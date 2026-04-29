@@ -7,13 +7,14 @@ import {
   Award, Star, Globe, Percent, Timer, Headphones,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { Button } from "@/components/ui/button";
 import { SectionDivider } from "@/components/ui/section-divider";
 import { Input } from "@/components/ui/input";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { scrollToId } from "@/lib/scroll";
 
 const scrollTo = (id: string) => scrollToId(id);
@@ -111,9 +112,6 @@ const trustSignals = [
   { icon: Headphones, title: "Dedicated Manager", desc: "Single point of contact assigned to every property portfolio" },
 ];
 
-/* ─── Page-level champagne background ─── */
-const pageBg = "bg-gradient-to-br from-[#FDFBF7] via-[#F8F3EA] to-[#F0E8D8]";
-
 /* ─── Section wrapper ─── */
 const Section = ({ id, children, className = "" }: { id: string; children: React.ReactNode; className?: string }) => (
   <section id={id} className={`scroll-mt-24 py-14 md:py-20 ${className}`}>
@@ -121,32 +119,28 @@ const Section = ({ id, children, className = "" }: { id: string; children: React
   </section>
 );
 
-/* ─── Champagne Card ─── */
+/* ─── Monochrome card ─── */
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 rounded-xl p-6 ${className}`}>{children}</div>
+  <div className={`bg-card border border-border rounded-xl p-6 ${className}`}>{children}</div>
 );
 
-/* ─── Section heading — gold first word, dark rest ─── */
-const SectionHeading = ({ children, centered = false }: { children: string; centered?: boolean }) => {
-  const words = children.split(" ");
-  const first = words[0];
-  const rest = words.slice(1).join(" ");
-  return (
-    <h2
-      className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? "text-center" : ""}`}
-      style={{ fontFamily: "Playfair Display, serif" }}
-    >
-      <span className="text-[#C8A766]">{first}</span>
-      {rest && <span className="text-[#1a1714] ml-2">{rest}</span>}
+/* ─── Section heading — solid foreground, optional eyebrow ─── */
+const SectionHeading = ({ children, centered = false, eyebrow }: { children: React.ReactNode; centered?: boolean; eyebrow?: string }) => (
+  <div className={`mb-8 ${centered ? "text-center" : ""}`}>
+    {eyebrow && (
+      <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground mb-2">{eyebrow}</div>
+    )}
+    <h2 className="text-3xl md:text-4xl font-bold tracking-[-0.02em] text-foreground">
+      {children}
     </h2>
-  );
-};
+  </div>
+);
 
 const BulletList = ({ items, icon: Icon = CheckCircle2 }: { items: string[]; icon?: any }) => (
   <ul className="space-y-3">
     {items.map((item, i) => (
-      <li key={i} className="flex items-start gap-3 text-[#3d3529] leading-relaxed">
-        <Icon className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
+      <li key={i} className="flex items-start gap-3 text-foreground/85 leading-relaxed">
+        <Icon className="w-5 h-5 text-foreground shrink-0 mt-0.5" />
         <span>{item}</span>
       </li>
     ))}
@@ -169,90 +163,74 @@ const PropertyManagement = () => {
       />
 
       {/* ═══ 1. HERO ═══ */}
-      <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        {/* Dark gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1714] to-[#151210]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#C8A766]/8 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-10 left-10 w-56 h-56 bg-[#C8A766]/8 rounded-full blur-[80px] pointer-events-none" />
-
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#C8A766]/40 bg-black/30 backdrop-blur-md">
-              <Building2 className="w-4 h-4 text-[#C8A766]" />
-              <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Property Management</span>
+      <section className="relative bg-background border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-border bg-card">
+              <Building2 className="w-4 h-4 text-foreground" />
+              <span className="text-foreground font-semibold text-[11px] uppercase tracking-[0.2em]">Property Management</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]" style={{ fontFamily: "Playfair Display, serif" }}>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-[-0.025em]">
               Property Management &<br className="hidden sm:block" /> Asset Stewardship
             </h1>
 
-            <p className="text-[#C8A766]/80 text-lg md:text-xl font-medium mb-4 max-w-2xl mx-auto" style={{ fontFamily: "Playfair Display, serif" }}>
+            <p className="text-foreground/80 text-lg md:text-xl font-medium mb-3 max-w-2xl mx-auto">
               Structured. Transparent. Performance-Driven.
             </p>
 
-            <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
               Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <PremiumHeroButton href="/contact?service=property-management">
-                Request Management Proposal
-              </PremiumHeroButton>
-              <PremiumHeroButton href="/contact">
-                Schedule Asset Consultation
-              </PremiumHeroButton>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button asChild size="lg">
+                <Link to="/contact?service=property-management">Request Management Proposal</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/contact">Schedule Asset Consultation</Link>
+              </Button>
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-[#C8A766]/60 text-xs tracking-widest uppercase">Explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-[#C8A766]/60 to-transparent" />
-        </div>
       </section>
 
-      {/* ═══ CHAMPAGNE BODY ═══ */}
-      <SectionDivider />
-
-      <div className={pageBg}>
+      {/* ═══ BODY ═══ */}
+      <div className="bg-background">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-          <div className="bg-white/70 backdrop-blur-sm border border-[#C8A766]/20 rounded-2xl shadow-[0_4px_30px_rgba(200,167,102,0.08)] overflow-hidden">
+          <div className="bg-card border border-border rounded-2xl overflow-hidden">
 
         {/* ═══ 2. TABLE OF CONTENTS ═══ */}
-        <section className="py-12 md:py-16 border-b border-[#C8A766]/15">
+        <section className="py-12 md:py-16 border-b border-border">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-[#1a1714] mb-8 text-center" style={{ fontFamily: "Playfair Display, serif" }}>
-              <span className="text-[#C8A766]">Table</span> of Contents
+            <h2 className="text-2xl font-bold text-foreground mb-8 text-center">
+              Table of Contents
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {tocSections.map((s, i) => (
                 <button
                   key={s.id}
                   onClick={() => scrollTo(s.id)}
-                  className="text-left px-4 py-3 rounded-xl border border-[#C8A766]/25 bg-white/60 hover:bg-white hover:border-[#C8A766]/50 hover:shadow-md transition-all text-sm text-[#3d3529] flex items-center gap-2 group"
+                  className="text-left px-4 py-3 rounded-xl border border-border bg-background hover:bg-muted hover:border-foreground/30 transition-all text-sm text-foreground flex items-center gap-2 group"
                 >
-                  <span className="text-[#C8A766] font-semibold text-xs">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="group-hover:text-[#1a1714] transition-colors">{s.label}</span>
+                  <span className="text-muted-foreground font-semibold text-xs">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{s.label}</span>
                 </button>
               ))}
             </div>
           </div>
         </section>
 
-        <SectionDivider variant="champagne" />
-
         {/* ═══ 3. MANAGEMENT OVERVIEW ═══ */}
         <Section id="overview">
           <SectionHeading>Management Overview</SectionHeading>
           <div>
-            <p className="text-[#3d3529] leading-relaxed mb-8 text-lg">
+            <p className="text-foreground/85 leading-relaxed mb-8 text-lg">
               We provide full-spectrum property management for individual investors, portfolio owners, family offices, overseas investors, and corporate property owners.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <CCard>
-                <h3 className="font-semibold text-[#1a1714] mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Clients We Serve</h3>
+                <h3 className="font-semibold text-foreground mb-4 text-lg">Clients We Serve</h3>
                 <BulletList icon={Users} items={[
                   "Individual & portfolio investors",
                   "Family offices & trusts",
@@ -262,7 +240,7 @@ const PropertyManagement = () => {
                 ]} />
               </CCard>
               <CCard>
-                <h3 className="font-semibold text-[#1a1714] mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Designed to Ensure</h3>
+                <h3 className="font-semibold text-foreground mb-4 text-lg">Designed to Ensure</h3>
                 <BulletList items={[
                   "Revenue optimization & yield protection",
                   "Tenant quality control & retention",
@@ -275,7 +253,7 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ 4. PERFORMANCE STATS ═══ */}
         <Section id="stats">
@@ -283,129 +261,121 @@ const PropertyManagement = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {performanceStats.map((stat, i) => (
               <div key={i}
-                className="text-center p-5 rounded-xl bg-white/70 border border-[#C8A766]/25 hover:border-[#C8A766]/50 hover:shadow-lg transition-all"
+                className="text-center p-5 rounded-xl bg-card border border-border hover:border-foreground/30 transition-all"
               >
-                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center">
-                  <stat.icon className="w-6 h-6 text-[#C8A766]" />
+                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-muted border border-border flex items-center justify-center">
+                  <stat.icon className="w-6 h-6 text-foreground" />
                 </div>
-                <p className="text-2xl md:text-3xl font-bold text-[#1a1714]" style={{ fontFamily: "Playfair Display, serif" }}>{stat.value}</p>
-                <p className="text-xs text-[#6b5d4d] mt-1 font-medium">{stat.label}</p>
+                <p className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">{stat.value}</p>
+                <p className="text-xs text-muted-foreground mt-1 font-medium">{stat.label}</p>
               </div>
             ))}
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ 5. SERVICE MODULES GRID ═══ */}
         <Section id="residential">
           <SectionHeading>Core Service Modules</SectionHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {serviceModules.map((mod, i) => (
-              <div key={i}>
-                <CCard className="h-full">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-11 h-11 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center shrink-0">
-                      <mod.icon className="w-5 h-5 text-[#C8A766]" />
-                    </div>
-                    <h3 className="font-semibold text-[#1a1714] text-lg" style={{ fontFamily: "Playfair Display, serif" }}>{mod.title}</h3>
+              <CCard key={i} className="h-full">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-muted border border-border flex items-center justify-center shrink-0">
+                    <mod.icon className="w-5 h-5 text-foreground" />
                   </div>
-                  <ul className="space-y-2">
-                    {mod.items.map((item, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-[#3d3529]">
-                        <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CCard>
-              </div>
+                  <h3 className="font-semibold text-foreground text-lg">{mod.title}</h3>
+                </div>
+                <ul className="space-y-2">
+                  {mod.items.map((item, j) => (
+                    <li key={j} className="flex items-start gap-2 text-sm text-foreground/85">
+                      <CheckCircle2 className="w-4 h-4 text-foreground shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CCard>
             ))}
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ RESIDENTIAL + COMMERCIAL DETAIL ═══ */}
         <Section id="commercial">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
               <SectionHeading>Residential Management</SectionHeading>
-              <div>
-                <CCard>
-                  <h3 className="font-semibold text-[#1a1714] mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
-                  <BulletList items={[
-                    "Tenant marketing & screening",
-                    "Lease preparation & renewals",
-                    "Move-in / move-out inspections",
-                    "Rent collection & follow-up",
-                    "Maintenance coordination",
-                    "Service charge monitoring",
-                    "Condition reporting",
-                  ]} />
-                </CCard>
-                <div className="flex items-start gap-3 p-4 mt-4 rounded-xl bg-[#C8A766]/5 border border-[#C8A766]/15">
-                  <Shield className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#6b5d4d]">
-                    We follow RERA-compliant procedures in Dubai and applicable regulations across the UAE.
-                  </p>
-                </div>
+              <CCard>
+                <h3 className="font-semibold text-foreground mb-4 text-lg">Services Include</h3>
+                <BulletList items={[
+                  "Tenant marketing & screening",
+                  "Lease preparation & renewals",
+                  "Move-in / move-out inspections",
+                  "Rent collection & follow-up",
+                  "Maintenance coordination",
+                  "Service charge monitoring",
+                  "Condition reporting",
+                ]} />
+              </CCard>
+              <div className="flex items-start gap-3 p-4 mt-4 rounded-xl bg-muted border border-border">
+                <Shield className="w-5 h-5 text-foreground shrink-0 mt-0.5" />
+                <p className="text-sm text-muted-foreground">
+                  We follow RERA-compliant procedures in Dubai and applicable regulations across the UAE.
+                </p>
               </div>
             </div>
             <div>
               <SectionHeading>Commercial Management</SectionHeading>
-              <div>
-                <CCard>
-                  <h3 className="font-semibold text-[#1a1714] mb-4 text-lg" style={{ fontFamily: "Playfair Display, serif" }}>Services Include</h3>
-                  <BulletList items={[
-                    "Commercial leasing strategy",
-                    "Tenant retention planning",
-                    "Contract negotiation support",
-                    "Property performance analysis",
-                    "Maintenance oversight",
-                    "Compliance monitoring",
-                  ]} />
-                </CCard>
-                <p className="text-[#6b5d4d] text-sm leading-relaxed mt-4">
-                  Financial reporting aligned with commercial tenancy laws. Structured approach ensures operational transparency and performance accountability.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Section>
-
-        <SectionDivider variant="champagne" />
-
-        {/* ═══ LEASING WORKFLOW ═══ */}
-        <Section id="leasing">
-          <SectionHeading>Leasing & Tenant Placement</SectionHeading>
-          <div>
-            <div className="relative max-w-3xl mx-auto">
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-[#C8A766]/20" />
-              <div className="space-y-5">
-                {leasingSteps.map((step, i) => (
-                  <div key={i} className="flex items-start gap-5 pl-1">
-                    <div className="w-12 h-12 rounded-full bg-white border-2 border-[#C8A766]/40 flex items-center justify-center shrink-0 z-10">
-                      <span className="text-[#C8A766] font-bold text-sm">{i + 1}</span>
-                    </div>
-                    <CCard className="flex-1">
-                      <h4 className="font-semibold text-[#1a1714] mb-1">{step.title}</h4>
-                      <p className="text-sm text-[#6b5d4d]">{step.desc}</p>
-                    </CCard>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/5 border border-[#C8A766]/15 max-w-3xl mx-auto">
-              <Scale className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
-              <p className="text-sm text-[#6b5d4d]">
-                All tenancy registrations are processed in accordance with relevant local authority regulations.
+              <CCard>
+                <h3 className="font-semibold text-foreground mb-4 text-lg">Services Include</h3>
+                <BulletList items={[
+                  "Commercial leasing strategy",
+                  "Tenant retention planning",
+                  "Contract negotiation support",
+                  "Property performance analysis",
+                  "Maintenance oversight",
+                  "Compliance monitoring",
+                ]} />
+              </CCard>
+              <p className="text-muted-foreground text-sm leading-relaxed mt-4">
+                Financial reporting aligned with commercial tenancy laws. Structured approach ensures operational transparency and performance accountability.
               </p>
             </div>
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
+
+        {/* ═══ LEASING WORKFLOW ═══ */}
+        <Section id="leasing">
+          <SectionHeading>Leasing & Tenant Placement</SectionHeading>
+          <div className="relative max-w-3xl mx-auto">
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-border" />
+            <div className="space-y-5">
+              {leasingSteps.map((step, i) => (
+                <div key={i} className="flex items-start gap-5 pl-1">
+                  <div className="w-12 h-12 rounded-full bg-card border-2 border-border flex items-center justify-center shrink-0 z-10">
+                    <span className="text-foreground font-bold text-sm">{i + 1}</span>
+                  </div>
+                  <CCard className="flex-1">
+                    <h4 className="font-semibold text-foreground mb-1">{step.title}</h4>
+                    <p className="text-sm text-muted-foreground">{step.desc}</p>
+                  </CCard>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-muted border border-border max-w-3xl mx-auto">
+            <Scale className="w-5 h-5 text-foreground shrink-0 mt-0.5" />
+            <p className="text-sm text-muted-foreground">
+              All tenancy registrations are processed in accordance with relevant local authority regulations.
+            </p>
+          </div>
+        </Section>
+
+        <SectionDivider />
 
         {/* ═══ FINANCIAL ═══ */}
         <Section id="financial">
@@ -420,34 +390,34 @@ const PropertyManagement = () => {
                 { icon: Briefcase, label: "Vendor payments", desc: "Timely processing with full documentation" },
                 { icon: Calendar, label: "Annual income summary", desc: "Tax-ready consolidated reports" },
               ].map((item, i) => (
-                <div key={i} className="p-5 rounded-xl bg-white/60 border border-[#C8A766]/25 hover:border-[#C8A766]/40 transition-all">
+                <div key={i} className="p-5 rounded-xl bg-card border border-border hover:border-foreground/30 transition-all">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-9 h-9 rounded-lg bg-[#C8A766]/10 flex items-center justify-center">
-                      <item.icon className="w-4 h-4 text-[#C8A766]" />
+                    <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center">
+                      <item.icon className="w-4 h-4 text-foreground" />
                     </div>
-                    <h4 className="font-semibold text-[#1a1714] text-sm">{item.label}</h4>
+                    <h4 className="font-semibold text-foreground text-sm">{item.label}</h4>
                   </div>
-                  <p className="text-xs text-[#6b5d4d] pl-12">{item.desc}</p>
+                  <p className="text-xs text-muted-foreground pl-12">{item.desc}</p>
                 </div>
               ))}
             </div>
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/5 border border-[#C8A766]/15">
-              <Eye className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
-              <p className="text-sm text-[#6b5d4d]">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-muted border border-border">
+              <Eye className="w-5 h-5 text-foreground shrink-0 mt-0.5" />
+              <p className="text-sm text-muted-foreground">
                 Financial transparency is maintained through structured reporting and owner-accessible documentation.
               </p>
             </div>
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
-        {/* ═══ MAINTENANCE (dedicated section) ═══ */}
+        {/* ═══ MAINTENANCE ═══ */}
         <Section id="maintenance">
           <SectionHeading>Maintenance & Operations</SectionHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <CCard>
-              <h3 className="font-semibold text-[#1a1714] mb-4" style={{ fontFamily: "Playfair Display, serif" }}>Preventive Maintenance</h3>
+              <h3 className="font-semibold text-foreground mb-4">Preventive Maintenance</h3>
               <BulletList items={[
                 "Scheduled HVAC, plumbing, and electrical inspections",
                 "Annual property condition assessments",
@@ -456,7 +426,7 @@ const PropertyManagement = () => {
               ]} />
             </CCard>
             <CCard>
-              <h3 className="font-semibold text-[#1a1714] mb-4" style={{ fontFamily: "Playfair Display, serif" }}>Reactive & Emergency</h3>
+              <h3 className="font-semibold text-foreground mb-4">Reactive & Emergency</h3>
               <BulletList items={[
                 "24/7 emergency response coordination",
                 "Vetted vendor dispatch within SLA targets",
@@ -467,14 +437,14 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ TENANT MANAGEMENT ═══ */}
         <Section id="tenant-mgmt">
           <SectionHeading>Tenant Management</SectionHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <CCard>
-              <h3 className="font-semibold text-[#1a1714] mb-4" style={{ fontFamily: "Playfair Display, serif" }}>Communication & Relations</h3>
+              <h3 className="font-semibold text-foreground mb-4">Communication & Relations</h3>
               <BulletList items={[
                 "Dedicated tenant communication portal",
                 "Complaint resolution protocols with SLA tracking",
@@ -483,7 +453,7 @@ const PropertyManagement = () => {
               ]} />
             </CCard>
             <CCard>
-              <h3 className="font-semibold text-[#1a1714] mb-4" style={{ fontFamily: "Playfair Display, serif" }}>Inspections & Compliance</h3>
+              <h3 className="font-semibold text-foreground mb-4">Inspections & Compliance</h3>
               <BulletList items={[
                 "Scheduled mid-tenancy inspections",
                 "Move-out condition assessments",
@@ -494,7 +464,7 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ RENEWALS ═══ */}
         <Section id="renewals">
@@ -502,37 +472,37 @@ const PropertyManagement = () => {
           <CCard>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <div className="w-11 h-11 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center mb-3">
-                  <Calendar className="w-5 h-5 text-[#C8A766]" />
+                <div className="w-11 h-11 rounded-xl bg-muted border border-border flex items-center justify-center mb-3">
+                  <Calendar className="w-5 h-5 text-foreground" />
                 </div>
-                <h4 className="font-semibold text-[#1a1714] mb-2">Proactive Tracking</h4>
-                <p className="text-sm text-[#6b5d4d]">Automated lease expiry alerts 90 days before renewal date with market rate comparisons.</p>
+                <h4 className="font-semibold text-foreground mb-2">Proactive Tracking</h4>
+                <p className="text-sm text-muted-foreground">Automated lease expiry alerts 90 days before renewal date with market rate comparisons.</p>
               </div>
               <div>
-                <div className="w-11 h-11 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center mb-3">
-                  <TrendingUp className="w-5 h-5 text-[#C8A766]" />
+                <div className="w-11 h-11 rounded-xl bg-muted border border-border flex items-center justify-center mb-3">
+                  <TrendingUp className="w-5 h-5 text-foreground" />
                 </div>
-                <h4 className="font-semibold text-[#1a1714] mb-2">Market-Rate Negotiation</h4>
-                <p className="text-sm text-[#6b5d4d]">Data-driven renewal terms based on current market conditions and RERA rental index.</p>
+                <h4 className="font-semibold text-foreground mb-2">Market-Rate Negotiation</h4>
+                <p className="text-sm text-muted-foreground">Data-driven renewal terms based on current market conditions and RERA rental index.</p>
               </div>
               <div>
-                <div className="w-11 h-11 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center mb-3">
-                  <UserCheck className="w-5 h-5 text-[#C8A766]" />
+                <div className="w-11 h-11 rounded-xl bg-muted border border-border flex items-center justify-center mb-3">
+                  <UserCheck className="w-5 h-5 text-foreground" />
                 </div>
-                <h4 className="font-semibold text-[#1a1714] mb-2">Retention Programs</h4>
-                <p className="text-sm text-[#6b5d4d]">Targeted retention incentives for high-quality tenants to minimize vacancy periods.</p>
+                <h4 className="font-semibold text-foreground mb-2">Retention Programs</h4>
+                <p className="text-sm text-muted-foreground">Targeted retention incentives for high-quality tenants to minimize vacancy periods.</p>
               </div>
             </div>
           </CCard>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ COMPLIANCE ═══ */}
         <Section id="compliance">
           <SectionHeading>Compliance & Governance</SectionHeading>
           <div>
-            <p className="text-[#3d3529] mb-6 leading-relaxed">We operate in alignment with:</p>
+            <p className="text-foreground/85 mb-6 leading-relaxed">We operate in alignment with:</p>
             <CCard className="mb-6">
               <BulletList icon={Scale} items={[
                 "Dubai Land Department (DLD) requirements",
@@ -542,18 +512,18 @@ const PropertyManagement = () => {
                 "ADGM and DIFC regulatory frameworks (where applicable)",
               ]} />
             </CCard>
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/5 border border-[#C8A766]/15">
-              <Shield className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
-              <p className="text-sm text-[#6b5d4d]">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-muted border border-border">
+              <Shield className="w-5 h-5 text-foreground shrink-0 mt-0.5" />
+              <p className="text-sm text-muted-foreground">
                 We do not provide legal representation but coordinate with licensed legal professionals when required.
               </p>
             </div>
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
-        {/* ═══ WORKFLOW DIAGRAM ═══ */}
+        {/* ═══ WORKFLOW ═══ */}
         <Section id="workflow">
           <SectionHeading centered>Management Workflow</SectionHeading>
           <div>
@@ -568,27 +538,27 @@ const PropertyManagement = () => {
                 <div key={i} className="flex flex-col items-center">
                   <div className="flex items-center w-full">
                     <div className="flex-1 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-2xl bg-white border-2 border-[#C8A766]/30 flex items-center justify-center mb-3 shadow-sm">
-                        <step.icon className="w-7 h-7 text-[#C8A766]" />
+                      <div className="w-16 h-16 rounded-2xl bg-card border-2 border-border flex items-center justify-center mb-3">
+                        <step.icon className="w-7 h-7 text-foreground" />
                       </div>
-                      <p className="text-xs font-semibold text-[#1a1714] text-center whitespace-pre-line">{step.label}</p>
+                      <p className="text-xs font-semibold text-foreground text-center whitespace-pre-line">{step.label}</p>
                     </div>
                     {i < 4 && (
-                      <ArrowRight className="w-5 h-5 text-[#C8A766]/40 hidden md:block shrink-0 -mt-6" />
+                      <ArrowRight className="w-5 h-5 text-muted-foreground hidden md:block shrink-0 -mt-6" />
                     )}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-8 p-4 rounded-xl bg-[#C8A766]/5 border border-[#C8A766]/15 text-center">
-              <p className="text-sm text-[#6b5d4d]">
-                <strong className="text-[#1a1714]">Continuous cycle.</strong> Each phase feeds into the next with monthly performance reviews and strategy adjustments.
+            <div className="mt-8 p-4 rounded-xl bg-muted border border-border text-center">
+              <p className="text-sm text-muted-foreground">
+                <strong className="text-foreground">Continuous cycle.</strong> Each phase feeds into the next with monthly performance reviews and strategy adjustments.
               </p>
             </div>
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ REPORTING ═══ */}
         <Section id="reporting">
@@ -602,38 +572,38 @@ const PropertyManagement = () => {
               { icon: Eye, title: "Occupancy Performance", desc: "Utilization rates, vacancy duration, and market positioning." },
               { icon: TrendingUp, title: "Annual Portfolio Review", desc: "Year-over-year performance, ROI analysis, and strategic outlook." },
             ].map((item, i) => (
-              <div key={i} className="p-5 rounded-xl bg-white/60 border border-[#C8A766]/25 hover:border-[#C8A766]/40 transition-all">
+              <div key={i} className="p-5 rounded-xl bg-card border border-border hover:border-foreground/30 transition-all">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-[#C8A766]/10 flex items-center justify-center">
-                    <item.icon className="w-4 h-4 text-[#C8A766]" />
+                  <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center">
+                    <item.icon className="w-4 h-4 text-foreground" />
                   </div>
-                  <h4 className="font-semibold text-[#1a1714] text-sm">{item.title}</h4>
+                  <h4 className="font-semibold text-foreground text-sm">{item.title}</h4>
                 </div>
-                <p className="text-xs text-[#6b5d4d]">{item.desc}</p>
+                <p className="text-xs text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ ONBOARDING ═══ */}
         <Section id="onboarding">
           <SectionHeading>Management Onboarding Process</SectionHeading>
           <div className="relative max-w-3xl mx-auto">
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-[#C8A766]/20" />
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-border" />
             <div className="space-y-5">
               {onboardingSteps.map((s) => (
                 <div key={s.step} className="flex items-start gap-5 pl-1">
-                  <div className="w-12 h-12 rounded-full bg-white border-2 border-[#C8A766]/40 flex items-center justify-center shrink-0 z-10">
-                    <span className="text-[#C8A766] font-bold text-sm">{s.step}</span>
+                  <div className="w-12 h-12 rounded-full bg-card border-2 border-border flex items-center justify-center shrink-0 z-10">
+                    <span className="text-foreground font-bold text-sm">{s.step}</span>
                   </div>
                   <CCard className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <s.icon className="w-5 h-5 text-[#C8A766] shrink-0" />
-                      <h4 className="font-semibold text-[#1a1714]">{s.title}</h4>
+                      <s.icon className="w-5 h-5 text-foreground shrink-0" />
+                      <h4 className="font-semibold text-foreground">{s.title}</h4>
                     </div>
-                    <p className="text-sm text-[#6b5d4d] pl-8">{s.desc}</p>
+                    <p className="text-sm text-muted-foreground pl-8">{s.desc}</p>
                   </CCard>
                 </div>
               ))}
@@ -641,7 +611,7 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ TRUST SIGNALS ═══ */}
         <Section id="trust">
@@ -649,59 +619,59 @@ const PropertyManagement = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {trustSignals.map((item, i) => (
               <div key={i}
-                className="text-center p-6 rounded-xl bg-white/70 border border-[#C8A766]/25 hover:border-[#C8A766]/50 hover:shadow-lg transition-all"
+                className="text-center p-6 rounded-xl bg-card border border-border hover:border-foreground/30 transition-all"
               >
-                <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center">
-                  <item.icon className="w-7 h-7 text-[#C8A766]" />
+                <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-muted border border-border flex items-center justify-center">
+                  <item.icon className="w-7 h-7 text-foreground" />
                 </div>
-                <h4 className="font-semibold text-[#1a1714] mb-2" style={{ fontFamily: "Playfair Display, serif" }}>{item.title}</h4>
-                <p className="text-xs text-[#6b5d4d] leading-relaxed">{item.desc}</p>
+                <h4 className="font-semibold text-foreground mb-2">{item.title}</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ FEES ═══ */}
         <Section id="fees">
           <SectionHeading>Service Fees & Structure</SectionHeading>
           <CCard className="p-8">
-            <p className="text-[#3d3529] leading-relaxed text-lg mb-4">
+            <p className="text-foreground/85 leading-relaxed text-lg mb-4">
               Management fees are structured based on property type, asset size, and scope of service. A tailored proposal is issued following asset evaluation.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-              <div className="p-4 rounded-lg bg-white/60 border border-[#C8A766]/20 text-center">
-                <Percent className="w-5 h-5 text-[#C8A766] mx-auto mb-2" />
-                <p className="font-semibold text-[#1a1714] text-sm">Performance-Based</p>
-                <p className="text-xs text-[#6b5d4d] mt-1">Fees tied to occupancy and collection performance</p>
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
+                <Percent className="w-5 h-5 text-foreground mx-auto mb-2" />
+                <p className="font-semibold text-foreground text-sm">Performance-Based</p>
+                <p className="text-xs text-muted-foreground mt-1">Fees tied to occupancy and collection performance</p>
               </div>
-              <div className="p-4 rounded-lg bg-white/60 border border-[#C8A766]/20 text-center">
-                <FileText className="w-5 h-5 text-[#C8A766] mx-auto mb-2" />
-                <p className="font-semibold text-[#1a1714] text-sm">Transparent Terms</p>
-                <p className="text-xs text-[#6b5d4d] mt-1">No hidden charges or undisclosed markups</p>
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
+                <FileText className="w-5 h-5 text-foreground mx-auto mb-2" />
+                <p className="font-semibold text-foreground text-sm">Transparent Terms</p>
+                <p className="text-xs text-muted-foreground mt-1">No hidden charges or undisclosed markups</p>
               </div>
-              <div className="p-4 rounded-lg bg-white/60 border border-[#C8A766]/20 text-center">
-                <Settings className="w-5 h-5 text-[#C8A766] mx-auto mb-2" />
-                <p className="font-semibold text-[#1a1714] text-sm">Custom Packages</p>
-                <p className="text-xs text-[#6b5d4d] mt-1">Scaled to your portfolio requirements</p>
+              <div className="p-4 rounded-lg bg-card border border-border text-center">
+                <Settings className="w-5 h-5 text-foreground mx-auto mb-2" />
+                <p className="font-semibold text-foreground text-sm">Custom Packages</p>
+                <p className="text-xs text-muted-foreground mt-1">Scaled to your portfolio requirements</p>
               </div>
             </div>
           </CCard>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ FAQ ═══ */}
         <Section id="faq">
           <SectionHeading>Frequently Asked Questions</SectionHeading>
           <Accordion type="single" collapsible className="space-y-3">
             {faqData.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`} className="border border-[#C8A766]/25 rounded-xl px-5 bg-white/60">
-                <AccordionTrigger className="text-[#1a1714] hover:no-underline font-medium">
+              <AccordionItem key={i} value={`faq-${i}`} className="border border-border rounded-xl px-5 bg-card">
+                <AccordionTrigger className="text-foreground hover:no-underline font-medium">
                   {faq.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-[#6b5d4d] leading-relaxed">
+                <AccordionContent className="text-muted-foreground leading-relaxed">
                   {faq.a}
                 </AccordionContent>
               </AccordionItem>
@@ -709,63 +679,61 @@ const PropertyManagement = () => {
           </Accordion>
         </Section>
 
-        <SectionDivider variant="champagne" />
+        <SectionDivider />
 
         {/* ═══ CTA / CONSULTATION ═══ */}
         <Section id="consultation">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1a1714] mb-4" style={{ fontFamily: "Playfair Display, serif" }}>
-              <span className="text-[#C8A766]">Entrust</span> Your Asset to Structured Management
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-[-0.02em]">
+              Entrust Your Asset to Structured Management
             </h2>
-            <p className="text-[#6b5d4d] max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Request a tailored management proposal or speak directly with a property manager.
             </p>
           </div>
 
-          <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-2xl border border-[#C8A766]/30 bg-white/80 shadow-[0_4px_20px_rgba(200,167,102,0.12)]">
+          <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-2xl border border-border bg-card">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="text-sm font-medium text-[#1a1714] mb-1 block">Full Name</label>
-                <Input placeholder="Your full name" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))} className="bg-white/80 border-[#C8A766]/30 focus:border-[#C8A766]" />
+                <label className="text-sm font-medium text-foreground mb-1 block">Full Name</label>
+                <Input placeholder="Your full name" value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))} />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1a1714] mb-1 block">Email</label>
-                <Input type="email" placeholder="your@email.com" value={formData.email} onChange={e => setFormData(p => ({ ...p, email: e.target.value }))} className="bg-white/80 border-[#C8A766]/30 focus:border-[#C8A766]" />
+                <label className="text-sm font-medium text-foreground mb-1 block">Email</label>
+                <Input type="email" placeholder="your@email.com" value={formData.email} onChange={e => setFormData(p => ({ ...p, email: e.target.value }))} />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1a1714] mb-1 block">Phone</label>
-                <Input placeholder="+971 ..." value={formData.phone} onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))} className="bg-white/80 border-[#C8A766]/30 focus:border-[#C8A766]" />
+                <label className="text-sm font-medium text-foreground mb-1 block">Phone</label>
+                <Input placeholder="+971 ..." value={formData.phone} onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))} />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1a1714] mb-1 block">Property Type</label>
-                <Input placeholder="Residential / Commercial" value={formData.propertyType} onChange={e => setFormData(p => ({ ...p, propertyType: e.target.value }))} className="bg-white/80 border-[#C8A766]/30 focus:border-[#C8A766]" />
+                <label className="text-sm font-medium text-foreground mb-1 block">Property Type</label>
+                <Input placeholder="Residential / Commercial" value={formData.propertyType} onChange={e => setFormData(p => ({ ...p, propertyType: e.target.value }))} />
               </div>
-              <div>
-                <label className="text-sm font-medium text-[#1a1714] mb-1 block">Location</label>
-                <Input placeholder="Dubai, Abu Dhabi..." value={formData.location} onChange={e => setFormData(p => ({ ...p, location: e.target.value }))} className="bg-white/80 border-[#C8A766]/30 focus:border-[#C8A766]" />
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-foreground mb-1 block">Location</label>
+                <Input placeholder="Dubai, Abu Dhabi..." value={formData.location} onChange={e => setFormData(p => ({ ...p, location: e.target.value }))} />
               </div>
             </div>
             <div className="mb-6">
-              <label className="text-sm font-medium text-[#1a1714] mb-1 block">Additional Notes</label>
+              <label className="text-sm font-medium text-foreground mb-1 block">Additional Notes</label>
               <textarea
                 placeholder="Describe your property or management requirements..."
                 value={formData.notes}
                 onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
-                className="w-full rounded-xl px-4 py-3 text-sm bg-white/80 border-2 border-[#C8A766]/30 text-[#1a1714] placeholder:text-[#9c9080] focus:outline-none focus:ring-2 focus:ring-[#C8A766]/50 focus:border-[#C8A766] min-h-[100px] resize-none"
+                className="w-full rounded-md px-3 py-2 text-sm bg-background border border-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring min-h-[100px] resize-none"
               />
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <PremiumHeroButton variant="light-bg" onClick={() => {}}>
-                Request Proposal
-              </PremiumHeroButton>
-              <PremiumHeroButton variant="light-bg" href="/contact">
-                Book Consultation
-              </PremiumHeroButton>
-              <PremiumHeroButton variant="light-bg" href="/contact?service=property-management">
-                Speak to Property Manager
-              </PremiumHeroButton>
+              <Button className="flex-1">Request Proposal</Button>
+              <Button asChild variant="outline" className="flex-1">
+                <Link to="/contact">Book Consultation</Link>
+              </Button>
+              <Button asChild variant="outline" className="flex-1">
+                <Link to="/contact?service=property-management">Speak to Property Manager</Link>
+              </Button>
             </div>
-            <p className="text-xs text-[#9c9080] mt-4 text-center">
+            <p className="text-xs text-muted-foreground mt-4 text-center">
               Submission does not constitute a service agreement. A dedicated property manager will contact you to discuss your requirements.
             </p>
           </div>
@@ -773,9 +741,7 @@ const PropertyManagement = () => {
 
           </div>{/* close rounded card */}
         </div>{/* close max-w container */}
-      </div>{/* close pageBg */}
-
-      <SectionDivider />
+      </div>{/* close bg-background */}
     </>
   );
 };

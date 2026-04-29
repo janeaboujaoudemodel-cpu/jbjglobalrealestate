@@ -10,6 +10,7 @@ import AuthRequiredRoute from "@/components/AuthRequiredRoute";
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
 const PropertiesReelly = lazy(() => import("@/pages/PropertiesReelly"));
+const Properties = lazy(() => import("@/pages/Properties"));
 const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
 const Communities = lazy(() => import("@/pages/Communities"));
 const CommunityDetail = lazy(() => import("@/pages/CommunityDetail"));
@@ -199,7 +200,8 @@ export const PublicRoutes = () => (
     <Route path="/vapi-prompt" element={<VapiPrompt />} />
 
     {/* ── Properties ── */}
-    <Route path="/properties" element={<PropertiesReelly />} />
+    <Route path="/properties" element={<Properties />} />
+    <Route path="/properties/explore" element={<PropertiesReelly />} />
     <Route path="/project/:slug" element={<ProjectDetail />} />
     <Route path="/communities" element={<Communities />} />
     <Route path="/community/:slug" element={<CommunityDetail />} />
