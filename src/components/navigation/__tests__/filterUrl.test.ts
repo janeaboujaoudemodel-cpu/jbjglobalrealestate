@@ -25,7 +25,7 @@ describe("encodeFilters", () => {
   });
 
   it("omits hideSoldOut when false, sets '1' when true", () => {
-    expect(encodeFilters(defaultShortcutFilters).get?.("hideSoldOut")).toBeUndefined();
+    expect(encodeFilters(defaultShortcutFilters).get("hideSoldOut")).toBeNull();
     const p = encodeFilters({ ...defaultShortcutFilters, hideSoldOut: true });
     expect(p.get("hideSoldOut")).toBe("1");
   });
