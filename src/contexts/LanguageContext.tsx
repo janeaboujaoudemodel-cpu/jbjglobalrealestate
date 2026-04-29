@@ -59,6 +59,14 @@ const LANGUAGE_MANUAL_KEY = 'jj_language_manual';
 
 const detectDeviceLanguage = (): Language => {
   try {
+    // 1. Honor explicit ?lang= query param (deep links, hreflang crawlers)
+    const url = new URL(window.location.href);
+    const qp = url.searchParams.get('lang')?.toLowerCase();
+    if (qp) {
+      const m = SUPPORTED_LANGUAGES.find(l => l.code === qp);
+      if (m) return m.code;
+    }
+    // 2. Browser default
     const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
     const langCode = browserLang.split('-')[0].toLowerCase();
     const supported = SUPPORTED_LANGUAGES.find(l => l.code === langCode);
@@ -68,6 +76,17 @@ const detectDeviceLanguage = (): Language => {
     return 'en';
   }
 };
+
+// Mirror language to URL ?lang= so deep links / SEO crawlers see the choice.
+function syncLanguageToUrl(lang: Language) {
+  try {
+    const url = new URL(window.location.href);
+    if (lang === 'en') url.searchParams.delete('lang');
+    else url.searchParams.set('lang', lang);
+    const next = url.pathname + (url.searchParams.toString() ? `?${url.searchParams}` : '') + url.hash;
+    window.history.replaceState({}, '', next);
+  } catch { /* no-op */ }
+}
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
@@ -106,12 +125,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
     document.documentElement.lang = lang;
     document.documentElement.dir = isRTLLanguage(lang) ? 'rtl' : 'ltr';
+    syncLanguageToUrl(lang);
   }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
     setAutoTranslatorLanguage(language);
+    syncLanguageToUrl(language);
     // Pre-warm the curated chrome dictionary in the background.
     // First view in a non-English locale is then near-instant.
     if (language !== 'en') {

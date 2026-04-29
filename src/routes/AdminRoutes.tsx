@@ -70,6 +70,7 @@ const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
 const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
+const TranslationCoverage = lazy(() => import("@/pages/admin/TranslationCoverage"));
 
 export const AdminRoutes = () => (
   <>
@@ -91,6 +92,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
     <Route path="/admin/legal-center" element={<OwnerGuard><LegalComplianceCenter /></OwnerGuard>} />
     <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
+    <Route path="/admin/translation-coverage" element={<OwnerGuard><Suspense fallback={<PageLoader />}><TranslationCoverage /></Suspense></OwnerGuard>} />
     <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
 
     {/* ── Internal Market Intelligence ── */}

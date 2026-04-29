@@ -2,6 +2,7 @@ import { MapPin, ArrowDown, Compass, Building2, ChevronDown, ChevronUp } from "l
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
+import { HtmlT } from "@/i18n/HtmlT";
 
 interface AreaAboutSectionProps {
   area: {
@@ -40,19 +41,18 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           {area.description ? (
             <div className="mb-8">
               <div className={`relative ${!isExpanded && isLongDescription ? 'max-h-40 overflow-hidden' : ''}`}>
-                <div 
+                <HtmlT
+                  html={renderMarkdownToHtml(formatReellyDescription(
+                    area.description
+                      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+                      .replace(/\[([^\]]+)\]\([^)]*$/gm, '$1')
+                      .replace(/https?:\/\/[^\s)]+/g, '')
+                      .replace(/[()]/g, '')
+                      .replace(/\s{2,}/g, ' ')
+                      .trim()
+                  ))}
+                  domain="area.description"
                   className="text-gray-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
-                  dangerouslySetInnerHTML={{ 
-                    __html: renderMarkdownToHtml(formatReellyDescription(
-                      area.description
-                        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-                        .replace(/\[([^\]]+)\]\([^)]*$/gm, '$1')
-                        .replace(/https?:\/\/[^\s)]+/g, '')
-                        .replace(/[()]/g, '')
-                        .replace(/\s{2,}/g, ' ')
-                        .trim()
-                    ))
-                  }}
                 />
                 {!isExpanded && isLongDescription && (
                   <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
