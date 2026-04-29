@@ -1204,6 +1204,7 @@ export const en = {
   'filter.propertyViews': 'Property Views',
   'filter.hideSold': 'Hide Sold',
   'filter.reset': 'Reset',
+  'filter.resetAll': 'Reset all',
   'filter.newest': 'Newest',
   'filter.lowHigh': 'Low-High',
   'filter.highLow': 'High-Low',
