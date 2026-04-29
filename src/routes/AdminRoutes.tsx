@@ -20,6 +20,7 @@ const AdminRoleManagement = lazy(() => import("@/pages/AdminRoleManagement"));
 const AdminDevelopers = lazy(() => import("@/pages/AdminDevelopers"));
 const AdminTrainingGuide = lazy(() => import("@/pages/AdminTrainingGuide"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
+const AdminCategories = lazy(() => import("@/pages/AdminCategories"));
 const ReellyImportTest = lazy(() => import("@/pages/admin/ReellyImportTest"));
 const InternalDashboard = lazy(() => import("@/pages/market-intelligence/internal/InternalDashboard"));
 const BrokerIntelligence = lazy(() => import("@/pages/market-intelligence/internal/BrokerIntelligence"));
@@ -85,6 +86,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
     <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
     <Route path="/admin/developers" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
+    <Route path="/admin/categories" element={<OwnerGuard><AdminCategories /></OwnerGuard>} />
     <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
     <Route path="/admin/legal-center" element={<OwnerGuard><LegalComplianceCenter /></OwnerGuard>} />
