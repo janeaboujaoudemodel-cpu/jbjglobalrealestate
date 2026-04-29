@@ -8,7 +8,6 @@
  * Owner-only. noindex,nofollow.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, X, Ruler } from "lucide-react";
 import OwnerGuard from "@/components/OwnerGuard";
@@ -175,13 +174,27 @@ const FooterPreviewInner = () => {
       }
     : {};
 
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = "Footer Preview · Dark Surface QA";
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const created = !meta;
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "robots";
+      document.head.appendChild(meta);
+    }
+    const prevContent = meta.content;
+    meta.content = "noindex,nofollow";
+    return () => {
+      document.title = prevTitle;
+      if (created) meta?.remove();
+      else if (meta) meta.content = prevContent;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white font-inter">
-      <Helmet>
-        <title>Footer Preview · Dark Surface QA</title>
-        <meta name="robots" content="noindex,nofollow" />
-      </Helmet>
-
       {/* Toolbar */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3 px-4 py-3">
