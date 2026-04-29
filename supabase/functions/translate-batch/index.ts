@@ -23,12 +23,20 @@ const LANG_NAMES: Record<string, string> = {
 
 // Locked Latin strings — never translated, even if AI suggests otherwise.
 const LATIN_LOCKED = new Set<string>([
+  // Brand
   "JBJ", "JBJ GLOBAL REAL ESTATE", "JBJ Global Real Estate",
+  // Currency codes
+  "AED", "USD", "EUR", "GBP", "SAR", "QAR", "KWD", "BHD", "OMR",
+  // Regulatory / acronyms
+  "RERA", "DLD", "ESCROW", "DIFC", "JBR", "KYC", "AML",
+  // Developer wordmarks
+  "Emaar", "EMAAR", "DAMAC", "Damac", "Sobha", "SOBHA", "Nakheel", "NAKHEEL",
+  "Aldar", "ALDAR", "Meraas", "MERAAS", "Dubai Properties", "Omniyat",
+  "Select Group", "Ellington", "Azizi", "Binghatti", "Danube",
 ]);
 
 // Curated proper-noun overrides keyed by source -> { lang -> translated }.
-// Mirrors src/translations/proper-nouns.ts and authoritatively writes to cache,
-// so the AI can never overwrite a canonical brand/personal-name transliteration.
+// Mirrors src/translations/proper-nouns.ts.
 const PROPER_NOUN_OVERRIDES: Record<string, Record<string, string>> = {
   "Jane Bou Jaoude": {
     ar: "جاين بو جودة", fa: "جاین بو ژودِه", he: "ג'יין בו ז'אודה",
@@ -45,8 +53,40 @@ const PROPER_NOUN_OVERRIDES: Record<string, Record<string, string>> = {
     fa: "بنیان‌گذار و مدیرعامل", he: "מייסדת ומנכ״לית",
     zh: "創辦人兼執行長", ja: "創業者兼CEO", hi: "संस्थापक और सीईओ",
   },
+  "Executive Assistant": {
+    ar: "المساعدة التنفيذية", fr: "Assistante de Direction",
+    es: "Asistente Ejecutiva", de: "Geschäftsführungsassistentin",
+    it: "Assistente Esecutiva", nl: "Directieassistente",
+    pl: "Asystentka Wykonawcza", ru: "Исполнительный ассистент",
+    tr: "Yönetici Asistanı", fa: "دستیار اجرایی", he: "עוזרת בכירה",
+    zh: "執行助理", ja: "エグゼクティブ・アシスタント", hi: "कार्यकारी सहायक",
+  },
+  "Real Estate Brokerage": {
+    ar: "وساطة عقارية", fr: "Maison de Courtage Immobilier",
+    es: "Correduría Inmobiliaria", de: "Immobilienmaklerhaus",
+    it: "Mediazione Immobiliare", nl: "Vastgoedmakelaardij",
+    pl: "Pośrednictwo Nieruchomości", ru: "Брокерское агентство недвижимости",
+    tr: "Gayrimenkul Komisyonculuğu", fa: "کارگزاری املاک",
+    he: "תיווך נדל״ן", zh: "房地產經紀", ja: "不動産仲介",
+    hi: "रियल एस्टेट ब्रोकरेज",
+  },
+  "Property Consultant": {
+    ar: "مستشار عقاري", fr: "Conseiller Immobilier",
+    es: "Consultor Inmobiliario", de: "Immobilienberater",
+    it: "Consulente Immobiliare", nl: "Vastgoedadviseur",
+    pl: "Doradca ds. Nieruchomości", ru: "Консультант по недвижимости",
+    tr: "Gayrimenkul Danışmanı", fa: "مشاور املاک", he: "יועץ נדל״ן",
+    zh: "房地產顧問", ja: "不動産コンサルタント", hi: "संपत्ति सलाहकार",
+  },
   "Dubai": { ar: "دبي", fa: "دبی", he: "דובאי", ru: "Дубай", zh: "迪拜", ja: "ドバイ", hi: "दुबई" },
   "Abu Dhabi": { ar: "أبوظبي", fa: "ابوظبی", he: "אבו דאבי", ru: "Абу-Даби", zh: "阿布扎比", ja: "アブダビ", hi: "अबू धाबी" },
+  "Sharjah": { ar: "الشارقة", fa: "شارجه", he: "שארג׳ה", ru: "Шарджа", zh: "沙迦", ja: "シャルジャ", hi: "शारजाह" },
+  "Ras Al Khaimah": { ar: "رأس الخيمة", fa: "راس الخیمه", he: "ראס אל-ח׳יימה", ru: "Рас-эль-Хайма", zh: "哈伊馬角", ja: "ラアス・アル＝ハイマ", hi: "रास अल खैमा" },
+  "Palm Jumeirah": { ar: "نخلة جميرا", fa: "نخل جمیرا", he: "פאלם ג׳ומיירה", ru: "Палм-Джумейра", zh: "朱美拉棕櫚島", ja: "パーム・ジュメイラ", hi: "पाम जुमेरा" },
+  "Downtown Dubai": { ar: "وسط مدينة دبي", fa: "مرکز شهر دبی", he: "מרכז דובאי", ru: "Даунтаун Дубай", zh: "迪拜市中心", ja: "ダウンタウン・ドバイ", hi: "डाउनटाउन दुबई" },
+  "Dubai Marina": { ar: "دبي مارينا", fa: "دبی مارینا", he: "דובאי מרינה", ru: "Дубай-Марина", zh: "迪拜碼頭", ja: "ドバイ・マリーナ", hi: "दुबई मरीना" },
+  "Business Bay": { ar: "الخليج التجاري", fa: "بیزینس بی", he: "ביזנס ביי", ru: "Бизнес-Бэй", zh: "商業灣", ja: "ビジネス・ベイ", hi: "बिज़नेस बे" },
+  "Jumeirah": { ar: "جميرا", fa: "جمیرا", he: "ג׳ומיירה", ru: "Джумейра", zh: "朱美拉", ja: "ジュメイラ", hi: "जुमेरा" },
   "United Arab Emirates": {
     ar: "الإمارات العربية المتحدة", fa: "امارات متحده عربی",
     he: "איחוד האמירויות הערביות", ru: "Объединённые Арабские Эмираты",
