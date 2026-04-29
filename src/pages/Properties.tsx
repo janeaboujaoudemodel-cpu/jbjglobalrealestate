@@ -31,6 +31,7 @@ import {
   Settings
 } from "lucide-react";
 import { SaleStatusSelect } from "@/components/filters/SaleStatusFilter";
+import { ActiveFilterIndicator } from "@/components/properties/ActiveFilterIndicator";
 
 import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
