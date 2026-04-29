@@ -3313,17 +3313,18 @@ button:disabled:has(.lucide),
    data-surface="dark" on the wrapping element.
    ============================================================ */
 @layer utilities {
-  [data-surface="light"] .text-white,
-  .bg-white .text-white:not([data-surface="dark"] *),
-  .bg-pearl-1 .text-white:not([data-surface="dark"] *),
-  .bg-pearl-2 .text-white:not([data-surface="dark"] *),
-  .bg-pearl-3 .text-white:not([data-surface="dark"] *) {
+  /* Only flip text-white on light surfaces when the element itself
+     is NOT sitting on its own dark background (button, badge, pill). */
+  [data-surface="light"] .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-white > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-1 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-2 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-3 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]) {
     color: #111 !important;
   }
 
-  /* Lucide / SVG glyphs forced white on light surfaces also flip */
-  [data-surface="light"] .text-white svg,
-  [data-surface="light"] svg.text-white {
+  /* Lucide / SVG glyphs forced white directly on a light surface only */
+  [data-surface="light"] > svg.text-white {
     color: #111 !important;
     stroke: currentColor;
   }
