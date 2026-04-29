@@ -281,7 +281,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
   // Pill styling
-  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0";
+  // `touch-manipulation` removes the 300ms double-tap-zoom delay on iOS/Android
+  // so chip taps fire instantly even mid-scroll, eliminating accidental
+  // "swallowed" taps when the user starts a horizontal pan and lifts on a pill.
+  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
     : "bg-white border border-gray-300 text-black hover:border-gray-400 hover:bg-gray-50";
@@ -323,7 +326,28 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     <>
       <div className="w-full">
         {/* Single merged row: Search + Filter Popovers + Sort + Map + Saved + Reset + Results */}
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+        {/*
+          Mobile-first horizontal rail:
+          - `overflow-x-auto` + `-webkit-overflow-scrolling: touch` = momentum
+            scrolling on iOS Safari.
+          - `overscroll-x-contain` stops swipes from triggering the browser's
+            back-gesture or rubber-banding the parent page.
+          - `touch-action: pan-x` locks the gesture axis so a quick horizontal
+            flick on a chip doesn't fight the page's vertical scroll, and a
+            vertical scroll doesn't get hijacked by the rail.
+          - `px-1` keeps the first/last pills from sitting flush against the
+            viewport edge, making them comfortably tappable.
+        */}
+        <div
+          className="flex items-center gap-1.5 overflow-x-auto overscroll-x-contain scrollbar-hide w-full px-1"
+          style={{
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            touchAction: 'pan-x',
+          } as React.CSSProperties}
+        >
+
           {/* Search slot or built-in search */}
           {searchSlot ? (
             <div className="min-w-0 max-w-[180px] flex-shrink-0" title="Search area, project, keyword">
