@@ -535,6 +535,29 @@ const Properties = () => {
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
+          {/* Active deep-link filter chips (status / category) */}
+          <ActiveFilterIndicator
+            transactionType={appliedFilters.transactionType}
+            completionStatus={appliedFilters.completionStatus}
+            propertyType={appliedFilters.propertyType}
+            onClearStatus={() => {
+              updateFilter("completionStatus", null);
+              setAppliedFilters((prev) => ({ ...prev, completionStatus: null }));
+            }}
+            onClearType={() => {
+              updateFilter("propertyType", null);
+              setAppliedFilters((prev) => ({ ...prev, propertyType: null }));
+            }}
+            onClearAll={() => {
+              updateFilter("completionStatus", null);
+              updateFilter("propertyType", null);
+              setAppliedFilters((prev) => ({
+                ...prev,
+                completionStatus: null,
+                propertyType: null,
+              }));
+            }}
+          />
           {/* Transaction Type Tabs - Buy / Rent */}
           <div className="flex items-center gap-1.5 sm:gap-2 mb-3 md:mb-4 flex-wrap">
             <span className="text-black/70 text-sm mr-2 font-medium">I want to:</span>
