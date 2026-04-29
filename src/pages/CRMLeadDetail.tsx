@@ -597,6 +597,11 @@ const CRMLeadDetail = () => {
             <SmartWhatsAppComposer lead={lead} />
           </TabsContent>
 
+          <TabsContent value="message-gen">
+            <LeadMessageGenerator lead={lead as any} />
+          </TabsContent>
+
+
           <TabsContent value="audit">
             <LeadAuditHistory leadId={id!} />
           </TabsContent>
