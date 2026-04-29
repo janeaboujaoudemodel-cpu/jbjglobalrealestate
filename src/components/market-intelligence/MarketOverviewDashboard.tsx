@@ -83,13 +83,13 @@ export const MarketOverviewDashboard = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-bold" style={{ color: '#000000' }}>
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-gold">Dubai</span> <span className="text-black">Real Estate Dashboard</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
+              <span style={{ color: '#000000' }}>Dubai</span> <span style={{ color: '#000000' }}>Real Estate Dashboard</span>
             </h2>
-            <p className="text-black/80 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
