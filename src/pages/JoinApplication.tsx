@@ -317,7 +317,7 @@ export default function JoinApplication() {
   if (checkingExisting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gold" />
+        <Loader2 className="h-8 w-8 animate-spin text-black" />
       </div>
     );
   }
@@ -336,7 +336,7 @@ export default function JoinApplication() {
                 </div>
                 <CardTitle className="text-3xl md:text-4xl text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Welcome Back!</CardTitle>
                 <CardDescription className="text-lg text-black/70">
-                  Your application status: <span className="font-semibold text-gold capitalize">{existingApplication.status}</span>
+                  Your application status: <span className="font-semibold text-black capitalize">{existingApplication.status}</span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
@@ -349,7 +349,7 @@ export default function JoinApplication() {
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
                           <span className="text-black">Go to</span>
-                          <span className="text-gold ml-1">Onboarding Dashboard</span>
+                          <span className="text-black underline ml-1">Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
@@ -376,14 +376,14 @@ export default function JoinApplication() {
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
                           <span className="text-black">Continue to</span>
-                          <span className="text-gold ml-1">Onboarding Dashboard</span>
+                          <span className="text-black underline ml-1">Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
                   </>
                 )}
                 <div className="pt-2">
-                  <Link to="/hr-agent" className="text-gold hover:underline text-sm">
+                  <Link to="/hr-agent" className="text-black underline hover:opacity-80 text-sm font-medium">
                     Need help? Chat with Jessica, our HR Assistant
                   </Link>
                 </div>
@@ -392,12 +392,12 @@ export default function JoinApplication() {
 
             {/* Contact Info */}
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-black/60">
-              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-gold transition-colors">
-                <Phone className="w-4 h-4 text-gold" />
+              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-black transition-colors">
+                <Phone className="w-4 h-4 text-black" />
                 {CONTACT_INFO.phone}
               </a>
-              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-gold transition-colors">
-                <Mail className="w-4 h-4 text-gold" />
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-black transition-colors">
+                <Mail className="w-4 h-4 text-black" />
                 {CONTACT_INFO.email}
               </a>
             </div>
@@ -414,7 +414,7 @@ export default function JoinApplication() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-black mb-2">
-              <span className="text-gold">Join</span> JBJ Global Real Estate
+              <span className="text-black underline decoration-black/40 underline-offset-8">Join</span> JBJ Global Real Estate
             </h1>
             <p className="text-black/70">
               Apply to become a broker partner. Complete the form below to start your journey.
@@ -580,27 +580,27 @@ export default function JoinApplication() {
                       <div
                         key={pos.id}
                         onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-xl border cursor-pointer transition-all bg-white shadow-sm hover:shadow-md ${
                           formData.positionApplied === pos.id
-                            ? "border-gold bg-gold/10 shadow-md"
-                            : "border-gold/20 bg-background hover:border-gold/50"
+                            ? "border-black ring-2 ring-black bg-gray-50"
+                            : "border-black/15 hover:border-black/40"
                         }`}
                       >
-                        <div className="flex items-start justify-between mb-1">
-                          <h4 className="font-semibold text-sm text-black">{pos.title}</h4>
+                        <div className="flex items-start justify-between mb-2 gap-2">
+                          <h4 className="font-semibold text-sm text-black leading-snug">{pos.title}</h4>
                           {pos.is_broker_role && (
-                            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0">
+                            <Badge className="bg-black text-white border-transparent text-[10px] px-1.5 py-0 shrink-0">
                               <Star className="w-2.5 h-2.5 mr-0.5" /> Partner
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-black/50">
-                          <Badge variant="outline" className="border-gold/20 text-black/60 text-[10px] px-1.5 py-0">{pos.department}</Badge>
-                          {pos.is_broker_role && <span className="text-gold font-medium">Commission Basis</span>}
-                          {pos.location && <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{pos.location}</span>}
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                          <Badge variant="outline" className="border-black/20 bg-gray-100 text-black text-[10px] px-1.5 py-0 font-medium">{pos.department}</Badge>
+                          {pos.is_broker_role && <span className="text-amber-700 font-semibold">Commission Basis</span>}
+                          {pos.location && <span className="flex items-center gap-0.5 text-gray-700"><MapPin className="w-2.5 h-2.5 text-black" />{pos.location}</span>}
                         </div>
                         {pos.description && (
-                          <p className="text-xs text-black/40 mt-1.5 line-clamp-2">{pos.description}</p>
+                          <p className="text-xs text-gray-700 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
                         )}
                       </div>
                     ))}
@@ -665,7 +665,7 @@ export default function JoinApplication() {
               {['property_consultant', 'senior_property_consultant', 'team_leader', 'sales_manager', 'sales_director', 'listing_agent', 'off_plan_specialist', 'secondary_market_agent', 'luxury_specialist', 'commercial_broker', 'leasing_consultant'].includes(formData.positionApplied) && (
                 <div className="space-y-4 p-4 rounded-xl border border-gold/30 bg-gold/5">
                   <h3 className="text-lg font-semibold text-black flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-gold" />
+                    <Briefcase className="h-5 w-5 text-black" />
                     Sales Qualification
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -692,7 +692,7 @@ export default function JoinApplication() {
                   </div>
 
                   <h3 className="text-lg font-semibold text-black mt-4 flex items-center gap-2">
-                    <User className="h-5 w-5 text-gold" />
+                    <User className="h-5 w-5 text-black" />
                     Professional References (2 required)
                   </h3>
                   <p className="text-sm text-black/60">Provide references from your previous employer so we can verify your experience.</p>
@@ -736,7 +736,7 @@ export default function JoinApplication() {
                   ) : (
                     <label className="cursor-pointer block w-full">
                       <div className="flex flex-col items-center gap-2 py-2">
-                        <Upload className="h-8 w-8 text-gold/60" />
+                        <Upload className="h-8 w-8 text-black/60" />
                         <span className="text-sm text-black/70">
                           Click to upload CV (PDF or Word, max 10MB)
                         </span>
@@ -779,9 +779,9 @@ export default function JoinApplication() {
                   />
                   <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-gold hover:underline" target="_blank">Terms of Service</Link>
+                    <Link to="/terms" className="text-black underline font-medium" target="_blank">Terms of Service</Link>
                     {" "}and{" "}
-                    <Link to="/privacy" className="text-gold hover:underline" target="_blank">Privacy Policy</Link>.
+                    <Link to="/privacy" className="text-black underline font-medium" target="_blank">Privacy Policy</Link>.
                   </Label>
                 </div>
               </div>
@@ -826,7 +826,7 @@ export default function JoinApplication() {
 
           <p className="text-center text-sm text-black/70 mt-6">
             Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="text-gold hover:underline">
+            <a href="mailto:contact@JBJ.ae" className="text-black underline font-medium">
               contact@JBJ.ae
             </a>
           </p>
