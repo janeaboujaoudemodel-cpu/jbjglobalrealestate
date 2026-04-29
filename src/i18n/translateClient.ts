@@ -234,3 +234,32 @@ export async function preloadTranslations(
   }
   await Promise.all(promises);
 }
+
+/**
+ * Pre-warm the curated chrome dictionary (nav, CTAs, headings) for a language.
+ * Single batch round-trip — after this resolves, switching to that language is
+ * effectively instant for the static UI surface. Body copy still streams in
+ * via the auto-translator as it appears.
+ */
+let prewarmed = new Set<Language>();
+export async function prewarmChromeDictionary(lang: Language): Promise<void> {
+  if (lang === 'en') return;
+  if (prewarmed.has(lang)) return;
+  prewarmed.add(lang);
+  try {
+    const { en } = await import('@/translations/en');
+    const flatten = (obj: any, out: string[] = []): string[] => {
+      for (const v of Object.values(obj ?? {})) {
+        if (typeof v === 'string') out.push(v);
+        else if (v && typeof v === 'object') flatten(v, out);
+      }
+      return out;
+    };
+    const strings = Array.from(new Set(flatten(en))).filter(shouldTranslate);
+    await preloadTranslations(strings, lang, 'ui');
+    notifyAll();
+  } catch (e) {
+    console.warn('prewarmChromeDictionary failed', e);
+    prewarmed.delete(lang); // allow retry
+  }
+}
