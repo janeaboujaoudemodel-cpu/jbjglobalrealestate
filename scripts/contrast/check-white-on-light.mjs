@@ -17,10 +17,13 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
 const SRC = path.join(root, 'src');
 
+// Only flag SOLID light backgrounds — translucent overlays like bg-white/10
+// are typically used on dark surfaces and must not match.
 const LIGHT_CLASS_RE =
-  /\b(bg-white|bg-pearl-[123]|bg-\[#F[0-9A-Fa-f]{2,5}\]|bg-\[#FFF[0-9A-Fa-f]*\]|bg-cream|bg-champagne|from-white|to-white|from-pearl-[123]|from-\[#F[0-9A-Fa-f]{2,5}\])\b/;
+  /\b(bg-white(?!\/)|bg-pearl-[123](?!\/)|bg-cream(?!\/)|bg-champagne(?!\/)|bg-\[#F[0-9A-Fa-f]{2,5}\](?!\/)|bg-\[#FFF[0-9A-Fa-f]*\](?!\/))\b/;
 
-const WHITE_TEXT_RE = /\btext-white(\/\d+)?\b/;
+// Same — solid text-white only (not text-white/40)
+const WHITE_TEXT_RE = /\btext-white(?!\/)\b/;
 
 const exts = new Set(['.tsx', '.jsx']);
 
