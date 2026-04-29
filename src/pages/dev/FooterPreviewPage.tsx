@@ -289,15 +289,26 @@ const FooterPreviewInner = () => {
             Ruler
           </button>
 
-          {/* Hex chip */}
+          {/* Hex + adaptive hairline read-out */}
           <div className="ml-auto flex items-center gap-2 text-[11px] text-white/60">
             <span
               className="inline-block h-4 w-4 rounded border border-white/20"
               style={preset.style}
             />
             <span className="font-mono">{preset.hex}</span>
-            <span className="hidden sm:inline">·</span>
-            <span className="hidden sm:inline">
+            {liveLuminance !== null && (
+              <>
+                <span className="hidden sm:inline">·</span>
+                <span
+                  className="hidden sm:inline font-mono text-[hsl(43_55%_70%)]"
+                  title="Underlay luminance detected by useAdaptiveHairline. Lower = darker, higher = brighter."
+                >
+                  L={liveLuminance.toFixed(3)}
+                </span>
+              </>
+            )}
+            <span className="hidden md:inline">·</span>
+            <span className="hidden md:inline">
               ← / → cycle · R ruler
             </span>
           </div>
