@@ -83,9 +83,24 @@ export const useDeleteClient = () => {
 export const useDeveloperRegistry = () => useQuery({
   queryKey: ["crm-dev-registry"],
   queryFn: async () => {
-    const { data, error } = await supabase.from("crm_developer_registry").select("*").order("developer_name");
-    if (error) throw error;
-    return data || [];
+    // Paginate past server-side row caps so the full registry (hundreds/thousands) is returned.
+    const PAGE = 1000;
+    const all: any[] = [];
+    let from = 0;
+    // Hard ceiling to avoid runaway loops; lifts the previous ~93/1000 visible cap.
+    while (from < 50000) {
+      const { data, error } = await supabase
+        .from("crm_developer_registry")
+        .select("*")
+        .order("developer_name")
+        .range(from, from + PAGE - 1);
+      if (error) throw error;
+      const batch = data || [];
+      all.push(...batch);
+      if (batch.length < PAGE) break;
+      from += PAGE;
+    }
+    return all;
   },
 });
 
