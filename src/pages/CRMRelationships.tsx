@@ -734,23 +734,72 @@ const DeveloperRegistryTab = () => {
                         )}
                         {r.outreach_count > 1 && <span className="text-xs text-emerald-700">×{r.outreach_count}</span>}
                       </div>
-                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-gray-700">
-                        {r.developer_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</span>}
-                        <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{r.phone || "—"}</span>
-                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.emirate || "—"}</span>
-                        {r.website && <a href={r.website} target="_blank" rel="noopener noreferrer" className="underline hover:text-black" onClick={(e) => e.stopPropagation()}>Website ↗</a>}
-                        {r.agency_code && <span>Code: {r.agency_code}</span>}
-                      </div>
-                      {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-black bg-amber-50 border border-amber-200 rounded px-2 py-1">
-                          <span className="font-semibold">👤 {r.developer_contact?.name || "Contact"}</span>
-                          {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
-                          {r.developer_contact?.phone && <a href={`tel:${r.developer_contact.phone}`} className="underline" onClick={(e) => e.stopPropagation()}>{r.developer_contact.phone}</a>}
-                          {r.developer_contact?.email && <a href={`mailto:${r.developer_contact.email}`} className="underline" onClick={(e) => e.stopPropagation()}>✉ {r.developer_contact.email}</a>}
+                      <div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-800">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <Building2 className="w-3 h-3 text-gray-500 shrink-0" />
+                          <span className="text-gray-500 shrink-0">Company:</span>
+                          <span className="font-medium text-black truncate">{r.developer_name || "—"}</span>
                         </div>
-                      ) : (
-                        <button onClick={() => openEdit(r)} className="mt-1 text-[11px] text-gray-500 hover:text-black italic">+ Add contact person</button>
-                      )}
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
+                          <span className="text-gray-500 shrink-0">Office:</span>
+                          <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <Phone className="w-3 h-3 text-gray-500 shrink-0" />
+                          <span className="text-gray-500 shrink-0">Phone:</span>
+                          {r.phone ? (
+                            <a href={`tel:${r.phone}`} className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.phone}</a>
+                          ) : (
+                            <span className="font-medium text-black">—</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <Mail className="w-3 h-3 text-gray-500 shrink-0" />
+                          <span className="text-gray-500 shrink-0">Email:</span>
+                          {r.developer_email ? (
+                            <a href={`mailto:${r.developer_email}`} className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.developer_email}</a>
+                          ) : (
+                            <span className="font-medium text-black">—</span>
+                          )}
+                        </div>
+                        {r.website && (
+                          <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
+                            <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
+                            <span className="text-gray-500 shrink-0">Website:</span>
+                            <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
+                          </div>
+                        )}
+                        {r.agency_code && (
+                          <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
+                            <span className="text-gray-500 shrink-0">Agency code:</span>
+                            <span className="font-medium text-black">{r.agency_code}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5">
+                        <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-amber-900 mb-0.5">
+                          <Users className="w-3 h-3" />Point of Contact
+                        </div>
+                        {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
+                          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
+                            <span className="font-semibold">{r.developer_contact?.name || "—"}</span>
+                            {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
+                            {r.developer_contact?.phone && (
+                              <a href={`tel:${r.developer_contact.phone}`} className="underline flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <Phone className="w-3 h-3" />{r.developer_contact.phone}
+                              </a>
+                            )}
+                            {r.developer_contact?.email && (
+                              <a href={`mailto:${r.developer_contact.email}`} className="underline flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                                <Mail className="w-3 h-3" />{r.developer_contact.email}
+                              </a>
+                            )}
+                          </div>
+                        ) : (
+                          <button onClick={() => openEdit(r)} className="text-[11px] text-amber-900/70 hover:text-amber-900 italic">+ Add point of contact</button>
+                        )}
+                      </div>
                       {noteEditing === r.id ? (
                         <div className="mt-2">
                           <Textarea

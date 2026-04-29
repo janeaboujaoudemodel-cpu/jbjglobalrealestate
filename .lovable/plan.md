@@ -1,121 +1,123 @@
-# Show All Developers on the Relationships Page
+# Always-Visible Developer Card Details
 
-## Why it stops at 93
+## Goal
 
-The Relationships → Developer Registry tab reads from `crm_developer_registry`, which currently has **exactly 93 rows** (verified via DB query). It is not a UI / pagination limit — the table only contains the 93 entries seeded by `public.seed_crm_developer_registry`, a hard-coded VALUES list of curated UAE developers.
+Make every developer card in **Relationships → Developer Registry** show, without any click or hover:
 
-Meanwhile, your master `public.developers` catalog has **633 rows** that never get imported into the CRM registry. That mismatch is the gap you're seeing.
+- **Name** — the developer / company name
+- **Company** — same value, shown with an explicit "Company:" label so the role is unambiguous
+- **Office location** — the registry's `emirate` field (e.g. Dubai, Abu Dhabi)
+- **Phone** — registry `phone`, click-to-call, or `—` when not set
+- **External point of contact** — `developer_contact.name`, role, phone, email, all visible up-front
 
-## Fix — "Import All Developers" action
+The current card already renders most of these, but they're crammed into a single wrap row and the contact block only appears if data exists. We'll restructure into a clear labeled grid that always renders all five rows, so nothing is hidden behind a click.
 
-Add a one-click action that imports the full developer catalog into the registry, alongside the existing curated "Pre-fill" button (which stays — no removal).
+## Change — `src/pages/CRMRelationships.tsx` (Developer Registry tab card body)
 
-### 1. New hook: `useImportAllDevelopersToRegistry` in `src/hooks/useCRMRelationships.ts`
+Replace the single inline meta line (lines 737–753) with:
 
-Pure client-side import (no DB migration needed — RLS already lets owners insert their own rows):
+1. **Two-column labeled grid** with icons and label/value pairs:
+   - `Building2` Company: <name>
+   - `MapPin` Office: <emirate or "—">
+   - `Phone` Phone: <click-to-call or "—">
+   - `Mail` Email: <mailto or "—">
+   - `LinkIcon` Website: <link> (full row, only when present)
+   - Agency code: <code> (full row, only when present)
 
-```ts
-export const useImportAllDevelopersToRegistry = () => {
-  const qc = useQueryClient();
-  const { user } = useAuth();
-  return useMutation({
-    mutationFn: async () => {
-      if (!user) throw new Error("Not signed in");
-
-      const slugify = (n: string) =>
-        n.toLowerCase().replace(/[^a-z0-9 -]/g, "").replace(/\s+/g, "-");
-
-      const PAGE = 1000;
-      let from = 0;
-      let imported = 0;
-
-      // Page through the catalog (Supabase caps a single request at 1000 rows).
-      while (true) {
-        const { data: devs, error } = await supabase
-          .from("developers")
-          .select("name, slug, website_url")
-          .or("is_hidden.is.null,is_hidden.eq.false")
-          .order("name")
-          .range(from, from + PAGE - 1);
-        if (error) throw error;
-        if (!devs?.length) break;
-
-        const rows = devs
-          .filter(d => d.name?.trim())
-          .map(d => ({
-            owner_id: user.id,
-            developer_name: d.name,
-            developer_slug: d.slug?.length ? d.slug : slugify(d.name),
-            website: d.website_url ?? null,
-            developer_contact: {},
-            status: "not_started",
-            required_docs_complete: false,
-            priority: "medium",
-          }));
-
-        if (rows.length) {
-          // Idempotent — never overwrites existing curated entries.
-          const { error: upErr } = await supabase
-            .from("crm_developer_registry")
-            .upsert(rows, {
-              onConflict: "owner_id,developer_slug",
-              ignoreDuplicates: true,
-            });
-          if (upErr) throw upErr;
-          imported += rows.length;
-        }
-
-        if (devs.length < PAGE) break;
-        from += PAGE;
-      }
-      return imported;
-    },
-    onSuccess: (count) => {
-      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
-      toast.success(`Imported ${count} developers from the catalog`);
-    },
-    onError: (e: any) => toast.error(e.message || "Import failed"),
-  });
-};
-```
-
-Why this is safe:
-- The unique constraint `(owner_id, developer_slug)` already exists, so `ignoreDuplicates: true` makes the operation idempotent — no duplicates, no overwrites of existing curated rows.
-- Only the signed-in owner's `owner_id` is used; RLS policy `owner_full_dev_registry` allows that insert.
-- Pagination handled in 1000-row pages so even a 10k-row catalog would still work.
-
-### 2. UI button in `src/pages/CRMRelationships.tsx` (Developer Registry tab)
-
-Right next to the existing "Pre-fill" button (line 662):
+2. **Always-visible "Point of Contact" card** (amber-on-white per existing convention):
+   - Header chip "Point of Contact" with `Users` icon
+   - When data exists: name · role · click-to-call phone · mailto email
+   - When empty: a subtle "+ Add point of contact" button that opens the edit dialog
 
 ```tsx
-const importAll = useImportAllDevelopersToRegistry();
-…
-<Button
-  variant="outline"
-  onClick={() => importAll.mutate()}
-  disabled={importAll.isPending}
->
-  {importAll.isPending ? "Importing…" : "Import all developers"}
-</Button>
+<div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-800">
+  <div className="flex items-center gap-1.5">
+    <Building2 className="w-3 h-3 text-gray-500 shrink-0" />
+    <span className="text-gray-500">Company:</span>
+    <span className="font-medium text-black truncate">{r.developer_name || "—"}</span>
+  </div>
+  <div className="flex items-center gap-1.5">
+    <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
+    <span className="text-gray-500">Office:</span>
+    <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
+  </div>
+  <div className="flex items-center gap-1.5">
+    <Phone className="w-3 h-3 text-gray-500 shrink-0" />
+    <span className="text-gray-500">Phone:</span>
+    {r.phone
+      ? <a href={`tel:${r.phone}`} className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.phone}</a>
+      : <span className="font-medium text-black">—</span>}
+  </div>
+  <div className="flex items-center gap-1.5">
+    <Mail className="w-3 h-3 text-gray-500 shrink-0" />
+    <span className="text-gray-500">Email:</span>
+    {r.developer_email
+      ? <a href={`mailto:${r.developer_email}`} className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.developer_email}</a>
+      : <span className="font-medium text-black">—</span>}
+  </div>
+  {r.website && (
+    <div className="flex items-center gap-1.5 sm:col-span-2">
+      <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
+      <span className="text-gray-500">Website:</span>
+      <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.website}</a>
+    </div>
+  )}
+  {r.agency_code && (
+    <div className="flex items-center gap-1.5 sm:col-span-2">
+      <span className="text-gray-500">Agency code:</span>
+      <span className="font-medium text-black">{r.agency_code}</span>
+    </div>
+  )}
+</div>
+
+<div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5">
+  <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-amber-900 mb-0.5">
+    <Users className="w-3 h-3" />Point of Contact
+  </div>
+  {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
+    <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
+      <span className="font-semibold">{r.developer_contact?.name || "—"}</span>
+      {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
+      {r.developer_contact?.phone && (
+        <a href={`tel:${r.developer_contact.phone}`} className="underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
+          <Phone className="w-3 h-3" />{r.developer_contact.phone}
+        </a>
+      )}
+      {r.developer_contact?.email && (
+        <a href={`mailto:${r.developer_contact.email}`} className="underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
+          <Mail className="w-3 h-3" />{r.developer_contact.email}
+        </a>
+      )}
+    </div>
+  ) : (
+    <button onClick={() => openEdit(r)} className="text-[11px] text-amber-900/70 hover:text-amber-900 italic">
+      + Add point of contact
+    </button>
+  )}
+</div>
 ```
 
-After the call resolves, the React Query cache is invalidated and the registry list re-renders with the full set (≈633 rows). The list, search, and status filters already work for any size — the only reason it "stopped" was that the data wasn't there.
+`Building2`, `Users`, `LinkIcon`, `Phone`, `Mail`, `MapPin` are already imported in this file — no new imports.
 
-### 3. No removals, no schema changes
+## What is preserved (no removal)
 
-- Existing "Pre-fill" curated seed stays.
-- No DB migration needed (we use the existing table, constraints, and RLS).
-- No reduction in feature surface.
+- Header row with developer name, status pill, "Confirmed" / "Email sent N days ago" badges, and outreach count.
+- Notes inline editor.
+- Action buttons (Send / AI / Remind / Edit).
+- AI next-action banner.
+- Selection checkbox and bulk actions.
+
+## Why this is internal-only and safe
+
+The Relationships page lives under owner-restricted routes; per the project's "Contact Gating Standard", developer/broker contact info is only displayed in the owner workspace. This change does not surface any contact details on public pages.
 
 ## Files touched
 
-- `src/hooks/useCRMRelationships.ts` — add `useImportAllDevelopersToRegistry`.
-- `src/pages/CRMRelationships.tsx` — add "Import all developers" button on the Developer Registry tab toolbar.
+- `src/pages/CRMRelationships.tsx` — replace the meta row + conditional contact block with a labeled grid and a permanent Point-of-Contact panel inside `DeveloperRegistryTab`'s card.
 
 ## Verification
 
-1. Open Relationships → Developer Registry → click "Import all developers".
-2. Toast shows the imported count (~633).
-3. Refresh / scroll — the registry list now shows all developers (no longer capped at 93).
-4. Click again → toast shows the same count, but no duplicates appear (idempotent).
+1. Open Relationships → Developer Registry.
+2. Every card shows, without any interaction: Name, Company, Office, Phone, Email (and Website / Agency code when set).
+3. Cards with a saved point of contact show name, role, click-to-call phone, mailto email — all visible at a glance.
+4. Cards without a point of contact still show the panel with a small "+ Add point of contact" inline action that opens the existing edit dialog.
