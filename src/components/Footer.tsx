@@ -568,9 +568,15 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Single premium hairline below the nav grid */}
+      {/* Soft champagne hairline below the nav grid */}
       <div className="px-4 sm:px-6 md:px-8">
-        <div className="max-w-7xl mx-auto h-px" style={{ background: HAIRLINE }} />
+        <div
+          className="max-w-7xl mx-auto h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+          }}
+        />
       </div>
 
       {/* === ZONE 3 — Contact strip + compact legal === */}
