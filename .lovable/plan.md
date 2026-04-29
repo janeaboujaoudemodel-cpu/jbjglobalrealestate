@@ -1,201 +1,123 @@
-# AI Research & Backfill for Developer Registry — with Per-Field Sources
+## What's actually wrong
 
-## Why
+1. **"When I click Properties it opens the wrong page."** The route `/properties` is wired to `PropertiesReelly` (a marketing landing), not to `Properties.tsx` which is the real listings page with Buy/Sell/Rent and Ready/Off-plan filters already built in.
+2. **"Property Management page looks broken."** `src/pages/services/PropertyManagement.tsx` is built on a gold-on-champagne palette with `Playfair Display` serif. The hero subtitle uses `text-gray-600` on a near-black gradient (unreadable). This violates four locked design memories (Monochrome, Typography, CTA, Footer).
+3. **The Properties click should reveal a richer menu** (Buy / Sell / Rent, Ready / Off-plan, plus categories: apartments, villas, townhouses, penthouses, retail, commercial, offices, plots).
 
-The Developer Registry currently has 93 rows, but **0 phones, 0 emirates, 0 websites** stored on the registry itself, even though:
+I will not delete any feature on the Property Management page (No Removal policy) — only restyle.
 
-- The master `public.developers` catalog has `headquarters` and `website_url` for hundreds of UAE developers.
-- Lovable AI, Perplexity, and Firecrawl are all available for live web research.
+---
 
-We'll add a one-click "Research & enrich" workflow that fills missing fields from (1) our own master catalog, then (2) AI/web research, and records *where each value came from* so the user can audit it on each card.
+## Step 1 — Properties navigation (dropdown + filtered page)
 
-## Scope of fields to enrich
+### 1a. Mega-menu in the top utility bar
+File: `src/components/navigation/HorizontalUtilityBar.tsx` (the existing "Browse" Popover, lines ~226–263).
 
-For every registry row, attempt to fill (only where currently empty):
+Expand the popover from 3 items to a 3-column mega-menu:
 
-- `developer_email` (corporate sales/info email)
-- `phone` (HQ phone)
-- `emirate` (Dubai / Abu Dhabi / etc.)
-- `website`
-- `developer_contact` jsonb → `{ name, role, phone, email }` (point of contact)
-
-## Data model — provenance
-
-New jsonb column on `crm_developer_registry`:
-
-```
-field_sources jsonb default '{}'::jsonb
-```
-
-Shape:
-```jsonc
-{
-  "phone":      { "source": "perplexity",   "url": "https://...", "fetched_at": "2026-04-29T..." },
-  "emirate":    { "source": "master_catalog", "fetched_at": "..." },
-  "website":    { "source": "perplexity",   "url": "https://...", "fetched_at": "..." },
-  "developer_email": { "source": "ai_inference", "fetched_at": "..." },
-  "developer_contact": { "source": "manual", "fetched_at": "..." }
-}
+```text
+┌──────────────────── BROWSE PROPERTIES ────────────────────┐
+│ TRANSACTION       │ READINESS         │ CATEGORY          │
+│  Buy              │  Ready to move    │  Apartments       │
+│  Rent             │  Off-plan         │  Villas           │
+│  Sell (list)      │  New launches     │  Townhouses       │
+│                   │                   │  Penthouses       │
+│                   │                   │  Commercial       │
+│                   │                   │  Retail           │
+│                   │                   │  Offices          │
+│                   │                   │  Plots / Land     │
+│  ┌──────────────────────────────────────────────────────┐ │
+│  │ [ See all properties → ]   [ Resale investor deals ] │ │
+│  └──────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────┘
 ```
 
-`source` values: `master_catalog`, `perplexity`, `firecrawl`, `ai_inference`, `manual`.
-`manual` is set automatically when the user edits a field via the existing edit dialog.
+Each link routes to `/properties` with the matching URL param the existing `Properties.tsx` page already understands:
+- Transaction: `?transactionType=buy|rent`
+- Readiness: `?completionStatus=ready` / `?completionStatus=off-plan` / `?status=new_launch`
+- Category: `?type=apartment|villa|townhouse|penthouse|commercial|retail|office|plot`
 
-A small DB trigger on `crm_developer_registry` updates `field_sources[<field>] = {source: 'manual', fetched_at: now()}` whenever the underlying field changes and `field_sources` wasn't explicitly set in the same statement.
+Same pattern applied to `GlobalVerticalNav.tsx` Properties section so the side rail matches.
 
-## Edge function — `enrich-developer-registry` (new)
+### 1b. Properties route fix
+File: `src/routes/PublicRoutes.tsx` line 202.
 
-Path: `supabase/functions/enrich-developer-registry/index.ts`
-
-Inputs (POST JSON):
-- `ids?: string[]` — specific registry rows; if omitted, picks rows missing any of the target fields, ordered by `created_at` ASC, capped at `batchSize`.
-- `batchSize?: number` (default 8, max 25)
-- `useWeb?: boolean` (default true) — toggle Perplexity/Firecrawl research.
-
-Per row pipeline (only fills empty fields, never overwrites existing values):
-
-1. **Master-catalog fill** — left-join `developers` by `lower(slug)`. If matched and registry field is empty:
-   - `website` ← `developers.website_url`
-   - `emirate` ← parse from `developers.headquarters` (regex: Dubai|Abu Dhabi|Sharjah|Ajman|Ras Al Khaimah|Fujairah|Umm Al Quwain).
-   - Source: `master_catalog`.
-
-2. **Perplexity research** (`sonar` model) — single grounded query per developer:
-   > "For the UAE real estate developer "<name>", return strict JSON: { hq_emirate, hq_address, phone, sales_email, website, contact_name, contact_role }. Only include fields you can verify from official sources (developer's own site, DLD, RERA, LinkedIn). Use null for unknown."
-   - Use `response_format: json_schema` for structured output.
-   - Citations from `data.citations[0]` saved as `url`.
-   - Source: `perplexity`.
-
-3. **Firecrawl fallback** — only when Perplexity returned a website but no phone/email, scrape `<website>/contact` (or `/`) with `formats: ['markdown']`, then a small Lovable AI extraction call to pick `phone`/`email` out of the markdown. Source: `firecrawl`.
-
-4. **AI inference last resort** — `google/gemini-3-flash-preview` produces a best-guess `developer_email` (e.g. `info@<domain>`) only if no email was found and a website domain is known. Source: `ai_inference`. Marked clearly in the UI as inferred.
-
-For each filled field, set both the value AND `field_sources[field] = {source, url?, fetched_at}` in a single update so the auto-`manual` trigger does not fire.
-
-Returns `{ processed, results: [{ id, name, filled: ['phone','website',...], skipped: [...] }] }`.
-
-Auth: standard JWT verification + `requireOwnerAuth`-equivalent check that the caller owns the registry rows (matches existing patterns in `crm-relationship-ai`).
-
-Rate limits: 8 rows per request, 1.2 s delay between Perplexity calls. Surface 402/429 from Perplexity/Firecrawl back to the client as toasts.
-
-## Hook — `useEnrichDeveloperRegistry`
-
-In `src/hooks/useCRMRelationships.ts`:
-
+Change:
 ```ts
-export const useEnrichDeveloperRegistry = () =>
-  useMutation({
-    mutationFn: async (input: { ids?: string[]; useWeb?: boolean } = {}) => {
-      const { data, error } = await supabase.functions.invoke("enrich-developer-registry", { body: input });
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      qc.invalidateQueries({ queryKey: ["crm-developer-registry"] });
-      toast({ title: "Enrichment complete", description: `${data.processed} developers updated.` });
-    },
-    onError: (e: any) => toast({ title: "Enrichment failed", description: e.message, variant: "destructive" }),
-  });
+<Route path="/properties" element={<PropertiesReelly />} />
+```
+to:
+```ts
+<Route path="/properties" element={<Properties />} />
+<Route path="/properties/explore" element={<PropertiesReelly />} />
 ```
 
-## UI changes — `src/pages/CRMRelationships.tsx`
+`PropertiesReelly` is preserved (No Removal) at the new `/properties/explore` path, and the marketing CTAs still work. The existing redirects `/buy → /properties?transactionType=buy` and `/rent → /properties?transactionType=rent` then reach the right page automatically.
 
-1. **Toolbar button** in the Developer Registry tab, next to the existing **Pre-fill** / **Import all developers**:
+### 1c. Filter chips on the listings page
+`Properties.tsx` already shows Buy/Rent toggles and a Ready/Off-plan strip. I'll surface category chips (apartment, villa, townhouse, penthouse, commercial, retail, office, plot) in the same row using the existing `appliedFilters.propertyType` field, so the page lands with the chip pre-selected when arriving from the dropdown.
 
-   - **"Research & enrich"** — runs `useEnrichDeveloperRegistry` with no `ids`, `useWeb: true`.
-     - Shows a confirm dialog: "This will research up to 8 developers per click using AI + web sources. Continue?"
-     - Loading state with spinner; disabled while running.
+---
 
-2. **Per-card per-field source chip** — on each developer card (the labeled grid we just shipped), append a tiny pill next to the value when `r.field_sources?.[field]` is set. Click opens a popover showing source + fetched date + link.
+## Step 2 — Rebuild Property Management page on the locked design system
 
-   ```tsx
-   const FieldSource = ({ meta }: { meta?: { source: string; url?: string; fetched_at?: string } }) => {
-     if (!meta) return null;
-     const colors: Record<string, string> = {
-       master_catalog: "bg-emerald-50 text-emerald-800 border-emerald-200",
-       perplexity:     "bg-blue-50 text-blue-800 border-blue-200",
-       firecrawl:      "bg-indigo-50 text-indigo-800 border-indigo-200",
-       ai_inference:   "bg-amber-50 text-amber-900 border-amber-200",
-       manual:         "bg-gray-100 text-gray-700 border-gray-200",
-     };
-     return (
-       <Popover>
-         <PopoverTrigger asChild>
-           <button className={`text-[9px] uppercase tracking-wider px-1.5 py-px rounded-full border ${colors[meta.source] || colors.manual}`}>
-             {meta.source.replace("_", " ")}
-           </button>
-         </PopoverTrigger>
-         <PopoverContent className="text-xs">
-           <div className="font-semibold capitalize">{meta.source.replace("_", " ")}</div>
-           {meta.url && <a href={meta.url} target="_blank" rel="noopener noreferrer" className="underline break-all block mt-1">{meta.url}</a>}
-           {meta.fetched_at && <div className="text-gray-500 mt-1">Fetched {new Date(meta.fetched_at).toLocaleString()}</div>}
-         </PopoverContent>
-       </Popover>
-     );
-   };
-   ```
+File: `src/pages/services/PropertyManagement.tsx`
 
-   Render `<FieldSource meta={r.field_sources?.phone} />` next to each labeled value (phone, email, website, office, point-of-contact name).
+Replace styling only — keep every section, every list, every FAQ, every CTA, every form field. Concretely:
 
-3. **Per-row "Enrich"** action — already-existing AI button beside Send/Remind/Edit gets a sibling **"Research"** button (icon `BookOpen`) that calls `useEnrichDeveloperRegistry({ ids: [r.id] })` for that single row.
+| Currently | Replace with |
+|---|---|
+| `bg-gradient-to-br from-[#FDFBF7] via-[#F8F3EA] to-[#F0E8D8]` page bg | `bg-background` (white) |
+| Hero `bg-gradient-to-b from-[#1a1714] to-[#151210]` + gold radial blobs | Clean white hero with a single thin `<AdaptiveHairline />` divider; eyebrow chip uses `border-border bg-card text-foreground` |
+| `font-family: Playfair Display, serif` everywhere | `Inter` (project default) — remove inline `style={{ fontFamily }}` |
+| `#C8A766` gold accents in body text/headings | `text-foreground` for headings, `text-muted-foreground` for descriptions, `--price-orange` only for any monetary stats |
+| `text-gray-600` on dark hero (the unreadable line) | `text-foreground/80` on white hero |
+| Gold CTA buttons (`PremiumHeroButton`) | Existing `Button` primary (black on white, white on black), no gold text |
+| Champagne `CCard` (gradient + gold border) | Standard `Card` from `@/components/ui/card` with `border border-border` and white surface |
+| Section heading "first word in gold" | Solid `text-foreground` heading; optional small uppercase eyebrow above in `text-muted-foreground` |
 
-## Migration
+Trust badges, performance stats, onboarding steps, leasing steps, service modules, FAQ accordion, fees table, consultation form — all preserved.
 
-Single migration:
+---
 
-```sql
-alter table public.crm_developer_registry
-  add column if not exists field_sources jsonb not null default '{}'::jsonb;
+## Step 3 — Global contrast audit (whole app, public + dashboards)
 
--- Auto-mark manual edits
-create or replace function public.mark_registry_field_sources()
-returns trigger language plpgsql as $$
-declare
-  ts text := to_char(now() at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
-begin
-  if new.field_sources is null then new.field_sources := '{}'::jsonb; end if;
-  if new.phone is distinct from old.phone and (new.field_sources -> 'phone') = (old.field_sources -> 'phone') then
-    new.field_sources := jsonb_set(new.field_sources, '{phone}', jsonb_build_object('source','manual','fetched_at',ts), true);
-  end if;
-  if new.developer_email is distinct from old.developer_email and (new.field_sources -> 'developer_email') = (old.field_sources -> 'developer_email') then
-    new.field_sources := jsonb_set(new.field_sources, '{developer_email}', jsonb_build_object('source','manual','fetched_at',ts), true);
-  end if;
-  if new.emirate is distinct from old.emirate and (new.field_sources -> 'emirate') = (old.field_sources -> 'emirate') then
-    new.field_sources := jsonb_set(new.field_sources, '{emirate}', jsonb_build_object('source','manual','fetched_at',ts), true);
-  end if;
-  if new.website is distinct from old.website and (new.field_sources -> 'website') = (old.field_sources -> 'website') then
-    new.field_sources := jsonb_set(new.field_sources, '{website}', jsonb_build_object('source','manual','fetched_at',ts), true);
-  end if;
-  if new.developer_contact is distinct from old.developer_contact and (new.field_sources -> 'developer_contact') = (old.field_sources -> 'developer_contact') then
-    new.field_sources := jsonb_set(new.field_sources, '{developer_contact}', jsonb_build_object('source','manual','fetched_at',ts), true);
-  end if;
-  return new;
-end$$;
+This is a sweep, not a redesign. Targets the patterns that produce the "unreadable / broken" feel:
 
-drop trigger if exists trg_mark_registry_field_sources on public.crm_developer_registry;
-create trigger trg_mark_registry_field_sources
-  before update on public.crm_developer_registry
-  for each row execute function public.mark_registry_field_sources();
-```
+1. **`text-gray-*` on dark surfaces** — replace with `text-foreground`, `text-muted-foreground`, or `text-white/80` per the surface, using the White-on-Light Guard rule.
+2. **Solid white text on light/gold surfaces** — flip to `text-foreground` (the static/runtime guard already exists; I'll fix the violations it would catch).
+3. **Gold text in interactive controls** (links, buttons, tab triggers) — replace with `text-foreground` per CTA System Standard. Gold remains permitted only as a thin hairline accent.
+4. **Body copy at < 14px or `opacity < 0.7` on busy backgrounds** — bump to `text-sm` minimum and `/80` opacity floor.
+5. **Disabled/muted form labels** — ensure `text-muted-foreground` resolves to a contrast ratio ≥ 4.5:1 on the surface.
 
-(Trigger fires only on UPDATE so the bulk import path stays untouched.)
+I'll grep the codebase for the offending tokens (`text-gray-`, `text-[#C8A766]`, `text-white` on light bg, `Playfair`, etc.) and fix violations file-by-file. I'll batch this across:
+- Public pages (Home, Properties, Communities, Services/*, About, Contact, Legal, Company Profile)
+- Owner/admin dashboards
+- Auth + onboarding screens
 
-## Privacy / compliance
+Locked features (Resale Investor Listings, Legal Hub, Company Profile Premium dark theme, AI purple theme, Executive Command Center) keep their distinct themes — the audit only fixes contrast violations inside them, not the theme itself.
 
-- Registry is owner-only (RLS + `OwnerGuard`); the new chip and source URL only appear on the internal page. Per project memory: developer/broker contact info is never displayed publicly — unchanged.
-- We do NOT publish the AI-inferred email to the user-facing inquiry forms; it lives only inside the registry until the owner reviews it.
-- Source chip clearly labels `ai inference` so any unverified value is auditable.
+---
 
-## Files touched
+## Files I'll touch
 
-- `supabase/migrations/<ts>_registry_field_sources.sql` — new column + trigger.
-- `supabase/functions/enrich-developer-registry/index.ts` — new edge function.
-- `src/hooks/useCRMRelationships.ts` — add `useEnrichDeveloperRegistry`.
-- `src/pages/CRMRelationships.tsx` — toolbar button, per-row "Research" button, `FieldSource` pills next to each value in the developer card.
+**Step 1 (nav + routing):**
+- `src/components/navigation/HorizontalUtilityBar.tsx`
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `src/routes/PublicRoutes.tsx`
+- `src/pages/Properties.tsx` (category chip row only)
 
-## Verification
+**Step 2 (Property Management restyle):**
+- `src/pages/services/PropertyManagement.tsx`
 
-1. Click **Research & enrich** in Developer Registry → toast shows "N developers updated".
-2. Reload the tab — cards now show populated phone/email/office/website with a tiny chip next to each value (e.g. `perplexity` blue, `master catalog` emerald, `ai inference` amber).
-3. Click the chip — popover shows source, link (when available) and fetched date.
-4. Edit a field manually → chip flips to gray `manual`.
-5. Per-row "Research" button on a single card fills only that row.
+**Step 3 (contrast audit, in batches):**
+- Targeted edits across `src/pages/**`, `src/components/**` where offending classes are detected. Each batch shows the file list before editing.
+
+---
+
+## Out of scope
+
+- No database changes.
+- No edge function changes.
+- No removal of any existing section, link, or feature.
+- Locked themes (Resale, Legal Hub, Company Profile dark, AI purple) keep their identity.
