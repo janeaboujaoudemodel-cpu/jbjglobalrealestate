@@ -219,8 +219,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
   }, []);
 
+  // Show on phones + tablets only — never on desktop (≥1280px)
+  const [isPhoneOrTablet, setIsPhoneOrTablet] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 1280;
+  });
   useEffect(() => {
-    if (isMobile && showDesktopBanner) {
+    const onResize = () => setIsPhoneOrTablet(window.innerWidth < 1280);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
+    if (isPhoneOrTablet && showDesktopBanner) {
       toast("For the best experience on our full portal, use a desktop browser.", {
         icon: <Monitor className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />,
         duration: 8000,
