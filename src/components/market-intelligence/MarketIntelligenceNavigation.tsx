@@ -39,22 +39,21 @@ export const MarketIntelligenceNavigation = ({
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
         {showStartHere && (
-          <div className="mb-8 jj-card-inner border-2 border-gold/50 rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
-            {/* Active color icon box */}
-            <div className="jj-icon-box-active w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <BarChart3 className="w-7 h-7 text-black" />
+          <div className="mb-8 rounded-2xl p-8 text-center shadow-lg" style={{ backgroundColor: '#FFFFFF', borderColor: '#000000', borderWidth: 2 }}>
+            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#000000' }}>
+              <BarChart3 className="w-7 h-7" style={{ color: '#ffffff' }} />
             </div>
-            <h3 className="text-xl font-bold text-black mb-3">New to Market Intelligence?</h3>
-            <p className="text-gray-600 text-sm mb-5 max-w-md mx-auto leading-relaxed">
+            <h3 className="text-xl font-bold mb-3" style={{ color: '#000000' }}>New to Market Intelligence?</h3>
+            <p className="text-sm mb-5 max-w-md mx-auto leading-relaxed" style={{ color: '#374151' }}>
               Start with our Market Overview to understand the Dubai real estate landscape.
             </p>
             <Link 
               to="/market-intelligence/overview"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-xl transition-all text-sm font-semibold shadow-[0_8px_25px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_35px_rgba(200,167,102,0.45),0_8px_25px_rgba(0,0,0,0.18)] hover:-translate-y-1"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-sm font-semibold hover:-translate-y-0.5"
+              style={{ backgroundColor: '#000000', color: '#ffffff' }}
             >
-              <span className="text-gold">Start Here:</span>
-              <span className="text-black">Market Overview</span>
-              <ArrowRight className="w-4 h-4 text-black" />
+              <span style={{ color: '#ffffff' }}>Start Here: Market Overview</span>
+              <ArrowRight className="w-4 h-4" style={{ color: '#ffffff' }} />
             </Link>
           </div>
         )}
