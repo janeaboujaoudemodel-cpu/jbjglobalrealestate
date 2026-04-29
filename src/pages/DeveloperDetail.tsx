@@ -13,6 +13,7 @@ import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronD
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
+import { HtmlT } from "@/i18n/HtmlT";
 import { DeveloperAIAnalyzer } from "@/components/developer/DeveloperAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -290,11 +291,10 @@ const DeveloperDetail = () => {
             {developer.description && (
               <div className="max-w-3xl">
                 <div className={`relative ${!isDevDescExpanded && developer.description.length > 400 ? 'max-h-32 overflow-hidden' : ''}`}>
-                  <div 
+                  <HtmlT
+                    html={renderMarkdownToHtml(formatReellyDescription(developer.description))}
+                    domain="developer.description"
                     className="text-foreground/75 text-base md:text-lg leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:mb-2"
-                    dangerouslySetInnerHTML={{ 
-                      __html: renderMarkdownToHtml(formatReellyDescription(developer.description)) 
-                    }}
                   />
                   {!isDevDescExpanded && developer.description.length > 400 && (
                     <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />

@@ -7,6 +7,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { renderMarkdownToHtml } from "@/lib/markdownUtils";
+import { HtmlT } from "@/i18n/HtmlT";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
 
@@ -276,7 +277,9 @@ const NewsDetail = () => {
             </blockquote>
 
             {/* Full content with pull quotes and separators */}
-            <div
+            <HtmlT
+              html={contentHtml}
+              domain="news.article"
               className="prose prose-lg max-w-none text-gray-800 leading-relaxed
                 prose-headings:text-black prose-headings:font-bold
                 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
@@ -289,7 +292,6 @@ const NewsDetail = () => {
                 prose-table:border-collapse prose-table:w-full
                 prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-600 prose-th:border prose-th:border-gold/20
                 prose-td:p-3 prose-td:border prose-td:border-gold/10 prose-td:text-sm"
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
 
             {/* AI Analysis Section - Green Theme */}
