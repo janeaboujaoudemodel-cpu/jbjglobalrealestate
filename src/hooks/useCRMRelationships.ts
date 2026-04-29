@@ -151,7 +151,7 @@ export const useImportAllDevelopersToRegistry = () => {
         if (rows.length > 0) {
           const { error: upErr } = await supabase
             .from("crm_developer_registry")
-            .upsert(rows, {
+            .upsert(rows as any, {
               onConflict: "owner_id,developer_slug",
               ignoreDuplicates: true,
             });
