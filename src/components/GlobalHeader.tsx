@@ -410,8 +410,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Mobile menu links - Buy section
   const mobileBuyLinks = [
     { href: "/properties?transaction=buy", label: "Properties for Sale", icon: Home },
-    { href: "/properties?type=apartment&transaction=buy", label: "Apartments", icon: Building2 },
-    { href: "/properties?type=villa&transaction=buy", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&status=ready", label: "Ready Properties", icon: Key },
+    { href: "/properties?transaction=buy&status=off-plan", label: "Off-Plan Properties", icon: ClipboardCheck },
+    { href: "/properties?transaction=buy&type=apartments", label: "Apartments", icon: Building2 },
+    { href: "/properties?transaction=buy&type=villa", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&type=townhouse", label: "Townhouses", icon: Home },
+    { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
+    { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
     { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
     { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: BarChart3 },
   ];
