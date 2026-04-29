@@ -179,7 +179,7 @@ const PropertyManagement = () => {
               Structured. Transparent. Performance-Driven.
             </p>
 
-            <p className="text-foreground/75 dark:text-foreground/85 text-[0.95rem] sm:text-base md:text-lg font-normal max-w-2xl mx-auto leading-relaxed sm:leading-[1.65] mb-8">
+            <p className="text-muted-foreground text-[0.95rem] sm:text-base md:text-lg font-normal max-w-2xl mx-auto leading-relaxed sm:leading-[1.65] mb-8">
               Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
             </p>
 
