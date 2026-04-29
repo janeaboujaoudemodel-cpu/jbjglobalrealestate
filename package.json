@@ -80,6 +80,7 @@
     "input-otp": "^1.4.2",
     "jsdom": "^28.1.0",
     "jspdf": "^4.2.0",
+    "jspdf-autotable": "^5.0.7",
     "jszip": "^3.10.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.462.0",
@@ -102,6 +103,7 @@
     "vite-plugin-prerender": "^1.0.8",
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^3.2.4",
+    "xlsx": "^0.18.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {
