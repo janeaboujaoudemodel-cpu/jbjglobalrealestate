@@ -326,11 +326,11 @@ const BrokeragesTab = () => {
           { key: "deal_count", label: "Deals" }, { key: "primary_contact", label: "Primary Contact" },
           { key: "notes", label: "Notes" },
         ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
-        <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
+        <Button variant="primary" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500">No brokerages yet. Click <b>Add Brokerage</b> to start.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-gray-700">No brokerages yet. Click <b className="text-black">Add Brokerage</b> to start.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
@@ -1094,8 +1094,8 @@ const CRMRelationships = () => {
     <>
       <SEOHead title="CRM Relationships | JBJ Global" description="Manage brokerages, clients and developer registrations" canonicalPath="/crm/relationships" />
       <div className="min-h-screen bg-[#FAF7F2] w-full">
-        <div className="w-full px-4 md:px-8 lg:px-12 pt-[112px] pb-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 pb-6 border-b border-black/10">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-[96px] pb-12">
+          <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-black/10">
             <Button
               variant="outline"
               onClick={() => navigate("/owner/crm")}
@@ -1103,11 +1103,10 @@ const CRMRelationships = () => {
             >
               <ArrowLeft className="w-4 h-4 mr-2" />Back to CRM Hub
             </Button>
-            <div className="text-center flex-1">
+            <div className="flex-1 min-w-[240px]">
               <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
-              <p className="text-sm text-gray-700 mt-2">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-black">Leads &amp; Clients</span>.</p>
+              <p className="text-sm text-gray-700 mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-black">Leads &amp; Clients</span>.</p>
             </div>
-            <div className="hidden md:block w-[180px]" aria-hidden />
           </div>
 
           {/* Clients tab intentionally removed — all client + lead records now live in the unified
@@ -1122,10 +1121,12 @@ const CRMRelationships = () => {
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
-            <TabsList className="mb-6 bg-white border border-black/10 p-1 rounded-xl">
-              <TabsTrigger value="brokerages" className="text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-              <TabsTrigger value="developers" className="text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto -mx-1 px-1 mb-6">
+              <TabsList className="bg-white border border-black/10 p-1 rounded-xl inline-flex w-auto">
+                <TabsTrigger value="brokerages" className="min-w-fit text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold whitespace-nowrap"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+                <TabsTrigger value="developers" className="min-w-fit text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold whitespace-nowrap"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+              </TabsList>
+            </div>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
             <TabsContent value="developers"><DeveloperRegistryTab /></TabsContent>
           </Tabs>
