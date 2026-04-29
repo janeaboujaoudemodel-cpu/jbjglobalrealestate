@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -29,6 +30,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -42,78 +44,93 @@ interface CRMLeadModalProps {
   userId: string;
 }
 
-const AGE_RANGES = [
-  "18-25", "25-30", "30-40", "40-50", "50-60", "60+"
-];
+const LEAD_TYPES = ["Buyer", "Investor", "Seller", "Tenant", "Landlord", "Broker", "Other"];
+const LEAD_SOURCES = ["Instagram", "WhatsApp", "Website", "Referral", "Event", "Brokerage", "Developer", "Other"];
+const PROPERTY_TYPES = ["Apartment", "Villa", "Townhouse", "Penthouse", "Commercial", "Land", "Other"];
+const BEDROOMS = ["Studio", "1", "2", "3", "4", "5+"];
+const BUYING_PURPOSE = ["Investment", "End Use", "Holiday Home", "Other"];
+const PRIORITY = ["low", "medium", "high"];
+const SCORE_BAND = ["hot", "warm", "cold"];
+const PIPELINE_STATUS = ["new", "contacted", "qualified", "viewing", "negotiation", "offer", "closed_won", "closed_lost"];
 
 const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) => {
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const initial = {
     full_name: "",
+    lead_type: "Buyer",
     email: "",
     phone: "",
+    whatsapp: "",
     nationality: "",
     preferred_language: "en",
+    country_of_residence: "",
     current_location_country: "",
     current_location_city: "",
-    gender: "",
-    age_range: "",
-    birthday: "",
-    source: "manual",
-    tags: ""
-  });
-
-  // Popover open states
+    budget_min: "",
+    budget_max: "",
+    budget_currency: "AED",
+    preferred_location: "",
+    preferred_project: "",
+    property_type: "",
+    bedroom_requirement: "",
+    buying_purpose: "",
+    source: "Website",
+    pipeline_stage: "new",
+    priority: "medium",
+    lead_score_band: "warm",
+    next_followup_at: "",
+    notes: "",
+    internal_comments: "",
+    tags: "",
+  };
+  const [formData, setFormData] = useState(initial);
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
+  const [residenceOpen, setResidenceOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
 
-  const cities = useMemo(() => getCitiesForCountry(formData.current_location_country), [formData.current_location_country]);
+  const cities = useMemo(
+    () => getCitiesForCountry(formData.current_location_country),
+    [formData.current_location_country],
+  );
 
   const normalizePhone = (phone: string): string | null => {
     if (!phone) return null;
     let normalized = phone.replace(/[^\d+]/g, "");
     if (!normalized.startsWith("+")) {
-      if (normalized.startsWith("0")) {
-        normalized = "+971" + normalized.slice(1);
-      } else if (normalized.length <= 10) {
-        normalized = "+971" + normalized;
-      } else {
-        normalized = "+" + normalized;
-      }
+      if (normalized.startsWith("0")) normalized = "+971" + normalized.slice(1);
+      else if (normalized.length <= 10) normalized = "+971" + normalized;
+      else normalized = "+" + normalized;
     }
-    if (/^\+[1-9]\d{1,14}$/.test(normalized)) {
-      return normalized;
-    }
+    if (/^\+[1-9]\d{1,14}$/.test(normalized)) return normalized;
     return null;
   };
 
   const normalizeEmail = (email: string): string | null => {
     if (!email) return null;
     const normalized = email.toLowerCase().trim();
-    if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(normalized)) {
-      return normalized;
-    }
+    if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(normalized)) return normalized;
     return null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.full_name.trim()) {
-      toast.error("Full name is required");
+      toast.error("Lead name is required");
       return;
     }
-
     const phone = normalizePhone(formData.phone);
+    const whatsapp = normalizePhone(formData.whatsapp);
     const email = normalizeEmail(formData.email);
-
     if (formData.phone && !phone) {
-      toast.error("Invalid phone number format. Use E.164 format (e.g., +971501234567)");
+      toast.error("Invalid phone format. Use E.164 (e.g., +971501234567)");
       return;
     }
-
+    if (formData.whatsapp && !whatsapp) {
+      toast.error("Invalid WhatsApp number format");
+      return;
+    }
     if (formData.email && !email) {
       toast.error("Invalid email format");
       return;
@@ -123,42 +140,42 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     try {
       const { error } = await supabase.from("crm_leads").insert({
         full_name: formData.full_name.trim(),
+        lead_type: formData.lead_type || null,
         email_lower: email,
         phone_e164: phone,
+        whatsapp_e164: whatsapp,
         nationality: formData.nationality || null,
         preferred_language: formData.preferred_language,
+        country_of_residence: formData.country_of_residence || null,
         current_location_country: formData.current_location_country || null,
         current_location_city: formData.current_location_city || null,
-        gender: formData.gender || null,
-        age_range: formData.age_range || null,
-        birthday: formData.birthday || null,
+        budget_min: formData.budget_min ? Number(formData.budget_min) : null,
+        budget_max: formData.budget_max ? Number(formData.budget_max) : null,
+        budget_currency: formData.budget_currency || "AED",
+        preferred_location: formData.preferred_location || null,
+        preferred_project: formData.preferred_project || null,
+        property_type: formData.property_type || null,
+        bedroom_requirement: formData.bedroom_requirement || null,
+        buying_purpose: formData.buying_purpose || null,
         source: formData.source || "manual",
-        tags: formData.tags ? formData.tags.split(",").map(t => t.trim()) : [],
+        pipeline_stage: formData.pipeline_stage || "new",
+        priority: formData.priority || "medium",
+        lead_score_band: formData.lead_score_band || "warm",
+        next_followup_at: formData.next_followup_at || null,
+        notes: formData.notes || null,
+        internal_comments: formData.internal_comments || null,
+        tags: formData.tags ? formData.tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
         owner_type: "broker_owned",
         owner_user_id: userId,
-        created_by_user_id: userId
-      });
+        created_by_user_id: userId,
+      } as any);
 
       if (error) throw error;
 
-      toast.success("Lead created successfully");
+      toast.success("Lead created");
       onSuccess();
       onClose();
-      
-      setFormData({
-        full_name: "",
-        email: "",
-        phone: "",
-        nationality: "",
-        preferred_language: "en",
-        current_location_country: "",
-        current_location_city: "",
-        gender: "",
-        age_range: "",
-        birthday: "",
-        source: "manual",
-        tags: ""
-      });
+      setFormData(initial);
     } catch (err: any) {
       console.error("Failed to create lead:", err);
       toast.error(err.message || "Failed to create lead");
@@ -169,282 +186,363 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-3xl max-h-[92vh] overflow-y-auto bg-white border border-black/10">
         <DialogHeader className="pt-2">
-          <DialogTitle className="text-black">Add New Lead</DialogTitle>
+          <DialogTitle className="text-black">Add Lead / Client</DialogTitle>
           <DialogDescription className="text-gray-600">
-            Create a new lead in "My Own Leads" (Source: Manual Entry)
+            One unified record &mdash; works for buyers, investors, sellers, tenants, landlords, brokers and clients.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Full Name */}
-          <div>
-            <Label htmlFor="full_name">Full Name *</Label>
-            <Input
-              id="full_name"
-              value={formData.full_name}
-              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              placeholder="John Doe"
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Tabs defaultValue="contact">
+            <TabsList className="bg-gray-100 p-1 rounded-lg">
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+              <TabsTrigger value="requirements">Requirements</TabsTrigger>
+              <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
+              <TabsTrigger value="notes">Notes</TabsTrigger>
+            </TabsList>
 
-          {/* Email & Phone */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="john@example.com"
-              />
-            </div>
-            <div>
-              <Label htmlFor="phone">Phone (E.164)</Label>
-              <Input
-                id="phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+971501234567"
-              />
-            </div>
-          </div>
+            {/* CONTACT */}
+            <TabsContent value="contact" className="space-y-3 pt-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Lead Name *</Label>
+                  <Input
+                    value={formData.full_name}
+                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                    placeholder="Full name"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label>Lead Type</Label>
+                  <Select value={formData.lead_type} onValueChange={(v) => setFormData({ ...formData, lead_type: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {LEAD_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
-          {/* Nationality & Language - Searchable with flags */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Nationality</Label>
-              <Popover open={nationalityOpen} onOpenChange={setNationalityOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
-                    {formData.nationality
-                      ? `${ALL_NATIONALITIES.find(n => n.nationality === formData.nationality)?.flag || ''} ${formData.nationality}`
-                      : "Select nationality"}
-                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search nationality..." className="text-black" />
-                    <CommandList>
-                      <CommandEmpty>No nationality found.</CommandEmpty>
-                      <CommandGroup>
-                        {ALL_NATIONALITIES.map((n) => (
-                          <CommandItem
-                            key={n.nationality}
-                            value={n.nationality}
-                            onSelect={() => {
-                              setFormData({ ...formData, nationality: n.nationality });
-                              setNationalityOpen(false);
-                            }}
-                            className="text-black"
-                          >
-                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.nationality === n.nationality ? "opacity-100" : "opacity-0")} />
-                            <span className="mr-2">{n.flag}</span>
-                            {n.nationality}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div>
-              <Label>Preferred Language</Label>
-              <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
-                    {formData.preferred_language
-                      ? `${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.flag || ''} ${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.name || ''}`
-                      : "Select language"}
-                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search language..." className="text-black" />
-                    <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
-                      <CommandGroup>
-                        {LANGUAGES_WITH_FLAGS.map((l) => (
-                          <CommandItem
-                            key={l.code}
-                            value={l.name}
-                            onSelect={() => {
-                              setFormData({ ...formData, preferred_language: l.code });
-                              setLanguageOpen(false);
-                            }}
-                            className="text-black"
-                          >
-                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.preferred_language === l.code ? "opacity-100" : "opacity-0")} />
-                            <span className="mr-2">{l.flag}</span>
-                            {l.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Phone (E.164)</Label>
+                  <Input
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+971501234567"
+                  />
+                </div>
+                <div>
+                  <Label>WhatsApp Number</Label>
+                  <Input
+                    value={formData.whatsapp}
+                    onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                    placeholder="+971501234567"
+                  />
+                </div>
+                <div>
+                  <Label>Email</Label>
+                  <Input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="name@example.com"
+                  />
+                </div>
+              </div>
 
-          {/* Country & City - Searchable with flags */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label>Country</Label>
-              <Popover open={countryOpen} onOpenChange={setCountryOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
-                    {formData.current_location_country
-                      ? `${COUNTRIES.find(c => c.name === formData.current_location_country)?.flag || ''} ${formData.current_location_country}`
-                      : "Select country"}
-                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[260px] p-0 z-[200] bg-white border-gold/40" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search country..." className="text-black" />
-                    <CommandList>
-                      <CommandEmpty>No country found.</CommandEmpty>
-                      <CommandGroup>
-                        {COUNTRIES.map((c) => (
-                          <CommandItem
-                            key={c.code}
-                            value={c.name}
-                            onSelect={() => {
-                              setFormData({ ...formData, current_location_country: c.name, current_location_city: "" });
-                              setCountryOpen(false);
-                            }}
-                            className="text-black"
-                          >
-                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.current_location_country === c.name ? "opacity-100" : "opacity-0")} />
-                            <span className="mr-2">{c.flag}</span>
-                            {c.name}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-            <div>
-              <Label>City</Label>
-              <Popover open={cityOpen} onOpenChange={setCityOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
-                    {formData.current_location_city || "Select city"}
-                    <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[240px] p-0 z-[200] bg-white border-gold/40" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search city..." className="text-black" />
-                    <CommandList>
-                      <CommandEmpty>No city found. Type to add custom.</CommandEmpty>
-                      <CommandGroup>
-                        {cities.map((city) => (
-                          <CommandItem
-                            key={city}
-                            value={city}
-                            onSelect={() => {
-                              setFormData({ ...formData, current_location_city: city });
-                              setCityOpen(false);
-                            }}
-                            className="text-black"
-                          >
-                            <Check className={cn("mr-2 h-3.5 w-3.5", formData.current_location_city === city ? "opacity-100" : "opacity-0")} />
-                            {city}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Preferred Language</Label>
+                  <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-white border border-black/15 text-black hover:bg-black/5">
+                        {formData.preferred_language
+                          ? `${LANGUAGES_WITH_FLAGS.find((l) => l.code === formData.preferred_language)?.flag || ""} ${LANGUAGES_WITH_FLAGS.find((l) => l.code === formData.preferred_language)?.name || ""}`
+                          : "Select language"}
+                        <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[240px] p-0 z-[200] bg-white border border-black/15" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search language..." className="text-black" />
+                        <CommandList>
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandGroup>
+                            {LANGUAGES_WITH_FLAGS.map((l) => (
+                              <CommandItem
+                                key={l.code}
+                                value={l.name}
+                                onSelect={() => {
+                                  setFormData({ ...formData, preferred_language: l.code });
+                                  setLanguageOpen(false);
+                                }}
+                                className="text-black"
+                              >
+                                <Check className={cn("mr-2 h-3.5 w-3.5", formData.preferred_language === l.code ? "opacity-100" : "opacity-0")} />
+                                <span className="mr-2">{l.flag}</span>
+                                {l.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div>
+                  <Label>Nationality</Label>
+                  <Popover open={nationalityOpen} onOpenChange={setNationalityOpen}>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-white border border-black/15 text-black hover:bg-black/5">
+                        {formData.nationality
+                          ? `${ALL_NATIONALITIES.find((n) => n.nationality === formData.nationality)?.flag || ""} ${formData.nationality}`
+                          : "Select"}
+                        <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[240px] p-0 z-[200] bg-white border border-black/15" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search nationality..." className="text-black" />
+                        <CommandList>
+                          <CommandEmpty>No nationality found.</CommandEmpty>
+                          <CommandGroup>
+                            {ALL_NATIONALITIES.map((n) => (
+                              <CommandItem
+                                key={n.nationality}
+                                value={n.nationality}
+                                onSelect={() => {
+                                  setFormData({ ...formData, nationality: n.nationality });
+                                  setNationalityOpen(false);
+                                }}
+                                className="text-black"
+                              >
+                                <Check className={cn("mr-2 h-3.5 w-3.5", formData.nationality === n.nationality ? "opacity-100" : "opacity-0")} />
+                                <span className="mr-2">{n.flag}</span>
+                                {n.nationality}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div>
+                  <Label>Country of Residence</Label>
+                  <Popover open={residenceOpen} onOpenChange={setResidenceOpen}>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-white border border-black/15 text-black hover:bg-black/5">
+                        {formData.country_of_residence
+                          ? `${COUNTRIES.find((c) => c.name === formData.country_of_residence)?.flag || ""} ${formData.country_of_residence}`
+                          : "Select"}
+                        <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[240px] p-0 z-[200] bg-white border border-black/15" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search country..." className="text-black" />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {COUNTRIES.map((c) => (
+                              <CommandItem
+                                key={c.code}
+                                value={c.name}
+                                onSelect={() => {
+                                  setFormData({ ...formData, country_of_residence: c.name });
+                                  setResidenceOpen(false);
+                                }}
+                                className="text-black"
+                              >
+                                <Check className={cn("mr-2 h-3.5 w-3.5", formData.country_of_residence === c.name ? "opacity-100" : "opacity-0")} />
+                                <span className="mr-2">{c.flag}</span>
+                                {c.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+            </TabsContent>
 
-          {/* Gender & Age Range */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="gender">Gender</Label>
-              <Select
-                value={formData.gender}
-                onValueChange={(value) => setFormData({ ...formData, gender: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
-                </SelectTrigger>
-                <SelectContent className="bg-white z-[200]">
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="age_range">Age Range</Label>
-              <Select
-                value={formData.age_range}
-                onValueChange={(value) => setFormData({ ...formData, age_range: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select age range" />
-                </SelectTrigger>
-                <SelectContent className="bg-white z-[200]">
-                  {AGE_RANGES.map(range => (
-                    <SelectItem key={range} value={range}>
-                      {range}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+            {/* REQUIREMENTS */}
+            <TabsContent value="requirements" className="space-y-3 pt-3">
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Budget Min</Label>
+                  <Input
+                    type="number"
+                    value={formData.budget_min}
+                    onChange={(e) => setFormData({ ...formData, budget_min: e.target.value })}
+                    placeholder="500000"
+                  />
+                </div>
+                <div>
+                  <Label>Budget Max</Label>
+                  <Input
+                    type="number"
+                    value={formData.budget_max}
+                    onChange={(e) => setFormData({ ...formData, budget_max: e.target.value })}
+                    placeholder="2000000"
+                  />
+                </div>
+                <div>
+                  <Label>Currency</Label>
+                  <Select value={formData.budget_currency} onValueChange={(v) => setFormData({ ...formData, budget_currency: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {["AED", "USD", "EUR", "GBP", "SAR"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
-          {/* Birthday */}
-          <div>
-            <Label htmlFor="birthday" className="flex items-center gap-2 mb-1.5">
-              Birthday (Optional)
-              <span className="text-xs text-muted-foreground">🎁 For birthday offers</span>
-            </Label>
-            <Input
-              id="birthday"
-              type="date"
-              value={formData.birthday}
-              onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
-            />
-          </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Preferred Location</Label>
+                  <Input
+                    value={formData.preferred_location}
+                    onChange={(e) => setFormData({ ...formData, preferred_location: e.target.value })}
+                    placeholder="Dubai Marina, Downtown..."
+                  />
+                </div>
+                <div>
+                  <Label>Preferred Project</Label>
+                  <Input
+                    value={formData.preferred_project}
+                    onChange={(e) => setFormData({ ...formData, preferred_project: e.target.value })}
+                    placeholder="Project name"
+                  />
+                </div>
+              </div>
 
-          {/* Source and Tags */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="source">Source</Label>
-              <Input
-                id="source"
-                value={formData.source}
-                onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                placeholder="website, referral, etc."
-              />
-            </div>
-            <div>
-              <Label htmlFor="tags">Tags (comma-separated)</Label>
-              <Input
-                id="tags"
-                value={formData.tags}
-                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                placeholder="investor, premium"
-              />
-            </div>
-          </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Property Type</Label>
+                  <Select value={formData.property_type} onValueChange={(v) => setFormData({ ...formData, property_type: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {PROPERTY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Bedrooms</Label>
+                  <Select value={formData.bedroom_requirement} onValueChange={(v) => setFormData({ ...formData, bedroom_requirement: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {BEDROOMS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Buying Purpose</Label>
+                  <Select value={formData.buying_purpose} onValueChange={(v) => setFormData({ ...formData, buying_purpose: v })}>
+                    <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {BUYING_PURPOSE.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </TabsContent>
 
-          <div className="flex gap-3 pt-3">
+            {/* PIPELINE */}
+            <TabsContent value="pipeline" className="space-y-3 pt-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Lead Source</Label>
+                  <Select value={formData.source} onValueChange={(v) => setFormData({ ...formData, source: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {LEAD_SOURCES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Status</Label>
+                  <Select value={formData.pipeline_stage} onValueChange={(v) => setFormData({ ...formData, pipeline_stage: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {PIPELINE_STATUS.map((s) => <SelectItem key={s} value={s}>{s.replace(/_/g, " ")}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <Label>Priority</Label>
+                  <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {PRIORITY.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Lead Score</Label>
+                  <Select value={formData.lead_score_band} onValueChange={(v) => setFormData({ ...formData, lead_score_band: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent className="bg-white z-[200]">
+                      {SCORE_BAND.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Next Follow-up</Label>
+                  <Input
+                    type="datetime-local"
+                    value={formData.next_followup_at}
+                    onChange={(e) => setFormData({ ...formData, next_followup_at: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Tags (comma-separated)</Label>
+                <Input
+                  value={formData.tags}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  placeholder="investor, premium, urgent"
+                />
+              </div>
+            </TabsContent>
+
+            {/* NOTES */}
+            <TabsContent value="notes" className="space-y-3 pt-3">
+              <div>
+                <Label>Notes (visible to assignees)</Label>
+                <Textarea
+                  rows={3}
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="What does this lead want, when, and why?"
+                />
+              </div>
+              <div>
+                <Label>Internal Comments (private)</Label>
+                <Textarea
+                  rows={3}
+                  value={formData.internal_comments}
+                  onChange={(e) => setFormData({ ...formData, internal_comments: e.target.value })}
+                  placeholder="Private notes for the team only"
+                />
+              </div>
+              <p className="text-xs text-gray-500">
+                Documents &amp; attachments can be uploaded from the lead profile after creation.
+              </p>
+            </TabsContent>
+          </Tabs>
+
+          <div className="flex gap-3 pt-2 border-t border-black/10">
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>

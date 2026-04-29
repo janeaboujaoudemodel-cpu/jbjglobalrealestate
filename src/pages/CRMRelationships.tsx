@@ -1105,19 +1105,28 @@ const CRMRelationships = () => {
             </Button>
             <div className="text-center flex-1">
               <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
-              <p className="text-sm text-gray-700 mt-2">Brokerages · Clients · Developer Registrations — all in one premium workspace.</p>
+              <p className="text-sm text-gray-700 mt-2">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-black">Leads &amp; Clients</span>.</p>
             </div>
             <div className="hidden md:block w-[180px]" aria-hidden />
+          </div>
+
+          {/* Clients tab intentionally removed — all client + lead records now live in the unified
+              "Leads & Clients" workspace at /crm/leads (powered by crm_leads). Do NOT re-add a Clients tab here. */}
+          <div className="mb-6 rounded-xl border border-black/10 bg-white p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="text-sm text-gray-700">
+              <span className="font-semibold text-black">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
+            </div>
+            <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
+              <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
+            </Button>
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="mb-6 bg-white border border-black/10 p-1 rounded-xl">
               <TabsTrigger value="brokerages" className="text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-              <TabsTrigger value="clients" className="text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
               <TabsTrigger value="developers" className="text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
             </TabsList>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
-            <TabsContent value="clients"><ClientsTab /></TabsContent>
             <TabsContent value="developers"><DeveloperRegistryTab /></TabsContent>
           </Tabs>
         </div>

@@ -32,6 +32,7 @@ import AIPropertyCoach from "@/components/crm/AIPropertyCoach";
 import SmartEmailComposer from "@/components/crm/SmartEmailComposer";
 import SmartWhatsAppComposer from "@/components/crm/SmartWhatsAppComposer";
 import LeadAuditHistory from "@/components/crm/LeadAuditHistory";
+import LeadMessageGenerator from "@/components/crm/LeadMessageGenerator";
 
 interface Lead {
   id: string;
@@ -506,6 +507,7 @@ const CRMLeadDetail = () => {
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="email" className="text-blue-500">AI Email</TabsTrigger>
             <TabsTrigger value="whatsapp" className="text-green-500">AI WhatsApp</TabsTrigger>
+            <TabsTrigger value="message-gen" className="text-purple-600">AI Message</TabsTrigger>
             <TabsTrigger value="audit" className="text-amber-500">Audit History</TabsTrigger>
           </TabsList>
 
@@ -594,6 +596,11 @@ const CRMLeadDetail = () => {
           <TabsContent value="whatsapp">
             <SmartWhatsAppComposer lead={lead} />
           </TabsContent>
+
+          <TabsContent value="message-gen">
+            <LeadMessageGenerator lead={lead as any} />
+          </TabsContent>
+
 
           <TabsContent value="audit">
             <LeadAuditHistory leadId={id!} />
