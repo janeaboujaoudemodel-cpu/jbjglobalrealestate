@@ -226,19 +226,22 @@ const Index = () => {
               Dubai's Trusted Real Estate Technology Platform
             </motion.p>
 
-            {/* Main heading */}
+            {/* Main heading — fluid edge-to-edge typography (clamp scales smoothly across all viewports without cropping) */}
             <motion.h1
               variants={fadeInUp}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]"
+              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
               style={{
+                // Fluid size: 26px (≈320px viewport) → 60px (≈1280px+). Scales linearly with vw, never crops.
+                fontSize: "clamp(1.625rem, 4.6vw + 0.5rem, 3.75rem)",
+                letterSpacing: "-0.015em",
                 background: "linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 40%, #FFFFFF 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                wordSpacing: "0.01em",
+                hyphens: "auto",
               }}
             >
-              Your Gateway to Dubai's
-              <br className="hidden sm:block" />
-              <span className="block sm:inline"> Finest Real Estate</span>
+              Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
 
             {/* Quick-action CTA pills — balanced 6-tile grid: 3×2 mobile/tablet, single row of 6 on desktop. Labels never truncate. */}
