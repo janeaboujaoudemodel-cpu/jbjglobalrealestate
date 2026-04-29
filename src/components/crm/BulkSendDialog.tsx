@@ -105,7 +105,7 @@ export const BulkSendDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
-      <DialogContent className="max-w-6xl w-[95vw] bg-white max-h-[92vh] overflow-y-auto">
+      <DialogContent className="max-w-[1500px] w-[97vw] bg-white max-h-[94vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-black flex items-center gap-2">
             Send Registration Email
@@ -121,7 +121,7 @@ export const BulkSendDialog = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 lg:grid-cols-[380px_1fr]"><div className="space-y-4">
+        <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]"><div className="space-y-4 min-w-0">
           {/* Variant */}
           <div>
             <Label className="text-xs text-black">Email variant</Label>
@@ -177,9 +177,9 @@ export const BulkSendDialog = ({
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="space-y-4">
+        <div className="space-y-4 min-w-0">
           {/* Email Preview */}
-          <div className="border border-black/10 rounded-xl bg-white">
+          <div className="border border-black/10 rounded-xl bg-white overflow-hidden">
             <div className="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-[#FAF5EA]">
               <div className="flex items-center gap-2 text-xs text-black">
                 <Eye className="w-4 h-4" /><strong>Email preview</strong>
@@ -212,7 +212,7 @@ export const BulkSendDialog = ({
                   title="email-preview"
                   srcDoc={previewHtml}
                   sandbox=""
-                  className="w-full h-[620px] bg-white rounded-b-xl"
+                  className="block w-full h-[78vh] min-h-[640px] bg-white rounded-b-xl border-0"
                 />
               </>
             )}
