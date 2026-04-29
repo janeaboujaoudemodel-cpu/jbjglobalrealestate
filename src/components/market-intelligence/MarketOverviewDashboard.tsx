@@ -188,14 +188,14 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {PROPERTY_TYPE_TRENDS.map((prop) => (
-                      <div key={prop.type} className="flex items-center justify-between py-3 border-b border-black/10 last:border-0">
+                      <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                         <div>
-                          <p className="text-black font-medium">{prop.type}</p>
-                          <p className="text-black/70 font-medium text-sm">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="font-semibold" style={{ color: '#000000' }}>{prop.type}</p>
+                          <p className="font-medium text-sm" style={{ color: '#374151' }}>{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-black font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className={`text-sm ${prop.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                          <p className="font-bold" style={{ color: '#000000' }}>AED {prop.avgPrice.toLocaleString()}/sqft</p>
+                          <p className="text-sm font-bold" style={{ color: prop.change >= 0 ? '#047857' : '#B91C1C' }}>
                             {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
                           </p>
                         </div>
@@ -208,17 +208,17 @@ export const MarketOverviewDashboard = () => {
           </div>
 
           {/* Data Attribution */}
-          <motion.div 
+          <motion.div
             className="mt-8 text-center"
             variants={fadeInUp}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
-              <Calendar className="w-4 h-4 text-gold" />
-              <span className="text-black/80 text-sm font-medium">
+              <Calendar className="w-4 h-4" style={{ color: '#000000' }} />
+              <span className="text-sm font-semibold" style={{ color: '#000000' }}>
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-black/70">•</span>
-              <span className="text-black/90 text-sm font-medium">
+              <span style={{ color: '#374151' }}>•</span>
+              <span className="text-sm font-medium" style={{ color: '#374151' }}>
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>
