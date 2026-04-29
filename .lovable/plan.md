@@ -1,87 +1,61 @@
-## Goal
+## Premium Footer Upgrade — Plan
 
-Three coordinated upgrades:
-1. **Global contrast fix** — eliminate white icons/text on light backgrounds anywhere in the app (logos, icons, labels).
-2. **Premium user avatar** — high-resolution, centered photo with a gold ring (replacing the gray fallback).
-3. **Gold sidebar icons** — every icon in the vertical sidebar rendered in gold inside a thin gold-bordered tile.
+Make the footer logo and social icons crisp/legible, then layer in luxury polish across the dark footer surface. No removals — all existing links stay.
 
-Strict no-removal: no nav items, sections, or features are removed — only styling/markup tweaks.
+### 1. Fix the social icons (legibility first)
 
----
+In `src/components/marketing/SocialLinks.tsx`:
 
-## 1. Global contrast guard (white-on-light)
+- Add a new `variant="premium"` and switch the footer to use it (we keep `glow` for legacy callers).
+- Render each icon inside a 36×36 circular gold-bordered tile instead of a bare drop-shadow glyph:
+  - Resting: `bg-white/[0.04]`, `border border-[hsl(var(--gold))]/45`, gold glyph at `text-[hsl(var(--gold))]` (full opacity).
+  - Hover: `bg-[hsl(var(--gold))]`, glyph flips to `text-black`, soft `shadow-[0_0_18px_rgba(200,167,102,0.55)]`, `scale-[1.06]`.
+  - Focus-visible: `ring-2 ring-[hsl(var(--gold))]/70 ring-offset-2 ring-offset-[#0A0908]`.
+- Bump default `iconClassName` to `w-[18px] h-[18px]` so glyphs sit nicely in the 36px tile.
+- In `Footer.tsx`, switch the footer call to `variant="premium"` and remove the `iconClassName="w-4 h-4"` override (the new variant ships its own sizing).
+- Verify the static contrast script still passes — the gold tiles use `bg-white/[0.04]` (translucent), and the gold hover swaps to `text-black`, so neither matches the white-on-light rule.
 
-Add a defensive runtime + static pass:
+### 2. Fix the footer monogram (looks faded)
 
-- **Static sweep** — `rg "text-white"` across `src/components` and `src/pages`; for each match, check if its container background is light (`bg-white`, `bg-pearl-*`, `bg-[#F…]`, gradients on light, `bg-gold/10`, etc). Replace with `text-black` (or `text-foreground`) — or, where a hover swap is required (e.g. CategorySelectorSection's `group-hover:text-white` on a black hover bg), keep the hover swap but only when the hover bg is dark.
-- **Sidebar mega-menu close buttons** (`GlobalVerticalNav.tsx` lines 866, 949, 1036) — currently `bg-gradient-to-br from-gold to-gold-dark` with `text-white` X. Gold gradient is light-ish; switch X icon to `text-black` for guaranteed contrast.
-- **Logos / brand marks** — audit any `<img>` with `filter: invert/brightness(0)` on light surfaces, and any `text-white` brand wordmarks rendered on `bg-pearl/bg-white/bg-[#ECE2D2]`. Force dark token (`#111`).
-- **Add a global CSS guard** in `src/index.css`:
-  ```css
-  /* Defensive: any element forced white on a light surface gets black text */
-  .text-white.on-light, [data-surface="light"] .text-white { color: #111 !important; }
-  ```
-  and document the `data-surface="light"` opt-in for new components.
-- **Lint rule (script)** — extend `scripts/contrast/check-tokens.mjs` (already exists) with a "white-on-light" rule that fails the build when `text-white` is statically nested in a known light wrapper class. Wire into the existing `contrast-check.yml` workflow.
+In `Footer.tsx` brand block:
 
-## 2. Premium user avatar (high-res, centered, gold ring)
+- Replace the bare `<img>` with a framed lockup:
+  - 64×64 square, `bg-white/[0.04]`, `border border-[hsl(var(--gold))]/40`, `rounded-md`, soft inner highlight `shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]` plus outer `shadow-[0_8px_24px_rgba(200,167,102,0.18)]`.
+  - Monogram inside at 44×44, `object-contain`, full opacity (drop the `30` alpha drop-shadow).
+- Brand wordmark: keep "JBJ GLOBAL REAL ESTATE" at `text-white` `font-semibold`, but add a thin champagne hairline (`w-10 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/70 to-transparent`) above the tagline for a couture feel.
+- Tagline color stays `text-white/55` (acceptable on `#0A0908`).
 
-Single source of truth for the user avatar — used by header dropdown, dashboard ProfileSummaryCard, and anywhere else `photo_url` is rendered.
+### 3. Premium polish across the whole footer
 
-- **New component** `src/components/account/UserAvatarPremium.tsx`:
-  - Reads `crm_users_profile.photo_url` → `user_metadata.avatar_url` → `picture` (same precedence we already use).
-  - Pipes the URL through `getHighResImageUrl(url, '512x512')` (`src/lib/imageUtils.ts`) so Google/CDN thumbs are upgraded.
-  - `<img>` with `object-cover object-center` + `loading="eager"` + `referrerPolicy="no-referrer"` (Google avatars 403 otherwise) so the face is always centered and crisp.
-  - Wrapper: `rounded-full p-[2px] bg-gradient-to-br from-[hsl(var(--gold))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]` with a soft `shadow-[0_0_0_1px_rgba(217,194,146,0.45),0_8px_24px_-8px_rgba(217,194,146,0.55)]` gold glow.
-  - Inner ring: `bg-white` so the gold reads as a true ring on every surface.
-  - Fallback (no photo): black initials on `from-[#F7F1E6] to-[#D8C7A6]` champagne, NOT gray.
-  - Sizes: `sm` 32px, `md` 48px, `lg` 64px, `xl` 96px.
-- **Replace existing avatars**:
-  - `src/components/dashboard/ProfileSummaryCard.tsx` (line 108) — swap the shadcn `Avatar` for `<UserAvatarPremium size="lg" />`. The `border-2 border-gold/40` is replaced by the component's own ring. Skeleton remains.
-  - `src/components/GlobalHeader.tsx` (account button area near line 958) — render `<UserAvatarPremium size="sm" />` next to "Signed in as" and in the My Account trigger if there's a slot. (No structural removal; only visual upgrade.)
-  - Any other `photo_url` consumer that visually shows the user (quick scan: `InvestorDashboard.tsx`, `DeveloperCheckin.tsx`) — opt-in only if the design currently shows a gray ring.
+All within `src/components/Footer.tsx`:
 
-## 3. Gold sidebar icons with gold borders
-
-Goal: every icon tile in `GlobalVerticalNav.tsx` reads as a small gold "chip" — gold glyph inside a 1px gold-bordered rounded tile, on the existing champagne sidebar.
-
-- **Refactor `getIconStyle`** (line 820):
-  - Drop the rose / violet / sky / emerald / amber per-route colors. ALL icons return `text-[hsl(var(--gold))]` in the resting state. (The colored route-row backgrounds in `getItemStyle` remain — only icon glyphs go gold.)
-  - When `shouldHighlight` is true AND the row background is a saturated color (the rose/violet/sky/emerald rows), keep `text-white` so the icon stays legible on the dark fill — that is dark-on-dark safe.
-  - When `shouldHighlight` is true on the standard champagne row, return `text-[hsl(var(--gold-dark))]` for extra contrast.
-- **Wrap every nav-item icon in a gold-bordered tile**:
-  - In the three render sites (line 1128, 1208, plus highlight items), wrap `<Icon …/>` in:
-    ```tsx
-    <span className="w-6 h-6 rounded-md flex items-center justify-center
-                     border border-gold/45 bg-gold/[0.06]
-                     group-hover:bg-gold/[0.12] group-hover:border-gold/70
-                     shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)]">
-      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
-    </span>
+- **Background depth.** Replace the flat `#0A0908` with a layered surface:
+  - Base color stays `#0A0908`.
+  - Add a subtle vignette: top radial `radial-gradient(ellipse 80% 40% at 50% 0%, rgba(200,167,102,0.06), transparent 70%)`.
+  - Add a faint noise/grain via an inline SVG `data:` background at `opacity-[0.03]` for that printed-paper luxury texture.
+  - Implement as two absolutely-positioned `pointer-events-none` overlays inside the existing `<footer>` (no new components required).
+- **Hairlines.** Keep the existing top/bottom champagne hairlines but soften the inner two grid hairlines: `linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)`.
+- **NavColumn typography.**
+  - Section headings get a tiny gold square bullet before the label and a 24px champagne underline beneath:
+    ```text
+    ▪ EXPLORE
+    ────
     ```
-  - Active state: `bg-gold/20 border-gold/80`.
-  - Saturated colored rows (rose/violet/sky/emerald) override: tile becomes `bg-white/15 border-white/40` so the gold tile pattern doesn't fight the colored fill.
-- **Section headers** (line 1174) — already use `bg-gold/[0.08]` tiles; tighten the border to `border border-gold/30` (currently borderless) for parity.
-- **Mega-menu close X** — also gets a thin gold border tile with a black X (per §1).
-- **Collapsed-rail mode** — apply the same gold tile wrapper at the rail width so collapsed icons also look like gold chips.
+  - Lift link color from `text-white/65` to `text-white/75` (better readability on dark) and add a subtle left border slide-in on hover (`hover:border-l hover:border-[hsl(var(--gold))]/60 hover:pl-2`) with `transition-all`.
+  - "View All" link gets an arrow that translates 2px on hover.
+- **Utility row chrome.** Wrap the whole utility cluster (Connect / GMB / ModeSwitcher / Currency) in a thin pill: `bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2`. Add subtle vertical dividers between the four groups (`w-px h-5 bg-white/10`).
+- **Currency & unit pills.** Upgrade to the same gold-tile language: bordered with `border-[hsl(var(--gold))]/30`, active state uses `bg-[hsl(var(--gold))]/15` and `text-white`, dropdown panel gets `shadow-[0_20px_40px_rgba(0,0,0,0.5)]` + champagne hairline at top.
+- **Contact strip.** Each item becomes a small chip: `inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/8 hover:border-[hsl(var(--gold))]/40 hover:bg-white/[0.06]`. Drop the bullet `·` separators (the chips visually separate themselves).
+- **Legal/copyright row.** Center-aligned, small caps, `tracking-[0.12em]`, `text-white/55`. Keep the bidi `<bdi>` wrappers exactly as-is.
 
----
+### 4. Files touched
 
-## Files
+- `src/components/Footer.tsx` — brand lockup, background overlays, hairlines, NavColumn styling, utility row chrome, currency pills, contact chips, legal row.
+- `src/components/marketing/SocialLinks.tsx` — add `premium` variant with gold-tile rendering; default size bump.
 
-**New**
-- `src/components/account/UserAvatarPremium.tsx`
+### 5. Guardrails
 
-**Edited**
-- `src/index.css` — defensive `.text-white` guard on light surfaces.
-- `scripts/contrast/check-tokens.mjs` — add white-on-light rule.
-- `src/components/navigation/GlobalVerticalNav.tsx` — gold icon tiles + simplified `getIconStyle` + gold X buttons.
-- `src/components/dashboard/ProfileSummaryCard.tsx` — use `UserAvatarPremium`.
-- `src/components/GlobalHeader.tsx` — use `UserAvatarPremium` in account dropdown.
-- `src/components/home/CategorySelectorSection.tsx` and any other components flagged by the white-on-light sweep.
-
-## Out of scope
-
-- No changes to nav structure, routes, sections, ordering, or labels (no-removal policy).
-- No changes to AI Premium Purple surfaces (those are dark — white icons stay).
-- No changes to footer monochrome obsidian (dark surface — white text stays).
+- No-Removal Policy: every existing link/feature stays — only styling changes.
+- Static contrast guard (`scripts/contrast/check-white-on-light.mjs`) must continue to pass — all new white text sits on `#0A0908` or translucent overlays.
+- Inter font only, single champagne hairline language preserved.
+- Preview the footer on desktop + mobile widths after build to confirm the chips and 4-col grid wrap cleanly.

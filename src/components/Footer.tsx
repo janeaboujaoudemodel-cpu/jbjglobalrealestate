@@ -36,28 +36,31 @@ const NavColumn = ({
   viewAllLabel?: string;
 }) => (
   <div>
-    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">
+    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+      <span className="inline-block w-1.5 h-1.5 rounded-[1px] bg-[hsl(var(--gold))]" aria-hidden="true" />
       {title}
     </h4>
+    <div className="w-8 h-px mb-4" style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }} aria-hidden="true" />
     <ul className="space-y-1.5">
       {links.map((link) => (
         <li key={link.href}>
           <Link
             to={link.href}
-            className="text-[13px] leading-snug text-white/65 hover:text-white transition-colors"
+            className="group inline-flex items-center text-[13px] leading-snug text-white/75 hover:text-white border-l border-transparent hover:border-[hsl(var(--gold))]/60 pl-0 hover:pl-2 transition-all duration-200"
           >
             {link.label}
           </Link>
         </li>
       ))}
       {viewAllHref && (
-        <li className="pt-1">
+        <li className="pt-2">
           <Link
             to={viewAllHref}
-            className="text-[12px] font-semibold uppercase tracking-[0.15em] text-white/80 hover:text-white transition-colors"
-            style={{ color: "#D9C292" }}
+            className="group inline-flex items-center gap-1 text-[12px] font-semibold uppercase tracking-[0.15em] transition-colors"
+            style={{ color: "#E6CFA0" }}
           >
-            {viewAllLabel}
+            <span>{viewAllLabel?.replace(/\s*→\s*$/, "")}</span>
+            <span className="inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </Link>
         </li>
       )}
@@ -105,23 +108,24 @@ const FooterCurrencyUnit = () => {
       <div className="relative">
         <button
           onClick={() => setCurrencyOpen(!currencyOpen)}
-          className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-medium text-white/85 hover:text-white border border-white/15 hover:border-white/30 rounded transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-medium text-white/90 hover:text-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/60 rounded-md bg-white/[0.03] hover:bg-white/[0.06] transition-colors"
         >
           <span>{currentCur?.flag} {activeCurrency}</span>
           <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", currencyOpen && "rotate-180")} />
         </button>
         {currencyOpen && (
           <div
-            className="absolute bottom-full mb-2 left-0 w-52 rounded overflow-hidden z-50 max-h-80 overflow-y-auto"
+            className="absolute bottom-full mb-2 left-0 w-52 rounded-md overflow-hidden z-50 max-h-80 overflow-y-auto shadow-[0_20px_40px_rgba(0,0,0,0.55)]"
             style={{ background: "#0F0E0C", border: `1px solid ${HAIRLINE}` }}
           >
+            <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} aria-hidden="true" />
             {SUPPORTED_CURRENCIES.map((cur) => (
               <button
                 key={cur.code}
                 onClick={() => handleCurrency(cur.code)}
                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-left text-white/80 hover:text-white hover:bg-white/5 transition-colors"
                 style={{
-                  background: activeCurrency === cur.code ? "rgba(255,255,255,0.05)" : "transparent",
+                  background: activeCurrency === cur.code ? "rgba(200,167,102,0.12)" : "transparent",
                   color: activeCurrency === cur.code ? "#FFFFFF" : "rgba(255,255,255,0.8)",
                 }}
               >
@@ -134,19 +138,19 @@ const FooterCurrencyUnit = () => {
         )}
       </div>
 
-      <div className="flex items-stretch rounded overflow-hidden border border-white/15">
+      <div className="flex items-stretch rounded-md overflow-hidden border border-[hsl(var(--gold))]/30 bg-white/[0.03]">
         {(["sqft", "sqm"] as const).map((unit, idx) => (
           <div key={unit} className="flex items-stretch">
             {idx === 1 && (
-              <div className="w-px self-stretch bg-[#D9C292]/40" aria-hidden />
+              <div className="w-px self-stretch bg-[hsl(var(--gold))]/30" aria-hidden />
             )}
             <button
               onClick={() => handleUnit(unit)}
               className="px-2.5 py-1.5 text-[12px] font-medium transition-colors"
               style={{
                 background:
-                  areaUnit === unit ? "rgba(217,194,146,0.18)" : "transparent",
-                color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.55)",
+                  areaUnit === unit ? "rgba(200,167,102,0.18)" : "transparent",
+                color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.6)",
               }}
             >
               {unit === "sqft" ? "sq ft" : "sq m"}
@@ -443,13 +447,31 @@ const Footer = () => {
     <footer
       id="site-footer"
       data-surface="dark"
-      className="relative overflow-x-hidden"
+      className="relative overflow-x-hidden isolate"
       style={{
         background: "#0A0908",
         color: "rgba(255,255,255,0.85)",
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
+      {/* Premium ambient overlays — vignette + soft champagne wash */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(200,167,102,0.07), transparent 70%), radial-gradient(ellipse 60% 35% at 50% 100%, rgba(200,167,102,0.05), transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>\")",
+        }}
+      />
+
       {/* Top hairline — single restrained champagne accent */}
       <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
 
@@ -457,41 +479,63 @@ const Footer = () => {
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <Link to="/" className="inline-flex items-center gap-3 group">
-              <img
-                src={jbjMonogramNobuffer}
-                alt="JBJ Global Real Estate"
-                className="h-12 w-auto object-contain transition-opacity group-hover:opacity-90"
-                style={{ filter: `drop-shadow(0 4px 12px ${ACCENT}30)` }}
-              />
+            <Link to="/" className="inline-flex items-center gap-4 group">
+              <span
+                className="inline-flex items-center justify-center w-16 h-16 rounded-md border bg-white/[0.04] shrink-0"
+                style={{
+                  borderColor: "rgba(200,167,102,0.4)",
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(200,167,102,0.18)",
+                }}
+              >
+                <img
+                  src={jbjMonogramNobuffer}
+                  alt="JBJ Global Real Estate"
+                  className="h-11 w-11 object-contain transition-opacity group-hover:opacity-90"
+                />
+              </span>
               <div className="flex flex-col">
                 <span className="text-white text-[15px] font-semibold tracking-[0.18em] uppercase leading-tight">
                   JBJ Global Real Estate
                 </span>
-                <span className="text-white/55 text-[11px] tracking-[0.12em] uppercase mt-0.5">
+                <div
+                  className="w-10 h-px my-1.5"
+                  style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }}
+                  aria-hidden="true"
+                />
+                <span className="text-white/60 text-[11px] tracking-[0.12em] uppercase">
                   Excellence in Real Estate · Licensed UAE Brokerage
                 </span>
               </div>
             </Link>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 md:gap-5">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/45">Connect</span>
-                <SocialLinks variant="glow" iconClassName="w-4 h-4" />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/55">Connect</span>
+                <SocialLinks variant="premium" className="gap-2" />
               </div>
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               <GoogleMyBusinessLink />
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               {/* Mode switcher opens upward inside the footer so it never
                   overlays the page header above. */}
               <ModeSwitcher variant="header" showForUnselected={true} side="top" />
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               <FooterCurrencyUnit />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Single premium hairline above the nav grid */}
+      {/* Soft champagne hairline above the nav grid */}
       <div className="px-4 sm:px-6 md:px-8">
-        <div className="max-w-7xl mx-auto h-px" style={{ background: HAIRLINE }} />
+        <div
+          className="max-w-7xl mx-auto h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+          }}
+        />
       </div>
 
       {/* === ZONE 2 — Premium 4-col navigation grid === */}
@@ -524,35 +568,44 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Single premium hairline below the nav grid */}
+      {/* Soft champagne hairline below the nav grid */}
       <div className="px-4 sm:px-6 md:px-8">
-        <div className="max-w-7xl mx-auto h-px" style={{ background: HAIRLINE }} />
+        <div
+          className="max-w-7xl mx-auto h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+          }}
+        />
       </div>
 
       {/* === ZONE 3 — Contact strip + compact legal === */}
       <div className="px-4 sm:px-6 md:px-8 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6">
-            <div className="flex items-center gap-2 text-[12px] text-white/70">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.address}</span>
             </div>
-            <span className="hidden md:inline text-white/20">·</span>
-            <a href={getCallUrl()} className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors">
+            <a
+              href={getCallUrl()}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
+            >
               <Phone className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.phone}</span>
             </a>
-            <span className="hidden md:inline text-white/20">·</span>
-            <a href={getEmailUrl()} className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors">
+            <a
+              href={getEmailUrl()}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
+            >
               <Mail className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.emailCapitalized}</span>
             </a>
-            <span className="hidden md:inline text-white/20">·</span>
             <a
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>WhatsApp</span>
@@ -583,14 +636,14 @@ const Footer = () => {
 
           {/* Copyright + legal links — premium single row, bidi-safe */}
           <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
-            <span className="text-[11px] text-white/60" dir="ltr">
-              © {currentYear} <bdi>JBJ Global Real Estate</bdi> · All Rights Reserved
+            <span className="text-[11px] text-white/65 tracking-[0.08em]" dir="ltr">
+              © {currentYear} <bdi className="font-medium text-white/85">JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
             <span className="hidden sm:inline text-white/20" aria-hidden="true">·</span>
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               {legalLinks.map((l, i) => (
                 <span key={l.href} className="flex items-center gap-3">
-                  <Link to={l.href} className="text-[11px] text-white/55 hover:text-white transition-colors whitespace-nowrap">
+                  <Link to={l.href} className="text-[11px] uppercase tracking-[0.1em] text-white/60 hover:text-white transition-colors whitespace-nowrap">
                     {l.label}
                   </Link>
                   {i < legalLinks.length - 1 && <span className="text-white/15" aria-hidden="true">·</span>}
