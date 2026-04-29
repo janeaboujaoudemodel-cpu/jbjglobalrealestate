@@ -10,14 +10,16 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit } from "lucide-react";
+import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit, BookOpen, Loader2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SEOHead } from "@/components/SEOHead";
 import {
   useBrokerages, useUpsertBrokerage, useDeleteBrokerage,
   useClients, useUpsertClient, useDeleteClient,
   useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry, useImportAllDevelopersToRegistry,
+  useEnrichDeveloperRegistry,
   useUpsertReminder,
   useOwnerSettings, useUpsertOwnerSettings, useSendDeveloperRegistration,
   useQuickStatusUpdate,
@@ -29,6 +31,68 @@ import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+type FieldSourceMeta = { source: string; url?: string; fetched_at?: string } | undefined;
+
+const SOURCE_LABELS: Record<string, string> = {
+  master_catalog: "Master catalog",
+  perplexity: "AI web research",
+  firecrawl: "Website scrape",
+  ai_inference: "AI inferred",
+  manual: "Manual",
+};
+
+const SOURCE_STYLES: Record<string, string> = {
+  master_catalog: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  perplexity: "bg-blue-50 text-blue-800 border-blue-200",
+  firecrawl: "bg-indigo-50 text-indigo-800 border-indigo-200",
+  ai_inference: "bg-amber-50 text-amber-900 border-amber-200",
+  manual: "bg-gray-100 text-gray-700 border-gray-200",
+};
+
+const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
+  if (!meta || !meta.source) return null;
+  const label = SOURCE_LABELS[meta.source] || meta.source.replace(/_/g, " ");
+  const cls = SOURCE_STYLES[meta.source] || SOURCE_STYLES.manual;
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className={`shrink-0 text-[9px] uppercase tracking-wider px-1.5 py-px rounded-full border font-semibold ${cls}`}
+          aria-label={`Source: ${label}`}
+        >
+          {label}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="text-xs w-64 bg-white border-black/10" onClick={(e) => e.stopPropagation()}>
+        <div className="font-semibold text-black">{label}</div>
+        {meta.url && (
+          <a
+            href={meta.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-1 underline text-blue-700 break-all"
+          >
+            {meta.url}
+          </a>
+        )}
+        {meta.fetched_at && (
+          <div className="text-gray-500 mt-1">
+            Fetched {new Date(meta.fetched_at).toLocaleString()}
+          </div>
+        )}
+        {meta.source === "ai_inference" && (
+          <div className="mt-2 text-amber-800">
+            This value was inferred from the website domain. Verify before using.
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 
 const STATUS_BROKERAGE = [
   { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
@@ -497,6 +561,7 @@ const DeveloperRegistryTab = () => {
   const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
   const importAll = useImportAllDevelopersToRegistry();
+  const enrich = useEnrichDeveloperRegistry();
   const upsert = useUpsertDeveloperRegistry();
   const upsertReminder = useUpsertReminder();
   const sendRegistration = useSendDeveloperRegistration();
@@ -671,6 +736,19 @@ const DeveloperRegistryTab = () => {
         >
           {importAll.isPending ? "Importing…" : "Import all developers"}
         </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (window.confirm("Research up to 8 developers per click using master catalog + AI web research. Only fills empty fields. Continue?")) {
+              enrich.mutate({ useWeb: true });
+            }
+          }}
+          disabled={enrich.isPending}
+          title="Fill missing phone, email, office, website and point of contact via AI web research. Records the source for each field."
+        >
+          {enrich.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BookOpen className="w-4 h-4 mr-2" />}
+          {enrich.isPending ? "Researching…" : "Research & enrich"}
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
 
@@ -744,6 +822,7 @@ const DeveloperRegistryTab = () => {
                           <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
                           <span className="text-gray-500 shrink-0">Office:</span>
                           <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
+                          <FieldSource meta={r.field_sources?.emirate} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
                           <Phone className="w-3 h-3 text-gray-500 shrink-0" />
@@ -753,6 +832,7 @@ const DeveloperRegistryTab = () => {
                           ) : (
                             <span className="font-medium text-black">—</span>
                           )}
+                          <FieldSource meta={r.field_sources?.phone} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
                           <Mail className="w-3 h-3 text-gray-500 shrink-0" />
@@ -762,12 +842,14 @@ const DeveloperRegistryTab = () => {
                           ) : (
                             <span className="font-medium text-black">—</span>
                           )}
+                          <FieldSource meta={r.field_sources?.developer_email} />
                         </div>
                         {r.website && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
                             <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
                             <span className="text-gray-500 shrink-0">Website:</span>
                             <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
+                            <FieldSource meta={r.field_sources?.website} />
                           </div>
                         )}
                         {r.agency_code && (
@@ -780,6 +862,7 @@ const DeveloperRegistryTab = () => {
                       <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5">
                         <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-amber-900 mb-0.5">
                           <Users className="w-3 h-3" />Point of Contact
+                          <FieldSource meta={r.field_sources?.developer_contact} />
                         </div>
                         {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
                           <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
@@ -830,6 +913,16 @@ const DeveloperRegistryTab = () => {
                       <Send className="w-3 h-3 mr-1" />Send
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("developer_registry", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => enrich.mutate({ ids: [r.id], useWeb: true })}
+                      disabled={enrich.isPending}
+                      title="Research this developer's missing fields via AI + web sources"
+                    >
+                      {enrich.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <BookOpen className="w-3 h-3 mr-1" />}
+                      Research
+                    </Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                   </div>

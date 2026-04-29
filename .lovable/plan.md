@@ -1,123 +1,201 @@
-# Always-Visible Developer Card Details
+# AI Research & Backfill for Developer Registry — with Per-Field Sources
 
-## Goal
+## Why
 
-Make every developer card in **Relationships → Developer Registry** show, without any click or hover:
+The Developer Registry currently has 93 rows, but **0 phones, 0 emirates, 0 websites** stored on the registry itself, even though:
 
-- **Name** — the developer / company name
-- **Company** — same value, shown with an explicit "Company:" label so the role is unambiguous
-- **Office location** — the registry's `emirate` field (e.g. Dubai, Abu Dhabi)
-- **Phone** — registry `phone`, click-to-call, or `—` when not set
-- **External point of contact** — `developer_contact.name`, role, phone, email, all visible up-front
+- The master `public.developers` catalog has `headquarters` and `website_url` for hundreds of UAE developers.
+- Lovable AI, Perplexity, and Firecrawl are all available for live web research.
 
-The current card already renders most of these, but they're crammed into a single wrap row and the contact block only appears if data exists. We'll restructure into a clear labeled grid that always renders all five rows, so nothing is hidden behind a click.
+We'll add a one-click "Research & enrich" workflow that fills missing fields from (1) our own master catalog, then (2) AI/web research, and records *where each value came from* so the user can audit it on each card.
 
-## Change — `src/pages/CRMRelationships.tsx` (Developer Registry tab card body)
+## Scope of fields to enrich
 
-Replace the single inline meta line (lines 737–753) with:
+For every registry row, attempt to fill (only where currently empty):
 
-1. **Two-column labeled grid** with icons and label/value pairs:
-   - `Building2` Company: <name>
-   - `MapPin` Office: <emirate or "—">
-   - `Phone` Phone: <click-to-call or "—">
-   - `Mail` Email: <mailto or "—">
-   - `LinkIcon` Website: <link> (full row, only when present)
-   - Agency code: <code> (full row, only when present)
+- `developer_email` (corporate sales/info email)
+- `phone` (HQ phone)
+- `emirate` (Dubai / Abu Dhabi / etc.)
+- `website`
+- `developer_contact` jsonb → `{ name, role, phone, email }` (point of contact)
 
-2. **Always-visible "Point of Contact" card** (amber-on-white per existing convention):
-   - Header chip "Point of Contact" with `Users` icon
-   - When data exists: name · role · click-to-call phone · mailto email
-   - When empty: a subtle "+ Add point of contact" button that opens the edit dialog
+## Data model — provenance
 
-```tsx
-<div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-800">
-  <div className="flex items-center gap-1.5">
-    <Building2 className="w-3 h-3 text-gray-500 shrink-0" />
-    <span className="text-gray-500">Company:</span>
-    <span className="font-medium text-black truncate">{r.developer_name || "—"}</span>
-  </div>
-  <div className="flex items-center gap-1.5">
-    <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
-    <span className="text-gray-500">Office:</span>
-    <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
-  </div>
-  <div className="flex items-center gap-1.5">
-    <Phone className="w-3 h-3 text-gray-500 shrink-0" />
-    <span className="text-gray-500">Phone:</span>
-    {r.phone
-      ? <a href={`tel:${r.phone}`} className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.phone}</a>
-      : <span className="font-medium text-black">—</span>}
-  </div>
-  <div className="flex items-center gap-1.5">
-    <Mail className="w-3 h-3 text-gray-500 shrink-0" />
-    <span className="text-gray-500">Email:</span>
-    {r.developer_email
-      ? <a href={`mailto:${r.developer_email}`} className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.developer_email}</a>
-      : <span className="font-medium text-black">—</span>}
-  </div>
-  {r.website && (
-    <div className="flex items-center gap-1.5 sm:col-span-2">
-      <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
-      <span className="text-gray-500">Website:</span>
-      <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={e => e.stopPropagation()}>{r.website}</a>
-    </div>
-  )}
-  {r.agency_code && (
-    <div className="flex items-center gap-1.5 sm:col-span-2">
-      <span className="text-gray-500">Agency code:</span>
-      <span className="font-medium text-black">{r.agency_code}</span>
-    </div>
-  )}
-</div>
+New jsonb column on `crm_developer_registry`:
 
-<div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5">
-  <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-amber-900 mb-0.5">
-    <Users className="w-3 h-3" />Point of Contact
-  </div>
-  {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
-    <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
-      <span className="font-semibold">{r.developer_contact?.name || "—"}</span>
-      {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
-      {r.developer_contact?.phone && (
-        <a href={`tel:${r.developer_contact.phone}`} className="underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
-          <Phone className="w-3 h-3" />{r.developer_contact.phone}
-        </a>
-      )}
-      {r.developer_contact?.email && (
-        <a href={`mailto:${r.developer_contact.email}`} className="underline flex items-center gap-1" onClick={e => e.stopPropagation()}>
-          <Mail className="w-3 h-3" />{r.developer_contact.email}
-        </a>
-      )}
-    </div>
-  ) : (
-    <button onClick={() => openEdit(r)} className="text-[11px] text-amber-900/70 hover:text-amber-900 italic">
-      + Add point of contact
-    </button>
-  )}
-</div>
+```
+field_sources jsonb default '{}'::jsonb
 ```
 
-`Building2`, `Users`, `LinkIcon`, `Phone`, `Mail`, `MapPin` are already imported in this file — no new imports.
+Shape:
+```jsonc
+{
+  "phone":      { "source": "perplexity",   "url": "https://...", "fetched_at": "2026-04-29T..." },
+  "emirate":    { "source": "master_catalog", "fetched_at": "..." },
+  "website":    { "source": "perplexity",   "url": "https://...", "fetched_at": "..." },
+  "developer_email": { "source": "ai_inference", "fetched_at": "..." },
+  "developer_contact": { "source": "manual", "fetched_at": "..." }
+}
+```
 
-## What is preserved (no removal)
+`source` values: `master_catalog`, `perplexity`, `firecrawl`, `ai_inference`, `manual`.
+`manual` is set automatically when the user edits a field via the existing edit dialog.
 
-- Header row with developer name, status pill, "Confirmed" / "Email sent N days ago" badges, and outreach count.
-- Notes inline editor.
-- Action buttons (Send / AI / Remind / Edit).
-- AI next-action banner.
-- Selection checkbox and bulk actions.
+A small DB trigger on `crm_developer_registry` updates `field_sources[<field>] = {source: 'manual', fetched_at: now()}` whenever the underlying field changes and `field_sources` wasn't explicitly set in the same statement.
 
-## Why this is internal-only and safe
+## Edge function — `enrich-developer-registry` (new)
 
-The Relationships page lives under owner-restricted routes; per the project's "Contact Gating Standard", developer/broker contact info is only displayed in the owner workspace. This change does not surface any contact details on public pages.
+Path: `supabase/functions/enrich-developer-registry/index.ts`
+
+Inputs (POST JSON):
+- `ids?: string[]` — specific registry rows; if omitted, picks rows missing any of the target fields, ordered by `created_at` ASC, capped at `batchSize`.
+- `batchSize?: number` (default 8, max 25)
+- `useWeb?: boolean` (default true) — toggle Perplexity/Firecrawl research.
+
+Per row pipeline (only fills empty fields, never overwrites existing values):
+
+1. **Master-catalog fill** — left-join `developers` by `lower(slug)`. If matched and registry field is empty:
+   - `website` ← `developers.website_url`
+   - `emirate` ← parse from `developers.headquarters` (regex: Dubai|Abu Dhabi|Sharjah|Ajman|Ras Al Khaimah|Fujairah|Umm Al Quwain).
+   - Source: `master_catalog`.
+
+2. **Perplexity research** (`sonar` model) — single grounded query per developer:
+   > "For the UAE real estate developer "<name>", return strict JSON: { hq_emirate, hq_address, phone, sales_email, website, contact_name, contact_role }. Only include fields you can verify from official sources (developer's own site, DLD, RERA, LinkedIn). Use null for unknown."
+   - Use `response_format: json_schema` for structured output.
+   - Citations from `data.citations[0]` saved as `url`.
+   - Source: `perplexity`.
+
+3. **Firecrawl fallback** — only when Perplexity returned a website but no phone/email, scrape `<website>/contact` (or `/`) with `formats: ['markdown']`, then a small Lovable AI extraction call to pick `phone`/`email` out of the markdown. Source: `firecrawl`.
+
+4. **AI inference last resort** — `google/gemini-3-flash-preview` produces a best-guess `developer_email` (e.g. `info@<domain>`) only if no email was found and a website domain is known. Source: `ai_inference`. Marked clearly in the UI as inferred.
+
+For each filled field, set both the value AND `field_sources[field] = {source, url?, fetched_at}` in a single update so the auto-`manual` trigger does not fire.
+
+Returns `{ processed, results: [{ id, name, filled: ['phone','website',...], skipped: [...] }] }`.
+
+Auth: standard JWT verification + `requireOwnerAuth`-equivalent check that the caller owns the registry rows (matches existing patterns in `crm-relationship-ai`).
+
+Rate limits: 8 rows per request, 1.2 s delay between Perplexity calls. Surface 402/429 from Perplexity/Firecrawl back to the client as toasts.
+
+## Hook — `useEnrichDeveloperRegistry`
+
+In `src/hooks/useCRMRelationships.ts`:
+
+```ts
+export const useEnrichDeveloperRegistry = () =>
+  useMutation({
+    mutationFn: async (input: { ids?: string[]; useWeb?: boolean } = {}) => {
+      const { data, error } = await supabase.functions.invoke("enrich-developer-registry", { body: input });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-developer-registry"] });
+      toast({ title: "Enrichment complete", description: `${data.processed} developers updated.` });
+    },
+    onError: (e: any) => toast({ title: "Enrichment failed", description: e.message, variant: "destructive" }),
+  });
+```
+
+## UI changes — `src/pages/CRMRelationships.tsx`
+
+1. **Toolbar button** in the Developer Registry tab, next to the existing **Pre-fill** / **Import all developers**:
+
+   - **"Research & enrich"** — runs `useEnrichDeveloperRegistry` with no `ids`, `useWeb: true`.
+     - Shows a confirm dialog: "This will research up to 8 developers per click using AI + web sources. Continue?"
+     - Loading state with spinner; disabled while running.
+
+2. **Per-card per-field source chip** — on each developer card (the labeled grid we just shipped), append a tiny pill next to the value when `r.field_sources?.[field]` is set. Click opens a popover showing source + fetched date + link.
+
+   ```tsx
+   const FieldSource = ({ meta }: { meta?: { source: string; url?: string; fetched_at?: string } }) => {
+     if (!meta) return null;
+     const colors: Record<string, string> = {
+       master_catalog: "bg-emerald-50 text-emerald-800 border-emerald-200",
+       perplexity:     "bg-blue-50 text-blue-800 border-blue-200",
+       firecrawl:      "bg-indigo-50 text-indigo-800 border-indigo-200",
+       ai_inference:   "bg-amber-50 text-amber-900 border-amber-200",
+       manual:         "bg-gray-100 text-gray-700 border-gray-200",
+     };
+     return (
+       <Popover>
+         <PopoverTrigger asChild>
+           <button className={`text-[9px] uppercase tracking-wider px-1.5 py-px rounded-full border ${colors[meta.source] || colors.manual}`}>
+             {meta.source.replace("_", " ")}
+           </button>
+         </PopoverTrigger>
+         <PopoverContent className="text-xs">
+           <div className="font-semibold capitalize">{meta.source.replace("_", " ")}</div>
+           {meta.url && <a href={meta.url} target="_blank" rel="noopener noreferrer" className="underline break-all block mt-1">{meta.url}</a>}
+           {meta.fetched_at && <div className="text-gray-500 mt-1">Fetched {new Date(meta.fetched_at).toLocaleString()}</div>}
+         </PopoverContent>
+       </Popover>
+     );
+   };
+   ```
+
+   Render `<FieldSource meta={r.field_sources?.phone} />` next to each labeled value (phone, email, website, office, point-of-contact name).
+
+3. **Per-row "Enrich"** action — already-existing AI button beside Send/Remind/Edit gets a sibling **"Research"** button (icon `BookOpen`) that calls `useEnrichDeveloperRegistry({ ids: [r.id] })` for that single row.
+
+## Migration
+
+Single migration:
+
+```sql
+alter table public.crm_developer_registry
+  add column if not exists field_sources jsonb not null default '{}'::jsonb;
+
+-- Auto-mark manual edits
+create or replace function public.mark_registry_field_sources()
+returns trigger language plpgsql as $$
+declare
+  ts text := to_char(now() at time zone 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
+begin
+  if new.field_sources is null then new.field_sources := '{}'::jsonb; end if;
+  if new.phone is distinct from old.phone and (new.field_sources -> 'phone') = (old.field_sources -> 'phone') then
+    new.field_sources := jsonb_set(new.field_sources, '{phone}', jsonb_build_object('source','manual','fetched_at',ts), true);
+  end if;
+  if new.developer_email is distinct from old.developer_email and (new.field_sources -> 'developer_email') = (old.field_sources -> 'developer_email') then
+    new.field_sources := jsonb_set(new.field_sources, '{developer_email}', jsonb_build_object('source','manual','fetched_at',ts), true);
+  end if;
+  if new.emirate is distinct from old.emirate and (new.field_sources -> 'emirate') = (old.field_sources -> 'emirate') then
+    new.field_sources := jsonb_set(new.field_sources, '{emirate}', jsonb_build_object('source','manual','fetched_at',ts), true);
+  end if;
+  if new.website is distinct from old.website and (new.field_sources -> 'website') = (old.field_sources -> 'website') then
+    new.field_sources := jsonb_set(new.field_sources, '{website}', jsonb_build_object('source','manual','fetched_at',ts), true);
+  end if;
+  if new.developer_contact is distinct from old.developer_contact and (new.field_sources -> 'developer_contact') = (old.field_sources -> 'developer_contact') then
+    new.field_sources := jsonb_set(new.field_sources, '{developer_contact}', jsonb_build_object('source','manual','fetched_at',ts), true);
+  end if;
+  return new;
+end$$;
+
+drop trigger if exists trg_mark_registry_field_sources on public.crm_developer_registry;
+create trigger trg_mark_registry_field_sources
+  before update on public.crm_developer_registry
+  for each row execute function public.mark_registry_field_sources();
+```
+
+(Trigger fires only on UPDATE so the bulk import path stays untouched.)
+
+## Privacy / compliance
+
+- Registry is owner-only (RLS + `OwnerGuard`); the new chip and source URL only appear on the internal page. Per project memory: developer/broker contact info is never displayed publicly — unchanged.
+- We do NOT publish the AI-inferred email to the user-facing inquiry forms; it lives only inside the registry until the owner reviews it.
+- Source chip clearly labels `ai inference` so any unverified value is auditable.
 
 ## Files touched
 
-- `src/pages/CRMRelationships.tsx` — replace the meta row + conditional contact block with a labeled grid and a permanent Point-of-Contact panel inside `DeveloperRegistryTab`'s card.
+- `supabase/migrations/<ts>_registry_field_sources.sql` — new column + trigger.
+- `supabase/functions/enrich-developer-registry/index.ts` — new edge function.
+- `src/hooks/useCRMRelationships.ts` — add `useEnrichDeveloperRegistry`.
+- `src/pages/CRMRelationships.tsx` — toolbar button, per-row "Research" button, `FieldSource` pills next to each value in the developer card.
 
 ## Verification
 
-1. Open Relationships → Developer Registry.
-2. Every card shows, without any interaction: Name, Company, Office, Phone, Email (and Website / Agency code when set).
-3. Cards with a saved point of contact show name, role, click-to-call phone, mailto email — all visible at a glance.
-4. Cards without a point of contact still show the panel with a small "+ Add point of contact" inline action that opens the existing edit dialog.
+1. Click **Research & enrich** in Developer Registry → toast shows "N developers updated".
+2. Reload the tab — cards now show populated phone/email/office/website with a tiny chip next to each value (e.g. `perplexity` blue, `master catalog` emerald, `ai inference` amber).
+3. Click the chip — popover shows source, link (when available) and fetched date.
+4. Edit a field manually → chip flips to gray `manual`.
+5. Per-row "Research" button on a single card fills only that row.

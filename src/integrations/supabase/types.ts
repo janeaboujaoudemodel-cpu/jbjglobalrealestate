@@ -5349,6 +5349,7 @@ export type Database = {
           documents: Json | null
           emirate: string | null
           expiry_date: string | null
+          field_sources: Json
           first_contact_at: string | null
           id: string
           last_auto_reply_at: string | null
@@ -5386,6 +5387,7 @@ export type Database = {
           documents?: Json | null
           emirate?: string | null
           expiry_date?: string | null
+          field_sources?: Json
           first_contact_at?: string | null
           id?: string
           last_auto_reply_at?: string | null
@@ -5423,6 +5425,7 @@ export type Database = {
           documents?: Json | null
           emirate?: string | null
           expiry_date?: string | null
+          field_sources?: Json
           first_contact_at?: string | null
           id?: string
           last_auto_reply_at?: string | null
