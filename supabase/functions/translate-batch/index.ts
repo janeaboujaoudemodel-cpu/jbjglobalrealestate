@@ -21,6 +21,45 @@ const LANG_NAMES: Record<string, string> = {
   he: "Hebrew", pl: "Polish", ja: "Japanese",
 };
 
+// Locked Latin strings — never translated, even if AI suggests otherwise.
+const LATIN_LOCKED = new Set<string>([
+  "JBJ", "JBJ GLOBAL REAL ESTATE", "JBJ Global Real Estate",
+]);
+
+// Curated proper-noun overrides keyed by source -> { lang -> translated }.
+// Mirrors src/translations/proper-nouns.ts and authoritatively writes to cache,
+// so the AI can never overwrite a canonical brand/personal-name transliteration.
+const PROPER_NOUN_OVERRIDES: Record<string, Record<string, string>> = {
+  "Jane Bou Jaoude": {
+    ar: "جاين بو جودة", fa: "جاین بو ژودِه", he: "ג'יין בו ז'אודה",
+    ru: "Джейн Бу Жауд", zh: "簡·博·喬德", ja: "ジェーン・ブー・ジャウデ",
+    hi: "जेन बू जौदे",
+  },
+  "Founder & CEO": {
+    ar: "المؤسِّسة والرئيسة التنفيذية",
+    fr: "Fondatrice et Présidente-Directrice Générale",
+    es: "Fundadora y Directora Ejecutiva", de: "Gründerin & CEO",
+    it: "Fondatrice e Amministratrice Delegata", nl: "Oprichtster & CEO",
+    pl: "Założycielka i Dyrektor Generalny",
+    ru: "Основательница и Генеральный директор", tr: "Kurucu ve CEO",
+    fa: "بنیان‌گذار و مدیرعامل", he: "מייסדת ומנכ״לית",
+    zh: "創辦人兼執行長", ja: "創業者兼CEO", hi: "संस्थापक और सीईओ",
+  },
+  "Dubai": { ar: "دبي", fa: "دبی", he: "דובאי", ru: "Дубай", zh: "迪拜", ja: "ドバイ", hi: "दुबई" },
+  "Abu Dhabi": { ar: "أبوظبي", fa: "ابوظبی", he: "אבו דאבי", ru: "Абу-Даби", zh: "阿布扎比", ja: "アブダビ", hi: "अबू धाबी" },
+  "United Arab Emirates": {
+    ar: "الإمارات العربية المتحدة", fa: "امارات متحده عربی",
+    he: "איחוד האמירויות הערביות", ru: "Объединённые Арабские Эмираты",
+    zh: "阿拉伯聯合大公國", ja: "アラブ首長国連邦", hi: "संयुक्त अरब अमीरात",
+  },
+};
+
+function getOverride(text: string, lang: string): string | null {
+  const t = text.trim();
+  if (LATIN_LOCKED.has(t)) return t;
+  return PROPER_NOUN_OVERRIDES[t]?.[lang] ?? null;
+}
+
 async function sha256Hex(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
   const buf = await crypto.subtle.digest("SHA-256", data);
@@ -166,10 +205,32 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Strings still needing translation
+    // Strings still needing translation (after cache + override pass)
     const missing: { text: string; hash: string }[] = [];
+    const overrideRows: Array<{ source_hash: string; source_text: string; target_lang: string; translated_text: string; domain: string }> = [];
     for (const [hash, entry] of uniqueMap) {
-      if (!cacheLookup.has(hash)) missing.push(entry);
+      if (cacheLookup.has(hash)) continue;
+      const ov = getOverride(entry.text, targetLang);
+      if (ov !== null) {
+        cacheLookup.set(hash, ov);
+        overrideRows.push({
+          source_hash: hash,
+          source_text: entry.text,
+          target_lang: targetLang,
+          translated_text: ov,
+          domain,
+        });
+      } else {
+        missing.push(entry);
+      }
+    }
+
+    // Persist override rows so all clients see the canonical value.
+    if (overrideRows.length > 0) {
+      const { error: ovErr } = await supabase
+        .from("translations_cache")
+        .upsert(overrideRows, { onConflict: "source_hash,target_lang" });
+      if (ovErr) console.error("override upsert error", ovErr);
     }
 
     if (missing.length > 0) {

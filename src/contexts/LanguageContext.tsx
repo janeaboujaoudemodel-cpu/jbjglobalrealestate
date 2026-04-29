@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback,
 import { Language, SUPPORTED_LANGUAGES, isRTLLanguage, getLanguageInfo } from '@/translations';
 import { en } from '@/translations/en';
 import { startAutoTranslator, setAutoTranslatorLanguage } from '@/i18n/autoTranslate';
+import { prewarmChromeDictionary } from '@/i18n/translateClient';
 
 // Only English is loaded eagerly — all other languages are lazy-loaded on demand
 const translationLoaders: Record<Language, () => Promise<Record<string, string>>> = {
@@ -111,6 +112,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.lang = language;
     document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
     setAutoTranslatorLanguage(language);
+    // Pre-warm the curated chrome dictionary in the background.
+    // First view in a non-English locale is then near-instant.
+    if (language !== 'en') {
+      void prewarmChromeDictionary(language);
+    }
   }, [language]);
 
   // Boot auto-translator once

@@ -44,7 +44,11 @@ interface NodeWithOrig extends Node {
 
 let currentLang: Language = 'en';
 let observer: MutationObserver | null = null;
+let headObserver: MutationObserver | null = null;
 let scheduled = false;
+// Roots queued for the next scoped sweep. If the set contains document.body
+// we treat that as a full sweep request.
+const dirtyRoots = new Set<Node>();
 
 function isInsideSkippedAncestor(node: Node): boolean {
   let p: Node | null = node.parentNode;
@@ -159,10 +163,11 @@ function applyTranslations(textNodes: Text[], attrTargets: { el: HTMLElement; at
   }
 }
 
-function scheduleSweep() {
+function scheduleSweep(root?: Node) {
+  if (root) dirtyRoots.add(root);
+  else dirtyRoots.add(document.body);
   if (scheduled) return;
   scheduled = true;
-  // requestIdleCallback if available, otherwise next frame
   const run = () => {
     scheduled = false;
     sweep();
@@ -172,11 +177,83 @@ function scheduleSweep() {
   else requestAnimationFrame(run);
 }
 
+// Translatable elements inside <head> — title text, meta descriptions, OG/Twitter cards.
+function sweepHead() {
+  if (typeof document === 'undefined') return;
+  const head = document.head;
+  if (!head) return;
+
+  // <title> text node
+  const titleEl = head.querySelector('title');
+  if (titleEl) {
+    // Treat as a normal text node
+    const t = titleEl.firstChild;
+    if (t && t.nodeType === Node.TEXT_NODE) {
+      const owned = t as unknown as NodeWithOrig;
+      if (owned[ORIG_TEXT_KEY] == null) {
+        const txt = t.nodeValue ?? '';
+        if (shouldTranslate(txt) && !LATIN_LOCKED_STRINGS.has(txt.trim())) {
+          owned[ORIG_TEXT_KEY] = txt;
+        }
+      }
+      const orig = owned[ORIG_TEXT_KEY];
+      if (orig != null) {
+        if (currentLang === 'en') {
+          if (t.nodeValue !== orig) t.nodeValue = orig;
+        } else {
+          const translated = getTranslationSync(orig, currentLang, 'ui');
+          if (t.nodeValue !== translated) t.nodeValue = translated;
+        }
+      }
+    }
+  }
+
+  // meta description, og:*, twitter:* — translate the `content` attribute
+  const metas = head.querySelectorAll<HTMLMetaElement>(
+    'meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]'
+  );
+  metas.forEach((m) => {
+    const prop = (m.getAttribute('property') || m.getAttribute('name') || '').toLowerCase();
+    // Skip non-text meta values: og:image, og:url, og:type, og:site_name (brand), twitter:card, twitter:site
+    if (
+      prop.endsWith(':image') || prop.endsWith(':url') || prop === 'og:type' ||
+      prop === 'og:site_name' || prop === 'twitter:card' || prop === 'twitter:site' ||
+      prop === 'twitter:creator' || prop.endsWith(':locale')
+    ) {
+      return;
+    }
+    const val = m.getAttribute('content');
+    if (!val || !shouldTranslate(val) || LATIN_LOCKED_STRINGS.has(val.trim())) return;
+    const owned = m as unknown as NodeWithOrig;
+    if (!owned[ORIG_ATTR_KEY]) owned[ORIG_ATTR_KEY] = {};
+    if (owned[ORIG_ATTR_KEY]!['content'] == null) owned[ORIG_ATTR_KEY]!['content'] = val;
+    const orig = owned[ORIG_ATTR_KEY]!['content']!;
+    if (currentLang === 'en') {
+      if (m.getAttribute('content') !== orig) m.setAttribute('content', orig);
+    } else {
+      const translated = getTranslationSync(orig, currentLang, 'ui');
+      if (m.getAttribute('content') !== translated) m.setAttribute('content', translated);
+    }
+  });
+}
+
 function sweep() {
   if (typeof document === 'undefined') return;
+  // Always refresh head — cheap, small set
+  sweepHead();
+
+  const roots = Array.from(dirtyRoots);
+  dirtyRoots.clear();
+  // If body is in the set, do a single full sweep and skip the rest.
+  const fullSweep = roots.includes(document.body);
+  const targets: Node[] = fullSweep ? [document.body] : roots;
   const textNodes: Text[] = [];
   const attrTargets: { el: HTMLElement; attr: string; orig: string }[] = [];
-  walkAndCollect(document.body, textNodes, attrTargets);
+  for (const r of targets) {
+    // Skip nodes detached from the tree
+    if (!document.contains(r)) continue;
+    walkAndCollect(r, textNodes, attrTargets);
+  }
   applyTranslations(textNodes, attrTargets, currentLang);
 }
 
@@ -184,23 +261,28 @@ export function startAutoTranslator(initialLang: Language) {
   if (typeof document === 'undefined') return;
   currentLang = initialLang;
 
-  // Initial sweep
+  // Initial full sweep
   scheduleSweep();
 
   // Re-apply when batch translations land
   subscribeTranslations(() => scheduleSweep());
 
-  // Watch for new DOM nodes (React renders, route changes)
+  // Watch for new DOM nodes (React renders, route changes) — scoped to mutation targets.
   if (observer) observer.disconnect();
   observer = new MutationObserver((mutations) => {
-    let dirty = false;
     for (const m of mutations) {
-      if (m.type === 'childList' && m.addedNodes.length > 0) dirty = true;
-      else if (m.type === 'characterData') dirty = true;
-      else if (m.type === 'attributes') dirty = true;
-      if (dirty) break;
+      if (m.type === 'childList') {
+        m.addedNodes.forEach((n) => {
+          if (n.nodeType === Node.ELEMENT_NODE || n.nodeType === Node.TEXT_NODE) {
+            scheduleSweep(n);
+          }
+        });
+      } else if (m.type === 'characterData') {
+        scheduleSweep(m.target);
+      } else if (m.type === 'attributes') {
+        scheduleSweep(m.target);
+      }
     }
-    if (dirty) scheduleSweep();
   });
   observer.observe(document.body, {
     childList: true,
@@ -209,9 +291,25 @@ export function startAutoTranslator(initialLang: Language) {
     attributes: true,
     attributeFilter: TRANSLATABLE_ATTRS,
   });
+
+  // Head observer — separate target, separate config
+  if (headObserver) headObserver.disconnect();
+  headObserver = new MutationObserver(() => scheduleSweep());
+  if (document.head) {
+    headObserver.observe(document.head, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ['content'],
+    });
+  }
 }
 
 export function setAutoTranslatorLanguage(lang: Language) {
   currentLang = lang;
+  // Force a full sweep on language change so previously translated nodes
+  // are re-translated into the new language.
+  dirtyRoots.add(document.body);
   scheduleSweep();
 }
