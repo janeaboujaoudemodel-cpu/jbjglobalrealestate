@@ -31,9 +31,9 @@ export default function CRMLeadsInbox() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-black">Leads Inbox</h1>
+            <h1 className="text-2xl font-bold text-black">Leads &amp; Clients</h1>
             <p className="text-black/60 text-sm">
-              {cx.totalLeads} lead{cx.totalLeads !== 1 ? "s" : ""} total
+              All leads, prospects, and clients in one workspace · {cx.totalLeads} record{cx.totalLeads !== 1 ? "s" : ""}
               {cx.hasActiveFilters && " (filtered)"}
             </p>
           </div>
