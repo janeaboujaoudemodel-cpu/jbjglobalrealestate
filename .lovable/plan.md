@@ -1,123 +1,109 @@
-## What's actually wrong
+# Goal
 
-1. **"When I click Properties it opens the wrong page."** The route `/properties` is wired to `PropertiesReelly` (a marketing landing), not to `Properties.tsx` which is the real listings page with Buy/Sell/Rent and Ready/Off-plan filters already built in.
-2. **"Property Management page looks broken."** `src/pages/services/PropertyManagement.tsx` is built on a gold-on-champagne palette with `Playfair Display` serif. The hero subtitle uses `text-gray-600` on a near-black gradient (unreadable). This violates four locked design memories (Monochrome, Typography, CTA, Footer).
-3. **The Properties click should reveal a richer menu** (Buy / Sell / Rent, Ready / Off-plan, plus categories: apartments, villas, townhouses, penthouses, retail, commercial, offices, plots).
+Bring the site to Hermès / Versace level multilingual quality: when the user picks a language, **every visible word changes** — navigation, headings, body copy, project names, descriptions, area guides, news, services, alt text, page titles, role labels, even Jane's name (transliterated). Only emails and numbers stay Latin. The brand wordmark "JBJ GLOBAL REAL ESTATE" stays Latin (registered mark); taglines and titles around it transliterate.
 
-I will not delete any feature on the Property Management page (No Removal policy) — only restyle.
+The current system covers ~3% of the app (55 of 1,657 files use `t()`). The 1,253-key dictionaries cover nav and CTAs only. The rest is hardcoded English JSX, plus thousands of rows of database content (projects, areas, news, services) that have no translation columns.
+
+We solve this with an **automatic AI translation engine** plus a thin client wrapper, so every English string — present and future — is translated on first view, cached forever, and instant for everyone after that. No per-string manual entry required.
 
 ---
 
-## Step 1 — Properties navigation (dropdown + filtered page)
-
-### 1a. Mega-menu in the top utility bar
-File: `src/components/navigation/HorizontalUtilityBar.tsx` (the existing "Browse" Popover, lines ~226–263).
-
-Expand the popover from 3 items to a 3-column mega-menu:
+# Architecture
 
 ```text
-┌──────────────────── BROWSE PROPERTIES ────────────────────┐
-│ TRANSACTION       │ READINESS         │ CATEGORY          │
-│  Buy              │  Ready to move    │  Apartments       │
-│  Rent             │  Off-plan         │  Villas           │
-│  Sell (list)      │  New launches     │  Townhouses       │
-│                   │                   │  Penthouses       │
-│                   │                   │  Commercial       │
-│                   │                   │  Retail           │
-│                   │                   │  Offices          │
-│                   │                   │  Plots / Land     │
-│  ┌──────────────────────────────────────────────────────┐ │
-│  │ [ See all properties → ]   [ Resale investor deals ] │ │
-│  └──────────────────────────────────────────────────────┘ │
-└───────────────────────────────────────────────────────────┘
+                ┌──────────────────────────────────┐
+   English ──►  │ <T> / useT() React primitive     │
+   string       │ — sees current language          │
+                │ — checks local cache             │
+                └────────┬─────────────────────────┘
+                         │ miss
+                         ▼
+                ┌──────────────────────────────────┐
+                │ translate-batch edge function    │
+                │ — batches 50 strings / 200ms     │
+                │ — checks translations_cache (DB) │
+                │ — calls Lovable AI for misses    │
+                │ — writes back to cache           │
+                └────────┬─────────────────────────┘
+                         │
+                         ▼
+                ┌──────────────────────────────────┐
+                │ translations_cache               │
+                │ (source_hash, lang) → translated │
+                │ shared across all users          │
+                └──────────────────────────────────┘
 ```
 
-Each link routes to `/properties` with the matching URL param the existing `Properties.tsx` page already understands:
-- Transaction: `?transactionType=buy|rent`
-- Readiness: `?completionStatus=ready` / `?completionStatus=off-plan` / `?status=new_launch`
-- Category: `?type=apartment|villa|townhouse|penthouse|commercial|retail|office|plot`
-
-Same pattern applied to `GlobalVerticalNav.tsx` Properties section so the side rail matches.
-
-### 1b. Properties route fix
-File: `src/routes/PublicRoutes.tsx` line 202.
-
-Change:
-```ts
-<Route path="/properties" element={<PropertiesReelly />} />
-```
-to:
-```ts
-<Route path="/properties" element={<Properties />} />
-<Route path="/properties/explore" element={<PropertiesReelly />} />
-```
-
-`PropertiesReelly` is preserved (No Removal) at the new `/properties/explore` path, and the marketing CTAs still work. The existing redirects `/buy → /properties?transactionType=buy` and `/rent → /properties?transactionType=rent` then reach the right page automatically.
-
-### 1c. Filter chips on the listings page
-`Properties.tsx` already shows Buy/Rent toggles and a Ready/Off-plan strip. I'll surface category chips (apartment, villa, townhouse, penthouse, commercial, retail, office, plot) in the same row using the existing `appliedFilters.propertyType` field, so the page lands with the chip pre-selected when arriving from the dropdown.
+First user to view "Discover Dubai's most exceptional residences" in Arabic triggers one AI call. Every user after that gets the cached Arabic instantly. Same model handles project descriptions, news bodies, area guides — anything pulled from the database.
 
 ---
 
-## Step 2 — Rebuild Property Management page on the locked design system
+# Plan
 
-File: `src/pages/services/PropertyManagement.tsx`
+### 1. Database — translation cache and content table extensions
+- New table `translations_cache(source_hash text, source_text text, target_lang text, translated_text text, domain text, created_at)` — primary key `(source_hash, target_lang)`. Public read, service-role write. Domain tags ("ui", "project.description", "news.body", "area.guide", etc.) for cache hygiene.
+- New table `content_translations(table_name, row_id, field, lang, translated_text)` for long-form DB content (project descriptions, news articles, area guides, services). Lets us pre-warm and override AI output where curation matters.
+- Optional override columns aren't added to source tables; we keep all locale data in `content_translations` to avoid touching 50+ existing tables.
 
-Replace styling only — keep every section, every list, every FAQ, every CTA, every form field. Concretely:
+### 2. Edge function `translate-batch`
+- POST `{ strings: string[], targetLang, domain }` → `{ translations: string[] }`.
+- Steps: hash each input, look up `translations_cache`, send misses to Lovable AI (`google/gemini-3-flash-preview`) with a luxury-brand system prompt ("You are translating for a Hermès-level real-estate maison. Preserve proper nouns 'JBJ GLOBAL REAL ESTATE'. Transliterate personal names. Keep numbers/emails verbatim. Match register: refined, concise, never marketing-y."), insert results back, return ordered array.
+- Built-in batching, dedupe inside the request, 30s timeout, 429/402 surfacing.
 
-| Currently | Replace with |
-|---|---|
-| `bg-gradient-to-br from-[#FDFBF7] via-[#F8F3EA] to-[#F0E8D8]` page bg | `bg-background` (white) |
-| Hero `bg-gradient-to-b from-[#1a1714] to-[#151210]` + gold radial blobs | Clean white hero with a single thin `<AdaptiveHairline />` divider; eyebrow chip uses `border-border bg-card text-foreground` |
-| `font-family: Playfair Display, serif` everywhere | `Inter` (project default) — remove inline `style={{ fontFamily }}` |
-| `#C8A766` gold accents in body text/headings | `text-foreground` for headings, `text-muted-foreground` for descriptions, `--price-orange` only for any monetary stats |
-| `text-gray-600` on dark hero (the unreadable line) | `text-foreground/80` on white hero |
-| Gold CTA buttons (`PremiumHeroButton`) | Existing `Button` primary (black on white, white on black), no gold text |
-| Champagne `CCard` (gradient + gold border) | Standard `Card` from `@/components/ui/card` with `border border-border` and white surface |
-| Section heading "first word in gold" | Solid `text-foreground` heading; optional small uppercase eyebrow above in `text-muted-foreground` |
+### 3. Frontend i18n primitive
+- New `useT()` hook in `src/contexts/LanguageContext.tsx` that:
+  - returns English unchanged when `language === 'en'`
+  - checks an in-memory + IndexedDB cache
+  - on miss, queues the string for the next debounced batch call (50 strings / 200 ms window) and returns English while loading; updates on resolve via React state.
+- New `<T>` component: `<T>Welcome to JBJ Global Real Estate</T>` — sugar over `useT()`. Children must be a static string literal; we'll wire a Babel/SWC ergonomic later if needed.
+- New `<TR field="description" row={project} />` for DB content — looks up `content_translations` first, falls back to AI translation of the source field.
+- All existing `t('key')` calls keep working (existing static dictionaries still take priority over AI).
 
-Trust badges, performance stats, onboarding steps, leasing steps, service modules, FAQ accordion, fees table, consultation form — all preserved.
+### 4. Codemod sweep — wrap hardcoded strings
+- Script (`scripts/i18n-wrap.ts`) walks `src/pages` and `src/components`, finds JSX text nodes and string-literal `title`/`alt`/`placeholder`/`aria-label` props, and wraps them in `<T>…</T>` / `useT()`. Skips: code-fence content, regex literals, route paths, env vars, file under `src/integrations`, `src/config`, brand-locked strings (`JBJ GLOBAL REAL ESTATE`, email addresses, phone numbers, currency codes).
+- Run in passes by directory so diffs stay reviewable. Target ~1,200 files; expect 8–15k wraps.
 
----
+### 5. Database content rendering
+- `useTranslatedField(row, fieldName, domain)` hook used by project cards, project detail, news, area guides, services pages, brokers' descriptions, agency about-text, awards, footer copy.
+- One-time backfill edge function `backfill-translations` to pre-warm Arabic first (largest target audience), then French, then the remaining 13 in background. Runs in chunks, idempotent.
 
-## Step 3 — Global contrast audit (whole app, public + dashboards)
+### 6. Founder identity & brand handling
+- Add curated overrides in a new `src/translations/proper-nouns.ts` for: `Jane Bou Jaoude`, `Founder & CEO`, role titles, city names that have official native forms (Dubai → دبي / 迪拜, Abu Dhabi → أبوظبي, etc.). These take priority over AI output.
+- "JBJ GLOBAL REAL ESTATE" wordmark is hard-locked in the AI system prompt and override list — never translated, only its surrounding tagline is.
+- Emails, phone numbers, prices, "AED", ISO dates — passed through verbatim.
 
-This is a sweep, not a redesign. Targets the patterns that produce the "unreadable / broken" feel:
+### 7. RTL polish
+- The `dir="rtl"` switch already happens. Audit Tailwind logical properties (`ms-*`/`me-*` over `ml-*`/`mr-*`) on top-level layout files: `Header`, `HorizontalUtilityBar`, `GlobalVerticalNav`, `Footer`, hero sections, property cards. Fix the worst offenders this pass; rest in subsequent.
 
-1. **`text-gray-*` on dark surfaces** — replace with `text-foreground`, `text-muted-foreground`, or `text-white/80` per the surface, using the White-on-Light Guard rule.
-2. **Solid white text on light/gold surfaces** — flip to `text-foreground` (the static/runtime guard already exists; I'll fix the violations it would catch).
-3. **Gold text in interactive controls** (links, buttons, tab triggers) — replace with `text-foreground` per CTA System Standard. Gold remains permitted only as a thin hairline accent.
-4. **Body copy at < 14px or `opacity < 0.7` on busy backgrounds** — bump to `text-sm` minimum and `/80` opacity floor.
-5. **Disabled/muted form labels** — ensure `text-muted-foreground` resolves to a contrast ratio ≥ 4.5:1 on the surface.
-
-I'll grep the codebase for the offending tokens (`text-gray-`, `text-[#C8A766]`, `text-white` on light bg, `Playfair`, etc.) and fix violations file-by-file. I'll batch this across:
-- Public pages (Home, Properties, Communities, Services/*, About, Contact, Legal, Company Profile)
-- Owner/admin dashboards
-- Auth + onboarding screens
-
-Locked features (Resale Investor Listings, Legal Hub, Company Profile Premium dark theme, AI purple theme, Executive Command Center) keep their distinct themes — the audit only fixes contrast violations inside them, not the theme itself.
-
----
-
-## Files I'll touch
-
-**Step 1 (nav + routing):**
-- `src/components/navigation/HorizontalUtilityBar.tsx`
-- `src/components/navigation/GlobalVerticalNav.tsx`
-- `src/routes/PublicRoutes.tsx`
-- `src/pages/Properties.tsx` (category chip row only)
-
-**Step 2 (Property Management restyle):**
-- `src/pages/services/PropertyManagement.tsx`
-
-**Step 3 (contrast audit, in batches):**
-- Targeted edits across `src/pages/**`, `src/components/**` where offending classes are detected. Each batch shows the file list before editing.
+### 8. Language switcher upgrade
+- Existing switcher stays; add a small "Translating…" indicator while the batch endpoint is in flight on first language switch (subsequent visits are instant from cache).
 
 ---
 
-## Out of scope
+# Rollout
 
-- No database changes.
-- No edge function changes.
-- No removal of any existing section, link, or feature.
-- Locked themes (Resale, Legal Hub, Company Profile dark, AI purple) keep their identity.
+1. **Migration + edge function + `useT`/`<T>` primitives + cache**. Site still 97% English but the engine is live.
+2. **Wrap pass A**: top-of-funnel pages — Home, Properties listing, Property detail, Services landing, About, Contact, Footer, Header, navigation menus. Highest visibility.
+3. **DB content wiring**: project cards/details, news, area guides, services. Triggers AI backfill for Arabic + French in the background.
+4. **Wrap pass B**: remaining public pages, dashboards, owner panels, CRM, forms.
+5. **Pre-warm script** kicked off for the remaining 13 languages.
+6. **RTL audit + polish** on key layouts.
+
+Step 1 ships behind the same language picker the user already uses — switching to Arabic immediately starts translating the wrapped pages. Each subsequent step extends coverage; nothing regresses.
+
+---
+
+# Files added / changed (high level)
+
+- **New**: `supabase/functions/translate-batch/index.ts`, `supabase/functions/backfill-translations/index.ts`
+- **New**: `src/translations/proper-nouns.ts`, `src/i18n/translateClient.ts`, `src/i18n/T.tsx`, `src/i18n/useTranslatedField.ts`
+- **New**: `scripts/i18n-wrap.ts` (one-off codemod)
+- **Edited**: `src/contexts/LanguageContext.tsx` (adds `useT`, batching, IDB cache)
+- **Edited (wrap pass A)**: ~80 files in `src/pages` + `src/components/layout` + `src/components/navigation` + `src/components/home` + `src/components/properties`
+- **Migration**: `translations_cache`, `content_translations` tables + RLS
+
+# Notes
+
+- This is a multi-step build. After step 1 the engine works end-to-end on whichever pages we've wrapped; coverage grows with each subsequent pass. I'll keep going until everything visible is translated — you don't have to ask again between passes.
+- Cost: AI translation runs once per (string × language) and is cached forever. A few thousand strings × 15 languages is a few dollars total, then near-zero.
+- "Don't remove anything" rule respected — this is purely additive.

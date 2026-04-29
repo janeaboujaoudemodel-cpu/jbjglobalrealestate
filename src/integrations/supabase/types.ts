@@ -4535,6 +4535,45 @@ export type Database = {
           },
         ]
       }
+      content_translations: {
+        Row: {
+          created_at: string
+          curated: boolean
+          field: string
+          id: string
+          lang: string
+          row_id: string
+          source_hash: string | null
+          table_name: string
+          translated_text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          curated?: boolean
+          field: string
+          id?: string
+          lang: string
+          row_id: string
+          source_hash?: string | null
+          table_name: string
+          translated_text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          curated?: boolean
+          field?: string
+          id?: string
+          lang?: string
+          row_id?: string
+          source_hash?: string | null
+          table_name?: string
+          translated_text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cookie_consents: {
         Row: {
           consent_status: string
@@ -24026,6 +24065,33 @@ export type Database = {
           target_lang?: string
           translated_text?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      translations_cache: {
+        Row: {
+          created_at: string
+          domain: string
+          source_hash: string
+          source_text: string
+          target_lang: string
+          translated_text: string
+        }
+        Insert: {
+          created_at?: string
+          domain?: string
+          source_hash: string
+          source_text: string
+          target_lang: string
+          translated_text: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string
+          source_hash?: string
+          source_text?: string
+          target_lang?: string
+          translated_text?: string
         }
         Relationships: []
       }

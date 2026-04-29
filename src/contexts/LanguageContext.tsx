@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Language, SUPPORTED_LANGUAGES, isRTLLanguage, getLanguageInfo } from '@/translations';
 import { en } from '@/translations/en';
+import { startAutoTranslator, setAutoTranslatorLanguage } from '@/i18n/autoTranslate';
 
 // Only English is loaded eagerly — all other languages are lazy-loaded on demand
 const translationLoaders: Record<Language, () => Promise<Record<string, string>>> = {
@@ -109,7 +110,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
+    setAutoTranslatorLanguage(language);
   }, [language]);
+
+  // Boot auto-translator once
+  useEffect(() => {
+    startAutoTranslator(language);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const t = useCallback((key: string, fallbackText?: string): string => {
     const currentDict = loadedTranslations[language];
