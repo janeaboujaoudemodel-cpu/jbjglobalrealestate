@@ -347,6 +347,7 @@ export const PublicRoutes = () => (
     <Route path="/investor-dashboard/portfolio" element={<AuthRequiredRoute><PortfolioViews /></AuthRequiredRoute>} />
     <Route path="/investor-dashboard/reports" element={<AuthRequiredRoute><ReportAccess /></AuthRequiredRoute>} />
     <Route path="/owner-dashboard" element={<Navigate to="/owner" replace />} />
+    <Route path="/owner/dashboard" element={<Navigate to="/owner" replace />} />
     <Route path="/my-account" element={<AuthRequiredRoute><BrokerAccount /></AuthRequiredRoute>} />
     <Route path="/profile" element={<AuthRequiredRoute><UserProfile /></AuthRequiredRoute>} />
     <Route path="/account" element={<Navigate to="/my-account" replace />} />
