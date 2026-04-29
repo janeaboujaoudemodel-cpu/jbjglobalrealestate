@@ -847,14 +847,17 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Reset All */}
         {hasActiveFilters && (
           <button
+            type="button"
             onClick={resetAll}
+            title={t('filter.resetAll') || 'Reset all filters'}
+            aria-label={t('filter.resetAll') || 'Reset all filters'}
             className={cn(
               pillBase, "px-2.5 py-1.5",
               "bg-red-500/10 border border-red-400/40 text-red-600 hover:bg-red-500/20"
             )}
           >
             <X className="w-3.5 h-3.5" />
-            {t('filter.reset')}
+            {t('filter.resetAll') || 'Reset all'}
           </button>
         )}
 
