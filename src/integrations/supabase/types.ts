@@ -6065,15 +6065,22 @@ export type Database = {
           assigned_broker_id: string | null
           assigned_to_user_id: string | null
           auto_detected_type: boolean | null
+          bedroom_requirement: string | null
           birthday: string | null
+          budget_currency: string | null
+          budget_max: number | null
+          budget_min: number | null
+          buying_purpose: string | null
           company_name: string | null
           contact_type: Database["public"]["Enums"]["crm_contact_type"] | null
+          country_of_residence: string | null
           created_at: string
           created_by_user_id: string | null
           current_location_city: string | null
           current_location_country: string | null
           deleted_at: string | null
           detection_keywords: string[] | null
+          documents: Json
           duplicate_hash: string | null
           duplicate_of_id: string | null
           email_encrypted: string | null
@@ -6089,11 +6096,15 @@ export type Database = {
             | null
           import_batch_id: string | null
           imported_at: string | null
+          internal_comments: string | null
           is_duplicate: boolean | null
           last_contacted_at: string | null
           lead_intent: string | null
+          lead_score_band: string | null
           lead_source_type: string | null
+          lead_type: string | null
           nationality: string | null
+          next_followup_at: string | null
           notes: string | null
           notes_encrypted: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -6105,7 +6116,11 @@ export type Database = {
           phone_raw: string | null
           pipeline_stage: string | null
           preferred_language: string | null
+          preferred_location: string | null
+          preferred_project: string | null
+          priority: string | null
           priority_score: number | null
+          property_type: string | null
           raw_import: Json | null
           rental_budget_max: number | null
           rental_budget_min: number | null
@@ -6124,6 +6139,7 @@ export type Database = {
           vip: boolean | null
           vip_tagged_at: string | null
           vip_tagged_by: string | null
+          whatsapp_e164: string | null
         }
         Insert: {
           age_range?: string | null
@@ -6133,15 +6149,22 @@ export type Database = {
           assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
+          bedroom_requirement?: string | null
           birthday?: string | null
+          budget_currency?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          buying_purpose?: string | null
           company_name?: string | null
           contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          country_of_residence?: string | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          documents?: Json
           duplicate_hash?: string | null
           duplicate_of_id?: string | null
           email_encrypted?: string | null
@@ -6157,11 +6180,15 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          internal_comments?: string | null
           is_duplicate?: boolean | null
           last_contacted_at?: string | null
           lead_intent?: string | null
+          lead_score_band?: string | null
           lead_source_type?: string | null
+          lead_type?: string | null
           nationality?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           notes_encrypted?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -6173,7 +6200,11 @@ export type Database = {
           phone_raw?: string | null
           pipeline_stage?: string | null
           preferred_language?: string | null
+          preferred_location?: string | null
+          preferred_project?: string | null
+          priority?: string | null
           priority_score?: number | null
+          property_type?: string | null
           raw_import?: Json | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
@@ -6192,6 +6223,7 @@ export type Database = {
           vip?: boolean | null
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
+          whatsapp_e164?: string | null
         }
         Update: {
           age_range?: string | null
@@ -6201,15 +6233,22 @@ export type Database = {
           assigned_broker_id?: string | null
           assigned_to_user_id?: string | null
           auto_detected_type?: boolean | null
+          bedroom_requirement?: string | null
           birthday?: string | null
+          budget_currency?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          buying_purpose?: string | null
           company_name?: string | null
           contact_type?: Database["public"]["Enums"]["crm_contact_type"] | null
+          country_of_residence?: string | null
           created_at?: string
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
+          documents?: Json
           duplicate_hash?: string | null
           duplicate_of_id?: string | null
           email_encrypted?: string | null
@@ -6225,11 +6264,15 @@ export type Database = {
             | null
           import_batch_id?: string | null
           imported_at?: string | null
+          internal_comments?: string | null
           is_duplicate?: boolean | null
           last_contacted_at?: string | null
           lead_intent?: string | null
+          lead_score_band?: string | null
           lead_source_type?: string | null
+          lead_type?: string | null
           nationality?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           notes_encrypted?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
@@ -6241,7 +6284,11 @@ export type Database = {
           phone_raw?: string | null
           pipeline_stage?: string | null
           preferred_language?: string | null
+          preferred_location?: string | null
+          preferred_project?: string | null
+          priority?: string | null
           priority_score?: number | null
+          property_type?: string | null
           raw_import?: Json | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
@@ -6260,6 +6307,7 @@ export type Database = {
           vip?: boolean | null
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
+          whatsapp_e164?: string | null
         }
         Relationships: [
           {
