@@ -172,17 +172,17 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-6 mt-12"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2 text-white/60">
-              <Database className="w-5 h-5 text-gold" />
-              <span className="text-sm">Government Open Data</span>
+            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
+              <Database className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+              <span className="text-sm font-medium">Government Open Data</span>
             </div>
-            <div className="flex items-center gap-2 text-white/60">
-              <Shield className="w-5 h-5 text-gold" />
-              <span className="text-sm">Analytics Only</span>
+            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
+              <Shield className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+              <span className="text-sm font-medium">Analytics Only</span>
             </div>
-            <div className="flex items-center gap-2 text-white/60">
-              <BarChart3 className="w-5 h-5 text-gold" />
-              <span className="text-sm">No Listings</span>
+            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
+              <BarChart3 className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+              <span className="text-sm font-medium">No Listings</span>
             </div>
           </motion.div>
         </motion.div>
