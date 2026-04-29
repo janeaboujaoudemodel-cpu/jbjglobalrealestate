@@ -3350,12 +3350,13 @@ button:disabled:has(.lucide),
     overflow-wrap: normal;
   }
 
-  /* Extended contrast guard — covers muted/card/popover/secondary surfaces */
-  .bg-card .text-white:not([data-surface="dark"] *),
-  .bg-popover .text-white:not([data-surface="dark"] *),
-  .bg-muted .text-white:not([data-surface="dark"] *),
-  .bg-secondary .text-white:not([data-surface="dark"] *),
-  .bg-background .text-white:not([data-surface="dark"] *) {
+  /* Extended contrast guard — only flips text-white that isn't
+     itself on its own dark surface (avoids killing primary buttons). */
+  .bg-card > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-popover > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-muted > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-secondary > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-background > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]) {
     color: #111 !important;
   }
 
