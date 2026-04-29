@@ -888,9 +888,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                  className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
                 >
-                  <X className="w-3 h-3 text-white" />
+                  <X className="w-3 h-3 text-black" />
                 </button>
               </div>
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
@@ -971,9 +971,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                  className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
                 >
-                  <X className="w-3 h-3 text-white" />
+                  <X className="w-3 h-3 text-black" />
                 </button>
               </div>
 
@@ -1058,9 +1058,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               </div>
               <button
                 onClick={closeMegaMenu}
-                className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
               >
-                <X className="w-3 h-3 text-white" />
+                <X className="w-3 h-3 text-black" />
               </button>
             </div>
             <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1.5' : 'space-y-1'}`}>
