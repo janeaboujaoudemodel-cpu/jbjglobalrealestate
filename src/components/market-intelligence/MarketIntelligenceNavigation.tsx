@@ -63,18 +63,18 @@ export const MarketIntelligenceNavigation = ({
           {prevLink ? (
             <Link 
               to={prevLink.path}
-              className="flex-1 group jj-card-inner border-2 border-gold/50 hover:border-gold rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1"
+              className="flex-1 group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 2 }}
             >
               <div className="flex items-center gap-4 md:gap-6">
-                {/* Active color icon box */}
-                <div className="jj-icon-box-active w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all shadow-lg">
-                  <ArrowLeft className="w-5 h-5 md:w-7 md:h-7 text-black" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all shadow-lg" style={{ backgroundColor: '#000000' }}>
+                  <ArrowLeft className="w-5 h-5 md:w-7 md:h-7" style={{ color: '#ffffff' }} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-gray-600 text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Previous</p>
-                  <p className="text-black font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{prevLink.title}</p>
+                  <p className="text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold" style={{ color: '#6B7280' }}>Previous</p>
+                  <p className="font-bold text-lg md:text-xl lg:text-2xl" style={{ color: '#000000' }}>{prevLink.title}</p>
                   {prevLink.description && (
-                    <p className="text-gray-600 text-sm mt-1 md:mt-2 hidden md:block">{prevLink.description}</p>
+                    <p className="text-sm mt-1 md:mt-2 hidden md:block" style={{ color: '#4B5563' }}>{prevLink.description}</p>
                   )}
                 </div>
               </div>
