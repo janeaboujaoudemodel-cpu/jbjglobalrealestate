@@ -822,6 +822,7 @@ const DeveloperRegistryTab = () => {
                           <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
                           <span className="text-gray-500 shrink-0">Office:</span>
                           <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
+                          <FieldSource meta={r.field_sources?.emirate} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
                           <Phone className="w-3 h-3 text-gray-500 shrink-0" />
@@ -831,6 +832,7 @@ const DeveloperRegistryTab = () => {
                           ) : (
                             <span className="font-medium text-black">—</span>
                           )}
+                          <FieldSource meta={r.field_sources?.phone} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
                           <Mail className="w-3 h-3 text-gray-500 shrink-0" />
@@ -840,12 +842,14 @@ const DeveloperRegistryTab = () => {
                           ) : (
                             <span className="font-medium text-black">—</span>
                           )}
+                          <FieldSource meta={r.field_sources?.developer_email} />
                         </div>
                         {r.website && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
                             <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
                             <span className="text-gray-500 shrink-0">Website:</span>
                             <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
+                            <FieldSource meta={r.field_sources?.website} />
                           </div>
                         )}
                         {r.agency_code && (
