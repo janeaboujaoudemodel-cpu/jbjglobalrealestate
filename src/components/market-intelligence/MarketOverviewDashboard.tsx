@@ -144,23 +144,24 @@ export const MarketOverviewDashboard = () => {
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
                       const qColors = [
-                        'from-emerald-500 to-emerald-400',
-                        'from-blue-500 to-blue-400',
-                        'from-amber-500 to-amber-400',
-                        'from-purple-500 to-purple-400',
+                        'linear-gradient(to right, #10B981, #34D399)', // emerald
+                        'linear-gradient(to right, #3B82F6, #60A5FA)', // blue
+                        'linear-gradient(to right, #F59E0B, #FBBF24)', // amber
+                        'linear-gradient(to right, #8B5CF6, #A78BFA)', // violet
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="text-black font-medium text-sm w-20">{quarter.quarter}</span>
-                          <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
+                          <span className="font-semibold text-sm w-20" style={{ color: '#000000' }}>{quarter.quarter}</span>
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner" style={{ backgroundColor: '#F3F4F6' }}>
                             <motion.div
-                              className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
+                              className="h-full"
+                              style={{ background: qColors[idx % qColors.length] }}
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-bold">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold" style={{ color: '#000000' }}>
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>
@@ -168,7 +169,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black/90 text-xs mt-4">
+                  <p className="text-xs mt-4 font-medium" style={{ color: '#374151' }}>
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
