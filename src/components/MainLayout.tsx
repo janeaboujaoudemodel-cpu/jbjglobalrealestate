@@ -244,7 +244,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       });
       dismissDesktopBanner();
     }
-  }, [isMobile, showDesktopBanner, dismissDesktopBanner]);
+  }, [isPhoneOrTablet, showDesktopBanner, dismissDesktopBanner]);
 
   return (
     <div className="min-h-screen bg-background md:bg-[#ECE2D2]">
