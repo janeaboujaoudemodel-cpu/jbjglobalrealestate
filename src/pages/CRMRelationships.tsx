@@ -561,6 +561,7 @@ const DeveloperRegistryTab = () => {
   const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
   const importAll = useImportAllDevelopersToRegistry();
+  const enrich = useEnrichDeveloperRegistry();
   const upsert = useUpsertDeveloperRegistry();
   const upsertReminder = useUpsertReminder();
   const sendRegistration = useSendDeveloperRegistration();
