@@ -7,6 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
 import { AdaptiveHairline } from "@/components/ui/AdaptiveHairline";
+import { HAIRLINE_TOKENS } from "@/styles/hairlineTokens";
 import { MapPin, Phone, Mail, MessageCircle, ChevronDown } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
@@ -463,10 +464,10 @@ const Footer = () => {
         color: "rgba(255,255,255,0.85)",
         fontFamily: "Inter, system-ui, sans-serif",
         // Expose alphas as CSS vars so descendants can opt in if needed.
-        ["--fh-white" as string]: `rgba(255,255,255,${hairline.white})`,
-        ["--fh-white-soft" as string]: `rgba(255,255,255,${hairline.whiteSoft})`,
-        ["--fh-gold" as string]: `rgba(200,167,102,${hairline.gold})`,
-        ["--fh-gold-peak" as string]: `rgba(200,167,102,${hairline.goldPeak})`,
+        ["--fh-white" as string]: `rgba(${HAIRLINE_TOKENS.whiteRgb},${hairline.white})`,
+        ["--fh-white-soft" as string]: `rgba(${HAIRLINE_TOKENS.whiteRgb},${hairline.whiteSoft})`,
+        ["--fh-gold" as string]: `rgba(${HAIRLINE_TOKENS.champagneRgb},${hairline.gold})`,
+        ["--fh-gold-peak" as string]: `rgba(${HAIRLINE_TOKENS.champagneRgb},${hairline.goldPeak})`,
       }}
     >
       {/* Premium ambient overlays — vignette + soft champagne wash */}
