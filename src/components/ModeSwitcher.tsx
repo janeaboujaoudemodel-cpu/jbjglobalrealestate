@@ -187,20 +187,42 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           align="end"
           side={side}
           // data-surface="light" gives the portaled panel its own light-scope
-          // so dark-surface CSS can't bleed in when the trigger is in the footer.
+          // so dark-surface CSS (e.g. inside <footer>) can't bleed in.
+          // Inline styles on the panel + descendants are belt-and-suspenders
+          // against any global rule that might force white/transparent text
+          // when the trigger lives on a dark surface.
           data-surface="light"
-          className="w-[360px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
+          data-mode-switcher-panel="true"
+          style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A' }}
+          className="mode-switcher-panel w-[360px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
           sideOffset={10}
           collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
           avoidCollisions
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           <div className="px-3 pt-1 pb-3 mb-2 border-b border-[#D9C292]/40">
-            <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em] text-[#8A7747] bg-[#D9C292]/15 border border-[#D9C292]/40">
+            <span
+              className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em]"
+              style={{
+                color: '#6B5424',
+                backgroundColor: '#FBF4E1',
+                borderColor: '#D9C292',
+                borderWidth: 1,
+                borderStyle: 'solid',
+              }}
+            >
               MODE
             </span>
-            <p className="text-[14px] font-bold text-black mt-1.5 leading-tight">Select your mode</p>
-            <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+            <p
+              className="text-[14px] font-bold mt-1.5 leading-tight"
+              style={{ color: '#0A0A0A' }}
+            >
+              Select your mode
+            </p>
+            <p
+              className="text-[11px] mt-0.5 leading-snug"
+              style={{ color: '#3F3F46' }}
+            >
               Choose how you want to use the platform
             </p>
           </div>
@@ -266,7 +288,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </p>
                     <p
                       className="text-[11px] leading-snug mt-0.5 line-clamp-1"
-                      style={{ color: config.dark, opacity: 0.85 }}
+                      style={{ color: config.dark }}
                     >
                       {config.description}
                     </p>
