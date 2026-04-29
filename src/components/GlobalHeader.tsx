@@ -953,9 +953,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {user ? (
                           <>
-                            <div className="px-3 py-2 bg-gray-100 rounded-lg mb-1">
-                              <p className="text-[10px] text-black/50 uppercase tracking-wider">Signed in as</p>
-                              <p className="text-sm font-medium text-black truncate">{accountDisplayName}</p>
+                            <div className="flex items-center gap-3 px-3 py-2 bg-gray-100 rounded-lg mb-1">
+                              <UserAvatarPremium size="sm" />
+                              <div className="min-w-0">
+                                <p className="text-[10px] text-black/50 uppercase tracking-wider">Signed in as</p>
+                                <p className="text-sm font-medium text-black truncate">{accountDisplayName}</p>
+                              </div>
                             </div>
                             <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
                               <Home className="w-4 h-4 text-black" />My Dashboard
