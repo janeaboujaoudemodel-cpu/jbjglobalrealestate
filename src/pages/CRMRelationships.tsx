@@ -734,6 +734,7 @@ const DeveloperRegistryTab = () => {
           disabled={importAll.isPending}
           title="Import every developer from the master catalog (no duplicates, never overwrites existing entries)"
         >
+          {importAll.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
           {importAll.isPending ? "Importing…" : "Import all developers"}
         </Button>
         <Button
