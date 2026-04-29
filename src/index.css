@@ -3328,3 +3328,69 @@ button:disabled:has(.lucide),
     stroke: currentColor;
   }
 }
+
+/* ============================================================
+   PASS 1 — Global label/contrast hardening (2026-04-29)
+   - Prevents word-breaking on tabs, chips, stage labels, badges
+   - Extends white-on-light guard to muted/card/popover/secondary
+   - Guarantees sidebar hover/active text stays legible
+   - Improves disabled-state readability
+   ============================================================ */
+@layer utilities {
+  /* No-break utility for compact labels */
+  .no-break,
+  [role="tab"],
+  [data-radix-collection-item],
+  .badge,
+  [data-stage],
+  [data-chip] {
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /* Extended contrast guard — covers muted/card/popover/secondary surfaces */
+  .bg-card .text-white:not([data-surface="dark"] *),
+  .bg-popover .text-white:not([data-surface="dark"] *),
+  .bg-muted .text-white:not([data-surface="dark"] *),
+  .bg-secondary .text-white:not([data-surface="dark"] *),
+  .bg-background .text-white:not([data-surface="dark"] *) {
+    color: #111 !important;
+  }
+
+  /* Inverse: black-on-black guard on dark surfaces */
+  [data-surface="dark"] .text-black,
+  [data-surface="dark"] .text-foreground,
+  .bg-black .text-black,
+  .bg-foreground .text-foreground,
+  .bg-primary .text-primary {
+    color: #fff !important;
+  }
+
+  /* Sidebar — guarantee text + icons remain visible in every state */
+  [data-sidebar="menu-button"],
+  [data-sidebar="menu-button"] svg {
+    color: hsl(var(--sidebar-foreground));
+  }
+  [data-sidebar="menu-button"]:hover,
+  [data-sidebar="menu-button"]:hover svg,
+  [data-sidebar="menu-button"][data-state="open"],
+  [data-sidebar="menu-button"][data-state="open"] svg {
+    color: hsl(var(--sidebar-accent-foreground)) !important;
+    background-color: hsl(var(--sidebar-accent));
+  }
+  [data-sidebar="menu-button"][data-active="true"],
+  [data-sidebar="menu-button"][data-active="true"] svg,
+  [data-sidebar="menu-button"][aria-current="page"],
+  [data-sidebar="menu-button"][aria-current="page"] svg {
+    color: hsl(var(--sidebar-primary-foreground)) !important;
+    background-color: hsl(var(--sidebar-primary));
+  }
+
+  /* Disabled state — keep readable, never invisible */
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [data-disabled="true"] {
+    opacity: 0.6;
+  }
+}
