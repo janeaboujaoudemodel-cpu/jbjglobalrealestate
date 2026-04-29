@@ -147,7 +147,8 @@ const MarketIntelligence = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            style={{ color: 'rgba(255,255,255,0.92)' }}
             variants={fadeInUp}
           >
             Data-driven insights powered by official government Open Data. 
