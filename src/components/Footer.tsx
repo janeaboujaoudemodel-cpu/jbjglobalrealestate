@@ -36,28 +36,31 @@ const NavColumn = ({
   viewAllLabel?: string;
 }) => (
   <div>
-    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">
+    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+      <span className="inline-block w-1.5 h-1.5 rounded-[1px] bg-[hsl(var(--gold))]" aria-hidden="true" />
       {title}
     </h4>
+    <div className="w-8 h-px mb-4" style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }} aria-hidden="true" />
     <ul className="space-y-1.5">
       {links.map((link) => (
         <li key={link.href}>
           <Link
             to={link.href}
-            className="text-[13px] leading-snug text-white/65 hover:text-white transition-colors"
+            className="group inline-flex items-center text-[13px] leading-snug text-white/75 hover:text-white border-l border-transparent hover:border-[hsl(var(--gold))]/60 pl-0 hover:pl-2 transition-all duration-200"
           >
             {link.label}
           </Link>
         </li>
       ))}
       {viewAllHref && (
-        <li className="pt-1">
+        <li className="pt-2">
           <Link
             to={viewAllHref}
-            className="text-[12px] font-semibold uppercase tracking-[0.15em] text-white/80 hover:text-white transition-colors"
-            style={{ color: "#D9C292" }}
+            className="group inline-flex items-center gap-1 text-[12px] font-semibold uppercase tracking-[0.15em] transition-colors"
+            style={{ color: "#E6CFA0" }}
           >
-            {viewAllLabel}
+            <span>{viewAllLabel?.replace(/\s*→\s*$/, "")}</span>
+            <span className="inline-block transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
           </Link>
         </li>
       )}
