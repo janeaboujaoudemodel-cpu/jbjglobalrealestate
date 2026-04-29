@@ -3313,17 +3313,18 @@ button:disabled:has(.lucide),
    data-surface="dark" on the wrapping element.
    ============================================================ */
 @layer utilities {
-  [data-surface="light"] .text-white,
-  .bg-white .text-white:not([data-surface="dark"] *),
-  .bg-pearl-1 .text-white:not([data-surface="dark"] *),
-  .bg-pearl-2 .text-white:not([data-surface="dark"] *),
-  .bg-pearl-3 .text-white:not([data-surface="dark"] *) {
+  /* Only flip text-white on light surfaces when the element itself
+     is NOT sitting on its own dark background (button, badge, pill). */
+  [data-surface="light"] .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-white > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-1 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-2 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-pearl-3 > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-zinc-9"]):not([class*="bg-neutral-9"]):not([class*="bg-foreground"]):not([class*="bg-primary"]):not([class*="bg-gradient"]) {
     color: #111 !important;
   }
 
-  /* Lucide / SVG glyphs forced white on light surfaces also flip */
-  [data-surface="light"] .text-white svg,
-  [data-surface="light"] svg.text-white {
+  /* Lucide / SVG glyphs forced white directly on a light surface only */
+  [data-surface="light"] > svg.text-white {
     color: #111 !important;
     stroke: currentColor;
   }
@@ -3349,12 +3350,13 @@ button:disabled:has(.lucide),
     overflow-wrap: normal;
   }
 
-  /* Extended contrast guard — covers muted/card/popover/secondary surfaces */
-  .bg-card .text-white:not([data-surface="dark"] *),
-  .bg-popover .text-white:not([data-surface="dark"] *),
-  .bg-muted .text-white:not([data-surface="dark"] *),
-  .bg-secondary .text-white:not([data-surface="dark"] *),
-  .bg-background .text-white:not([data-surface="dark"] *) {
+  /* Extended contrast guard — only flips text-white that isn't
+     itself on its own dark surface (avoids killing primary buttons). */
+  .bg-card > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-popover > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-muted > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-secondary > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]),
+  .bg-background > .text-white:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-primary"]):not([class*="bg-gradient"]) {
     color: #111 !important;
   }
 
@@ -3392,5 +3394,45 @@ button:disabled:has(.lucide),
   [role="button"][aria-disabled="true"],
   [data-disabled="true"] {
     opacity: 0.6;
+  }
+
+  /* ============================================================
+     PASS 4 — Gold-token visibility guard (2026-04-29)
+     `--gold` resolves to near-black in this monochrome theme.
+     Anywhere `text-gold` lands inside a dark/black surface, force
+     white so labels never vanish; and gold-on-gold flips to black.
+     ============================================================ */
+  .bg-black .text-gold,
+  .bg-gray-900 .text-gold,
+  .bg-zinc-900 .text-gold,
+  .bg-neutral-900 .text-gold,
+  .bg-foreground .text-gold,
+  .bg-primary .text-gold,
+  [data-surface="dark"] .text-gold,
+  .bg-black svg.text-gold,
+  .bg-gray-900 svg.text-gold,
+  [data-surface="dark"] svg.text-gold {
+    color: #ffffff !important;
+  }
+  .bg-gold .text-gold,
+  .bg-gold\/10 .text-gold,
+  .bg-gold\/20 .text-gold,
+  .bg-gold\/30 .text-gold {
+    color: #111 !important;
+  }
+
+  /* Tab triggers — guarantee labels are visible on light surfaces. */
+  [role="tab"][data-state="inactive"] {
+    color: hsl(0 0% 25%);
+  }
+  [role="tab"][data-state="active"] {
+    color: hsl(0 0% 7%);
+  }
+  /* When an active tab pill is dark, force white label/icons. */
+  [role="tab"][data-state="active"][class*="bg-black"],
+  [role="tab"][data-state="active"][class*="bg-black"] svg,
+  [role="tab"][data-state="active"][class*="data-[state=active]:bg-black"],
+  [role="tab"][data-state="active"][class*="data-[state=active]:bg-black"] svg {
+    color: #ffffff !important;
   }
 }

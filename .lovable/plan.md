@@ -1,77 +1,73 @@
-# Targeted UI Fix Plan — Screenshots + Global Audit
+I inspected the uploaded screenshots, the live preview route, console/network output, and the affected code. The main repeated problems are not random: they come from a few global patterns that are being reused across pages.
 
-Scope is limited to the bugs visible in your screenshots and the *exact same patterns* repeated elsewhere. No redesign, no removed features, no new components.
+Identified bugs from the screenshots and live audit:
 
----
+1. Relationships Hub tabs and controls
+- Active Brokerage tab can render as a black pill with only the icon visible, making the label look missing/faded.
+- The previous Clients tab shown in screenshots conflicts with the current code policy where clients/leads live in the unified Leads & Clients workspace; I will not re-add it.
+- The action row can look disabled because outline buttons, selected tabs, and disabled buttons share too-similar low-contrast styling.
+- Empty-state text and filters are readable but too weak for a premium CRM surface.
 
-## 1. Pending Tasks Modal (IMG_4411 / IMG_4412)
+2. Join page / HR CTA
+- The “Contact Our HR · Jessica” CTA is black with dark/gold inner text, so it looks like an empty black button in the screenshot.
+- The black circular Jessica icon uses a near-black monochrome gold token, causing the icon to disappear.
+- The page uses old champagne/dark gradients and low-contrast text tokens that conflict with the current white-dominant monochrome standard.
 
-**Files:** `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`, `src/components/notifications/UserTasksPopupAlert.tsx`
+3. Auth screen
+- Apple sign-in button has black background with black/near-black label text, so only the Apple icon is visible.
+- Some secondary links use the near-black gold token and appear inconsistent/faded.
+- Browser console shows React ref warnings around `App`/provider rendering; I will inspect and correct the forwardRef/ref misuse if it is coming from our wrappers.
+- Network audit showed repeated 401 reads for `app_settings`; I will verify whether these are expected auth-gated reads or noisy public reads that should be handled gracefully.
 
-Bugs:
-- Subtitle ("Daily action items require attention") and body line ("You have N pending items…") render too faint on the white card — the `text-muted-foreground` token reads near-light-gray on `bg-card`.
-- The `bg-muted/40` body box is so pale it looks empty.
-- The "Later" button is barely visible (outline-on-white).
-- `UserTasksPopupAlert` has the same shape but uses a champagne gradient that worsens contrast and a hard-coded `text-gray-600` close button (basically invisible on the cream gradient).
+4. Global repeated patterns
+- Many pages still use `text-gold` on light or black surfaces, but the project token currently maps gold to near-black. This causes hidden text inside buttons/icons.
+- Repeated `text-muted-foreground`, `text-black/60`, `text-white/60`, `bg-white/60`, and generic disabled opacity create the faded/unprofessional look.
+- Generic Tabs/Button primitives need stricter contrast defaults so individual pages stop reintroducing invisible labels.
 
-Fixes:
-- Bump body text from `text-muted-foreground` → `text-gray-700` and the count line span from `text-foreground` → keep but add `font-extrabold`.
-- Replace `bg-muted/40` body card with `bg-gray-50 border-gray-200`.
-- "Later" button: change from `variant="secondary"` → keep secondary but add explicit `border-gray-300 text-black` so it's always readable.
-- Close (X) button: from `text-muted-foreground` → `text-gray-600 hover:text-black` (real contrast on white).
-- `UserTasksPopupAlert`: drop the champagne gradient, switch to the same neutral white card so both modals match. Keep all functionality (ticket alerts, View Tasks, dismissal logic).
+Implementation plan:
 
----
+1. Fix core primitives globally
+- Harden `src/components/ui/tabs.tsx` so inactive and active tab labels/icons always have visible foreground colors, no hidden active text, no label clipping, and correct contrast on light CRM surfaces.
+- Harden `src/components/ui/button.tsx` disabled styling so disabled buttons are clearly disabled but still readable, and black buttons cannot contain dark/gold text that disappears.
+- Add targeted global CSS safety rules in `src/index.css` for:
+  - black/dark buttons forcing child text/icons to white unless explicitly marked otherwise,
+  - light cards forcing muted text to stronger gray,
+  - tabs forcing active-state label visibility,
+  - form controls and select triggers maintaining readable text/borders.
 
-## 2. Relationships Hub layout (IMG_4413 / IMG_4414 / IMG_4415)
+2. Fix Relationships Hub specifically
+- Update `src/pages/CRMRelationships.tsx` so the Brokerage/Developer Registry tabs use explicit visible labels and icons in every state.
+- Make the filters/action row more professional: stronger borders, white surfaces, black text, readable placeholder text, and clear primary CTA styling.
+- Keep the “Clients and Leads are now unified” bridge instead of restoring the removed Clients tab, respecting the no-removal/no-duplication policy and the existing CRM structure.
+- Improve empty states and selection/action buttons so “Add Brokerage”, “Export CSV”, disabled states, and status filters do not look faded or broken.
 
-**File:** `src/pages/CRMRelationships.tsx`
+3. Fix Join / HR application screen
+- Update `src/pages/JoinApplication.tsx` so the HR CTA uses a proper black button with white text and a visible icon.
+- Replace problematic `text-gold` inside buttons with white/black/semantic text according to surface.
+- Strengthen the HR card, headings, descriptions, file upload area, badges, and terms links so they remain readable and premium on the current light layout.
+- Preserve the existing flow and form logic; no new feature or system will be added.
 
-Bugs:
-- Header uses `flex-col md:flex-row items-center justify-between` with a centered title and a 180px spacer — produces the huge dead vertical band seen in IMG_4413 between the back button and the tabs.
-- Active tab pill shows only the icon at narrow widths because the row overflows; "Brokerages" text is clipped under the active black pill (visible in IMG_4414 vs IMG_4415).
-- "Add Brokerage" CTA appears washed out — actually it's a default primary button but it sits on the same `#FAF7F2` page surface and reads weak next to the bigger Export CSV outline. It needs the locked black/white treatment with proper weight.
-- "No brokerages yet" empty card is `text-gray-500` on white — too faint.
+4. Fix Auth screen visibility and warnings
+- Update `src/pages/Auth.tsx` so Apple, Google, Sign In, OTP, forgot-password, and mode-switch controls have explicit high-contrast colors.
+- Ensure Apple button text is white on black.
+- Replace weak gold link styling with high-contrast black/underline or strong semantic states where appropriate.
+- Inspect the React ref warning source and correct it if it is caused by an app wrapper receiving a ref it cannot handle.
 
-Fixes:
-- Restructure header: keep `Back to CRM Hub` flush-left, title left-aligned (not centered) with subtitle directly underneath, single row, no 180px spacer. Removes the empty band.
-- Tabs: keep both triggers, add `min-w-fit` and ensure label is always rendered (no responsive hiding). Wrap `TabsList` in `overflow-x-auto` so on narrow screens the user scrolls instead of clipping.
-- "Add Brokerage": explicit `variant="primary"` plus `shadow-md` so it's the dominant CTA in the row.
-- Empty-state copy: `text-gray-700` (matches the contrast guard already in place).
-- Reduce top padding from `pt-[112px]` to `pt-[96px]` so content sits closer to the header (still respects the 88px frame standard).
+5. Audit repeated issues across frontend
+- Run a targeted code sweep for low-contrast patterns in pages/components:
+  - `text-gold` inside buttons/dark surfaces,
+  - `text-white/50-70` on non-dark sections,
+  - `text-muted-foreground` on light cards/dialogs/forms,
+  - `opacity-50/60` on actionable controls,
+  - tab triggers missing explicit active/inactive text colors.
+- Fix only existing broken patterns; no random redesign, no new features, no duplicate systems.
 
----
+6. Backend-facing audit related to reported “logic/integration/automation/AI intelligence” issues
+- Inspect failing/noisy requests seen in the browser audit, especially `app_settings` 401s, and determine whether the frontend should stop querying them publicly or handle auth-gated responses cleanly.
+- Inspect CRM relationship hooks and AI enrichment calls for obvious loading/error states that could make automation appear broken.
+- If database/RLS changes are required, I will use a migration with strict owner/auth policies and will not expose private data publicly.
 
-## 3. Global audit — same patterns to fix everywhere they appear
-
-Run a single sweep replacing repeat offenders, no behavior changes:
-
-| Pattern | Replace with |
-|---|---|
-| `text-muted-foreground` inside modal/dialog/popover bodies on light cards | `text-gray-700` |
-| `bg-muted/40` info boxes | `bg-gray-50 border border-gray-200` |
-| `text-gray-500` empty-state messages | `text-gray-700` |
-| Hard-coded `text-gray-600 hover:text-gray-600` (no hover delta) | `text-gray-600 hover:text-black` |
-| `variant="secondary"` ghost-on-white "Later/Cancel" buttons that disappear | add `border-gray-300 text-black` class override |
-
-Files I will touch (verified by grep, only where the offending pattern is on a light surface):
-- `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`
-- `src/components/notifications/UserTasksPopupAlert.tsx`
-- `src/pages/CRMRelationships.tsx`
-- `src/components/notifications/*` (other popup alerts that mirror the same shape)
-- `src/pages/AlertsDemo.tsx` (uses the same modal pattern)
-
-I will NOT change:
-- The contrast guard in `src/index.css` (it's already correct; I'll only adjust class usage in the components above).
-- The button variant system in `src/components/ui/button.tsx`.
-- Any backend, RLS, edge function, or routing.
-- Any feature, tab, or section will be removed.
-
----
-
-## Out of scope (per "no new features" rule)
-
-- No new dashboards, no new metrics, no AI changes, no automation rewiring.
-- No theme/token changes — all fixes use existing tokens and Tailwind utilities.
-
-After approval I'll apply the changes in one pass and report exactly which files were edited.
+7. Verification
+- Reopen `/owner/crm/relationships`, `/join`, and `/auth` in the preview after changes.
+- Check desktop and at least one smaller viewport for tab overflow, CTA visibility, faded text, and console/network errors.
+- Confirm the fixes are visual/UX/logic hardening only, with no removed CRM systems and no newly duplicated workflows.
