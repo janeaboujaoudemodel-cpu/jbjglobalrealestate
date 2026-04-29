@@ -86,19 +86,19 @@ export const MarketIntelligenceNavigation = ({
           {nextLink ? (
             <Link 
               to={nextLink.path}
-              className="flex-1 group jj-card-inner border-2 border-gold/50 hover:border-gold rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1 text-right"
+              className="flex-1 group rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-right"
+              style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 2 }}
             >
               <div className="flex items-center justify-end gap-4 md:gap-6">
                 <div className="flex-1">
-                  <p className="text-gold text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Next</p>
-                  <p className="text-black font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{nextLink.title}</p>
+                  <p className="text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold" style={{ color: '#6B7280' }}>Next</p>
+                  <p className="font-bold text-lg md:text-xl lg:text-2xl" style={{ color: '#000000' }}>{nextLink.title}</p>
                   {nextLink.description && (
-                    <p className="text-gray-600 text-sm mt-1 md:mt-2 hidden md:block">{nextLink.description}</p>
+                    <p className="text-sm mt-1 md:mt-2 hidden md:block" style={{ color: '#4B5563' }}>{nextLink.description}</p>
                   )}
                 </div>
-                {/* Active color icon box */}
-                <div className="jj-icon-box-active w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all shadow-lg">
-                  <ArrowRight className="w-5 h-5 md:w-7 md:h-7 text-black" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all shadow-lg" style={{ backgroundColor: '#000000' }}>
+                  <ArrowRight className="w-5 h-5 md:w-7 md:h-7" style={{ color: '#ffffff' }} />
                 </div>
               </div>
             </Link>
