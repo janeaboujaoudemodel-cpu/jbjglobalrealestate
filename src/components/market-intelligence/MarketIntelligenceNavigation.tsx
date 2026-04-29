@@ -108,8 +108,8 @@ export const MarketIntelligenceNavigation = ({
         </div>
 
         {/* All Market Intelligence Links */}
-        <div className="mt-8 pt-6 border-t border-gold/30">
-          <p className="text-center text-sm text-gray-600 font-medium uppercase tracking-wider mb-4">Market Intelligence</p>
+        <div className="mt-8 pt-6 border-t" style={{ borderColor: '#E5E7EB' }}>
+          <p className="text-center text-sm font-medium uppercase tracking-wider mb-4" style={{ color: '#6B7280' }}>Market Intelligence</p>
           <div className="flex flex-wrap justify-center gap-3">
             {MARKET_INTELLIGENCE_LINKS.map((link) => (
               <Link
