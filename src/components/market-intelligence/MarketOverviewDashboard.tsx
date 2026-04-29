@@ -178,7 +178,7 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner h-full">
+              <Card className="h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
