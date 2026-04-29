@@ -1,44 +1,103 @@
-# Hard-Fix Persistent Faded UI on /join
+## Site-Wide Contrast Verification & Remediation
 
-## What's still broken (from new screenshots)
+### Audit Findings
 
-1. **IMG_4421** — "Join" still renders in faded gold, NOT black. My previous JSX change to `text-black` didn't visually take effect because some other CSS rule still wins.
-2. **IMG_4421** — "Contact Our HR · Jessica" button shows only the chat icon; the text label is invisible. The shadcn `<Button variant="primary" asChild>` wrapper combined with descendant-selector contrast guards is killing the white color on the inner `<span>`.
-3. **IMG_4419 / IMG_4420** — Position cards have pills that wrap mid-word: "Sales" → "Sale s", "Partner" → "Partn er". The Badge components are too narrow / have wrap enabled.
-4. **IMG_4420** — "Commission Basis" text on the position card still renders in faded gold — my amber-700 swap didn't apply because the running build is older than my last edit, OR a different code path is rendering it. Need belt-and-suspenders inline styles.
+A repository-wide scan reveals the same faded patterns Market Intelligence had still live across the rest of the site:
 
-## Root cause
-The CSS contrast guards in `index.css` are deeply nested and use `!important`. JSX class names like `text-black` and `text-white` are getting overridden by `:where()` cascades and `[class*="bg-…"]` matchers in unpredictable ways. The bullet-proof solution is **inline `style={{ color }}` on the affected elements** — inline styles beat any external CSS rule short of `!important` on the same element.
+| Pattern | Files affected | Severity |
+|---|---|---|
+| `text-gold/30` … `text-gold/70` (low-opacity gold text on white/light) | **99 files** (~194 occurrences) | High — fails WCAG AA |
+| `text-white/30` … `text-white/70` (faded white on dark) | **238 files** | Medium — borderline AA |
+| `bg-black` parent + `text-black` child (inverted contrast bug like Market Intel) | ~20 files | Critical — invisible text |
+| Faded gold on non-button decorative icons (`text-gold/30`, `/50`, `/60`) | High concentration in services/, toolkit/, support/ | Medium |
 
-## Fixes
+The `jj-card-inner` class itself is **not** the culprit — its definition in `index.css` resolves to `background:#FFFFFF` with a gray border. The bug is content placed *outside* the card on a `bg-black` section, plus widespread faded `text-gold/XX` and `text-white/XX` decorative labels.
 
-### `src/pages/JoinApplication.tsx`
+### Fix Strategy (Three Tiers)
 
-**Hero "Join" headline (lines 416-418):**
-- Replace the `<span className="text-gold|text-black …">Join</span>` with `<span style={{ color: '#000000' }}>Join</span>`. Apply same inline style to the h1 itself.
+```text
+TIER 1 — Critical contrast bugs (invisible/illegible text)
+   └─ bg-black sections containing text-black headings
+   └─ Same Market Intel pattern repeated in services/, FAQ, Founder, Awards, Guides
 
-**Jessica CTA (lines 425-445):**
-- Drop the shadcn `<Button variant="primary" asChild>` wrapper. Render the `<Link>` directly with explicit Tailwind utility classes AND inline `style={{ backgroundColor: '#000', color: '#fff' }}`. This bypasses every contrast guard.
-- Inline-style the `MessageCircle` icon and label span to `color: '#ffffff'` so they cannot be flipped.
-- Inline-style the Bot icon (Jessica avatar) to white as well.
-- Add `whitespace-nowrap` so the label never wraps.
+TIER 2 — Faded gold decorative text (fails WCAG AA)
+   └─ Replace text-gold/30…/70 with high-contrast tokens
+   └─ Heading eyebrows → text-muted-foreground or solid #6B7280
+   └─ Empty-state icons → text-gold (full) or text-muted
 
-**Position cards pills (lines 589-600):**
-- Add `whitespace-nowrap` to all three badges (`Partner`, `department`, `Commission Basis`, location) so "Sales" and "Partner" never break across two lines.
-- Keep the previously applied black/white solid pills. Add inline `style={{ color }}` as a final guard on the "Commission Basis" span (`color: '#b45309'` for amber-700) and the location text (`color: '#374151'` for gray-700) so even if the rest of the cascade fails, the cards remain readable.
-- Set the Partner badge to `min-width: fit-content` so the star + "Partner" label stays one line.
+TIER 3 — Faded white over dark (borderline)
+   └─ text-white/30…/60 → text-white/85 or text-white (full)
+   └─ Trust-badge / metadata rows on hero sections
+```
 
-### `src/index.css` (small reinforcement)
-- Confirm the existing PASS 5 guard catches `.jj-section-champagne` and add a final one-liner: `.jj-section-champagne span { /* no special color */ }` — actually, no, leave the cascade alone; inline styles are enough.
+### Implementation Plan
 
-## Out of scope
-- Position-card content (titles, descriptions) is dynamic from DB, untouched.
-- No new features. No layout restructure.
+**Step 1 — Fix the critical inverted-contrast pages (Tier 1, ~20 files)**
 
-## Files to edit
-- `src/pages/JoinApplication.tsx` (single targeted edit, lines ~416-445 and ~589-605)
+Apply the same hardening pattern proven on Market Intelligence:
+- Convert `bg-black` section wrappers to `bg-white`/`bg-gray-50` where headings are black
+- Where dark hero is intentional, force headings to `style={{ color: '#FFFFFF' }}`
+- Replace `text-white/60` trust-row metadata with solid white + medium font weight
 
-## Expected result
-- "Join" renders in solid black, matching "JBJ Global Real Estate".
-- Jessica CTA button is solid black with white "Contact Our HR · Jessica" label and white chat icon, label fully visible on one line.
-- Position-card pills "Sales", "Partner", "Commission Basis" render on one line, no wrap, all readable.
+Targets: `Awards.tsx`, `Founder.tsx`, `FAQ.tsx`, `Guides.tsx`, `SellerGuide.tsx`, `Services.tsx`, plus `services/{LawFirm,SellingAdvisory,RentalAdvisory,CustomerHappinessCenter,CurrencyExchange,BuyingAdvisory,FitOut,Testimonials}.tsx`, `market-intelligence/AreaDetail.tsx`, `JBJBrokerAdmin.tsx`, `components/project-detail/MasterPlanSection.tsx`, `components/jbj-broker/BrokerCapacityPanel.tsx`, `components/home/JBJPodcastSection.tsx`, `components/DocumentDownloads.tsx`.
+
+**Step 2 — Codemod faded gold across all 99 files (Tier 2)**
+
+Run a scripted, reviewable replacement:
+```text
+text-gold/30  → text-gray-400        (decorative low-emphasis)
+text-gold/50  → text-gray-500        (decorative medium)
+text-gold/60  → text-gray-600        (eyebrow labels)
+text-gold/70  → text-gray-700        (subheadings)
+text-gold/80  → text-gray-800        (active text)
+text-gold/90  → text-gray-900        (heading accents)
+```
+
+Exception: keep gold-tinted opacity ONLY where it overlays a fully dark hero video and the gold is brand-mandated (logos, watermarks). Audit flagged occurrences manually:
+- `JBJMeetRoom.tsx:219` — JBJ wordmark watermark on dark video → keep
+- `MeetingAIAssistant.tsx:238` — empty-state Sparkles → switch to `text-gray-400`
+
+**Step 3 — Tighten faded white-on-dark (Tier 3, top 20 hot files)**
+
+Focus on the highest-density offenders revealed by audit:
+- `PropertyEvaluator.tsx` (66 hits), `AdminTrainingGuide.tsx` (39), `VideoResizePack.tsx` (37), `VoiceSuite.tsx` (33), `VideoMeeting.tsx` (31), `PropertyMeasurement.tsx` (29), executive dashboards, `OwnerDashboard.tsx`, etc.
+
+Replace:
+```text
+text-white/30 → text-white/70  (or solid white if metadata)
+text-white/40 → text-white/80
+text-white/50 → text-white/85
+text-white/60 → text-white/90
+text-white/70 → text-white     (or text-white/95 if intentional fade)
+```
+
+**Step 4 — Add a static contrast guard**
+
+Extend `scripts/contrast/check-white-on-light.mjs` (already present in repo) with a sibling rule that fails CI on:
+- Any `text-gold/[1-7][0-9]?` outside an allowlist
+- Any `bg-black` ancestor with a `text-black` descendant in the same JSX file
+
+This prevents regression after the sweep.
+
+### Technical Details
+
+- **Why not just edit the global `text-gold` token?** The `text-gold` token is correctly used in many high-contrast contexts (gold over solid black). Only the `/XX` opacity variants degrade contrast. Surgical replacement is required.
+- **Approach for codemod**: a Node script using `ripgrep` + `sed` per-file with a pre-written allowlist (logos, watermarks, intentional video overlays). Each file is reviewed before commit.
+- **Inter font + black-on-white** is the standard per memory `Monochrome Design` and `Typography Monochrome` — fixes align with existing core memory.
+- **No feature removal** — purely color/contrast token swaps. Honors the strict "No Removal" policy.
+- **Testing**: After implementation, run `node scripts/contrast/check-rendered.mjs` and the new gold guard against the dev server to verify zero AA failures.
+
+### Estimated Output
+
+- **~99 component/page files** edited (gold opacity sweep)
+- **~20 critical pages** restructured (Tier 1 inversion bug)
+- **~20 high-density dark pages** tightened (Tier 3)
+- **1 new CI guard script** added to `scripts/contrast/`
+
+### Out of Scope
+
+- Visual redesign of any page (colors only, no layout changes)
+- Refactoring the `jj-card-inner` class itself (it is correct)
+- Touching brand-locked elements: monogram, footer corporate hairline, AI-purple theme, price-orange tokens
+
+Approving this plan switches Lovable to default mode and the sweep executes in a single batched implementation.
