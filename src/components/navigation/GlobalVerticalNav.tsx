@@ -817,18 +817,43 @@ export default function GlobalVerticalNav() {
       : "text-black/80 hover:bg-gold/[0.08] hover:text-black border border-black/10 hover:border-gold/30";
   };
 
+  // Saturated colored rows where the row background is a vivid fill (not champagne).
+  // On those rows, icon glyphs go white for contrast and the tile uses translucent white.
+  const isSaturatedColorRow = (item: NavItem) =>
+    item.href === '/join' ||
+    item.href === '/quiz' ||
+    (item.href === '/listing-portal' && (item as any).highlight) ||
+    item.href === '/resale-properties';
+
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-rose-500';
-    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-500';
-    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-amber-700';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
-    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
-    if (sectionKey === 'MY ACCOUNT') return 'text-gold';
-    return "text-gold";
+    // Saturated colored row → white icon for legibility on the colored fill.
+    if (isSaturatedColorRow(item)) {
+      return shouldHighlight ? 'text-white' : 'text-white';
+    }
+    // Active on champagne row → deeper gold for stronger contrast.
+    if (shouldHighlight) return 'text-[hsl(var(--gold-dark))]';
+    // Resting state → premium gold.
+    return 'text-[hsl(var(--gold))]';
   };
+
+  // Premium gold-bordered icon tile shared across nav rows.
+  const getIconTileClass = (item: NavItem) => {
+    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
+    const routeActive = isRouteActive(item.href);
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
+    if (isSaturatedColorRow(item)) {
+      // White-on-color tile so it doesn't fight the saturated row background
+      return 'bg-white/15 border border-white/45 group-hover:bg-white/25 group-hover:border-white/70';
+    }
+    if (shouldHighlight) {
+      return 'bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/80 shadow-[0_0_0_1px_rgba(217,194,146,0.35)]';
+    }
+    return 'bg-[hsl(var(--gold))]/[0.06] border border-[hsl(var(--gold))]/45 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/70';
+  };
+
 
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
@@ -863,9 +888,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                  className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
                 >
-                  <X className="w-3 h-3 text-white" />
+                  <X className="w-3 h-3 text-black" />
                 </button>
               </div>
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
@@ -891,13 +916,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onClick={closeMegaMenu}
                             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                               linkActive
-                                ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                                ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                                 : "bg-white/80 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                             }`}
                           >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                             <span className="flex-1">{link.label}</span>
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                           </Link>
                         );
                       })}
@@ -946,9 +971,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                  className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
                 >
-                  <X className="w-3 h-3 text-white" />
+                  <X className="w-3 h-3 text-black" />
                 </button>
               </div>
 
@@ -964,13 +989,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={closeMegaMenu}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                         linkActive
-                          ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                          ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                           : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                       }`}
                     >
-                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                     </Link>
                   );
                 })}
@@ -980,7 +1005,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <Link
                   to={viewAllHref}
                   onClick={closeMegaMenu}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-black bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
                 >
                   <Eye className="w-4 h-4 text-white flex-shrink-0" />
                   <span className="flex-1">{viewAllLabel}</span>
@@ -1033,9 +1058,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               </div>
               <button
                 onClick={closeMegaMenu}
-                className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
+                className="w-6 h-6 rounded-full bg-white border border-[hsl(var(--gold))]/70 flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-colors shadow-sm"
               >
-                <X className="w-3 h-3 text-white" />
+                <X className="w-3 h-3 text-black" />
               </button>
             </div>
             <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1.5' : 'space-y-1'}`}>
@@ -1049,13 +1074,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={closeMegaMenu}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
-                        ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                         : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                   </Link>
                 );
               })}
@@ -1123,9 +1148,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   if (hasMega) handleNavClick(item.megaMenu, e);
                   else handleNavClick(undefined);
                 }}
-                className={`flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
+                className={`group flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
               >
-                <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item)}`} />
+                <span className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                  <Icon className={`w-3.5 h-3.5 ${getIconStyle(item)}`} />
+                </span>
                 <span className="flex-1">{item.label}</span>
                 {hasMega && (
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/25"}`} />
@@ -1171,8 +1198,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         : "text-black/65 hover:text-black/85 hover:bg-gold/[0.05]"
                     }`}
                   >
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${sectionHighlighted ? 'bg-gold/20' : 'bg-gold/[0.08] group-hover:bg-gold/15'}`}>
-                      <SectionIcon className="w-3 h-3 text-gold" />
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
+                      <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
                     </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
                     <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-black/70' : 'text-black/25'}`} />
@@ -1203,9 +1230,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                                 }
                               }
                             }}
-                            className={`flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
+                            className={`group flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
                           >
-                            <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
+                            <span className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}>
+                              <Icon className={`w-3 h-3 ${getIconStyle(item, sectionKey)}`} />
+                            </span>
                             <span className="flex-1">{item.label}</span>
                             {hasMega && (
                               <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/20"}`} />
@@ -1301,13 +1330,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           navigate(firstItem.href);
                         }
                       }}
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
-                          ? 'bg-gold/20 text-gold shadow-sm shadow-gold/15 ring-1 ring-gold/30'
-                          : 'text-black/40 hover:text-gold hover:bg-gold/10'
+                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
                       }`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5" />
+                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>

@@ -1,157 +1,87 @@
 ## Goal
 
-Make category selection (Investor / Broker / Developer) a first-class step of every login, capture full per-category profile data into the backend, and give the owner a single admin view that counts and lists users per category.
+Three coordinated upgrades:
+1. **Global contrast fix** — eliminate white icons/text on light backgrounds anywhere in the app (logos, icons, labels).
+2. **Premium user avatar** — high-resolution, centered photo with a gold ring (replacing the gray fallback).
+3. **Gold sidebar icons** — every icon in the vertical sidebar rendered in gold inside a thin gold-bordered tile.
+
+Strict no-removal: no nav items, sections, or features are removed — only styling/markup tweaks.
 
 ---
 
-## 1. Homepage — Category Selection Block
+## 1. Global contrast guard (white-on-light)
 
-Add a new section near the top of the homepage (`src/pages/Index.tsx`) called **"I am a…"** with three premium cards:
+Add a defensive runtime + static pass:
 
-- **Investor** — TrendingUp icon, "Browse properties, track your portfolio"
-- **Broker** — Briefcase icon, "Access CRM, leads & broker tools"
-- **Developer** — Building2 icon, "Submit projects & manage launches"
+- **Static sweep** — `rg "text-white"` across `src/components` and `src/pages`; for each match, check if its container background is light (`bg-white`, `bg-pearl-*`, `bg-[#F…]`, gradients on light, `bg-gold/10`, etc). Replace with `text-black` (or `text-foreground`) — or, where a hover swap is required (e.g. CategorySelectorSection's `group-hover:text-white` on a black hover bg), keep the hover swap but only when the hover bg is dark.
+- **Sidebar mega-menu close buttons** (`GlobalVerticalNav.tsx` lines 866, 949, 1036) — currently `bg-gradient-to-br from-gold to-gold-dark` with `text-white` X. Gold gradient is light-ish; switch X icon to `text-black` for guaranteed contrast.
+- **Logos / brand marks** — audit any `<img>` with `filter: invert/brightness(0)` on light surfaces, and any `text-white` brand wordmarks rendered on `bg-pearl/bg-white/bg-[#ECE2D2]`. Force dark token (`#111`).
+- **Add a global CSS guard** in `src/index.css`:
+  ```css
+  /* Defensive: any element forced white on a light surface gets black text */
+  .text-white.on-light, [data-surface="light"] .text-white { color: #111 !important; }
+  ```
+  and document the `data-surface="light"` opt-in for new components.
+- **Lint rule (script)** — extend `scripts/contrast/check-tokens.mjs` (already exists) with a "white-on-light" rule that fails the build when `text-white` is statically nested in a known light wrapper class. Wire into the existing `contrast-check.yml` workflow.
 
-Click behavior:
-- If **not logged in** → navigate to `/auth?returnTo=/welcome&preselect=<category>`.
-- If **logged in** → call `setMode(category)`, persist to backend, then navigate to that category's onboarding page (see §3).
+## 2. Premium user avatar (high-res, centered, gold ring)
 
-New component: `src/components/home/CategorySelectorSection.tsx`. Inserted after the hero, before existing sections. Monochrome styling per Core memory (white surface, black text, Inter font); orange used only for accent dots, not buttons.
+Single source of truth for the user avatar — used by header dropdown, dashboard ProfileSummaryCard, and anywhere else `photo_url` is rendered.
 
----
+- **New component** `src/components/account/UserAvatarPremium.tsx`:
+  - Reads `crm_users_profile.photo_url` → `user_metadata.avatar_url` → `picture` (same precedence we already use).
+  - Pipes the URL through `getHighResImageUrl(url, '512x512')` (`src/lib/imageUtils.ts`) so Google/CDN thumbs are upgraded.
+  - `<img>` with `object-cover object-center` + `loading="eager"` + `referrerPolicy="no-referrer"` (Google avatars 403 otherwise) so the face is always centered and crisp.
+  - Wrapper: `rounded-full p-[2px] bg-gradient-to-br from-[hsl(var(--gold))] via-[hsl(var(--gold))] to-[hsl(var(--gold-dark))]` with a soft `shadow-[0_0_0_1px_rgba(217,194,146,0.45),0_8px_24px_-8px_rgba(217,194,146,0.55)]` gold glow.
+  - Inner ring: `bg-white` so the gold reads as a true ring on every surface.
+  - Fallback (no photo): black initials on `from-[#F7F1E6] to-[#D8C7A6]` champagne, NOT gray.
+  - Sizes: `sm` 32px, `md` 48px, `lg` 64px, `xl` 96px.
+- **Replace existing avatars**:
+  - `src/components/dashboard/ProfileSummaryCard.tsx` (line 108) — swap the shadcn `Avatar` for `<UserAvatarPremium size="lg" />`. The `border-2 border-gold/40` is replaced by the component's own ring. Skeleton remains.
+  - `src/components/GlobalHeader.tsx` (account button area near line 958) — render `<UserAvatarPremium size="sm" />` next to "Signed in as" and in the My Account trigger if there's a slot. (No structural removal; only visual upgrade.)
+  - Any other `photo_url` consumer that visually shows the user (quick scan: `InvestorDashboard.tsx`, `DeveloperCheckin.tsx`) — opt-in only if the design currently shows a gray ring.
 
-## 2. Auth Flow — Always Funnel Through /welcome
+## 3. Gold sidebar icons with gold borders
 
-Edit `src/pages/Auth.tsx`:
+Goal: every icon tile in `GlobalVerticalNav.tsx` reads as a small gold "chip" — gold glyph inside a 1px gold-bordered rounded tile, on the existing champagne sidebar.
 
-- After **sign-in success** (currently `navigate("/")` on lines 319 & 352): check `user_role_selections.selected_role` and `crm_users_profile`/`broker_profiles`. If no category recorded → `navigate("/welcome")`. Otherwise honor `returnTo` param or go to `/`.
-- After **sign-up success** (already routes to `/welcome`): pass through `?preselect=<category>` from URL so the chosen card auto-highlights.
-- Honor `?returnTo=` so the homepage card flow returns the user to the right onboarding step.
-
-Edit `src/pages/Welcome.tsx`:
-
-- Read `?preselect=` and pre-select that card.
-- After category save, instead of jumping straight to dashboards, route to the **registration form** for that category if the registration is incomplete:
-  - `developer` → `/register/developer`
-  - `broker` → `/register/broker`
-  - `investor` → `/register/investor`
-- If a registration row already exists (status `submitted` or `approved`), skip the form and go to the dashboard as today.
-
----
-
-## 3. Authenticated Registration Forms
-
-Three new pages under `src/pages/register/` (added to `src/routes/PublicRoutes.tsx` behind `<AuthGate>`):
-
-### `/register/investor` — `RegisterInvestor.tsx`
-Fields:
-- Full name, phone (E.164), nationality, residency status
-- Investor type: `currently_invested` | `looking_to_buy`
-- If invested: list of properties owned (project, unit, purchase price, purchase date) — repeatable
-- If looking: budget range, preferred areas (multi), unit type, timeline, financing (cash/mortgage), investment goal (rental yield / capital growth / Golden Visa)
-- Notes / requirements (textarea)
-
-Saves into:
-- `user_role_selections` (basic identity)
-- `client_investors` (one row per owned property)
-- New table `investor_intake` (looking-to-buy preferences, see §5)
-
-### `/register/broker` — `RegisterBroker.tsx`
-Fields:
-- Full name, phone, nationality, photo
-- Current company / brokerage, years experience, RERA / BRN number
-- Specializations (multi: off-plan, secondary, rentals, commercial, luxury)
-- Languages, preferred areas
-- CV upload (PDF/DOCX → Supabase Storage `broker-documents` bucket)
-- RERA card upload, Emirates ID upload (already supported by `broker_profiles`)
-- LinkedIn URL, short bio
-
-Saves into `broker_profiles` (existing table — covers nearly all fields). New file uploads use existing storage pattern from `BrokerAccount.tsx`.
-
-### `/register/developer` — `RegisterDeveloper.tsx`
-Reuse the existing `DeveloperCompanyRegistration` page logic but expose it under the unified `/register/developer` route too. No schema change — saves to `developer_registrations`.
-
-All three forms use the existing `FormDraftBar` for autosave UX (matches `JoinInvestorList.tsx` pattern).
-
----
-
-## 4. Wiring "Send Registration Email" Form Width
-
-Carry-over from prior message: the Bulk Send / Registration dialog's email column is clipped. Widen `BulkSendDialog`'s `DialogContent` to `max-w-[900px]` and let the email column use `min-w-[280px]` with `truncate` removed so the address is fully visible.
-
----
-
-## 5. Backend Changes (one migration)
-
-```sql
--- Investor intake (for "looking to buy" pipeline)
-create table public.investor_intake (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
-  status text not null default 'submitted',     -- submitted | reviewing | matched
-  intent text not null,                          -- 'currently_invested' | 'looking_to_buy'
-  budget_min numeric, budget_max numeric, currency text default 'AED',
-  preferred_areas text[], unit_types text[],
-  timeline text, financing text, investment_goal text,
-  notes text,
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
-);
-alter table public.investor_intake enable row level security;
-create policy "owner read own"   on public.investor_intake for select using (auth.uid() = user_id);
-create policy "owner insert own" on public.investor_intake for insert with check (auth.uid() = user_id);
-create policy "owner update own" on public.investor_intake for update using (auth.uid() = user_id);
-create policy "admins read all"  on public.investor_intake for select using (public.has_role(auth.uid(),'admin'));
-
--- Unified category registry view (read-only, used by admin page)
-create or replace view public.user_categories_v as
-  select urs.user_id, urs.email, urs.full_name, urs.phone_e164,
-         urs.selected_role::text as category, urs.created_at
-  from public.user_role_selections urs;
-grant select on public.user_categories_v to authenticated;
-```
-
-(`developer_registrations`, `broker_profiles`, `client_investors` already exist — no schema change there.)
-
----
-
-## 6. Admin "Categories" Page
-
-New route `/admin/categories` (page: `src/pages/AdminCategories.tsx`, linked from existing `Admin.tsx` sidebar). Owner/admin-only via `requireOwnerAuth`.
-
-Three tabs: **Investors · Brokers · Developers**. Each tab shows:
-
-- Total count badge
-- Searchable table: name, email, phone, country, registration status, created date
-- Row click → drawer with the full submitted profile + uploaded documents
-- CSV export per tab
-
-Data sources:
-- Investors: `user_categories_v` filtered to `investor` + `investor_intake` + `client_investors`
-- Brokers: `broker_profiles`
-- Developers: `developer_registrations`
+- **Refactor `getIconStyle`** (line 820):
+  - Drop the rose / violet / sky / emerald / amber per-route colors. ALL icons return `text-[hsl(var(--gold))]` in the resting state. (The colored route-row backgrounds in `getItemStyle` remain — only icon glyphs go gold.)
+  - When `shouldHighlight` is true AND the row background is a saturated color (the rose/violet/sky/emerald rows), keep `text-white` so the icon stays legible on the dark fill — that is dark-on-dark safe.
+  - When `shouldHighlight` is true on the standard champagne row, return `text-[hsl(var(--gold-dark))]` for extra contrast.
+- **Wrap every nav-item icon in a gold-bordered tile**:
+  - In the three render sites (line 1128, 1208, plus highlight items), wrap `<Icon …/>` in:
+    ```tsx
+    <span className="w-6 h-6 rounded-md flex items-center justify-center
+                     border border-gold/45 bg-gold/[0.06]
+                     group-hover:bg-gold/[0.12] group-hover:border-gold/70
+                     shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)]">
+      <Icon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+    </span>
+    ```
+  - Active state: `bg-gold/20 border-gold/80`.
+  - Saturated colored rows (rose/violet/sky/emerald) override: tile becomes `bg-white/15 border-white/40` so the gold tile pattern doesn't fight the colored fill.
+- **Section headers** (line 1174) — already use `bg-gold/[0.08]` tiles; tighten the border to `border border-gold/30` (currently borderless) for parity.
+- **Mega-menu close X** — also gets a thin gold border tile with a black X (per §1).
+- **Collapsed-rail mode** — apply the same gold tile wrapper at the rail width so collapsed icons also look like gold chips.
 
 ---
 
 ## Files
 
-**Created**
-- `src/components/home/CategorySelectorSection.tsx`
-- `src/pages/register/RegisterInvestor.tsx`
-- `src/pages/register/RegisterBroker.tsx`
-- `src/pages/register/RegisterDeveloper.tsx`
-- `src/pages/AdminCategories.tsx`
-- `supabase/migrations/<ts>_investor_intake_and_categories_view.sql`
+**New**
+- `src/components/account/UserAvatarPremium.tsx`
 
 **Edited**
-- `src/pages/Index.tsx` — mount `CategorySelectorSection`
-- `src/pages/Auth.tsx` — post-login category check + `preselect` passthrough
-- `src/pages/Welcome.tsx` — `preselect` support, route to `/register/<category>` when intake missing
-- `src/routes/PublicRoutes.tsx` — register the 4 new routes (3 forms + admin page)
-- `src/components/crm/BulkSendDialog.tsx` — wider dialog so email column is fully visible
-- `src/pages/Admin.tsx` — add "Categories" link
+- `src/index.css` — defensive `.text-white` guard on light surfaces.
+- `scripts/contrast/check-tokens.mjs` — add white-on-light rule.
+- `src/components/navigation/GlobalVerticalNav.tsx` — gold icon tiles + simplified `getIconStyle` + gold X buttons.
+- `src/components/dashboard/ProfileSummaryCard.tsx` — use `UserAvatarPremium`.
+- `src/components/GlobalHeader.tsx` — use `UserAvatarPremium` in account dropdown.
+- `src/components/home/CategorySelectorSection.tsx` and any other components flagged by the white-on-light sweep.
 
----
+## Out of scope
 
-## Out of scope (will note for follow-up)
-- The "JavaScript required" message on opening pack/Drive links — that is Google Drive's own preview page when opened inside the in-app iframe; needs a separate fix to open Drive links in a new tab. I'll address it in a follow-up unless you want it bundled here.
+- No changes to nav structure, routes, sections, ordering, or labels (no-removal policy).
+- No changes to AI Premium Purple surfaces (those are dark — white icons stay).
+- No changes to footer monochrome obsidian (dark surface — white text stays).

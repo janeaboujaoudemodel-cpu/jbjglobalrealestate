@@ -189,7 +189,7 @@ export function PartnerApplicationPortal() {
                           <div className={`flex flex-col items-center gap-1 px-2 ${isCurrent ? "scale-110" : ""} transition-transform`}>
                             <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                               isCompleted
-                                ? "bg-gradient-to-br from-gold to-amber-500 border-gold text-white"
+                                ? "bg-gradient-to-br from-gold to-amber-500 border-gold text-black"
                                 : "bg-white border-gray-200 text-gray-600"
                             }`}>
                               <StageIcon className="w-4 h-4" />

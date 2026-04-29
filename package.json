@@ -13,7 +13,8 @@
     "pdf:qa": "node scripts/pdf-qa/check-exports.mjs",
     "check:contrast:tokens": "node scripts/contrast/check-tokens.mjs",
     "check:contrast:rendered": "node scripts/contrast/check-rendered.mjs",
-    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:rendered",
+    "check:contrast:white-on-light": "node scripts/contrast/check-white-on-light.mjs",
+    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:white-on-light && npm run check:contrast:rendered",
     "prepare": "husky || true"
   },
   "lint-staged": {

@@ -3281,3 +3281,27 @@ button:disabled:has(.lucide),
     transform: none !important;
   }
 }
+
+/* ============================================================
+   GLOBAL CONTRAST GUARD — White-on-light fail-safe
+   Any element forced .text-white sitting inside a known light
+   surface gets demoted to near-black so logos / icons / labels
+   never disappear on bright backgrounds. Opt-out with
+   data-surface="dark" on the wrapping element.
+   ============================================================ */
+@layer utilities {
+  [data-surface="light"] .text-white,
+  .bg-white .text-white:not([data-surface="dark"] *),
+  .bg-pearl-1 .text-white:not([data-surface="dark"] *),
+  .bg-pearl-2 .text-white:not([data-surface="dark"] *),
+  .bg-pearl-3 .text-white:not([data-surface="dark"] *) {
+    color: #111 !important;
+  }
+
+  /* Lucide / SVG glyphs forced white on light surfaces also flip */
+  [data-surface="light"] .text-white svg,
+  [data-surface="light"] svg.text-white {
+    color: #111 !important;
+    stroke: currentColor;
+  }
+}
