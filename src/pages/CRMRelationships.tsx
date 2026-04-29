@@ -862,6 +862,7 @@ const DeveloperRegistryTab = () => {
                       <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1.5">
                         <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-amber-900 mb-0.5">
                           <Users className="w-3 h-3" />Point of Contact
+                          <FieldSource meta={r.field_sources?.developer_contact} />
                         </div>
                         {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
                           <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
