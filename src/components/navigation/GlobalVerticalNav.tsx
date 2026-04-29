@@ -1330,13 +1330,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           navigate(firstItem.href);
                         }
                       }}
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 border ${
                         isActive
-                          ? 'bg-gold/20 text-gold shadow-sm shadow-gold/15 ring-1 ring-gold/30'
-                          : 'text-black/40 hover:text-gold hover:bg-gold/10'
+                          ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/80 shadow-sm shadow-gold/15'
+                          : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/45 hover:bg-[hsl(var(--gold))]/15 hover:border-[hsl(var(--gold))]/70'
                       }`}
                     >
-                      <SectionIcon className="w-3.5 h-3.5" />
+                      <SectionIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
