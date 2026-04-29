@@ -212,7 +212,7 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' }}>
               <Calendar className="w-4 h-4" style={{ color: '#000000' }} />
               <span className="text-sm font-semibold" style={{ color: '#000000' }}>
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
