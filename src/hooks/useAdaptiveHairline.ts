@@ -90,7 +90,7 @@ function detectUnderlayLuminance(target: HTMLElement): number {
  *  - Bright underlays (L 0.18..0.5): taper 0.85 → 0.65.
  *  - Light surfaces (L > 0.5): floor at 0.6 — never harsh.
  */
-function multiplierFromLuminance(L: number): number {
+export function multiplierFromLuminance(L: number): number {
   if (L <= 0.005) return 1.25;
   if (L <= 0.05) {
     const t = (L - 0.005) / (0.05 - 0.005);
