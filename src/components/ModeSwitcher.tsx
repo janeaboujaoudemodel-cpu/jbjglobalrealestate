@@ -288,7 +288,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </p>
                     <p
                       className="text-[11px] leading-snug mt-0.5 line-clamp-1"
-                      style={{ color: config.dark, opacity: 0.85 }}
+                      style={{ color: config.dark }}
                     >
                       {config.description}
                     </p>
