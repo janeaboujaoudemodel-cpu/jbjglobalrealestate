@@ -3421,6 +3421,27 @@ button:disabled:has(.lucide),
     color: #111 !important;
   }
 
+  /* PASS 5 — Gold-on-light/champagne guard.
+     The champagne section + cream cards make `text-gold` (~#111 already)
+     still look faded next to neutral grays. Force pure black for max legibility. */
+  .jj-section-champagne .text-gold,
+  .jj-box-active .text-gold,
+  .bg-white .text-gold,
+  .bg-card .text-gold,
+  .bg-background .text-gold,
+  [class*="bg-cream"] .text-gold,
+  [class*="from-white"] .text-gold,
+  [class*="from-gray-50"] .text-gold,
+  [class*="from-gray-100"] .text-gold {
+    color: #000 !important;
+  }
+  /* Faded helper text in cards — ensure description rows remain readable */
+  .bg-white [class*="text-black/4"],
+  .bg-white [class*="text-black/5"],
+  .bg-card [class*="text-black/4"],
+  .bg-card [class*="text-black/5"] {
+    color: rgba(0,0,0,0.72) !important;
+  }
   /* Tab triggers — guarantee labels are visible on light surfaces. */
   [role="tab"][data-state="inactive"] {
     color: hsl(0 0% 25%);
