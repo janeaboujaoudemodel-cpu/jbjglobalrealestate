@@ -455,8 +455,8 @@ export default function JoinApplication() {
                 </p>
                 <div className="flex justify-center">
                   <Button variant="primary" asChild>
-                    <Link to="/auth?redirect=/join">
-                      <span className="text-black">Sign In /</span><span className="text-gold"> Create Account</span>
+                    <Link to="/auth?redirect=/join" className="text-white">
+                      <span className="text-white font-semibold">Sign In / Create Account</span>
                     </Link>
                   </Button>
                 </div>
