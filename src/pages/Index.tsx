@@ -66,6 +66,7 @@ const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalCTA"));
+const CategorySelectorSection = lazy(() => import("@/components/home/CategorySelectorSection"));
 
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
