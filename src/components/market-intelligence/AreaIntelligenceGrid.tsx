@@ -154,8 +154,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="py-16 bg-black">
-      <div className="jj-layer-2">
+    <section className="py-16" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+      <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -166,13 +166,13 @@ export const AreaIntelligenceGrid = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold" style={{ color: '#6b7280' }}>
               Area Intelligence
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
               Market Snapshot by Location
             </h2>
-            <p className="text-black/90 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>
