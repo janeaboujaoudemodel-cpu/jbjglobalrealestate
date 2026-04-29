@@ -185,6 +185,11 @@ const ScanSignDocuments = lazy(() => import("@/pages/ScanSignDocuments"));
 const PropertyMeasurement = lazy(() => import("@/pages/PropertyMeasurement"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
+// ── Category Registration Forms ──
+const RegisterInvestor = lazy(() => import("@/pages/register/RegisterInvestor"));
+const RegisterBroker = lazy(() => import("@/pages/register/RegisterBroker"));
+const RegisterDeveloper = lazy(() => import("@/pages/register/RegisterDeveloper"));
+
 export const PublicRoutes = () => (
   <>
     {/* ── Home ── */}
@@ -393,6 +398,11 @@ export const PublicRoutes = () => (
     <Route path="/submit-event" element={<Navigate to="/developer-hub/events" replace />} />
     <Route path="/my-projects" element={<Navigate to="/developer-portal?tab=projects" replace />} />
     <Route path="/my-events" element={<Navigate to="/developer-hub/events" replace />} />
+
+    {/* ── Category Registration (after /welcome category pick) ── */}
+    <Route path="/register/investor" element={<AuthRequiredRoute><RegisterInvestor /></AuthRequiredRoute>} />
+    <Route path="/register/broker" element={<AuthRequiredRoute><RegisterBroker /></AuthRequiredRoute>} />
+    <Route path="/register/developer" element={<AuthRequiredRoute><RegisterDeveloper /></AuthRequiredRoute>} />
 
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />

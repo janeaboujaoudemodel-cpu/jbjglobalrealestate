@@ -211,12 +211,17 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
-            // Check if user has made mode selection — if not, go to welcome page
+            // Honor ?returnTo and ?preselect from URL
+            const params = new URLSearchParams(window.location.search);
+            const returnTo = params.get('returnTo');
+            const preselect = params.get('preselect');
             const modeSelected = localStorage.getItem('jj_mode_selected');
-            if (modeSelected === 'true') {
+            if (modeSelected === 'true' && returnTo) {
+              navigate(returnTo);
+            } else if (modeSelected === 'true') {
               navigate("/");
             } else {
-              navigate("/welcome");
+              navigate(`/welcome${preselect ? `?preselect=${preselect}` : ''}`);
             }
           }
           break;
@@ -316,7 +321,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       if (signInError) {
         toast.error("Account reactivated, but sign-in failed. Please try signing in again.");
       } else {
-        navigate("/");
+        const modeSelected = localStorage.getItem('jj_mode_selected');
+        navigate(modeSelected === 'true' ? "/" : "/welcome");
       }
     } catch (err: any) {
       toast.error(err.message || "Failed to reactivate account. Please contact support.");
@@ -349,7 +355,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             toast.success("Welcome back! Signed in with Face ID.");
-            navigate("/");
+            const modeSelected = localStorage.getItem('jj_mode_selected');
+            navigate(modeSelected === 'true' ? "/" : "/welcome");
           } else {
             toast.info("Please enter your password to complete sign-in.");
             setEmail(storedUser);

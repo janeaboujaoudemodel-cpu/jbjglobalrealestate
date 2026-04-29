@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUserModeContext, type UserMode } from '@/contexts/UserModeContext';
 import { JJLogoImage } from '@/components/JJLogoImage';
@@ -56,10 +56,19 @@ const CATEGORIES: CategoryOption[] = [
 
 export default function Welcome() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { setMode } = useUserModeContext();
   const [selected, setSelected] = useState<SelectableCategory | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Pre-select category from URL (?preselect=investor|broker|developer|visitor)
+  useEffect(() => {
+    const pre = searchParams.get('preselect') as SelectableCategory | null;
+    if (pre && ['investor', 'broker', 'developer', 'visitor'].includes(pre)) {
+      setSelected(pre);
+    }
+  }, [searchParams]);
 
   // If not logged in, redirect to auth
   if (!user) {
@@ -84,16 +93,16 @@ export default function Welcome() {
         { duration: 4000, icon: <CheckCircle2 className="w-5 h-5 text-gold" /> }
       );
 
-      // Route based on category
+      // Route to category-specific registration form (skip for explorer)
       switch (selected) {
         case 'developer':
-          navigate('/developer-portal', { replace: true });
+          navigate('/register/developer', { replace: true });
           break;
         case 'broker':
-          navigate('/broker-dashboard', { replace: true });
+          navigate('/register/broker', { replace: true });
           break;
         case 'investor':
-          navigate('/my-dashboard', { replace: true });
+          navigate('/register/investor', { replace: true });
           break;
         default:
           navigate('/', { replace: true });
