@@ -15,20 +15,23 @@ const fadeInUp = {
 };
 
 const TrendIcon = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
-  if (trend === 'bullish') return <TrendingUp className="w-4 h-4 text-emerald-600" />;
-  if (trend === 'bearish') return <TrendingDown className="w-4 h-4 text-red-600" />;
-  return <Minus className="w-4 h-4 text-amber-600" />;
+  if (trend === 'bullish') return <TrendingUp className="w-3.5 h-3.5 text-emerald-700" />;
+  if (trend === 'bearish') return <TrendingDown className="w-3.5 h-3.5 text-red-700" />;
+  return <Minus className="w-3.5 h-3.5 text-amber-700" />;
 };
 
 const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => {
   const colors = {
-    bullish: 'bg-emerald-100 text-emerald-700 border-emerald-300',
-    bearish: 'bg-red-100 text-red-700 border-red-300',
-    neutral: 'bg-amber-100 text-amber-700 border-amber-300',
+    bullish: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+    bearish: 'bg-red-100 text-red-800 border-red-300',
+    neutral: 'bg-amber-100 text-amber-800 border-amber-300',
   };
-  
+
   return (
-    <Badge className={`${colors[trend]} border`}>
+    <Badge
+      className={`${colors[trend]} border whitespace-nowrap min-w-fit shrink-0 px-2 py-0.5 text-[11px] font-bold`}
+      style={{ wordBreak: 'keep-all', overflowWrap: 'normal' }}
+    >
       <TrendIcon trend={trend} />
       <span className="ml-1 capitalize">{trend}</span>
     </Badge>
@@ -36,16 +39,14 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
 };
 
 /* ============================================================
- * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ICON BOX STYLE - Solid black tile, white icon (max contrast on white card)
  * ============================================================ */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div 
-    className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
-    style={{
-      background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-    }}
+  <div
+    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${className}`}
+    style={{ backgroundColor: '#000000' }}
   >
-    <Icon className="w-5 h-5 text-black" />
+    <Icon className="w-5 h-5" style={{ color: '#ffffff' }} />
   </div>
 );
 
