@@ -5,6 +5,7 @@ import {
   SlidersHorizontal,
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
   ChevronLeft, ChevronRight, ChevronDown, Compass, SlidersVertical,
+  Home, Castle, Building, Store, Briefcase, Trees, Sparkles, ArrowRight,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -237,28 +238,93 @@ export default function HorizontalUtilityBar() {
                   </TooltipTrigger>
                   <TooltipContent side="bottom" sideOffset={8} className="max-w-[220px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Buy, rent, or sell properties</TooltipContent>
                 </Tooltip>
-                <PopoverContent align="start" sideOffset={10} className="w-56 p-1 z-[10100]">
-                  <Link to="/properties?transaction=buy" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                    <Building2 className="w-4 h-4 text-[hsl(var(--gold))]" />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-foreground">Buy</span>
-                      <span className="text-[10px] text-muted-foreground">Off-plan & ready properties</span>
+                <PopoverContent align="start" sideOffset={10} className="w-[640px] max-w-[92vw] p-0 z-[10100] border border-border bg-background shadow-xl">
+                  <div className="px-5 pt-4 pb-3 border-b border-border">
+                    <div className="text-[10px] font-semibold tracking-[0.18em] uppercase text-muted-foreground">Browse Properties</div>
+                    <div className="text-sm text-foreground mt-0.5">Pick a transaction, readiness, or category</div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-0">
+                    {/* Transaction */}
+                    <div className="p-4 border-r border-border">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Transaction</div>
+                      <div className="space-y-0.5">
+                        <Link to="/properties?transactionType=buy" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Building2 className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Buy</span>
+                        </Link>
+                        <Link to="/properties?transactionType=rent" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Key className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Rent</span>
+                        </Link>
+                        <Link to="/listing-portal" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Tag className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Sell / List</span>
+                        </Link>
+                      </div>
                     </div>
-                  </Link>
-                  <Link to="/properties?transaction=rent" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                    <Key className="w-4 h-4 text-[hsl(var(--gold))]" />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-foreground">Rent</span>
-                      <span className="text-[10px] text-muted-foreground">Properties to rent in UAE</span>
+
+                    {/* Readiness */}
+                    <div className="p-4 border-r border-border">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Readiness</div>
+                      <div className="space-y-0.5">
+                        <Link to="/properties?completionStatus=ready" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Home className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Ready to move</span>
+                        </Link>
+                        <Link to="/properties?completionStatus=off-plan" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Building2 className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Off-plan</span>
+                        </Link>
+                        <Link to="/properties?status=new_launch" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <Sparkles className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">New launches</span>
+                        </Link>
+                        <Link to="/resale-properties" className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-muted transition-colors">
+                          <ArrowRight className="w-4 h-4 text-foreground" />
+                          <span className="text-sm font-medium text-foreground">Resale deals</span>
+                        </Link>
+                      </div>
                     </div>
-                  </Link>
-                  <Link to="/listing-portal" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[hsl(var(--gold)/0.1)] transition-colors">
-                    <Tag className="w-4 h-4 text-[hsl(var(--gold))]" />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-foreground">Sell</span>
-                      <span className="text-[10px] text-muted-foreground">List your property</span>
+
+                    {/* Category */}
+                    <div className="p-4">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground mb-2">Category</div>
+                      <div className="grid grid-cols-1 gap-0.5">
+                        <Link to="/properties?type=apartment" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Building2 className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Apartments</span>
+                        </Link>
+                        <Link to="/properties?type=villa" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Home className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Villas</span>
+                        </Link>
+                        <Link to="/properties?type=townhouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Castle className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Townhouses</span>
+                        </Link>
+                        <Link to="/properties?type=penthouse" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Building className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Penthouses</span>
+                        </Link>
+                        <Link to="/properties?type=commercial" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Briefcase className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Commercial</span>
+                        </Link>
+                        <Link to="/properties?type=retail" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Store className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Retail</span>
+                        </Link>
+                        <Link to="/properties?type=office" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Briefcase className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Offices</span>
+                        </Link>
+                        <Link to="/properties?type=plot" className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors">
+                          <Trees className="w-3.5 h-3.5 text-foreground" /><span className="text-sm text-foreground">Plots / Land</span>
+                        </Link>
+                      </div>
                     </div>
-                  </Link>
+                  </div>
+                  <div className="flex items-center justify-between px-5 py-3 border-t border-border bg-muted/40">
+                    <Link to="/properties" className="text-sm font-medium text-foreground hover:underline inline-flex items-center gap-1.5">
+                      See all properties <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                    <Link to="/properties/explore" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                      Marketing overview
+                    </Link>
+                  </div>
                 </PopoverContent>
               </Popover>
 
