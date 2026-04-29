@@ -356,8 +356,82 @@ export default function CRMLeadsBulkBar({
           >
             Apply Status
           </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleDuplicate}
+            disabled={busy}
+            className="font-semibold"
+          >
+            <Copy className="h-4 w-4 mr-2" />
+            Duplicate
+          </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowBroadcast((v) => !v)}
+            disabled={busy}
+            className="font-semibold"
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            Bulk Message
+          </Button>
         </div>
       </div>
+
+      {showBroadcast && (
+        <div className="mt-2 rounded-xl border-2 border-gold/40 bg-white p-4 space-y-3 shadow-md">
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant={broadcastChannel === "whatsapp" ? "primary" : "secondary"}
+              onClick={() => setBroadcastChannel("whatsapp")}
+            >
+              <MessageSquare className="h-4 w-4 mr-2" /> WhatsApp
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={broadcastChannel === "email" ? "primary" : "secondary"}
+              onClick={() => setBroadcastChannel("email")}
+            >
+              <Mail className="h-4 w-4 mr-2" /> Email
+            </Button>
+            <span className="ml-auto text-xs text-black/60">
+              Use <code className="text-black">{"{name}"}</code> for personalisation
+            </span>
+          </div>
+          {broadcastChannel === "email" && (
+            <input
+              value={broadcastSubject}
+              onChange={(e) => setBroadcastSubject(e.target.value)}
+              placeholder="Subject"
+              className="w-full h-10 rounded-lg border-2 border-gold/30 bg-white px-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+            />
+          )}
+          <textarea
+            value={broadcastMessage}
+            onChange={(e) => setBroadcastMessage(e.target.value)}
+            placeholder={`Hi {name}, ...`}
+            rows={4}
+            className="w-full rounded-lg border-2 border-gold/30 bg-white px-3 py-2 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+          />
+          <div className="flex items-center justify-end gap-2">
+            <Button type="button" size="sm" variant="ghost" onClick={() => setShowBroadcast(false)} disabled={busy}>
+              Cancel
+            </Button>
+            <Button type="button" size="sm" variant="primary" onClick={handleBroadcast} disabled={busy || !broadcastMessage.trim()}>
+              {busy ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Send to {count}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
