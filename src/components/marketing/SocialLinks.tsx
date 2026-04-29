@@ -4,7 +4,7 @@ import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
 interface SocialLinksProps {
   className?: string;
   iconClassName?: string;
-  variant?: 'default' | 'gold' | 'white' | 'glow';
+  variant?: 'default' | 'gold' | 'white' | 'glow' | 'premium';
 }
 
 const SOCIAL_LINKS = {
