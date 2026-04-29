@@ -207,18 +207,24 @@ const MarketIntelligence = () => {
       {/* Data Sources Panel - Edge to Edge */}
       <DataSourcesPanel />
 
-      {/* Compliance Disclaimer - 3-Layer System */}
-      <section className="py-12 bg-black">
-        <div className="jj-layer-2">
+      {/* Compliance Disclaimer */}
+      <section className="py-12" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+        <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="jj-card-inner rounded-2xl p-8 text-center">
-              <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-4">
-                <Info className="w-6 h-6 text-gold" />
+            <div
+              className="rounded-2xl p-8 text-center"
+              style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
+                style={{ backgroundColor: '#000000' }}
+              >
+                <Info className="w-6 h-6" style={{ color: '#ffffff' }} />
               </div>
-              <h3 className="text-black text-xl font-bold mb-4">
-                <span className="text-gold">Compliance</span> & Transparency
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#000000' }}>
+                Compliance & Transparency
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#374151' }}>
                 {MARKET_DISCLAIMER}
               </p>
             </div>

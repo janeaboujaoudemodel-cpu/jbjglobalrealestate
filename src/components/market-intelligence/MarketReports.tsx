@@ -69,13 +69,11 @@ const REPORT_TYPES: MarketReportType[] = [
  * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
  * ============================================================ */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div 
-    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
-    style={{
-      background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-    }}
+  <div
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${className}`}
+    style={{ backgroundColor: '#000000', boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}
   >
-    <Icon className="w-6 h-6 text-black" />
+    <Icon className="w-6 h-6" style={{ color: '#ffffff' }} />
   </div>
 );
 
@@ -118,8 +116,8 @@ export const MarketReports = () => {
   };
 
   return (
-    <section className="py-16 bg-black">
-      <div className="jj-layer-2">
+    <section className="py-16" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+      <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -130,71 +128,77 @@ export const MarketReports = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold" style={{ color: '#6b7280' }}>
               Market Reports
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
               Downloadable Reports
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
-              Generate AI-powered market reports based on official Open Data. 
+            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
+              Generate AI-powered market reports based on official Open Data.
               Reports are descriptive summaries, not predictive forecasts.
             </p>
           </motion.div>
 
-          {/* Report Cards - Active color fill with proper alignment */}
+          {/* Report Cards */}
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card className="jj-card-inner hover:border-white transition-all h-full flex flex-col">
+                <Card
+                  className="transition-all h-full flex flex-col hover:shadow-lg"
+                  style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <IconBox icon={report.icon} />
-                      <Badge variant="outline" className="bg-white/50 text-black border-black/20">
-                        <Clock className="w-3 h-3 mr-1" />
+                      <Badge
+                        variant="outline"
+                        className="whitespace-nowrap"
+                        style={{ backgroundColor: '#F3F4F6', color: '#000000', borderColor: '#D1D5DB' }}
+                      >
+                        <Clock className="w-3 h-3 mr-1" style={{ color: '#000000' }} />
                         {report.frequency}
                       </Badge>
                     </div>
-                    <CardTitle className="text-black text-xl mt-4">{report.title}</CardTitle>
+                    <CardTitle className="text-xl mt-4" style={{ color: '#000000' }}>{report.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
-                    <p className="text-black/70 text-sm mb-6">
+                    <p className="text-sm mb-6" style={{ color: '#374151' }}>
                       {report.description}
                     </p>
-                    
-                    {/* Report Features - consistent spacing */}
+
                     <div className="space-y-2 mb-6 flex-1">
-                      <div className="flex items-center gap-2 text-black/70 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
+                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
                         Powered by Government Open Data
                       </div>
-                      <div className="flex items-center gap-2 text-black/70 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
+                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
                         AI-generated insights included
                       </div>
-                      <div className="flex items-center gap-2 text-black/70 text-xs">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
+                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
                         Source attribution & timestamps
                       </div>
                     </div>
 
-                    {/* Download Button - Primary styling, aligned */}
                     <Button
                       variant="primary"
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
                       className="w-full mt-auto"
+                      style={{ backgroundColor: '#000000', color: '#ffffff' }}
                     >
                       {generatingId === report.id ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2" />
-                          <span className="text-black">Gener</span><span className="text-gold">ating...</span>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                          <span style={{ color: '#ffffff' }}>Generating...</span>
                         </>
                       ) : (
                         <>
-                          <Download className="w-4 h-4 mr-2" />
-                          <span className="text-black">Generate</span><span className="text-gold"> Report</span>
-                          <ChevronRight className="w-4 h-4 ml-1" />
+                          <Download className="w-4 h-4 mr-2" style={{ color: '#ffffff' }} />
+                          <span style={{ color: '#ffffff' }}>Generate Report</span>
+                          <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#ffffff' }} />
                         </>
                       )}
                     </Button>
@@ -204,21 +208,22 @@ export const MarketReports = () => {
             ))}
           </div>
 
-          {/* Report Disclaimer - Active color */}
-          <motion.div 
-            className="mt-10 p-6 jj-card-inner max-w-3xl mx-auto text-center"
+          {/* Report Disclaimer */}
+          <motion.div
+            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-2xl"
             variants={fadeInUp}
+            style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
           >
             <div className="flex justify-center mb-4">
               <IconBox icon={FileText} />
             </div>
-            <h4 className="text-black font-semibold mb-2">
+            <h4 className="font-semibold mb-2" style={{ color: '#000000' }}>
               Report Disclaimer
             </h4>
-            <p className="text-black/70 text-sm leading-relaxed">
-              All market reports are generated using AI analysis of publicly available government Open Data. 
-              Reports are for informational purposes only and do not constitute investment advice. 
-              Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department. 
+            <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
+              All market reports are generated using AI analysis of publicly available government Open Data.
+              Reports are for informational purposes only and do not constitute investment advice.
+              Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department.
               Always verify information independently before making decisions.
             </p>
           </motion.div>
