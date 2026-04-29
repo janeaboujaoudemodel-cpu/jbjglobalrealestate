@@ -125,7 +125,7 @@ const ActionGateModal = () => {
 
             <button
               onClick={closeGate}
-              className="w-full text-center text-white/60 hover:text-white/70 text-xs mt-2 transition-colors"
+              className="w-full text-center text-white/90 hover:text-white/70 text-xs mt-2 transition-colors"
             >
               Continue Browsing
             </button>

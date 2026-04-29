@@ -113,7 +113,7 @@ export function BrokerAIAssistant() {
             </TabsTrigger>
           </TabsList>
 
-          <p className="text-white/60 text-xs mt-2">{getTypeDescription(selectedType)}</p>
+          <p className="text-white/90 text-xs mt-2">{getTypeDescription(selectedType)}</p>
 
           {/* Common Controls */}
           <div className="grid grid-cols-2 gap-3 mt-4">
@@ -162,7 +162,7 @@ export function BrokerAIAssistant() {
           </TabsContent>
 
           <TabsContent value="area_narrative" className="mt-3">
-            <p className="text-white/60 text-sm">
+            <p className="text-white/90 text-sm">
               Generate a compliant narrative for {selectedArea || "selected area"} focused on {transactionType.toUpperCase()} transactions.
             </p>
           </TabsContent>
@@ -216,14 +216,14 @@ export function BrokerAIAssistant() {
 
             <div className="mt-4 pt-3 border-t border-gray-700/50 flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-              <p className="text-white/60 text-xs">{aiResponse.disclaimer}</p>
+              <p className="text-white/90 text-xs">{aiResponse.disclaimer}</p>
             </div>
           </div>
         )}
 
         {/* Compliance Reminder */}
         <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
-          <Shield className="w-4 h-4 text-white/60 shrink-0 mt-0.5" />
+          <Shield className="w-4 h-4 text-white/90 shrink-0 mt-0.5" />
           <p className="text-gray-600 text-xs">
             AI guidance is descriptive only. Never use predictions, guarantees, or investment advice language with clients.
           </p>

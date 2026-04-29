@@ -134,7 +134,7 @@ const FooterCurrencyUnit = () => {
               >
                 <span>{cur.flag}</span>
                 <span>{cur.code}</span>
-                <span className="text-[11px] ml-auto text-white/50">{cur.name}</span>
+                <span className="text-[11px] ml-auto text-white/90">{cur.name}</span>
               </button>
             ))}
           </div>
@@ -519,7 +519,7 @@ const Footer = () => {
                   style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }}
                   aria-hidden="true"
                 />
-                <span className="text-white/60 text-[11px] tracking-[0.12em] uppercase">
+                <span className="text-white/90 text-[11px] tracking-[0.12em] uppercase">
                   Excellence in Real Estate · Licensed UAE Brokerage
                 </span>
               </div>
@@ -643,14 +643,14 @@ const Footer = () => {
             <span className="text-[11px] text-white/65 tracking-[0.08em]" dir="ltr">
               © {currentYear} <bdi className="font-medium text-white/85">JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
-            <span className="hidden sm:inline text-white/20" aria-hidden="true">·</span>
+            <span className="hidden sm:inline text-white/80" aria-hidden="true">·</span>
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               {legalLinks.map((l, i) => (
                 <span key={l.href} className="flex items-center gap-3">
-                  <Link to={l.href} className="text-[11px] uppercase tracking-[0.1em] text-white/60 hover:text-white transition-colors whitespace-nowrap">
+                  <Link to={l.href} className="text-[11px] uppercase tracking-[0.1em] text-white/90 hover:text-white transition-colors whitespace-nowrap">
                     {l.label}
                   </Link>
-                  {i < legalLinks.length - 1 && <span className="text-white/15" aria-hidden="true">·</span>}
+                  {i < legalLinks.length - 1 && <span className="text-white/75" aria-hidden="true">·</span>}
                 </span>
               ))}
             </div>

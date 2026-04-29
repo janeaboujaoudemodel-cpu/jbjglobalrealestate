@@ -431,7 +431,7 @@ const Services = () => {
                     {/* We do not provide */}
                     <div>
                       <h3 className="text-black font-semibold text-lg mb-4 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-white/60" />
+                        <AlertCircle className="w-5 h-5 text-white/90" />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
@@ -461,7 +461,7 @@ const Services = () => {
       {/* Footer Disclaimer */}
       <section className="bg-black py-8 border-t border-gray-800">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-white/60 text-sm max-w-3xl mx-auto">
+          <p className="text-white/90 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided 
             within brokerage scope. Partner services are delivered independently under partner licenses.
           </p>

@@ -459,7 +459,7 @@ const ResaleProperties = () => {
                     {listing.images?.[0] ? (
                       <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                     ) : (
-                      <Building2 className="w-12 h-12 text-gold/30" />
+                      <Building2 className="w-12 h-12 text-gray-400" />
                     )}
                     {listing.is_premium && (
                       <div className="absolute top-3 right-3">

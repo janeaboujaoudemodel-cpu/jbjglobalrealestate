@@ -159,7 +159,7 @@ const ExecutiveAIInsights = () => {
               </p>
             </div>
             <div className="mt-4 md:mt-0 flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-white/60">
+              <div className="flex items-center gap-2 text-sm text-white/90">
                 <Clock className="w-4 h-4" />
                 <span>{new Date(lastUpdated).toLocaleString()}</span>
               </div>
@@ -221,28 +221,28 @@ const ExecutiveAIInsights = () => {
               <CardContent className="pt-6 text-center">
                 <TrendingUp className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Pattern Recognition</p>
-                <p className="text-xs text-white/60 mt-1">Recurring trends identified</p>
+                <p className="text-xs text-white/90 mt-1">Recurring trends identified</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-gray-800">
               <CardContent className="pt-6 text-center">
                 <Activity className="w-8 h-8 text-blue-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Correlation Summary</p>
-                <p className="text-xs text-white/60 mt-1">Relationship mapping</p>
+                <p className="text-xs text-white/90 mt-1">Relationship mapping</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-gray-800">
               <CardContent className="pt-6 text-center">
                 <TrendingDown className="w-8 h-8 text-amber-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Period Comparison</p>
-                <p className="text-xs text-white/60 mt-1">What changed vs last period</p>
+                <p className="text-xs text-white/90 mt-1">What changed vs last period</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-gray-800">
               <CardContent className="pt-6 text-center">
                 <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Attention Required</p>
-                <p className="text-xs text-white/60 mt-1">Areas needing focus</p>
+                <p className="text-xs text-white/90 mt-1">Areas needing focus</p>
               </CardContent>
             </Card>
           </div>
@@ -274,7 +274,7 @@ const ExecutiveAIInsights = () => {
                       </div>
                       <p className="text-white/85 text-sm mb-2">{insight.summary}</p>
                       {insight.details && (
-                        <p className="text-white/60 text-xs">{insight.details}</p>
+                        <p className="text-white/90 text-xs">{insight.details}</p>
                       )}
                       <p className="text-gray-600 text-xs mt-2">
                         Generated: {new Date(insight.timestamp).toLocaleString()}
@@ -319,7 +319,7 @@ const ExecutiveAIInsights = () => {
 
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-gray-800 text-center">
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-white/90">
               AI Strategic Insights • Supports judgment, does not replace it • All insights logged and explainable
             </p>
             <p className="text-xs text-gray-600 mt-1">

@@ -161,17 +161,17 @@ const AIObjectionHandlerPremium = () => {
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Heart className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-white/60">Empathy</p>
+              <p className="text-xs text-white/90">Empathy</p>
               <p className="text-sm font-semibold text-white">First</p>
             </Card>
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-white/60">Value</p>
+              <p className="text-xs text-white/90">Value</p>
               <p className="text-sm font-semibold text-white">Focused</p>
             </Card>
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Shield className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-white/60">Trust</p>
+              <p className="text-xs text-white/90">Trust</p>
               <p className="text-sm font-semibold text-white">Building</p>
             </Card>
         </div>
@@ -262,7 +262,7 @@ const AIObjectionHandlerPremium = () => {
                     <div className="space-y-2">
                       {response.alternatives.map((alt: string, i: number) => (
                         <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-white/85">
-                          <span className="text-xs text-white/60">Option {i + 1}:</span>
+                          <span className="text-xs text-white/90">Option {i + 1}:</span>
                           <p className="mt-1">{alt}</p>
                         </div>
                       ))}
@@ -281,7 +281,7 @@ const AIObjectionHandlerPremium = () => {
                 <MessageSquareReply className="h-12 w-12 text-rose-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Respond</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Enter a buyer objection to get AI-powered response suggestions with empathy-first approach
               </p>
             </motion.div>

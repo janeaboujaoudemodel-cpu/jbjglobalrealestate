@@ -59,7 +59,7 @@ function InspirationCarousel() {
             </div>
             <div className="absolute bottom-0 left-0 right-0 px-2.5 py-1.5">
               <p className="text-white text-[11px] font-bold leading-tight">{v.label}</p>
-              <p className="text-white/60 text-[9px] leading-tight">{v.sublabel}</p>
+              <p className="text-white/90 text-[9px] leading-tight">{v.sublabel}</p>
             </div>
           </div>
         ))}

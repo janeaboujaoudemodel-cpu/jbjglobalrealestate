@@ -645,7 +645,7 @@ const HeroSearchBar = () => {
             <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-white/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
               <span className="text-base leading-none">{currentCurrency.flag}</span>
               <span className="font-semibold">{currentCurrency.code}</span>
-              <ChevronDown className="w-3 h-3 text-white/60" />
+              <ChevronDown className="w-3 h-3 text-white/90" />
             </button>
           </PopoverTrigger>
           <PopoverContent 
@@ -724,7 +724,7 @@ const HeroSearchBar = () => {
               value={locationSearch}
               onChange={(e) => setLocationSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="bg-transparent border-none outline-none text-white placeholder:text-white/50 pl-2 pr-0 text-sm font-medium tracking-wide"
+              className="bg-transparent border-none outline-none text-white placeholder:text-white/90 pl-2 pr-0 text-sm font-medium tracking-wide"
             />
           </div>
           {/* Premium Gradient Divider */}
@@ -1184,7 +1184,7 @@ const HeroSearchBar = () => {
                       });
                       return EMIRATE_ORDER.filter(em => grouped[em]?.length).map(em => (
                         <div key={em}>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gold/80 bg-gold/5 border-y border-gold/10">{em}</div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-800 bg-gold/5 border-y border-gold/10">{em}</div>
                           {grouped[em]!.map(area => (
                             <button
                               key={area.id}
@@ -1211,7 +1211,7 @@ const HeroSearchBar = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-white font-bold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-gold/80 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
+                    <p className="text-gray-800 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
                   </div>
                   <ChevronDown className="w-5 h-5 text-gold -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -1313,7 +1313,7 @@ const HeroSearchBar = () => {
             value={locationSearch}
             onChange={(e) => setLocationSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/50 px-3 text-sm font-medium min-w-0 w-full"
+            className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/90 px-3 text-sm font-medium min-w-0 w-full"
           />
         </div>
 

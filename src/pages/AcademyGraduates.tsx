@@ -205,7 +205,7 @@ export default function AcademyGraduates() {
             ) : filteredCerts.length === 0 ? (
               <Card className="border-gold/20 bg-white/80">
                 <CardContent className="p-8 text-center">
-                  <GraduationCap className="w-12 h-12 text-gold/30 mx-auto mb-3" />
+                  <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-black/50">
                     {searchQuery ? "No graduates match your search." : "No graduates yet. Complete the certification program to be the first!"}
                   </p>
@@ -229,8 +229,8 @@ export default function AcademyGraduates() {
                           <h3 className="font-semibold text-black text-sm">{cert.full_name.split(" ")[0]}</h3>
                           <p className="text-black/40 text-xs mt-1">{cert.track}</p>
                           <div className="flex items-center justify-center gap-1.5 mt-2">
-                            <Hash className="w-3 h-3 text-gold/60" />
-                            <span className="text-xs text-gold/80 font-mono">{cert.certificate_number}</span>
+                            <Hash className="w-3 h-3 text-gray-600" />
+                            <span className="text-xs text-gray-800 font-mono">{cert.certificate_number}</span>
                           </div>
                           <div className="flex items-center justify-center gap-1.5 mt-1.5">
                             <Calendar className="w-3 h-3 text-black/30" />

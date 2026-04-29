@@ -363,7 +363,7 @@ const News = () => {
                               fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3';
                               const cat = filteredNews[0]?.category || 'News';
                               const src = filteredNews[0]?.source || '';
-                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-xs">${src}</span>`;
+                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gray-800 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-xs">${src}</span>`;
                               parent.insertBefore(fallback, e.currentTarget);
                             }
                           }}
@@ -438,7 +438,7 @@ const News = () => {
                           fallback.className = 'w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4';
                           const cat = article.category || 'News';
                           const src = article.source || '';
-                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-[10px]">${src}</span>`;
+                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gray-800 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-[10px]">${src}</span>`;
                           parent.insertBefore(fallback, e.currentTarget);
                         }
                       }}

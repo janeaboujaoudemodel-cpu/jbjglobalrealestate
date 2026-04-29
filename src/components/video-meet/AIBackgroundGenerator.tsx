@@ -173,7 +173,7 @@ const AIBackgroundGenerator = ({
           </div>
         )}
 
-        <p className="text-xs text-white/60 text-center">
+        <p className="text-xs text-white/90 text-center">
           AI-generated backgrounds require processing time
         </p>
       </CardContent>

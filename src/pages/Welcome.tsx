@@ -160,7 +160,7 @@ export default function Welcome() {
                       ? "bg-gold/20 border-gold"
                       : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-gold/60")} />
+                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-gray-600")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -176,7 +176,7 @@ export default function Welcome() {
                 <div className="space-y-1">
                   {cat.features.map((f) => (
                     <div key={f} className="flex items-center gap-2 text-xs text-gray-600">
-                      <Sparkles className="w-3 h-3 text-gold/50 flex-shrink-0" />
+                      <Sparkles className="w-3 h-3 text-gray-500 flex-shrink-0" />
                       <span>{f}</span>
                     </div>
                   ))}

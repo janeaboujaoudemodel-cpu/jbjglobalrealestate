@@ -157,7 +157,7 @@ const SellWithUs = () => {
                   Sell Your Property
                 </span>
                 <br />
-                <span className="text-white/40 text-4xl md:text-5xl lg:text-6xl">with Confidence</span>
+                <span className="text-white/85 text-4xl md:text-5xl lg:text-6xl">with Confidence</span>
               </motion.h1>
               
               <motion.p variants={fadeInUp} className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -218,7 +218,7 @@ const SellWithUs = () => {
                     className="group p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] hover:scale-[1.02] hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.05)] transition-all duration-500"
                   >
                     <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-white/10 transition-colors">
-                      <card.icon className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
+                      <card.icon className="w-6 h-6 text-white/90 group-hover:text-white transition-colors" />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">{card.title}</h3>
                     <p className="text-gray-600 leading-relaxed">{card.description}</p>
@@ -252,7 +252,7 @@ const SellWithUs = () => {
                     <div className="pb-10">
                       <div className="p-5 rounded-xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all duration-300">
                         <div className="flex items-center gap-3 mb-2">
-                          <step.icon className="w-5 h-5 text-white/50" />
+                          <step.icon className="w-5 h-5 text-white/90" />
                           <h3 className="text-lg font-semibold text-white">{step.title}</h3>
                         </div>
                         <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
@@ -441,7 +441,7 @@ const SellWithUs = () => {
                   {documentChecklist.map((item, index) => (
                     <li key={index} className="flex items-center gap-4 group">
                       <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/10 transition-colors">
-                        <CheckCircle className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+                        <CheckCircle className="w-4 h-4 text-white/90 group-hover:text-white transition-colors" />
                       </div>
                       <span className="text-gray-600 group-hover:text-white transition-colors">{item}</span>
                     </li>
@@ -458,7 +458,7 @@ const SellWithUs = () => {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-2 gap-6">
                 <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
-                  <MessageCircle className="w-10 h-10 text-white/40 mx-auto mb-4" />
+                  <MessageCircle className="w-10 h-10 text-white/85 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Speak to a Selling Advisor</h3>
                   <p className="text-gray-600 text-sm mb-6">Get personalized guidance from our licensed team</p>
                   <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl w-full">
@@ -468,7 +468,7 @@ const SellWithUs = () => {
                   </Button>
                 </motion.div>
                 <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
-                  <Sparkles className="w-10 h-10 text-white/40 mx-auto mb-4" />
+                  <Sparkles className="w-10 h-10 text-white/85 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Get Started Now</h3>
                   <p className="text-gray-600 text-sm mb-6">Use our AI tools to get an instant valuation</p>
                   <Button onClick={() => scrollTo(valuationRef)} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-xl w-full">

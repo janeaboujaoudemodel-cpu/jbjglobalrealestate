@@ -66,7 +66,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
           {/* Contact Info */}
           <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
             <div>
-              <p className="text-white/60">Contact</p>
+              <p className="text-white/90">Contact</p>
               <p className="text-white font-medium">{conversation.user_name || "Anonymous"}</p>
               <p className="text-white/70">{conversation.user_email}</p>
               {conversation.user_phone && (
@@ -74,7 +74,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
               )}
             </div>
             <div>
-              <p className="text-white/60">Details</p>
+              <p className="text-white/90">Details</p>
               <div className="flex items-center gap-2 text-white/70">
                 <Calendar className="w-3 h-3" />
                 <span>{format(new Date(conversation.created_at), "MMM d, yyyy")}</span>
@@ -107,7 +107,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
         <ScrollArea className="flex-1 h-[400px]">
           <div className="p-6 space-y-4">
             {messages.length === 0 ? (
-              <div className="text-center text-white/60 py-8">
+              <div className="text-center text-white/90 py-8">
                 No messages in this conversation
               </div>
             ) : (
@@ -134,7 +134,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     {message.timestamp && (
                       <p className={`text-xs mt-1 ${
-                        message.role === "user" ? "text-black/60" : "text-white/60"
+                        message.role === "user" ? "text-black/60" : "text-white/90"
                       }`}>
                         {format(new Date(message.timestamp), "h:mm a")}
                       </p>
@@ -154,7 +154,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-800 flex justify-between items-center">
-          <p className="text-xs text-white/60">
+          <p className="text-xs text-white/90">
             {messages.length} messages • Last updated {format(new Date(conversation.updated_at), "MMM d, h:mm a")}
           </p>
           <Button onClick={onClose} variant="outline" className="border-gray-700">

@@ -459,10 +459,10 @@ const JBJDesignStudio: React.FC = () => {
                               }`}
                             >
                               <div className="aspect-video bg-zinc-700 rounded mb-2 flex items-center justify-center min-h-[60px]">
-                                <Layers className="w-6 h-6 text-white/60" />
+                                <Layers className="w-6 h-6 text-white/90" />
                               </div>
                               <p className="text-white text-xs font-medium truncate">{template.name}</p>
-                              <p className="text-white/60 text-[10px]">{template.size}</p>
+                              <p className="text-white/90 text-[10px]">{template.size}</p>
                             </motion.button>
                           ))}
                         </div>
@@ -476,7 +476,7 @@ const JBJDesignStudio: React.FC = () => {
                           <h4 className="text-white/70 text-xs font-medium">Active Palette</h4>
                           <button 
                             onClick={() => setSelectedPalette(null)}
-                            className="text-white/60 hover:text-white/70"
+                            className="text-white/90 hover:text-white/70"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -518,7 +518,7 @@ const JBJDesignStudio: React.FC = () => {
                             <Wand2 className="w-10 h-10 text-purple-400" />
                           </div>
                           <h3 className="text-white font-semibold mb-2">{selectedTemplate.name}</h3>
-                          <p className="text-white/60 text-sm mb-4">Size: {selectedTemplate.size}</p>
+                          <p className="text-white/90 text-sm mb-4">Size: {selectedTemplate.size}</p>
                           <p className="text-white/70 text-sm max-w-sm mx-auto">
                             Describe what you want to create in the AI Assistant panel.
                           </p>
@@ -529,7 +529,7 @@ const JBJDesignStudio: React.FC = () => {
                             <ImagePlus className="w-10 h-10 text-gray-600" />
                           </div>
                           <h3 className="text-white/70 font-medium mb-2">Select a Template</h3>
-                          <p className="text-white/60 text-sm">Choose a template from the left panel to get started</p>
+                          <p className="text-white/90 text-sm">Choose a template from the left panel to get started</p>
                         </div>
                       )}
 
@@ -697,7 +697,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">Maya Chen</h4>
                       <p className="text-gold text-sm">Lead AI Designer</p>
-                      <p className="text-white/60 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
+                      <p className="text-white/90 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
                     </div>
 
                     {/* Brand Manager Persona */}
@@ -707,7 +707,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">Victoria Reynolds</h4>
                       <p className="text-gold text-sm">Brand Director</p>
-                      <p className="text-white/60 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
+                      <p className="text-white/90 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
                     </div>
 
                     {/* Content Designer Persona */}
@@ -717,7 +717,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">James Porter</h4>
                       <p className="text-gold text-sm">Content Designer</p>
-                      <p className="text-white/60 text-xs mt-2">Creates books, reports, and long-form visual content</p>
+                      <p className="text-white/90 text-xs mt-2">Creates books, reports, and long-form visual content</p>
                     </div>
                   </div>
                 </div>

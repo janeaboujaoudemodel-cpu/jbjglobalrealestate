@@ -301,7 +301,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           <div className="flex items-center justify-between mb-8">
             <div>
               {!embedded && (
-                <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-gold hover:text-gold/80 hover:bg-gold/10">
+                <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2 text-gold hover:text-gray-800 hover:bg-gold/10">
                   <ArrowLeft className="w-4 h-4 mr-2" /> Back
                 </Button>
               )}

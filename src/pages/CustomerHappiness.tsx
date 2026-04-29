@@ -196,7 +196,7 @@ const SupportTicketForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
             placeholder="John Smith"
           />
         </div>
@@ -210,7 +210,7 @@ const SupportTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
             placeholder="john@example.com"
           />
         </div>
@@ -224,7 +224,7 @@ const SupportTicketForm = () => {
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
             placeholder="+971 50 123 4567"
           />
         </div>
@@ -266,7 +266,7 @@ const SupportTicketForm = () => {
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
           placeholder="Brief description of your inquiry"
         />
       </div>
@@ -297,7 +297,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
@@ -485,7 +485,7 @@ const FeedbackForm = () => {
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
@@ -654,7 +654,7 @@ const IssueReportForm = () => {
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
@@ -666,7 +666,7 @@ const IssueReportForm = () => {
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Copy and paste any error message you see"
         />
       </div>
@@ -679,7 +679,7 @@ const IssueReportForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Describe what's not working..."
         />
       </div>
@@ -691,7 +691,7 @@ const IssueReportForm = () => {
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
@@ -900,7 +900,7 @@ const IdeaBoxForm = () => {
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Give your idea a catchy title"
         />
       </div>
@@ -913,7 +913,7 @@ const IdeaBoxForm = () => {
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
@@ -925,7 +925,7 @@ const IdeaBoxForm = () => {
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>

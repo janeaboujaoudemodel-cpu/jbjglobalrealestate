@@ -227,7 +227,7 @@ const SupportTicketHub = () => {
           {/* Filters */}
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/70" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700" />
               <input
                 type="text"
                 value={filters.search}
@@ -238,7 +238,7 @@ const SupportTicketHub = () => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gold/70" />
+              <Filter className="w-4 h-4 text-gray-700" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
@@ -367,7 +367,7 @@ const SupportTicketHub = () => {
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
                   <AlertCircle className="w-12 h-12 text-red-400/50 mx-auto mb-3" />
                   <p className="text-red-400 font-medium">Failed to load tickets</p>
-                  <p className="text-white/60 text-sm mt-1">
+                  <p className="text-white/90 text-sm mt-1">
                     {error instanceof Error ? error.message : "Please try again"}
                   </p>
                   <Button
@@ -494,9 +494,9 @@ const SupportTicketHub = () => {
                 </div>
               ) : (
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
-                  <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
+                  <Ticket className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-white/70 font-medium">No tickets found</p>
-                  <p className="text-white/60 text-sm mt-1">
+                  <p className="text-white/90 text-sm mt-1">
                     Try adjusting your filters or check back later
                   </p>
                 </div>

@@ -488,7 +488,7 @@ const Compare = () => {
     const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#DC2626';
     return (
       <div className="flex items-center gap-2">
-        <span className="text-[10px] text-white/60 w-20 shrink-0 text-right">{label}</span>
+        <span className="text-[10px] text-white/90 w-20 shrink-0 text-right">{label}</span>
         <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
           <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
         </div>
@@ -545,7 +545,7 @@ const Compare = () => {
               <div className="text-center mb-12">
                 <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
                 <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-white/60 text-xs mt-0.5">JBJ Global Real Estate</p>
+                <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
 
@@ -589,7 +589,7 @@ const Compare = () => {
                 <div key={f.label} className="bg-zinc-900/50 border border-gray-800 rounded-xl p-4 text-center">
                   <f.icon className="w-6 h-6 text-gold mx-auto mb-2" />
                   <p className="text-white text-sm font-medium">{f.label}</p>
-                  <p className="text-white/60 text-xs">{f.sub}</p>
+                  <p className="text-white/90 text-xs">{f.sub}</p>
                 </div>
               ))}
             </div>
@@ -613,7 +613,7 @@ const Compare = () => {
               </button>
             </Link>
             
-            <p className="text-white/60 text-sm mt-6">
+            <p className="text-white/90 text-sm mt-6">
               Need help? Our team is available 24/7 to assist you.
             </p>
           </div>
@@ -655,7 +655,7 @@ const Compare = () => {
               <div className="mt-2">
                 <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
                 <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-white/60 text-xs mt-0.5">JBJ Global Real Estate</p>
+                <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
 
@@ -672,7 +672,7 @@ const Compare = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium">{f.title}</p>
-                    <p className="text-gold/50 text-sm">{f.sub}</p>
+                    <p className="text-gray-500 text-sm">{f.sub}</p>
                   </div>
                 </div>
               ))}
@@ -761,7 +761,7 @@ const Compare = () => {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left py-4 px-4 text-white/60 font-medium border-b border-gray-800 sticky left-0 bg-zinc-900 z-10">
+                  <th className="text-left py-4 px-4 text-white/90 font-medium border-b border-gray-800 sticky left-0 bg-zinc-900 z-10">
                     Feature
                   </th>
                     {projects.map((project) => {
@@ -778,14 +778,14 @@ const Compare = () => {
                               {badge && (
                                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
                                   badge === 'top1' ? 'bg-gold/20 text-gold' :
-                                  badge === 'top2' ? 'bg-gold/15 text-gold/80' :
-                                  'bg-gold/10 text-gold/60'
+                                  badge === 'top2' ? 'bg-gold/15 text-gray-800' :
+                                  'bg-gold/10 text-gray-600'
                                 }`}>
                                   {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                                 </span>
                               )}
                               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-white/60'
+                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-white/90'
                               }`}>
                                 <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                                 {isFav ? 'In Favorites' : 'Not Saved'}
@@ -799,7 +799,7 @@ const Compare = () => {
                               />
                             </div>
                             <h3 className="text-white font-semibold">{project.name}</h3>
-                            <p className="text-white/60 text-sm truncate">{project.developer?.name}</p>
+                            <p className="text-white/90 text-sm truncate">{project.developer?.name}</p>
                         </div>
                       </th>
                     );
@@ -892,7 +892,7 @@ const Compare = () => {
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
                         <div className="flex items-center gap-2">
                           <span className="text-2xl font-bold" style={{ color: '#B8943E' }}>{toScore(rating.overallRating)}</span>
-                          <span className="text-white/60 text-xs">/10</span>
+                          <span className="text-white/90 text-xs">/10</span>
                         </div>
                       </div>
                       
@@ -1027,7 +1027,7 @@ const Compare = () => {
                 )}
               </Button>
               {projects.length < 2 && (
-                <p className="text-white/60 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
+                <p className="text-white/90 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
               )}
             </div>
           )}
@@ -1040,7 +1040,7 @@ const Compare = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-gold/60 text-sm">Speak with our property consultants</p>
+                <p className="text-gray-600 text-sm">Speak with our property consultants</p>
               </div>
             </div>
 

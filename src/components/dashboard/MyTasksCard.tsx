@@ -340,7 +340,7 @@ export default function MyTasksCard() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-8">
-            <ListChecks className="w-8 h-8 text-gold/30 mx-auto mb-2" />
+            <ListChecks className="w-8 h-8 text-gray-400 mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">
               {filter === "all" ? "No tasks yet. Click + to add one." : filter === "completed" ? "No completed tasks yet." : "No pending tasks."}
             </p>
@@ -418,9 +418,9 @@ export default function MyTasksCard() {
                         </span>
                       )}
                       {/* Indicator icons for contact/url/attachments */}
-                      {task.client_contact && <Phone className="w-3 h-3 text-gold/50" />}
-                      {task.reference_url && <Link2 className="w-3 h-3 text-gold/50" />}
-                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-gold/50" />}
+                      {task.client_contact && <Phone className="w-3 h-3 text-gray-500" />}
+                      {task.reference_url && <Link2 className="w-3 h-3 text-gray-500" />}
+                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-gray-500" />}
                     </div>
                   </div>
 
@@ -428,7 +428,7 @@ export default function MyTasksCard() {
                   {!selectionMode && (
                     <div className="flex items-center gap-1.5 shrink-0">
                       {getTaskRoute(task) && (
-                        <ChevronRight className="w-4 h-4 text-gold/60 group-hover:text-gold transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gold transition-colors" />
                       )}
                       <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       {isCompleted && (

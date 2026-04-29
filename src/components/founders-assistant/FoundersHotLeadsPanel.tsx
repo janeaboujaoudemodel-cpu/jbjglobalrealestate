@@ -268,7 +268,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
           {leads.length === 0 ? (
             <Card className="bg-white border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
-                <Flame className="w-16 h-16 text-gold/30 mx-auto mb-4" />
+                <Flame className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h4 className="text-black font-semibold mb-2">No Hot Leads</h4>
                 <p className="text-gray-600">No hot leads at the moment</p>
                 <p className="text-sm text-gray-600 mt-1">Great job staying on top of your leads!</p>

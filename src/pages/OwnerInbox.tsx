@@ -263,7 +263,7 @@ export default function OwnerInbox() {
                     </div>
                   ) : threads.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                      <MessageSquare className="h-12 w-12 text-gold/40 mb-4" />
+                      <MessageSquare className="h-12 w-12 text-gray-500 mb-4" />
                       <p className="text-gray-600 font-medium">No conversations yet</p>
                       <p className="text-gray-600 text-sm mt-1">Connect channels to start receiving messages</p>
                     </div>
@@ -294,7 +294,7 @@ export default function OwnerInbox() {
               ) : (
                 <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
                   <div className="text-center p-8">
-                    <MessageSquare className="h-16 w-16 text-gold/30 mx-auto mb-4" />
+                    <MessageSquare className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-600 font-medium">Select a conversation</p>
                     <p className="text-gray-600 text-sm mt-1">Choose a thread from the list to view messages</p>
                   </div>

@@ -344,7 +344,7 @@ ${response.script}
                   <Video className="h-12 w-12 text-pink-400/50" />
                 </div>
                 <h3 className="text-lg font-semibold text-white/70">Ready to Script</h3>
-                <p className="text-sm text-white/60 mt-2 max-w-sm">
+                <p className="text-sm text-white/90 mt-2 max-w-sm">
                   Enter property details to generate a professional video tour script with hooks and CTAs
                 </p>
               </motion.div>

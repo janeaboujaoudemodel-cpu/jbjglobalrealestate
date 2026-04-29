@@ -688,7 +688,7 @@ const VideoMeeting = () => {
                   <div className="w-full border-t border-violet-500/30" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-violet-900/20 px-2 text-white/60">or</span>
+                  <span className="bg-violet-900/20 px-2 text-white/90">or</span>
                 </div>
               </div>
 
@@ -701,7 +701,7 @@ const VideoMeeting = () => {
               </Button>
             </div>
 
-            <p className="text-center text-white/60 text-sm mt-4">
+            <p className="text-center text-white/90 text-sm mt-4">
               Unlimited meeting time • No account required • Encrypted connections
             </p>
           </div>
@@ -1107,12 +1107,12 @@ const VideoMeeting = () => {
                     className={`${msg.isSystem ? 'text-center' : ''}`}
                   >
                     {msg.isSystem ? (
-                      <span className="text-xs text-white/60 italic">{msg.message}</span>
+                      <span className="text-xs text-white/90 italic">{msg.message}</span>
                     ) : (
                       <div className="bg-zinc-800 rounded-lg p-3">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-white text-sm font-medium">{msg.sender}</span>
-                          <span className="text-white/60 text-xs">
+                          <span className="text-white/90 text-xs">
                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
@@ -1525,7 +1525,7 @@ const VideoMeeting = () => {
               Continue to Meeting
             </Button>
           </div>
-          <p className="text-white/60 text-xs text-center">
+          <p className="text-white/90 text-xs text-center">
             End-to-end encrypted — No data shared without your permission
           </p>
         </DialogContent>
@@ -1546,11 +1546,11 @@ const VideoMeeting = () => {
             </div>
             <div className="bg-zinc-800/50 rounded-xl p-4 border border-gray-700">
               <p className="text-gold text-sm font-medium">JBJ Global Real Estate</p>
-              <p className="text-white/60 text-xs mt-1">
+              <p className="text-white/90 text-xs mt-1">
                 Thank you for joining our video meeting. We appreciate your time.
               </p>
             </div>
-            <p className="text-white/60 text-sm">
+            <p className="text-white/90 text-sm">
               You will be redirected shortly...
             </p>
           </div>

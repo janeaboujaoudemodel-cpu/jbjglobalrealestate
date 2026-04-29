@@ -145,7 +145,7 @@ const ListingAdminManager = () => {
             </div>
             <div>
               <CardTitle className="text-white">Listing Admins</CardTitle>
-              <p className="text-white/60 text-sm">
+              <p className="text-white/90 text-sm">
                 Staff who can add & manage property listings
               </p>
             </div>
@@ -184,7 +184,7 @@ const ListingAdminManager = () => {
                       )}
                     </Button>
                   </div>
-                  <p className="text-white/60 text-xs mt-1">
+                  <p className="text-white/90 text-xs mt-1">
                     User must have an account first
                   </p>
                 </div>
@@ -251,7 +251,7 @@ const ListingAdminManager = () => {
       </CardHeader>
       <CardContent className="p-4">
         {listingAdmins.length === 0 ? (
-          <div className="text-center py-12 text-white/60">
+          <div className="text-center py-12 text-white/90">
             <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>No Listing Admins yet</p>
             <p className="text-sm">Add staff members who will manage property listings</p>
@@ -268,7 +268,7 @@ const ListingAdminManager = () => {
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       admin.is_active
                         ? "bg-gold/20 text-gold"
-                        : "bg-zinc-700 text-white/60"
+                        : "bg-zinc-700 text-white/90"
                     }`}
                   >
                     <User className="w-5 h-5" />
@@ -286,7 +286,7 @@ const ListingAdminManager = () => {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-white/60 text-sm flex items-center gap-1">
+                    <p className="text-white/90 text-sm flex items-center gap-1">
                       <Mail className="w-3 h-3" />
                       {admin.email}
                     </p>

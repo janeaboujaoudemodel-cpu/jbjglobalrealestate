@@ -269,7 +269,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-white/70">Colors</Label>
-                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-gold/80">
+                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-gray-800">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Color
                   </Button>
@@ -364,7 +364,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
       ) : palettes.length === 0 ? (
         <div className="text-center py-6">
           <FolderOpen className="w-10 h-10 text-gray-600 mx-auto mb-2" />
-          <p className="text-white/60 text-sm">No custom palettes yet</p>
+          <p className="text-white/90 text-sm">No custom palettes yet</p>
           <p className="text-gray-600 text-xs">Create your first palette above</p>
         </div>
       ) : (
@@ -397,7 +397,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                         size="icon"
                         variant="ghost"
                         onClick={(e) => { e.stopPropagation(); handleSetDefault(palette.id); }}
-                        className="w-6 h-6 text-white/60 hover:text-gold"
+                        className="w-6 h-6 text-white/90 hover:text-gold"
                         title="Set as default"
                       >
                         <Star className="w-3 h-3" />
@@ -407,7 +407,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                       size="icon"
                       variant="ghost"
                       onClick={(e) => { e.stopPropagation(); handleDeletePalette(palette.id); }}
-                      className="w-6 h-6 text-white/60 hover:text-red-400"
+                      className="w-6 h-6 text-white/90 hover:text-red-400"
                     >
                       <Trash2 className="w-3 h-3" />
                     </Button>
@@ -424,7 +424,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   ))}
                 </div>
                 {palette.description && (
-                  <p className="text-white/60 text-xs mt-2 truncate">{palette.description}</p>
+                  <p className="text-white/90 text-xs mt-2 truncate">{palette.description}</p>
                 )}
               </motion.div>
             ))}

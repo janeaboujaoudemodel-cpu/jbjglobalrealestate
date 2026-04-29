@@ -85,7 +85,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                 {book.title}
               </h2>
             </div>
-            <p className="text-sm text-white/60 mb-6 flex items-center gap-2">
+            <p className="text-sm text-white/90 mb-6 flex items-center gap-2">
               <Clock className="w-4 h-4" />
               {book.tableOfContents.length} chapters &middot; ~{totalTime} min total reading time
             </p>

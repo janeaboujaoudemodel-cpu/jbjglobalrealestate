@@ -288,7 +288,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
       {/* Empty State */}
       {!selectedFile && (
         <div className="text-center py-8 text-gray-600">
-          <Upload className="w-12 h-12 mx-auto mb-2 text-gold/40" />
+          <Upload className="w-12 h-12 mx-auto mb-2 text-gray-500" />
           <p className="text-gray-600">Select a document to automatically detect the project</p>
           <p className="text-sm mt-1 text-gray-600">Duplicates will be blocked</p>
         </div>

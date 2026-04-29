@@ -922,7 +922,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           >
                             <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                             <span className="flex-1">{link.label}</span>
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gray-600'}`} />
                           </Link>
                         );
                       })}
@@ -995,7 +995,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     >
                       <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
+                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gray-600'}`} />
                     </Link>
                   );
                 })}
@@ -1019,7 +1019,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <BookOpen className="w-4 h-4 text-gold flex-shrink-0" />
                     <span className="flex-1">Read Area Guides</span>
-                    <ChevronRight className="w-3 h-3 text-gold/60 flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-gray-600 flex-shrink-0" />
                   </Link>
                 )}
               </div>
@@ -1080,7 +1080,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gray-600'}`} />
                   </Link>
                 );
               })}
@@ -1130,7 +1130,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <Zap className="w-3.5 h-3.5 text-gold" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/25"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gray-400"}`} />
           </button>
         </div>
 
@@ -1158,7 +1158,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
-                  <Sparkles className="w-3 h-3 text-gold/40" />
+                  <Sparkles className="w-3 h-3 text-gray-500" />
                 )}
               </Link>
             );

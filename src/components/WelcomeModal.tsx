@@ -175,7 +175,7 @@ const WelcomeModal = () => {
             </div>
 
             {/* Loyalty hint */}
-            <p className="text-center text-white/60 text-xs mt-6 leading-relaxed">
+            <p className="text-center text-white/90 text-xs mt-6 leading-relaxed">
               Sign in to earn loyalty points on every activity —<br />
               redeemable on purchases & subscriptions
             </p>

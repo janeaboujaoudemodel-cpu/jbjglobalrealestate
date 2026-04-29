@@ -228,7 +228,7 @@ export default function ContractForms() {
                   <h3 className="text-lg font-bold text-foreground mb-1">
                     {template.name}
                   </h3>
-                  <p className="text-sm text-gold/80 font-arabic mb-3" dir="rtl">
+                  <p className="text-sm text-gray-800 font-arabic mb-3" dir="rtl">
                     {template.arabicName}
                   </p>
 

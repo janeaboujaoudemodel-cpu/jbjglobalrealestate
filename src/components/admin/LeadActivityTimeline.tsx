@@ -207,7 +207,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
 
   if (!email) {
     return (
-      <div className="flex items-center justify-center py-16 text-white/60">
+      <div className="flex items-center justify-center py-16 text-white/90">
         <AlertCircle className="w-5 h-5 mr-2" />
         No email address — cannot look up activity.
       </div>
@@ -254,7 +254,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
           {error}
         </div>
       ) : events.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 text-white/60 gap-2">
+        <div className="flex flex-col items-center justify-center py-12 text-white/90 gap-2">
           <Activity className="w-8 h-8 text-gray-700" />
           <p className="text-sm">No activity recorded yet for this lead.</p>
           <p className="text-xs text-gray-600">Activity is tracked after form submission.</p>
@@ -301,7 +301,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                           )}
                         </div>
                         <time
-                          className="text-white/60 text-[11px] flex-shrink-0"
+                          className="text-white/90 text-[11px] flex-shrink-0"
                           title={format(new Date(event.created_at), "PPpp")}
                         >
                           {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
@@ -309,7 +309,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                       </div>
                       {path !== "—" && (
                         <p
-                          className="text-white/60 text-[11px] mt-1 font-mono truncate max-w-[340px]"
+                          className="text-white/90 text-[11px] mt-1 font-mono truncate max-w-[340px]"
                           title={path}
                         >
                           {path}

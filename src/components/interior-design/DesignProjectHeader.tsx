@@ -215,7 +215,7 @@ const DesignProjectHeader = ({
                 Measure
               </Button>
             </div>
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-white/90">
               Use our AI Measurement tool to calculate your space dimensions
             </p>
           </div>

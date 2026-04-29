@@ -161,7 +161,7 @@ const PreJoinForm = ({
                   </Button>
                 </div>
               </div>
-              <p className="text-xs text-white/60 text-center">
+              <p className="text-xs text-white/90 text-center">
                 Camera and microphone are off by default. Click to enable.
               </p>
             </CardContent>
@@ -258,7 +258,7 @@ const PreJoinForm = ({
                 />
                 <label htmlFor="agree-terms" className="text-white/85 text-xs leading-tight cursor-pointer">
                   I agree to the terms and consent to have my meeting data processed. 
-                  <span className="text-white/60 block mt-1">
+                  <span className="text-white/90 block mt-1">
                     Your details are only visible to the meeting host.
                   </span>
                 </label>
@@ -276,7 +276,7 @@ const PreJoinForm = ({
           </Card>
         </div>
 
-        <p className="text-center text-white/60 text-sm mt-4">
+        <p className="text-center text-white/90 text-sm mt-4">
           Unlimited meeting time • Encrypted connections • First name only shown to participants
         </p>
       </div>

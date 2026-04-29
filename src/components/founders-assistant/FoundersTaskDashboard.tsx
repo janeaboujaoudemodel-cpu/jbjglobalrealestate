@@ -333,7 +333,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
           {filteredTasks.length === 0 ? (
             <Card className="bg-white border-2 border-gold/20">
               <CardContent className="p-8 text-center">
-                <CheckCircle2 className="w-16 h-16 text-gold/30 mx-auto mb-4" />
+                <CheckCircle2 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h4 className="text-black font-semibold mb-2">No Tasks Found</h4>
                 <p className="text-gray-600">No tasks found in this category</p>
                 <p className="text-sm text-gray-600 mt-1">Ask Amanda to create tasks for you</p>

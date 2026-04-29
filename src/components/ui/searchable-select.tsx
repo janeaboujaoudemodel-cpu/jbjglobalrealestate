@@ -96,7 +96,7 @@ export function SearchableSelect({
             {selectedFlag && <span className="text-xl leading-none">{selectedFlag}</span>}
             {value || placeholder}
           </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-gold/60" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-gray-600" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -112,7 +112,7 @@ export function SearchableSelect({
       >
         <div className="p-2 border-b border-gold/20">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold/60" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
@@ -164,7 +164,7 @@ export function SearchableSelect({
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base">{option}</span>
                   {option === priorityItem && (
-                    <span className="ml-auto text-xs text-gold/60">Default</span>
+                    <span className="ml-auto text-xs text-gray-600">Default</span>
                   )}
                 </button>
               );

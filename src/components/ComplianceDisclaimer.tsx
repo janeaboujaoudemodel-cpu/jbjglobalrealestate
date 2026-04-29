@@ -65,7 +65,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             <h4 className="text-white font-semibold">
               {language === "ar" ? "إشعار قانوني وإخلاء مسؤولية" : "Legal Notice & Disclaimer"}
             </h4>
-            <p className="text-white/60 text-xs">
+            <p className="text-white/90 text-xs">
               {language === "ar" ? "جي بي جي جلوبال للعقارات | وساطة عقارية" : "JBJ Global Real Estate | Real Estate Brokerage"}
             </p>
           </div>

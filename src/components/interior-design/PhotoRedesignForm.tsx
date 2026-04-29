@@ -139,13 +139,13 @@ const PhotoRedesignForm = ({
               onClick={() => fileInputRef.current?.click()}
               className="aspect-square rounded-xl border-2 border-dashed border-gray-700 hover:border-blue-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
-              <Upload className="w-8 h-8 text-white/60" />
-              <span className="text-xs text-white/60">Add Photo</span>
+              <Upload className="w-8 h-8 text-white/90" />
+              <span className="text-xs text-white/90">Add Photo</span>
             </button>
           )}
         </div>
 
-        <p className="text-xs text-white/60">
+        <p className="text-xs text-white/90">
           Upload up to 4 photos of your room. The AI will transform them based on your style preferences.
         </p>
       </div>

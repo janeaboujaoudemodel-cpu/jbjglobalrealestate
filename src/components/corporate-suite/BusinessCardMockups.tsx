@@ -38,7 +38,7 @@ export function PocketMockup({ children, finishEffect }: { children: React.React
           </div>
         </div>
       </div>
-      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-white/30 tracking-[0.2em] uppercase">Pocket Preview</p>
+      <p className="absolute bottom-3 left-0 right-0 text-center text-[9px] font-semibold text-white/85 tracking-[0.2em] uppercase">Pocket Preview</p>
     </div>
   );
 }

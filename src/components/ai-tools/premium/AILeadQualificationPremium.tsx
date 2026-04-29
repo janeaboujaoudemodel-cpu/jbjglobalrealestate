@@ -331,7 +331,7 @@ const AILeadQualificationPremium = () => {
                 <UserCheck className="h-12 w-12 text-purple-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Qualify</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Enter lead information to get AI-powered qualification scoring with conversion probability
               </p>
             </motion.div>

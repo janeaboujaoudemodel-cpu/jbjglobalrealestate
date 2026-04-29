@@ -453,7 +453,7 @@ export default function ReportsManagementPanel() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-gold hover:text-gold/80"
+                        className="text-gold hover:text-gray-800"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedReport(report);

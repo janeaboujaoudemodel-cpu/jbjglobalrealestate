@@ -150,7 +150,7 @@ const VisitorDashboard = () => {
                           <h3 className="font-medium text-white group-hover:text-gold transition-colors">
                             {item.title}
                           </h3>
-                          <p className="text-sm text-white/60">{item.description}</p>
+                          <p className="text-sm text-white/90">{item.description}</p>
                         </div>
                       </CardContent>
                     </Card>

@@ -127,7 +127,7 @@ export default function ProjectMediaSection({
             className="group relative rounded-xl border-2 border-gold/30 bg-card overflow-hidden aspect-video hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
           >
             <div className="w-full h-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center">
-              <Eye className="w-16 h-16 text-gold/60 group-hover:scale-110 transition-transform" />
+              <Eye className="w-16 h-16 text-gray-600 group-hover:scale-110 transition-transform" />
             </div>
             
             {/* Label */}

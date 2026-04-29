@@ -465,7 +465,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 </Popover>
               </div>
               {dueDate && (
-                <p className="text-xs text-gold/70">Saved: {formatDateDisplay(dueDate)}</p>
+                <p className="text-xs text-gray-700">Saved: {formatDateDisplay(dueDate)}</p>
               )}
             </div>
 
@@ -515,7 +515,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             {leadMode === "select" && (
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/60" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                   <Input
                     value={leadSearch}
                     onChange={(e) => setLeadSearch(e.target.value)}
@@ -577,7 +577,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-600 text-sm"
                   />
                 </div>
-                <p className="col-span-2 text-xs text-gold/70 flex items-center gap-1">
+                <p className="col-span-2 text-xs text-gray-700 flex items-center gap-1">
                   <UserPlus className="w-3 h-3" /> This lead will be added to your CRM under "Manual — Task Source"
                 </p>
               </div>
@@ -621,7 +621,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 </div>
               ) : (
                 <div className="text-gray-600 text-sm">
-                  <Upload className="w-5 h-5 mx-auto mb-1 text-gold/60" />
+                  <Upload className="w-5 h-5 mx-auto mb-1 text-gray-600" />
                   Click to upload documents (PDF, images, spreadsheets)
                 </div>
               )}

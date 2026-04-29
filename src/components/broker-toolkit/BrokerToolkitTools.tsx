@@ -491,7 +491,7 @@ export function BrokerToolkitTools() {
                   </div>
                 </div>
                 <ArrowRight
-                  className="w-5 h-5 text-white/50 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0"
+                  className="w-5 h-5 text-white/90 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0"
                 />
               </div>
             </CardContent>

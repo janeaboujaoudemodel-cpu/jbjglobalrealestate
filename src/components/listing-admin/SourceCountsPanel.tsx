@@ -146,7 +146,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
           variant="ghost"
           size="sm"
           onClick={() => refreshCounts()}
-          className="h-6 text-xs text-gold hover:text-gold/80 hover:bg-gold/10"
+          className="h-6 text-xs text-gold hover:text-gray-800 hover:bg-gold/10"
         >
           <RefreshCw className="w-3 h-3 mr-1" />
           Refresh

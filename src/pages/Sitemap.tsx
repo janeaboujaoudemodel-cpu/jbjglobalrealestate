@@ -469,7 +469,7 @@ const Sitemap = () => {
               {/* Last Updated */}
               <motion.p 
                 variants={fadeInUp}
-                className="text-white/60 text-xs"
+                className="text-white/90 text-xs"
               >
                 Last Updated: {lastUpdated}
               </motion.p>

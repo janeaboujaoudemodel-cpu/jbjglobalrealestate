@@ -219,7 +219,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 value={whatDidntWork}
                 onChange={(e) => setWhatDidntWork(e.target.value)}
                 placeholder="Tell us what went wrong..."
-                className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 text-xs h-16 resize-none"
+                className="bg-white/10 border-gold/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
               />
             </div>
           )}
@@ -231,7 +231,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               value={whatImprove}
               onChange={(e) => setWhatImprove(e.target.value)}
               placeholder="Your suggestions help us get better..."
-              className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 text-xs h-16 resize-none"
+              className="bg-white/10 border-gold/20 text-white placeholder:text-white/85 text-xs h-16 resize-none"
             />
           </div>
 
@@ -240,7 +240,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Any additional comments? (optional)"
-            className="bg-white/10 border-gold/20 text-white placeholder:text-white/40 mb-3 text-xs h-9"
+            className="bg-white/10 border-gold/20 text-white placeholder:text-white/85 mb-3 text-xs h-9"
           />
 
           <div className="flex gap-3 mt-auto">

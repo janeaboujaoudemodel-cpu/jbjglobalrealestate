@@ -33,6 +33,10 @@ jobs:
       - name: Check static white-on-light regressions
         run: node scripts/contrast/check-white-on-light.mjs
 
+      # ---------- Layer 1c: static faded-gold guard ----------
+      - name: Check faded-gold regressions
+        run: node scripts/contrast/check-faded-gold.mjs
+
       # ---------- Layer 2: rendered pages (Playwright + axe) ----------
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

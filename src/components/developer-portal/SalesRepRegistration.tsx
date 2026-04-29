@@ -267,7 +267,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               </div>
             ) : (
               <>
-                <Upload className="w-5 h-5 mx-auto text-gold/60 mb-1" />
+                <Upload className="w-5 h-5 mx-auto text-gray-600 mb-1" />
                 <p className="text-xs font-medium text-foreground">Click to upload</p>
                 <p className="text-[10px] text-muted-foreground mt-0.5">JPG, PNG, or PDF</p>
               </>

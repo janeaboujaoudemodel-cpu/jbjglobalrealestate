@@ -226,10 +226,10 @@ const BrokerCertification = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <GraduationCap className="w-12 h-12 text-gold/60" />
+                <GraduationCap className="w-12 h-12 text-gray-600" />
               </div>
-              <p className="text-gold/60 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
-              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
+              <p className="text-gray-600 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
+              <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
@@ -278,7 +278,7 @@ const BrokerCertification = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -405,7 +405,7 @@ const BrokerCertification = () => {
                         </div>
                         
                         <div className="mb-4">
-                          <p className="text-xs text-white/60 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
+                          <p className="text-xs text-white/90 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
@@ -417,7 +417,7 @@ const BrokerCertification = () => {
                         </div>
                         
                         <div className="bg-black/10 rounded-lg p-3 border border-gold/20">
-                          <p className="text-xs text-white/60 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
+                          <p className="text-xs text-white/90 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
                           <p className="text-sm text-gray-700">{module.completionCheck}</p>
                         </div>
                       </div>

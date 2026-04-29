@@ -239,7 +239,7 @@ export function EmbeddedSupportTickets() {
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/70" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700" />
               <input
                 type="text"
                 value={filters.search}
@@ -250,7 +250,7 @@ export function EmbeddedSupportTickets() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gold/70" />
+              <Filter className="w-4 h-4 text-gray-700" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
@@ -455,7 +455,7 @@ export function EmbeddedSupportTickets() {
                               {status.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-gold/70 text-xs whitespace-nowrap">
+                          <TableCell className="text-gray-700 text-xs whitespace-nowrap">
                             {format(new Date(ticket.created_at), "MMM d, HH:mm")}
                           </TableCell>
                         </TableRow>
@@ -466,9 +466,9 @@ export function EmbeddedSupportTickets() {
               </div>
             ) : (
               <CardContent className="p-12 text-center">
-                <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
-                <p className="text-gold/70 font-medium">No tickets found</p>
-                <p className="text-gold/50 text-sm mt-1">
+                <Ticket className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-700 font-medium">No tickets found</p>
+                <p className="text-gray-500 text-sm mt-1">
                   Try adjusting your filters
                 </p>
               </CardContent>

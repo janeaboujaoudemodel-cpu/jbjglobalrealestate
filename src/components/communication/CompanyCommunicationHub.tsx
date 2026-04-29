@@ -295,7 +295,7 @@ const CompanyCommunicationHub = () => {
         {/* Search */}
         <div className="p-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
             <Input
               placeholder="Search messages..."
               value={searchQuery}
@@ -344,7 +344,7 @@ const CompanyCommunicationHub = () => {
             </DropdownMenu>
           </div>
           {translation.enabled && (
-            <p className="text-[10px] text-white/60 mt-1">
+            <p className="text-[10px] text-white/90 mt-1">
               Messages will be translated to {AVAILABLE_LANGUAGES.find(l => l.code === translation.targetLanguage)?.name}
             </p>
           )}
@@ -518,7 +518,7 @@ const CompanyCommunicationHub = () => {
                             AI
                           </Badge>
                         )}
-                        <span className="text-xs text-white/60">
+                        <span className="text-xs text-white/90">
                           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
@@ -714,7 +714,7 @@ const CompanyCommunicationHub = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm truncate">{member.name}</p>
-                      <p className="text-xs text-white/60 truncate">{member.role}</p>
+                      <p className="text-xs text-white/90 truncate">{member.role}</p>
                     </div>
                   </div>
                 );

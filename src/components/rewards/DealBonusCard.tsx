@@ -56,7 +56,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
           </div>
           Deal Bonus Rewards
         </CardTitle>
-        <p className="text-white/60 text-sm mt-2">
+        <p className="text-white/90 text-sm mt-2">
           Earn bonuses exclusively from closing deals. Your current deal points: <span className="text-gold font-semibold">{dealPoints.toLocaleString()}</span>
         </p>
       </CardHeader>
@@ -109,7 +109,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                         </Badge>
                       )}
                     </h4>
-                    <p className="text-white/60 text-sm">
+                    <p className="text-white/90 text-sm">
                       {threshold.bonus_type === 'cash' 
                         ? `AED ${threshold.bonus_value_aed?.toLocaleString()}`
                         : threshold.hardware_item
@@ -126,7 +126,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                     className={cn(
                       eligibility.eligible
                         ? "bg-gold hover:bg-gold/90 text-black"
-                        : "bg-white/10 text-white/50"
+                        : "bg-white/10 text-white/90"
                     )}
                   >
                     {claimingId === threshold.id ? (
@@ -143,7 +143,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
 
               {!eligibility.claimed && !eligibility.eligible && (
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-white/50 mb-1">
+                  <div className="flex justify-between text-xs text-white/90 mb-1">
                     <span>{dealPoints.toLocaleString()} / {threshold.required_deal_points.toLocaleString()} pts</span>
                     <span>{Math.round(eligibility.progress)}%</span>
                   </div>
@@ -151,7 +151,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                     value={eligibility.progress} 
                     className="h-2 bg-white/10"
                   />
-                  <p className="text-xs text-white/40 mt-1">
+                  <p className="text-xs text-white/85 mt-1">
                     {eligibility.pointsNeeded.toLocaleString()} more deal points needed
                   </p>
                 </div>
@@ -161,7 +161,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
         })}
 
         {thresholds.length === 0 && (
-          <div className="text-center py-8 text-white/60">
+          <div className="text-center py-8 text-white/90">
             <Gift className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>No bonus tiers available</p>
           </div>

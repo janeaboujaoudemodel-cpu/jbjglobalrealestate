@@ -122,7 +122,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
         <div className="p-4 space-y-6">
           {toolCategories.map((category) => (
             <div key={category.name}>
-              <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">
+              <h4 className="text-xs font-semibold text-white/90 uppercase tracking-wider mb-3">
                 {category.name}
               </h4>
               <div className="space-y-1">

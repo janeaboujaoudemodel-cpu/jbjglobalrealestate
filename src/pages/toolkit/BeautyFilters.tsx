@@ -577,7 +577,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                 {TABS.map(({ value, label, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
                     className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all border-0 outline-none whitespace-nowrap
-                      data-[state=inactive]:text-white/40 data-[state=active]:text-white data-[state=active]:shadow-lg"
+                      data-[state=inactive]:text-white/85 data-[state=active]:text-white data-[state=active]:shadow-lg"
                     style={{
                       background: activeTab === value ? I.btnGrad : 'transparent',
                       boxShadow: activeTab === value ? I.btnShadow : 'none',
@@ -756,7 +756,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="Describe what you want: 'remove acne', 'add freckles', 'age me 10 years'..."
                         value={aiPrompt}
                         onChange={e => setAiPrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/30"
+                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={2}
                       />
                       <button
@@ -952,7 +952,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="'Remove background and place me on a beach', 'Change to red suit'..."
                         value={aiPrompt}
                         onChange={e => setAiPrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/30"
+                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={2}
                       />
                       <button
@@ -1015,7 +1015,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="'Make this into a luxury real estate ad', 'Create a before/after comparison', 'Add text: OPEN HOUSE'..."
                         value={createPrompt}
                         onChange={e => setCreatePrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/30"
+                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={3}
                       />
                       <button

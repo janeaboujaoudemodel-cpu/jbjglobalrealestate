@@ -69,7 +69,7 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
             }}
           />
         ) : (
-          <div className="text-gold/30">{getDesignTypeIcon(item.item_type)}</div>
+          <div className="text-gray-400">{getDesignTypeIcon(item.item_type)}</div>
         )}
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}
@@ -265,7 +265,7 @@ const Favorites = () => {
     <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-8 md:py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <Link to="/" className="inline-flex items-center gap-2 text-gold/60 hover:text-gold transition-colors mb-8">
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gold transition-colors mb-8">
           <ChevronLeft className="w-5 h-5" />
           <span>Back to Properties</span>
         </Link>
@@ -362,7 +362,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto px-4">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-                    <Heart className="w-10 h-10 text-gold/70" />
+                    <Heart className="w-10 h-10 text-gray-700" />
                   </div>
                   <h3 className="text-black text-xl font-semibold mb-3">Your Favorites List is Empty</h3>
                   <p className="text-black/50 mb-3">Save properties you love by clicking the heart icon on any listing.</p>
@@ -485,7 +485,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
-                    <ListPlus className="w-10 h-10 text-gold/70" />
+                    <ListPlus className="w-10 h-10 text-gray-700" />
                   </div>
                   <h3 className="text-black text-xl font-semibold mb-3">Your Shortlist is Empty</h3>
                   <p className="text-black/50 mb-3">Move your top property picks from Favorites to your Shortlist. Assign medals (🥇🥈🥉) to rank your best choices.</p>
@@ -513,7 +513,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto px-4">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-                    <PenTool className="w-10 h-10 text-gold/70" />
+                    <PenTool className="w-10 h-10 text-gray-700" />
                   </div>
                   <h3 className="text-black text-xl font-semibold mb-3">No Saved Designs Yet</h3>
                   <p className="text-black/50 mb-8">Save your stamps, business cards, letterheads, CVs, and more from the toolkit by clicking the heart or shortlist icon.</p>

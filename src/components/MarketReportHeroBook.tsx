@@ -109,7 +109,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                 </h3>
 
                 <FounderContent fallback={null}>
-                  <p className="text-white/60 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
+                  <p className="text-white/90 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                 </FounderContent>
 
                 <div className="mt-6 pt-4 border-t border-gray-800">

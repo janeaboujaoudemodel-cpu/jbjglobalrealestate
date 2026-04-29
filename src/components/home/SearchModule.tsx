@@ -245,7 +245,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
           "flex items-center gap-1 px-2 py-1.5 rounded-full",
           isHero ? 'bg-white/10 backdrop-blur-sm' : 'bg-black/5'
         )}>
-          <Ruler className={cn("w-4 h-4 mx-1", isHero ? 'text-white/60' : 'text-black/50')} />
+          <Ruler className={cn("w-4 h-4 mx-1", isHero ? 'text-white/90' : 'text-black/50')} />
           {(['sqft', 'sqm'] as const).map((u) => (
             <button
               key={u}

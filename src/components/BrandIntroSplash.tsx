@@ -121,7 +121,7 @@ export default function BrandIntroSplash() {
       {/* Skip button */}
       <button
         onClick={dismiss}
-        className="absolute top-6 right-6 flex items-center gap-1.5 text-white/40 hover:text-white/80 text-xs font-medium tracking-wider uppercase transition-colors"
+        className="absolute top-6 right-6 flex items-center gap-1.5 text-white/85 hover:text-white/80 text-xs font-medium tracking-wider uppercase transition-colors"
       >
         Skip
         <X className="w-3.5 h-3.5" />
@@ -129,7 +129,7 @@ export default function BrandIntroSplash() {
 
       {/* Audio indicator */}
       {audioPlaying && (
-        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-gold/50 text-[10px] tracking-wider uppercase">
+        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-gray-500 text-[10px] tracking-wider uppercase">
           <Volume2 className="w-3 h-3" />
           <span>♪</span>
         </div>

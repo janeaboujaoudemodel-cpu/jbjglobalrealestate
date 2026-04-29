@@ -193,7 +193,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                 >
                   JBJ
                 </span>
-                <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
+                <span className="text-gray-600 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
                   Global Real Estate
                 </span>
               </div>
@@ -226,7 +226,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="mt-auto pt-3 md:pt-4 w-full">
               <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent mb-2" />
               <FounderContent fallback={null}>
-                <p className="text-white/60 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
+                <p className="text-white/90 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
                   By Founder & CEO Jane Bou Jaoude
                 </p>
               </FounderContent>

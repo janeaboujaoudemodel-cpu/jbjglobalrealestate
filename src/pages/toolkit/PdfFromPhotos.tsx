@@ -792,13 +792,13 @@ const PdfFromPhotos = ({ embedded = false }: { embedded?: boolean }) => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           <Input placeholder="Title" value={titlePage.title}
                             onChange={e => setTitlePage(p => ({ ...p, title: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-amber-500/50" />
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/85 focus:border-amber-500/50" />
                           <Input placeholder="Subtitle" value={titlePage.subtitle}
                             onChange={e => setTitlePage(p => ({ ...p, subtitle: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-amber-500/50" />
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/85 focus:border-amber-500/50" />
                           <Input placeholder="Date" value={titlePage.date}
                             onChange={e => setTitlePage(p => ({ ...p, date: e.target.value }))}
-                            className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-amber-500/50" />
+                            className="bg-white/5 border-white/10 text-white placeholder:text-white/85 focus:border-amber-500/50" />
                         </div>
                       )}
                     </div>

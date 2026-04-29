@@ -148,7 +148,7 @@ const AIContractReviewerPremium = () => {
                   onChange={(e) => setContractText(e.target.value)}
                   className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50 focus:border-red-400 transition-colors min-h-[300px] font-mono text-sm"
                 />
-                <p className="text-xs text-white/60">{contractText.length} characters</p>
+                <p className="text-xs text-white/90">{contractText.length} characters</p>
               </div>
 
               <Button
@@ -271,7 +271,7 @@ const AIContractReviewerPremium = () => {
                   </CardContent>
                 </Card>
 
-                <p className="text-xs text-white/60 text-center">
+                <p className="text-xs text-white/90 text-center">
                   * AI-generated review for informational purposes only. Consult a legal professional for advice.
                 </p>
               </motion.div>
@@ -286,7 +286,7 @@ const AIContractReviewerPremium = () => {
                 <FileSearch className="h-12 w-12 text-red-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Review</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Paste your contract text to get AI-powered analysis with risk assessment and key term identification
               </p>
             </motion.div>

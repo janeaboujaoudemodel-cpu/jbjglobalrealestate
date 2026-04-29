@@ -63,7 +63,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 JBJ GLOBAL REAL ESTATE
               </div>
 
-              <div className="text-gold/80 text-sm tracking-[0.3em] uppercase mb-4">
+              <div className="text-gray-800 text-sm tracking-[0.3em] uppercase mb-4">
                 Certificate of Achievement
               </div>
 
@@ -98,7 +98,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 CERTIFIED JBJ BROKER
               </div>
 
-              <div className="flex justify-center items-center gap-8 text-white/50 text-xs">
+              <div className="flex justify-center items-center gap-8 text-white/90 text-xs">
                 <div>
                   <div className="w-24 h-px bg-gold/40 mb-2" />
                   <span>Date: {currentDate}</span>

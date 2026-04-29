@@ -328,7 +328,7 @@ export default function ProjectLocationFlyover({
             className="absolute inset-x-0 bottom-0 z-[1000] pointer-events-none"
           >
             <div className="bg-gradient-to-t from-black/70 via-black/40 to-transparent px-8 py-6">
-              <p className="text-white/60 text-xs uppercase tracking-[0.2em] mb-1">
+              <p className="text-white/90 text-xs uppercase tracking-[0.2em] mb-1">
                 {currentStep === 1 ? "Overview" : currentStep === 2 ? "Region" : currentStep === 3 ? "Neighborhood" : "Destination"}
               </p>
               <h3 className="text-white text-xl font-bold tracking-wide">

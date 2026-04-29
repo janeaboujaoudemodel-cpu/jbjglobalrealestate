@@ -231,7 +231,7 @@ const DesignResultsGallery = ({
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">Your Design is Ready!</h3>
-              <p className="text-sm text-white/60">{projectName || 'AI Generated Design'}</p>
+              <p className="text-sm text-white/90">{projectName || 'AI Generated Design'}</p>
             </div>
           </div>
           

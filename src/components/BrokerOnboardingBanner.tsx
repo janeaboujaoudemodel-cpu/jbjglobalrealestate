@@ -151,7 +151,7 @@ const BrokerOnboardingBanner = () => {
               onClick={handleDismiss}
               className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
             >
-              <X className="w-5 h-5 text-white/60" />
+              <X className="w-5 h-5 text-white/90" />
             </button>
           </div>
 
@@ -189,9 +189,9 @@ const BrokerOnboardingBanner = () => {
                     {step.completed ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                     ) : (
-                      <Circle className="w-4 h-4 text-white/60" />
+                      <Circle className="w-4 h-4 text-white/90" />
                     )}
-                    <span className="text-xs text-white/60">Step {idx + 1}</span>
+                    <span className="text-xs text-white/90">Step {idx + 1}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Icon className={`w-4 h-4 ${step.completed ? 'text-emerald-400' : 'text-gold'}`} />
@@ -199,7 +199,7 @@ const BrokerOnboardingBanner = () => {
                       {step.title}
                     </span>
                   </div>
-                  <p className="text-xs text-white/60 mt-1 line-clamp-1">{step.description}</p>
+                  <p className="text-xs text-white/90 mt-1 line-clamp-1">{step.description}</p>
                 </Link>
               );
             })}

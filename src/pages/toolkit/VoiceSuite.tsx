@@ -52,7 +52,7 @@ function CenteredAudioPreview({ src, label, onRemove }: { src: string | null; la
   return (
     <div className="mx-auto max-w-xl w-full">
       <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-gold/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
-        {label && <p className="text-xs text-gold/70 font-medium mb-3 tracking-wider uppercase">{label}</p>}
+        {label && <p className="text-xs text-gray-700 font-medium mb-3 tracking-wider uppercase">{label}</p>}
         <audio controls src={src} className="w-full [&::-webkit-media-controls-panel]:bg-transparent" />
         {onRemove && (
           <Button variant="ghost" size="sm" onClick={onRemove} className="mt-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 text-xs">
@@ -107,7 +107,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-gold flex items-center gap-1.5"><Wand2 className="w-4 h-4" /> AI Script Writer</p>
-          <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/60 h-6 w-6 p-0">×</Button>
+          <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/90 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
           className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600 min-h-[60px]" rows={3} />
@@ -270,7 +270,7 @@ function VoiceStudioPanel() {
               </div>
 
               {script && (
-                <div className="text-xs text-white/60 flex gap-4">
+                <div className="text-xs text-white/90 flex gap-4">
                   <span>{script.split(/\s+/).filter(Boolean).length} words</span>
                   <span>~{estimateDuration(script)}s</span>
                 </div>
@@ -322,7 +322,7 @@ function VoiceStudioPanel() {
                         <SelectItem key={v.id} value={v.id}>
                           <span className="flex items-center gap-2">
                             <span>{v.name}</span>
-                            <span className="text-white/60 text-[10px]">{v.gender} · {v.accent}</span>
+                            <span className="text-white/90 text-[10px]">{v.gender} · {v.accent}</span>
                           </span>
                         </SelectItem>
                       ))}
@@ -620,7 +620,7 @@ function AudioEnhancePanel() {
                     ? 'bg-gold/10 border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
                     : 'bg-[#1a1708]/50 border-gold/10 hover:border-gold/25'
                 }`}>
-                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/60'}`} />
+                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/90'}`} />
                 <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
                 <p className="text-[10px] text-gray-600 mt-0.5">{m.desc}</p>
               </button>
@@ -937,11 +937,11 @@ function VoiceCloningPanel() {
                 className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-black hover:bg-gold/90'}>
                 {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop</> : <><Mic className="w-4 h-4 mr-2" />Record Sample</>}
               </Button>
-              <span className="text-xs text-white/60 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
+              <span className="text-xs text-white/90 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
             </div>
             {recordingUrls.map((url, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-xs text-white/60">#{i + 1}</span>
+                <span className="text-xs text-white/90">#{i + 1}</span>
                 <audio controls src={url} className="h-8 flex-1" />
               </div>
             ))}
@@ -1137,7 +1137,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
 export default function VoiceSuite() {
   const { isOwner } = useAuth();
 
-  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-white/60 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
+  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-white/90 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
 
   return (
     <>
@@ -1152,7 +1152,7 @@ export default function VoiceSuite() {
           <div className="max-w-7xl mx-auto px-4 py-5">
             <div className="flex items-center gap-3 mb-3">
               <Link to="/toolkit">
-                <Button variant="ghost" size="sm" className="text-white/60 hover:text-gold hover:bg-gold/5 border border-gold/10 hover:border-gold/30 text-xs h-7">
+                <Button variant="ghost" size="sm" className="text-white/90 hover:text-gold hover:bg-gold/5 border border-gold/10 hover:border-gold/30 text-xs h-7">
                   <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Royal Tools Hub
                 </Button>
               </Link>
@@ -1165,7 +1165,7 @@ export default function VoiceSuite() {
                 <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                   Voice & Audio <span className="text-gold">Suite</span>
                 </h1>
-                <p className="text-white/60 text-xs">Premium TTS, transcription, enhancement, effects & translation</p>
+                <p className="text-white/90 text-xs">Premium TTS, transcription, enhancement, effects & translation</p>
               </div>
             </div>
           </div>

@@ -861,7 +861,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
       {!embedded && (
         <header style={{ borderBottom: `1px solid ${C.border}`, background: C.surface }}>
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/toolkit" className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-white/50 hover:text-white"
+            <Link to="/toolkit" className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-white/90 hover:text-white"
               style={{ border: `1px solid ${C.border}` }}>
               <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Royal Tools Hub</span>
             </Link>
@@ -940,15 +940,15 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                 style={{ background: "rgba(184,148,62,0.04)", border: `1px solid ${C.border}` }}>
                 <div className="flex items-center gap-1.5">
                   <ZoomIn className="h-3.5 w-3.5" style={{ color: C.accentText }} />
-                  <span className="text-xs text-white/60">{imageInfo.width} × {imageInfo.height} px</span>
+                  <span className="text-xs text-white/90">{imageInfo.width} × {imageInfo.height} px</span>
                 </div>
-                <span className="text-white/20">·</span>
-                <span className="text-xs text-white/60">{imageInfo.aspectRatio}</span>
-                <span className="text-white/20">·</span>
-                <span className="text-xs text-white/60">{imageInfo.fileSize}</span>
+                <span className="text-white/80">·</span>
+                <span className="text-xs text-white/90">{imageInfo.aspectRatio}</span>
+                <span className="text-white/80">·</span>
+                <span className="text-xs text-white/90">{imageInfo.fileSize}</span>
                 {isAnalyzing && (
                   <>
-                    <span className="text-white/20">·</span>
+                    <span className="text-white/80">·</span>
                     <span className="text-xs flex items-center gap-1" style={{ color: C.accentText }}>
                       <Loader2 className="h-3 w-3 animate-spin" /> AI analyzing...
                     </span>
@@ -956,8 +956,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                 )}
                 {aiAnalysis?.subjectDescription && !isAnalyzing && (
                   <>
-                    <span className="text-white/20">·</span>
-                    <span className="text-xs flex items-center gap-1 text-white/50">
+                    <span className="text-white/80">·</span>
+                    <span className="text-xs flex items-center gap-1 text-white/90">
                       <Info className="h-3 w-3" /> {aiAnalysis.subjectDescription}
                     </span>
                   </>
@@ -1204,7 +1204,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                       )}
                       {/* Background color for video */}
                       <div>
-                        <p className="text-xs font-medium text-white/60 mb-2">Output background</p>
+                        <p className="text-xs font-medium text-white/90 mb-2">Output background</p>
                         <div className="flex flex-wrap gap-2">
                           {BG_PRESETS.map(p => (
                             <button key={p.id} onClick={() => setVideoBackground(p.id)}

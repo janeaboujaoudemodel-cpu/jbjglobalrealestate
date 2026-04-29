@@ -406,7 +406,7 @@ const VisitorInsightsDashboard = () => {
                             </div>
                           </td>
                           <td className="p-4">
-                            <Button size="sm" variant="ghost" className="text-gold hover:text-gold/80">
+                            <Button size="sm" variant="ghost" className="text-gold hover:text-gray-800">
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>

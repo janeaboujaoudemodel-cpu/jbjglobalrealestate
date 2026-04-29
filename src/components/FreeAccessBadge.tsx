@@ -41,10 +41,10 @@ export default function FreeAccessBadge({ variant = "default", className = "" }:
         </div>
         <div>
           <p className="text-white text-sm font-bold">Limited Time: FREE Access</p>
-          <p className="text-white/50 text-xs">No credit card required</p>
+          <p className="text-white/90 text-xs">No credit card required</p>
         </div>
       </div>
-      <Clock className="w-4 h-4 text-white/60 animate-pulse" />
+      <Clock className="w-4 h-4 text-white/90 animate-pulse" />
     </motion.div>
   );
 }

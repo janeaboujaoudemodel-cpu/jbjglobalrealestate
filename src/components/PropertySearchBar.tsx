@@ -32,17 +32,17 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-zinc-900/80 border border-gray-700/50 text-white rounded-lg text-sm hover:border-gold transition-colors">
-          <Building2 className="w-4 h-4 text-white/60 flex-shrink-0" />
+          <Building2 className="w-4 h-4 text-white/90 flex-shrink-0" />
           <span className="truncate flex-1 text-left text-sm">
             {selectedDev ? selectedDev.name : "Developer / Project"}
           </span>
-          <ChevronDown className="w-3.5 h-3.5 text-white/60 flex-shrink-0" />
+          <ChevronDown className="w-3.5 h-3.5 text-white/90 flex-shrink-0" />
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-[260px] p-0 bg-zinc-900 border border-gray-700 z-[10200]" side="bottom" align="start" sideOffset={4}>
         <div className="p-2 border-b border-gray-800">
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/60" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/90" />
             <input
               type="text"
               value={search}
@@ -69,14 +69,14 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               {isValidDeveloperLogoUrl(dev.logo_url) ? (
                 <img src={dev.logo_url as string} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white" />
               ) : (
-                <Building2 className="w-5 h-5 text-white/40 flex-shrink-0" />
+                <Building2 className="w-5 h-5 text-white/85 flex-shrink-0" />
               )}
               <span className="truncate">{dev.name}</span>
               {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-gold flex-shrink-0" />}
             </button>
           ))}
           {filtered.length === 0 && (
-            <p className="text-xs text-white/60 text-center py-4">No developers found</p>
+            <p className="text-xs text-white/90 text-center py-4">No developers found</p>
           )}
         </div>
       </PopoverContent>
@@ -122,7 +122,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
           <Input
             placeholder="Search properties..."
             value={keyword}
@@ -145,7 +145,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
       <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full">
         {/* Keyword Search */}
         <div className="relative flex-1 min-w-[170px]">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
           <Input
             placeholder="Keyword"
             value={keyword}
@@ -161,7 +161,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Emirates / Location */}
         <Select value={location || "all"} onValueChange={(value) => setLocation(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[150px] h-12 rounded-lg">
-            <MapPin className="w-4 h-4 mr-2 text-white/60" />
+            <MapPin className="w-4 h-4 mr-2 text-white/90" />
             <SelectValue placeholder="Emirates" />
           </SelectTriggerDark>
           <SelectContentDark>
@@ -192,7 +192,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Beds */}
         <Select value={beds || "all"} onValueChange={(value) => setBeds(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[126px] h-12 rounded-lg">
-            <BedDouble className="w-4 h-4 mr-2 text-white/60" />
+            <BedDouble className="w-4 h-4 mr-2 text-white/90" />
             <SelectValue placeholder="Beds" />
           </SelectTriggerDark>
           <SelectContentDark>
@@ -212,7 +212,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         {/* Price Range */}
         <Select value={priceRange || "all"} onValueChange={(value) => setPriceRange(value === "all" ? null : value)}>
           <SelectTriggerDark className="w-[148px] h-12 rounded-lg">
-            <DollarSign className="w-4 h-4 mr-2 text-white/60" />
+            <DollarSign className="w-4 h-4 mr-2 text-white/90" />
             <SelectValue placeholder="Price Range" />
           </SelectTriggerDark>
           <SelectContentDark>

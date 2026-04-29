@@ -150,13 +150,13 @@ export default function BookStyleDocuments({
               <div className="absolute inset-0 flex flex-col justify-between p-3">
                 <div className="flex items-start justify-between">
                   <span className="text-white/80">{icon}</span>
-                  <Eye className="w-3.5 h-3.5 text-white/50 group-hover:text-white transition-colors" />
+                  <Eye className="w-3.5 h-3.5 text-white/90 group-hover:text-white transition-colors" />
                 </div>
                 <div>
                   <p className="text-white font-semibold text-xs leading-tight line-clamp-3 mb-1">
                     {title}
                   </p>
-                  <p className="text-white/60 text-[10px] uppercase tracking-wider">
+                  <p className="text-white/90 text-[10px] uppercase tracking-wider">
                     {projectName}
                   </p>
                 </div>

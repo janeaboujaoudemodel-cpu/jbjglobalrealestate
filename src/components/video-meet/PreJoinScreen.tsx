@@ -159,7 +159,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                         />
                       ) : (
                         <div className="w-32 h-32 rounded-full bg-zinc-700 flex items-center justify-center border-4 border-gray-600">
-                          <User className="w-16 h-16 text-white/60" />
+                          <User className="w-16 h-16 text-white/90" />
                         </div>
                       )}
                     </div>

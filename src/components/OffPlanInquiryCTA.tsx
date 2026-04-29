@@ -99,7 +99,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                 <div className="p-3 rounded-xl bg-gold/20">
                   <Building2 className="w-8 h-8 text-gold" />
                 </div>
-                <HelpCircle className="w-6 h-6 text-gold/60" />
+                <HelpCircle className="w-6 h-6 text-gray-600" />
               </div>
               
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">

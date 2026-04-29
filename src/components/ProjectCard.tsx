@@ -305,7 +305,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Location with icon */}
           {project.location && (
             <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-2">
-              <MapPin className="w-3.5 h-3.5 text-gold/70 flex-shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-gray-700 flex-shrink-0" />
               <span className="truncate">{project.location}</span>
             </div>
           )}
@@ -343,7 +343,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <span className="font-medium">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
-              <span className="text-gold/50">|</span>
+              <span className="text-gray-500">|</span>
             )}
             {getSizeText() && (
               <span>{getSizeText()}</span>
@@ -353,7 +353,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2 overflow-hidden">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-gold font-bold hover:text-gold/70 cursor-pointer ml-1">
+            <span className="text-gold font-bold hover:text-gray-700 cursor-pointer ml-1">
               ...more
             </span>
           </p>

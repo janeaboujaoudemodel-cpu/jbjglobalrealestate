@@ -203,7 +203,7 @@ const InvestmentAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -310,7 +310,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-white/60 text-sm"
+              className="text-center text-white/90 text-sm"
             >
               Where required, we introduce clients to licensed third-party professionals for legal, mortgage, or tax services.
             </motion.p>

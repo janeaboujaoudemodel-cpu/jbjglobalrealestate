@@ -323,7 +323,7 @@ const Founder = () => {
                       {member.name}
                     </h4>
                     {member.nameAr && (
-                      <p className="text-white/60 text-sm mb-2">{member.nameAr}</p>
+                      <p className="text-white/90 text-sm mb-2">{member.nameAr}</p>
                     )}
                     <p className="text-gold text-xs uppercase tracking-wider mb-4">
                       {member.role}

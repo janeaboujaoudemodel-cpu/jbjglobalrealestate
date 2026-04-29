@@ -85,7 +85,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
                 {currentDraw.prize_description}
               </h3>
               
-              <div className="flex items-center gap-2 text-white/60 text-sm">
+              <div className="flex items-center gap-2 text-white/90 text-sm">
                 <Users className="w-4 h-4" />
                 Minimum {currentDraw.min_activity_points} activity points to enter
               </div>
@@ -96,7 +96,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
               <div className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/30 text-center">
                 <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
                 <p className="text-emerald-300 font-semibold">You're Entered!</p>
-                <p className="text-white/60 text-sm mt-1">
+                <p className="text-white/90 text-sm mt-1">
                   Entered with {userEntry.activity_points_at_entry} points
                 </p>
               </div>
@@ -117,7 +117,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
                   </Button>
                 ) : (
                   <div className="text-center">
-                    <p className="text-white/60 mb-3">{eligibility.reason}</p>
+                    <p className="text-white/90 mb-3">{eligibility.reason}</p>
                     {eligibility.progress !== undefined && (
                       <Progress 
                         value={eligibility.progress} 
@@ -130,7 +130,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
             )}
           </>
         ) : (
-          <div className="text-center py-8 text-white/60">
+          <div className="text-center py-8 text-white/90">
             <Calendar className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>No active draw this month</p>
             <p className="text-sm mt-1">Check back soon!</p>
@@ -150,7 +150,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
                   key={draw.id}
                   className="flex items-center justify-between text-sm py-2 px-3 bg-white/5 rounded-lg"
                 >
-                  <span className="text-white/60">
+                  <span className="text-white/90">
                     {getMonthName(draw.draw_month)} {draw.draw_year}
                   </span>
                   <Badge variant="outline" className="border-gold/50 text-gold">

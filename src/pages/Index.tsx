@@ -285,8 +285,8 @@ const Index = () => {
               transition={{ delay: 1.2, duration: 0.5 }}
               className="flex flex-col items-center gap-1"
             >
-              <span className="text-[9px] uppercase tracking-[0.2em] text-white/60">Explore</span>
-              <ChevronDown className="w-4 h-4 text-white/40 animate-bounce" />
+              <span className="text-[9px] uppercase tracking-[0.2em] text-white/90">Explore</span>
+              <ChevronDown className="w-4 h-4 text-white/85 animate-bounce" />
             </motion.div>
           </div>
         </motion.div>

@@ -349,17 +349,17 @@ jbj.ae
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <CheckCircle2 className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Verify Developer Claims</p>
-                <p className="text-white/60 text-sm">Check if the property matches the stated size before you buy</p>
+                <p className="text-white/90 text-sm">Check if the property matches the stated size before you buy</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Check Rental Sizes</p>
-                <p className="text-white/60 text-sm">Verify apartment sizes before signing a rental agreement</p>
+                <p className="text-white/90 text-sm">Verify apartment sizes before signing a rental agreement</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Secondary Market Check</p>
-                <p className="text-white/60 text-sm">Verify size claims before viewing a resale property</p>
+                <p className="text-white/90 text-sm">Verify size claims before viewing a resale property</p>
               </div>
             </div>
           </motion.div>
@@ -376,7 +376,7 @@ jbj.ae
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
                     ? "bg-teal-500 text-white" 
-                    : "bg-zinc-800 text-white/60"
+                    : "bg-zinc-800 text-white/90"
                 }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
@@ -587,7 +587,7 @@ jbj.ae
                           <span className="text-sm">{room.files.length} file(s) added</span>
                         </div>
                       ) : (
-                        <p className="text-white/60 text-sm">No media uploaded</p>
+                        <p className="text-white/90 text-sm">No media uploaded</p>
                       )}
                     </div>
                   ))}
@@ -600,7 +600,7 @@ jbj.ae
                     }}
                     className="p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-gray-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
                   >
-                    <Plus className="w-6 h-6 text-white/60" />
+                    <Plus className="w-6 h-6 text-white/90" />
                     <span className="text-white/70 text-sm">Add Custom Room</span>
                   </button>
                 </div>
@@ -663,7 +663,7 @@ jbj.ae
                           {room.isComplete ? (
                             <CheckCircle2 className="w-5 h-5 text-teal-400" />
                           ) : (
-                            <Camera className="w-5 h-5 text-white/60" />
+                            <Camera className="w-5 h-5 text-white/90" />
                           )}
                           <h4 className="text-white font-medium">{room.name}</h4>
                         </div>
@@ -713,12 +713,12 @@ jbj.ae
                           >
                             {room.mediaType === "photo" ? (
                               <>
-                                <Camera className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                                <Camera className="w-8 h-8 text-white/90 mx-auto mb-2" />
                                 <p className="text-white/70 text-sm">Click to upload 2-3 photos of <strong>{room.name}</strong></p>
                               </>
                             ) : (
                               <>
-                                <Video className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                                <Video className="w-8 h-8 text-white/90 mx-auto mb-2" />
                                 <p className="text-white/70 text-sm">Click to upload video walkthrough of <strong>{room.name}</strong></p>
                               </>
                             )}
@@ -764,7 +764,7 @@ jbj.ae
                       <p className="text-teal-300 font-medium">AI is analyzing each room...</p>
                     </div>
                     <Progress value={progress} className="h-2" />
-                    <p className="text-white/60 text-sm mt-2">{progress}% complete</p>
+                    <p className="text-white/90 text-sm mt-2">{progress}% complete</p>
                   </div>
                 )}
 
@@ -856,13 +856,13 @@ jbj.ae
                           <span className="text-white/85">{room.name}</span>
                           <div className="text-right">
                             <span className="text-white font-medium">{room.area} sq ft</span>
-                            <span className="text-white/60 text-sm ml-2">
+                            <span className="text-white/90 text-sm ml-2">
                               ({convertArea(room.area, "sqm")} sqm)
                             </span>
                           </div>
                         </div>
                         {room.dimensions && (
-                          <p className="text-white/60 text-xs mt-1">
+                          <p className="text-white/90 text-xs mt-1">
                             Estimated: {room.dimensions}
                           </p>
                         )}
@@ -903,7 +903,7 @@ jbj.ae
                   </Button>
                 </div>
 
-                <p className="text-center text-white/60 text-sm">
+                <p className="text-center text-white/90 text-sm">
                   Your measurement data will be automatically transferred to the Interior Design tool.
                 </p>
               </CardContent>

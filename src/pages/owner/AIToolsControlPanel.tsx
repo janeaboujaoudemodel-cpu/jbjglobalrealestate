@@ -339,7 +339,7 @@ export default function AIToolsControlPanel() {
         ].map(s => (
           <div key={s.label} className="bg-zinc-900/60 border border-gray-800 rounded-lg p-3 text-center">
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-white/60">{s.label}</div>
+            <div className="text-xs text-white/90">{s.label}</div>
           </div>
         ))}
       </div>
@@ -347,7 +347,7 @@ export default function AIToolsControlPanel() {
       {/* Search + Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
           <Input
             placeholder="Search tools..."
             value={search}
@@ -372,7 +372,7 @@ export default function AIToolsControlPanel() {
 
       {/* Tool List */}
       {loading ? (
-        <div className="text-center py-20 text-white/60">Loading tools...</div>
+        <div className="text-center py-20 text-white/90">Loading tools...</div>
       ) : (
         <div className="space-y-3">
           {filtered.map(tool => {
@@ -390,10 +390,10 @@ export default function AIToolsControlPanel() {
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <ChevronDown className={`w-4 h-4 text-white/60 transition-transform shrink-0 ${isExpanded ? "rotate-180" : ""}`} />
+                          <ChevronDown className={`w-4 h-4 text-white/90 transition-transform shrink-0 ${isExpanded ? "rotate-180" : ""}`} />
                           <div className="min-w-0">
                             <CardTitle className="!text-base text-white truncate">{tool.title}</CardTitle>
-                            <p className="text-xs text-white/60 mt-0.5">{tool.description}</p>
+                            <p className="text-xs text-white/90 mt-0.5">{tool.description}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
@@ -404,7 +404,7 @@ export default function AIToolsControlPanel() {
                       {/* Direct URL row */}
                       <div className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
                         <code className="text-xs text-white/70 bg-zinc-800/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
-                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/60 hover:text-gold">
+                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/90 hover:text-gold">
                           <Copy className="w-3 h-3" />
                         </Button>
                         <Link to={tool.link} target="_blank">
@@ -477,7 +477,7 @@ export default function AIToolsControlPanel() {
                                     <div className="flex items-center gap-2">
                                       <span className="text-sm font-mono text-gold">v{v.version_number}</span>
                                       <StatusBadge status={v.status} />
-                                      <span className="text-xs text-white/60">{new Date(v.created_at).toLocaleString()}</span>
+                                      <span className="text-xs text-white/90">{new Date(v.created_at).toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
                                       {v.status !== "published" && (
@@ -488,11 +488,11 @@ export default function AIToolsControlPanel() {
                                     </div>
                                   </div>
                                   {v.changes_description && <p className="text-xs text-white/70 mt-1">{v.changes_description}</p>}
-                                  {v.change_reason && <p className="text-xs text-white/60 mt-0.5">Reason: {v.change_reason}</p>}
+                                  {v.change_reason && <p className="text-xs text-white/90 mt-0.5">Reason: {v.change_reason}</p>}
                                   {v.test_result && (
                                     <div className="flex items-center gap-1 mt-1">
                                       {v.test_result === "pass" ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <XCircle className="w-3 h-3 text-red-400" />}
-                                      <span className="text-xs text-white/60">Test: {v.test_result}</span>
+                                      <span className="text-xs text-white/90">Test: {v.test_result}</span>
                                       {v.test_notes && <span className="text-xs text-gray-600"> — {v.test_notes}</span>}
                                     </div>
                                   )}
@@ -531,7 +531,7 @@ export default function AIToolsControlPanel() {
                                     {t.result === "pass" ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <XCircle className="w-4 h-4 text-red-400" />}
                                     <div>
                                       <span className="text-xs text-white/85">{t.result === "pass" ? "Passed" : "Failed"}</span>
-                                      {t.notes && <span className="text-xs text-white/60 ml-2">— {t.notes}</span>}
+                                      {t.notes && <span className="text-xs text-white/90 ml-2">— {t.notes}</span>}
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
@@ -603,7 +603,7 @@ function FixCard({
               <Save className="w-3 h-3" /> Save & Publish
             </Button>
           )}
-          <Button size="sm" variant="ghost" onClick={onRevert} className="h-7 text-xs text-white/60 hover:text-red-400 gap-1">
+          <Button size="sm" variant="ghost" onClick={onRevert} className="h-7 text-xs text-white/90 hover:text-red-400 gap-1">
             <Undo2 className="w-3 h-3" /> Revert
           </Button>
         </div>

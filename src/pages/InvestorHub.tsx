@@ -139,19 +139,19 @@ const InvestorHub = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                     <div>
                       <p className="text-2xl font-bold text-white">{isLoading ? '...' : summary.totalPoints.toLocaleString()}</p>
-                      <p className="text-white/60 text-xs">Total Points</p>
+                      <p className="text-white/90 text-xs">Total Points</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-emerald-400">{isLoading ? '...' : summary.dealPoints.toLocaleString()}</p>
-                      <p className="text-white/60 text-xs">Deal Points</p>
+                      <p className="text-white/90 text-xs">Deal Points</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-blue-400">{isLoading ? '...' : summary.activityPoints.toLocaleString()}</p>
-                      <p className="text-white/60 text-xs">Activity</p>
+                      <p className="text-white/90 text-xs">Activity</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-purple-400">{isLoading ? '...' : summary.referralPoints.toLocaleString()}</p>
-                      <p className="text-white/60 text-xs">Referral</p>
+                      <p className="text-white/90 text-xs">Referral</p>
                     </div>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ const InvestorHub = () => {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-white font-semibold text-sm mb-1 relative z-10">{card.title}</h3>
-                  <p className="text-white/60 text-xs relative z-10">{card.desc}</p>
+                  <p className="text-white/90 text-xs relative z-10">{card.desc}</p>
                   <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
                 </motion.button>
               );
@@ -203,7 +203,7 @@ const InvestorHub = () => {
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
-                  <p className="text-white/60 text-xs mt-1">{tool.desc}</p>
+                  <p className="text-white/90 text-xs mt-1">{tool.desc}</p>
                 </button>
               );
             })}
@@ -228,7 +228,7 @@ const InvestorHub = () => {
                 {supportTickets.length === 0 ? (
                   <div className="text-center py-8">
                     <Ticket className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                    <p className="text-white/60">No support tickets</p>
+                    <p className="text-white/90">No support tickets</p>
                     <Button
                       className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
                       onClick={() => navigate('/support')}
@@ -256,7 +256,7 @@ const InvestorHub = () => {
                       >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
-                          <p className="text-xs text-white/60">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
+                          <p className="text-xs text-white/90">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
                         </div>
                         <Badge className={
                           ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :

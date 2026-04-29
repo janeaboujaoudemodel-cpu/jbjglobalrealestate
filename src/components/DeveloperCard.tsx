@@ -97,7 +97,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                   loading="lazy"
                   renderFallback
                 />
-                <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
+                <span className="text-white/90 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
               </div>
             </div>
           )}

@@ -388,7 +388,7 @@ export function StampPreviewModal({
                     <div>
                       <p className="text-white font-bold text-base leading-tight">{companyName}</p>
                       {arabicName && <p className="text-white/70 text-sm mt-0.5" dir="rtl">{arabicName}</p>}
-                      <p className="text-white/60 text-xs mt-1">{city}</p>
+                      <p className="text-white/90 text-xs mt-1">{city}</p>
                     </div>
                     <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={70}/>
                   </div>
@@ -547,7 +547,7 @@ export function StampPreviewModal({
                       <p className="text-sm tracking-[0.2em] uppercase font-semibold" style={{ color: `${tintColor}cc`, fontFamily: 'Georgia, serif', textShadow: `0 0 20px ${tintColor}44` }}>{companyName}</p>
                       <div className="h-px w-20" style={{ background: `linear-gradient(90deg, ${tintColor}66, transparent)` }}/>
                     </div>
-                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/30">{city} · Authenticated Seal</p>
+                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/85">{city} · Authenticated Seal</p>
                   </div>
                 </div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center">Premium wax seal impression — embossed on luxury stationery & documents</p>
@@ -579,7 +579,7 @@ export function StampPreviewModal({
                       <p className="text-white font-bold text-lg tracking-wider" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>{companyName}</p>
                       {arabicName && <p className="text-white/70 text-sm" dir="rtl">{arabicName}</p>}
                       <div className="h-px w-24 mx-auto" style={{ background: 'rgba(255,255,255,0.3)' }}/>
-                      <p className="text-white/60 text-xs tracking-widest uppercase">{city}</p>
+                      <p className="text-white/90 text-xs tracking-widest uppercase">{city}</p>
                     </div>
                   </div>
                 </div>
@@ -613,11 +613,11 @@ export function StampPreviewModal({
                       <p className="text-white font-bold text-xl tracking-wider" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)', fontFamily: 'Georgia, serif' }}>{companyName}</p>
                       {arabicName && <p className="text-white/70 text-base" dir="rtl" style={{ fontFamily: 'Georgia, serif' }}>{arabicName}</p>}
                       <div className="h-px w-28 mx-auto" style={{ background: 'rgba(255,255,255,0.25)' }}/>
-                      <p className="text-white/50 text-xs tracking-[0.2em] uppercase">Company Profile</p>
+                      <p className="text-white/90 text-xs tracking-[0.2em] uppercase">Company Profile</p>
                     </div>
                     {/* Bottom area */}
                     <div className="mt-auto text-center">
-                      <p className="text-white/40 text-[10px] tracking-widest uppercase">{city} · {new Date().getFullYear()}</p>
+                      <p className="text-white/85 text-[10px] tracking-widest uppercase">{city} · {new Date().getFullYear()}</p>
                     </div>
                   </div>
                   {/* Bottom decorative band */}
@@ -681,7 +681,7 @@ export function StampPreviewModal({
             <div className="w-px h-6 bg-[hsl(var(--border))]"/>
             <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Expand for better editing</p>
           </div>
-          <p className="absolute bottom-6 text-white/40 text-xs">Click outside to close</p>
+          <p className="absolute bottom-6 text-white/85 text-xs">Click outside to close</p>
         </div>
       )}
     </div>

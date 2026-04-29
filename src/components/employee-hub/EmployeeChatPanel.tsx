@@ -261,7 +261,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             <h3 className="text-white font-semibold text-sm">{employee.name}</h3>
             <div className="flex items-center gap-1">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-white/60 text-xs">Online</span>
+              <span className="text-white/90 text-xs">Online</span>
             </div>
           </div>
         </div>
@@ -284,7 +284,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gold text-xs font-medium">{employee.role}</p>
-            <p className="text-white/60 text-xs">{employee.department}</p>
+            <p className="text-white/90 text-xs">{employee.department}</p>
           </div>
           <Badge variant="outline" className="text-xs border-gray-700 text-white/70">
             {employee.languages?.slice(0, 2).join(', ')}
@@ -316,7 +316,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}>
                     <span className={`text-xs ${
-                      message.role === 'user' ? 'text-black/60' : 'text-white/60'
+                      message.role === 'user' ? 'text-black/60' : 'text-white/90'
                     }`}>
                       {formatTime(message.timestamp)}
                     </span>

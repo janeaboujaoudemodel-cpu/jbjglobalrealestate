@@ -496,7 +496,7 @@ The content should be:
             )
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Mail className="w-12 h-12 text-gold/40 mb-3" />
+              <Mail className="w-12 h-12 text-gray-500 mb-3" />
               <p className="text-black/40 italic">Your email content will preview here...</p>
               <p className="text-xs text-black/30 mt-1">Use the AI assistant or type content in the Content tab</p>
             </div>

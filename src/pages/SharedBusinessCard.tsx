@@ -422,7 +422,7 @@ export default function SharedBusinessCard() {
       <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)" }}>
         <div className="flex flex-col items-center gap-3">
           <RefreshCw size={28} className="animate-spin text-[#C8A766]" />
-          <p className="text-sm text-white/60">Loading card…</p>
+          <p className="text-sm text-white/90">Loading card…</p>
         </div>
       </div>
     );
@@ -433,10 +433,10 @@ export default function SharedBusinessCard() {
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)" }}>
         <div className="text-center space-y-4 max-w-sm">
           <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">
-            <CreditCard size={28} className="text-white/30" />
+            <CreditCard size={28} className="text-white/85" />
           </div>
           <p className="text-white font-semibold text-lg">Card Not Found</p>
-          <p className="text-white/50 text-sm">This link may have expired or been removed.</p>
+          <p className="text-white/90 text-sm">This link may have expired or been removed.</p>
           <Link to="/toolkit/corporate-suite/business-card" className="inline-block mt-4 text-[#C8A766] text-sm hover:underline">
             Create your own card →
           </Link>
@@ -460,13 +460,13 @@ export default function SharedBusinessCard() {
           </div>
           <span className="text-white/70 text-sm font-medium">Digital Business Card</span>
           {/* Subtle view count badge */}
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px]">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/85 text-[10px]">
             <Eye size={10} />
             {viewCount}
           </span>
         </div>
         {cardData.company && (
-          <p className="text-white/40 text-xs uppercase tracking-widest">{cardData.company}</p>
+          <p className="text-white/85 text-xs uppercase tracking-widest">{cardData.company}</p>
         )}
       </div>
 
@@ -521,7 +521,7 @@ export default function SharedBusinessCard() {
           </a>
         )}
         {cardData.address && (
-          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 text-white/60 text-sm">
+          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 text-white/90 text-sm">
             <span className="text-base">📍</span>
             <span>{cardData.address}</span>
           </div>
@@ -547,7 +547,7 @@ export default function SharedBusinessCard() {
           )}
           {saving ? "Saving…" : "💾 Save Contact"}
         </Button>
-        <p className="text-center text-white/30 text-xs mt-3">
+        <p className="text-center text-white/85 text-xs mt-3">
           Downloads a .vcf file — tap to add to your phone contacts instantly
         </p>
       </div>
@@ -556,7 +556,7 @@ export default function SharedBusinessCard() {
       <div className="mt-12 text-center">
         <Link
           to="/toolkit/corporate-suite/business-card"
-          className="text-white/20 text-xs hover:text-[#C8A766] transition-colors"
+          className="text-white/80 text-xs hover:text-[#C8A766] transition-colors"
         >
           Create your card with JBJ Business Card Designer →
         </Link>

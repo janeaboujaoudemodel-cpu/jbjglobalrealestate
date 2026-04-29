@@ -149,7 +149,7 @@ export default function ProtectedContent({
       </div>
 
       {/* Security badge */}
-      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-white/60 bg-zinc-900/80 px-2 py-1 rounded">
+      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-white/90 bg-zinc-900/80 px-2 py-1 rounded">
         <Shield className="w-3 h-3" />
         Protected Content
       </div>

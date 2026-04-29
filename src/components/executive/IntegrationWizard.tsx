@@ -293,7 +293,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         href="https://vapi.ai"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-gold hover:text-gold/80"
+                        className="inline-flex items-center gap-2 text-gold hover:text-gray-800"
                       >
                         Open VAPI.ai <ExternalLink className="w-4 h-4" />
                       </a>
@@ -350,7 +350,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         href="https://business.facebook.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-gold hover:text-gold/80"
+                        className="inline-flex items-center gap-2 text-gold hover:text-gray-800"
                       >
                         Open Meta Business <ExternalLink className="w-4 h-4" />
                       </a>

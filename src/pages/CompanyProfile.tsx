@@ -527,7 +527,7 @@ const CompanyProfile = () => {
                     {index + 1}
                   </span>
                   <span className="text-white/80 text-sm flex-1 group-hover:text-[#C8A766] transition-colors">{item.title}</span>
-                  <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                  <ChevronRight className="w-4 h-4 text-white/85 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
                 </a>
               ))}
             </div>
@@ -612,7 +612,7 @@ const CompanyProfile = () => {
               <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
                 Company Introduction
               </h2>
-              <p className="text-white/60 max-w-xl mx-auto">
+              <p className="text-white/90 max-w-xl mx-auto">
                 Discover our vision, values, and commitment to excellence in Dubai real estate.
               </p>
             </div>
@@ -1299,7 +1299,7 @@ const CompanyProfile = () => {
             <ConsistentBook3D onClick={generatePDF} isGenerating={isGenerating} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <p className="text-white/60 text-sm">
+              <p className="text-white/90 text-sm">
                 JBJ_Global_Real_Estate_Company_Profile.pdf
               </p>
               <div className="flex flex-wrap justify-center gap-3">

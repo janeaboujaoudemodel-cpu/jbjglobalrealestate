@@ -216,7 +216,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
       <div className="relative">
         <div className="w-[600px] h-[300px] bg-gradient-to-b from-[#2a2018] to-[#1a1410] rounded-[100px] border-4 border-gold/30 shadow-2xl">
           <div className="absolute inset-4 bg-gradient-to-b from-[#3a3020] to-[#2a2018] rounded-[80px] flex items-center justify-center">
-            <span className="text-gold/30 text-2xl font-bold tracking-widest">JBJ GLOBAL</span>
+            <span className="text-gray-400 text-2xl font-bold tracking-widest">JBJ GLOBAL</span>
           </div>
         </div>
 
@@ -254,7 +254,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User className="w-8 h-8 text-white/60" />
+                      <User className="w-8 h-8 text-white/90" />
                     </div>
                   )}
                   
@@ -322,7 +322,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-zinc-700">
-                    <User className="w-10 h-10 text-white/60" />
+                    <User className="w-10 h-10 text-white/90" />
                   </div>
                 )}
               </div>

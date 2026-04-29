@@ -381,7 +381,7 @@ export const IPBlocklistDashboard = () => {
           </div>
         ) : filteredIPs.length === 0 ? (
           <div className="text-center py-12">
-            <ShieldBan className="w-12 h-12 text-gold/40 mx-auto mb-3" />
+            <ShieldBan className="w-12 h-12 text-gray-500 mx-auto mb-3" />
             <p className="text-black/60">No blocked IPs found</p>
             <p className="text-black/40 text-sm mt-1">
               Add IPs to the blocklist to prevent malicious access

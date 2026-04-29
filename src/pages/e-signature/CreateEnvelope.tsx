@@ -491,7 +491,7 @@ export default function CreateEnvelope() {
       {/* Premium Page Header — aligned with sidebar logo divider */}
       <div className="border-b border-gold/20">
         <div className="max-w-5xl mx-auto px-6 flex items-end h-[84px] pb-4 gap-4">
-          <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-gold hover:text-gold/80 hover:bg-gold/10 mb-0.5">
+          <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-gold hover:text-gray-800 hover:bg-gold/10 mb-0.5">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>

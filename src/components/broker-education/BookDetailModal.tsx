@@ -147,7 +147,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                         {/* Status Icon */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isLocked
-                            ? 'bg-gold/10 border border-gold/30 text-gold/50'
+                            ? 'bg-gold/10 border border-gold/30 text-gray-500'
                             : isCompleted 
                               ? 'bg-emerald-500 text-white' 
                               : isCurrentModule 
@@ -169,7 +169,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <Clock className="w-3 h-3" />
                             {module.estimated_minutes} min
                             {isLocked && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-gold/50">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-gray-500">
                                 Locked
                               </Badge>
                             )}
@@ -188,7 +188,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                           {module.description || "Complete this module to learn key concepts and best practices."}
                         </p>
                         {isLocked ? (
-                          <div className="flex items-center gap-2 text-gold/70 text-sm">
+                          <div className="flex items-center gap-2 text-gray-700 text-sm">
                             <Lock className="w-4 h-4" />
                             <span>Join JBJ Broker Circle to access this module</span>
                           </div>

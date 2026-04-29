@@ -58,8 +58,8 @@ const DesignHistoryList = ({
       <div className="w-full max-w-4xl mx-auto">
         <div className="bg-zinc-900/60 border border-gray-800 rounded-2xl p-6">
           <div className="flex items-center gap-3">
-            <History className="w-5 h-5 text-white/60 animate-pulse" />
-            <span className="text-white/60">Loading history...</span>
+            <History className="w-5 h-5 text-white/90 animate-pulse" />
+            <span className="text-white/90">Loading history...</span>
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ const DesignHistoryList = ({
                           </p>
                         )}
                         
-                        <div className="flex items-center gap-2 mt-2 text-xs text-white/60">
+                        <div className="flex items-center gap-2 mt-2 text-xs text-white/90">
                           <Calendar className="w-3 h-3" />
                           {formatDate(item.createdAt)}
                           {item.designStyle && (

@@ -75,7 +75,7 @@ const AdminTrainingGuide = () => {
               <h1 className="text-white text-xl font-bold">
                 Listing Training Guide
               </h1>
-              <p className="text-white/60 text-sm">Complete property listing & verification guide</p>
+              <p className="text-white/90 text-sm">Complete property listing & verification guide</p>
             </div>
           </div>
           <Badge className="bg-gold/20 text-gold border-gold/30">
@@ -292,7 +292,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Properties under construction or not yet built. Requires handover date.
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Set handover date (future date)</li>
                       <li>• Include payment plan details</li>
                       <li>• Upload project brochure</li>
@@ -308,7 +308,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Completed properties available for immediate occupancy.
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Leave handover date empty or past date</li>
                       <li>• Include actual unit photos</li>
                       <li>• Verify availability status</li>
@@ -324,7 +324,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Properties listed by existing owners (homeowners).
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Verify Title Deed</li>
                       <li>• Confirm owner identity (ID/Passport)</li>
                       <li>• Use actual property photos only</li>
@@ -340,7 +340,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Office spaces, retail, warehouses, hotels.
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Specify commercial type</li>
                       <li>• Include service charge info</li>
                       <li>• Note any restrictions</li>
@@ -356,7 +356,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Properties available for lease (yearly or monthly).
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Specify annual rent price</li>
                       <li>• Note payment terms (1-4 cheques)</li>
                       <li>• Include furnished status</li>
@@ -372,7 +372,7 @@ const AdminTrainingGuide = () => {
                     <p className="text-white/70 text-sm mb-2">
                       Vacant land for development or investment.
                     </p>
-                    <ul className="text-xs text-white/60 space-y-1">
+                    <ul className="text-xs text-white/90 space-y-1">
                       <li>• Specify plot size in sqft</li>
                       <li>• Note zoning/permitted use</li>
                       <li>• Include location coordinates if available</li>
@@ -411,7 +411,7 @@ const AdminTrainingGuide = () => {
                     <span>Featured by management for promotion</span>
                   </li>
                 </ul>
-                <p className="text-white/60 text-sm mt-4">
+                <p className="text-white/90 text-sm mt-4">
                   Premium listings display with a Crown icon and receive priority visibility on the website.
                 </p>
               </CardContent>
@@ -472,28 +472,28 @@ const AdminTrainingGuide = () => {
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Use high-quality images</span>
-                      <p className="text-white/60 text-sm">Minimum 1920x1080 pixels, well-lit and clear</p>
+                      <p className="text-white/90 text-sm">Minimum 1920x1080 pixels, well-lit and clear</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Include exterior and interior shots</span>
-                      <p className="text-white/60 text-sm">Building facade, lobby, amenities, and unit interiors</p>
+                      <p className="text-white/90 text-sm">Building facade, lobby, amenities, and unit interiors</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">First image is primary</span>
-                      <p className="text-white/60 text-sm">Upload the best exterior/hero image first - it will be the thumbnail</p>
+                      <p className="text-white/90 text-sm">Upload the best exterior/hero image first - it will be the thumbnail</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Only use authorized images</span>
-                      <p className="text-white/60 text-sm">Images must be from developer or with permission. No stock photos for actual units.</p>
+                      <p className="text-white/90 text-sm">Images must be from developer or with permission. No stock photos for actual units.</p>
                     </div>
                   </li>
                 </ul>

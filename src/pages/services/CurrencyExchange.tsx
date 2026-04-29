@@ -159,7 +159,7 @@ const CurrencyExchange = () => {
                     <Play className="w-6 h-6 text-gold ml-1" />
                   </div>
                   <p className="text-gold text-sm font-medium">Cross-Border Buying Made Easier</p>
-                  <p className="text-white/60 text-xs mt-1">Video Coming Soon</p>
+                  <p className="text-white/90 text-xs mt-1">Video Coming Soon</p>
                 </div>
               </div>
             </motion.div>
@@ -172,7 +172,7 @@ const CurrencyExchange = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>

@@ -152,7 +152,7 @@ export const ModeSelectionModal = () => {
                       ? "bg-gold/20 border-gold"
                       : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-gold/60")} />
+                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-gray-600")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">

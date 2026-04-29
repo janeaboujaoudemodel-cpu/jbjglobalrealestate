@@ -507,7 +507,7 @@ export default function BrokerSubscriptionsDashboard() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleViewDetails(sub)}
-                        className="text-gold hover:text-gold/80 hover:bg-gold/10"
+                        className="text-gold hover:text-gray-800 hover:bg-gold/10"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         View

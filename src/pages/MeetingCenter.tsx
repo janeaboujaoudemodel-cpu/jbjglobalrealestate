@@ -112,7 +112,7 @@ const MeetingCenter = () => {
               </div>
             ) : filteredSummaries.length === 0 ? (
               <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
-                <Calendar className="w-12 h-12 text-gold/40 mx-auto mb-4" />
+                <Calendar className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-black mb-2">No summaries yet</h3>
                 <p className="text-gray-600 mb-6">
                   {activeTab === "all" 

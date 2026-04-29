@@ -364,7 +364,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Data Sources */}
           <div className="flex flex-wrap gap-2 justify-center pt-2">
             {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-              <Badge key={source} variant="outline" className="text-white/60 border-gray-700 text-xs">
+              <Badge key={source} variant="outline" className="text-white/90 border-gray-700 text-xs">
                 {source}
               </Badge>
             ))}
@@ -535,13 +535,13 @@ DISCLAIMER: ${result.disclaimer}
             {/* Disclaimer */}
             <Card className="bg-zinc-900/30 border-gray-800">
               <CardContent className="p-4">
-                <p className="text-xs text-white/60 flex items-start gap-2">
+                <p className="text-xs text-white/90 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                   {result.disclaimer}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {result.sources.map((source) => (
-                    <Badge key={source} variant="outline" className="text-white/60 border-gray-700 text-xs">
+                    <Badge key={source} variant="outline" className="text-white/90 border-gray-700 text-xs">
                       {source}
                     </Badge>
                   ))}

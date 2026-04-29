@@ -117,7 +117,7 @@ export function BrokerToolkitAcademy() {
                     </div>
                     <h3 className="text-sky-300 font-semibold text-lg mb-2">{cert.title}</h3>
                     <p className="text-white/70 text-sm mb-4">{cert.description}</p>
-                    <div className="flex items-center justify-between text-xs text-white/60">
+                    <div className="flex items-center justify-between text-xs text-white/90">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {cert.duration}

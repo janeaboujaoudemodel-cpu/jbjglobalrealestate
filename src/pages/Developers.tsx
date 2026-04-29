@@ -275,7 +275,7 @@ const Developers = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+            <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
           </motion.div>
         </section>
@@ -427,7 +427,7 @@ const Developers = () => {
               </div>
             ) : filteredDevelopers.length === 0 ? (
               <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
-                <Building2 className="w-20 h-20 text-gold/40 mx-auto mb-6" />
+                <Building2 className="w-20 h-20 text-gray-500 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
                   {activeFilterCount > 0 

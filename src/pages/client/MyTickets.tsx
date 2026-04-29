@@ -366,7 +366,7 @@ const MyTickets = () => {
                   }}
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 text-gold/60 hover:text-gold"
+                  className="h-6 w-6 text-gray-600 hover:text-gold"
                 />
               </div>
             </div>

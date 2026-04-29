@@ -101,10 +101,10 @@ const ComingSoon = () => {
             transition={{ delay: 0.6, duration: 0.6 }}
             className="space-y-4"
           >
-            <p className="text-lg md:text-xl text-white/60 font-light">
+            <p className="text-lg md:text-xl text-white/90 font-light">
               {t('comingSoon.subtitle', config.subtitle)}
             </p>
-            <p className="text-sm md:text-base text-white/40 tracking-[0.2em] uppercase">
+            <p className="text-sm md:text-base text-white/85 tracking-[0.2em] uppercase">
               {t('comingSoon.tagline', config.tagline)}
             </p>
           </motion.div>
@@ -138,7 +138,7 @@ const ComingSoon = () => {
               {t('comingSoon.joinCircle', 'Join the Circle')}
             </h3>
             
-            <p className="text-white/50 text-sm md:text-base mb-8 max-w-sm mx-auto leading-relaxed">
+            <p className="text-white/90 text-sm md:text-base mb-8 max-w-sm mx-auto leading-relaxed">
               {t('comingSoon.joinCircleDesc', 'Fill the form to join our circle and be the first to access exclusive properties and market insights.')}
             </p>
 
@@ -203,7 +203,7 @@ const ComingSoon = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.6 }}
-            className="mt-12 text-xs text-white/30"
+            className="mt-12 text-xs text-white/85"
           >
             © {new Date().getFullYear()} JBJ Global Real Estate. {t('footer.allRightsReserved', 'All Rights Reserved.')}
           </motion.p>

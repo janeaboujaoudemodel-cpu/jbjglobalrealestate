@@ -89,7 +89,7 @@ const Presentations = () => {
               </div>
             ))}
             <div className="cursor-pointer rounded-xl border-2 border-dashed border-gray-700 hover:border-gray-500 flex items-center justify-center aspect-video transition-all" onClick={h.addSlide}>
-              <div className="text-center"><Plus className="w-6 h-6 text-white/60 mx-auto mb-2" /><span className="text-xs text-white/60">Add Slide</span></div>
+              <div className="text-center"><Plus className="w-6 h-6 text-white/90 mx-auto mb-2" /><span className="text-xs text-white/90">Add Slide</span></div>
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@ const Presentations = () => {
         <button onClick={(e) => { e.stopPropagation(); h.exitPresentation(); }} className="absolute top-4 right-4 p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors z-10"><X className="w-5 h-5 text-white" /></button>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/60 backdrop-blur-sm px-5 py-2.5 rounded-full">
           <span className="text-white/70 text-sm font-medium">{h.currentSlide + 1} / {h.slides.length}</span>
-          <span className="text-white/40 text-xs">Click or arrow keys to navigate</span>
+          <span className="text-white/85 text-xs">Click or arrow keys to navigate</span>
         </div>
       </div>
     );
@@ -161,7 +161,7 @@ const Presentations = () => {
             <div className="w-full mb-5 bg-zinc-900/80 border border-[#B89555]/30 rounded-2xl p-5" style={{ maxWidth: `${1920 * previewScale + 40}px` }}>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2"><Wand2 className="w-4 h-4 text-[#B89555]" /><h3 className="text-sm font-semibold text-gray-200">AI Slide Generator</h3></div>
-                <button onClick={() => h.setShowAIPanel(false)} className="text-white/60 hover:text-white/85"><X className="w-4 h-4" /></button>
+                <button onClick={() => h.setShowAIPanel(false)} className="text-white/90 hover:text-white/85"><X className="w-4 h-4" /></button>
               </div>
               <div className="grid grid-cols-5 gap-2 mb-4">
                 {AI_SLIDE_PRESETS.map(preset => {
@@ -182,7 +182,7 @@ const Presentations = () => {
                   <Button size="sm" variant="outline" onClick={() => h.generateFullDeck(h.aiPrompt || h.presentationTitle)} disabled={h.isAIGenerating} className="border-[#B89555]/40 text-[#B89555] hover:bg-[#B89555]/10 text-xs"><Layers className="w-3.5 h-3.5" /> Full Deck</Button>
                 </div>
               </div>
-              <p className="text-[10px] text-white/60">Tip: Use "Full Deck" to generate a complete 7-slide presentation instantly.</p>
+              <p className="text-[10px] text-white/90">Tip: Use "Full Deck" to generate a complete 7-slide presentation instantly.</p>
             </div>
           )}
 
@@ -264,7 +264,7 @@ const Presentations = () => {
         <div className="w-60 border-l border-gray-800 bg-zinc-900/50 overflow-y-auto flex-shrink-0 p-3 space-y-4">
           <h3 className="text-xs font-bold text-white/85 uppercase tracking-wider">Slide Properties</h3>
           <div>
-            <label className="text-[10px] text-white/60 mb-1.5 block uppercase tracking-wide">Layout</label>
+            <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Layout</label>
             <div className="grid grid-cols-2 gap-1">
               {(["title", "content", "two-column", "blank", "quote", "stats"] as const).map(layout => (
                 <button key={layout} className={`py-1.5 text-xs rounded-lg capitalize transition-all ${h.slide.layout === layout ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50 font-semibold" : "bg-zinc-800 text-white/85 hover:bg-gray-700 border border-transparent"}`} onClick={() => h.updateSlide("layout", layout)}>{layout}</button>
@@ -272,13 +272,13 @@ const Presentations = () => {
             </div>
           </div>
           <div>
-            <label className="text-[10px] text-white/60 mb-1.5 block uppercase tracking-wide">Font</label>
+            <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Font</label>
             <select value={h.slide.fontFamily} onChange={(e) => h.updateSlide("fontFamily", e.target.value)} className="w-full bg-zinc-800 text-gray-200 text-xs rounded-lg px-2 py-1.5 border border-gray-700 focus:outline-none focus:border-[#B89555]">
               {FONT_OPTIONS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-[10px] text-white/60 mb-1.5 block uppercase tracking-wide">Alignment</label>
+            <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">Alignment</label>
             <div className="flex gap-1">
               {(["left", "center", "right"] as const).map(align => (
                 <button key={align} onClick={() => h.updateSlide("textAlign", align)} className={`flex-1 py-1.5 rounded-lg flex items-center justify-center transition-all ${h.slide.textAlign === align ? "bg-[#B89555]/20 text-[#B89555] border border-[#B89555]/50" : "bg-zinc-800 text-white/70 hover:bg-gray-700 border border-transparent"}`}>
@@ -288,11 +288,11 @@ const Presentations = () => {
             </div>
           </div>
           <div>
-            <label className="text-[10px] text-white/60 mb-1 block uppercase tracking-wide">Title Size: {h.slide.titleSize}px</label>
+            <label className="text-[10px] text-white/90 mb-1 block uppercase tracking-wide">Title Size: {h.slide.titleSize}px</label>
             <input type="range" min={24} max={96} value={h.slide.titleSize} onChange={(e) => h.updateSlide("titleSize", +e.target.value)} className="w-full accent-[#B89555]" />
           </div>
           <div>
-            <label className="text-[10px] text-white/60 mb-1 block uppercase tracking-wide">Content Size: {h.slide.contentSize}px</label>
+            <label className="text-[10px] text-white/90 mb-1 block uppercase tracking-wide">Content Size: {h.slide.contentSize}px</label>
             <input type="range" min={14} max={48} value={h.slide.contentSize} onChange={(e) => h.updateSlide("contentSize", +e.target.value)} className="w-full accent-[#B89555]" />
           </div>
           {[
@@ -301,7 +301,7 @@ const Presentations = () => {
             { label: "Accent Color", field: "accentColor" as const },
           ].map(c => (
             <div key={c.field}>
-              <label className="text-[10px] text-white/60 mb-1.5 block uppercase tracking-wide">{c.label}</label>
+              <label className="text-[10px] text-white/90 mb-1.5 block uppercase tracking-wide">{c.label}</label>
               <div className="flex items-center gap-2">
                 <input type="color" value={h.slide[c.field]} onChange={(e) => h.updateSlide(c.field, e.target.value)} className="w-8 h-8 rounded-lg border border-gray-600 cursor-pointer bg-transparent" />
                 <span className="text-xs text-white/70 font-mono">{h.slide[c.field]}</span>

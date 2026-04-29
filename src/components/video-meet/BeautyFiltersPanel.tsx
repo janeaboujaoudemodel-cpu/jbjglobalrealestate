@@ -290,7 +290,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                     <Wand2 className="h-4 w-4 mr-2" />
                     AI Persona Generator
                   </Button>
-                  <p className="text-xs text-white/60 mt-2">
+                  <p className="text-xs text-white/90 mt-2">
                     Describe or select a persona to transform your appearance
                   </p>
                 </div>

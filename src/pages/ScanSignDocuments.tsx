@@ -98,7 +98,7 @@ const ScanSignDocuments = () => {
                   <TabsContent value="upload" className="mt-4">
                     <input type="file" accept="image/png,image/jpeg" className="hidden" id="sig-upload" onChange={h.handleSignatureUpload} />
                     <label htmlFor="sig-upload" className="flex flex-col items-center justify-center h-20 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer hover:border-emerald-500 transition-colors">
-                      <Image className="w-6 h-6 text-white/60 mb-1" /><span className="text-xs text-white/60">Upload PNG signature</span>
+                      <Image className="w-6 h-6 text-white/90 mb-1" /><span className="text-xs text-white/90">Upload PNG signature</span>
                     </label>
                   </TabsContent>
                 </Tabs>
@@ -139,7 +139,7 @@ const ScanSignDocuments = () => {
               <CardContent className="space-y-4">
                 <input ref={h.cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={h.handleCameraCapture} />
                 <Button onClick={() => h.cameraInputRef.current?.click()} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"><Camera className="w-4 h-4 mr-2" />Capture with Camera</Button>
-                <p className="text-xs text-white/60 text-center">Auto-straightens & enhances like a scanner</p>
+                <p className="text-xs text-white/90 text-center">Auto-straightens & enhances like a scanner</p>
                 <input ref={h.fileInputRef} type="file" accept="image/*,application/pdf" multiple className="hidden" onChange={h.handleFileUpload} />
                 <Button onClick={() => h.fileInputRef.current?.click()} variant="outline" className="w-full border-gray-700 text-white/85 hover:bg-gray-800"><Upload className="w-4 h-4 mr-2" />Upload PDF/Image</Button>
               </CardContent>
@@ -156,7 +156,7 @@ const ScanSignDocuments = () => {
                         <p className="text-sm text-white truncate flex-1">{doc.name}</p>
                         <span className={`text-xs px-2 py-0.5 rounded ${doc.isColor ? 'bg-blue-500/20 text-blue-400' : 'bg-zinc-600/20 text-white/70'}`}>{doc.isColor ? 'Color' : 'B&W'}</span>
                       </div>
-                      <p className="text-xs text-white/60">{doc.timestamp.toLocaleTimeString()}</p>
+                      <p className="text-xs text-white/90">{doc.timestamp.toLocaleTimeString()}</p>
                     </div>
                   ))}
                 </CardContent>
@@ -232,7 +232,7 @@ const ScanSignDocuments = () => {
                       <FileText className="w-10 h-10 text-emerald-400/50" />
                     </div>
                     <h3 className="text-white font-semibold mb-2">No Document Selected</h3>
-                    <p className="text-white/60 text-sm mb-4">Scan or upload a document to get started</p>
+                    <p className="text-white/90 text-sm mb-4">Scan or upload a document to get started</p>
                     <div className="flex gap-3">
                       <Button onClick={() => h.cameraInputRef.current?.click()} className="bg-emerald-600"><Camera className="w-4 h-4 mr-2" />Scan</Button>
                       <Button onClick={() => h.fileInputRef.current?.click()} variant="outline"><Upload className="w-4 h-4 mr-2" />Upload</Button>

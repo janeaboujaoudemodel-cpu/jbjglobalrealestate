@@ -133,7 +133,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
               AI Video
               <span className="bg-gradient-to-r from-primary via-gold to-primary bg-clip-text text-transparent"> Builder</span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
               Create stunning, cinematic property videos in minutes with AI-powered editing, voiceovers, and branding
             </p>
           </motion.div>
@@ -160,7 +160,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                         className="absolute inset-0 rounded-full bg-primary/10"
                       />
                     </div>
-                    <p className="text-white/60 text-lg">AI-Powered Property Tours</p>
+                    <p className="text-white/90 text-lg">AI-Powered Property Tours</p>
                   </div>
                 </div>
 
@@ -198,7 +198,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-white font-semibold">Creek Vista by Sobha</p>
-                      <p className="text-white/60 text-sm">Dubai Creek Harbour</p>
+                      <p className="text-white/90 text-sm">Dubai Creek Harbour</p>
                     </div>
                     <Badge className="bg-primary text-primary-foreground">
                       AED 1.8M
@@ -266,7 +266,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                     <feature.icon className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
-                  <p className="text-white/50 text-sm">{feature.description}</p>
+                  <p className="text-white/90 text-sm">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -290,7 +290,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   This Tool is Reserved for JBJ Brokers
                 </h2>
 
-                <p className="text-white/60 mb-6">
+                <p className="text-white/90 mb-6">
                   Join the JBJ Broker Circle and unlock instant access to the AI Video Builder, 
                   plus 20+ professional tools, dedicated support, and exclusive training.
                 </p>
@@ -318,7 +318,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   )}
                 </div>
 
-                <p className="text-white/40 text-sm mt-6">
+                <p className="text-white/85 text-sm mt-6">
                   Connect with our HR team to start your journey today
                 </p>
               </CardContent>

@@ -19,7 +19,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
           <div>
             <h4 className="text-white font-semibold">Legal Notice & Disclaimer</h4>
-            <p className="text-white/60 text-xs">JBJ Global Real Estate | Brokerage</p>
+            <p className="text-white/90 text-xs">JBJ Global Real Estate | Brokerage</p>
           </div>
         </div>
 

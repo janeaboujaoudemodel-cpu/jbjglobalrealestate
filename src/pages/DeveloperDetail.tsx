@@ -30,7 +30,7 @@ const DeveloperProjectsMap = lazy(() => import("@/components/developer/Developer
 const MapLoadingFallback = () => (
   <div className="rounded-xl border-2 border-gold/40 bg-champagne/20 p-8 h-[400px] flex items-center justify-center">
     <div className="text-center">
-      <MapIcon className="w-12 h-12 text-gold/50 mx-auto mb-3 animate-pulse" />
+      <MapIcon className="w-12 h-12 text-gray-500 mx-auto mb-3 animate-pulse" />
       <p className="text-foreground/70">Loading map...</p>
     </div>
   </div>

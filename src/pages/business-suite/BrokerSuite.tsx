@@ -77,7 +77,7 @@ const BrokerSuite = () => {
             Accelerate your sales pipeline with intelligent automation.
           </p>
           
-          <div className="flex items-center justify-center gap-4 text-sm text-white/60">
+          <div className="flex items-center justify-center gap-4 text-sm text-white/90">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-purple-400 rounded-full" />
               5 Tools Included
