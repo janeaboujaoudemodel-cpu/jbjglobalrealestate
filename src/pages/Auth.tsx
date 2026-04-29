@@ -551,7 +551,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 {errors.otp && <p className="text-red-500 text-sm">{errors.otp}</p>}
               </div>
 
-              <Button type="submit" disabled={isSubmitting || otpCode.length !== 6} className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20 transition-all duration-300">
+              <Button type="submit" disabled={isSubmitting || otpCode.length !== 6} className="w-full h-12 bg-black hover:bg-gray-900 text-white font-semibold rounded-xl shadow-lg transition-all duration-300">
                 {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify Code"}
               </Button>
 
