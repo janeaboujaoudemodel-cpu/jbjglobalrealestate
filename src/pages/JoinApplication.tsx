@@ -413,10 +413,10 @@ export default function JoinApplication() {
       <section className="jj-section-champagne py-16 px-4 pt-20 lg:pt-16">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-black mb-2">
-              <span className="text-black underline decoration-black/40 underline-offset-8">Join</span> JBJ Global Real Estate
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#000000' }}>
+              <span style={{ color: '#000000' }}>Join</span> JBJ Global Real Estate
             </h1>
-            <p className="text-black/70">
+            <p style={{ color: 'rgba(0,0,0,0.72)' }}>
               Apply to become a broker partner. Complete the form below to start your journey.
             </p>
           </div>
@@ -425,21 +425,23 @@ export default function JoinApplication() {
           <Card className="bg-white border border-black/10 shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-8 h-8 text-white" />
+                <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#000000' }}>
+                  <Bot className="w-8 h-8" style={{ color: '#ffffff' }} />
                 </div>
                 <div className="text-center sm:text-left flex-1">
-                  <h3 className="text-lg font-semibold text-black mb-1">Prefer a Conversation?</h3>
-                  <p className="text-sm text-gray-700">
+                  <h3 className="text-lg font-semibold mb-1" style={{ color: '#000000' }}>Prefer a Conversation?</h3>
+                  <p className="text-sm" style={{ color: '#374151' }}>
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
                 </div>
-                <Button variant="primary" asChild>
-                  <Link to="/hr-agent" className="text-white">
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    <span className="text-white font-semibold">Contact Our HR · Jessica</span>
-                  </Link>
-                </Button>
+                <Link
+                  to="/hr-agent"
+                  className="inline-flex items-center justify-center gap-2 rounded-md px-4 h-10 font-semibold shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap"
+                  style={{ backgroundColor: '#000000', color: '#ffffff' }}
+                >
+                  <MessageCircle className="w-4 h-4" style={{ color: '#ffffff' }} />
+                  <span style={{ color: '#ffffff' }}>Contact Our HR · Jessica</span>
+                </Link>
               </div>
             </CardContent>
           </Card>
