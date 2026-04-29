@@ -105,6 +105,29 @@ All colors MUST be HSL.
     --champagne-2: 0 0% 96%;
     --champagne-3: 0 0% 93%;
 
+    /* ─── Hairline / divider tokens ─────────────────────────────
+     * Section-divider hairlines on dark surfaces:
+     *   - Always render via <AdaptiveHairline /> (src/components/ui/AdaptiveHairline.tsx)
+     *   - Tokens below are the SOURCE OF TRUTH; do not inline new
+     *     rgba(200,167,102,…) gradients in components.
+     * RGB triplets compose into rgba(...) inside gradient strings.
+     * Alphas are baseline values that useAdaptiveHairline scales
+     * per underlay luminance.
+     * Mirrored in TS at src/styles/hairlineTokens.ts.
+     */
+    --hairline-champagne-rgb: 200, 167, 102; /* #C8A766 — brand champagne */
+    --hairline-white-rgb: 255, 255, 255;
+    --hairline-ink-rgb: 10, 9, 8; /* obsidian footer surface */
+
+    --hairline-alpha-white: 0.14;
+    --hairline-alpha-white-soft: 0.10;
+    --hairline-alpha-gold: 0.35;
+    --hairline-alpha-gold-peak: 0.40;
+
+    /* Static fallbacks for SSR / non-adaptive contexts */
+    --hairline-static-gold: rgba(200, 167, 102, 0.35);
+    --hairline-static-white: rgba(255, 255, 255, 0.14);
+
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
      * ============================================================ */
