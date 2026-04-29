@@ -422,22 +422,22 @@ export default function JoinApplication() {
           </div>
 
           {/* HR Agent CTA - Meet Jessica */}
-          <Card className="jj-box-active mb-8">
+          <Card className="bg-white border border-black/10 shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-8 h-8 text-gold" />
+                  <Bot className="w-8 h-8 text-white" />
                 </div>
                 <div className="text-center sm:text-left flex-1">
                   <h3 className="text-lg font-semibold text-black mb-1">Prefer a Conversation?</h3>
-                  <p className="text-sm text-black/70">
+                  <p className="text-sm text-gray-700">
                     Meet Jessica — available 24/7 to support you. She'll collect your CV, qualify you, and conduct your interview.
                   </p>
                 </div>
                 <Button variant="primary" asChild>
-                  <Link to="/hr-agent">
+                  <Link to="/hr-agent" className="text-white">
                     <MessageCircle className="w-4 h-4 mr-2" />
-                    <span className="text-black">Contact</span><span className="text-gold"> Our HR · Jessica</span>
+                    <span className="text-white font-semibold">Contact Our HR · Jessica</span>
                   </Link>
                 </Button>
               </div>
