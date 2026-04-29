@@ -817,18 +817,43 @@ export default function GlobalVerticalNav() {
       : "text-black/80 hover:bg-gold/[0.08] hover:text-black border border-black/10 hover:border-gold/30";
   };
 
+  // Saturated colored rows where the row background is a vivid fill (not champagne).
+  // On those rows, icon glyphs go white for contrast and the tile uses translucent white.
+  const isSaturatedColorRow = (item: NavItem) =>
+    item.href === '/join' ||
+    item.href === '/quiz' ||
+    (item.href === '/listing-portal' && (item as any).highlight) ||
+    item.href === '/resale-properties';
+
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (item.href === '/join') return shouldHighlight ? 'text-white' : 'text-rose-500';
-    if (item.href === '/quiz') return shouldHighlight ? 'text-white' : 'text-violet-500';
-    if (item.href === '/ai-hub') return shouldHighlight ? 'text-white' : 'text-amber-700';
-    if (item.href === '/listing-portal' && item.highlight) return shouldHighlight ? 'text-white' : 'text-sky-500';
-    if (item.href === '/resale-properties') return shouldHighlight ? 'text-white' : 'text-emerald-600';
-    if (sectionKey === 'MY ACCOUNT') return 'text-gold';
-    return "text-gold";
+    // Saturated colored row → white icon for legibility on the colored fill.
+    if (isSaturatedColorRow(item)) {
+      return shouldHighlight ? 'text-white' : 'text-white';
+    }
+    // Active on champagne row → deeper gold for stronger contrast.
+    if (shouldHighlight) return 'text-[hsl(var(--gold-dark))]';
+    // Resting state → premium gold.
+    return 'text-[hsl(var(--gold))]';
   };
+
+  // Premium gold-bordered icon tile shared across nav rows.
+  const getIconTileClass = (item: NavItem) => {
+    const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
+    const routeActive = isRouteActive(item.href);
+    const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
+    if (isSaturatedColorRow(item)) {
+      // White-on-color tile so it doesn't fight the saturated row background
+      return 'bg-white/15 border border-white/45 group-hover:bg-white/25 group-hover:border-white/70';
+    }
+    if (shouldHighlight) {
+      return 'bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/80 shadow-[0_0_0_1px_rgba(217,194,146,0.35)]';
+    }
+    return 'bg-[hsl(var(--gold))]/[0.06] border border-[hsl(var(--gold))]/45 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/70';
+  };
+
 
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
