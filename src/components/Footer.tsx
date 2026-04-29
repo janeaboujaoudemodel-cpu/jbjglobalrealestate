@@ -446,15 +446,26 @@ const Footer = () => {
     { label: "Education Hub", href: "/education-hub" },
   ];
 
+  // Adaptive hairline gradient — center peak alpha follows underlay luminance.
+  const accentHairline = `linear-gradient(90deg, transparent 0%, ${ACCENT}00 8%, rgba(200,167,102,${hairline.goldPeak}) 50%, ${ACCENT}00 92%, transparent 100%)`;
+  const navHairline = `linear-gradient(90deg, transparent, rgba(255,255,255,${hairline.whiteSoft}) 20%, rgba(200,167,102,${hairline.gold}) 50%, rgba(255,255,255,${hairline.whiteSoft}) 80%, transparent)`;
+
   return (
     <footer
+      ref={footerRef}
       id="site-footer"
       data-surface="dark"
+      data-hairline-luminance={hairline.luminance.toFixed(4)}
       className="relative overflow-x-hidden isolate"
       style={{
         background: "#0A0908",
         color: "rgba(255,255,255,0.85)",
         fontFamily: "Inter, system-ui, sans-serif",
+        // Expose alphas as CSS vars so descendants can opt in if needed.
+        ["--fh-white" as string]: `rgba(255,255,255,${hairline.white})`,
+        ["--fh-white-soft" as string]: `rgba(255,255,255,${hairline.whiteSoft})`,
+        ["--fh-gold" as string]: `rgba(200,167,102,${hairline.gold})`,
+        ["--fh-gold-peak" as string]: `rgba(200,167,102,${hairline.goldPeak})`,
       }}
     >
       {/* Premium ambient overlays — vignette + soft champagne wash */}
