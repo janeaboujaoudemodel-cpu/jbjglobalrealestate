@@ -16,16 +16,14 @@ const fadeInUp = {
 };
 
 /* ============================================================
- * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ICON BOX STYLE - Solid black tile, white icon (max contrast)
  * ============================================================ */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div 
-    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
-    style={{
-      background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-    }}
+  <div
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${className}`}
+    style={{ backgroundColor: '#000000' }}
   >
-    <Icon className="w-6 h-6 text-black" />
+    <Icon className="w-6 h-6" style={{ color: '#ffffff' }} />
   </div>
 );
 
@@ -85,13 +83,13 @@ export const MarketOverviewDashboard = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-bold" style={{ color: '#000000' }}>
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="text-gold">Dubai</span> <span className="text-black">Real Estate Dashboard</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
+              <span style={{ color: '#000000' }}>Dubai</span> <span style={{ color: '#000000' }}>Real Estate Dashboard</span>
             </h2>
-            <p className="text-black/80 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
@@ -146,23 +144,24 @@ export const MarketOverviewDashboard = () => {
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
                       const qColors = [
-                        'from-emerald-500 to-emerald-400',
-                        'from-blue-500 to-blue-400',
-                        'from-amber-500 to-amber-400',
-                        'from-purple-500 to-purple-400',
+                        'linear-gradient(to right, #10B981, #34D399)', // emerald
+                        'linear-gradient(to right, #3B82F6, #60A5FA)', // blue
+                        'linear-gradient(to right, #F59E0B, #FBBF24)', // amber
+                        'linear-gradient(to right, #8B5CF6, #A78BFA)', // violet
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="text-black font-medium text-sm w-20">{quarter.quarter}</span>
-                          <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
+                          <span className="font-semibold text-sm w-20" style={{ color: '#000000' }}>{quarter.quarter}</span>
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner" style={{ backgroundColor: '#F3F4F6' }}>
                             <motion.div
-                              className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
+                              className="h-full"
+                              style={{ background: qColors[idx % qColors.length] }}
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-bold">
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold" style={{ color: '#000000' }}>
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>
@@ -170,7 +169,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black/90 text-xs mt-4">
+                  <p className="text-xs mt-4 font-medium" style={{ color: '#374151' }}>
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -189,14 +188,14 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {PROPERTY_TYPE_TRENDS.map((prop) => (
-                      <div key={prop.type} className="flex items-center justify-between py-3 border-b border-black/10 last:border-0">
+                      <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
                         <div>
-                          <p className="text-black font-medium">{prop.type}</p>
-                          <p className="text-black/70 font-medium text-sm">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="font-semibold" style={{ color: '#000000' }}>{prop.type}</p>
+                          <p className="font-medium text-sm" style={{ color: '#374151' }}>{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-black font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className={`text-sm ${prop.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                          <p className="font-bold" style={{ color: '#000000' }}>AED {prop.avgPrice.toLocaleString()}/sqft</p>
+                          <p className="text-sm font-bold" style={{ color: prop.change >= 0 ? '#047857' : '#B91C1C' }}>
                             {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
                           </p>
                         </div>
@@ -209,17 +208,17 @@ export const MarketOverviewDashboard = () => {
           </div>
 
           {/* Data Attribution */}
-          <motion.div 
+          <motion.div
             className="mt-8 text-center"
             variants={fadeInUp}
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
-              <Calendar className="w-4 h-4 text-gold" />
-              <span className="text-black/80 text-sm font-medium">
+              <Calendar className="w-4 h-4" style={{ color: '#000000' }} />
+              <span className="text-sm font-semibold" style={{ color: '#000000' }}>
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-black/70">•</span>
-              <span className="text-black/90 text-sm font-medium">
+              <span style={{ color: '#374151' }}>•</span>
+              <span className="text-sm font-medium" style={{ color: '#374151' }}>
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>
