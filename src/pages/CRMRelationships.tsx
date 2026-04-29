@@ -32,6 +32,68 @@ import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+type FieldSourceMeta = { source: string; url?: string; fetched_at?: string } | undefined;
+
+const SOURCE_LABELS: Record<string, string> = {
+  master_catalog: "Master catalog",
+  perplexity: "AI web research",
+  firecrawl: "Website scrape",
+  ai_inference: "AI inferred",
+  manual: "Manual",
+};
+
+const SOURCE_STYLES: Record<string, string> = {
+  master_catalog: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  perplexity: "bg-blue-50 text-blue-800 border-blue-200",
+  firecrawl: "bg-indigo-50 text-indigo-800 border-indigo-200",
+  ai_inference: "bg-amber-50 text-amber-900 border-amber-200",
+  manual: "bg-gray-100 text-gray-700 border-gray-200",
+};
+
+const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
+  if (!meta || !meta.source) return null;
+  const label = SOURCE_LABELS[meta.source] || meta.source.replace(/_/g, " ");
+  const cls = SOURCE_STYLES[meta.source] || SOURCE_STYLES.manual;
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          onClick={(e) => e.stopPropagation()}
+          className={`shrink-0 text-[9px] uppercase tracking-wider px-1.5 py-px rounded-full border font-semibold ${cls}`}
+          aria-label={`Source: ${label}`}
+        >
+          {label}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="text-xs w-64 bg-white border-black/10" onClick={(e) => e.stopPropagation()}>
+        <div className="font-semibold text-black">{label}</div>
+        {meta.url && (
+          <a
+            href={meta.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-1 underline text-blue-700 break-all"
+          >
+            {meta.url}
+          </a>
+        )}
+        {meta.fetched_at && (
+          <div className="text-gray-500 mt-1">
+            Fetched {new Date(meta.fetched_at).toLocaleString()}
+          </div>
+        )}
+        {meta.source === "ai_inference" && (
+          <div className="mt-2 text-amber-800">
+            This value was inferred from the website domain. Verify before using.
+          </div>
+        )}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+
 const STATUS_BROKERAGE = [
   { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
   { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
