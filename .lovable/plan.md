@@ -1,79 +1,44 @@
-# Fix Faded UI Across Careers, Join, and Globally
+# Hard-Fix Persistent Faded UI on /join
 
-## Problem (from screenshots)
+## What's still broken (from new screenshots)
 
-**Screenshot 1 — Careers grid:** Every role card (Real Estate Broker, Senior Broker, Luxury Specialist, Off-Plan, Marketing, Social Media, Content Creator, Full-Stack, UI/UX, IT) renders as light gray on a light gray gradient. Titles, "Sales/Marketing/IT" badges, "Commission Basis", "Dubai, UAE", and descriptions are all near-invisible. The "Partner" badges are washed out. The right-side preview pane is empty/gray.
+1. **IMG_4421** — "Join" still renders in faded gold, NOT black. My previous JSX change to `text-black` didn't visually take effect because some other CSS rule still wins.
+2. **IMG_4421** — "Contact Our HR · Jessica" button shows only the chat icon; the text label is invisible. The shadcn `<Button variant="primary" asChild>` wrapper combined with descendant-selector contrast guards is killing the white color on the inner `<span>`.
+3. **IMG_4419 / IMG_4420** — Position cards have pills that wrap mid-word: "Sales" → "Sale s", "Partner" → "Partn er". The Badge components are too narrow / have wrap enabled.
+4. **IMG_4420** — "Commission Basis" text on the position card still renders in faded gold — my amber-700 swap didn't apply because the running build is older than my last edit, OR a different code path is rendering it. Need belt-and-suspenders inline styles.
 
-**Screenshot 2 — Join page:** The word "Join" (gold) blends into the cream background. The "Prefer a Conversation?" CTA button is a black pill with no visible label (gold text on black fails our own contrast guard). Jessica's icon circle is solid black with no glyph. Sidebar nav items (Properties, Tools, Insights, Guides, Services, Partners, Broker & Academy) are gray-on-gray.
+## Root cause
+The CSS contrast guards in `index.css` are deeply nested and use `!important`. JSX class names like `text-black` and `text-white` are getting overridden by `:where()` cascades and `[class*="bg-…"]` matchers in unpredictable ways. The bullet-proof solution is **inline `style={{ color }}` on the affected elements** — inline styles beat any external CSS rule short of `!important` on the same element.
 
-## Root Cause
+## Fixes
 
-Same recurring pattern we've fixed elsewhere:
-1. `text-gold` resolves to a dark champagne value that disappears on light/cream surfaces and on solid black buttons.
-2. `text-muted-foreground` is too light on white cards.
-3. Position cards use a light gradient background with no border + muted text, so the whole card fades.
-4. Inline buttons embedding `text-gold` on `bg-black` violate the Gold Visibility Guard but bypass it because the class is applied directly.
+### `src/pages/JoinApplication.tsx`
 
-## Fix Plan (no new features, no removals)
+**Hero "Join" headline (lines 416-418):**
+- Replace the `<span className="text-gold|text-black …">Join</span>` with `<span style={{ color: '#000000' }}>Join</span>`. Apply same inline style to the h1 itself.
 
-### 1. `src/pages/JoinApplication.tsx`
-- Replace `text-gold` on light surfaces with `text-black` for the "Join" headline accent and form/section icons (Briefcase, User, Upload).
-- "Prefer a Conversation?" Jessica CTA: change button to `bg-black text-white` with a visible MessageCircle icon + label; ensure the avatar circle shows the icon in white.
-- Replace `text-muted-foreground` helper text with `text-gray-700`.
-- Position cards (the grid in screenshot 1):
-  - Card surface: `bg-white border border-black/10 hover:border-black/30 shadow-sm hover:shadow-md`
-  - Title: `text-black font-semibold`
-  - Department badge: `bg-black text-white` (or category-tinted with white text)
-  - Location row: `text-gray-700` with `text-black` icon
-  - Description: `text-gray-700`
-  - "Commission Basis" + "Partner" pills: solid amber/black with white text instead of gold/20 washes
-  - Selected state: `ring-2 ring-black bg-gray-50`
-- Footer email/phone link `text-gold` → `text-black underline-offset-4 hover:underline`.
-- Loader spinner `text-gold` → `text-black`.
-- Existing-application status pill: solid emerald/amber with white text.
-- Terms/Privacy links: `text-black underline`.
+**Jessica CTA (lines 425-445):**
+- Drop the shadcn `<Button variant="primary" asChild>` wrapper. Render the `<Link>` directly with explicit Tailwind utility classes AND inline `style={{ backgroundColor: '#000', color: '#fff' }}`. This bypasses every contrast guard.
+- Inline-style the `MessageCircle` icon and label span to `color: '#ffffff'` so they cannot be flipped.
+- Inline-style the Bot icon (Jessica avatar) to white as well.
+- Add `whitespace-nowrap` so the label never wraps.
 
-### 2. Global guard reinforcement (`src/index.css`)
-Extend the existing Gold Visibility Guard so it also catches inline `text-gold` on neutral light backgrounds (white/cream/gray-50/gray-100) and forces black, plus on solid black buttons forces white. This auto-fixes any other page we miss.
+**Position cards pills (lines 589-600):**
+- Add `whitespace-nowrap` to all three badges (`Partner`, `department`, `Commission Basis`, location) so "Sales" and "Partner" never break across two lines.
+- Keep the previously applied black/white solid pills. Add inline `style={{ color }}` as a final guard on the "Commission Basis" span (`color: '#b45309'` for amber-700) and the location text (`color: '#374151'` for gray-700) so even if the rest of the cascade fails, the cards remain readable.
+- Set the Partner badge to `min-width: fit-content` so the star + "Partner" label stays one line.
 
-```css
-/* Gold on light surfaces → black */
-.bg-white .text-gold,
-.bg-card .text-gold,
-.bg-background .text-gold,
-[class*="bg-gray-50"] .text-gold,
-[class*="bg-gray-100"] .text-gold,
-[class*="from-gray"] .text-gold,
-[class*="from-white"] .text-gold {
-  color: #000 !important;
-}
-/* Gold on solid dark buttons → white (extend existing rule) */
-button.bg-black .text-gold,
-a.bg-black .text-gold,
-.bg-black > .text-gold { color: #fff !important; }
-```
+### `src/index.css` (small reinforcement)
+- Confirm the existing PASS 5 guard catches `.jj-section-champagne` and add a final one-liner: `.jj-section-champagne span { /* no special color */ }` — actually, no, leave the cascade alone; inline styles are enough.
 
-### 3. Sidebar nav contrast (already partially in `src/index.css`)
-Confirm sidebar item labels resolve to `text-gray-800` inactive / `text-black font-semibold` active so Properties/Tools/Insights/etc. are readable in screenshot 2.
+## Out of scope
+- Position-card content (titles, descriptions) is dynamic from DB, untouched.
+- No new features. No layout restructure.
 
-### 4. Global audit sweep (read-only verification, then fix instances)
-Run `rg "text-gold"` across `src/` and replace any remaining usages on light backgrounds with `text-black`. Same for `text-muted-foreground` inside cards/badges where it's the primary label. Files already known to need it from prior sweeps (Auth, JoinApplication done now) — extend to:
-- `src/pages/HRAgent.tsx`, `src/pages/HRDashboard.tsx`
-- `src/pages/JoinBrokerList.tsx`, `src/pages/JoinDeveloperList.tsx`, `src/pages/JoinInvestorList.tsx`
-- Any position-card-like component using gold pills.
+## Files to edit
+- `src/pages/JoinApplication.tsx` (single targeted edit, lines ~416-445 and ~589-605)
 
-The CSS guard in step 2 is the safety net that fixes the rest globally even if we miss a file.
-
-## Out of Scope
-- No new features, no layout restructure, no removed sections.
-- "Speed/automation/integration/AI intelligence" mentioned in the request: this round is strictly the visual contrast + readability fixes shown in the screenshots. If you want backend/perf work next, I'll scope that separately after this lands.
-
-## Files to Edit
-- `src/pages/JoinApplication.tsx` (primary)
-- `src/index.css` (extend gold guard)
-- `src/pages/HRAgent.tsx`, `HRDashboard.tsx`, `JoinBrokerList.tsx`, `JoinDeveloperList.tsx`, `JoinInvestorList.tsx` (sweep)
-
-## Expected Result
-- Careers grid: every role card is white with a thin border, black title, gray-700 description, solid colored badges — fully readable.
-- Join page: "Join" headline visible in black, Jessica CTA shows white text + icon on black, sidebar items legible.
-- Any other page using `text-gold` on light/dark surfaces is auto-corrected by the CSS guard.
+## Expected result
+- "Join" renders in solid black, matching "JBJ Global Real Estate".
+- Jessica CTA button is solid black with white "Contact Our HR · Jessica" label and white chat icon, label fully visible on one line.
+- Position-card pills "Sales", "Partner", "Commission Basis" render on one line, no wrap, all readable.
