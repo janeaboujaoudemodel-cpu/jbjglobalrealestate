@@ -1274,18 +1274,22 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-red-400/80 hover:text-white transition-all px-2 py-[5px] rounded-lg border border-red-400/20 hover:bg-red-500 hover:border-red-500 w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
+              style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.35)', backgroundColor: 'rgba(185,28,28,0.04)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#B91C1C'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(185,28,28,0.04)'; e.currentTarget.style.color = '#B91C1C'; e.currentTarget.style.borderColor = 'rgba(185,28,28,0.35)'; }}
             >
-              <LogOut className="w-3 h-3 group-hover:text-white" />
-              Sign Out
+              <LogOut className="w-3 h-3" style={{ color: 'inherit' }} />
+              <span style={{ color: 'inherit' }}>Sign Out</span>
             </button>
           ) : (
             <Link
               to="/auth"
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-gold hover:text-white transition-all px-2 py-[5px] rounded-lg border border-gold/25 hover:bg-gold hover:border-gold w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
+              style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >
-              <User className="w-3 h-3 group-hover:text-white" />
-              Sign In
+              <User className="w-3 h-3" style={{ color: '#000000' }} />
+              <span style={{ color: '#000000' }}>Sign In</span>
             </Link>
           )}
         </div>
