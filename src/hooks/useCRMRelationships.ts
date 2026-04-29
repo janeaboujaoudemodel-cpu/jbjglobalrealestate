@@ -103,6 +103,76 @@ export const useSeedDeveloperRegistry = () => {
   });
 };
 
+/**
+ * Imports the entire `developers` catalog into the owner's `crm_developer_registry`.
+ * Pages through the catalog (Supabase JS caps a single request at 1000 rows) and
+ * upserts on the unique (owner_id, developer_slug) constraint so re-running is safe
+ * and never overwrites existing curated entries.
+ */
+export const useImportAllDevelopersToRegistry = () => {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error("Not signed in");
+
+      const slugify = (n: string) =>
+        n.toLowerCase().replace(/[^a-z0-9 -]/g, "").replace(/\s+/g, "-");
+
+      const PAGE = 1000;
+      let from = 0;
+      let imported = 0;
+
+      // Page through the catalog (Supabase caps a single request at 1000 rows).
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { data: devs, error } = await supabase
+          .from("developers")
+          .select("name, slug, website_url")
+          .or("is_hidden.is.null,is_hidden.eq.false")
+          .order("name", { ascending: true })
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        if (!devs || devs.length === 0) break;
+
+        const rows = devs
+          .filter((d: any) => d.name && String(d.name).trim().length > 0)
+          .map((d: any) => ({
+            owner_id: user.id,
+            developer_name: d.name,
+            developer_slug: d.slug && d.slug.length > 0 ? d.slug : slugify(d.name),
+            website: d.website_url ?? null,
+            developer_contact: {},
+            status: "not_started",
+            required_docs_complete: false,
+            priority: "medium",
+          }));
+
+        if (rows.length > 0) {
+          const { error: upErr } = await supabase
+            .from("crm_developer_registry")
+            .upsert(rows, {
+              onConflict: "owner_id,developer_slug",
+              ignoreDuplicates: true,
+            });
+          if (upErr) throw upErr;
+          imported += rows.length;
+        }
+
+        if (devs.length < PAGE) break;
+        from += PAGE;
+      }
+
+      return imported;
+    },
+    onSuccess: (count) => {
+      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+      toast.success(`Imported ${count} developers from the catalog`);
+    },
+    onError: (e: any) => toast.error(e.message || "Import failed"),
+  });
+};
+
 export const useUpsertDeveloperRegistry = () => {
   const qc = useQueryClient();
   const { user } = useAuth();
