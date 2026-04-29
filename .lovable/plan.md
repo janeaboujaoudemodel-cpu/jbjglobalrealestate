@@ -1,70 +1,105 @@
-# Audit results
+## Translation Audit — findings
 
-I tested the engine end-to-end against the live edge function in **6 languages** (ar, fr, ru, zh, ja, he — covering RTL, Cyrillic, CJK, Hebrew). All return high-quality, brand-aware translations:
+The auto-translator architecture is sound. New pages, components, and DB fields added in the future are picked up automatically by the `MutationObserver` on `<body>` and `<head>` — that requirement is already met. However, a deep pass uncovered six concrete gaps that need to be closed for true 15-language parity.
 
-| Source | Arabic | Russian | Chinese | Japanese |
-|---|---|---|---|---|
-| Your Gateway to Dubai's Finest Real Estate | بوابتكم إلى أرقى العقارات في دبي عبر JBJ GLOBAL REAL ESTATE | Ваш проводник в мир элитной недвижимости Дубая | 通往迪拜顶级房地产的门户 | ドバイ最高峰の不動産へのゲートウェイ |
-| Jane Bou Jaoude | جاين بو جودة (override) | Джейн Бу Жауде (AI) | 詹妮·布·朱德 (AI) | ジェーン・ブー・ジャウデ |
-| Founder & CEO | المؤسِّسة والرئيسة التنفيذية | Основатель и генеральный директор | 创始人兼首席执行官 | 創業者 兼 最高経営責任者 |
-| AI-Powered Tools | — | Инструменты на базе искусственного интеллекта | 人工智能驱动工具 | AI搭載ツール |
+### What already works
+- DOM walker translates every visible text node + `placeholder/title/alt/aria-label`.
+- `<head>` observer localizes `<title>`, `<meta description>`, OG and Twitter cards.
+- 16 locales registered, RTL handled for `ar/fa/he`.
+- IndexedDB + `translations_cache` (Postgres) + in-memory caches dedupe every unique string globally.
+- Brand wordmark "JBJ GLOBAL REAL ESTATE" stays Latin; "Jane Bou Jaoude" + "Founder & CEO" have curated transliterations that the AI cannot overwrite.
+- Pre-warm fires when user picks a non-English language.
 
-The brand wordmark "JBJ GLOBAL REAL ESTATE" is preserved Latin everywhere. The DOM walker, MutationObserver, IndexedDB cache, and DB cache are all wired correctly. **Engine is production-ready.**
+### Gaps found
 
-But the audit surfaced **5 real gaps** to harden so it stays Hermès-grade going forward, and so future pages/fields get translated automatically without anyone touching them.
-
----
-
-# Gaps to fix
-
-### 1. `<head>` is not translated
-The DOM walker only sees `document.body`. Browser tab title (`<title>`), meta descriptions, OG tags, and Twitter card text stay English. Luxury brands localize page titles too.
-
-**Fix:** Extend `autoTranslate.ts` with a parallel `headSweep()` that watches `<title>`, `<meta name="description">`, `<meta property="og:*">`, `<meta name="twitter:*">`. Same cache, same engine. Triggered on language switch and on a separate MutationObserver scoped to `document.head`.
-
-### 2. Cache divergence: AI vs curated overrides
-Server runs first → AI writes "Джейн Бу Жауде" to cache. Client override later returns "جاين بو جودة" only at render time. Future server requests miss the override and serve the AI variant. Two sources of truth for the same string.
-
-**Fix:** Mirror the curated overrides into the edge function (`supabase/functions/translate-batch/index.ts`). Before calling AI, short-circuit to the override and write that to `translations_cache`. Single source of truth, persisted globally.
-
-### 3. Sweep walks the whole body on every mutation
-Currently every React render triggers a full-tree walk, even when only a button text changed. Fine for now, but on data-heavy pages (CRM, listings grid) this is O(N) per mutation.
-
-**Fix:** Pass mutation targets directly into `walkAndCollect`. Only sweep the subtrees that changed. Keep the full-body initial sweep on language switch.
-
-### 4. Pre-warm the cache for chrome strings
-First user to switch to a language pays the latency cost for ~50 nav/CTA strings. Trivial to pre-warm at app start.
-
-**Fix:** On first non-English language activation, fire a single batch request with the contents of `src/translations/en.ts` (1,253 strings, the curated chrome dictionary). One round trip; instant after.
-
-### 5. Make number digits language-appropriate (optional polish)
-Currently all locales use Latin digits (Hermès style). Some Arabic/Persian users prefer Eastern Arabic digits (٠١٢٣). Out of scope for now — we keep Latin per the Hermès reference.
+| # | Gap | Impact |
+|---|-----|--------|
+| A | `dangerouslySetInnerHTML` blocks bypass the text-node walker on re-render | News articles, area descriptions, developer bios stay in English |
+| B | `translations_cache` has 3–5 rows per language → first-visit latency | Slow first paint on cold cache for non-English |
+| C | `useTranslatedField` exists but is unused → no curated DB row translations | DB titles/descriptions retranslated string-by-string instead of row-by-row |
+| D | `index.html` only declares `hreflang` for `en` + `ar` | Google can't surface the 13 other languages |
+| E | No QA/coverage dashboard | Impossible to verify "all languages fully translated" |
+| F | Proper-noun list missing UAE landmarks, RERA, AED, common developers | AI translates inconsistently across sessions |
 
 ---
 
-# Plan
+## Plan
 
-1. **Edit** `supabase/functions/translate-batch/index.ts` — add `LATIN_LOCKED` set + `PROPER_NOUN_OVERRIDES` map + `getOverride()`. In the request handler, intercept overrides before AI call; write canonical values to cache.
+### 1. Fix HTML-block translation (Gap A)
+Add `src/i18n/HtmlT.tsx` — a `<HtmlT html={...} />` component used wherever `dangerouslySetInnerHTML` renders DB-sourced content. Internally it:
+- sanitizes via existing `contentSanitizer.ts`
+- mounts the HTML inside a `<div>` ref
+- runs a one-shot scoped sweep on that subtree after every prop change
+- adds `data-jbj-html-block` so the global observer also re-sweeps on language switch
 
-2. **Edit** `src/i18n/autoTranslate.ts`:
-   - Add `headSweep()` plus a MutationObserver on `document.head` watching `title`, `meta[name=description]`, `meta[property^=og:]`, `meta[name^=twitter:]`.
-   - Change MutationObserver in body to pass `mutation.target` / `mutation.addedNodes` into a scoped walker, so only changed subtrees are re-walked.
+Refactor these call-sites to use it (preserving their existing sanitization):
+`NewsDetail.tsx`, `pages/market-intelligence/AreaDetail.tsx`, `DeveloperDetail.tsx`, `components/area-detail/AreaAboutSection.tsx`, `AcademyGraduates.tsx`, `Favorites.tsx`. UI-only callers (charts, SVG generators, signatures) stay untouched.
 
-3. **Edit** `src/i18n/translateClient.ts` — add `prewarmChromeDictionary(lang)` helper that batches all `Object.values(en)` strings.
+### 2. Cold-cache seeding (Gap B)
+Create edge function `i18n-warm` (admin-triggered + nightly cron) that:
+- Pulls the flattened `en.ts` chrome dictionary
+- Pulls top 200 strings most frequently inserted into `translations_cache` (proxy for hot UI)
+- For each of the 14 non-English locales, calls `translateWithAI` and upserts to `translations_cache`
 
-4. **Edit** `src/contexts/LanguageContext.tsx` — call `prewarmChromeDictionary(lang)` once when `lang !== 'en'` (after the existing auto-translator boot).
+Result: by the time a visitor switches language, the chrome is already in the public-readable cache — sub-second perceived switch.
 
-# Files changed
+### 3. Wire `useTranslatedField` for DB rows (Gap C)
+Use it in the highest-traffic DB-driven titles:
+- `NewsDetail` — `title`, `excerpt`
+- `DeveloperDetail` — `name`, `tagline`, `description`
+- `AreaDetail` — `name`, `description`
+- Property card — `title`, `community`
 
-- `supabase/functions/translate-batch/index.ts` (server-side overrides)
-- `src/i18n/autoTranslate.ts` (head sweep + scoped mutations)
-- `src/i18n/translateClient.ts` (prewarm helper)
-- `src/contexts/LanguageContext.tsx` (call prewarm on language switch)
+Falls through to AI engine if no curated row exists. Curated rows can be added later via admin UI; not needed now.
 
-# What this gives you
+### 4. SEO: full hreflang set (Gap D)
+Update `index.html` to emit `<link rel="alternate" hreflang="…" href="https://jbj.ae/?lang=…" />` for all 15 languages + `x-default`.
 
-- **Every new page, every new field, every new component** → automatically translated the moment it mounts, no developer action required. Already true after my last turn; this hardening pass makes it bulletproof.
-- **Browser tab + share previews + SEO meta** → also localized.
-- **First view in a new language** → near-instant (chrome is pre-warmed; only novel body text round-trips).
-- **Cache integrity** → curated names like "Jane Bou Jaoude → جاين بو جودة" can never be overridden by AI guesses.
-- **No removal** of any existing functionality — purely additive.
+Also: when `LanguageContext` loads a manual language, mirror it into the URL query string (`?lang=ar`) so deep links and crawlers respect the selection.
+
+### 5. Coverage dashboard (Gap E)
+Add `/admin/translation-coverage` (owner-only, behind `requireOwnerAuth`):
+- Per language: total cached strings, last update, sample of recent translations
+- "Re-translate string" button (busts cache for one row)
+- "Warm now" button (invokes `i18n-warm`)
+- Read-only table backed by `translations_cache` aggregations
+
+### 6. Expand brand & locale glossary (Gap F)
+Append to `src/translations/proper-nouns.ts` and the edge function's `PROPER_NOUN_OVERRIDES`:
+- UAE landmarks: Palm Jumeirah, Downtown Dubai, Dubai Marina, Business Bay, Sharjah, Ras Al Khaimah, JBR, DIFC, Jumeirah
+- Currency: AED, USD, EUR (locked Latin in numeric contexts)
+- Compliance: RERA, DLD, ESCROW (locked Latin)
+- Top developers: Emaar, DAMAC, Sobha, Nakheel, Aldar, Meraas (locked Latin — these are global brands)
+- Tagline / role variants: "Executive Assistant", "Real Estate Brokerage", "Property Consultant"
+
+### 7. Smoke verification (no UI work)
+After deploy, run `i18n-warm` once. Then for each of 15 languages, visit `/`, `/properties`, `/about`, `/contact`, `/news` and confirm `translations_cache` row count > 300 per language. Spot-check Arabic + Chinese + Japanese rendering for layout/RTL regressions.
+
+---
+
+## Technical details
+
+```text
+NEW FILES
+  src/i18n/HtmlT.tsx                       — sanitized + scoped-sweep HTML block
+  supabase/functions/i18n-warm/index.ts    — admin/cron warmup
+  src/pages/admin/TranslationCoverage.tsx  — owner-only dashboard
+
+EDITED
+  src/translations/proper-nouns.ts         — +20 glossary entries
+  supabase/functions/translate-batch/      — mirror glossary, lock currencies/RERA
+  index.html                               — full hreflang set
+  src/contexts/LanguageContext.tsx         — sync language to URL ?lang=
+  src/pages/NewsDetail.tsx                 — HtmlT + useTranslatedField
+  src/pages/DeveloperDetail.tsx            — HtmlT + useTranslatedField
+  src/pages/market-intelligence/AreaDetail.tsx
+  src/components/area-detail/AreaAboutSection.tsx
+  src/pages/AcademyGraduates.tsx
+  src/pages/Favorites.tsx
+  src/App.tsx                              — register /admin/translation-coverage
+
+DB (migration)
+  -- no schema changes; existing translations_cache + content_translations suffice
+```
+
+Future automation: any new component, page, DB column, or string is automatically translated the moment it appears in the DOM, with the new HTML-block fix closing the last loophole. The `i18n-warm` cron keeps the cache hot so users never see English flicker on language switch.
