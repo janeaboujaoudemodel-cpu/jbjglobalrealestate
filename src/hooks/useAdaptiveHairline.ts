@@ -15,6 +15,7 @@
  * Cheap by design: ResizeObserver + MutationObserver, no rAF loop.
  */
 import { useEffect, useState, RefObject } from "react";
+import { HAIRLINE_TOKENS } from "@/styles/hairlineTokens";
 
 export interface HairlineAlphas {
   /** Luminance of detected underlay, 0 (black) → 1 (white). */
@@ -31,11 +32,10 @@ export interface HairlineAlphas {
 
 const BASELINE: HairlineAlphas = {
   luminance: 0.003,
-  white: 0.14,
-  whiteSoft: 0.1,
-  gold: 0.35,
-  goldPeak: 0.4,
+  ...HAIRLINE_TOKENS.baseline,
 };
+
+const CEIL = HAIRLINE_TOKENS.ceilings;
 
 function parseRgb(input: string): [number, number, number, number] | null {
   const m = input.match(
@@ -124,10 +124,10 @@ export function useAdaptiveHairline<T extends HTMLElement>(
         const m = multiplierFromLuminance(L);
         setAlphas({
           luminance: L,
-          white: Math.min(0.32, +(BASELINE.white * m).toFixed(3)),
-          whiteSoft: Math.min(0.24, +(BASELINE.whiteSoft * m).toFixed(3)),
-          gold: Math.min(0.6, +(BASELINE.gold * m).toFixed(3)),
-          goldPeak: Math.min(0.7, +(BASELINE.goldPeak * m).toFixed(3)),
+          white: Math.min(CEIL.white, +(BASELINE.white * m).toFixed(3)),
+          whiteSoft: Math.min(CEIL.whiteSoft, +(BASELINE.whiteSoft * m).toFixed(3)),
+          gold: Math.min(CEIL.gold, +(BASELINE.gold * m).toFixed(3)),
+          goldPeak: Math.min(CEIL.goldPeak, +(BASELINE.goldPeak * m).toFixed(3)),
         });
       });
     };
