@@ -333,9 +333,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
     { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
 
+    { section: "Sell" },
+    { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
+    { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
+    { href: "/services/selling-advisory", label: t('header.sellingAdvisory') || "Selling Advisory", icon: Briefcase },
+
     { section: "More" },
     { href: "/developers", label: "Developers", icon: Building2 },
-    { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
   // Services dropdown
