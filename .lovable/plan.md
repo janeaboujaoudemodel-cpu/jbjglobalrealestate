@@ -1,70 +1,123 @@
-## Adaptive Footer Hairlines — Plan
+## Hairline Consistency Audit — Plan
 
-Make footer hairline strokes **respond to the brightness of whatever sits behind/around the footer** so they never look too faint on pure black or too harsh on lighter underlays.
+Goal: bring **section-divider hairlines on dark backgrounds** across the codebase to the same adaptive opacity model now used in `<Footer />`, without touching decorative gradients (book covers, hero underlines, modal accents) that aren't dividers.
 
-### Approach
+### What I found in the audit
 
-The footer paints `#0A0908`, but the **effective** background can change: the page above can show through during scroll transitions, and some routes mount the footer over brighter ambient gradients. Today all hairlines use fixed alphas (e.g. `rgba(255,255,255,0.10)`, `rgba(200,167,102,0.35)`), so they read inconsistently.
+The audit splits findings into 3 buckets:
 
-I'll measure the perceived luminance of the nearest non-transparent ancestor at runtime, then scale every hairline alpha through CSS variables.
+**1. True section dividers on dark surfaces** — these match Footer's pattern (full-width or column-width `h-px` strokes that separate content zones on a dark background). Worth normalizing.
 
-### 1. New hook — `src/hooks/useAdaptiveHairline.ts`
+| File | Line | Element | Current alpha |
+|---|---|---|---|
+| `src/components/Footer.tsx` | (already done) | 5 hairlines | adaptive ✓ |
+| `src/pages/toolkit/CorporateSuite.tsx` | 143 | Top-bar bottom hairline | gold 0.4 fixed |
+| `src/pages/NewsDetail.tsx` | 83 | Article paragraph separator | gold/20 fixed |
 
-- Walks up from the footer ref, skipping itself, to find the first ancestor with a non-transparent `background-color`.
-- Computes sRGB → relative luminance (WCAG formula).
-- Maps luminance → alpha multiplier via a smooth piecewise curve:
+**2. Hairlines inside isolated dark surfaces** (cards, modals, hero books) — these live on their own controlled background (a card, a modal panel, a 3D book cover). They are *not* responding to a page underlay; they're sized to look correct on their specific surface. Touching them risks visual regressions in unrelated UI. **Out of scope.** Examples: `Book3D`, `BookCoverFace`, `CompanyProfileBrochure`, `MarketReportHeroBook`, `StampPreviewModal`, modal frames (`WelcomeModal`, `ActionGateModal`, `AIAccessGate`, `RoleSelectionModal`, `OTPVerificationModal`, `InquiryFormModal`, `CookiesConsentBanner`, `GuidedTour`, `BusinessCardCamera`).
 
-| Underlay luminance | Multiplier | Effect |
-|---|---|---|
-| `≤ 0.005` (pure black) | ×1.25 | Boost — line wouldn't read otherwise |
-| `0.005–0.05` (obsidian, baseline) | ×1.25 → 1.0 | Smooth taper |
-| `0.05–0.18` (warm dark) | ×1.0 → 0.85 | Slight reduction |
-| `0.18–0.5` (mid-dark) | ×0.85 → 0.65 | Visibly softened |
-| `> 0.5` (light) | ×0.6 | Minimum — never harsh |
+**3. Decorative underlines / chip dividers** (`w-8 h-px` accent under a heading, mini gold flourishes) — intentional brand details, not dividers between sections. **Out of scope.**
 
-- Returns `{ luminance, white, gold, goldPeak }` clamped alphas.
-- Re-measures on: mount, `ResizeObserver` (footer + parent), window resize, `<html>` class/style/data-theme mutations (theme toggle).
-- No rAF loop; observers only.
+### Implementation
 
-### 2. Footer integration — `src/components/Footer.tsx`
+#### Step 1 — Extract a reusable `<AdaptiveHairline />` primitive
 
-- Add a `footerRef`, call `useAdaptiveHairline(footerRef)`.
-- Expose alphas as CSS custom properties on the `<footer>` element:
-  ```ts
-  style={{
-    '--fh-white': `rgba(255,255,255,${alphas.white})`,
-    '--fh-white-soft': `rgba(255,255,255,${alphas.white * 0.7})`,
-    '--fh-gold': `rgba(200,167,102,${alphas.gold})`,
-    '--fh-gold-peak': `rgba(200,167,102,${alphas.goldPeak})`,
-  }}
+`src/components/ui/AdaptiveHairline.tsx`
+
+```tsx
+import { useRef } from "react";
+import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  variant?: "accent" | "nav" | "soft";
+  className?: string;
+}
+
+/**
+ * Single source of truth for full-width divider hairlines on dark surfaces.
+ * Alpha auto-adapts to the underlying background luminance.
+ */
+export const AdaptiveHairline = ({ variant = "nav", className }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const a = useAdaptiveHairline(ref);
+
+  const ACCENT = "200,167,102";
+  const WHITE = "255,255,255";
+
+  const bg =
+    variant === "accent"
+      ? `linear-gradient(90deg, transparent 0%, rgba(${ACCENT},0) 8%, rgba(${ACCENT},${a.goldPeak}) 50%, rgba(${ACCENT},0) 92%, transparent 100%)`
+      : variant === "soft"
+        ? `linear-gradient(90deg, transparent, rgba(${WHITE},${a.whiteSoft}), transparent)`
+        : `linear-gradient(90deg, transparent, rgba(${WHITE},${a.whiteSoft}) 20%, rgba(${ACCENT},${a.gold}) 50%, rgba(${WHITE},${a.whiteSoft}) 80%, transparent)`;
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className={cn("h-px w-full", className)}
+      style={{ background: bg }}
+    />
+  );
+};
+```
+
+Variants:
+- `accent` — restrained champagne with faded edges (Footer top/bottom style).
+- `nav` — champagne center with white edges (Footer above/below-grid style).
+- `soft` — pure white soft-fade (for places where champagne would be wrong).
+
+#### Step 2 — Refactor `<Footer />` to use the primitive
+
+Replace the 5 inline hairline `<div>`s (top accent, above-grid, below-grid, copyright `border-t`, bottom accent) with `<AdaptiveHairline variant="accent|nav" />`. Remove the local `accentHairline` / `navHairline` const builders. The `useAdaptiveHairline` call on the footer ref stays only for the copyright `border-t` (which is a real CSS border, not a div) and for exposing CSS vars to descendants.
+
+#### Step 3 — Adopt at the 2 in-scope external sites
+
+- **`src/pages/toolkit/CorporateSuite.tsx:143`** — replace the inline `<div ... style={{ background: 'linear-gradient(...rgba(184,148,62,0.4)...)' }} />` with `<AdaptiveHairline variant="accent" className="absolute bottom-0 left-0 right-0" />`.
+
+- **`src/pages/NewsDetail.tsx:83`** — this is a string of HTML injected into article body via `dangerouslySetInnerHTML`, so React components don't help. Update the string to use a slightly stronger gradient that matches the new Footer baseline:
+  ```html
+  <div class="my-8 flex items-center justify-center gap-4">
+    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent"></div>
+    <div class="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]/45"></div>
+    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent"></div>
+  </div>
   ```
-- Replace the 5 hardcoded hairline gradients/borders with these vars:
-  - Top + bottom accent hairlines (lines 476, 658) → `var(--fh-gold-peak)` for the center stop.
-  - Above-grid + below-grid champagne hairlines (530–539, 571–580) → use `var(--fh-white-soft)` and `var(--fh-gold)`.
-  - Copyright divider `borderColor: HAIRLINE` (line 638) → `var(--fh-white)`.
-  - The brand-lockup mini hairline (502) and ambient overlays stay as-is (they're decorative gold washes, not separators).
-- Keep the existing `HAIRLINE` / `ACCENT_HAIRLINE` constants as fallbacks for SSR-first paint.
+  (Article body is on the white `prose` surface — adaptive logic doesn't apply, but bumping `/20` → `/30` aligns with the new "never too faint" target.)
 
-### 3. Verification in `/dev/footer-preview`
+#### Step 4 — Document the standard
 
-The preview tool already lets me cycle 8 dark backgrounds. I'll add a small **"Hairline alphas"** read-out to its toolbar showing the live luminance + computed alphas — purely informational, no behavior change to the footer. This makes the adaptation visible during QA.
+Append a short comment to `src/index.css` near the existing hairline tokens (if any) noting:
+```
+/* For section-divider hairlines on dark surfaces, prefer
+   <AdaptiveHairline /> from @/components/ui — alphas auto-adapt
+   to the underlying background luminance. */
+```
 
-### 4. Files
+#### Step 5 — Save a memory rule
+
+`mem://ui-ux/visual-standards/adaptive-hairline-standard` — short note: "Section dividers on dark surfaces use `<AdaptiveHairline />`. Decorative underlines, modal/card internal strokes, and book-cover ornaments are exempt."
+
+### Files
 
 **Create**
-- `src/hooks/useAdaptiveHairline.ts`
+- `src/components/ui/AdaptiveHairline.tsx`
+- `mem://ui-ux/visual-standards/adaptive-hairline-standard`
 
 **Edit**
-- `src/components/Footer.tsx` — wire the hook + replace 5 hairline declarations with CSS-var references.
-- `src/pages/dev/FooterPreviewPage.tsx` — show live alpha read-out (small chip in the toolbar).
+- `src/components/Footer.tsx` — swap 4 inline hairline divs for `<AdaptiveHairline />`; keep the hook call only for the copyright `border-t` colour.
+- `src/pages/toolkit/CorporateSuite.tsx` — 1 hairline.
+- `src/pages/NewsDetail.tsx` — 1 string-template separator (alpha bump only).
+- `src/index.css` — short policy comment.
+- `mem://index.md` — add the new memory entry.
 
-### 5. Out of scope
+### Out of scope (with reason)
 
-- No changes to footer layout, copy, links, social icons, or ambient gradients.
-- No changes to `MainLayout`, header, or sidebar.
-- The accent hairline center peak stays gold; the curve only adjusts opacity, never hue.
+- All `via-white/X` and `via-gold/X` strokes inside modals, cards, books, and hero ornaments — they're surface-internal details, not page dividers, and changing them risks unrelated regressions.
+- Any tailwind `border-t border-white/10` on light-text-on-dark cards — those are container chrome, not divider hairlines.
+- No changes to `<Footer />` layout, copy, links, or ambient gradients (No-Removal Policy).
 
-### 6. Risk / fallbacks
+### Risk
 
-- If `getComputedStyle` returns nothing usable (very early paint, SSR), the hook falls back to the baseline alphas — identical to today's footer. No regression possible.
-- All multipliers are clamped (`white ≤ 0.32`, `gold ≤ 0.6`) so the line can never spike to harsh values even if luminance detection misfires.
+Low. The primitive is additive; the only behavior change at adoption sites is alpha auto-scaling, which we've already validated in `/dev/footer-preview`. Article-body string change is a single `/20` → `/30` bump.
