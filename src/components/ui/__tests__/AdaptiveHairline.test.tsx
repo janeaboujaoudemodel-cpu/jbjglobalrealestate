@@ -9,11 +9,16 @@ import { AdaptiveHairline } from "../AdaptiveHairline";
  * measurement inside requestAnimationFrame and getComputedStyle returns
  * no backgroundColor, so the initial paint uses the BASELINE alphas
  * straight from HAIRLINE_TOKENS — exactly what we want to assert.
+ *
+ * Note: jsdom re-serializes `rgba(r,g,b,a)` with spaces inside the
+ * parens (`rgba(r, g, b, a)`). We strip spaces before matching so the
+ * assertions track logical content, not formatting.
  */
 const getStroke = (variant: "accent" | "nav" | "soft") => {
   const { container } = render(<AdaptiveHairline variant={variant} />);
   const el = container.firstElementChild as HTMLElement;
-  return { el, bg: el.style.background || el.style.backgroundImage };
+  const raw = el.style.background || el.style.backgroundImage;
+  return { el, raw, bg: raw.replace(/\s+/g, "") };
 };
 
 describe("<AdaptiveHairline />", () => {
@@ -28,8 +33,9 @@ describe("<AdaptiveHairline />", () => {
 
   it("accent variant uses champagne with faded edges, no white", () => {
     const { bg } = getStroke("accent");
-    expect(bg).toContain("rgba(200,167,102,0)"); // edge fade stops
-    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\) 50%/); // peak at center
+    expect(bg).toContain("rgba(200,167,102,0)8%"); // edge fade stop at 8%
+    expect(bg).toContain("rgba(200,167,102,0)92%"); // edge fade stop at 92%
+    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\)50%/); // peak at center
     expect(bg).not.toContain("255,255,255");
   });
 
@@ -37,9 +43,9 @@ describe("<AdaptiveHairline />", () => {
     const { bg } = getStroke("nav");
     expect(bg).toContain("rgba(255,255,255,");
     expect(bg).toContain("rgba(200,167,102,");
-    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\) 50%/);
-    expect(bg).toMatch(/rgba\(255,255,255,0\.\d+\) 20%/);
-    expect(bg).toMatch(/rgba\(255,255,255,0\.\d+\) 80%/);
+    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\)50%/);
+    expect(bg).toMatch(/rgba\(255,255,255,0\.\d+\)20%/);
+    expect(bg).toMatch(/rgba\(255,255,255,0\.\d+\)80%/);
   });
 
   it("soft variant is pure white, no champagne", () => {
@@ -51,8 +57,8 @@ describe("<AdaptiveHairline />", () => {
   it("never emits a stop alpha above the calibrated ceiling (0.7)", () => {
     for (const v of ["accent", "nav", "soft"] as const) {
       const { bg } = getStroke(v);
-      const alphas = [...bg.matchAll(/rgba\([^)]+,\s*(0?\.\d+)\s*\)/g)].map(
-        (m) => parseFloat(m[1]),
+      const alphas = [...bg.matchAll(/rgba\([^)]+,(0?\.\d+)\)/g)].map((m) =>
+        parseFloat(m[1]),
       );
       for (const a of alphas) {
         expect(a).toBeLessThanOrEqual(0.7 + 1e-9);
