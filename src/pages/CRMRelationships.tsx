@@ -913,6 +913,16 @@ const DeveloperRegistryTab = () => {
                       <Send className="w-3 h-3 mr-1" />Send
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("developer_registry", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => enrich.mutate({ ids: [r.id], useWeb: true })}
+                      disabled={enrich.isPending}
+                      title="Research this developer's missing fields via AI + web sources"
+                    >
+                      {enrich.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <BookOpen className="w-3 h-3 mr-1" />}
+                      Research
+                    </Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                   </div>
