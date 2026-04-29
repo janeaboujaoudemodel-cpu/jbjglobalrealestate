@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { RefreshCw, Trash2, UserPlus, X } from "lucide-react";
+import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 
 interface BrokerOption {
@@ -32,6 +32,10 @@ export default function CRMLeadsBulkBar({
   const [assigneeId, setAssigneeId] = useState<string>("");
   const [nextStatus, setNextStatus] = useState<string>("");
   const [busy, setBusy] = useState(false);
+  const [showBroadcast, setShowBroadcast] = useState(false);
+  const [broadcastChannel, setBroadcastChannel] = useState<"whatsapp" | "email">("whatsapp");
+  const [broadcastSubject, setBroadcastSubject] = useState("");
+  const [broadcastMessage, setBroadcastMessage] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -153,6 +157,108 @@ export default function CRMLeadsBulkBar({
     }
   };
 
+  const handleDuplicate = async () => {
+    if (count === 0) return;
+    if (!confirm(`Duplicate ${count} lead(s)?`)) return;
+    setBusy(true);
+    try {
+      const { data: src, error: srcErr } = await supabase
+        .from("crm_leads")
+        .select("*")
+        .in("id", selectedIds);
+      if (srcErr) {
+        toast.error(`Duplicate failed: ${srcErr.message}`);
+        return;
+      }
+      const clones = (src ?? []).map((row: any) => {
+        const { id, created_at, updated_at, deleted_at, ...rest } = row;
+        return {
+          ...rest,
+          full_name: `${rest.full_name ?? "Lead"} (copy)`,
+          owner_user_id: userId,
+        };
+      });
+      if (clones.length === 0) return;
+      const { error } = await supabase.from("crm_leads").insert(clones as any);
+      if (error) {
+        toast.error(`Duplicate failed: ${error.message}`);
+        return;
+      }
+      toast.success(`Duplicated ${clones.length} lead(s)`);
+      onClear();
+      onSuccess();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleBroadcast = async () => {
+    if (!broadcastMessage.trim()) {
+      toast.error("Message is required");
+      return;
+    }
+    if (broadcastChannel === "email" && !broadcastSubject.trim()) {
+      toast.error("Email subject is required");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { data: leads } = await supabase
+        .from("crm_leads")
+        .select("id, full_name, phone_e164, whatsapp_e164, email_lower")
+        .in("id", selectedIds);
+
+      let sent = 0;
+      let skipped = 0;
+
+      if (broadcastChannel === "whatsapp") {
+        // Open wa.me links in new tabs (browser blocks > ~5 popups; we batch the rest as a download)
+        for (const l of leads ?? []) {
+          const phone = (l.whatsapp_e164 || l.phone_e164 || "").replace(/[^0-9]/g, "");
+          if (!phone) { skipped++; continue; }
+          const personalised = broadcastMessage.replace(/\{name\}/gi, l.full_name || "");
+          window.open(
+            `https://wa.me/${phone}?text=${encodeURIComponent(personalised)}`,
+            "_blank",
+            "noopener,noreferrer",
+          );
+          sent++;
+        }
+      } else {
+        const recipients = (leads ?? [])
+          .map((l) => l.email_lower)
+          .filter(Boolean) as string[];
+        skipped = (leads?.length ?? 0) - recipients.length;
+        if (recipients.length) {
+          const mailto = `mailto:?bcc=${recipients.join(",")}&subject=${encodeURIComponent(
+            broadcastSubject,
+          )}&body=${encodeURIComponent(broadcastMessage)}`;
+          window.location.href = mailto;
+          sent = recipients.length;
+        }
+      }
+
+      // Log activity
+      await supabase.from("crm_activities").insert(
+        (leads ?? []).map((l) => ({
+          lead_id: l.id,
+          user_id: userId,
+          activity_type: broadcastChannel === "whatsapp" ? "whatsapp" : "email",
+          metadata: { bulk: true, subject: broadcastSubject || null },
+        })) as any,
+      );
+
+      toast.success(`Broadcast: ${sent} sent, ${skipped} skipped`);
+      setShowBroadcast(false);
+      setBroadcastMessage("");
+      setBroadcastSubject("");
+      onClear();
+      onSuccess();
+    } finally {
+      setBusy(false);
+    }
+  };
+
   if (count === 0) return null;
 
   return (
@@ -250,8 +356,82 @@ export default function CRMLeadsBulkBar({
           >
             Apply Status
           </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleDuplicate}
+            disabled={busy}
+            className="font-semibold"
+          >
+            <Copy className="h-4 w-4 mr-2" />
+            Duplicate
+          </Button>
+
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowBroadcast((v) => !v)}
+            disabled={busy}
+            className="font-semibold"
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            Bulk Message
+          </Button>
         </div>
       </div>
+
+      {showBroadcast && (
+        <div className="mt-2 rounded-xl border-2 border-gold/40 bg-white p-4 space-y-3 shadow-md">
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant={broadcastChannel === "whatsapp" ? "primary" : "secondary"}
+              onClick={() => setBroadcastChannel("whatsapp")}
+            >
+              <MessageSquare className="h-4 w-4 mr-2" /> WhatsApp
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={broadcastChannel === "email" ? "primary" : "secondary"}
+              onClick={() => setBroadcastChannel("email")}
+            >
+              <Mail className="h-4 w-4 mr-2" /> Email
+            </Button>
+            <span className="ml-auto text-xs text-black/60">
+              Use <code className="text-black">{"{name}"}</code> for personalisation
+            </span>
+          </div>
+          {broadcastChannel === "email" && (
+            <input
+              value={broadcastSubject}
+              onChange={(e) => setBroadcastSubject(e.target.value)}
+              placeholder="Subject"
+              className="w-full h-10 rounded-lg border-2 border-gold/30 bg-white px-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+            />
+          )}
+          <textarea
+            value={broadcastMessage}
+            onChange={(e) => setBroadcastMessage(e.target.value)}
+            placeholder={`Hi {name}, ...`}
+            rows={4}
+            className="w-full rounded-lg border-2 border-gold/30 bg-white px-3 py-2 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+          />
+          <div className="flex items-center justify-end gap-2">
+            <Button type="button" size="sm" variant="ghost" onClick={() => setShowBroadcast(false)} disabled={busy}>
+              Cancel
+            </Button>
+            <Button type="button" size="sm" variant="primary" onClick={handleBroadcast} disabled={busy || !broadcastMessage.trim()}>
+              {busy ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Send to {count}
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
