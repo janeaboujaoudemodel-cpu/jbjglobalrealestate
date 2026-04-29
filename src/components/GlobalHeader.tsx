@@ -312,9 +312,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     null;
 
   // Properties dropdown (execution-only)
-  const propertiesLinks = [
+  // Supports optional `section` headers; clicking an item navigates to the
+  // canonical /properties listing page with the matching filter params.
+  const propertiesLinks: Array<
+    | { section: string }
+    | { href: string; label: string; icon: typeof Home }
+  > = [
+    { section: "Browse" },
     { href: "/properties?transaction=buy", label: t('header.buyProperties') || "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: t('header.rentProperties') || "Rent Properties", icon: Building2 },
+
+    { section: "By Status" },
+    { href: "/properties?transaction=buy&status=ready", label: "Ready Properties", icon: Key },
+    { href: "/properties?transaction=buy&status=off-plan", label: "Off-Plan Properties", icon: ClipboardCheck },
+
+    { section: "By Category" },
+    { href: "/properties?transaction=buy&type=apartments", label: "Apartments", icon: Building2 },
+    { href: "/properties?transaction=buy&type=villa", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&type=townhouse", label: "Townhouses", icon: Home },
+    { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
+    { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
+
+    { section: "More" },
     { href: "/developers", label: "Developers", icon: Building2 },
     { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
