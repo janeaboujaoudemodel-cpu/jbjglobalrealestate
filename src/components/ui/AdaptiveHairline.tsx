@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
+import { HAIRLINE_TOKENS } from "@/styles/hairlineTokens";
 import { cn } from "@/lib/utils";
 
 interface AdaptiveHairlineProps {
@@ -12,8 +13,8 @@ interface AdaptiveHairlineProps {
   className?: string;
 }
 
-const ACCENT = "200,167,102";
-const WHITE = "255,255,255";
+const ACCENT = HAIRLINE_TOKENS.champagneRgb;
+const WHITE = HAIRLINE_TOKENS.whiteRgb;
 
 /**
  * Single source of truth for section-divider hairlines on dark surfaces.
