@@ -50,14 +50,20 @@ function check() {
     const lines = text.split('\n');
     lines.forEach((line, idx) => {
       if (line.includes('contrast-ok')) return;
-      if (!WHITE_TEXT_RE.test(line)) return;
-      // Same-element regression: light bg AND white text in the same className
-      if (LIGHT_CLASS_RE.test(line)) {
-        violations.push({
-          file: path.relative(root, file),
-          line: idx + 1,
-          snippet: line.trim().slice(0, 200),
-        });
+      // Split into class-string segments so ternary branches don't bleed into
+      // each other. Anything between quotes / backticks / `?` / `:` / `,` /
+      // template `${…}` boundaries is treated as its own segment.
+      const segments = line.split(/['"`]|\?|:|,|\$\{|\}/);
+      for (const seg of segments) {
+        if (!WHITE_TEXT_RE.test(seg)) continue;
+        if (LIGHT_CLASS_RE.test(seg)) {
+          violations.push({
+            file: path.relative(root, file),
+            line: idx + 1,
+            snippet: line.trim().slice(0, 200),
+          });
+          break; // one violation per line is enough
+        }
       }
     });
   }
