@@ -669,7 +669,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="mt-6 text-center">
               <button
                 onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setErrors({}); }}
-                className="text-gold hover:text-gold-dark hover:underline transition-colors"
+                className="text-black font-medium hover:underline transition-colors"
               >
                 {mode === "signin" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
               </button>
