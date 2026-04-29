@@ -582,27 +582,30 @@ const Footer = () => {
       {/* === ZONE 3 — Contact strip + compact legal === */}
       <div className="px-4 sm:px-6 md:px-8 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6">
-            <div className="flex items-center gap-2 text-[12px] text-white/70">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.address}</span>
             </div>
-            <span className="hidden md:inline text-white/20">·</span>
-            <a href={getCallUrl()} className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors">
+            <a
+              href={getCallUrl()}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
+            >
               <Phone className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.phone}</span>
             </a>
-            <span className="hidden md:inline text-white/20">·</span>
-            <a href={getEmailUrl()} className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors">
+            <a
+              href={getEmailUrl()}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
+            >
               <Mail className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.emailCapitalized}</span>
             </a>
-            <span className="hidden md:inline text-white/20">·</span>
             <a
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-[12px] text-white/70 hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-white/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-white/[0.07] hover:text-white transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>WhatsApp</span>
