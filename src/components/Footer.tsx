@@ -447,13 +447,31 @@ const Footer = () => {
     <footer
       id="site-footer"
       data-surface="dark"
-      className="relative overflow-x-hidden"
+      className="relative overflow-x-hidden isolate"
       style={{
         background: "#0A0908",
         color: "rgba(255,255,255,0.85)",
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
+      {/* Premium ambient overlays — vignette + soft champagne wash */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(200,167,102,0.07), transparent 70%), radial-gradient(ellipse 60% 35% at 50% 100%, rgba(200,167,102,0.05), transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.04] mix-blend-overlay"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>\")",
+        }}
+      />
+
       {/* Top hairline — single restrained champagne accent */}
       <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
 
@@ -461,32 +479,48 @@ const Footer = () => {
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <Link to="/" className="inline-flex items-center gap-3 group">
-              <img
-                src={jbjMonogramNobuffer}
-                alt="JBJ Global Real Estate"
-                className="h-12 w-auto object-contain transition-opacity group-hover:opacity-90"
-                style={{ filter: `drop-shadow(0 4px 12px ${ACCENT}30)` }}
-              />
+            <Link to="/" className="inline-flex items-center gap-4 group">
+              <span
+                className="inline-flex items-center justify-center w-16 h-16 rounded-md border bg-white/[0.04] shrink-0"
+                style={{
+                  borderColor: "rgba(200,167,102,0.4)",
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(200,167,102,0.18)",
+                }}
+              >
+                <img
+                  src={jbjMonogramNobuffer}
+                  alt="JBJ Global Real Estate"
+                  className="h-11 w-11 object-contain transition-opacity group-hover:opacity-90"
+                />
+              </span>
               <div className="flex flex-col">
                 <span className="text-white text-[15px] font-semibold tracking-[0.18em] uppercase leading-tight">
                   JBJ Global Real Estate
                 </span>
-                <span className="text-white/55 text-[11px] tracking-[0.12em] uppercase mt-0.5">
+                <div
+                  className="w-10 h-px my-1.5"
+                  style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }}
+                  aria-hidden="true"
+                />
+                <span className="text-white/60 text-[11px] tracking-[0.12em] uppercase">
                   Excellence in Real Estate · Licensed UAE Brokerage
                 </span>
               </div>
             </Link>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 md:gap-5">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/45">Connect</span>
-                <SocialLinks variant="glow" iconClassName="w-4 h-4" />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/55">Connect</span>
+                <SocialLinks variant="premium" className="gap-2" />
               </div>
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               <GoogleMyBusinessLink />
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               {/* Mode switcher opens upward inside the footer so it never
                   overlays the page header above. */}
               <ModeSwitcher variant="header" showForUnselected={true} side="top" />
+              <span className="hidden md:inline-block w-px h-5 bg-white/10" aria-hidden="true" />
               <FooterCurrencyUnit />
             </div>
           </div>
