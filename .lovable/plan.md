@@ -1,176 +1,78 @@
-## Lightweight Hairline Regression Tests — Plan
+# Fix: Tasks Popup → 404, Broken 404 Page, Black Edges, and Task Removal
 
-Goal: catch future color/opacity regressions in the footer divider/hairline system **before they reach preview**, using the existing Vitest + jsdom + Testing Library setup. No Playwright, no real browser, no pixel diffing.
+## What's broken (root causes)
 
-### Strategy
+1. **Tasks popup leads to 404.** `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx` navigates to `/owner/dashboard#tasks`, but no such route exists. The owner index route is `/owner` (with `OwnerDashboardOverview` as `index`). Result: 404 on every click.
 
-Three layers of cheap, deterministic checks — each catches a different class of regression:
+2. **404 page is broken.**
+   - Outer wrapper uses `bg-black` + `jj-hero-fullscreen` → produces the black band you see at the edges around the card.
+   - It collides with the "Ready to get started" footer because `pt-28 sm:pt-32 lg:pt-24` doesn't match the live header height (88px) and the card sits centered with no proper bottom safe-area against the next section.
+   - Buttons are unreadable: gold→gold gradients with `text-black` on champagne backgrounds for outline buttons, plus low-contrast `text-black/40` "Attempted path" line.
+   - The "Attempted path: /owner/dashboard" leak exposes internals to end users.
 
-1. **Token contract test** — pin the exact champagne RGB triplet and baseline alpha values in `HAIRLINE_TOKENS`. Catches "someone bumped `--hairline-alpha-gold` from 0.35 to 0.5".
-2. **Hook curve test** — feed `multiplierFromLuminance` known luminance values and assert the resulting alphas. Catches "someone changed the piecewise curve and footer dividers got harsh on bright backgrounds". Uses an exported helper so we don't need DOM.
-3. **Component render test** — render `<AdaptiveHairline />` for each variant and assert the `style.background` string contains the expected RGB triplets and a gradient with the right shape. Catches "someone swapped champagne for a different gold by accident" or "the gradient stops drifted".
+3. **"Black edges" on every page.** This is `MainLayout`'s outer `div` using `bg-background md:bg-[#ECE2D2]` while child pages (like `NotFound` and several hero sections) declare their own dark background only inside a centered card. The page background between sidebar edge and the card shows through. The fix is for full-bleed pages to fill the entire content area (sidebar-edge → right-edge) rather than centering a card on a contrasting backdrop.
 
-All three run in <100ms total. No snapshot files, no flake.
+4. **Task popup gets dismissed on every cancel/close.** `handleDismiss()` writes to `sessionStorage` so the popup never re-appears that day — including when the user simply taps "Later" or X. Per your rule "the task should never be removed," dismissal must not suppress the alert; only completing all tasks should.
 
-### Implementation
+## Changes
 
-#### 1. Export the pure curve from the hook
+### 1. `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`
+- **Fix link**: navigate to `/owner#tasks` (valid index route). Add a fallback safety: also accept `/owner/tasks` if a real subroute exists; otherwise `/owner`.
+- **Stop auto-suppressing the alert**:
+  - Remove `sessionStorage` write on "Later" / X close. Keep it for the session only via in-memory state, so it returns next session/refresh until tasks reach 0.
+  - Add a separate "Don't show again today" small link if you want opt-out, off by default.
+- **Readable buttons**: replace gold gradient with `text-white` on dark `bg-foreground` for primary; outline button uses `text-foreground` (per CTA System Standard, no gold text in buttons).
+- Keep modal styling otherwise; ensure aria-label on close.
 
-`src/hooks/useAdaptiveHairline.ts` currently keeps `multiplierFromLuminance` private. Add a named export:
+### 2. `src/pages/NotFound.tsx` — full rebuild for institutional 404
+- Replace `bg-black` + `jj-hero-fullscreen` with a full-bleed light surface that fills the content area edge-to-edge:
+  ```tsx
+  <div className="min-h-[calc(100dvh-88px)] w-full bg-background flex items-center justify-center px-4 sm:px-6 lg:px-10 py-12">
+  ```
+- Remove the framing `jj-layer-2 / jj-card-inner` so there is no contrasting black band around it. Card itself becomes a soft elevated surface (`bg-card border border-border shadow-sm rounded-2xl`) centered with `max-w-3xl`.
+- Header spacing already provided by `MainLayout` (`md:pt-[88px]`). Remove the page's own `pt-28` to avoid double-offset and the collision with the "Ready to get started" section.
+- Add a clear bottom margin (`mb-12`) so the footer/CTA banner does not visually touch the card.
+- **Buttons**: use `<Button variant="primary">` and `variant="secondary"` defaults from the design system (high contrast, no gold text). Keep WhatsApp / Call / Email as ghost-style chips with `text-foreground`.
+- **Remove the "Attempted path: …" debug line from production UI**. Keep `console.error` for observability only.
+- Keep popular destinations grid, search, and Need Assistance section. Nothing is removed.
 
-```ts
-export { multiplierFromLuminance };
-```
+### 3. Global "edge-to-edge" page rendering — `src/components/MainLayout.tsx` + page wrappers
+- The visible black/dark edges come from pages declaring their own dark hero inside a centered max-width container while the body shows the layout's pearl/`#ECE2D2` background. Two-line fix:
+  - In `MainLayout`, the `<main>` already has `w-full max-w-full`. Add `bg-background` to it so the content lane is one consistent surface from the sidebar edge to the right viewport edge (no body color showing through gaps).
+  - For routes that intentionally use a dark hero (Home, About, BrokerEducation, etc.), the hero already spans `w-full`. We do not change those. We only ensure the *page surrounding* the hero is full-bleed.
+- For `NotFound` specifically, the page now spans the full content lane (no centered black card on champagne background).
 
-This is the only production-code change. Pure function, no side effects.
+### 4. Route safety net
+- In `src/routes/PublicRoutes.tsx` add an alias:
+  ```tsx
+  <Route path="/owner/dashboard" element={<Navigate to="/owner" replace />} />
+  ```
+  This permanently catches any other place still pointing at the old path so users never see a 404 from an internal link again.
 
-#### 2. Token contract test — `src/styles/__tests__/hairlineTokens.test.ts`
+### 5. Quick audit pass
+- Grep the codebase for any other `/owner/dashboard` or `/owner-dashboard` links and normalise them to `/owner`. Found candidates so far:
+  - `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx` (fixed in #1)
+  - `src/pages/Dashboard.tsx` (comment only — no functional impact, but I'll align the comment).
+- Ensure no other component links to a non-existent owner subroute.
 
-```ts
-import { describe, it, expect } from "vitest";
-import { HAIRLINE_TOKENS } from "../hairlineTokens";
+## Files to edit
 
-describe("HAIRLINE_TOKENS contract", () => {
-  it("champagne RGB triplet stays #C8A766", () => {
-    expect(HAIRLINE_TOKENS.champagneRgb).toBe("200,167,102");
-  });
-  it("white RGB triplet stays pure white", () => {
-    expect(HAIRLINE_TOKENS.whiteRgb).toBe("255,255,255");
-  });
-  it("baseline alphas pinned to premium champagne defaults", () => {
-    expect(HAIRLINE_TOKENS.baseline).toEqual({
-      white: 0.14, whiteSoft: 0.10, gold: 0.35, goldPeak: 0.40,
-    });
-  });
-  it("ceilings prevent over-boost on pitch-black", () => {
-    expect(HAIRLINE_TOKENS.ceilings).toEqual({
-      white: 0.32, whiteSoft: 0.24, gold: 0.60, goldPeak: 0.70,
-    });
-  });
-});
-```
+- `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`
+- `src/pages/NotFound.tsx`
+- `src/components/MainLayout.tsx` (one-line `bg-background` on `<main>`)
+- `src/routes/PublicRoutes.tsx` (add `/owner/dashboard` redirect alias)
+- `src/pages/Dashboard.tsx` (comment cleanup only)
 
-#### 3. Curve test — `src/hooks/__tests__/useAdaptiveHairline.test.ts`
+## Out of scope / preserved
 
-```ts
-import { describe, it, expect } from "vitest";
-import { multiplierFromLuminance } from "../useAdaptiveHairline";
+- L-shaped 88px frame, sidebar, header, footer — unchanged.
+- Hero pages with intentional dark backgrounds — unchanged.
+- All existing 404 features (search, popular destinations, Need Assistance, back/home buttons) — preserved.
+- No data, no routes, no features removed (per "No Removal" policy).
 
-describe("multiplierFromLuminance — alpha curve", () => {
-  it("boosts on pitch-black so hairline reads", () => {
-    expect(multiplierFromLuminance(0)).toBe(1.25);
-    expect(multiplierFromLuminance(0.005)).toBe(1.25);
-  });
-  it("tapers to baseline on obsidian footer surface (~L 0.05)", () => {
-    expect(multiplierFromLuminance(0.05)).toBeCloseTo(1.0, 2);
-  });
-  it("softens to ~0.85 on mid-dark underlays", () => {
-    expect(multiplierFromLuminance(0.18)).toBeCloseTo(0.85, 2);
-  });
-  it("floors at 0.6 on light surfaces — never harsh", () => {
-    expect(multiplierFromLuminance(0.5)).toBeCloseTo(0.65, 2);
-    expect(multiplierFromLuminance(0.9)).toBe(0.6);
-    expect(multiplierFromLuminance(1)).toBe(0.6);
-  });
-  it("monotonically non-increasing from L=0.005 → 1", () => {
-    let prev = multiplierFromLuminance(0.005);
-    for (let L = 0.01; L <= 1; L += 0.01) {
-      const v = multiplierFromLuminance(L);
-      expect(v).toBeLessThanOrEqual(prev + 1e-9);
-      prev = v;
-    }
-  });
-});
-```
+## Verification
 
-#### 4. Component render test — `src/components/ui/__tests__/AdaptiveHairline.test.tsx`
-
-```tsx
-import { describe, it, expect } from "vitest";
-import { render } from "@testing-library/react";
-import { AdaptiveHairline } from "../AdaptiveHairline";
-
-const getStroke = (variant: "accent" | "nav" | "soft") => {
-  const { container } = render(<AdaptiveHairline variant={variant} />);
-  const el = container.firstElementChild as HTMLElement;
-  expect(el).toBeInTheDocument();
-  return { el, bg: el.style.background };
-};
-
-describe("<AdaptiveHairline />", () => {
-  it("renders an h-px decorative div", () => {
-    const { el } = getStroke("nav");
-    expect(el.className).toContain("h-px");
-    expect(el.getAttribute("aria-hidden")).toBe("true");
-  });
-
-  it("accent variant uses champagne triplet with faded edges", () => {
-    const { bg } = getStroke("accent");
-    expect(bg).toContain("rgba(200,167,102,0)"); // edge transparency stops
-    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\) 50%/); // peak at center
-    expect(bg).not.toContain("255,255,255"); // no white in accent
-  });
-
-  it("nav variant blends white edges with champagne center", () => {
-    const { bg } = getStroke("nav");
-    expect(bg).toContain("rgba(255,255,255,");
-    expect(bg).toContain("rgba(200,167,102,");
-    expect(bg).toMatch(/rgba\(200,167,102,0\.\d+\) 50%/);
-  });
-
-  it("soft variant is pure white, no champagne", () => {
-    const { bg } = getStroke("soft");
-    expect(bg).toContain("rgba(255,255,255,");
-    expect(bg).not.toContain("200,167,102");
-  });
-
-  it("never emits a gradient stop with alpha > the ceiling", () => {
-    // jsdom default body bg is transparent → falls back to BASELINE.luminance.
-    // At baseline, gold alpha is 0.35 (×1.25 boost = 0.4375 capped at 0.6).
-    const { bg } = getStroke("nav");
-    const alphas = [...bg.matchAll(/rgba\([^)]+,(0?\.\d+)\)/g)]
-      .map(m => parseFloat(m[1]));
-    for (const a of alphas) expect(a).toBeLessThanOrEqual(0.7);
-  });
-
-  it("forwards className for layout overrides", () => {
-    const { container } = render(
-      <AdaptiveHairline variant="nav" className="max-w-7xl mx-auto" />
-    );
-    const el = container.firstElementChild as HTMLElement;
-    expect(el.className).toContain("max-w-7xl");
-    expect(el.className).toContain("mx-auto");
-  });
-});
-```
-
-### Files
-
-**Create**
-- `src/styles/__tests__/hairlineTokens.test.ts`
-- `src/hooks/__tests__/useAdaptiveHairline.test.ts`
-- `src/components/ui/__tests__/AdaptiveHairline.test.tsx`
-
-**Edit**
-- `src/hooks/useAdaptiveHairline.ts` — add `export { multiplierFromLuminance };` (one line).
-
-### What this catches
-
-| Regression | Caught by |
-|---|---|
-| Champagne triplet changed (e.g. someone uses `184,148,62`) | Token contract + render test |
-| Baseline alpha bumped (gold 0.35 → 0.5 makes footer harsh) | Token contract |
-| Adaptive curve flattened (light surfaces no longer soften) | Curve test |
-| Curve becomes non-monotonic (bizarre dark-spot harshness) | Curve test |
-| Variant gradient shape drifts (e.g. peak at 30% instead of 50%) | Render test |
-| White leaks into `accent` or champagne leaks into `soft` | Render test |
-| `<AdaptiveHairline />` stops respecting `className` overrides | Render test |
-
-### What this does NOT catch (acknowledged)
-
-- True pixel-level rendering differences across browsers — would need Playwright + screenshot diffing, which is heavyweight and out of scope for "lightweight".
-- The luminance detection inside `useAdaptiveHairline` walking a real ancestor tree — jsdom's `getComputedStyle` returns empty backgrounds so the hook always falls back to baseline. The pure curve test covers the math; the live integration is verified manually in `/dev/footer-preview`.
-
-### Risk
-
-Negligible. All tests are pure / synchronous. The only production change is a single `export` of an already-pure helper.
+- Click the Pending Tasks popup → lands on `/owner` overview with `#tasks` anchor; no 404.
+- Visit a non-existent route (e.g., `/foo`) → see clean institutional 404, full-bleed light surface from sidebar edge to right edge, readable primary/secondary buttons, no black band, no "Attempted path" leak, comfortable gap above the "Ready to get started" CTA.
+- Dismiss popup with "Later" → re-appears on next session/refresh (no silent suppression).
+- Sample a few normal pages (Properties, About) at desktop and mobile to confirm no black edges.

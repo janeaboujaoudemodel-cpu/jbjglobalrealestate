@@ -6,23 +6,27 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
+/**
+ * Pending Tasks alert.
+ *
+ * Behaviour rules (per product owner):
+ *  - Tasks must NEVER be silently removed/auto-suppressed.
+ *  - Closing the modal (X / "Later") only hides it for the current in-memory session;
+ *    on the next page load the alert returns until tasks reach 0.
+ *  - "View Tasks" deep-links to the owner dashboard root (`/owner`) — the canonical
+ *    overview route — with a `#tasks` anchor. We do NOT navigate to non-existent
+ *    `/owner/dashboard` (which produced a 404).
+ */
 export function OwnerTasksPopupAlert() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [pendingCount, setPendingCount] = useState(0);
-  const [dismissed, setDismissed] = useState(false);
+  const [hiddenThisSession, setHiddenThisSession] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!user) return;
-
-    const sessionKey = `owner_tasks_popup_${new Date().toDateString()}`;
-    if (sessionStorage.getItem(sessionKey)) {
-      setDismissed(true);
-      setLoaded(true);
-      return;
-    }
 
     const checkTasks = async () => {
       const [tasksRes, cvsRes] = await Promise.all([
@@ -44,53 +48,71 @@ export function OwnerTasksPopupAlert() {
     checkTasks();
   }, [user]);
 
-  const handleDismiss = () => {
-    const sessionKey = `owner_tasks_popup_${new Date().toDateString()}`;
-    sessionStorage.setItem(sessionKey, "1");
-    setDismissed(true);
+  const handleClose = () => {
+    // Hide for this in-memory session only — never persist dismissal.
+    setHiddenThisSession(true);
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
     queryClient.invalidateQueries({ queryKey: ['notifications-preview'] });
   };
 
-  if (!loaded || dismissed || pendingCount === 0) return null;
+  const handleViewTasks = () => {
+    setHiddenThisSession(true);
+    // Canonical owner dashboard route is `/owner` (index). `#tasks` lets the
+    // overview scroll to / open the tasks panel.
+    navigate("/owner#tasks");
+  };
+
+  if (!loaded || hiddenThisSession || pendingCount === 0) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pending-tasks-title"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+    >
+      <div className="bg-card border border-border rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative">
         <button
-          onClick={handleDismiss}
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-600 transition-colors"
+          type="button"
+          onClick={handleClose}
+          aria-label="Close pending tasks alert"
+          className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
-            <AlertTriangle className="w-6 h-6 text-[#B89555]" />
+          <div className="w-12 h-12 rounded-xl bg-foreground/5 border border-border flex items-center justify-center">
+            <AlertTriangle className="w-6 h-6 text-foreground" />
           </div>
           <div>
-            <h3 className="text-black font-bold text-lg">Pending Tasks</h3>
-            <p className="text-gray-600 text-sm">Daily action items require attention</p>
+            <h3 id="pending-tasks-title" className="text-foreground font-bold text-lg">
+              Pending Tasks
+            </h3>
+            <p className="text-muted-foreground text-sm">Daily action items require attention</p>
           </div>
         </div>
 
-        <div className="bg-white/60 border border-[#B89555]/20 rounded-xl p-4 mb-5">
-          <p className="text-black text-sm">
-            You have <span className="font-bold text-[#B89555] text-lg">{pendingCount}</span> pending item{pendingCount !== 1 ? 's' : ''} that need your review today.
+        <div className="bg-muted/40 border border-border rounded-xl p-4 mb-5">
+          <p className="text-foreground text-sm">
+            You have{" "}
+            <span className="font-bold text-foreground text-lg">{pendingCount}</span> pending item
+            {pendingCount !== 1 ? "s" : ""} that need your review today.
           </p>
         </div>
 
         <div className="flex gap-3">
           <Button
-            onClick={() => { handleDismiss(); navigate("/owner/dashboard#tasks"); }}
-            className="flex-1 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold rounded-xl"
+            onClick={handleViewTasks}
+            variant="primary"
+            className="flex-1 rounded-xl"
           >
             View Tasks <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
           <Button
-            variant="outline"
-            onClick={handleDismiss}
-            className="border-[#B89555]/30 text-gray-600 hover:bg-[#B89555]/10 rounded-xl"
+            variant="secondary"
+            onClick={handleClose}
+            className="rounded-xl"
           >
             Later
           </Button>
