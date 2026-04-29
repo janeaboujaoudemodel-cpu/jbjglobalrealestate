@@ -661,6 +661,7 @@ const DeveloperRegistryTab = () => {
 
   return (
     <div className="space-y-5">
+      <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
       <DocumentPackPanel />
 
       {/* Sub-tabs: Outreach Queue vs Sent History */}
