@@ -120,6 +120,20 @@ function loadState(): PersistedState {
 
 const FooterPreviewInner = () => {
   const [state, setState] = useState<PersistedState>(() => loadState());
+  const [liveLuminance, setLiveLuminance] = useState<number | null>(null);
+
+  // Poll the footer's data-hairline-luminance attribute so we can show
+  // the adaptive alphas the hook computed for the current preset.
+  useEffect(() => {
+    const read = () => {
+      const el = document.getElementById("site-footer");
+      const v = el?.getAttribute("data-hairline-luminance");
+      if (v) setLiveLuminance(parseFloat(v));
+    };
+    read();
+    const id = window.setInterval(read, 400);
+    return () => window.clearInterval(id);
+  }, [state.presetKey]);
 
   useEffect(() => {
     try {
