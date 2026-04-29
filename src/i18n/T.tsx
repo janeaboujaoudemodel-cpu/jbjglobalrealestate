@@ -9,7 +9,7 @@
 // For attribute strings (placeholder, alt, aria-label, title) use the
 // `useT` hook instead.
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTranslationSync, subscribeTranslations } from './translateClient';
 
