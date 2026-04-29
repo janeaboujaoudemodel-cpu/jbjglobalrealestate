@@ -48,7 +48,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="jj-card-inner transition-all h-full">
+      <Card className="transition-all h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -71,8 +71,8 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="py-16 bg-black">
-      <div className="jj-layer-2">
+    <section className="py-16" style={{ backgroundColor: '#FFFFFF' }} data-surface="light">
+      <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -133,7 +133,7 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner h-full">
+              <Card className="h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
@@ -178,7 +178,7 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="jj-card-inner h-full">
+              <Card className="h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
@@ -212,7 +212,7 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' }}>
               <Calendar className="w-4 h-4" style={{ color: '#000000' }} />
               <span className="text-sm font-semibold" style={{ color: '#000000' }}>
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}

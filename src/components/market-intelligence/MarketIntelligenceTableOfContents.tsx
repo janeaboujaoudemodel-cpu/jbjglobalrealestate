@@ -107,15 +107,15 @@ export const MarketIntelligenceTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="rounded-xl p-4 shadow-xl border" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}>
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-gold" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#000000' }}>
+                  <HelpCircle className="w-4 h-4" style={{ color: '#ffffff' }} />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-black text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    Click any section button to jump directly to that part of the page. The active section is highlighted in gold.
+                  <h4 className="font-semibold text-sm mb-1" style={{ color: '#000000' }}>Quick Navigation</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>
+                    Click any section button to jump directly to that part of the page. The active section is highlighted.
                   </p>
                 </div>
               </div>
@@ -128,7 +128,7 @@ export const MarketIntelligenceTableOfContents = ({
                 I Understand
               </Button>
             </div>
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#ECE2D2]" />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent" style={{ borderLeftColor: '#FFFFFF' }} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -137,23 +137,24 @@ export const MarketIntelligenceTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
+        className="rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] border"
+        style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}
       >
-        {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
           <div className="flex items-center gap-2">
-            <List className="w-5 h-5 text-gold" />
-            <h3 className="text-black font-semibold">{title}</h3>
+            <List className="w-5 h-5" style={{ color: '#000000' }} />
+            <h3 className="font-semibold" style={{ color: '#000000' }}>{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+            style={{ backgroundColor: '#F3F4F6' }}
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-gray-600" />
+              <ChevronDown className="w-4 h-4" style={{ color: '#374151' }} />
             ) : (
-              <ChevronUp className="w-4 h-4 text-gray-600" />
+              <ChevronUp className="w-4 h-4" style={{ color: '#374151' }} />
             )}
           </button>
         </div>
@@ -173,24 +174,27 @@ export const MarketIntelligenceTableOfContents = ({
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all border",
                     activeId === item.id
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      ? "font-semibold shadow-sm"
+                      : "border-transparent hover:bg-gray-50"
                   )}
+                  style={
+                    activeId === item.id
+                      ? { backgroundColor: '#000000', color: '#ffffff', borderColor: '#000000' }
+                      : { color: '#374151', backgroundColor: 'transparent' }
+                  }
                 >
                   <span className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                  )} style={
                     activeId === item.id
-                      ? "bg-black text-gold"
-                      : "bg-gold/10 text-gold"
-                  )}>
+                      ? { backgroundColor: '#ffffff', color: '#000000' }
+                      : { backgroundColor: '#F3F4F6', color: '#000000' }
+                  }>
                     {index + 1}
                   </span>
-                  {item.icon && <item.icon className={cn(
-                    "w-4 h-4",
-                    activeId === item.id ? "text-black" : "text-gold"
-                  )} />}
+                  {item.icon && <item.icon className="w-4 h-4" style={{ color: activeId === item.id ? '#ffffff' : '#374151' }} />}
                   <span className="flex-1">{item.title}</span>
                 </button>
               ))}
