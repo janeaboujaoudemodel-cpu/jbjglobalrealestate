@@ -658,7 +658,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom hairline */}
-      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
+      <AdaptiveHairline variant="accent" />
     </footer>
   );
 };
