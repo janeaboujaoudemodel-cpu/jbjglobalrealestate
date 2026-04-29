@@ -254,6 +254,7 @@ export const BulkSendDialog = ({
             </div>
           )}
         </div>
+        </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={closeAndReset} disabled={running}>
