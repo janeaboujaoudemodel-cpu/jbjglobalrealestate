@@ -71,8 +71,8 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="py-16 bg-black">
-      <div className="jj-layer-2">
+    <section className="py-16" style={{ backgroundColor: '#FFFFFF' }} data-surface="light">
+      <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
           whileInView="visible"
