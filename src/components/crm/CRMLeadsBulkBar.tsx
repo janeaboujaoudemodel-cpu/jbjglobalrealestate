@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { RefreshCw, Trash2, UserPlus, X } from "lucide-react";
+import { Copy, MessageSquare, Mail, RefreshCw, Trash2, UserPlus, X, Sparkles } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
 
 interface BrokerOption {
@@ -32,6 +32,10 @@ export default function CRMLeadsBulkBar({
   const [assigneeId, setAssigneeId] = useState<string>("");
   const [nextStatus, setNextStatus] = useState<string>("");
   const [busy, setBusy] = useState(false);
+  const [showBroadcast, setShowBroadcast] = useState(false);
+  const [broadcastChannel, setBroadcastChannel] = useState<"whatsapp" | "email">("whatsapp");
+  const [broadcastSubject, setBroadcastSubject] = useState("");
+  const [broadcastMessage, setBroadcastMessage] = useState("");
 
   useEffect(() => {
     let cancelled = false;
