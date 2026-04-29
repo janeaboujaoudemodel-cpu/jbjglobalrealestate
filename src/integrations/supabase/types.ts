@@ -14435,6 +14435,72 @@ export type Database = {
         }
         Relationships: []
       }
+      investor_intake: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          created_at: string
+          currency: string | null
+          financing: string | null
+          full_name: string | null
+          id: string
+          intent: string
+          investment_goal: string | null
+          nationality: string | null
+          notes: string | null
+          phone_e164: string | null
+          preferred_areas: string[] | null
+          residency_status: string | null
+          status: string
+          timeline: string | null
+          unit_types: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string
+          currency?: string | null
+          financing?: string | null
+          full_name?: string | null
+          id?: string
+          intent: string
+          investment_goal?: string | null
+          nationality?: string | null
+          notes?: string | null
+          phone_e164?: string | null
+          preferred_areas?: string[] | null
+          residency_status?: string | null
+          status?: string
+          timeline?: string | null
+          unit_types?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string
+          currency?: string | null
+          financing?: string | null
+          full_name?: string | null
+          id?: string
+          intent?: string
+          investment_goal?: string | null
+          nationality?: string | null
+          notes?: string | null
+          phone_e164?: string | null
+          preferred_areas?: string[] | null
+          residency_status?: string | null
+          status?: string
+          timeline?: string | null
+          unit_types?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ip_blocklist: {
         Row: {
           block_count: number
@@ -27960,6 +28026,39 @@ export type Database = {
           reviewed_at: string | null
           status: string | null
           title: string | null
+        }
+        Relationships: []
+      }
+      user_categories_v: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          current_location_country: string | null
+          email: string | null
+          full_name: string | null
+          nationality: string | null
+          phone_e164: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: never
+          created_at?: string | null
+          current_location_country?: string | null
+          email?: string | null
+          full_name?: string | null
+          nationality?: string | null
+          phone_e164?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: never
+          created_at?: string | null
+          current_location_country?: string | null
+          email?: string | null
+          full_name?: string | null
+          nationality?: string | null
+          phone_e164?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

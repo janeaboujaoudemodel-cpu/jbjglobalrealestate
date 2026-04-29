@@ -1,79 +1,157 @@
 ## Goal
 
-Four user-reported gaps on `/owner/crm/relationships` → Developer Registry:
-
-1. Only 93 developers listed — need a comprehensive UAE developer directory (200+) with office address, phone, website, and a primary contact person per developer.
-2. The contact person (name / role / phone / email) added to a developer must be visible directly on the registry card — without opening edit.
-3. The "Send Registration" dialog is too narrow; the email column is cut off and requires scrolling right. Widen it and let the email body render fully.
-4. The "Open Pack" / Google Drive button currently shows a JBJ "JavaScript required" splash because it's pointing to the app instead of the actual Drive folder. Make it open the real Drive URL in a new tab.
+Make category selection (Investor / Broker / Developer) a first-class step of every login, capture full per-category profile data into the backend, and give the owner a single admin view that counts and lists users per category.
 
 ---
 
-## What changes
+## 1. Homepage — Category Selection Block
 
-### 1. Massive developer directory expansion
+Add a new section near the top of the homepage (`src/pages/Index.tsx`) called **"I am a…"** with three premium cards:
 
-Replace the hardcoded 93-row `seed_crm_developer_registry()` SQL function with a fuller, researched UAE developer dataset (~220 rows) covering Dubai, Abu Dhabi, Sharjah, Ajman, RAK, Fujairah, UAQ. Each row carries:
+- **Investor** — TrendingUp icon, "Browse properties, track your portfolio"
+- **Broker** — Briefcase icon, "Access CRM, leads & broker tools"
+- **Developer** — Building2 icon, "Submit projects & manage launches"
 
-- `developer_name`
-- `developer_email` (broker/channel-partner inbox)
-- `phone` (HQ switchboard)
-- `website`
-- `emirate`
-- `developer_contact` JSONB → `{ name, role, phone, email }` for the published broker-relations contact where publicly known; left empty `{}` where unknown so the user can fill it in.
+Click behavior:
+- If **not logged in** → navigate to `/auth?returnTo=/welcome&preselect=<category>`.
+- If **logged in** → call `setMode(category)`, persist to backend, then navigate to that category's onboarding page (see §3).
 
-Sources for the new list: existing `developers` table (633 slugs already in the project), `uae_developers` table, public broker-relations directories (Dubai Land Department developer registry, Abu Dhabi DMT registry, public LinkedIn/company-website "Brokers" pages). Add common Dubai names currently missing such as Iman Developers, AYS, Sankari, Five, Wellington, Q Properties, Vincitore, Mered, Mira, Refine, Crown, ORO24, Beyond by Omniyat, GFH, Lootah, Modon, Aldar, etc., plus Northern-Emirate developers (Arada, Alef Group, Tilal Properties, Manazel, RAK Properties, Al Hamra, Eagle Hills Sharjah, Imkan, Ajmal Makan, Shurooq, Arabian Hills, Al Marjan Island, etc.).
+New component: `src/components/home/CategorySelectorSection.tsx`. Inserted after the hero, before existing sections. Monochrome styling per Core memory (white surface, black text, Inter font); orange used only for accent dots, not buttons.
 
-The seed function will be `INSERT … ON CONFLICT (owner_id, developer_slug) DO UPDATE` — running "Pre-fill" on an account that already has rows will **enrich** existing entries (fill in missing phone/website/contact) rather than skipping them, without overwriting the user's manual edits to `notes`, `agency_code`, `status`, etc.
+---
 
-### 2. Contact person visible on the registry card
+## 2. Auth Flow — Always Funnel Through /welcome
 
-In `CRMRelationships.tsx` registry list (around line 713), add a second row under the email/phone/emirate strip:
+Edit `src/pages/Auth.tsx`:
 
-```text
-👤 Mohammed Khan · Broker Relations Manager · +971 50 ••• ••••  ✉ m.khan@developer.ae
+- After **sign-in success** (currently `navigate("/")` on lines 319 & 352): check `user_role_selections.selected_role` and `crm_users_profile`/`broker_profiles`. If no category recorded → `navigate("/welcome")`. Otherwise honor `returnTo` param or go to `/`.
+- After **sign-up success** (already routes to `/welcome`): pass through `?preselect=<category>` from URL so the chosen card auto-highlights.
+- Honor `?returnTo=` so the homepage card flow returns the user to the right onboarding step.
+
+Edit `src/pages/Welcome.tsx`:
+
+- Read `?preselect=` and pre-select that card.
+- After category save, instead of jumping straight to dashboards, route to the **registration form** for that category if the registration is incomplete:
+  - `developer` → `/register/developer`
+  - `broker` → `/register/broker`
+  - `investor` → `/register/investor`
+- If a registration row already exists (status `submitted` or `approved`), skip the form and go to the dashboard as today.
+
+---
+
+## 3. Authenticated Registration Forms
+
+Three new pages under `src/pages/register/` (added to `src/routes/PublicRoutes.tsx` behind `<AuthGate>`):
+
+### `/register/investor` — `RegisterInvestor.tsx`
+Fields:
+- Full name, phone (E.164), nationality, residency status
+- Investor type: `currently_invested` | `looking_to_buy`
+- If invested: list of properties owned (project, unit, purchase price, purchase date) — repeatable
+- If looking: budget range, preferred areas (multi), unit type, timeline, financing (cash/mortgage), investment goal (rental yield / capital growth / Golden Visa)
+- Notes / requirements (textarea)
+
+Saves into:
+- `user_role_selections` (basic identity)
+- `client_investors` (one row per owned property)
+- New table `investor_intake` (looking-to-buy preferences, see §5)
+
+### `/register/broker` — `RegisterBroker.tsx`
+Fields:
+- Full name, phone, nationality, photo
+- Current company / brokerage, years experience, RERA / BRN number
+- Specializations (multi: off-plan, secondary, rentals, commercial, luxury)
+- Languages, preferred areas
+- CV upload (PDF/DOCX → Supabase Storage `broker-documents` bucket)
+- RERA card upload, Emirates ID upload (already supported by `broker_profiles`)
+- LinkedIn URL, short bio
+
+Saves into `broker_profiles` (existing table — covers nearly all fields). New file uploads use existing storage pattern from `BrokerAccount.tsx`.
+
+### `/register/developer` — `RegisterDeveloper.tsx`
+Reuse the existing `DeveloperCompanyRegistration` page logic but expose it under the unified `/register/developer` route too. No schema change — saves to `developer_registrations`.
+
+All three forms use the existing `FormDraftBar` for autosave UX (matches `JoinInvestorList.tsx` pattern).
+
+---
+
+## 4. Wiring "Send Registration Email" Form Width
+
+Carry-over from prior message: the Bulk Send / Registration dialog's email column is clipped. Widen `BulkSendDialog`'s `DialogContent` to `max-w-[900px]` and let the email column use `min-w-[280px]` with `truncate` removed so the address is fully visible.
+
+---
+
+## 5. Backend Changes (one migration)
+
+```sql
+-- Investor intake (for "looking to buy" pipeline)
+create table public.investor_intake (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  status text not null default 'submitted',     -- submitted | reviewing | matched
+  intent text not null,                          -- 'currently_invested' | 'looking_to_buy'
+  budget_min numeric, budget_max numeric, currency text default 'AED',
+  preferred_areas text[], unit_types text[],
+  timeline text, financing text, investment_goal text,
+  notes text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+alter table public.investor_intake enable row level security;
+create policy "owner read own"   on public.investor_intake for select using (auth.uid() = user_id);
+create policy "owner insert own" on public.investor_intake for insert with check (auth.uid() = user_id);
+create policy "owner update own" on public.investor_intake for update using (auth.uid() = user_id);
+create policy "admins read all"  on public.investor_intake for select using (public.has_role(auth.uid(),'admin'));
+
+-- Unified category registry view (read-only, used by admin page)
+create or replace view public.user_categories_v as
+  select urs.user_id, urs.email, urs.full_name, urs.phone_e164,
+         urs.selected_role::text as category, urs.created_at
+  from public.user_role_selections urs;
+grant select on public.user_categories_v to authenticated;
 ```
 
-- Pulls from `r.developer_contact?.name / role / phone / email`.
-- Renders only when at least one field is present.
-- Phone & email are clickable (`tel:` / `mailto:`).
-- Falls back to a small grey "+ Add contact person" button that opens the existing edit dialog focused on the contact section.
-
-### 3. Wider Send Registration dialog with readable email preview
-
-In `BulkSendDialog.tsx`:
-
-- Change `DialogContent` from `max-w-3xl` to `max-w-6xl w-[95vw]` so on desktop the dialog uses ~1200 px instead of ~768 px.
-- Re-flow the body into a 2-column grid (`lg:grid-cols-[360px_1fr]`):
-  - **Left column**: variant picker, test field, skip-recent toggle, recipient list with live status.
-  - **Right column**: full-height iframe email preview (`min-h-[520px]`), subject line, From/To, locked badge — no horizontal scroll, full text visible.
-- The preview iframe gets `width: 100%` and `min-height: 520px` so the email renders at its natural width.
-- Mobile collapses back to a single column automatically.
-
-### 4. Fix the "Open Pack" / Google Drive link
-
-The blank "JBJ Global Real Estate — JavaScript required" page happens because the button is rendering with a relative href (or a `<button>` with no real navigation) and the SPA catches the click. Fix in `DocumentPackPanel`:
-
-- Render the open-pack button as a real `<a href={settings.drive_doc_pack_url} target="_blank" rel="noopener noreferrer">` styled like a button.
-- Validate the stored URL: if it doesn't start with `http`, show a red helper line "Paste a full https://drive.google.com/… link". 
-- Add a small "Test link" inline action that does `window.open(url, "_blank")` so the user can verify before sending.
-
-The same fix is applied wherever the doc-pack link is surfaced (the Send dialog footer note, the per-developer Send button tooltip).
+(`developer_registrations`, `broker_profiles`, `client_investors` already exist — no schema change there.)
 
 ---
 
-## Files touched
+## 6. Admin "Categories" Page
 
-- `supabase/migrations/<new>.sql` — replace `seed_crm_developer_registry()` with the expanded ON-CONFLICT-DO-UPDATE version covering ~220 UAE developers + contact metadata. No schema changes (all columns already exist).
-- `src/pages/CRMRelationships.tsx` — add inline contact-person row on each registry card; fix Open Pack button to be a real anchor; minor "Add contact person" empty-state link.
-- `src/components/crm/BulkSendDialog.tsx` — widen dialog, switch to 2-column layout, enlarge iframe preview.
+New route `/admin/categories` (page: `src/pages/AdminCategories.tsx`, linked from existing `Admin.tsx` sidebar). Owner/admin-only via `requireOwnerAuth`.
 
-No changes needed to the edge function, RLS policies, or the email template itself.
+Three tabs: **Investors · Brokers · Developers**. Each tab shows:
+
+- Total count badge
+- Searchable table: name, email, phone, country, registration status, created date
+- Row click → drawer with the full submitted profile + uploaded documents
+- CSV export per tab
+
+Data sources:
+- Investors: `user_categories_v` filtered to `investor` + `investor_intake` + `client_investors`
+- Brokers: `broker_profiles`
+- Developers: `developer_registrations`
 
 ---
 
-## Out of scope
+## Files
 
-- Live scraping of every developer's website to auto-fill the broker-relations contact. We seed what is publicly known and clearly leave the rest blank for the user to enrich (matches how the registry already works).
-- Building a separate "Address book" table for multiple contacts per developer — for now we keep one primary contact in the existing `developer_contact` JSONB; multi-contact support can follow if needed.
-- Pulling delivery webhooks from Resend into `email_send_log` (already noted as future work in the previous plan).
+**Created**
+- `src/components/home/CategorySelectorSection.tsx`
+- `src/pages/register/RegisterInvestor.tsx`
+- `src/pages/register/RegisterBroker.tsx`
+- `src/pages/register/RegisterDeveloper.tsx`
+- `src/pages/AdminCategories.tsx`
+- `supabase/migrations/<ts>_investor_intake_and_categories_view.sql`
+
+**Edited**
+- `src/pages/Index.tsx` — mount `CategorySelectorSection`
+- `src/pages/Auth.tsx` — post-login category check + `preselect` passthrough
+- `src/pages/Welcome.tsx` — `preselect` support, route to `/register/<category>` when intake missing
+- `src/routes/PublicRoutes.tsx` — register the 4 new routes (3 forms + admin page)
+- `src/components/crm/BulkSendDialog.tsx` — wider dialog so email column is fully visible
+- `src/pages/Admin.tsx` — add "Categories" link
+
+---
+
+## Out of scope (will note for follow-up)
+- The "JavaScript required" message on opening pack/Drive links — that is Google Drive's own preview page when opened inside the in-app iframe; needs a separate fix to open Drive links in a new tab. I'll address it in a follow-up unless you want it bundled here.
