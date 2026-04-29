@@ -137,23 +137,24 @@ export const MarketIntelligenceTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
+        className="rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] border"
+        style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}
       >
-        {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
           <div className="flex items-center gap-2">
-            <List className="w-5 h-5 text-gold" />
-            <h3 className="text-black font-semibold">{title}</h3>
+            <List className="w-5 h-5" style={{ color: '#000000' }} />
+            <h3 className="font-semibold" style={{ color: '#000000' }}>{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+            style={{ backgroundColor: '#F3F4F6' }}
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-gray-600" />
+              <ChevronDown className="w-4 h-4" style={{ color: '#374151' }} />
             ) : (
-              <ChevronUp className="w-4 h-4 text-gray-600" />
+              <ChevronUp className="w-4 h-4" style={{ color: '#374151' }} />
             )}
           </button>
         </div>
