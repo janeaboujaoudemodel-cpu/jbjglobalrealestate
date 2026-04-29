@@ -211,12 +211,17 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
-            // Check if user has made mode selection — if not, go to welcome page
+            // Honor ?returnTo and ?preselect from URL
+            const params = new URLSearchParams(window.location.search);
+            const returnTo = params.get('returnTo');
+            const preselect = params.get('preselect');
             const modeSelected = localStorage.getItem('jj_mode_selected');
-            if (modeSelected === 'true') {
+            if (modeSelected === 'true' && returnTo) {
+              navigate(returnTo);
+            } else if (modeSelected === 'true') {
               navigate("/");
             } else {
-              navigate("/welcome");
+              navigate(`/welcome${preselect ? `?preselect=${preselect}` : ''}`);
             }
           }
           break;
