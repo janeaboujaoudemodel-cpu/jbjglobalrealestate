@@ -333,9 +333,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
     { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
 
+    { section: "Sell" },
+    { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
+    { href: "/sell/valuation", label: "Property Valuation", icon: BarChart3 },
+    { href: "/services/selling-advisory", label: t('header.sellingAdvisory') || "Selling Advisory", icon: Briefcase },
+
     { section: "More" },
     { href: "/developers", label: "Developers", icon: Building2 },
-    { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
 
   // Services dropdown
@@ -406,8 +410,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Mobile menu links - Buy section
   const mobileBuyLinks = [
     { href: "/properties?transaction=buy", label: "Properties for Sale", icon: Home },
-    { href: "/properties?type=apartment&transaction=buy", label: "Apartments", icon: Building2 },
-    { href: "/properties?type=villa&transaction=buy", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&status=ready", label: "Ready Properties", icon: Key },
+    { href: "/properties?transaction=buy&status=off-plan", label: "Off-Plan Properties", icon: ClipboardCheck },
+    { href: "/properties?transaction=buy&type=apartments", label: "Apartments", icon: Building2 },
+    { href: "/properties?transaction=buy&type=villa", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&type=townhouse", label: "Townhouses", icon: Home },
+    { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
+    { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
     { href: "/buyer-guide", label: "Buyer's Guide", icon: FileText },
     { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: BarChart3 },
   ];
