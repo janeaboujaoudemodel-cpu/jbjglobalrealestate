@@ -916,7 +916,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             onClick={closeMegaMenu}
                             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                               linkActive
-                                ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                                ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                                 : "bg-white/80 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                             }`}
                           >
@@ -989,7 +989,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={closeMegaMenu}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                         linkActive
-                          ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                          ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                           : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                       }`}
                     >
@@ -1005,7 +1005,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 <Link
                   to={viewAllHref}
                   onClick={closeMegaMenu}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-black bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
                 >
                   <Eye className="w-4 h-4 text-white flex-shrink-0" />
                   <span className="flex-1">{viewAllLabel}</span>
@@ -1074,7 +1074,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={closeMegaMenu}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
-                        ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-black font-bold border-gold shadow-sm"
                         : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                     }`}
                   >
