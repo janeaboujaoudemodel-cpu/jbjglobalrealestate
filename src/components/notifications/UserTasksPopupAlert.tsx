@@ -70,18 +70,19 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
   if (!loaded || dismissed || totalAlerts === 0) return null;
 
   return (
-    <div ref={ref} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
+    <div ref={ref} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative">
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-600 transition-colors"
+          aria-label="Close"
+          className="absolute top-3 right-3 text-gray-600 hover:text-black transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
-            <Bell className="w-6 h-6 text-[#B89555]" />
+          <div className="w-12 h-12 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center">
+            <Bell className="w-6 h-6 text-black" />
           </div>
           <div>
             <h3 className="text-black font-bold text-lg">
@@ -91,7 +92,7 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
                   ? "Ticket Updates"
                   : "Pending Tasks"}
             </h3>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-700 text-sm">
               {totalAlerts} notification{totalAlerts !== 1 ? "s" : ""} for you
             </p>
           </div>
@@ -101,10 +102,10 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
           <div className="space-y-2 mb-4">
             {ticketAlerts.map((alert) => (
               <div key={alert.id} className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
-                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                <CheckCircle className="w-5 h-5 text-green-700 mt-0.5 shrink-0" />
                 <div>
                   <p className="text-black font-semibold text-sm">{alert.title}</p>
-                  <p className="text-gray-600 text-xs">{alert.message}</p>
+                  <p className="text-gray-700 text-xs">{alert.message}</p>
                 </div>
               </div>
             ))}
@@ -112,9 +113,9 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
         )}
 
         {pendingCount > 0 && (
-          <div className="bg-white/60 border border-[#B89555]/20 rounded-xl p-4 mb-5">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
             <p className="text-black text-sm">
-              You have <span className="font-bold text-[#B89555] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention.
+              You have <span className="font-extrabold text-black text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention.
             </p>
           </div>
         )}
@@ -123,7 +124,8 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
           {ticketAlerts.length > 0 && (
             <Button
               onClick={() => { handleDismiss(); navigate("/my-tickets"); }}
-              className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl"
+              variant="primary"
+              className="flex-1 rounded-xl"
             >
               <Headphones className="w-4 h-4 mr-2" />
               My Tickets
@@ -132,15 +134,16 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
           {pendingCount > 0 && (
             <Button
               onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
-              className="flex-1 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold rounded-xl"
+              variant="primary"
+              className="flex-1 rounded-xl"
             >
               View Tasks <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           )}
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={handleDismiss}
-            className="border-[#B89555]/30 text-gray-600 hover:bg-[#B89555]/10 rounded-xl"
+            className="rounded-xl border-gray-300 text-black"
           >
             Later
           </Button>

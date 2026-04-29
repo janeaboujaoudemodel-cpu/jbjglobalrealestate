@@ -71,32 +71,32 @@ export function OwnerTasksPopupAlert() {
       aria-labelledby="pending-tasks-title"
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
     >
-      <div className="bg-card border border-border rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative">
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative">
         <button
           type="button"
           onClick={handleClose}
           aria-label="Close pending tasks alert"
-          className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-3 right-3 text-gray-600 hover:text-black transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-foreground/5 border border-border flex items-center justify-center">
-            <AlertTriangle className="w-6 h-6 text-foreground" />
+          <div className="w-12 h-12 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center">
+            <AlertTriangle className="w-6 h-6 text-black" />
           </div>
           <div>
-            <h3 id="pending-tasks-title" className="text-foreground font-bold text-lg">
+            <h3 id="pending-tasks-title" className="text-black font-bold text-lg">
               Pending Tasks
             </h3>
-            <p className="text-muted-foreground text-sm">Daily action items require attention</p>
+            <p className="text-gray-700 text-sm">Daily action items require attention</p>
           </div>
         </div>
 
-        <div className="bg-muted/40 border border-border rounded-xl p-4 mb-5">
-          <p className="text-foreground text-sm">
+        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5">
+          <p className="text-black text-sm">
             You have{" "}
-            <span className="font-bold text-foreground text-lg">{pendingCount}</span> pending item
+            <span className="font-extrabold text-black text-lg">{pendingCount}</span> pending item
             {pendingCount !== 1 ? "s" : ""} that need your review today.
           </p>
         </div>
@@ -112,7 +112,7 @@ export function OwnerTasksPopupAlert() {
           <Button
             variant="secondary"
             onClick={handleClose}
-            className="rounded-xl"
+            className="rounded-xl border-gray-300 text-black"
           >
             Later
           </Button>
