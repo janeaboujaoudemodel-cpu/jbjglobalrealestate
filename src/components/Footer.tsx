@@ -108,23 +108,24 @@ const FooterCurrencyUnit = () => {
       <div className="relative">
         <button
           onClick={() => setCurrencyOpen(!currencyOpen)}
-          className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-medium text-white/85 hover:text-white border border-white/15 hover:border-white/30 rounded transition-colors"
+          className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-medium text-white/90 hover:text-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/60 rounded-md bg-white/[0.03] hover:bg-white/[0.06] transition-colors"
         >
           <span>{currentCur?.flag} {activeCurrency}</span>
           <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", currencyOpen && "rotate-180")} />
         </button>
         {currencyOpen && (
           <div
-            className="absolute bottom-full mb-2 left-0 w-52 rounded overflow-hidden z-50 max-h-80 overflow-y-auto"
+            className="absolute bottom-full mb-2 left-0 w-52 rounded-md overflow-hidden z-50 max-h-80 overflow-y-auto shadow-[0_20px_40px_rgba(0,0,0,0.55)]"
             style={{ background: "#0F0E0C", border: `1px solid ${HAIRLINE}` }}
           >
+            <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} aria-hidden="true" />
             {SUPPORTED_CURRENCIES.map((cur) => (
               <button
                 key={cur.code}
                 onClick={() => handleCurrency(cur.code)}
                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-left text-white/80 hover:text-white hover:bg-white/5 transition-colors"
                 style={{
-                  background: activeCurrency === cur.code ? "rgba(255,255,255,0.05)" : "transparent",
+                  background: activeCurrency === cur.code ? "rgba(200,167,102,0.12)" : "transparent",
                   color: activeCurrency === cur.code ? "#FFFFFF" : "rgba(255,255,255,0.8)",
                 }}
               >
@@ -137,19 +138,19 @@ const FooterCurrencyUnit = () => {
         )}
       </div>
 
-      <div className="flex items-stretch rounded overflow-hidden border border-white/15">
+      <div className="flex items-stretch rounded-md overflow-hidden border border-[hsl(var(--gold))]/30 bg-white/[0.03]">
         {(["sqft", "sqm"] as const).map((unit, idx) => (
           <div key={unit} className="flex items-stretch">
             {idx === 1 && (
-              <div className="w-px self-stretch bg-[#D9C292]/40" aria-hidden />
+              <div className="w-px self-stretch bg-[hsl(var(--gold))]/30" aria-hidden />
             )}
             <button
               onClick={() => handleUnit(unit)}
               className="px-2.5 py-1.5 text-[12px] font-medium transition-colors"
               style={{
                 background:
-                  areaUnit === unit ? "rgba(217,194,146,0.18)" : "transparent",
-                color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.55)",
+                  areaUnit === unit ? "rgba(200,167,102,0.18)" : "transparent",
+                color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.6)",
               }}
             >
               {unit === "sqft" ? "sq ft" : "sq m"}
