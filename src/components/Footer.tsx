@@ -4,7 +4,8 @@
  * All links preserved (No-Removal Policy).
  */
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
 import { MapPin, Phone, Mail, MessageCircle, ChevronDown } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
@@ -167,6 +168,8 @@ const Footer = () => {
   const { isFounderVisible } = useFounderVisibility();
   const currentYear = new Date().getFullYear();
   const location = useLocation();
+  const footerRef = useRef<HTMLElement>(null);
+  const hairline = useAdaptiveHairline(footerRef);
 
   const isBackOfficeContext =
     location.pathname.startsWith("/listing-admin") || location.pathname.startsWith("/admin");
@@ -443,15 +446,26 @@ const Footer = () => {
     { label: "Education Hub", href: "/education-hub" },
   ];
 
+  // Adaptive hairline gradient — center peak alpha follows underlay luminance.
+  const accentHairline = `linear-gradient(90deg, transparent 0%, ${ACCENT}00 8%, rgba(200,167,102,${hairline.goldPeak}) 50%, ${ACCENT}00 92%, transparent 100%)`;
+  const navHairline = `linear-gradient(90deg, transparent, rgba(255,255,255,${hairline.whiteSoft}) 20%, rgba(200,167,102,${hairline.gold}) 50%, rgba(255,255,255,${hairline.whiteSoft}) 80%, transparent)`;
+
   return (
     <footer
+      ref={footerRef}
       id="site-footer"
       data-surface="dark"
+      data-hairline-luminance={hairline.luminance.toFixed(4)}
       className="relative overflow-x-hidden isolate"
       style={{
         background: "#0A0908",
         color: "rgba(255,255,255,0.85)",
         fontFamily: "Inter, system-ui, sans-serif",
+        // Expose alphas as CSS vars so descendants can opt in if needed.
+        ["--fh-white" as string]: `rgba(255,255,255,${hairline.white})`,
+        ["--fh-white-soft" as string]: `rgba(255,255,255,${hairline.whiteSoft})`,
+        ["--fh-gold" as string]: `rgba(200,167,102,${hairline.gold})`,
+        ["--fh-gold-peak" as string]: `rgba(200,167,102,${hairline.goldPeak})`,
       }}
     >
       {/* Premium ambient overlays — vignette + soft champagne wash */}
@@ -473,7 +487,7 @@ const Footer = () => {
       />
 
       {/* Top hairline — single restrained champagne accent */}
-      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
+      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
 
       {/* === ZONE 1 — Brand + utility row === */}
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
@@ -532,8 +546,7 @@ const Footer = () => {
         <div
           className="max-w-7xl mx-auto h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+            background: navHairline,
           }}
         />
       </div>
@@ -573,8 +586,7 @@ const Footer = () => {
         <div
           className="max-w-7xl mx-auto h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+            background: navHairline,
           }}
         />
       </div>
@@ -635,7 +647,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright + legal links — premium single row, bidi-safe */}
-          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
+          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: `rgba(255,255,255,${hairline.white})` }}>
             <span className="text-[11px] text-white/65 tracking-[0.08em]" dir="ltr">
               © {currentYear} <bdi className="font-medium text-white/85">JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
@@ -655,7 +667,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom hairline */}
-      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
+      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
     </footer>
   );
 };

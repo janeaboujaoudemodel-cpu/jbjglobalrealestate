@@ -1,79 +1,70 @@
-## Footer Dark-Mode Preview Toggle — Plan
+## Adaptive Footer Hairlines — Plan
 
-Add an internal QA route that renders the live `<Footer />` against a swatch of common dark backgrounds, with a toggle to cycle through them. This makes hairline + divider visibility easy to verify without touching production surfaces.
+Make footer hairline strokes **respond to the brightness of whatever sits behind/around the footer** so they never look too faint on pure black or too harsh on lighter underlays.
 
-### 1. New route — `/dev/footer-preview`
+### Approach
 
-- Create `src/pages/dev/FooterPreviewPage.tsx`.
-- Register in `src/routes/StandaloneRoutes.tsx` (no MainLayout chrome — full-bleed canvas).
-- Owner-only access: wrap with the existing `OwnerGuard` used by other `/dev/*` routes (will inspect that file to match exact pattern).
-- Add a `<Helmet>` `noindex,nofollow` so it never gets surfaced publicly.
+The footer paints `#0A0908`, but the **effective** background can change: the page above can show through during scroll transitions, and some routes mount the footer over brighter ambient gradients. Today all hairlines use fixed alphas (e.g. `rgba(255,255,255,0.10)`, `rgba(200,167,102,0.35)`), so they read inconsistently.
 
-### 2. Background swatch presets
+I'll measure the perceived luminance of the nearest non-transparent ancestor at runtime, then scale every hairline alpha through CSS variables.
 
-Hardcoded list of representative dark canvases (extensible array at top of file):
+### 1. New hook — `src/hooks/useAdaptiveHairline.ts`
 
-| Key | Background | Use case |
+- Walks up from the footer ref, skipping itself, to find the first ancestor with a non-transparent `background-color`.
+- Computes sRGB → relative luminance (WCAG formula).
+- Maps luminance → alpha multiplier via a smooth piecewise curve:
+
+| Underlay luminance | Multiplier | Effect |
 |---|---|---|
-| `obsidian` | `#0A0908` | Current footer base — sanity baseline |
-| `ink` | `#000000` | Pure black — worst case for hairlines |
-| `charcoal` | `#1A1714` | Slightly warmer dark surface |
-| `midnight` | `#0B1020` | Cool blue-black (e.g. landing hero) |
-| `espresso` | `#15110D` | Warm brown-black |
-| `gradient-radial` | radial champagne wash on `#0A0908` | Footer's actual ambient overlay |
-| `gradient-linear` | top-to-bottom black → `#0A0908` | Above-fold transition |
-| `noise` | `#0A0908` + SVG grain | Stress-test grain interaction |
+| `≤ 0.005` (pure black) | ×1.25 | Boost — line wouldn't read otherwise |
+| `0.005–0.05` (obsidian, baseline) | ×1.25 → 1.0 | Smooth taper |
+| `0.05–0.18` (warm dark) | ×1.0 → 0.85 | Slight reduction |
+| `0.18–0.5` (mid-dark) | ×0.85 → 0.65 | Visibly softened |
+| `> 0.5` (light) | ×0.6 | Minimum — never harsh |
 
-Each preset stored as `{ key, label, style: React.CSSProperties }`.
+- Returns `{ luminance, white, gold, goldPeak }` clamped alphas.
+- Re-measures on: mount, `ResizeObserver` (footer + parent), window resize, `<html>` class/style/data-theme mutations (theme toggle).
+- No rAF loop; observers only.
 
-### 3. Page UI
+### 2. Footer integration — `src/components/Footer.tsx`
 
-```text
-┌──────────────────────────────────────────────────────┐
-│  Footer Preview · Dark Surface QA       [×] close    │
-│  ┌──────────────────────────────────────────────┐    │
-│  │ Background: [Obsidian ▾]  Hairline overlay:  │    │
-│  │             [< prev] [next >]    [□ ruler]   │    │
-│  │             Width: [Desktop / Tablet / Mobile]│   │
-│  └──────────────────────────────────────────────┘    │
-│                                                       │
-│  ┌──────────────────────────────────────────────┐    │
-│  │ <swatch background>                          │    │
-│  │   <Footer />  rendered live                  │    │
-│  │                                              │    │
-│  │   (1px ruler grid overlay if toggled)        │    │
-│  └──────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────┘
-```
+- Add a `footerRef`, call `useAdaptiveHairline(footerRef)`.
+- Expose alphas as CSS custom properties on the `<footer>` element:
+  ```ts
+  style={{
+    '--fh-white': `rgba(255,255,255,${alphas.white})`,
+    '--fh-white-soft': `rgba(255,255,255,${alphas.white * 0.7})`,
+    '--fh-gold': `rgba(200,167,102,${alphas.gold})`,
+    '--fh-gold-peak': `rgba(200,167,102,${alphas.goldPeak})`,
+  }}
+  ```
+- Replace the 5 hardcoded hairline gradients/borders with these vars:
+  - Top + bottom accent hairlines (lines 476, 658) → `var(--fh-gold-peak)` for the center stop.
+  - Above-grid + below-grid champagne hairlines (530–539, 571–580) → use `var(--fh-white-soft)` and `var(--fh-gold)`.
+  - Copyright divider `borderColor: HAIRLINE` (line 638) → `var(--fh-white)`.
+  - The brand-lockup mini hairline (502) and ambient overlays stay as-is (they're decorative gold washes, not separators).
+- Keep the existing `HAIRLINE` / `ACCENT_HAIRLINE` constants as fallbacks for SSR-first paint.
 
-Controls:
-- **Background dropdown** — pick one preset, or click `[< prev] [next >]` to cycle (also bound to `←` / `→` arrow keys).
-- **Width selector** — 3 buttons that set the wrapper width to `1280 / 768 / 390` so you can verify the hairlines and chip wrapping at all breakpoints in one screen.
-- **Ruler overlay** — toggle a 1px CSS grid (`background-image: linear-gradient(...)`) on top of the footer to make sure hairlines align to the pixel grid.
-- **Diff helper** — small floating swatch in the corner showing the current bg color hex + computed hairline RGB so you can verify contrast at a glance.
-- Persist current preset/width/ruler in `localStorage` (`jbj_footer_preview_state`) so reloads keep state.
+### 3. Verification in `/dev/footer-preview`
 
-### 4. Implementation notes
+The preview tool already lets me cycle 8 dark backgrounds. I'll add a small **"Hairline alphas"** read-out to its toolbar showing the live luminance + computed alphas — purely informational, no behavior change to the footer. This makes the adaptation visible during QA.
 
-- Reuse the existing `<Footer />` component as-is — no fork. The page just wraps it in a div whose style comes from the selected preset.
-- Footer must render correctly outside MainLayout — it already does (it's used in `MainLayout.tsx` directly), but I'll verify by reading the imports it needs (no router-only hooks beyond `useLocation`, which works fine inside the standalone route).
-- Use `framer-motion` only if it adds value (probably not — keep it static).
-- Keyboard shortcuts wired with a simple `useEffect` + `keydown` listener on `window`.
-
-### 5. Files
+### 4. Files
 
 **Create**
-- `src/pages/dev/FooterPreviewPage.tsx`
+- `src/hooks/useAdaptiveHairline.ts`
 
 **Edit**
-- `src/routes/StandaloneRoutes.tsx` — add the route under the existing `/dev/*` group with `OwnerGuard`.
+- `src/components/Footer.tsx` — wire the hook + replace 5 hairline declarations with CSS-var references.
+- `src/pages/dev/FooterPreviewPage.tsx` — show live alpha read-out (small chip in the toolbar).
 
-### 6. Out of scope
+### 5. Out of scope
 
-- No changes to `<Footer />` itself.
-- No changes to existing tests/CI — this is a manual QA tool, not an automated check.
-- No screenshot export button (the user asked for a toggle/preview; can add later if useful).
+- No changes to footer layout, copy, links, social icons, or ambient gradients.
+- No changes to `MainLayout`, header, or sidebar.
+- The accent hairline center peak stays gold; the curve only adjusts opacity, never hue.
 
-### 7. Open questions
+### 6. Risk / fallbacks
 
-None blocking — defaults are reasonable. If you'd like screenshot export (download the current swatch as PNG via `html2canvas`), say the word and I'll add it.
+- If `getComputedStyle` returns nothing usable (very early paint, SSR), the hook falls back to the baseline alphas — identical to today's footer. No regression possible.
+- All multipliers are clamped (`white ≤ 0.32`, `gold ≤ 0.6`) so the line can never spike to harsh values even if luminance detection misfires.

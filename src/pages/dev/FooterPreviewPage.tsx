@@ -120,6 +120,20 @@ function loadState(): PersistedState {
 
 const FooterPreviewInner = () => {
   const [state, setState] = useState<PersistedState>(() => loadState());
+  const [liveLuminance, setLiveLuminance] = useState<number | null>(null);
+
+  // Poll the footer's data-hairline-luminance attribute so we can show
+  // the adaptive alphas the hook computed for the current preset.
+  useEffect(() => {
+    const read = () => {
+      const el = document.getElementById("site-footer");
+      const v = el?.getAttribute("data-hairline-luminance");
+      if (v) setLiveLuminance(parseFloat(v));
+    };
+    read();
+    const id = window.setInterval(read, 400);
+    return () => window.clearInterval(id);
+  }, [state.presetKey]);
 
   useEffect(() => {
     try {
@@ -275,15 +289,26 @@ const FooterPreviewInner = () => {
             Ruler
           </button>
 
-          {/* Hex chip */}
+          {/* Hex + adaptive hairline read-out */}
           <div className="ml-auto flex items-center gap-2 text-[11px] text-white/60">
             <span
               className="inline-block h-4 w-4 rounded border border-white/20"
               style={preset.style}
             />
             <span className="font-mono">{preset.hex}</span>
-            <span className="hidden sm:inline">·</span>
-            <span className="hidden sm:inline">
+            {liveLuminance !== null && (
+              <>
+                <span className="hidden sm:inline">·</span>
+                <span
+                  className="hidden sm:inline font-mono text-[hsl(43_55%_70%)]"
+                  title="Underlay luminance detected by useAdaptiveHairline. Lower = darker, higher = brighter."
+                >
+                  L={liveLuminance.toFixed(3)}
+                </span>
+              </>
+            )}
+            <span className="hidden md:inline">·</span>
+            <span className="hidden md:inline">
               ← / → cycle · R ruler
             </span>
           </div>
