@@ -256,7 +256,7 @@ export function AIBrokersDashboard() {
           {brokers.length === 0 ? (
             <Card className="bg-white border-2 border-gold/30 border-dashed">
               <CardContent className="flex flex-col items-center justify-center py-16">
-                <Users className="h-16 w-16 text-gold/40 mb-4" />
+                <Users className="h-16 w-16 text-gray-500 mb-4" />
                 <h3 className="text-black text-lg font-medium mb-2">
                   No Brokers Configured
                 </h3>

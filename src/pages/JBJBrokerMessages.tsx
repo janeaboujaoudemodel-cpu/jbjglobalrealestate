@@ -449,7 +449,7 @@ export default function JBJBrokerMessages() {
           ) : (
             <div className="flex-1 flex items-center justify-center text-center bg-gradient-to-br from-[#F7F1E6]/30 via-[#ECE2D2]/30 to-[#D8C7A6]/30">
               <div>
-                <MessageSquare className="h-16 w-16 text-gold/40 mx-auto mb-4" />
+                <MessageSquare className="h-16 w-16 text-gray-500 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-black">
                   Select a conversation
                 </h3>

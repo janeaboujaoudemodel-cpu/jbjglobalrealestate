@@ -269,7 +269,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-white/70">Colors</Label>
-                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-gold/80">
+                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-gray-800">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Color
                   </Button>

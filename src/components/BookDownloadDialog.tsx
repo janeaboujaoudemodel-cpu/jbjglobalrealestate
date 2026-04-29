@@ -164,7 +164,7 @@ export default function BookDownloadDialog({
 
               <div className="space-y-3">
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/60" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                   <Input
                     type="text"
                     placeholder="Your name (optional)"
@@ -175,7 +175,7 @@ export default function BookDownloadDialog({
                 </div>
 
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/60" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                   <Input
                     type="email"
                     placeholder="Your email address"

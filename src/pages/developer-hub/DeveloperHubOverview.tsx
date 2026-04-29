@@ -132,7 +132,7 @@ const DeveloperHubOverview = () => {
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-[#ECE2D2]/60">{card.title}</CardTitle>
-              <card.icon className="w-5 h-5 text-gold/60 group-hover:text-gold transition-colors" />
+              <card.icon className="w-5 h-5 text-gray-600 group-hover:text-gold transition-colors" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-gold">

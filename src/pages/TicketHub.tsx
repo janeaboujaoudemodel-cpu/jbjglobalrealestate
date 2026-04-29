@@ -566,7 +566,7 @@ const TicketHub = () => {
                             className="hidden"
                             onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = ''; }}
                           />
-                          <Upload className="w-8 h-8 mx-auto mb-2 text-gold/60" />
+                          <Upload className="w-8 h-8 mx-auto mb-2 text-gray-600" />
                           <p className="text-sm text-muted-foreground">
                             Drag & drop files here or <span className="text-gold font-medium underline">browse</span>
                           </p>
@@ -611,9 +611,9 @@ const TicketHub = () => {
                                 ) : (
                                   <div className="w-full h-20 flex items-center justify-center bg-gold/5">
                                     {att.file.type.startsWith('video/') ? (
-                                      <Video className="w-8 h-8 text-gold/50" />
+                                      <Video className="w-8 h-8 text-gray-500" />
                                     ) : (
-                                      <FileImage className="w-8 h-8 text-gold/50" />
+                                      <FileImage className="w-8 h-8 text-gray-500" />
                                     )}
                                   </div>
                                 )}

@@ -265,7 +265,7 @@ const BuyingAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>

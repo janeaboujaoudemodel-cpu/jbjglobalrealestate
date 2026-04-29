@@ -375,7 +375,7 @@ export default function Studio() {
           ) : filteredProjects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl bg-white/40 border border-gold/20">
               <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gold/10 border border-gold/25">
-                <FolderOpen className="w-8 h-8 text-gold/50" />
+                <FolderOpen className="w-8 h-8 text-gray-500" />
               </div>
               <h3 className="text-lg font-bold text-black mb-1">No projects yet</h3>
               <p className="mb-5 text-sm max-w-xs text-gray-600">
@@ -417,7 +417,7 @@ export default function Studio() {
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gold/10 border border-gold/25">
-                              <Icon className="w-7 h-7 text-gold/60" />
+                              <Icon className="w-7 h-7 text-gray-600" />
                             </div>
                           </div>
                         )}

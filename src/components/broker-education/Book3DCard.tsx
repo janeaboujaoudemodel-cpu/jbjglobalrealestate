@@ -161,9 +161,9 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               {/* Locked Overlay (restricted or access-locked) */}
               {effectivelyLocked && (
                 <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
-                  <Lock className="w-10 h-10 text-gold/80" />
+                  <Lock className="w-10 h-10 text-gray-800" />
                   {isLocked && !book.is_restricted && (
-                    <span className="text-gold/70 text-[10px] uppercase tracking-widest">Join to Unlock</span>
+                    <span className="text-gray-700 text-[10px] uppercase tracking-widest">Join to Unlock</span>
                   )}
                 </div>
               )}
@@ -193,7 +193,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               <div className="pt-3 border-t border-gray-700 mt-auto">
                 {effectivelyLocked ? (
                   <div className="space-y-2">
-                    <p className="text-gold/60 text-[10px] leading-tight">
+                    <p className="text-gray-600 text-[10px] leading-tight">
                       {book.is_restricted 
                         ? 'Available after completing all foundational books and manager approval.'
                         : 'Join the JBJ Broker Circle to unlock this book.'}
@@ -201,7 +201,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-gold/10 hover:bg-gold/20 text-gold/70 border border-gold/30"
+                      className="w-full bg-gold/10 hover:bg-gold/20 text-gray-700 border border-gold/30"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!book.is_restricted) onOpen(book);

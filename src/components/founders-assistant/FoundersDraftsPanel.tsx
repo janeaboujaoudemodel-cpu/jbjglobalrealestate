@@ -157,7 +157,7 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="space-y-2 p-4 pt-0">
               {drafts.length === 0 ? (
                 <div className="text-center py-8">
-                  <FileEdit className="w-12 h-12 text-gold/30 mx-auto mb-4" />
+                  <FileEdit className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600">No drafts yet</p>
                   <p className="text-sm text-gray-600 mt-1">Ask Amanda to draft messages for you</p>
                 </div>
@@ -272,7 +272,7 @@ const FoundersDraftsPanel: React.FC = () => {
           ) : (
             <div className="flex items-center justify-center h-[350px] text-center">
               <div>
-                <FileEdit className="w-16 h-16 text-gold/20 mx-auto mb-4" />
+                <FileEdit className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600">Select a draft to edit</p>
                 <p className="text-sm text-gray-600 mt-1">Or ask Amanda to create a new one</p>
               </div>

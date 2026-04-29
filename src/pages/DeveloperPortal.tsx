@@ -866,7 +866,7 @@ const DeveloperPortal = () => {
           }
         }}
       >
-        <Upload className="w-8 h-8 mx-auto text-gold/60 mb-2" />
+        <Upload className="w-8 h-8 mx-auto text-gray-600 mb-2" />
         <p className="text-sm font-medium text-foreground">{isDragging ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
         <p className="text-xs text-muted-foreground mt-1">Photos, videos, PDFs, brochures — any format</p>
         <input ref={inputRef} type="file" className="hidden" multiple
@@ -1185,7 +1185,7 @@ const DeveloperPortal = () => {
                         }
                       }}
                     >
-                      <Upload className="w-10 h-10 mx-auto text-gold/60 mb-3" />
+                      <Upload className="w-10 h-10 mx-auto text-gray-600 mb-3" />
                       <p className="text-sm font-medium text-foreground">
                         {mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop files'}
                       </p>

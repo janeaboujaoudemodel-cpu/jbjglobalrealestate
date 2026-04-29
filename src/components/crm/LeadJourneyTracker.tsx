@@ -123,7 +123,7 @@ const LeadJourneyTracker = ({
         {/* Last Interaction */}
         {lastInteraction && (
           <div className="p-3 bg-gold/10 border border-gold/20 rounded-lg">
-            <p className="text-xs text-gold/70 mb-1">Last Interaction</p>
+            <p className="text-xs text-gray-700 mb-1">Last Interaction</p>
             <p className="text-white text-sm">
               {format(new Date(lastInteraction), "MMM d, yyyy 'at' h:mm a")}
             </p>

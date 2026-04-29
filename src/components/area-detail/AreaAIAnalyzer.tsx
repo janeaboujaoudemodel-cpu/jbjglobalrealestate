@@ -342,7 +342,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
                 <p className="text-gray-600 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-gray-500 flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
@@ -635,11 +635,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-4xl font-bold text-gold">{ratingScore}</span>
-                      <span className="text-gold/50 text-[10px] font-medium">/10</span>
+                      <span className="text-gray-500 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
                   
-                  <div className="text-gold/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-gray-700 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
                     <p className="text-gray-600 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}

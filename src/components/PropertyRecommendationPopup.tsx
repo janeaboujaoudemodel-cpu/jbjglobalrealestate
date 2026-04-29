@@ -217,7 +217,7 @@ const PropertyRecommendationPopup = () => {
                     />
                   ) : (
                     <div className="w-14 h-14 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <Building2 className="w-5 h-5 text-gold/60" />
+                      <Building2 className="w-5 h-5 text-gray-600" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">

@@ -249,7 +249,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     sendOTP();
                   }}
                   disabled={countdown > 0 || isSending}
-                  className="text-gold hover:text-gold/80 hover:bg-gold/10"
+                  className="text-gold hover:text-gray-800 hover:bg-gold/10"
                 >
                   {isSending ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />

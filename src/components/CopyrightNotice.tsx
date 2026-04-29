@@ -24,7 +24,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
               </FounderContent>
               Unauthorized reproduction is strictly prohibited.
             </p>
-            <Lock className="w-4 h-4 text-gold/60 flex-shrink-0 hidden md:block" />
+            <Lock className="w-4 h-4 text-gray-600 flex-shrink-0 hidden md:block" />
           </div>
         </div>
       </div>

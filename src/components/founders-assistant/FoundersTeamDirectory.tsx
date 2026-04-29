@@ -286,7 +286,7 @@ const FoundersTeamDirectory: React.FC = () => {
       {filteredMembers.length === 0 && (
         <Card className="bg-white border-2 border-gold/20">
           <CardContent className="p-8 text-center">
-            <Search className="w-12 h-12 text-gold/30 mx-auto mb-4" />
+            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-600">No team members found</p>
             <p className="text-sm text-gray-600 mt-1">Try adjusting your search or filter</p>
           </CardContent>

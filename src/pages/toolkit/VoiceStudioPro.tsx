@@ -526,7 +526,7 @@ export default function VoiceStudioPro() {
                         <button
                           onClick={() => setPageTab("library")}
                           disabled={!script.trim()}
-                          className="flex items-center gap-1.5 text-xs text-gold hover:text-gold/80 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                          className="flex items-center gap-1.5 text-xs text-gold hover:text-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <BookOpen className="h-3.5 w-3.5" />
                           Save to Library

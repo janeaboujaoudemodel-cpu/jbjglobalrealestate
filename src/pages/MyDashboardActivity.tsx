@@ -108,7 +108,7 @@ const MyDashboardActivity = () => {
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}
-            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gold/80 hover:bg-gold/10">
+            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gray-800 hover:bg-gold/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
@@ -330,7 +330,7 @@ const MyDashboardActivity = () => {
                     </ScrollArea>
                   ) : (
                     <div className="text-center py-12">
-                      <Activity className="w-12 h-12 text-gold/40 mx-auto mb-4" />
+                      <Activity className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                       <p className="text-stone-600">Activity is being recorded live.</p>
                       <p className="text-sm text-stone-400 mt-1">Browse the platform to see your activity appear here.</p>
                     </div>

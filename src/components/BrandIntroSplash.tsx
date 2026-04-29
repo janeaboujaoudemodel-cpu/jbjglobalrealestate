@@ -129,7 +129,7 @@ export default function BrandIntroSplash() {
 
       {/* Audio indicator */}
       {audioPlaying && (
-        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-gold/50 text-[10px] tracking-wider uppercase">
+        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-gray-500 text-[10px] tracking-wider uppercase">
           <Volume2 className="w-3 h-3" />
           <span>♪</span>
         </div>

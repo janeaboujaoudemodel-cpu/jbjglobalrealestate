@@ -628,7 +628,7 @@ const VideoResizePack = () => {
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gold/50"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gray-500"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
@@ -1014,7 +1014,7 @@ const VideoResizePack = () => {
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gold/50"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gray-500"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>

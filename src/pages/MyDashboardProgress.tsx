@@ -79,7 +79,7 @@ const MyDashboardProgress = () => {
             <Button 
               variant="ghost" 
               onClick={() => navigate('/my-dashboard')}
-              className="text-gold hover:text-gold/80 hover:bg-gold/10 mb-0.5"
+              className="text-gold hover:text-gray-800 hover:bg-gold/10 mb-0.5"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back

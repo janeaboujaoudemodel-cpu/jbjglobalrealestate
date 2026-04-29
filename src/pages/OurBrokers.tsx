@@ -58,7 +58,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <Badge
                 key={spec}
                 variant="outline"
-                className="text-xs border-gold/30 text-gold/80"
+                className="text-xs border-gold/30 text-gray-800"
               >
                 {spec}
               </Badge>

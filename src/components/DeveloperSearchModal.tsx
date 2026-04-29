@@ -127,7 +127,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     </div>
                   </div>
                   
-                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-gold/60 group-hover:text-gold" : "text-gray-600 group-hover:text-white"}`} />
+                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-gray-600 group-hover:text-gold" : "text-gray-600 group-hover:text-white"}`} />
                 </button>
               );
             })

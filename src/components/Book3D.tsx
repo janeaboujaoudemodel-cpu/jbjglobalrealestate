@@ -193,7 +193,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                 >
                   JBJ
                 </span>
-                <span className="text-gold/60 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
+                <span className="text-gray-600 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
                   Global Real Estate
                 </span>
               </div>

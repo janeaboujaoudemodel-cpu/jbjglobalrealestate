@@ -370,7 +370,7 @@ const JobOfferManager = () => {
                           href={offer.document_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-gold hover:text-gold/80 mt-2"
+                          className="inline-flex items-center gap-2 text-sm text-gold hover:text-gray-800 mt-2"
                         >
                           <FileText className="w-4 h-4" />
                           View Document

@@ -672,7 +672,7 @@ const Compare = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium">{f.title}</p>
-                    <p className="text-gold/50 text-sm">{f.sub}</p>
+                    <p className="text-gray-500 text-sm">{f.sub}</p>
                   </div>
                 </div>
               ))}
@@ -778,8 +778,8 @@ const Compare = () => {
                               {badge && (
                                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
                                   badge === 'top1' ? 'bg-gold/20 text-gold' :
-                                  badge === 'top2' ? 'bg-gold/15 text-gold/80' :
-                                  'bg-gold/10 text-gold/60'
+                                  badge === 'top2' ? 'bg-gold/15 text-gray-800' :
+                                  'bg-gold/10 text-gray-600'
                                 }`}>
                                   {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                                 </span>
@@ -1040,7 +1040,7 @@ const Compare = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-gold/60 text-sm">Speak with our property consultants</p>
+                <p className="text-gray-600 text-sm">Speak with our property consultants</p>
               </div>
             </div>
 

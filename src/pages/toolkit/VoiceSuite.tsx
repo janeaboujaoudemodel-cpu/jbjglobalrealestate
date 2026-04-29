@@ -52,7 +52,7 @@ function CenteredAudioPreview({ src, label, onRemove }: { src: string | null; la
   return (
     <div className="mx-auto max-w-xl w-full">
       <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-gold/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
-        {label && <p className="text-xs text-gold/70 font-medium mb-3 tracking-wider uppercase">{label}</p>}
+        {label && <p className="text-xs text-gray-700 font-medium mb-3 tracking-wider uppercase">{label}</p>}
         <audio controls src={src} className="w-full [&::-webkit-media-controls-panel]:bg-transparent" />
         {onRemove && (
           <Button variant="ghost" size="sm" onClick={onRemove} className="mt-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 text-xs">

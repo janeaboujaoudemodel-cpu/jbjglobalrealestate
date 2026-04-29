@@ -266,7 +266,7 @@ export default function OwnerCommSettings() {
                       </div>
                     ) : channels.length === 0 ? (
                       <div className="text-center py-8">
-                        <MessageSquare className="h-12 w-12 text-gold/30 mx-auto mb-3" />
+                        <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-3" />
                         <p className="text-gray-600">No channels connected</p>
                         <p className="text-gray-600 text-sm">Add your first channel to start receiving messages</p>
                       </div>

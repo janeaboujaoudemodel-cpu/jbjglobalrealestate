@@ -416,7 +416,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-gold/80">
+                        <Button asChild variant="ghost" className="text-gold hover:text-gray-800">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />
@@ -463,7 +463,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-gold/80">
+                        <Button asChild variant="ghost" className="text-gold hover:text-gray-800">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />

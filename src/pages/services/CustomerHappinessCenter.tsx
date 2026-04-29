@@ -101,9 +101,9 @@ const CustomerHappinessCenter = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <Heart className="w-12 h-12 text-gold/60" />
+                <Heart className="w-12 h-12 text-gray-600" />
               </div>
-              <p className="text-gold/60 text-sm tracking-widest uppercase">Support That Actually Works</p>
+              <p className="text-gray-600 text-sm tracking-widest uppercase">Support That Actually Works</p>
               <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -153,7 +153,7 @@ const CustomerHappinessCenter = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gold/60 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>

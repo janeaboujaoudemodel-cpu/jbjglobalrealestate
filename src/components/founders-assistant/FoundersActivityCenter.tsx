@@ -291,7 +291,7 @@ const FoundersActivityCenter: React.FC = () => {
           {Object.keys(groupedActivities).length === 0 ? (
             <Card className="bg-white border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-8 text-center">
-                <Activity className="w-16 h-16 text-gold/30 mx-auto mb-4" />
+                <Activity className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                 <h4 className="text-black font-semibold mb-2">Activity Center</h4>
                 <p className="text-gray-600">No activities found</p>
                 <p className="text-sm text-gray-600 mt-1">Activities will appear here as you work</p>

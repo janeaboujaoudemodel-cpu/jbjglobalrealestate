@@ -204,7 +204,7 @@ const SuggestionCard = ({
         <p className="text-xs text-[#8A7356] line-clamp-2">
           {suggestion.message.slice(0, 120)}...
         </p>
-        <p className="text-[10px] text-gold/60 mt-1">Click to preview full response</p>
+        <p className="text-[10px] text-gray-600 mt-1">Click to preview full response</p>
       </button>
 
       {/* Expanded Preview Modal */}
@@ -283,8 +283,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   if (!ticketId) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
-        <div className="text-center text-gold/60">
-          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gold/30" />
+        <div className="text-center text-gray-600">
+          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-400" />
           <p>Select a ticket to view details</p>
         </div>
       </div>
@@ -307,7 +307,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   if (!data) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
-        <p className="text-gold/60">Ticket not found</p>
+        <p className="text-gray-600">Ticket not found</p>
       </div>
     );
   }
@@ -602,7 +602,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             </h3>
             <div className="space-y-3">
               {messages.length === 0 ? (
-                <p className="text-gold/60 text-sm italic">No messages yet</p>
+                <p className="text-gray-600 text-sm italic">No messages yet</p>
               ) : (
                 messages.map((msg) => (
                   <div
@@ -625,7 +625,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                       >
                         {msg.sender_type === "staff" ? "Staff Reply" : "Customer"}
                       </span>
-                      <span className="text-xs text-gold/60">
+                      <span className="text-xs text-gray-600">
                         {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                       </span>
                     </div>
@@ -639,7 +639,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </div>
 
           {/* Metadata */}
-          <div className="text-xs text-gold/60 pt-4 border-t border-gold/20">
+          <div className="text-xs text-gray-600 pt-4 border-t border-gold/20">
             <p>Created: {format(new Date(ticket.created_at), "MMM d, yyyy h:mm a")}</p>
             {ticket.customer_confirmation_sent_at && (
               <p className="text-green-400">
@@ -653,7 +653,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       {/* Reply Composer */}
       <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
-        <p className="text-[10px] text-gold/60 mb-1 flex items-center gap-1">
+        <p className="text-[10px] text-gray-600 mb-1 flex items-center gap-1">
           <Mic className="w-3 h-3" /> Speak in any language — auto-translated to English
         </p>
         <div className="flex gap-2">
@@ -663,7 +663,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               onChange={(e) => setReplyMessage(e.target.value)}
               placeholder="Type your reply to the customer..."
               rows={2}
-              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
             />
             <div className="absolute top-2 right-2 flex items-center gap-1">
               <VoiceInputButton
@@ -677,11 +677,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 }}
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 text-gold/60 hover:text-gold"
+                className="h-6 w-6 text-gray-600 hover:text-gold"
               />
               <button
                 onClick={() => setReplyMaximized(true)}
-                className="text-gold/60 hover:text-gold transition-colors p-0.5"
+                className="text-gray-600 hover:text-gold transition-colors p-0.5"
                 title="Maximize reply editor"
               >
                 <Maximize2 className="w-4 h-4" />
@@ -723,7 +723,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 value={replyMessage}
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply to the customer..."
-                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gold/40 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
+                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
                 autoFocus
               />
             </div>

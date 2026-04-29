@@ -312,7 +312,7 @@ const AreaGuides = () => {
             {shortcutFilters.emirates && shortcutFilters.emirates.length > 0 && (
               <button
                 onClick={() => setShortcutFilters(prev => ({ ...prev, emirates: [] }))}
-                className="text-xs text-gold hover:text-gold/80 flex items-center gap-1 transition-colors"
+                className="text-xs text-gold hover:text-gray-800 flex items-center gap-1 transition-colors"
               >
                 ✕ Clear emirate filter
               </button>

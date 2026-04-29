@@ -63,7 +63,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 JBJ GLOBAL REAL ESTATE
               </div>
 
-              <div className="text-gold/80 text-sm tracking-[0.3em] uppercase mb-4">
+              <div className="text-gray-800 text-sm tracking-[0.3em] uppercase mb-4">
                 Certificate of Achievement
               </div>
 

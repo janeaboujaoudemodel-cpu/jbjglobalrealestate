@@ -76,7 +76,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
                     )}
                   </div>
                 </div>
-                <Link to={`/project/${p.slug}`} className="text-gold hover:text-gold/80 shrink-0">
+                <Link to={`/project/${p.slug}`} className="text-gold hover:text-gray-800 shrink-0">
                   <ExternalLink className="w-4 h-4" />
                 </Link>
               </div>

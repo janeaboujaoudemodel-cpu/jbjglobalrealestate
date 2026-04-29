@@ -206,7 +206,7 @@ function GraduatedBrokersGallery() {
 
         <Card className="border-2 border-gold/20 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
           <CardContent className="p-8 text-center">
-            <GraduationCap className="w-12 h-12 text-gold/40 mx-auto mb-3" />
+            <GraduationCap className="w-12 h-12 text-gray-500 mx-auto mb-3" />
             <p className="text-black/50 text-sm">
               Complete the certification program to join the graduates gallery.
             </p>

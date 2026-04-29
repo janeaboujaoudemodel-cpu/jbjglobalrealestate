@@ -193,7 +193,7 @@ const OwnerRecommendations = () => {
           </div>
         ) : recs.length === 0 ? (
           <div className="text-center py-20 bg-white/60 border border-gold/20 rounded-2xl">
-            <Sparkles className="h-12 w-12 mx-auto mb-4 text-gold/40" />
+            <Sparkles className="h-12 w-12 mx-auto mb-4 text-gray-500" />
             <p className="text-lg font-semibold text-black">No Recommendations Yet</p>
             <p className="text-sm text-gray-600 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
           </div>

@@ -220,7 +220,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               return (
                 <div key={category} className="mb-4">
                   <div className="px-3 py-2 flex items-center gap-2">
-                    {category === 'Recent' && <Clock className="w-3.5 h-3.5 text-gold/60" />}
+                    {category === 'Recent' && <Clock className="w-3.5 h-3.5 text-gray-600" />}
                     <span className="text-xs uppercase tracking-wider text-gold font-semibold">
                       {category}
                     </span>
@@ -269,7 +269,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
             {filteredCommands.length === 0 && (
               <div className="py-12 text-center">
-                <Sparkles className="w-12 h-12 mx-auto text-gold/30 mb-4" />
+                <Sparkles className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-600">No commands found</p>
                 <p className="text-sm text-gray-600 mt-1">Try a different search term</p>
               </div>

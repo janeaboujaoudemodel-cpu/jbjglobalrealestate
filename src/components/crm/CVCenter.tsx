@@ -1291,7 +1291,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
               <iframe title="CV Preview" src={cvPreviewUrl} className="w-full h-full rounded-md border" />
             ) : cvDirectUrl ? (
               <div className="h-full flex flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
-                <FileText className="h-16 w-16 text-gold/40" />
+                <FileText className="h-16 w-16 text-gray-500" />
                 <p className="text-lg font-medium text-foreground">This file format cannot be previewed inline.</p>
                 <p>Use the buttons below to open or download the CV.</p>
               </div>

@@ -244,7 +244,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-black truncate">{item.name}</p>
       </div>
-      <ArrowRight className="w-3 h-3 text-gold/60 flex-shrink-0" />
+      <ArrowRight className="w-3 h-3 text-gray-600 flex-shrink-0" />
     </button>
   );
 
@@ -255,7 +255,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="space-y-3">
         {dbDevelopers.length > 0 && (
           <div>
-            <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider`}>Developers</p>
+            <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-gray-800 mb-1 px-1 uppercase tracking-wider`}>Developers</p>
             <div className="space-y-0.5">
               {dbDevelopers.map((d, i) => (
                 <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} isFirst={!compact && i === 0 && dbProjects.length === 0 && dbAreas.length === 0} />
@@ -265,7 +265,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         )}
         {dbProjects.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Projects</p>
+            <p className="text-xs font-semibold text-gray-800 mb-1 px-1 uppercase tracking-wider">Projects</p>
             <div className="space-y-0.5">
               {dbProjects.map(p => (
                 <DbResultItem key={p.id} item={p} route={`/project/${p.slug}`} fallbackIcon={Building2} />
@@ -275,7 +275,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         )}
         {dbAreas.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Areas</p>
+            <p className="text-xs font-semibold text-gray-800 mb-1 px-1 uppercase tracking-wider">Areas</p>
             <div className="space-y-0.5">
               {dbAreas.map(a => (
                 <DbResultItem key={a.id} item={a} route={`/area/${a.slug}`} fallbackIcon={Map} />
@@ -300,7 +300,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search projects, developers, tools & more..."
-            className="w-full h-12 pl-12 pr-4 bg-white/80 border border-gold/30 rounded-xl text-black text-base placeholder:text-gold/60 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all duration-200"
+            className="w-full h-12 pl-12 pr-4 bg-white/80 border border-gold/30 rounded-xl text-black text-base placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all duration-200"
           />
         </div>
         {/* Content */}
@@ -312,7 +312,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               {/* Static page results */}
               {results.length > 0 && (
                 <div>
-                  {hasDbResults && <p className="text-xs font-semibold text-gold/80 mb-1 px-1 uppercase tracking-wider">Pages & Tools</p>}
+                  {hasDbResults && <p className="text-xs font-semibold text-gray-800 mb-1 px-1 uppercase tracking-wider">Pages & Tools</p>}
                   <div className="space-y-0.5">
                     {results.map((item, idx) => (
                       <button
@@ -327,7 +327,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <p className="text-sm font-medium text-black truncate">{item.label}</p>
                           {item.category && <p className="text-xs text-gold">{item.category}</p>}
                         </div>
-                        <ArrowRight className="w-3 h-3 text-gold/60" />
+                        <ArrowRight className="w-3 h-3 text-gray-600" />
                       </button>
                     ))}
                   </div>
@@ -340,7 +340,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
           ) : (
             <div className="space-y-4">
               <div>
-                <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Quick Access</p>
+                <p className="text-xs font-semibold text-gray-800 mb-2 uppercase tracking-wider">Quick Access</p>
                 <div className="grid grid-cols-3 gap-2">
                   {QUICK_SHORTCUTS.map((s) => (
                     <button
@@ -357,7 +357,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </div>
               </div>
               <div>
-                <p className="text-xs font-semibold text-gold/80 mb-2 uppercase tracking-wider">Popular Pages</p>
+                <p className="text-xs font-semibold text-gray-800 mb-2 uppercase tracking-wider">Popular Pages</p>
                 <div className="grid grid-cols-3 gap-1.5">
                   {POPULAR_PAGES.map((page) => (
                     <button
@@ -377,7 +377,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               {recentSearches.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-semibold text-gold/80 uppercase tracking-wider">Recent Searches</p>
+                    <p className="text-xs font-semibold text-gray-800 uppercase tracking-wider">Recent Searches</p>
                     <button onClick={handleClearRecent} className="text-xs text-gray-600 hover:text-gray-700 transition-colors">Clear</button>
                   </div>
                   <div className="space-y-1">
@@ -387,7 +387,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         onClick={() => handleRecentSearchClick(search)}
                         className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                       >
-                        <Clock className="w-3.5 h-3.5 text-gold/60" />
+                        <Clock className="w-3.5 h-3.5 text-gray-600" />
                         <span className="text-xs text-black font-medium">{search}</span>
                       </button>
                     ))}
@@ -433,7 +433,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search by keyword... Search anything"
-                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-black text-xl placeholder:text-gold/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-black text-xl placeholder:text-gray-600 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
@@ -455,7 +455,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     {results.length > 0 && (
                       <div>
                         {hasDbResults && (
-                          <p className="text-xs font-semibold text-gold/80 mb-2 px-1 uppercase tracking-wider">Pages & Tools</p>
+                          <p className="text-xs font-semibold text-gray-800 mb-2 px-1 uppercase tracking-wider">Pages & Tools</p>
                         )}
                         <div className="space-y-1">
                           {results.map((item, idx) => (
@@ -560,7 +560,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               onClick={() => handleRecentSearchClick(search)}
                               className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/50 border border-gold/10 hover:bg-white hover:border-gold/30 transition-all"
                             >
-                              <Clock className="w-3.5 h-3.5 text-gold/60" />
+                              <Clock className="w-3.5 h-3.5 text-gray-600" />
                               <span className="text-sm font-medium text-black">{search}</span>
                             </button>
                           ))}
@@ -617,7 +617,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
 
                     {/* Search Hint */}
                     <div className="text-center pt-2">
-                      <p className="text-sm text-gold/80">
+                      <p className="text-sm text-gray-800">
                         Start typing to search projects, developers, tools, pages, and more...
                       </p>
                     </div>
