@@ -4,7 +4,8 @@
  * All links preserved (No-Removal Policy).
  */
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
 import { MapPin, Phone, Mail, MessageCircle, ChevronDown } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
@@ -167,6 +168,8 @@ const Footer = () => {
   const { isFounderVisible } = useFounderVisibility();
   const currentYear = new Date().getFullYear();
   const location = useLocation();
+  const footerRef = useRef<HTMLElement>(null);
+  const hairline = useAdaptiveHairline(footerRef);
 
   const isBackOfficeContext =
     location.pathname.startsWith("/listing-admin") || location.pathname.startsWith("/admin");
