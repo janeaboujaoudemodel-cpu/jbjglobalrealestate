@@ -16,16 +16,14 @@ const fadeInUp = {
 };
 
 /* ============================================================
- * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
+ * ICON BOX STYLE - Solid black tile, white icon (max contrast)
  * ============================================================ */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div 
-    className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
-    style={{
-      background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-    }}
+  <div
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${className}`}
+    style={{ backgroundColor: '#000000' }}
   >
-    <Icon className="w-6 h-6 text-black" />
+    <Icon className="w-6 h-6" style={{ color: '#ffffff' }} />
   </div>
 );
 
