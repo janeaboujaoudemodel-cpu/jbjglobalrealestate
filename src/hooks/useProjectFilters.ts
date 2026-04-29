@@ -27,6 +27,7 @@ export const defaultFilters: FilterState = {
   sizeUnit: 'sqft',
   language: 'en',
   transactionType: 'all',
+  propertyType: null,
 };
 
 // Check if a project is premium based ONLY on is_premium flag (no auto-detection)
@@ -193,6 +194,27 @@ export function useFilteredProjects(
       // Furnished status filter
       if (filters.furnishedStatus && project.furnished_status !== filters.furnishedStatus) {
         return false;
+      }
+
+      // Property type filter (apartments | villa | townhouse | penthouse | commercial)
+      if (filters.propertyType) {
+        const stem = filters.propertyType.toLowerCase().replace(/s$/, '');
+        const label = (project as unknown as { property_type_label?: string | null })
+          .property_type_label?.toLowerCase() || '';
+        const unitTypesRaw = (project as unknown as { unit_types?: unknown }).unit_types;
+        const unitTypesStr = Array.isArray(unitTypesRaw)
+          ? unitTypesRaw.map((u) => (typeof u === 'string' ? u : JSON.stringify(u))).join(' ').toLowerCase()
+          : typeof unitTypesRaw === 'string'
+            ? unitTypesRaw.toLowerCase()
+            : unitTypesRaw
+              ? JSON.stringify(unitTypesRaw).toLowerCase()
+              : '';
+        const name = project.name?.toLowerCase() || '';
+        const desc = (project.description || '').toLowerCase();
+        const haystack = `${label} ${unitTypesStr} ${name} ${desc}`;
+        if (!haystack.includes(stem)) {
+          return false;
+        }
       }
 
       // Sale status filter (matches status_label column)
