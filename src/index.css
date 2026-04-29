@@ -429,6 +429,23 @@ All colors MUST be HSL.
   }
 
   /* ----------------------------------------------------------
+   * MODE SWITCHER PANEL — locked light surface
+   * Portaled to <body> and may render above the dark footer.
+   * Force white background and dark legible text regardless of
+   * any global surface override or color inheritance.
+   * ---------------------------------------------------------- */
+  [data-mode-switcher-panel="true"] {
+    background-color: #FFFFFF !important;
+    color: #0A0A0A !important;
+  }
+  /* Block any ancestor [data-surface="dark"] rule from forcing
+     white text inside the panel (defensive; portal sits on body). */
+  [data-surface="dark"] [data-mode-switcher-panel="true"],
+  [data-surface="dark"] [data-mode-switcher-panel="true"] * {
+    color: revert !important;
+  }
+
+  /* ----------------------------------------------------------
    * DEFENSIVE CONTRAST FLOORS (no data-surface required)
    * Fires when components place icons/gray text directly on
    * dark or light Tailwind bg utilities without opting into a
