@@ -414,7 +414,7 @@ export default function JoinApplication() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-black mb-2">
-              <span className="text-gold">Join</span> JBJ Global Real Estate
+              <span className="text-black underline decoration-black/40 underline-offset-8">Join</span> JBJ Global Real Estate
             </h1>
             <p className="text-black/70">
               Apply to become a broker partner. Complete the form below to start your journey.
@@ -580,27 +580,27 @@ export default function JoinApplication() {
                       <div
                         key={pos.id}
                         onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-xl border cursor-pointer transition-all bg-white shadow-sm hover:shadow-md ${
                           formData.positionApplied === pos.id
-                            ? "border-gold bg-gold/10 shadow-md"
-                            : "border-gold/20 bg-background hover:border-gold/50"
+                            ? "border-black ring-2 ring-black bg-gray-50"
+                            : "border-black/15 hover:border-black/40"
                         }`}
                       >
-                        <div className="flex items-start justify-between mb-1">
-                          <h4 className="font-semibold text-sm text-black">{pos.title}</h4>
+                        <div className="flex items-start justify-between mb-2 gap-2">
+                          <h4 className="font-semibold text-sm text-black leading-snug">{pos.title}</h4>
                           {pos.is_broker_role && (
-                            <Badge className="bg-gold/20 text-gold border-gold/30 text-[10px] px-1.5 py-0">
+                            <Badge className="bg-black text-white border-transparent text-[10px] px-1.5 py-0 shrink-0">
                               <Star className="w-2.5 h-2.5 mr-0.5" /> Partner
                             </Badge>
                           )}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-black/50">
-                          <Badge variant="outline" className="border-gold/20 text-black/60 text-[10px] px-1.5 py-0">{pos.department}</Badge>
-                          {pos.is_broker_role && <span className="text-gold font-medium">Commission Basis</span>}
-                          {pos.location && <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{pos.location}</span>}
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                          <Badge variant="outline" className="border-black/20 bg-gray-100 text-black text-[10px] px-1.5 py-0 font-medium">{pos.department}</Badge>
+                          {pos.is_broker_role && <span className="text-amber-700 font-semibold">Commission Basis</span>}
+                          {pos.location && <span className="flex items-center gap-0.5 text-gray-700"><MapPin className="w-2.5 h-2.5 text-black" />{pos.location}</span>}
                         </div>
                         {pos.description && (
-                          <p className="text-xs text-black/40 mt-1.5 line-clamp-2">{pos.description}</p>
+                          <p className="text-xs text-gray-700 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
                         )}
                       </div>
                     ))}
