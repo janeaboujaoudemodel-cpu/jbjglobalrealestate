@@ -537,7 +537,7 @@ const BusinessCardScanner = () => {
         )}
 
         {/* Footer Privacy Notice */}
-        <div className="mt-8 text-center text-xs text-white/60 space-y-2">
+        <div className="mt-8 text-center text-xs text-white/90 space-y-2">
           <p>
             <Lock className="h-3 w-3 inline mr-1 text-blue-400" />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.

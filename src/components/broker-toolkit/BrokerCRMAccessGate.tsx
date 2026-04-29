@@ -111,7 +111,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
           </p>
           
           {userEmail && (
-            <p className="text-white/60 text-sm mb-4">
+            <p className="text-white/90 text-sm mb-4">
               Logged in as: {userEmail}
             </p>
           )}

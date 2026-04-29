@@ -142,7 +142,7 @@ const VoiceAgentSettings = () => {
               <CreditCard className="w-5 h-5 text-black" />
             </div>
             <h2 className="text-xl font-bold text-white">Business Card Branding</h2>
-            <span className="text-xs text-white/60">Applied to generated documents</span>
+            <span className="text-xs text-white/90">Applied to generated documents</span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">

@@ -56,7 +56,7 @@ export default function AlertsDemo() {
             <button className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] text-sm font-medium">
               <Volume2 className="w-4 h-4" /> Enable Sound
             </button>
-            <button className="absolute top-4 right-4 flex items-center gap-1.5 text-white/40 text-xs font-medium tracking-wider uppercase">
+            <button className="absolute top-4 right-4 flex items-center gap-1.5 text-white/85 text-xs font-medium tracking-wider uppercase">
               Skip <X className="w-3.5 h-3.5" />
             </button>
           </div>

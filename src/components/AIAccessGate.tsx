@@ -173,7 +173,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
                   <benefit.icon className="w-5 h-5 text-gold" />
                 </div>
                 <h3 className="text-white font-medium text-sm mb-1">{benefit.title}</h3>
-                <p className="text-white/60 text-xs">{benefit.description}</p>
+                <p className="text-white/90 text-xs">{benefit.description}</p>
               </motion.div>
             ))}
           </div>

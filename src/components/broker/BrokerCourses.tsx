@@ -220,7 +220,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                       )}
                     </div>
                     <p className="text-white/70 text-sm">{module.description}</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-white/60">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-white/90">
                       <span className="flex items-center gap-1">
                         <BookOpen className="w-3 h-3" />
                         {module.lessons.length} Lessons
@@ -237,7 +237,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                   {hasAccess && (
                     <div className="hidden md:block w-32">
                       <Progress value={progress} className="h-2" />
-                      <p className="text-xs text-white/60 mt-1 text-right">
+                      <p className="text-xs text-white/90 mt-1 text-right">
                         {completedLessons}/{module.lessons.length} completed
                       </p>
                     </div>
@@ -272,7 +272,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                             </div>
                             <div>
                               <p className="text-white text-sm font-medium">{lesson.title}</p>
-                              <p className="text-white/60 text-xs">{lesson.duration}</p>
+                              <p className="text-white/90 text-xs">{lesson.duration}</p>
                             </div>
                           </div>
                           

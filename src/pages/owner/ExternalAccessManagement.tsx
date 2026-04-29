@@ -142,9 +142,9 @@ const ExternalAccessManagement = () => {
           </div>
 
           {isLoading ? (
-            <div className="p-8 text-center text-white/60">Loading...</div>
+            <div className="p-8 text-center text-white/90">Loading...</div>
           ) : !auditors?.length ? (
-            <div className="p-8 text-center text-white/60">No external users</div>
+            <div className="p-8 text-center text-white/90">No external users</div>
           ) : (
             <div className="divide-y divide-gray-800">
               {auditors.map((auditor: any) => (
@@ -155,7 +155,7 @@ const ExternalAccessManagement = () => {
                         <p className="text-white font-semibold">{auditor.display_name}</p>
                         {getStatusBadge(auditor)}
                       </div>
-                      <p className="text-white/60 text-sm">{auditor.email}</p>
+                      <p className="text-white/90 text-sm">{auditor.email}</p>
                       <div className="flex items-center gap-4 mt-1 text-xs text-gray-600">
                         <span>Logins: {auditor.total_logins}</span>
                         <span>Last: {formatDate(auditor.last_login_at)}</span>
@@ -214,7 +214,7 @@ const ExternalAccessManagement = () => {
                                     </Badge>
                                   ))}
                                   {(s.pages_visited as any[]).length > 10 && (
-                                    <Badge variant="outline" className="text-[10px] border-gray-700 text-white/60">
+                                    <Badge variant="outline" className="text-[10px] border-gray-700 text-white/90">
                                       +{(s.pages_visited as any[]).length - 10} more
                                     </Badge>
                                   )}
@@ -245,7 +245,7 @@ const ExternalAccessManagement = () => {
           </div>
 
           {!feedback?.length ? (
-            <div className="p-8 text-center text-white/60">No feedback received yet</div>
+            <div className="p-8 text-center text-white/90">No feedback received yet</div>
           ) : (
             <div className="divide-y divide-gray-800 max-h-[500px] overflow-y-auto">
               {feedback.map((f: any) => (

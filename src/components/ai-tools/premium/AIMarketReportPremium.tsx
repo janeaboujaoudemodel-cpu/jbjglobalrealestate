@@ -203,17 +203,17 @@ ${response.report}
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <BarChart3 className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-white/60">Trend</p>
+              <p className="text-xs text-white/90">Trend</p>
               <p className="text-sm font-semibold text-white">Analysis</p>
             </Card>
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <PieChart className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-white/60">Market</p>
+              <p className="text-xs text-white/90">Market</p>
               <p className="text-sm font-semibold text-white">Share</p>
             </Card>
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-white/60">Investment</p>
+              <p className="text-xs text-white/90">Investment</p>
               <p className="text-sm font-semibold text-white">Insights</p>
             </Card>
         </div>
@@ -291,7 +291,7 @@ ${response.report}
                   </CardContent>
                 </Card>
 
-                <p className="text-xs text-white/60 text-center">
+                <p className="text-xs text-white/90 text-center">
                   * AI-generated report. For investment decisions, consult with licensed professionals.
                 </p>
               </motion.div>
@@ -306,7 +306,7 @@ ${response.report}
                 <FileBarChart className="h-12 w-12 text-indigo-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Analyze</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Enter a location to generate comprehensive market insights with trends and investment recommendations
               </p>
             </motion.div>

@@ -310,7 +310,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-white/60 text-sm"
+              className="text-center text-white/90 text-sm"
             >
               Where required, we introduce clients to licensed third-party professionals for legal, mortgage, or tax services.
             </motion.p>

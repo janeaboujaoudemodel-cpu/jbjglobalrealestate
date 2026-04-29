@@ -280,7 +280,7 @@ const OwnerDashboard = () => {
                               <p className="text-xs text-white/70">{listing.views} views • {listing.inquiries} inquiries</p>
                             </div>
                             {getStatusBadge(listing.status)}
-                            <ChevronRight className="w-5 h-5 text-white/60" />
+                            <ChevronRight className="w-5 h-5 text-white/90" />
                           </div>
                         </div>
                       ))}
@@ -320,7 +320,7 @@ const OwnerDashboard = () => {
                         <div>
                           <p className="font-medium">Listing Submitted</p>
                           <p className="text-sm text-white/70">Marina View Tower - 2BR</p>
-                          <p className="text-xs text-white/60">Jan 14, 2025 at 10:30 AM</p>
+                          <p className="text-xs text-white/90">Jan 14, 2025 at 10:30 AM</p>
                         </div>
                       </div>
                       
@@ -334,7 +334,7 @@ const OwnerDashboard = () => {
                         <div>
                           <p className="font-medium">Documents Verified</p>
                           <p className="text-sm text-white/70">Title deed and NOC confirmed</p>
-                          <p className="text-xs text-white/60">Jan 15, 2025 at 2:15 PM</p>
+                          <p className="text-xs text-white/90">Jan 15, 2025 at 2:15 PM</p>
                         </div>
                       </div>
                       
@@ -347,7 +347,7 @@ const OwnerDashboard = () => {
                         <div>
                           <p className="font-medium">Listing Published</p>
                           <p className="text-sm text-white/70">Now live on JBJ platform</p>
-                          <p className="text-xs text-white/60">Jan 15, 2025 at 4:00 PM</p>
+                          <p className="text-xs text-white/90">Jan 15, 2025 at 4:00 PM</p>
                         </div>
                       </div>
                     </div>
@@ -378,10 +378,10 @@ const OwnerDashboard = () => {
                         >
                           <div className="flex items-center justify-between mb-1">
                             <p className="font-medium text-sm">{message.from}</p>
-                            <span className="text-xs text-white/60">{message.time}</span>
+                            <span className="text-xs text-white/90">{message.time}</span>
                           </div>
                           <p className="text-sm text-white/85">{message.subject}</p>
-                          <p className="text-xs text-white/60 mt-1 truncate">{message.preview}</p>
+                          <p className="text-xs text-white/90 mt-1 truncate">{message.preview}</p>
                         </div>
                       ))}
                     </div>
@@ -411,7 +411,7 @@ const OwnerDashboard = () => {
                           <FileText className="w-8 h-8 text-red-400" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">{doc.name}</p>
-                            <p className="text-xs text-white/60">{doc.uploadedAt}</p>
+                            <p className="text-xs text-white/90">{doc.uploadedAt}</p>
                           </div>
                         </div>
                       ))}

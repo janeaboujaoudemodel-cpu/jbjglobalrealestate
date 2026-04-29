@@ -133,7 +133,7 @@ const ReopenTicket = () => {
           </div>
         </div>
 
-        <p className="text-center text-white/60 text-sm mt-6">
+        <p className="text-center text-white/90 text-sm mt-6">
           JBJ Global Real Estate Support
         </p>
       </div>

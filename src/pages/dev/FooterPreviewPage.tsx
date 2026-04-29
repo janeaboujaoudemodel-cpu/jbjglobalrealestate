@@ -290,7 +290,7 @@ const FooterPreviewInner = () => {
           </button>
 
           {/* Hex + adaptive hairline read-out */}
-          <div className="ml-auto flex items-center gap-2 text-[11px] text-white/60">
+          <div className="ml-auto flex items-center gap-2 text-[11px] text-white/90">
             <span
               className="inline-block h-4 w-4 rounded border border-white/20"
               style={preset.style}
@@ -325,7 +325,7 @@ const FooterPreviewInner = () => {
 
       {/* Canvas */}
       <main className="mx-auto max-w-[1600px] p-4 sm:p-6">
-        <div className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-wider text-white/40">
+        <div className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-wider text-white/85">
           <span>Live &lt;Footer /&gt;</span>
           <span>·</span>
           <span>{preset.label}</span>
@@ -355,7 +355,7 @@ const FooterPreviewInner = () => {
           </div>
         </div>
 
-        <p className="mt-4 text-center text-[11px] text-white/40">
+        <p className="mt-4 text-center text-[11px] text-white/85">
           Internal QA tool · noindex · resize the browser or use the width
           selector to verify hairlines at every breakpoint.
         </p>

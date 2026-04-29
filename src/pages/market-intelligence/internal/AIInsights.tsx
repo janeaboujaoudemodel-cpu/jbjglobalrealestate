@@ -135,7 +135,7 @@ const AIInsights = () => {
               <h1 className="text-white text-3xl font-bold">
                 AI Market Narratives
               </h1>
-              <p className="text-white/60">Internal execution intelligence — descriptive, not predictive</p>
+              <p className="text-white/90">Internal execution intelligence — descriptive, not predictive</p>
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@ const AIInsights = () => {
                           </div>
                           <div>
                             <CardTitle className="text-white text-xl">{type.title}</CardTitle>
-                            <p className="text-white/60 text-sm mt-1">{type.description}</p>
+                            <p className="text-white/90 text-sm mt-1">{type.description}</p>
                           </div>
                         </div>
                         <Button
@@ -214,7 +214,7 @@ const AIInsights = () => {
                     <CardContent>
                       {insight ? (
                         <div className="space-y-4">
-                          <div className="flex items-center gap-2 text-xs text-white/60">
+                          <div className="flex items-center gap-2 text-xs text-white/90">
                             <MessageSquare className="w-3 h-3" />
                             Generated {new Date(insight.generatedAt).toLocaleString()}
                           </div>
@@ -234,7 +234,7 @@ const AIInsights = () => {
                       ) : (
                         <div className="text-center py-12">
                           <Brain className="w-12 h-12 text-gray-700 mx-auto mb-4" />
-                          <p className="text-white/60 text-sm">
+                          <p className="text-white/90 text-sm">
                             Click "Generate" to create AI-powered execution intelligence for this category.
                           </p>
                         </div>
@@ -260,7 +260,7 @@ const AIInsights = () => {
                   <span className="text-white/70 text-sm">Hot Areas</span>
                 </div>
                 <p className="text-white font-semibold">Palm Jumeirah, Dubai Hills, Creek Harbour</p>
-                <p className="text-white/60 text-xs mt-2">Based on recent inquiry velocity</p>
+                <p className="text-white/90 text-xs mt-2">Based on recent inquiry velocity</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900/50 border-gray-800">
@@ -270,7 +270,7 @@ const AIInsights = () => {
                   <span className="text-white/70 text-sm">Client Focus</span>
                 </div>
                 <p className="text-white font-semibold">HNWI Beachfront, Corporate Rentals</p>
-                <p className="text-white/60 text-xs mt-2">Priority segments this week</p>
+                <p className="text-white/90 text-xs mt-2">Priority segments this week</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900/50 border-gray-800">
@@ -280,7 +280,7 @@ const AIInsights = () => {
                   <span className="text-white/70 text-sm">Action Priority</span>
                 </div>
                 <p className="text-white font-semibold">Follow up on pending viewings</p>
-                <p className="text-white/60 text-xs mt-2">12 high-intent leads in pipeline</p>
+                <p className="text-white/90 text-xs mt-2">12 high-intent leads in pipeline</p>
               </CardContent>
             </Card>
           </div>

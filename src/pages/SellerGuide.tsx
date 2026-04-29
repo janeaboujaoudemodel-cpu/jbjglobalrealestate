@@ -428,7 +428,7 @@ const SellerGuide = () => {
                           ))}
                         </ul>
                         {step.note && (
-                          <p className="text-white/60 text-sm italic">{step.note}</p>
+                          <p className="text-white/90 text-sm italic">{step.note}</p>
                         )}
                         {step.warning && (
                           <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
@@ -528,7 +528,7 @@ const SellerGuide = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-white/60 text-sm italic">This process is handled step-by-step to avoid delays.</p>
+                <p className="text-white/90 text-sm italic">This process is handled step-by-step to avoid delays.</p>
               </motion.div>
             </motion.div>
           </div>
@@ -558,7 +558,7 @@ const SellerGuide = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-white/60 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
+                <p className="text-white/90 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
               </motion.div>
             </motion.div>
           </div>

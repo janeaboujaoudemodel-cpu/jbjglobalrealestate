@@ -291,7 +291,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
               {/* Data Sources */}
               <div className="flex flex-wrap gap-2 justify-center pt-2">
                 {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-                  <Badge key={source} variant="outline" className="text-white/60 border-gray-700 text-xs">
+                  <Badge key={source} variant="outline" className="text-white/90 border-gray-700 text-xs">
                     {source}
                   </Badge>
                 ))}
@@ -410,7 +410,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   </Card>
                 )}
 
-                <p className="text-xs text-white/60 text-center">
+                <p className="text-xs text-white/90 text-center">
                   {response.disclaimer || "* AI-generated analysis for informational purposes only."}
                 </p>
               </motion.div>
@@ -425,7 +425,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   <Brain className="h-12 w-12 text-sky-400/50" />
                 </div>
                 <h3 className="text-lg font-semibold text-white/70">Ready to Analyze</h3>
-                <p className="text-sm text-white/60 mt-2 max-w-sm">
+                <p className="text-sm text-white/90 mt-2 max-w-sm">
                   Select an area to get comprehensive market analysis with price trends, developer insights, and investment recommendations
                 </p>
               </motion.div>

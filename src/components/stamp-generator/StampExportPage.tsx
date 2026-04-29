@@ -821,8 +821,8 @@ export default function StampExportPage() {
                       )}
                     </div>
                     <div className="space-y-0.5">
-                      <p className="text-white/50 text-[10px]">CEO / Managing Director</p>
-                      {project.city_optional && <p className="text-white/40 text-[10px]">{[project.city_optional, project.country_optional].filter(Boolean).join(', ')}</p>}
+                      <p className="text-white/90 text-[10px]">CEO / Managing Director</p>
+                      {project.city_optional && <p className="text-white/85 text-[10px]">{[project.city_optional, project.country_optional].filter(Boolean).join(', ')}</p>}
                     </div>
                   </div>
                   <div className="flex items-center justify-center opacity-80">

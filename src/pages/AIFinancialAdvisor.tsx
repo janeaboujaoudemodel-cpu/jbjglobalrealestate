@@ -472,11 +472,11 @@ const AIFinancialAdvisor = () => {
                           </div>
                           <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                             <div>
-                              <span className="text-white/60">Payment Plan:</span>
+                              <span className="text-white/90">Payment Plan:</span>
                               <p className="text-white/85">{property.paymentPlan}</p>
                             </div>
                             <div>
-                              <span className="text-white/60">Developers:</span>
+                              <span className="text-white/90">Developers:</span>
                               <p className="text-white/85">{property.developer}</p>
                             </div>
                           </div>
@@ -541,7 +541,7 @@ const AIFinancialAdvisor = () => {
                 <CardContent className="text-center">
                   <Calculator className="w-16 h-16 text-gray-700 mx-auto mb-4" />
                   <h3 className="text-white text-lg font-medium mb-2">Enter Your Financial Details</h3>
-                  <p className="text-white/60 text-sm max-w-md">
+                  <p className="text-white/90 text-sm max-w-md">
                     Fill in your income and expenses on the left, then click "Generate AI Analysis" 
                     to receive personalized investment recommendations.
                   </p>

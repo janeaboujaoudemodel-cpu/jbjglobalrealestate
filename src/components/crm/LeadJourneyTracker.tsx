@@ -133,7 +133,7 @@ const LeadJourneyTracker = ({
         {/* Pages Visited List */}
         {pagesVisited.length > 0 && (
           <div>
-            <p className="text-xs text-white/60 mb-2">Pages Viewed</p>
+            <p className="text-xs text-white/90 mb-2">Pages Viewed</p>
             <div className="flex flex-wrap gap-1">
               {pagesVisited.slice(0, 6).map((page, i) => (
                 <Badge 
@@ -156,7 +156,7 @@ const LeadJourneyTracker = ({
         {/* Recent Events Timeline */}
         {events.length > 0 && (
           <div>
-            <p className="text-xs text-white/60 mb-2">Recent Activity</p>
+            <p className="text-xs text-white/90 mb-2">Recent Activity</p>
             <div className="space-y-2 max-h-40 overflow-y-auto">
               {events.slice(0, 5).map((event) => (
                 <div 

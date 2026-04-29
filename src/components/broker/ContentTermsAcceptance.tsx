@@ -133,7 +133,7 @@ export default function ContentTermsAcceptance({
                 </p>
 
                 <div className="pt-3 border-t border-gray-700">
-                  <p className="text-white/60">
+                  <p className="text-white/90">
                     © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                     <br />
                     For copyright inquiries: LEGAL@JBJ.AE

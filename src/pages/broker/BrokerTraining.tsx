@@ -190,7 +190,7 @@ export default function BrokerTraining() {
                 <h1 className="text-white text-3xl font-bold">
                   Market Intelligence Training
                 </h1>
-                <p className="text-white/60">Master data-driven conversations for BUY · SELL · RENT</p>
+                <p className="text-white/90">Master data-driven conversations for BUY · SELL · RENT</p>
               </div>
             </div>
 
@@ -200,7 +200,7 @@ export default function BrokerTraining() {
                 <span className="text-white font-medium">Your Progress</span>
               </div>
               <Progress value={totalProgress} className="h-2" />
-              <p className="text-white/60 text-xs mt-1">{Math.round(totalProgress)}% Complete</p>
+              <p className="text-white/90 text-xs mt-1">{Math.round(totalProgress)}% Complete</p>
             </div>
           </div>
         </div>
@@ -233,18 +233,18 @@ export default function BrokerTraining() {
                           <h3 className="text-white font-bold text-lg">{module.title}</h3>
                           <div className="flex items-center gap-3 mt-1">
                             {getCategoryBadge(module.category)}
-                            <span className="text-white/60 text-sm flex items-center gap-1">
+                            <span className="text-white/90 text-sm flex items-center gap-1">
                               <Clock className="w-3 h-3" />
                               {module.duration}
                             </span>
-                            <span className="text-white/60 text-sm">{module.lessons} lessons</span>
+                            <span className="text-white/90 text-sm">{module.lessons} lessons</span>
                           </div>
                         </div>
                       </div>
                       {module.completed ? (
                         <CheckCircle className="w-6 h-6 text-emerald-400" />
                       ) : (
-                        <ChevronRight className="w-6 h-6 text-white/60" />
+                        <ChevronRight className="w-6 h-6 text-white/90" />
                       )}
                     </div>
 
@@ -253,7 +253,7 @@ export default function BrokerTraining() {
                     {module.progress !== undefined && module.progress > 0 && (
                       <div className="mb-4">
                         <Progress value={module.progress} className="h-1.5" />
-                        <p className="text-white/60 text-xs mt-1">{module.progress}% Complete</p>
+                        <p className="text-white/90 text-xs mt-1">{module.progress}% Complete</p>
                       </div>
                     )}
 
@@ -265,7 +265,7 @@ export default function BrokerTraining() {
                           </span>
                         ))}
                         {module.topics.length > 2 && (
-                          <span className="text-xs text-white/60">+{module.topics.length - 2} more</span>
+                          <span className="text-xs text-white/90">+{module.topics.length - 2} more</span>
                         )}
                       </div>
                       <Button size="sm" className="bg-gold/10 text-gold hover:bg-gold/20 border border-gold/30">
@@ -344,21 +344,21 @@ export default function BrokerTraining() {
                     <span className="text-gold font-bold">1</span>
                   </div>
                   <p className="text-white font-medium mb-1">Describe, Don't Predict</p>
-                  <p className="text-white/60 text-sm">Explain what data shows, never what will happen</p>
+                  <p className="text-white/90 text-sm">Explain what data shows, never what will happen</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-3">
                     <span className="text-gold font-bold">2</span>
                   </div>
                   <p className="text-white font-medium mb-1">Insight, Not Advice</p>
-                  <p className="text-white/60 text-sm">Share market context, let clients decide</p>
+                  <p className="text-white/90 text-sm">Share market context, let clients decide</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-3">
                     <span className="text-gold font-bold">3</span>
                   </div>
                   <p className="text-white font-medium mb-1">Cite Sources</p>
-                  <p className="text-white/60 text-sm">Always reference Open Data origins</p>
+                  <p className="text-white/90 text-sm">Always reference Open Data origins</p>
                 </div>
               </div>
             </CardContent>

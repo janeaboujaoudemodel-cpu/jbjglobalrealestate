@@ -235,15 +235,15 @@ export default function AIInvestmentReportPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-white/60 text-xs uppercase">State</Label>
+                      <Label className="text-white/90 text-xs uppercase">State</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.currentState}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-white/60 text-xs uppercase">Sentiment</Label>
+                      <Label className="text-white/90 text-xs uppercase">Sentiment</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.sentiment}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-white/60 text-xs uppercase">Trend</Label>
+                      <Label className="text-white/90 text-xs uppercase">Trend</Label>
                       <p className="text-emerald-400 font-semibold">{result.priceAnalysis?.trend}</p>
                     </div>
                   </div>
@@ -288,11 +288,11 @@ export default function AIInvestmentReportPage() {
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-zinc-800/50 rounded-lg p-4">
-                      <Label className="text-white/60 text-xs uppercase">Short Term (3-6 months)</Label>
+                      <Label className="text-white/90 text-xs uppercase">Short Term (3-6 months)</Label>
                       <p className="text-white/85 mt-1">{result.forecast.shortTerm}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4">
-                      <Label className="text-white/60 text-xs uppercase">Medium Term (6-12 months)</Label>
+                      <Label className="text-white/90 text-xs uppercase">Medium Term (6-12 months)</Label>
                       <p className="text-white/85 mt-1">{result.forecast.mediumTerm}</p>
                     </div>
                   </div>

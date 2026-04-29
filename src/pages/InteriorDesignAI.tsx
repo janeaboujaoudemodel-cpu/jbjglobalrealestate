@@ -415,7 +415,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                   {/* Or generate from description */}
                   <div className="mt-6 text-center">
-                    <p className="text-white/60 text-xs mb-3">— or generate from description only —</p>
+                    <p className="text-white/90 text-xs mb-3">— or generate from description only —</p>
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing || !designStyle}
@@ -437,7 +437,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
                 <p className="text-white font-medium mb-3">Creating Your Design...</p>
                 <Progress value={progress} className="h-2 max-w-xs mx-auto" />
-                <p className="text-xs text-white/60 mt-2">{progress}%</p>
+                <p className="text-xs text-white/90 mt-2">{progress}%</p>
               </div>
             )}
 
@@ -467,7 +467,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       </Badge>
                     )}
                   </div>
-                  {styleOpen ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
+                  {styleOpen ? <ChevronUp className="w-4 h-4 text-white/90" /> : <ChevronDown className="w-4 h-4 text-white/90" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -503,7 +503,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       </Badge>
                     )}
                   </div>
-                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
+                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-white/90" /> : <ChevronDown className="w-4 h-4 text-white/90" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -539,7 +539,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white text-sm">Design Assistant</h3>
-                  <p className="text-[10px] text-white/60">Describe edits or new ideas</p>
+                  <p className="text-[10px] text-white/90">Describe edits or new ideas</p>
                 </div>
               </div>
 

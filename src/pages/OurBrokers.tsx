@@ -47,7 +47,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
                   </Badge>
                 )}
               </div>
-              <p className="text-white/60 text-sm">{broker.nationality}</p>
+              <p className="text-white/90 text-sm">{broker.nationality}</p>
             </div>
           </div>
 
@@ -183,7 +183,7 @@ const OurBrokers = () => {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
                 <Input
                   placeholder="Search by name or specialization..."
                   value={search}
@@ -227,7 +227,7 @@ const OurBrokers = () => {
         {/* Brokers Grid */}
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <p className="text-white/60 mb-6">
+            <p className="text-white/90 mb-6">
               {filteredBrokers.length} broker{filteredBrokers.length === 1 ? "" : "s"} found
             </p>
             <motion.div

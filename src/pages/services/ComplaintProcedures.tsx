@@ -152,7 +152,7 @@ const ComplaintProcedures = () => {
                 <AlertTriangle className="w-12 h-12 text-gray-600" />
               </div>
               <p className="text-gray-600 text-sm tracking-widest uppercase">How Complaints Are Handled</p>
-              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
+              <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />

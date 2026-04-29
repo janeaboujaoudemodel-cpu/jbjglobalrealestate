@@ -248,7 +248,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
                 <Lock className="w-4 h-4" />
                 <strong>Recorded Evidence:</strong>
               </p>
-              <ul className="text-xs text-white/60 space-y-1">
+              <ul className="text-xs text-white/90 space-y-1">
                 <li>• IP Address & Geolocation: Captured</li>
                 <li>• Device Fingerprint: Captured</li>
                 <li>• Timestamp: {violation?.timestamp.toISOString()}</li>

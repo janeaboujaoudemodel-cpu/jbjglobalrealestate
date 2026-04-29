@@ -283,7 +283,7 @@ const FormBuilder = () => {
               </Card>
 
               {fields.length === 0 ? (
-                <div className="text-center py-16 text-white/60">
+                <div className="text-center py-16 text-white/90">
                   <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p>Add fields from the sidebar to build your form</p>
                 </div>
@@ -414,7 +414,7 @@ const FormBuilder = () => {
             </div>
 
             {responses.length === 0 ? (
-              <div className="text-center py-16 text-white/60">
+              <div className="text-center py-16 text-white/90">
                 <List className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No responses yet</p>
               </div>

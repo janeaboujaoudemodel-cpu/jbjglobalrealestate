@@ -220,7 +220,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           <button onClick={() => inputRef.current?.click()} className="absolute bottom-2 right-2 px-3 py-1.5 rounded-none bg-black/70 text-white text-xs font-medium hover:bg-black/90 transition">Change</button>
         </div>
       ) : (
-        <button onClick={() => inputRef.current?.click()} className="w-full h-40 border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-none flex flex-col items-center justify-center gap-2 text-white/60 hover:border-[hsl(var(--gold)/0.6)] hover:bg-[hsl(var(--gold)/0.05)] transition-all">
+        <button onClick={() => inputRef.current?.click()} className="w-full h-40 border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-none flex flex-col items-center justify-center gap-2 text-white/90 hover:border-[hsl(var(--gold)/0.6)] hover:bg-[hsl(var(--gold)/0.05)] transition-all">
           {icon}
           <span className="text-sm font-medium">{label}</span>
           <span className="text-xs text-white/70">JPG, PNG up to 10MB</span>
@@ -253,7 +253,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                   <li>A selfie of you holding your ID</li>
                   <li>A quick liveness check via your camera</li>
                 </ul>
-                <p className="mt-3 text-xs text-white/60">We review submissions within 24–48 hours. Your documents are stored securely.</p>
+                <p className="mt-3 text-xs text-white/90">We review submissions within 24–48 hours. Your documents are stored securely.</p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-black">Full Name (as on ID)</label>

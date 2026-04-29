@@ -116,7 +116,7 @@ function CaptionPanel({
           placeholder="Write a caption… use # for hashtags and @ for mentions"
           rows={4}
           maxLength={charLimit}
-          className="flex-1 text-xs text-white bg-transparent resize-none outline-none placeholder:text-white/30 leading-relaxed"
+          className="flex-1 text-xs text-white bg-transparent resize-none outline-none placeholder:text-white/85 leading-relaxed"
           style={{ borderBottom: `1px solid ${I.border}` }}
           autoFocus
         />
@@ -603,7 +603,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                             value={photo.caption}
                             onChange={e => updateCaption(photo.id, e.target.value)}
                             placeholder={`Caption for photo #${idx + 1}…`}
-                            className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/30"
+                            className="w-full bg-transparent text-xs text-white outline-none placeholder:text-white/85"
                             style={{ borderBottom: `1px solid ${I.border}`, paddingBottom: 4 }}
                           />
                         </div>
@@ -780,7 +780,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                           placeholder="Write a caption for this post…"
                           rows={2}
                           disabled={!!posted || !!scheduled}
-                          className="w-full bg-transparent text-white text-xs resize-none outline-none placeholder:text-white/30 leading-relaxed"
+                          className="w-full bg-transparent text-white text-xs resize-none outline-none placeholder:text-white/85 leading-relaxed"
                           style={{ borderBottom: (posted || scheduled) ? 'none' : `1px solid ${I.border}`, paddingBottom: 4 }}
                         />
 
@@ -916,7 +916,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                                   <button
                                     className={cn(
                                       "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all",
-                                      schedEntry?.date ? "text-white" : "text-white/40"
+                                      schedEntry?.date ? "text-white" : "text-white/85"
                                     )}
                                     style={{ background: "rgba(255,255,255,0.05)", border: `1px solid ${I.border}` }}>
                                     <CalendarDays className="h-3 w-3" style={{ color: I.text }} />

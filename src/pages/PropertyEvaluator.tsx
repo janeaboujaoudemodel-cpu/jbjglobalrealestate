@@ -319,14 +319,14 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
           <p className="text-xl text-white/85 max-w-2xl mx-auto mb-2">
             Get an AI-powered property valuation based on DLD transaction data, RERA Rental Index, and institutional market analysis.
           </p>
-          <p className="text-sm text-white/60 max-w-xl mx-auto">
+          <p className="text-sm text-white/90 max-w-xl mx-auto">
             Sources: DLD Public Records · RERA · JBJ Analysis Framework
           </p>
           <FounderContent>
             <div className="text-center mt-4">
               <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
               <p className="text-blue-400 text-xs mt-0.5">Founder & CEO</p>
-              <p className="text-white/60 text-xs mt-0.5">JBJ Global Real Estate</p>
+              <p className="text-white/90 text-xs mt-0.5">JBJ Global Real Estate</p>
             </div>
           </FounderContent>
         </motion.div>
@@ -367,7 +367,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     <div className="space-y-1">
                       <Label className="text-white/85 flex items-center gap-1">
                         Building Name <span className="text-blue-400">*</span>
-                        <HelpCircle className="w-3 h-3 text-white/60" />
+                        <HelpCircle className="w-3 h-3 text-white/90" />
                       </Label>
                       <Input
                         value={property.buildingName}
@@ -375,12 +375,12 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         placeholder="e.g., Burj Vista Tower 1"
                         className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
                       />
-                      <p className="text-xs text-white/60">Official building name as registered</p>
+                      <p className="text-xs text-white/90">Official building name as registered</p>
                     </div>
                     <div className="space-y-1">
                       <Label className="text-white/85 flex items-center gap-1">
                         Unit Number
-                        <HelpCircle className="w-3 h-3 text-white/60" />
+                        <HelpCircle className="w-3 h-3 text-white/90" />
                       </Label>
                       <Input
                         value={property.unitNumber}
@@ -388,7 +388,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         placeholder="e.g., 1505 or 15-A"
                         className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
                       />
-                      <p className="text-xs text-white/60">As shown on title deed</p>
+                      <p className="text-xs text-white/90">As shown on title deed</p>
                     </div>
                   </div>
 
@@ -421,7 +421,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                                 </button>
                               ))
                             ) : (
-                              <p className="px-3 py-2 text-sm text-white/60">No communities found</p>
+                              <p className="px-3 py-2 text-sm text-white/90">No communities found</p>
                             )}
                           </div>
                         )}
@@ -503,7 +503,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     <MapPin className="w-5 h-5 text-blue-400" />
                     Specifications
                   </CardTitle>
-                  <CardDescription className="text-white/60">
+                  <CardDescription className="text-white/90">
                     Property measurements and details
                   </CardDescription>
                 </CardHeader>
@@ -604,8 +604,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                       </div>
                     ))}
                     <button onClick={() => photoInputRef.current?.click()} className="w-28 h-28 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
-                      <Camera className="w-6 h-6 text-white/60 group-hover:text-blue-400 mb-1" />
-                      <span className="text-xs text-white/60 group-hover:text-blue-400">Add Photos</span>
+                      <Camera className="w-6 h-6 text-white/90 group-hover:text-blue-400 mb-1" />
+                      <span className="text-xs text-white/90 group-hover:text-blue-400">Add Photos</span>
                     </button>
                   </div>
                   {property.propertyPhotos.length === 0 && (
@@ -664,7 +664,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         </div>
                         <div>
                           <p className="text-white font-semibold">Original Stock Condition</p>
-                          <p className="text-xs text-white/60">As delivered by developer</p>
+                          <p className="text-xs text-white/90">As delivered by developer</p>
                         </div>
                       </div>
                       <p className="text-sm text-white/70 mt-2">Property is in the original condition from developer handover.</p>
@@ -681,7 +681,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         </div>
                         <div>
                           <p className="text-white font-semibold">Modified / Upgraded</p>
-                          <p className="text-xs text-white/60">Has add-ons or changes</p>
+                          <p className="text-xs text-white/90">Has add-ons or changes</p>
                         </div>
                       </div>
                       <p className="text-sm text-white/70 mt-2">Property has been modified with renovations, fit-outs, or upgrades.</p>
@@ -731,7 +731,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${property.modificationType === type.value ? 'text-blue-400' : 'text-white/70'}`} />
                               <p className={`text-sm font-medium ${property.modificationType === type.value ? 'text-white' : 'text-white/85'}`}>{type.label}</p>
-                              <p className="text-xs text-white/60 mt-0.5">{type.desc}</p>
+                              <p className="text-xs text-white/90 mt-0.5">{type.desc}</p>
                             </button>
                           ))}
                         </div>
@@ -753,12 +753,12 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           Total Investment Made (AED)
                         </Label>
                         <Input type="number" value={property.renovationCost || ''} onChange={(e) => updateProperty('renovationCost', parseInt(e.target.value) || 0)} placeholder="e.g., 150000" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 mt-2" />
-                        <p className="text-xs text-white/60 mt-1">Include all costs: materials, labor, permits, and professional fees</p>
+                        <p className="text-xs text-white/90 mt-1">Include all costs: materials, labor, permits, and professional fees</p>
                       </div>
 
                       <div>
                         <Label className="text-white/70">Upload Before/After Photos or Receipts</Label>
-                        <p className="text-xs text-white/60 mb-3">Photos documenting your upgrades help validate the added value</p>
+                        <p className="text-xs text-white/90 mb-3">Photos documenting your upgrades help validate the added value</p>
                         <input ref={renovationPhotoRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handlePhotoUpload(e, 'renovation')} />
                         <div className="flex flex-wrap gap-4">
                           {property.renovationPhotos.map((photo, i) => (
@@ -770,8 +770,8 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                             </div>
                           ))}
                           <button onClick={() => renovationPhotoRef.current?.click()} className="w-24 h-24 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
-                            <Upload className="w-5 h-5 text-white/60 group-hover:text-blue-400 mb-1" />
-                            <span className="text-xs text-white/60 group-hover:text-blue-400">Add</span>
+                            <Upload className="w-5 h-5 text-white/90 group-hover:text-blue-400 mb-1" />
+                            <span className="text-xs text-white/90 group-hover:text-blue-400">Add</span>
                           </button>
                         </div>
                       </div>
@@ -882,7 +882,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     )}
 
                     {evaluation.sources && (
-                      <p className="text-xs text-white/60 mt-4">{evaluation.sources}</p>
+                      <p className="text-xs text-white/90 mt-4">{evaluation.sources}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -949,7 +949,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         <div key={i} className="flex justify-between items-center p-3 bg-zinc-800/50 rounded-lg">
                           <div>
                             <p className="text-white font-medium">{t.building}</p>
-                            <p className="text-white/60 text-sm">{t.size} sq ft · {t.date}</p>
+                            <p className="text-white/90 text-sm">{t.size} sq ft · {t.date}</p>
                           </div>
                           <p className="text-price-orange font-semibold">AED {t.price.toLocaleString()}</p>
                         </div>
@@ -960,7 +960,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
 
                 {/* Disclaimer */}
                 <div className="max-w-4xl mx-auto p-4 bg-zinc-900/50 border border-gray-800 rounded-lg">
-                  <p className="text-xs text-white/60 text-center">{evaluation.disclaimer}</p>
+                  <p className="text-xs text-white/90 text-center">{evaluation.disclaimer}</p>
                 </div>
 
                 {/* Actions */}

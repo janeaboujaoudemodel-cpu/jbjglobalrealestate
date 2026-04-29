@@ -26,7 +26,7 @@ export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProp
       animate={{ opacity: 1, y: 0 }}
       className="bg-zinc-900/80 backdrop-blur-sm border border-gray-800 rounded-xl p-4 sticky top-20 z-10"
     >
-      <p className="text-white/60 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
+      <p className="text-white/90 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
       <div className="flex flex-wrap gap-2">
         {sections.map((section) => (
           <button

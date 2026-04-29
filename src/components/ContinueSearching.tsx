@@ -220,7 +220,7 @@ const ContinueSearching = ({
               <Home className="w-8 h-8 text-gray-500" />
             </div>
             <p className="text-white/70 text-sm mb-1">You haven't viewed any properties yet.</p>
-            <p className="text-white/40 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
+            <p className="text-white/85 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
               className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-light text-black text-sm font-semibold hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"

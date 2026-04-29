@@ -1196,7 +1196,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Buy
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'buy' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Sell */}
                 <button
@@ -1211,7 +1211,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Sell
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'sell' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Rent */}
                 <button
@@ -1226,7 +1226,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Rent
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'rent' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Projects */}
                 <button
@@ -1241,7 +1241,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Projects
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'projects' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Areas */}
                 <button
@@ -1256,7 +1256,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Areas
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'areas' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Developers */}
                 <button
@@ -1271,7 +1271,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   Developers
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'developers' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
                 {/* Insights (News & Market Intelligence) */}
                 <button

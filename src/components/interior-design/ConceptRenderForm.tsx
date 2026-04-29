@@ -174,7 +174,7 @@ const ConceptRenderForm = ({
           className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 min-h-[120px] focus:border-fuchsia-500/50"
           maxLength={1000}
         />
-        <p className="text-xs text-white/60 mt-2 text-right">
+        <p className="text-xs text-white/90 mt-2 text-right">
           {customNotes.length}/1000 characters
         </p>
       </div>

@@ -387,19 +387,19 @@ export default function AIClientMatcherPage() {
                         <h4 className="text-white font-semibold mb-2">{prop.type}</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                           <div>
-                            <span className="text-white/60">Size:</span>
+                            <span className="text-white/90">Size:</span>
                             <span className="text-white/85 ml-1">{prop.idealSize}</span>
                           </div>
                           <div>
-                            <span className="text-white/60">Price:</span>
+                            <span className="text-white/90">Price:</span>
                             <span className="text-white/85 ml-1">{prop.targetPrice}</span>
                           </div>
                           <div>
-                            <span className="text-white/60">Potential:</span>
+                            <span className="text-white/90">Potential:</span>
                             <span className="text-purple-300 ml-1">{prop.investmentPotential}</span>
                           </div>
                           <div>
-                            <span className="text-white/60">Yield:</span>
+                            <span className="text-white/90">Yield:</span>
                             <span className="text-green-400 ml-1">{prop.rentalYield}</span>
                           </div>
                         </div>

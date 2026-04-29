@@ -72,7 +72,7 @@ const ExecutiveMarketSignals = () => {
                 Directional indicators for strategic planning and resource allocation
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/90">
               <Clock className="w-4 h-4" />
               <span>Last updated: {new Date(lastUpdated).toLocaleString()}</span>
             </div>
@@ -115,7 +115,7 @@ const ExecutiveMarketSignals = () => {
                   <TrendingUp className="w-6 h-6 text-emerald-500" />
                   <span className="text-2xl font-bold text-white">Strong</span>
                 </div>
-                <p className="text-xs text-white/60 mt-2">
+                <p className="text-xs text-white/90 mt-2">
                   Based on aggregated transaction velocity
                 </p>
               </CardContent>
@@ -133,7 +133,7 @@ const ExecutiveMarketSignals = () => {
                   <Activity className="w-6 h-6 text-amber-500" />
                   <span className="text-2xl font-bold text-white">Moderate</span>
                 </div>
-                <p className="text-xs text-white/60 mt-2">
+                <p className="text-xs text-white/90 mt-2">
                   New inventory vs absorption rate
                 </p>
               </CardContent>
@@ -151,7 +151,7 @@ const ExecutiveMarketSignals = () => {
                   <TrendingDown className="w-6 h-6 text-amber-500" />
                   <span className="text-2xl font-bold text-white">Elevated</span>
                 </div>
-                <p className="text-xs text-white/60 mt-2">
+                <p className="text-xs text-white/90 mt-2">
                   Buyer negotiation intensity increasing
                 </p>
               </CardContent>
@@ -242,7 +242,7 @@ const ExecutiveMarketSignals = () => {
 
               <div className="bg-zinc-800 rounded-lg p-4">
                 <h4 className="text-white/85 font-medium mb-2">Data Attribution</h4>
-                <p className="text-white/60 text-sm">
+                <p className="text-white/90 text-sm">
                   All signals derived from aggregated government Open Data and internal CRM trends. 
                   These are directional indicators, not predictions or investment advice.
                 </p>
@@ -252,7 +252,7 @@ const ExecutiveMarketSignals = () => {
 
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-gray-800 text-center">
-            <p className="text-xs text-white/60">
+            <p className="text-xs text-white/90">
               Market Signals Dashboard • Directional indicators for strategic planning • Not predictive
             </p>
             <FounderContent>

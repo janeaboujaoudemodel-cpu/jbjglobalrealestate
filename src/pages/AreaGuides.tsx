@@ -250,7 +250,7 @@ const AreaGuides = () => {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/85"
         >
           <ChevronDown className="w-6 h-6" />
         </motion.div>

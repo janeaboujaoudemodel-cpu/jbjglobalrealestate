@@ -262,7 +262,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         <Badge variant="outline" className="text-xs border-gray-600 text-white/70">
                           {voice.gender}
                         </Badge>
-                        <span className="text-xs text-white/60">{voice.accent}</span>
+                        <span className="text-xs text-white/90">{voice.accent}</span>
                       </div>
                     </button>
                   ))}
@@ -289,7 +289,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                           <Icon className={`w-4 h-4 ${formData.persona === preset.id ? 'text-gold' : 'text-white/70'}`} />
                           <span className="text-white text-sm">{preset.name}</span>
                         </div>
-                        <p className="text-xs text-white/60 mt-1">{preset.description}</p>
+                        <p className="text-xs text-white/90 mt-1">{preset.description}</p>
                       </button>
                     );
                   })}
@@ -324,7 +324,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
       {characters.length === 0 ? (
         <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-lg">
           <Users className="w-10 h-10 text-gray-600 mx-auto mb-2" />
-          <p className="text-white/60 text-sm">No characters created yet</p>
+          <p className="text-white/90 text-sm">No characters created yet</p>
           <p className="text-gray-600 text-xs">Create characters for multi-voice scripts</p>
         </div>
       ) : (
@@ -355,7 +355,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       </div>
                       <div>
                         <p className="text-white font-medium">{character.name}</p>
-                        <div className="flex items-center gap-2 text-xs text-white/60">
+                        <div className="flex items-center gap-2 text-xs text-white/90">
                           <Globe className="w-3 h-3" />
                           <span>{character.nationality}</span>
                           <span>•</span>

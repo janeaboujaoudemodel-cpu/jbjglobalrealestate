@@ -650,7 +650,7 @@ const AIDocumentGeneratorPremium = () => {
                     {TONES.map((t) => (
                       <SelectItemDark key={t.value} value={t.value}>
                         <span>{t.label}</span>
-                        <span className="text-xs text-white/60 ml-2">{t.desc}</span>
+                        <span className="text-xs text-white/90 ml-2">{t.desc}</span>
                       </SelectItemDark>
                     ))}
                   </SelectContentDark>
@@ -710,15 +710,15 @@ const AIDocumentGeneratorPremium = () => {
                   <Badge className="bg-lime-500/20 text-lime-400 text-[10px]">1 selected</Badge>
                 )}
               </div>
-              <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${brandAssetsOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`h-4 w-4 text-white/90 transition-transform ${brandAssetsOpen ? 'rotate-180' : ''}`} />
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
             <div className="rounded-lg bg-zinc-800/30 border border-gray-700/50 p-4 space-y-3">
-              <p className="text-xs text-white/60">Select a saved logo, stamp, or signature to include in your document.</p>
+              <p className="text-xs text-white/90">Select a saved logo, stamp, or signature to include in your document.</p>
               {loadingAssets ? (
                 <div className="flex justify-center py-6">
-                  <Loader2 size={18} className="animate-spin text-white/60" />
+                  <Loader2 size={18} className="animate-spin text-white/90" />
                 </div>
               ) : brandAssets.length === 0 ? (
                 <p className="text-xs text-gray-600 text-center py-4">No brand assets saved yet.</p>
@@ -766,7 +766,7 @@ const AIDocumentGeneratorPremium = () => {
                 <FilePlus className="h-12 w-12 text-lime-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Create</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Select a document type, fill in the smart fields, and generate professional content instantly
               </p>
             </motion.div>

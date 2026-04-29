@@ -121,7 +121,7 @@ export function DocuSignIntegration() {
               </SelectContentDark>
             </Select>
             {selectedTemplate && (
-              <p className="text-white/60 text-xs">
+              <p className="text-white/90 text-xs">
                 {CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.description}
               </p>
             )}
@@ -130,7 +130,7 @@ export function DocuSignIntegration() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-white/85 flex items-center gap-2">
-                <User className="w-4 h-4 text-white/60" />
+                <User className="w-4 h-4 text-white/90" />
                 Recipient Name *
               </Label>
               <Input
@@ -143,7 +143,7 @@ export function DocuSignIntegration() {
 
             <div className="space-y-2">
               <Label className="text-white/85 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-white/60" />
+                <Mail className="w-4 h-4 text-white/90" />
                 Recipient Email *
               </Label>
               <Input
@@ -158,7 +158,7 @@ export function DocuSignIntegration() {
 
           <div className="space-y-2">
             <Label className="text-white/85 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-white/60" />
+              <Building2 className="w-4 h-4 text-white/90" />
               Property Reference (Optional)
             </Label>
             <Input
@@ -190,7 +190,7 @@ export function DocuSignIntegration() {
         </CardHeader>
         <CardContent className="space-y-3">
           {pendingSignatures.length === 0 ? (
-            <div className="text-center py-8 text-white/60">
+            <div className="text-center py-8 text-white/90">
               <FileSignature className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>No pending signatures</p>
             </div>
@@ -203,13 +203,13 @@ export function DocuSignIntegration() {
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <p className="text-white font-medium text-sm">{sig.recipientName}</p>
-                    <p className="text-white/60 text-xs">{sig.recipientEmail}</p>
+                    <p className="text-white/90 text-xs">{sig.recipientEmail}</p>
                   </div>
                   {getStatusBadge(sig.status)}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-white/60" />
+                    <FileText className="w-4 h-4 text-white/90" />
                     <span className="text-white/70 text-xs">{sig.template}</span>
                   </div>
                   <span className="text-gray-600 text-xs">

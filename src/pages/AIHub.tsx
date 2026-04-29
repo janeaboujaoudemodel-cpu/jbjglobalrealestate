@@ -602,8 +602,8 @@ const AIHub = () => {
                   <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <ArrowUpRight className="w-5 h-5 text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all" />
-                  <span className="text-[10px] font-semibold text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all">Open →</span>
+                  <ArrowUpRight className="w-5 h-5 text-white/90 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all" />
+                  <span className="text-[10px] font-semibold text-white/90 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all">Open →</span>
                 </div>
               </div>
             </CardContent>
@@ -916,7 +916,7 @@ const AIHub = () => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-sm text-white">{suite.label}</h4>
-                        <p className="text-xs text-white/50">{suite.desc}</p>
+                        <p className="text-xs text-white/90">{suite.desc}</p>
                       </div>
                       <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-white" />
                     </div>

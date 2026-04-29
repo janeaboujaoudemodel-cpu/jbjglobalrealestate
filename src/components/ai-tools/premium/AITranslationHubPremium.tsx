@@ -155,7 +155,7 @@ const AITranslationHubPremium = () => {
                 dir={isRTL(sourceLanguage) ? "rtl" : "ltr"}
               />
               <div className="flex items-center justify-between mt-4">
-                <span className="text-xs text-white/60">{text.length} characters</span>
+                <span className="text-xs text-white/90">{text.length} characters</span>
               </div>
             </CardContent>
           </Card>
@@ -252,7 +252,7 @@ const AITranslationHubPremium = () => {
                   </motion.div>
                 ) : (
                   <div className="bg-zinc-800/50 border border-gray-700/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
-                    <div className="text-center text-white/60">
+                    <div className="text-center text-white/90">
                       <Globe className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Translation will appear here</p>
                     </div>

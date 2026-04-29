@@ -69,7 +69,7 @@ const DataOperations = () => {
               <h1 className="text-white text-3xl font-bold">
                 Data Operations & Audit
               </h1>
-              <p className="text-white/60">Dataset management, refresh logs, and compliance audit</p>
+              <p className="text-white/90">Dataset management, refresh logs, and compliance audit</p>
             </div>
           </div>
         </div>
@@ -92,15 +92,15 @@ const DataOperations = () => {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-white/60">Provider</span>
+                      <span className="text-white/90">Provider</span>
                       <span className="text-white/85">{source.provider}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-white/60">Update Frequency</span>
+                      <span className="text-white/90">Update Frequency</span>
                       <span className="text-white/85 capitalize">{source.updateFrequency}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-white/60">Last Updated</span>
+                      <span className="text-white/90">Last Updated</span>
                       <span className="text-emerald-400">{source.lastUpdated}</span>
                     </div>
                     <div className="pt-2 border-t border-gray-800">
@@ -130,11 +130,11 @@ const DataOperations = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-800">
-                  <th className="text-left text-white/60 text-sm py-3 px-4">Timestamp</th>
-                  <th className="text-left text-white/60 text-sm py-3 px-4">Action</th>
-                  <th className="text-left text-white/60 text-sm py-3 px-4">Source</th>
-                  <th className="text-center text-white/60 text-sm py-3 px-4">Status</th>
-                  <th className="text-right text-white/60 text-sm py-3 px-4">Records</th>
+                  <th className="text-left text-white/90 text-sm py-3 px-4">Timestamp</th>
+                  <th className="text-left text-white/90 text-sm py-3 px-4">Action</th>
+                  <th className="text-left text-white/90 text-sm py-3 px-4">Source</th>
+                  <th className="text-center text-white/90 text-sm py-3 px-4">Status</th>
+                  <th className="text-right text-white/90 text-sm py-3 px-4">Records</th>
                 </tr>
               </thead>
               <tbody>

@@ -137,14 +137,14 @@ const WhyDubaiSection = () => {
 
           {/* Source Citations Bar */}
           <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-black/50">
-            <span className="text-white/60 text-xs font-medium uppercase tracking-wider">Sources:</span>
+            <span className="text-white/90 text-xs font-medium uppercase tracking-wider">Sources:</span>
             {[
               { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },
               { label: "#1 Prime Price Growth", source: "Knight Frank Global Cities Index" },
               { label: "#1 FDI in MENA", source: "fDi Intelligence, Financial Times" },
               { label: "Top 5 Most Visited", source: "Mastercard Destination Cities Index" },
             ].map((citation, i) => (
-              <span key={i} className="text-white/60 text-xs">
+              <span key={i} className="text-white/90 text-xs">
                 <span className="text-gold font-medium">{citation.label}</span>
                 {" — "}
                 <span className="italic">{citation.source}</span>

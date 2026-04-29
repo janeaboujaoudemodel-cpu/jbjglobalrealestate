@@ -279,13 +279,13 @@ const AIFollowupSchedulerPremium = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {response.optimalTiming.bestDays && (
                       <div className="bg-zinc-800/50 p-3 rounded-lg">
-                        <p className="text-xs text-white/60">Best Days</p>
+                        <p className="text-xs text-white/90">Best Days</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestDays.join(', ')}</p>
                       </div>
                     )}
                     {response.optimalTiming.bestHours && (
                       <div className="bg-zinc-800/50 p-3 rounded-lg">
-                        <p className="text-xs text-white/60">Best Hours</p>
+                        <p className="text-xs text-white/90">Best Hours</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestHours}</p>
                       </div>
                     )}
@@ -348,7 +348,7 @@ const AIFollowupSchedulerPremium = () => {
                 <CalendarClock className="h-12 w-12 text-cyan-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Schedule</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Enter lead details to get AI-powered follow-up scheduling with optimal timing recommendations
               </p>
             </motion.div>

@@ -319,7 +319,7 @@ const RentalIndex = () => {
                     <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-white/70 text-sm mb-2">Minimum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
-                      <p className="text-white/60 text-xs mt-1">/year</p>
+                      <p className="text-white/90 text-xs mt-1">/year</p>
                     </div>
                     <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
                       <p className="text-emerald-400 text-sm mb-2 font-medium">Average</p>
@@ -329,7 +329,7 @@ const RentalIndex = () => {
                     <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-white/70 text-sm mb-2">Maximum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
-                      <p className="text-white/60 text-xs mt-1">/year</p>
+                      <p className="text-white/90 text-xs mt-1">/year</p>
                     </div>
                   </div>
 
@@ -389,7 +389,7 @@ const RentalIndex = () => {
                       <p className="text-white/70 text-sm leading-relaxed">
                         {analysis.disclaimer}
                       </p>
-                      <p className="text-white/60 text-xs mt-3">
+                      <p className="text-white/90 text-xs mt-3">
                         For more accurate and updated information, we recommend verifying with official government sources such as the Dubai Land Department (DLD), RERA, and DXB Interact. Rental values can vary based on specific building, view, condition, and market timing.
                       </p>
                     </div>

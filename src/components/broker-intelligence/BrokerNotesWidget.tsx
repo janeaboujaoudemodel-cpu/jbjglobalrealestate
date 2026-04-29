@@ -182,7 +182,7 @@ export function BrokerNotesWidget() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
             <Input
               placeholder="Search notes..."
               value={searchQuery}
@@ -193,7 +193,7 @@ export function BrokerNotesWidget() {
 
           {/* Notes List */}
           {filteredNotes.length === 0 ? (
-            <div className="text-center py-8 text-white/60">
+            <div className="text-center py-8 text-white/90">
               <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>{searchQuery ? "No notes match your search" : "No notes yet"}</p>
             </div>
@@ -240,7 +240,7 @@ export function BrokerNotesWidget() {
               <FileText className="w-5 h-5 text-gold" />
               <div>
                 <p className="text-white font-medium text-sm">Open Full Notes</p>
-                <p className="text-white/60 text-xs">Access all notes, AI summaries, and linked items</p>
+                <p className="text-white/90 text-xs">Access all notes, AI summaries, and linked items</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-600" />

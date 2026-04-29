@@ -39,7 +39,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
             <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-gold text-xs font-semibold mb-1">Protected Content</p>
-              <p className="text-white/60 text-[10px] leading-relaxed">
+              <p className="text-white/90 text-[10px] leading-relaxed">
                 © {currentYear} JBJ Global Real Estate. All intellectual property rights reserved.
               </p>
             </div>
@@ -53,7 +53,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <Shield className="w-4 h-4 text-gold flex-shrink-0" />
-      <p className="text-white/60 text-xs">
+      <p className="text-white/90 text-xs">
         © {currentYear} JBJ Global Real Estate. All Rights Reserved.
       </p>
     </div>

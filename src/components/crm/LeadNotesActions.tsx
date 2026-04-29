@@ -137,7 +137,7 @@ const LeadNotesActions = ({
         {/* Notes List */}
         <div className="space-y-2">
           {notes.length === 0 && !isAddingNote && (
-            <p className="text-sm text-white/60 text-center py-3">
+            <p className="text-sm text-white/90 text-center py-3">
               No notes yet. Add your first note below.
             </p>
           )}
@@ -170,7 +170,7 @@ const LeadNotesActions = ({
                 <>
                   <p className="text-sm text-white/85 whitespace-pre-wrap">{note.content}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-white/60">
+                    <span className="text-xs text-white/90">
                       {format(new Date(note.created_at), "MMM d, h:mm a")}
                     </span>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

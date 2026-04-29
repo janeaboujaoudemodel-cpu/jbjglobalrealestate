@@ -108,7 +108,7 @@ export function BrokerCalendarWidget() {
               Quick Add
             </Button>
           </div>
-          <p className="text-white/60 text-sm">{formattedDate}</p>
+          <p className="text-white/90 text-sm">{formattedDate}</p>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Quick Add Form */}
@@ -172,7 +172,7 @@ export function BrokerCalendarWidget() {
 
           {/* Events List */}
           {events.length === 0 ? (
-            <div className="text-center py-8 text-white/60">
+            <div className="text-center py-8 text-white/90">
               <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>No events scheduled for today</p>
             </div>
@@ -190,7 +190,7 @@ export function BrokerCalendarWidget() {
                     </div>
                     {getEventTypeBadge(event.type)}
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-white/60">
+                  <div className="flex items-center gap-4 text-xs text-white/90">
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {event.time}
@@ -223,7 +223,7 @@ export function BrokerCalendarWidget() {
               <Calendar className="w-5 h-5 text-gold" />
               <div>
                 <p className="text-white font-medium text-sm">Open Full Calendar</p>
-                <p className="text-white/60 text-xs">Manage all events, sync with Google Calendar</p>
+                <p className="text-white/90 text-xs">Manage all events, sync with Google Calendar</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-gray-600" />

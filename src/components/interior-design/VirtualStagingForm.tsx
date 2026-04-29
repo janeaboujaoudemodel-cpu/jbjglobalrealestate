@@ -138,13 +138,13 @@ const VirtualStagingForm = ({
               onClick={() => fileInputRef.current?.click()}
               className="aspect-square rounded-xl border-2 border-dashed border-gray-700 hover:border-emerald-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
-              <Upload className="w-8 h-8 text-white/60" />
-              <span className="text-xs text-white/60">Add Photo</span>
+              <Upload className="w-8 h-8 text-white/90" />
+              <span className="text-xs text-white/90">Add Photo</span>
             </button>
           )}
         </div>
 
-        <p className="text-xs text-white/60">
+        <p className="text-xs text-white/90">
           Upload photos of empty rooms. The AI will add furniture and decor based on your preferences.
         </p>
       </div>
@@ -205,7 +205,7 @@ const VirtualStagingForm = ({
                 <span className={`text-sm font-semibold ${isSelected ? 'text-white' : 'text-white/85'}`}>
                   {style.label}
                 </span>
-                <p className="text-xs text-white/60 mt-1">{style.desc}</p>
+                <p className="text-xs text-white/90 mt-1">{style.desc}</p>
               </button>
             );
           })}

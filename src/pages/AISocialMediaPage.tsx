@@ -326,7 +326,7 @@ export default function AISocialMediaPage() {
                 )}
 
                 {result.bestTimeToPost && (
-                  <p className="text-white/60 text-sm">Best time to post: {result.bestTimeToPost}</p>
+                  <p className="text-white/90 text-sm">Best time to post: {result.bestTimeToPost}</p>
                 )}
               </CardContent>
             </Card>

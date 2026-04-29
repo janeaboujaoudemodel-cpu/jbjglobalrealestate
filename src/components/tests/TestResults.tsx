@@ -104,7 +104,7 @@ export function TestResults({
                         Correct: {item.question.options[item.correctAnswer]}
                       </Badge>
                       {item.question.explanation && (
-                        <p className="text-white/60 text-xs mt-2">
+                        <p className="text-white/90 text-xs mt-2">
                           {item.question.explanation}
                         </p>
                       )}
@@ -115,7 +115,7 @@ export function TestResults({
             </div>
 
             {!showAnswers && (
-              <p className="text-white/50 text-sm text-center">
+              <p className="text-white/90 text-sm text-center">
                 Correct answers are hidden. Review the material and try again.
                 {attempts.filter(a => !a.passed).length < 3 && (
                   <span className="block mt-1 text-amber-400/70">

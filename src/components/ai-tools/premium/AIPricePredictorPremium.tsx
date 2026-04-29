@@ -269,7 +269,7 @@ const AIPricePredictorPremium = () => {
                   )}
                   {response.priceRange && (
                     <div className="mt-4 pt-4 border-t border-blue-500/20">
-                      <p className="text-xs text-white/60">Price Range</p>
+                      <p className="text-xs text-white/90">Price Range</p>
                       <p className="text-sm text-white/85">
                         AED {response.priceRange.min?.toLocaleString()} - {response.priceRange.max?.toLocaleString()}
                       </p>

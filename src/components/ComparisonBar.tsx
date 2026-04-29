@@ -127,7 +127,7 @@ const ComparisonBar = () => {
               <SheetTitle className="text-white text-2xl flex items-center gap-3">
                 <Scale className="w-6 h-6 text-gold" />
                 Property Shortlist & Comparison
-                <span className="text-sm font-normal text-white/60">
+                <span className="text-sm font-normal text-white/90">
                   ({shortlist.length} selected)
                 </span>
               </SheetTitle>
@@ -213,19 +213,19 @@ const ComparisonBar = () => {
                           <h3 className="text-white font-semibold text-lg line-clamp-1">
                             {project.name}
                           </h3>
-                          <p className="text-white/60 text-sm">
+                          <p className="text-white/90 text-sm">
                             {project.developer?.name}
                           </p>
                           
                           <div className="grid grid-cols-2 gap-2 text-sm">
                             <div className="bg-zinc-800/50 rounded-lg p-2">
-                              <p className="text-white/60 text-xs">Price From</p>
+                              <p className="text-white/90 text-xs">Price From</p>
                               <p className="text-white font-medium">
                                 AED {(Math.round((project.price_from || 0)) / 1000000).toFixed(1)}M
                               </p>
                             </div>
                             <div className="bg-zinc-800/50 rounded-lg p-2">
-                              <p className="text-white/60 text-xs">Bedrooms</p>
+                              <p className="text-white/90 text-xs">Bedrooms</p>
                               <p className="text-white font-medium">
                                 {project.bedrooms_min} - {project.bedrooms_max} BR
                               </p>
@@ -246,7 +246,7 @@ const ComparisonBar = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-white/60">Loading properties...</p>
+                  <p className="text-white/90">Loading properties...</p>
                 </div>
               )}
             </div>
@@ -273,7 +273,7 @@ const ComparisonBar = () => {
                 </a>
               </div>
               {shortlist.length < 2 && (
-                <p className="text-white/60 text-sm text-center mt-3">
+                <p className="text-white/90 text-sm text-center mt-3">
                   Add at least 2 properties for AI comparison
                 </p>
               )}

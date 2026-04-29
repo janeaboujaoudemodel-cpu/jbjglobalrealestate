@@ -194,7 +194,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           </div>
           <h1 className="text-2xl font-bold text-white mb-3">Verification Temporarily Unavailable</h1>
           <p className="text-white/70 mb-2">We couldn't verify your access at this time.</p>
-          <p className="text-white/60 text-sm mb-6">Error: {ownerError}</p>
+          <p className="text-white/90 text-sm mb-6">Error: {ownerError}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {

@@ -229,7 +229,7 @@ const BrokerCertification = () => {
                 <GraduationCap className="w-12 h-12 text-gray-600" />
               </div>
               <p className="text-gray-600 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
-              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
+              <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
@@ -405,7 +405,7 @@ const BrokerCertification = () => {
                         </div>
                         
                         <div className="mb-4">
-                          <p className="text-xs text-white/60 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
+                          <p className="text-xs text-white/90 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
@@ -417,7 +417,7 @@ const BrokerCertification = () => {
                         </div>
                         
                         <div className="bg-black/10 rounded-lg p-3 border border-gold/20">
-                          <p className="text-xs text-white/60 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
+                          <p className="text-xs text-white/90 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
                           <p className="text-sm text-gray-700">{module.completionCheck}</p>
                         </div>
                       </div>

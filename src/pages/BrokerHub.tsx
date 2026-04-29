@@ -172,7 +172,7 @@ const BrokerHub = () => {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-white font-semibold text-sm mb-1 relative z-10">{card.title}</h3>
-                  <p className="text-white/60 text-xs relative z-10">{card.desc}</p>
+                  <p className="text-white/90 text-xs relative z-10">{card.desc}</p>
                   <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
                 </motion.button>
               );
@@ -201,28 +201,28 @@ const BrokerHub = () => {
                     <CardContent className="p-4 text-center">
                       <Phone className="w-6 h-6 text-blue-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{callLogs.length}</p>
-                      <p className="text-xs text-white/60">Total Calls</p>
+                      <p className="text-xs text-white/90">Total Calls</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-gray-800">
                     <CardContent className="p-4 text-center">
                       <MessageCircle className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{chatLogs.length}</p>
-                      <p className="text-xs text-white/60">Total Chats</p>
+                      <p className="text-xs text-white/90">Total Chats</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-gray-800">
                     <CardContent className="p-4 text-center">
                       <Target className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{weekCalls + weekChats}</p>
-                      <p className="text-xs text-white/60">This Week</p>
+                      <p className="text-xs text-white/90">This Week</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-gray-800">
                     <CardContent className="p-4 text-center">
                       <TrendingUp className="w-6 h-6 text-amber-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{monthCalls + monthChats}</p>
-                      <p className="text-xs text-white/60">This Month</p>
+                      <p className="text-xs text-white/90">This Month</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -242,7 +242,7 @@ const BrokerHub = () => {
                         return (
                           <div key={mod.id} className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50">
                             <div className="flex items-center gap-2">
-                              {done ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-white/60" />}
+                              {done ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-white/90" />}
                               <span className="text-sm text-white/85">{mod.title}</span>
                             </div>
                             <Badge className={done ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-zinc-700/50 text-white/70 border-gray-600'}>
@@ -263,7 +263,7 @@ const BrokerHub = () => {
                 <Card className="bg-zinc-900/60 border-gray-800">
                   <CardContent className="p-6">
                     {callLogs.length === 0 ? (
-                      <p className="text-center text-white/60 py-8">No call logs yet</p>
+                      <p className="text-center text-white/90 py-8">No call logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {callLogs.slice(0, 10).map((call: any) => (
@@ -272,7 +272,7 @@ const BrokerHub = () => {
                               <Phone className="w-4 h-4 text-blue-400" />
                               <div>
                                 <p className="text-sm text-white">{call.phone_number}</p>
-                                <p className="text-xs text-white/60">{format(new Date(call.created_at), 'MMM d, HH:mm')}</p>
+                                <p className="text-xs text-white/90">{format(new Date(call.created_at), 'MMM d, HH:mm')}</p>
                               </div>
                             </div>
                             <Badge className="bg-zinc-700/50 text-white/85 border-gray-600 text-xs">{call.call_status || 'completed'}</Badge>
@@ -288,7 +288,7 @@ const BrokerHub = () => {
                 <Card className="bg-zinc-900/60 border-gray-800">
                   <CardContent className="p-6">
                     {chatLogs.length === 0 ? (
-                      <p className="text-center text-white/60 py-8">No chat logs yet</p>
+                      <p className="text-center text-white/90 py-8">No chat logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {chatLogs.slice(0, 10).map((chat: any) => (
@@ -297,10 +297,10 @@ const BrokerHub = () => {
                               <MessageCircle className="w-4 h-4 text-emerald-400" />
                               <div>
                                 <p className="text-sm text-white">{chat.platform || 'WhatsApp'} - {chat.contact_number}</p>
-                                <p className="text-xs text-white/60">{chat.message_count} messages</p>
+                                <p className="text-xs text-white/90">{chat.message_count} messages</p>
                               </div>
                             </div>
-                            <span className="text-xs text-white/60">{format(new Date(chat.created_at), 'MMM d')}</span>
+                            <span className="text-xs text-white/90">{format(new Date(chat.created_at), 'MMM d')}</span>
                           </div>
                         ))}
                       </div>
@@ -315,7 +315,7 @@ const BrokerHub = () => {
                     {supportTickets.length === 0 ? (
                       <div className="text-center py-8">
                         <Ticket className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                        <p className="text-white/60">No support tickets</p>
+                        <p className="text-white/90">No support tickets</p>
                         <Button
                           className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
                           onClick={() => navigate('/support')}
@@ -343,7 +343,7 @@ const BrokerHub = () => {
                           >
                             <div>
                               <p className="text-sm text-white">{ticket.subject}</p>
-                              <p className="text-xs text-white/60">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
+                              <p className="text-xs text-white/90">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
                             </div>
                             <Badge className={
                               ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
@@ -445,7 +445,7 @@ const BrokerHub = () => {
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
-                  <p className="text-white/60 text-xs mt-1">{tool.desc}</p>
+                  <p className="text-white/90 text-xs mt-1">{tool.desc}</p>
                 </button>
               );
             })}

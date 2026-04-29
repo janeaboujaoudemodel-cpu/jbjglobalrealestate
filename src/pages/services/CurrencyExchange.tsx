@@ -159,7 +159,7 @@ const CurrencyExchange = () => {
                     <Play className="w-6 h-6 text-gold ml-1" />
                   </div>
                   <p className="text-gold text-sm font-medium">Cross-Border Buying Made Easier</p>
-                  <p className="text-white/60 text-xs mt-1">Video Coming Soon</p>
+                  <p className="text-white/90 text-xs mt-1">Video Coming Soon</p>
                 </div>
               </div>
             </motion.div>

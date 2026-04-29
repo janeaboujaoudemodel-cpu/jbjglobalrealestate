@@ -141,7 +141,7 @@ What would you like to create today?`,
           </div>
           <div>
             <h3 className="font-semibold text-white">Design Assistant</h3>
-            <p className="text-xs text-white/60">Describe your dream space</p>
+            <p className="text-xs text-white/90">Describe your dream space</p>
           </div>
         </div>
 
@@ -189,7 +189,7 @@ What would you like to create today?`,
         {/* Example Prompts */}
         {messages.length === 1 && (
           <div className="px-4 pb-4">
-            <p className="text-xs text-white/60 mb-2">Try one of these:</p>
+            <p className="text-xs text-white/90 mb-2">Try one of these:</p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.slice(0, 2).map((prompt, index) => (
                 <button

@@ -108,7 +108,7 @@ const ExecutiveOverview = () => {
                 One-glance understanding of business health across BUY · SELL · RENT
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/90">
               <Clock className="w-4 h-4" />
               <span>Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleString() : "Loading..."}</span>
             </div>
@@ -157,7 +157,7 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.buy}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/90 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
 
@@ -172,7 +172,7 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.sell}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/90 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
 
@@ -187,7 +187,7 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.rent}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/90 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
               </div>
@@ -205,7 +205,7 @@ const ExecutiveOverview = () => {
                       {metrics.weeklyVelocity}
                       {getTrendIcon(metrics.leadQualityTrend)}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">New leads this week</p>
+                    <p className="text-xs text-white/90 mt-1">New leads this week</p>
                   </CardContent>
                 </Card>
 
@@ -219,7 +219,7 @@ const ExecutiveOverview = () => {
                     <div className="text-2xl font-bold text-white">
                       {metrics.monthlyVelocity}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">New leads (30 days)</p>
+                    <p className="text-xs text-white/90 mt-1">New leads (30 days)</p>
                   </CardContent>
                 </Card>
 
@@ -236,7 +236,7 @@ const ExecutiveOverview = () => {
                         {metrics.leadQualityTrend}
                       </span>
                     </div>
-                    <p className="text-xs text-white/60 mt-1">vs. previous period</p>
+                    <p className="text-xs text-white/90 mt-1">vs. previous period</p>
                   </CardContent>
                 </Card>
 
@@ -250,7 +250,7 @@ const ExecutiveOverview = () => {
                     <div className="text-2xl font-bold text-gold">
                       {metrics.activeDeals.buy + metrics.activeDeals.sell + metrics.activeDeals.rent}
                     </div>
-                    <p className="text-xs text-white/60 mt-1">All qualified deals</p>
+                    <p className="text-xs text-white/90 mt-1">All qualified deals</p>
                   </CardContent>
                 </Card>
               </div>
@@ -277,7 +277,7 @@ const ExecutiveOverview = () => {
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-white/60 mt-4">
+                  <p className="text-xs text-white/90 mt-4">
                     Momentum indicators are directional summaries based on aggregated Open Data. Not predictive.
                   </p>
                 </CardContent>
@@ -298,7 +298,7 @@ const ExecutiveOverview = () => {
                         Supply vs demand pressure, RENT absorption velocity
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-gold transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-white/90 group-hover:text-gold transition-colors" />
                   </div>
                 </Link>
 
@@ -315,14 +315,14 @@ const ExecutiveOverview = () => {
                         Compliance alerts, language risk flags, audit status
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-gold transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-white/90 group-hover:text-gold transition-colors" />
                   </div>
                 </Link>
               </div>
 
               {/* Footer Attribution */}
               <div className="mt-12 pt-6 border-t border-gray-800 text-center">
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-white/90">
                   Executive Dashboard • Data sourced from CRM (anonymized) and Open Data (aggregated) • 
                   AI insights are descriptive only, not predictive
                 </p>

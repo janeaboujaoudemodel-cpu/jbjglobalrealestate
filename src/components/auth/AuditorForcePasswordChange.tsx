@@ -58,7 +58,7 @@ const AuditorForcePasswordChange = ({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
             <Input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -71,14 +71,14 @@ const AuditorForcePasswordChange = ({
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/85"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/90 hover:text-white/85"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/90" />
             <Input
               type={showPassword ? "text" : "password"}
               value={confirmPassword}

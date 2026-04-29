@@ -263,7 +263,7 @@ const AIROICalculatorPremium = () => {
                   <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Total ROI</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.roi}%</p>
-                    <p className="text-white/60 text-xs mt-1">over {formData.holdingPeriod} years</p>
+                    <p className="text-white/90 text-xs mt-1">over {formData.holdingPeriod} years</p>
                   </div>
                 )}
                 {response.netYield && (
@@ -277,7 +277,7 @@ const AIROICalculatorPremium = () => {
                   <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Est. Appreciation</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.appreciation}%</p>
-                    <p className="text-white/60 text-xs mt-1">projected growth</p>
+                    <p className="text-white/90 text-xs mt-1">projected growth</p>
                   </div>
                 )}
               </div>

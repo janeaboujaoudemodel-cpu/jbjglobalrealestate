@@ -148,7 +148,7 @@ const ExecutiveRisk = () => {
                 Early warning system and audit readiness status
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/90">
               <Clock className="w-4 h-4" />
               <span>Last updated: {new Date(lastUpdated).toLocaleString()}</span>
             </div>
@@ -301,7 +301,7 @@ const ExecutiveRisk = () => {
                               )}
                             </div>
                             <p className="text-white/85 text-sm">{alert.message}</p>
-                            <p className="text-white/60 text-xs mt-1">
+                            <p className="text-white/90 text-xs mt-1">
                               {new Date(alert.timestamp).toLocaleString()}
                             </p>
                           </div>
@@ -390,7 +390,7 @@ const ExecutiveRisk = () => {
 
               {/* Footer */}
               <div className="mt-12 pt-6 border-t border-gray-800 text-center">
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-white/90">
                   Risk & Compliance Monitor • All events logged and auditable
                 </p>
                 <p className="text-xs text-gold mt-0.5">JBJ Global Real Estate</p>

@@ -55,7 +55,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
         </DialogHeader>
 
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/90" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,9 +67,9 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
 
         <div className="overflow-y-auto max-h-[55vh] space-y-2 pr-1">
           {isLoading ? (
-            <div className="text-center py-12 text-white/60">Loading developers...</div>
+            <div className="text-center py-12 text-white/90">Loading developers...</div>
           ) : filteredDevelopers.length === 0 ? (
-            <div className="text-center py-12 text-white/60">No developers found</div>
+            <div className="text-center py-12 text-white/90">No developers found</div>
           ) : (
             filteredDevelopers.map((developer, index) => {
               const tier = getTierBadge(developer.rank);
@@ -97,7 +97,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     {isValidDeveloperLogoUrl(developer.logo_url) ? (
                       <img src={developer.logo_url as string} alt={developer.name} className="w-full h-full object-contain" />
                     ) : (
-                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-white/60"}`} />
+                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-white/90"}`} />
                     )}
                   </div>
                   

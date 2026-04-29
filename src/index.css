@@ -963,7 +963,7 @@ All colors MUST be HSL.
   }
   
   .jj-title-split span:not(:first-child) {
-    @apply text-white/60;
+    @apply text-white/90;
   }
 
   /* ============================================================
@@ -1072,7 +1072,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card-role {
-    @apply text-sm font-normal text-white/60;
+    @apply text-sm font-normal text-white/90;
   }
 
   /* --- CRM Record Card --- */
@@ -1254,7 +1254,7 @@ All colors MUST be HSL.
 
   /* --- Inactive/Default Item --- */
   .jj-inactive-item {
-    @apply text-white/40 bg-transparent border border-transparent;
+    @apply text-white/85 bg-transparent border border-transparent;
   }
 
   .jj-inactive-item:hover {
@@ -1262,7 +1262,7 @@ All colors MUST be HSL.
   }
 
   .jj-inactive-item-icon {
-    @apply text-white/60;
+    @apply text-white/90;
   }
 
   .jj-inactive-item-number {
@@ -1275,7 +1275,7 @@ All colors MUST be HSL.
   }
 
   .jj-tab-inactive {
-    @apply bg-transparent text-white/60 border border-white/10;
+    @apply bg-transparent text-white/90 border border-white/10;
   }
 
   .jj-tab-inactive:hover {
@@ -1288,7 +1288,7 @@ All colors MUST be HSL.
   }
 
   .jj-sort-inactive {
-    @apply bg-white/5 text-white/60;
+    @apply bg-white/5 text-white/90;
   }
 
   .jj-sort-inactive:hover {
@@ -1301,17 +1301,17 @@ All colors MUST be HSL.
   }
 
   .jj-role {
-    @apply font-normal text-white/60;
+    @apply font-normal text-white/90;
   }
 
   /* --- Label / Tag --- */
   .jj-label {
-    @apply text-xs font-medium uppercase tracking-wider text-white/60;
+    @apply text-xs font-medium uppercase tracking-wider text-white/90;
   }
 
   /* --- Premium Section Label --- */
   .jj-section-label {
-    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-white/60;
+    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-white/90;
     letter-spacing: 0.15em;
   }
 
@@ -1411,7 +1411,7 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-role {
-    @apply text-white/60 text-sm mt-1;
+    @apply text-white/90 text-sm mt-1;
   }
 
   /* Profile image container - ensures proper sizing */

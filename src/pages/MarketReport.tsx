@@ -39,7 +39,7 @@ const MarketReport = () => {
             <h2 className="text-2xl font-bold text-white mb-3">Thank You!</h2>
             <p className="text-gold text-lg font-semibold mb-2">From JBJ Global Real Estate</p>
             <p className="text-white/70 mb-6">You have successfully unlocked your Market Intelligence Book. Opening now...</p>
-            <div className="flex items-center justify-center gap-2 text-white/60">
+            <div className="flex items-center justify-center gap-2 text-white/90">
               <div className="w-5 h-5 border-2 border-gold/50 border-t-gold rounded-full animate-spin" />
               <span className="text-sm">Preparing your book...</span>
             </div>
@@ -111,7 +111,7 @@ const MarketReport = () => {
                       <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-2">
                         UAE Real Estate<span className="block text-gold">Market Intelligence</span>
                       </h3>
-                      <FounderContent fallback={null}><p className="text-white/60 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p></FounderContent>
+                      <FounderContent fallback={null}><p className="text-white/90 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p></FounderContent>
                       <div className="mt-6 pt-4 border-t border-gray-800"><p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p></div>
                     </div>
                     <div className="absolute right-0 top-0 bottom-0 w-3">
@@ -194,7 +194,7 @@ const MarketReport = () => {
                     <CheckCircle className="w-10 h-10 text-gold" />
                   </div>
                   <h2 className="text-black text-2xl font-bold mb-2">Welcome back, <span className="text-gold">{leadData?.fullName || leadData?.email}</span></h2>
-                  <p className="text-white/60 text-sm mb-8">Click below to instantly access your Market Intelligence book.</p>
+                  <p className="text-white/90 text-sm mb-8">Click below to instantly access your Market Intelligence book.</p>
                   <Button variant="primary" size="lg" onClick={handleDirectDownload} disabled={isGeneratingPdf} className="w-full h-14 text-base shadow-[0_10px_30px_rgba(200,167,102,0.4)] hover:shadow-[0_15px_40px_rgba(200,167,102,0.5)] transition-all">
                     <Download className="w-5 h-5 mr-2" />{isGeneratingPdf ? "Downloading UAE Market Intelligence 2026..." : "Download UAE Market Intelligence 2026"}<ArrowUpRight className="w-5 h-5 ml-2" />
                   </Button>
@@ -272,7 +272,7 @@ const MarketReport = () => {
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
                 <p className="text-gray-600 text-xs mb-1">Created by <span className="text-black font-semibold">JBJ Global Real Estate</span></p>
                 <p className="text-gray-700 text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
-                <p className="text-white/60 text-[10px] mt-2 uppercase tracking-widest">Real Estate Brokerage • Dubai, UAE</p>
+                <p className="text-white/90 text-[10px] mt-2 uppercase tracking-widest">Real Estate Brokerage • Dubai, UAE</p>
               </div>
             </motion.aside>
           </div>

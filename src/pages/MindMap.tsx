@@ -388,18 +388,18 @@ const MindMap = () => {
               {selectedNode ? (
                 <div className="bg-zinc-900 rounded-lg p-3">
                   <p className="text-sm">{nodes.find(n => n.id === selectedNode)?.text}</p>
-                  <p className="text-xs text-white/60 mt-1">
+                  <p className="text-xs text-white/90 mt-1">
                     {nodes.find(n => n.id === selectedNode)?.children.length} children
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-white/60">Click a node to select it</p>
+                <p className="text-sm text-white/90">Click a node to select it</p>
               )}
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-white/70 mb-3">Tips</h3>
-              <ul className="text-xs text-white/60 space-y-1">
+              <ul className="text-xs text-white/90 space-y-1">
                 <li>• Click to select a node</li>
                 <li>• Double-click to edit text</li>
                 <li>• Drag nodes to reposition</li>

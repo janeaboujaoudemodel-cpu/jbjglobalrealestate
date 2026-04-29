@@ -599,7 +599,7 @@ const VideoResizePack = () => {
                       <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">1</div>
                       <div>
                         <CardTitle className="text-white">Upload Your Video</CardTitle>
-                        <CardDescription className="text-white/60">MP4, MOV, or WebM • Max 500MB</CardDescription>
+                        <CardDescription className="text-white/90">MP4, MOV, or WebM • Max 500MB</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -632,7 +632,7 @@ const VideoResizePack = () => {
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
-                            <p className="text-white/50 text-sm">or click to browse</p>
+                            <p className="text-white/90 text-sm">or click to browse</p>
                           </>
                         )}
                       </div>
@@ -658,19 +658,19 @@ const VideoResizePack = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-sm">
                               <div>
-                                <p className="text-white/50">Resolution</p>
+                                <p className="text-white/90">Resolution</p>
                                 <p className="text-white">{uploadedVideo.width}×{uploadedVideo.height}</p>
                               </div>
                               <div>
-                                <p className="text-white/50">Orientation</p>
+                                <p className="text-white/90">Orientation</p>
                                 <p className="text-white capitalize">{uploadedVideo.orientation}</p>
                               </div>
                               <div>
-                                <p className="text-white/50">Duration</p>
+                                <p className="text-white/90">Duration</p>
                                 <p className="text-white">{Math.floor(uploadedVideo.duration / 60)}:{String(Math.floor(uploadedVideo.duration % 60)).padStart(2, "0")}</p>
                               </div>
                               <div>
-                                <p className="text-white/50">Size</p>
+                                <p className="text-white/90">Size</p>
                                 <p className="text-white">{(uploadedVideo.size / (1024 * 1024)).toFixed(1)} MB</p>
                               </div>
                             </div>
@@ -712,7 +712,7 @@ const VideoResizePack = () => {
                             <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">2</div>
                             <div>
                               <CardTitle className="text-white">Target Output</CardTitle>
-                              <CardDescription className="text-white/60">Choose how to transform your video</CardDescription>
+                              <CardDescription className="text-white/90">Choose how to transform your video</CardDescription>
                             </div>
                           </div>
                         </CardHeader>
@@ -738,11 +738,11 @@ const VideoResizePack = () => {
                                 }`}
                               >
                                 <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
-                                <div className={`mb-2 ${targetOutput === option.value ? "text-gold" : "text-white/50"}`}>
+                                <div className={`mb-2 ${targetOutput === option.value ? "text-gold" : "text-white/90"}`}>
                                   {option.icon}
                                 </div>
                                 <p className="font-medium text-white text-sm">{option.label}</p>
-                                <p className="text-xs text-white/50 text-center mt-1">{option.desc}</p>
+                                <p className="text-xs text-white/90 text-center mt-1">{option.desc}</p>
                                 {targetOutput === option.value && (
                                   <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-gold" />
                                 )}
@@ -755,7 +755,7 @@ const VideoResizePack = () => {
                             <ZoomIn className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                             <div>
                               <p className="text-sm text-gold font-medium">Smart Framing Enabled</p>
-                              <p className="text-xs text-white/60">AI automatically detects subjects and keeps them in frame during reframe - no blind center-crops.</p>
+                              <p className="text-xs text-white/90">AI automatically detects subjects and keeps them in frame during reframe - no blind center-crops.</p>
                             </div>
                           </div>
                         </CardContent>
@@ -780,7 +780,7 @@ const VideoResizePack = () => {
                               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">3</div>
                               <div>
                                 <CardTitle className="text-white">Export Formats</CardTitle>
-                                <CardDescription className="text-white/60">Select the formats you need</CardDescription>
+                                <CardDescription className="text-white/90">Select the formats you need</CardDescription>
                               </div>
                             </div>
                             <div className="flex gap-2">
@@ -818,7 +818,7 @@ const VideoResizePack = () => {
                                   onClick={() => toggleFormat(format.id)}
                                 >
                                   <div className="flex items-center justify-between mb-3">
-                                    <div className={isSelected ? "text-gold" : "text-white/50"}>
+                                    <div className={isSelected ? "text-gold" : "text-white/90"}>
                                       {format.icon}
                                     </div>
                                     <Checkbox 
@@ -827,8 +827,8 @@ const VideoResizePack = () => {
                                     />
                                   </div>
                                   <p className="font-medium text-white text-sm">{format.name}</p>
-                                  <p className="text-xs text-white/50">{format.width}×{format.height}</p>
-                                  <Badge variant="outline" className="mt-2 text-xs border-white/20 text-white/60">
+                                  <p className="text-xs text-white/90">{format.width}×{format.height}</p>
+                                  <Badge variant="outline" className="mt-2 text-xs border-white/20 text-white/90">
                                     {format.platform}
                                   </Badge>
                                 </div>
@@ -842,7 +842,7 @@ const VideoResizePack = () => {
                               <p className="text-white font-medium">
                                 {selectedFormats.length} format{selectedFormats.length !== 1 ? "s" : ""} selected
                               </p>
-                              <p className="text-sm text-white/50">Projects save automatically</p>
+                              <p className="text-sm text-white/90">Projects save automatically</p>
                             </div>
                             <Button 
                               size="lg"
@@ -885,7 +885,7 @@ const VideoResizePack = () => {
                               <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">4</div>
                               <div>
                                 <CardTitle className="text-white">Export Results</CardTitle>
-                                <CardDescription className="text-white/60">
+                                <CardDescription className="text-white/90">
                                   {completedCount} of {jobs.length} complete
                                 </CardDescription>
                               </div>
@@ -916,7 +916,7 @@ const VideoResizePack = () => {
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                       <p className="font-medium text-white">{format?.name}</p>
-                                      <Badge variant="outline" className="text-xs border-white/20 text-white/60">
+                                      <Badge variant="outline" className="text-xs border-white/20 text-white/90">
                                         {format?.aspect}
                                       </Badge>
                                     </div>
@@ -924,7 +924,7 @@ const VideoResizePack = () => {
                                       <Progress value={job.progress} className="h-2" />
                                     )}
                                     {job.status === "queued" && (
-                                      <p className="text-xs text-white/50">Waiting in queue...</p>
+                                      <p className="text-xs text-white/90">Waiting in queue...</p>
                                     )}
                                     {job.status === "completed" && (
                                       <p className="text-xs text-green-400">Ready to download</p>
@@ -985,7 +985,7 @@ const VideoResizePack = () => {
                       <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">1</div>
                       <div>
                         <CardTitle className="text-white">Upload Your Video</CardTitle>
-                        <CardDescription className="text-white/60">MP4, MOV, or WebM • Max 500MB</CardDescription>
+                        <CardDescription className="text-white/90">MP4, MOV, or WebM • Max 500MB</CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -1018,7 +1018,7 @@ const VideoResizePack = () => {
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
-                            <p className="text-white/50 text-sm">or click to browse</p>
+                            <p className="text-white/90 text-sm">or click to browse</p>
                           </>
                         )}
                       </div>
@@ -1146,7 +1146,7 @@ const VideoResizePack = () => {
                                     <div className="w-16 h-10 bg-white/10 rounded flex items-center justify-center text-xs text-white/70">
                                       Shot {idx + 1}
                                     </div>
-                                    <p className="text-xs text-white/50 mt-1">
+                                    <p className="text-xs text-white/90 mt-1">
                                       {shot.startTime.toFixed(1)}s
                                     </p>
                                   </button>
@@ -1175,11 +1175,11 @@ const VideoResizePack = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-sm">
                               <div>
-                                <p className="text-white/50">Resolution</p>
+                                <p className="text-white/90">Resolution</p>
                                 <p className="text-white">{uploadedVideo.width}×{uploadedVideo.height}</p>
                               </div>
                               <div>
-                                <p className="text-white/50">Duration</p>
+                                <p className="text-white/90">Duration</p>
                                 <p className="text-white">{Math.floor(uploadedVideo.duration / 60)}:{String(Math.floor(uploadedVideo.duration % 60)).padStart(2, "0")}</p>
                               </div>
                             </div>
@@ -1225,7 +1225,7 @@ const VideoResizePack = () => {
                             <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">2</div>
                             <div>
                               <CardTitle className="text-white">Reframe Settings</CardTitle>
-                              <CardDescription className="text-white/60">Configure AI tracking and output</CardDescription>
+                              <CardDescription className="text-white/90">Configure AI tracking and output</CardDescription>
                             </div>
                           </div>
                         </CardHeader>
@@ -1251,11 +1251,11 @@ const VideoResizePack = () => {
                                       : "border-white/10 hover:border-gold/30"
                                   }`}
                                 >
-                                  <div className={`mb-2 ${reframeSettings.targetRatio === ratio.value ? "text-gold" : "text-white/50"}`}>
+                                  <div className={`mb-2 ${reframeSettings.targetRatio === ratio.value ? "text-gold" : "text-white/90"}`}>
                                     {ratio.icon}
                                   </div>
                                   <p className="font-medium text-white text-sm">{ratio.label}</p>
-                                  <p className="text-xs text-white/50">{ratio.desc}</p>
+                                  <p className="text-xs text-white/90">{ratio.desc}</p>
                                 </button>
                               ))}
                             </div>
@@ -1314,7 +1314,7 @@ const VideoResizePack = () => {
                               step={5}
                               className="w-full"
                             />
-                            <div className="flex justify-between mt-1 text-xs text-white/50">
+                            <div className="flex justify-between mt-1 text-xs text-white/90">
                               <span>Stable (less movement)</span>
                               <span>Aggressive (follows subject)</span>
                             </div>
@@ -1373,7 +1373,7 @@ const VideoResizePack = () => {
                             <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-sm">3</div>
                             <div>
                               <CardTitle className="text-white">Export</CardTitle>
-                              <CardDescription className="text-white/60">Generate your reframed video</CardDescription>
+                              <CardDescription className="text-white/90">Generate your reframed video</CardDescription>
                             </div>
                           </div>
                         </CardHeader>
@@ -1383,7 +1383,7 @@ const VideoResizePack = () => {
                               <p className="text-white font-medium">
                                 Ready to export {reframeSettings.targetRatio} version
                               </p>
-                              <p className="text-sm text-white/50">
+                              <p className="text-sm text-white/90">
                                 {detectedShots.length} shots with AI tracking • Projects save automatically
                               </p>
                             </div>
@@ -1495,7 +1495,7 @@ const VideoResizePack = () => {
                       {feature.icon}
                     </div>
                     <h3 className="font-semibold text-white mb-2">{feature.title}</h3>
-                    <p className="text-sm text-white/60">{feature.desc}</p>
+                    <p className="text-sm text-white/90">{feature.desc}</p>
                   </CardContent>
                 </Card>
               ))}

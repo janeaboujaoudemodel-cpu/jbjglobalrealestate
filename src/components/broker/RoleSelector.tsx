@@ -140,7 +140,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                       className={`text-xs ${
                         isRoleActive(role.id)
                           ? "border-gold/50 text-gold"
-                          : "border-gray-700 text-white/60"
+                          : "border-gray-700 text-white/90"
                       }`}
                     >
                       {benefit}

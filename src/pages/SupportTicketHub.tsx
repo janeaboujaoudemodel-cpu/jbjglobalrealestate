@@ -367,7 +367,7 @@ const SupportTicketHub = () => {
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
                   <AlertCircle className="w-12 h-12 text-red-400/50 mx-auto mb-3" />
                   <p className="text-red-400 font-medium">Failed to load tickets</p>
-                  <p className="text-white/60 text-sm mt-1">
+                  <p className="text-white/90 text-sm mt-1">
                     {error instanceof Error ? error.message : "Please try again"}
                   </p>
                   <Button
@@ -496,7 +496,7 @@ const SupportTicketHub = () => {
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
                   <Ticket className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-white/70 font-medium">No tickets found</p>
-                  <p className="text-white/60 text-sm mt-1">
+                  <p className="text-white/90 text-sm mt-1">
                     Try adjusting your filters or check back later
                   </p>
                 </div>

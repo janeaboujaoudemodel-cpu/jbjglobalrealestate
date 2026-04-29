@@ -254,7 +254,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User className="w-8 h-8 text-white/60" />
+                      <User className="w-8 h-8 text-white/90" />
                     </div>
                   )}
                   
@@ -322,7 +322,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-zinc-700">
-                    <User className="w-10 h-10 text-white/60" />
+                    <User className="w-10 h-10 text-white/90" />
                   </div>
                 )}
               </div>

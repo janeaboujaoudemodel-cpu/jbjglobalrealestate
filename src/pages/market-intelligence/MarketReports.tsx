@@ -360,7 +360,7 @@ const MarketReportsPage = () => {
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-white/60 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-white/90 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 

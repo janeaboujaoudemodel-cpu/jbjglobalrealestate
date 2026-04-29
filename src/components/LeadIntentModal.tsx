@@ -220,7 +220,7 @@ export default function LeadIntentModal() {
                         </span>
                         {isSelected && <Check className="w-5 h-5 text-gold" />}
                       </div>
-                      <p className="text-white/60 text-sm mt-0.5">{option.description}</p>
+                      <p className="text-white/90 text-sm mt-0.5">{option.description}</p>
                     </div>
                   </button>
                 );
@@ -261,7 +261,7 @@ export default function LeadIntentModal() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
-              <p className="text-white/60 text-xs text-center">
+              <p className="text-white/90 text-xs text-center">
                 You can update your preferences anytime from your profile.
               </p>
             </div>

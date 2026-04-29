@@ -125,17 +125,17 @@ const AINeighborhoodInsightsPremium = () => {
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <School className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-white/60">Education</p>
+              <p className="text-xs text-white/90">Education</p>
               <p className="text-sm font-semibold text-white">Schools</p>
             </Card>
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Hospital className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-white/60">Healthcare</p>
+              <p className="text-xs text-white/90">Healthcare</p>
               <p className="text-sm font-semibold text-white">Facilities</p>
             </Card>
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Train className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-white/60">Transport</p>
+              <p className="text-xs text-white/90">Transport</p>
               <p className="text-sm font-semibold text-white">Access</p>
             </Card>
         </div>
@@ -268,7 +268,7 @@ const AINeighborhoodInsightsPremium = () => {
                 <MapPin className="h-12 w-12 text-teal-400/50" />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Explore</h3>
-              <p className="text-sm text-white/60 mt-2 max-w-sm">
+              <p className="text-sm text-white/90 mt-2 max-w-sm">
                 Enter a location to get AI-powered neighborhood insights with livability scores
               </p>
             </motion.div>

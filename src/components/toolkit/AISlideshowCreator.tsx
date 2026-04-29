@@ -236,7 +236,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
           {/* ── Right: Preview ── */}
           <div className="bg-black rounded-xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
             {slides.length === 0 ? (
-              <div className="absolute inset-0 flex items-center justify-center text-white/30">
+              <div className="absolute inset-0 flex items-center justify-center text-white/85">
                 <div className="text-center">
                   <ImageIcon className="w-16 h-16 mx-auto mb-3" />
                   <p className="text-sm">Add photos to preview slideshow</p>

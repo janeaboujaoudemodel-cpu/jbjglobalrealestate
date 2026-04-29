@@ -222,7 +222,7 @@ const Testimonials = () => {
               </div>
               <div>
                 <p className="font-semibold text-black">{testimonial.name}</p>
-                <p className="text-sm text-white/60">{testimonial.role} • {testimonial.location}</p>
+                <p className="text-sm text-white/90">{testimonial.role} • {testimonial.location}</p>
               </div>
             </div>
             <div className="flex gap-1">
@@ -254,7 +254,7 @@ const Testimonials = () => {
                 <Star className="w-12 h-12 text-gray-600" />
               </div>
               <p className="text-gray-600 text-sm tracking-widest uppercase">Client Stories</p>
-              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
+              <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
@@ -431,7 +431,7 @@ const Testimonials = () => {
                     <div className="aspect-video bg-gray-200 flex items-center justify-center">
                       <div className="text-center">
                         <Video className="w-12 h-12 text-gold mx-auto mb-2" />
-                        <p className="text-sm text-white/60">Video Coming Soon</p>
+                        <p className="text-sm text-white/90">Video Coming Soon</p>
                       </div>
                     </div>
                     <CardContent className="p-4">

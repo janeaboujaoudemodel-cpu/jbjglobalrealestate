@@ -232,7 +232,7 @@ const RealEstateSuite = () => {
                       "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all whitespace-nowrap min-w-fit",
                       isActive
                         ? `${currentColors.active} border ${currentColors.border}`
-                        : "text-white/60 hover:text-white/85 border border-gray-800 hover:border-gray-700"
+                        : "text-white/90 hover:text-white/85 border border-gray-800 hover:border-gray-700"
                     )}
                   >
                     <Icon className="w-4 h-4" />

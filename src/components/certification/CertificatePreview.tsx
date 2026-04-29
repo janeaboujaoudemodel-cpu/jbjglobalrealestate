@@ -98,7 +98,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 CERTIFIED JBJ BROKER
               </div>
 
-              <div className="flex justify-center items-center gap-8 text-white/50 text-xs">
+              <div className="flex justify-center items-center gap-8 text-white/90 text-xs">
                 <div>
                   <div className="w-24 h-px bg-gold/40 mb-2" />
                   <span>Date: {currentDate}</span>

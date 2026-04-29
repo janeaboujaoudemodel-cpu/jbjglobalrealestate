@@ -363,7 +363,7 @@ const AdvancedBrokerToolkit = () => {
           </div>
           <h4 className="text-white font-semibold mb-1">{member.role}</h4>
           <p className={`${member.color} text-sm mb-2`}>{member.name}</p>
-          <p className="text-white/60 text-sm">{member.description}</p>
+          <p className="text-white/90 text-sm">{member.description}</p>
         </CardContent>
       </Card>
     </motion.div>
@@ -379,7 +379,7 @@ const AdvancedBrokerToolkit = () => {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-white text-sm font-medium">{item.name}</h4>
-              <p className="text-white/60 text-xs truncate">{item.description}</p>
+              <p className="text-white/90 text-xs truncate">{item.description}</p>
             </div>
           </div>
         </CardContent>
@@ -405,7 +405,7 @@ const AdvancedBrokerToolkit = () => {
                     </Badge>
                   )}
                 </div>
-                <p className="text-white/60 text-xs truncate">{tool.description}</p>
+                <p className="text-white/90 text-xs truncate">{tool.description}</p>
               </div>
               <ArrowRight className={`h-4 w-4 ${tool.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
             </div>
@@ -549,7 +549,7 @@ const AdvancedBrokerToolkit = () => {
             </Link>
           </div>
           
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/60">
+          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/90">
             <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-gold transition-colors">
               <Mail className="h-4 w-4" />
               CONTACT@JBJ.AE

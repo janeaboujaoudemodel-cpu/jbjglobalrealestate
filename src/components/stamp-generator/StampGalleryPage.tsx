@@ -797,7 +797,7 @@ export default function StampGalleryPage() {
                 <p className="text-white font-medium text-sm truncate">
                   {(lbDesign.template_key || 'stamp').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                 </p>
-                <p className="text-white/50 text-xs">{lightboxIdx + 1} / {designs.length}</p>
+                <p className="text-white/90 text-xs">{lightboxIdx + 1} / {designs.length}</p>
               </div>
             </div>
 
@@ -806,7 +806,7 @@ export default function StampGalleryPage() {
                 <button onClick={() => setZoom(z => Math.max(z - 0.25, 0.25))} className="p-1.5 rounded hover:bg-white/20 text-white transition-colors"><ZoomOut size={14}/></button>
                 <span className="text-white/80 text-xs font-mono w-12 text-center">{Math.round(zoom * 100)}%</span>
                 <button onClick={() => setZoom(z => Math.min(z + 0.25, 5))} className="p-1.5 rounded hover:bg-white/20 text-white transition-colors"><ZoomIn size={14}/></button>
-                <button onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }} className="p-1.5 rounded hover:bg-white/20 text-white/60 hover:text-white transition-colors"><RotateCcw size={13}/></button>
+                <button onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }} className="p-1.5 rounded hover:bg-white/20 text-white/90 hover:text-white transition-colors"><RotateCcw size={13}/></button>
               </div>
               <button onClick={() => toggleFavorite(lbDesign)}
                 className={`p-2 rounded-lg transition-colors ${lbDesign.is_favorite ? 'bg-[hsl(var(--gold))] text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}>
@@ -858,7 +858,7 @@ export default function StampGalleryPage() {
               <ChevronRight size={22}/>
             </button>
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/30 text-[10px] pointer-events-none">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/85 text-[10px] pointer-events-none">
               Scroll to zoom · Arrow keys to navigate · Esc to close
             </div>
           </div>

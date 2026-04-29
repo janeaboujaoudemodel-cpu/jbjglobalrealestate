@@ -70,7 +70,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
       </CardHeader>
       <CardContent>
         {displayedPoints.length === 0 ? (
-          <div className="text-center text-white/60 py-6">
+          <div className="text-center text-white/90 py-6">
             <Award className="w-10 h-10 mx-auto mb-2 opacity-30" />
             <p>No points activity yet</p>
             <p className="text-xs mt-1">Complete activities to earn points!</p>
@@ -110,7 +110,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
                           {isPositive ? '+' : ''}{entry.points_delta}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-xs text-white/40 mt-0.5">
+                      <div className="flex items-center justify-between text-xs text-white/85 mt-0.5">
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className={cn("text-[10px] py-0 h-5", categoryBadge.className)}>
                             {categoryBadge.label}

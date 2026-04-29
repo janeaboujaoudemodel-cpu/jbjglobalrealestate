@@ -392,7 +392,7 @@ const AIPersonalShopper = () => {
                       <prompt.icon className="w-4 h-4 text-emerald-400" />
                       <span className="text-white text-sm font-medium">{prompt.title}</span>
                     </div>
-                    <p className="text-white/60 text-xs line-clamp-2 group-hover:text-white/70">
+                    <p className="text-white/90 text-xs line-clamp-2 group-hover:text-white/70">
                       {prompt.prompt.substring(0, 80)}...
                     </p>
                   </motion.button>
@@ -544,7 +544,7 @@ const AIPersonalShopper = () => {
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-white/60 mt-2 text-center">
+                <p className="text-xs text-white/90 mt-2 text-center">
                   Press Enter to send • Your plan can be saved and submitted to our concierge team
                 </p>
               </div>

@@ -82,7 +82,7 @@ const ExecutivePerformance = () => {
                 Performance trends, not micro-management metrics
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/90">
               <Clock className="w-4 h-4" />
               <span>Last updated: {new Date(lastUpdated).toLocaleString()}</span>
             </div>
@@ -177,7 +177,7 @@ const ExecutivePerformance = () => {
                       <Progress value={rate} className="h-2" />
                     </div>
                   ))}
-                  <p className="text-xs text-white/60 mt-4">
+                  <p className="text-xs text-white/90 mt-4">
                     Conversion rates based on 90-day rolling average
                   </p>
                 </CardContent>
@@ -251,7 +251,7 @@ const ExecutivePerformance = () => {
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-white/60 mt-4">
+                  <p className="text-xs text-white/90 mt-4">
                     Bottlenecks identified based on stage duration exceeding baseline thresholds
                   </p>
                 </CardContent>
@@ -259,7 +259,7 @@ const ExecutivePerformance = () => {
 
               {/* Footer */}
               <div className="mt-12 pt-6 border-t border-gray-800 text-center">
-                <p className="text-xs text-white/60">
+                <p className="text-xs text-white/90">
                   Performance Snapshot • Trends and patterns, not individual broker rankings
                 </p>
                 <FounderContent>

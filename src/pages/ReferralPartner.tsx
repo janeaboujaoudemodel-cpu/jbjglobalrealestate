@@ -56,7 +56,7 @@ const ReferralPartner = () => {
                 </div>
                 <div>
                   <h2 className="text-white text-2xl font-bold">How It Works</h2>
-                  <p className="text-white/60">Simple and straightforward</p>
+                  <p className="text-white/90">Simple and straightforward</p>
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ const ReferralPartner = () => {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </a>
-                <p className="text-white/60 text-sm mt-4">
+                <p className="text-white/90 text-sm mt-4">
                   Contact us at {CONTACT_INFO.email}
                 </p>
               </div>

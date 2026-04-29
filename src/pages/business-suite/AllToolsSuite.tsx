@@ -113,7 +113,7 @@ const AllToolsSuite = () => {
             <h2 className={`text-xl font-bold ${currentColors.active.split(' ')[0]}`}>
               {currentCategory.label}
             </h2>
-            <span className="text-white/60 text-sm">
+            <span className="text-white/90 text-sm">
               ({currentCategory.tools.length} tools)
             </span>
           </div>
@@ -216,7 +216,7 @@ const AllToolsSuite = () => {
                     )}>
                       {category.label}
                     </span>
-                    <span className="text-xs text-white/60">{category.tools.length} tools</span>
+                    <span className="text-xs text-white/90">{category.tools.length} tools</span>
                   </button>
                 );
               })}

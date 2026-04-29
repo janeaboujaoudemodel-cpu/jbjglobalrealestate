@@ -538,7 +538,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       : "text-gray-600";
     const helperTextStyles = isLight
       ? "text-gray-600"
-      : "text-white/60";
+      : "text-white/90";
     const countryNameStyles = isLight
       ? "text-gold font-medium"
       : "text-gold font-medium";

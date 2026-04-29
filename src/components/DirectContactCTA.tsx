@@ -205,7 +205,7 @@ const DirectContactCTA = ({
 
         {/* Social Links Display */}
         <div className="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-gold/20">
-          <span className="text-white/60 text-xs uppercase tracking-wider">{t('cta.followUs', 'Follow Us:')}</span>
+          <span className="text-white/90 text-xs uppercase tracking-wider">{t('cta.followUs', 'Follow Us:')}</span>
           <a 
             href={SOCIAL_LINKS.linkedin} 
             target="_blank" 

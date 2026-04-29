@@ -106,7 +106,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
               <>
                 <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
                 <h3 className="text-white text-lg font-semibold mb-2">Test Passed!</h3>
-                <p className="text-white/60">
+                <p className="text-white/90">
                   Best score: {Math.round(status.bestScore)}%
                 </p>
               </>
@@ -114,7 +114,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
               <>
                 <BookOpen className="w-12 h-12 text-gold mx-auto mb-4" />
                 <h3 className="text-white text-lg font-semibold mb-2">Ready to Test Your Knowledge?</h3>
-                <p className="text-white/60 mb-4">
+                <p className="text-white/90 mb-4">
                   You need {PASS_THRESHOLD}% to pass. 
                   {status.attemptCount > 0 && ` Attempts: ${status.attemptCount}`}
                 </p>
@@ -217,7 +217,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                     ? "bg-gold text-black"
                     : userAnswers[currentTest[idx].id] !== undefined
                       ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-white/10 text-white/60 hover:bg-white/20"
+                      : "bg-white/10 text-white/90 hover:bg-white/20"
                 )}
               >
                 {idx + 1}

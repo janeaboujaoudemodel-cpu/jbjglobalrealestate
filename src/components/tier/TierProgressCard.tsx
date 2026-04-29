@@ -48,13 +48,13 @@ const SingleTierSection = ({
     {/* Points */}
     <div className="text-center mb-3">
       <div className={cn("text-2xl font-bold", colorClass)}>{totalPoints.toLocaleString()}</div>
-      <div className="text-xs text-white/60">Total Points</div>
+      <div className="text-xs text-white/90">Total Points</div>
     </div>
 
     {/* Progress Bar */}
     {nextTierName && (
       <div className="space-y-1.5">
-        <div className="flex justify-between text-xs text-white/60">
+        <div className="flex justify-between text-xs text-white/90">
           <span>{tierName}</span>
           <span>{nextTierName}</span>
         </div>
@@ -119,7 +119,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
             style={{ '--progress-color': getTierColor(currentTier?.tier_name || 'Starter') } as React.CSSProperties}
           />
         </div>
-        <span className="text-xs text-white/60 whitespace-nowrap">
+        <span className="text-xs text-white/90 whitespace-nowrap">
           {totalPoints.toLocaleString()} pts
         </span>
       </div>
@@ -145,7 +145,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
           {/* Shared Points Banner */}
           <div className="text-center py-3 bg-gold/10 rounded-lg border border-gold/20">
             <div className="text-3xl font-bold text-gold">{totalPoints.toLocaleString()}</div>
-            <div className="text-xs text-white/60">Shared Points Balance</div>
+            <div className="text-xs text-white/90">Shared Points Balance</div>
           </div>
 
           {/* Dual Tier Cards */}
@@ -183,11 +183,11 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
               <div className="space-y-1">
                 {tierProgress.tierHistory.slice(0, 3).map((entry) => (
                   <div key={entry.id} className="flex items-center justify-between text-xs">
-                    <span className="text-white/60">
+                    <span className="text-white/90">
                       {entry.old_tier ? `${entry.old_tier} → ` : 'Started as '}
                       <span className="text-gold">{entry.new_tier}</span>
                     </span>
-                    <span className="text-white/40">
+                    <span className="text-white/85">
                       {new Date(entry.changed_at).toLocaleDateString()}
                     </span>
                   </div>
@@ -225,12 +225,12 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white/5 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gold">{totalPoints.toLocaleString()}</div>
-            <div className="text-xs text-white/60">Total Points</div>
+            <div className="text-xs text-white/90">Total Points</div>
           </div>
           {nextTier && (
             <div className="bg-white/5 rounded-lg p-3 text-center">
               <div className="text-2xl font-bold text-white">{pointsToNextTier.toLocaleString()}</div>
-              <div className="text-xs text-white/60">To {nextTier.tier_name}</div>
+              <div className="text-xs text-white/90">To {nextTier.tier_name}</div>
             </div>
           )}
         </div>
@@ -238,7 +238,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
         {/* Progress Bar */}
         {nextTier && (
           <div className="space-y-2">
-            <div className="flex justify-between text-xs text-white/60">
+            <div className="flex justify-between text-xs text-white/90">
               <span>{currentTier?.tier_name}</span>
               <span>{nextTier.tier_name}</span>
             </div>
@@ -277,11 +277,11 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
             <div className="space-y-1">
               {tierProgress.tierHistory.slice(0, 3).map((entry) => (
                 <div key={entry.id} className="flex items-center justify-between text-xs">
-                  <span className="text-white/60">
+                  <span className="text-white/90">
                     {entry.old_tier ? `${entry.old_tier} → ` : 'Started as '}
                     <span className="text-gold">{entry.new_tier}</span>
                   </span>
-                  <span className="text-white/40">
+                  <span className="text-white/85">
                     {new Date(entry.changed_at).toLocaleDateString()}
                   </span>
                 </div>

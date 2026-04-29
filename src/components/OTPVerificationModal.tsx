@@ -241,7 +241,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
               {/* Resend */}
               <div className="text-center">
-                <p className="text-white/60 text-sm mb-2">Didn't receive the code?</p>
+                <p className="text-white/90 text-sm mb-2">Didn't receive the code?</p>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -261,7 +261,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               </div>
 
               {/* Help Text */}
-              <p className="text-white/60 text-xs text-center">
+              <p className="text-white/90 text-xs text-center">
                 The code is valid for 10 minutes. Check your {type === 'email' ? 'inbox and spam folder' : 'messages'}.
               </p>
             </div>

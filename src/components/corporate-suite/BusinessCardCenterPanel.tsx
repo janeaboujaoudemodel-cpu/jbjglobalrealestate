@@ -262,7 +262,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
           </div>
         )}
 
-        <div className={`flex items-center gap-3 text-[10px] ${cardShape === "digital" ? "text-white/40" : "text-[hsl(var(--muted-foreground))]"}`}>
+        <div className={`flex items-center gap-3 text-[10px] ${cardShape === "digital" ? "text-white/85" : "text-[hsl(var(--muted-foreground))]"}`}>
           <span>{CARD_SHAPES.find(s => s.id === cardShape)?.label} · {CARD_SHAPES.find(s => s.id === cardShape)?.ratio}</span>
           <span>·</span>
           <span>F: {TEMPLATES.find(t => t.id === frontTemplate)?.label} · B: {TEMPLATES.find(t => t.id === backTemplate)?.label}</span>
@@ -283,7 +283,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                   className={`flex-1 py-2.5 text-xs font-semibold transition-all ${
                     digitalTab === tab
                       ? "bg-blue-600/30 text-blue-100 border-b-2 border-blue-400"
-                      : "bg-[#ffffff08] text-white/50 hover:text-white/70"
+                      : "bg-[#ffffff08] text-white/90 hover:text-white/70"
                   }`}
                 >
                   {tab === "card" ? "📇 Card" : "📄 Landing Page"}

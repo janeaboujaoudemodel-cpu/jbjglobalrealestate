@@ -62,15 +62,15 @@ const Philanthropy = () => {
             className="flex flex-wrap justify-center gap-6 mt-12"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2 text-white/60">
+            <div className="flex items-center gap-2 text-white/90">
               <Heart className="w-5 h-5 text-gold" />
               <span className="text-sm">Community Support</span>
             </div>
-            <div className="flex items-center gap-2 text-white/60">
+            <div className="flex items-center gap-2 text-white/90">
               <Users className="w-5 h-5 text-gold" />
               <span className="text-sm">Social Responsibility</span>
             </div>
-            <div className="flex items-center gap-2 text-white/60">
+            <div className="flex items-center gap-2 text-white/90">
               <Globe className="w-5 h-5 text-gold" />
               <span className="text-sm">Global Impact</span>
             </div>

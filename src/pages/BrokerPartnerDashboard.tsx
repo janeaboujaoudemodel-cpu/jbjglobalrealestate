@@ -204,7 +204,7 @@ const BrokerPartnerDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium group-hover:text-purple-400 transition-colors">{tool.name}</p>
-                          <p className="text-xs text-white/60">{tool.description}</p>
+                          <p className="text-xs text-white/90">{tool.description}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -251,11 +251,11 @@ const BrokerPartnerDashboard = () => {
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
-                            <span className="text-xs text-white/60 hidden md:block">{list.lastUpdated}</span>
+                            <span className="text-xs text-white/90 hidden md:block">{list.lastUpdated}</span>
                             <Badge className={list.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}>
                               {list.status === 'active' ? 'Active' : 'Follow-up'}
                             </Badge>
-                            <ChevronRight className="w-5 h-5 text-white/60" />
+                            <ChevronRight className="w-5 h-5 text-white/90" />
                           </div>
                         </div>
                       ))}
@@ -299,7 +299,7 @@ const BrokerPartnerDashboard = () => {
                             </div>
                             <div>
                               <h4 className="font-medium text-sm">{report.name}</h4>
-                              <p className="text-xs text-white/60">{report.type} • {report.date}</p>
+                              <p className="text-xs text-white/90">{report.type} • {report.date}</p>
                             </div>
                           </div>
                           <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
@@ -370,17 +370,17 @@ const BrokerPartnerDashboard = () => {
                       <Link to="/broker-education">
                         <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Course Library</p>
-                          <p className="text-xs text-white/60">Access broker training materials</p>
+                          <p className="text-xs text-white/90">Access broker training materials</p>
                         </div>
                       </Link>
                       <Link to="/broker-faq">
                         <div className="p-3 rounded-lg bg-zinc-800/50 hover:bg-gray-800 transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Broker FAQ</p>
-                          <p className="text-xs text-white/60">Common questions answered</p>
+                          <p className="text-xs text-white/90">Common questions answered</p>
                         </div>
                       </Link>
                     </div>
-                    <p className="text-xs text-white/60 mt-4">
+                    <p className="text-xs text-white/90 mt-4">
                       <Star className="w-3 h-3 inline mr-1" />
                       Read-only access for external partners
                     </p>

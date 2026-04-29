@@ -220,7 +220,7 @@ export default function FreeToolsBanner() {
                 {/* Countdown timer - positioned bottom-right */}
                 <div className="flex justify-end mt-4">
                   {!canClose ? (
-                    <p className="text-white/60 text-xs">
+                    <p className="text-white/90 text-xs">
                       You can close this window in{" "}
                       <span className="text-gold font-bold">{countdown}</span>{" "}
                       {countdown === 1 ? "second" : "seconds"}…
