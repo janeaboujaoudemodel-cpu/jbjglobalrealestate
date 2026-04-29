@@ -262,9 +262,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   }, [filters, onFilterChange]);
 
   const hasActiveFilters =
+    filters.searchQuery !== '' ||
     filters.priceMin !== '' ||
     filters.priceMax !== '' ||
+    filters.sizeMin !== '' ||
+    filters.sizeMax !== '' ||
     filters.paymentPlanMax < 100 ||
+    filters.afterHandover ||
     filters.postHandoverOnly ||
     filters.propertyCategory !== null ||
     filters.propertyTypes.length > 0 ||
@@ -273,9 +277,57 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     filters.sortBy !== null ||
     filters.hideSoldOut ||
     filters.constructionStatuses.length > 0 ||
-    filters.views.length > 0;
+    filters.views.length > 0 ||
+    filters.emirates.length > 0 ||
+    filters.areas.length > 0 ||
+    filters.developers.length > 0;
 
-  const resetAll = () => onFilterChange({ ...defaultShortcutFilters });
+  /**
+   * Single source of truth for "Reset all filters":
+   *   1. Clear every filter back to the canonical defaults.
+   *   2. Force every controlled popover (and the advanced panel / save
+   *      modal) closed so the user isn't left with a stale UI surface
+   *      hanging open over reset chips.
+   *   3. Drop any draft state inside the price / payments popovers so
+   *      reopening them shows zeroed inputs, not the previous typed values.
+   *   4. Navigate to /properties with no query string so the user sees the
+   *      full unfiltered results immediately, regardless of where they
+   *      triggered reset from.
+   *
+   * This is the one control the user can rely on to "start over".
+   */
+  const resetAll = useCallback(() => {
+    // 1. Reset filter state — propagates to URL via GlobalFilterBar's
+    //    useEffect-driven encodeFilters/navigate pipeline.
+    onFilterChange({ ...defaultShortcutFilters });
+
+    // 2. Close every popover / sheet this component owns.
+    setPriceOpen(false);
+    setPaymentsOpen(false);
+    setHandoverOpen(false);
+    setPropertyTypeOpen(false);
+    setBedroomsOpen(false);
+    setStatusOpen(false);
+    setConstructionOpen(false);
+    setViewsOpen(false);
+    setAdvancedOpen(false);
+    setSaveModalOpen(false);
+
+    // 3. Wipe popover drafts so reopening shows clean inputs.
+    setDraftPriceMin('');
+    setDraftPriceMax('');
+    setDraftPaymentPlanMax(defaultShortcutFilters.paymentPlanMax);
+    setDraftAfterHandover(defaultShortcutFilters.afterHandover);
+    setDraftPostHandoverOnly(defaultShortcutFilters.postHandoverOnly);
+
+    // 4. Navigate to the unfiltered listing. Defer one tick so popover
+    //    close animations can settle before the route potentially
+    //    unmounts the bar (mirrors GlobalFilterBar's navigation pattern).
+    setTimeout(() => {
+      navigate('/properties');
+    }, 0);
+  }, [onFilterChange, navigate]);
+
 
   const toggleArray = (arr: string[], val: string) =>
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
