@@ -137,54 +137,80 @@ export const useImportAllDevelopersToRegistry = () => {
       const PAGE = 1000;
       let from = 0;
       let imported = 0;
+      let scanned = 0;
 
-      // Page through the catalog (Supabase caps a single request at 1000 rows).
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { data: devs, error } = await supabase
-          .from("developers")
-          .select("name, slug, website_url")
-          .or("is_hidden.is.null,is_hidden.eq.false")
-          .order("name", { ascending: true })
-          .range(from, from + PAGE - 1);
-        if (error) throw error;
-        if (!devs || devs.length === 0) break;
+      // Persistent loading toast — updates with progress, dismissed on completion.
+      const toastId = toast.loading("Starting import…", {
+        description: "Fetching the developer catalog.",
+      });
 
-        const rows = devs
-          .filter((d: any) => d.name && String(d.name).trim().length > 0)
-          .map((d: any) => ({
-            owner_id: user.id,
-            developer_name: d.name,
-            developer_slug: d.slug && d.slug.length > 0 ? d.slug : slugify(d.name),
-            website: d.website_url ?? null,
-            developer_contact: {},
-            status: "not_started",
-            required_docs_complete: false,
-            priority: "medium",
-          }));
+      try {
+        // Page through the catalog (Supabase caps a single request at 1000 rows).
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { data: devs, error } = await supabase
+            .from("developers")
+            .select("name, slug, website_url")
+            .or("is_hidden.is.null,is_hidden.eq.false")
+            .order("name", { ascending: true })
+            .range(from, from + PAGE - 1);
+          if (error) throw error;
+          if (!devs || devs.length === 0) break;
 
-        if (rows.length > 0) {
-          const { error: upErr } = await supabase
-            .from("crm_developer_registry")
-            .upsert(rows as any, {
-              onConflict: "owner_id,developer_slug",
-              ignoreDuplicates: true,
-            });
-          if (upErr) throw upErr;
-          imported += rows.length;
+          scanned += devs.length;
+
+          const rows = devs
+            .filter((d: any) => d.name && String(d.name).trim().length > 0)
+            .map((d: any) => ({
+              owner_id: user.id,
+              developer_name: d.name,
+              developer_slug: d.slug && d.slug.length > 0 ? d.slug : slugify(d.name),
+              website: d.website_url ?? null,
+              developer_contact: {},
+              status: "not_started",
+              required_docs_complete: false,
+              priority: "medium",
+            }));
+
+          if (rows.length > 0) {
+            const { error: upErr } = await supabase
+              .from("crm_developer_registry")
+              .upsert(rows as any, {
+                onConflict: "owner_id,developer_slug",
+                ignoreDuplicates: true,
+              });
+            if (upErr) throw upErr;
+            imported += rows.length;
+          }
+
+          toast.loading(`Importing developers… ${imported.toLocaleString()} of ${scanned.toLocaleString()}`, {
+            id: toastId,
+            description: "Adding missing entries to your registry.",
+          });
+
+          if (devs.length < PAGE) break;
+          from += PAGE;
         }
 
-        if (devs.length < PAGE) break;
-        from += PAGE;
+        return { imported, scanned, toastId };
+      } catch (e) {
+        // Surface error on the same toast slot so the user sees it inline.
+        toast.error("Import failed", {
+          id: toastId,
+          description: (e as any)?.message || "Please try again in a moment.",
+        });
+        throw e;
       }
-
-      return imported;
     },
-    onSuccess: (count) => {
+    onSuccess: ({ imported, scanned, toastId }) => {
       qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
-      toast.success(`Imported ${count} developers from the catalog`);
+      toast.success(`Import complete — ${imported.toLocaleString()} of ${scanned.toLocaleString()} developers ready`, {
+        id: toastId,
+        description: "Existing curated entries were preserved.",
+      });
     },
-    onError: (e: any) => toast.error(e.message || "Import failed"),
+    // Error toast is already shown inside mutationFn so we have a single, stable toast slot.
+    onError: () => {},
   });
 };
 
