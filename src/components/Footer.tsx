@@ -6,6 +6,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { useAdaptiveHairline } from "@/hooks/useAdaptiveHairline";
+import { AdaptiveHairline } from "@/components/ui/AdaptiveHairline";
 import { MapPin, Phone, Mail, MessageCircle, ChevronDown } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
@@ -446,9 +447,9 @@ const Footer = () => {
     { label: "Education Hub", href: "/education-hub" },
   ];
 
-  // Adaptive hairline gradient — center peak alpha follows underlay luminance.
-  const accentHairline = `linear-gradient(90deg, transparent 0%, ${ACCENT}00 8%, rgba(200,167,102,${hairline.goldPeak}) 50%, ${ACCENT}00 92%, transparent 100%)`;
-  const navHairline = `linear-gradient(90deg, transparent, rgba(255,255,255,${hairline.whiteSoft}) 20%, rgba(200,167,102,${hairline.gold}) 50%, rgba(255,255,255,${hairline.whiteSoft}) 80%, transparent)`;
+  // Hairline alphas (above) are still computed so descendants can read the
+  // CSS vars and the dev preview can poll data-hairline-luminance.
+  // Section dividers themselves now use <AdaptiveHairline />.
 
   return (
     <footer
@@ -487,7 +488,7 @@ const Footer = () => {
       />
 
       {/* Top hairline — single restrained champagne accent */}
-      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
+      <AdaptiveHairline variant="accent" />
 
       {/* === ZONE 1 — Brand + utility row === */}
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
@@ -543,12 +544,7 @@ const Footer = () => {
 
       {/* Soft champagne hairline above the nav grid */}
       <div className="px-4 sm:px-6 md:px-8">
-        <div
-          className="max-w-7xl mx-auto h-px"
-          style={{
-            background: navHairline,
-          }}
-        />
+        <AdaptiveHairline variant="nav" className="max-w-7xl mx-auto" />
       </div>
 
       {/* === ZONE 2 — Premium 4-col navigation grid === */}
@@ -583,12 +579,7 @@ const Footer = () => {
 
       {/* Soft champagne hairline below the nav grid */}
       <div className="px-4 sm:px-6 md:px-8">
-        <div
-          className="max-w-7xl mx-auto h-px"
-          style={{
-            background: navHairline,
-          }}
-        />
+        <AdaptiveHairline variant="nav" className="max-w-7xl mx-auto" />
       </div>
 
       {/* === ZONE 3 — Contact strip + compact legal === */}
@@ -667,7 +658,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom hairline */}
-      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
+      <AdaptiveHairline variant="accent" />
     </footer>
   );
 };

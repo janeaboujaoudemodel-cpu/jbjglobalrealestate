@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AdaptiveHairline } from "@/components/ui/AdaptiveHairline";
 import {
   Stamp, CreditCard, FileText, FileEdit, Globe, Presentation,
   ArrowRight, Sparkles, ChevronRight, LayoutGrid, ImageIcon,
@@ -140,7 +141,7 @@ export default function CorporateSuite() {
           className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 80% 60% at 10% 50%, rgba(184,148,62,0.08) 0%, transparent 70%)" }}
         />
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(184,148,62,0.4), transparent)" }} />
+        <AdaptiveHairline variant="accent" className="absolute bottom-0 left-0 right-0" />
 
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-8 pt-28 sm:pt-32">
           {/* Breadcrumb */}
