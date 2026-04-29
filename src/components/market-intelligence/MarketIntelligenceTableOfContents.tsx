@@ -174,24 +174,27 @@ export const MarketIntelligenceTableOfContents = ({
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all border",
                     activeId === item.id
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      ? "font-semibold shadow-sm"
+                      : "border-transparent hover:bg-gray-50"
                   )}
+                  style={
+                    activeId === item.id
+                      ? { backgroundColor: '#000000', color: '#ffffff', borderColor: '#000000' }
+                      : { color: '#374151', backgroundColor: 'transparent' }
+                  }
                 >
                   <span className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                  )} style={
                     activeId === item.id
-                      ? "bg-black text-gold"
-                      : "bg-gold/10 text-gold"
-                  )}>
+                      ? { backgroundColor: '#ffffff', color: '#000000' }
+                      : { backgroundColor: '#F3F4F6', color: '#000000' }
+                  }>
                     {index + 1}
                   </span>
-                  {item.icon && <item.icon className={cn(
-                    "w-4 h-4",
-                    activeId === item.id ? "text-black" : "text-gold"
-                  )} />}
+                  {item.icon && <item.icon className="w-4 h-4" style={{ color: activeId === item.id ? '#ffffff' : '#374151' }} />}
                   <span className="flex-1">{item.title}</span>
                 </button>
               ))}
