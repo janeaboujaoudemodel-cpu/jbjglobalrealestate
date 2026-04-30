@@ -253,7 +253,12 @@ serve(async (req) => {
 
     const results: any[] = [];
 
+    let timedOut = false;
     for (const r of rows) {
+      if (Date.now() - startedAt > TIME_BUDGET_MS) {
+        timedOut = true;
+        break;
+      }
       const filled: string[] = [];
       const updates: Record<string, any> = {};
       const sources: Record<string, any> = { ...(r.field_sources || {}) };
