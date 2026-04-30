@@ -79,7 +79,29 @@ jobs:
             const fs = require('fs');
             const tokens = 'artifacts/contrast/tokens.json';
             const rendered = 'artifacts/contrast/rendered.md';
+            const gateLog = 'artifacts/contrast/pr-gate.log';
+            const gateOutcome = '${{ steps.pr_gate.outcome }}';
+
             let body = '## 🎨 Contrast Regression Check\n\n';
+
+            // PR Gate block — most prominent, mergers see this first.
+            if (gateOutcome === 'failure') {
+              body += '### ❌ PR Gate: BLOCKED\n\n';
+              body += 'New faded-gold or low-opacity-white usage was introduced. ';
+              body += 'Merge is blocked until these are resolved or allowlisted.\n\n';
+              if (fs.existsSync(gateLog)) {
+                const log = fs.readFileSync(gateLog, 'utf8').trim();
+                const trimmed = log.length > 6000 ? log.slice(-6000) : log;
+                body += '<details><summary>Gate output</summary>\n\n```\n' + trimmed + '\n```\n\n</details>\n\n';
+              }
+              body += '**How to fix:**\n';
+              body += '- Replace `text-gold/XX` (XX < 80) with solid `text-gold` or `text-gray-400…900`.\n';
+              body += '- Replace `text-white/XX` (XX < 90) on light surfaces with `text-foreground` / `text-zinc-900`.\n';
+              body += '- For legitimate branded watermarks, owners can allowlist files via `/admin/faded-gold-allowlist` and commit the updated `scripts/contrast/faded-gold-allowlist.json`.\n\n';
+            } else if (gateOutcome === 'success') {
+              body += '### ✅ PR Gate: passed (no faded-gold or low-opacity-white regressions)\n\n';
+            }
+
             if (fs.existsSync(tokens)) {
               const t = JSON.parse(fs.readFileSync(tokens, 'utf8'));
               const fails = t.results.filter(r => r.status === 'fail').length;
@@ -88,7 +110,7 @@ jobs:
             }
             if (fs.existsSync(rendered)) {
               body += fs.readFileSync(rendered, 'utf8');
-            } else {
+            } else if (gateOutcome !== 'failure') {
               body += '_Rendered sweep did not produce a report (likely failed before completion). See workflow logs._\n';
             }
             await github.rest.issues.createComment({
