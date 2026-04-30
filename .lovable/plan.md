@@ -1,56 +1,61 @@
 ## Goal
 
-Fix `TemplateEditorDialog` (the "New registration request / Confirm we are already registered" email template editor) so that:
+In the **Developers → Outreach Queue** tab (`src/pages/CRMRelationships.tsx`), let you bulk-revert any group of developers — typically the 24 stuck on **Pending Application** after the failed-email batch — back to **Not Started** so they can be re-emailed in one click.
 
-1. The dialog fills the screen — the email preview is fully readable in one view, with vertical scroll only.
-2. The buttons (Save, Lock, Hide/Show Preview, variant toggles, Close) work correctly and have proper contrast.
-3. A new **"Send test email"** panel lets the user fire off the live template to any address (prefilled with their own).
+The selection plumbing (per-row checkboxes, `selected` Set, `Select all filtered`, `Clear`, `Send to Selected`) already exists. I'm only adding two buttons and one bulk handler — no new components, no schema changes.
 
-## File
+## What I'll add
 
-`src/components/crm/TemplateEditorDialog.tsx` — full rewrite (existing component, ~140 lines).
+In `DeveloperRegistryTab`:
 
-No new edge functions, no new hooks, no DB changes. The infrastructure already exists:
+1. **"Select all Pending Application" button** — one-click shortcut next to the existing `Select all filtered` / `Clear` controls. Selects every row in the current `queuePool` whose `status === "pending_application"`.
+2. **"Reset to Not Started" button** — sits next to the existing `Send to Selected` button in the bulk action bar. Disabled when nothing is selected.
+   - Confirms: *"Reset N developers back to Not Started? They'll re-appear ready to send."*
+   - Loops over `selectedDevs` calling the existing `useQuickStatusUpdate` (`developer_registry`, status `not_started`). This already writes to `crm_relationship_status_history` (audit trail intact).
+   - Shows a toast progress counter (mirrors the existing `bulkSend` UX).
+   - On finish: clears selection, refetches, toasts `Reset N · Failed M`.
+3. New `bulkResetting` boolean state to disable the button while running.
+4. Import the `RotateCcw` icon from `lucide-react`.
 
-- `useSendDeveloperRegistration` (in `src/hooks/useCRMRelationships.ts`) already supports `testRecipient` / `testDeveloperName` / `variant`.
-- The edge function `crm-send-developer-registration` already handles test mode (prefixes subject with `[TEST]`, no DB logging, no CC).
-- The send goes through the existing email pipeline (Resend, already connected).
+## What I won't touch
 
-## Layout changes
+- No DB migration, no edge function changes.
+- No changes to `useQuickStatusUpdate` (already supports the call).
+- No removal of existing buttons (per the No-Removal rule).
+- The per-row `InlineStatusSelect` continues to work for one-off changes.
 
-```text
-DialogContent: w-[96vw], h-[94vh], flex column, overflow hidden
-├── Header (sticky, bordered)
-├── Variant toolbar row (sticky)
-└── Body: flex-1 min-h-0
-    ├── Editor column   (overflow-y-auto only)
-    │   ├── Subject input
-    │   ├── HTML textarea (rows=18)
-    │   └── "Send test email" panel:
-    │         • Send to (prefilled with auth.user.email)
-    │         • Sample developer name
-    │         • [Send test email] button
-    └── Preview column  (iframe flex-1, fills remaining height)
-        srcDoc = html with placeholders substituted
+## Sketch of the bulk handler
+
+```ts
+const bulkResetToNotStarted = async () => {
+  if (!selected.size) return;
+  if (!confirm(`Reset ${selected.size} developers back to Not Started? They'll reappear ready to send.`)) return;
+  setBulkResetting(true);
+  const t = toast.loading(`Resetting 0 / ${selected.size}…`);
+  let ok = 0, fail = 0;
+  for (let i = 0; i < selectedDevs.length; i++) {
+    const d = selectedDevs[i];
+    if (d.status === "not_started") { ok++; }
+    else {
+      try {
+        await quickStatus.mutateAsync({
+          entityType: "developer_registry",
+          id: d.id, status: "not_started", previousStatus: d.status,
+        });
+        ok++;
+      } catch { fail++; }
+    }
+    toast.loading(`Resetting ${i + 1} / ${selectedDevs.length}…`, { id: t });
+  }
+  toast.success(`Reset: ${ok} · Failed: ${fail}`, { id: t });
+  setBulkResetting(false);
+  clearSelection();
+  refetch();
+};
 ```
 
-Result: no horizontal scrolling, preview iframe stretches to ~80vh tall, only the editor column scrolls vertically when content overflows.
+## Result
 
-## Button fixes
-
-- Variant toggles, Close, Hide/Show Preview, Save changes, Lock template: explicit `text-black` / `bg-black text-white` to comply with the project's white-dominant monochrome rules and avoid faded-gold contrast issues.
-- Save / Lock / Send-test buttons get loading states (spinner + disabled while pending).
-
-## Send-test behavior
-
-- Reuses existing `useSendDeveloperRegistration({ variant, testRecipient, testDeveloperName })`.
-- On success the existing hook already toasts: *"Test email sent to {recipient}"*.
-- Light client-side email regex guard before invoking; server is the source of truth.
-- Prefills the email field once per dialog open from `supabase.auth.getUser()`.
-
-## Out of scope
-
-- No changes to the edge function, the registration table, the email template HTML, or any send wiring elsewhere in the CRM.
-- No design-token or theme changes.
-
-After approval I'll implement the rewrite in a single file edit.
+- One click → "Select all Pending Application" → all 24 stuck rows ticked.
+- One click → "Reset to Not Started" → they all flip back, audit trail recorded.
+- Then your existing **Send to Selected** button (or the bulk send) re-emails them through the now-fixed mail pipeline.
