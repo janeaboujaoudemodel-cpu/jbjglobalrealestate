@@ -927,16 +927,58 @@ const DeveloperRegistryTab = () => {
       </div>
 
       {data.length > 0 && (
-        <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
-          {STATUS_DEV.map((s) => (
-            <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
-              <CardContent className="p-3 text-center">
-                <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                <div className="text-[10px] uppercase text-gray-600 mt-1">{s.label}</div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <>
+          {/* Quick filter chips — queue-relevant statuses only */}
+          <div className="flex flex-wrap gap-1.5 items-center">
+            <button
+              type="button"
+              onClick={() => setStatusFilter("all")}
+              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition ${
+                statusFilter === "all"
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-black border-black/15 hover:border-black/40"
+              }`}
+            >
+              All ({queuePool.length})
+            </button>
+            {STATUS_DEV.filter((s) => s.v !== "registered").map((s) => {
+              const n = counts[s.v] || 0;
+              const active = statusFilter === s.v;
+              return (
+                <button
+                  key={s.v}
+                  type="button"
+                  onClick={() => setStatusFilter(active ? "all" : s.v)}
+                  disabled={n === 0 && !active}
+                  className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
+                    active
+                      ? "bg-black text-white border-black"
+                      : n === 0
+                      ? "bg-white text-gray-400 border-black/10 cursor-not-allowed"
+                      : "bg-white text-black border-black/15 hover:border-black/40"
+                  }`}
+                >
+                  <span>{s.label}</span>
+                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    active ? "bg-white/20 text-white" : "bg-black/5 text-black"
+                  }`}>{n}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Detailed status cards (existing) */}
+          <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
+            {STATUS_DEV.map((s) => (
+              <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
+                <CardContent className="p-3 text-center">
+                  <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
+                  <div className="text-[10px] uppercase text-gray-600 mt-1">{s.label}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </>
       )}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
