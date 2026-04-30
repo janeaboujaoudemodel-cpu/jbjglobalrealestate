@@ -99,28 +99,35 @@ Deno.serve(async (req) => {
   const attachmentsHtml = (body.attachmentNames ?? []).map((n) => `• ${escape(n)}`).join("<br/>");
   const tpl = TEMPLATES[lang]({ contact: body.contactPersonName, company, attachments: attachmentsHtml });
 
-  // Send via send-transactional-email (Lovable Emails infra) if available; otherwise log-only fallback
+  // Send via Resend (through Lovable connector gateway).
+  // Sender is hard-locked to CONTACT@JBJ.AE — domain jbj.ae must be verified in Resend.
   let sendOk = false;
   let sendError: string | null = null;
   try {
-    const fnUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`;
-    const res = await fetch(fnUrl, {
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured");
+
+    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": RESEND_API_KEY,
       },
       body: JSON.stringify({
-        to: body.recipientEmail,
         from: `JBJ Global Real Estate <${LOCKED_SENDER}>`,
+        to: [body.recipientEmail],
         subject: tpl.subject,
         html: tpl.html,
-        purpose: "transactional",
-        idempotency_key: `uae-registry-${body.recordType}-${body.recordId}-${Date.now()}`,
       }),
     });
     sendOk = res.ok;
-    if (!res.ok) sendError = `send-transactional-email returned ${res.status}`;
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      sendError = `Resend returned ${res.status}: ${txt.slice(0, 300)}`;
+    }
   } catch (e) {
     sendError = (e as Error).message;
   }
