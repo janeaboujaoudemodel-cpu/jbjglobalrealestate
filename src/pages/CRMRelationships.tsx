@@ -1,6 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { ChevronDown, ChevronRight as ChevronRightIcon } from "lucide-react";
 import { isInHistoryPool, isInQueuePool } from "@/lib/crm/developerPools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -723,6 +726,13 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("crm.queue.collapsed") !== "false";
+  });
+  useEffect(() => {
+    try { localStorage.setItem("crm.queue.collapsed", String(queueCollapsed)); } catch {}
+  }, [queueCollapsed]);
   const quickStatus = useQuickStatusUpdate();
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
@@ -891,7 +901,25 @@ const DeveloperRegistryTab = () => {
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
       ) : (
-      <>
+      <Collapsible open={!queueCollapsed} onOpenChange={(open) => setQueueCollapsed(!open)}>
+        <CollapsibleTrigger asChild>
+          <button
+            type="button"
+            className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA] hover:bg-[#F2EBDA] transition text-left"
+          >
+            <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+              {queueCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              Outreach Queue
+              <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/10 text-[11px] font-bold">
+                {queuePool.length}
+              </span>
+            </div>
+            <span className="text-[11px] text-[#5A4A2E]">
+              {queueCollapsed ? "Click to expand" : "Click to collapse"}
+            </span>
+          </button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="space-y-5 pt-4">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
@@ -1100,15 +1128,13 @@ const DeveloperRegistryTab = () => {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-3 flex-1 min-w-[260px]">
                     <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleSel(r.id)} className="mt-1" />
-                    {r.logo_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-[#F7F2EA] border border-[#1A1A1A]/10 flex items-center justify-center shrink-0 overflow-hidden">
-                        <img src={r.logo_url} alt={`${r.developer_name} logo`} className="max-w-full max-h-full object-contain p-1" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center shrink-0 text-[#8A7556] font-bold text-sm">
-                        {String(r.developer_name || "?").charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    <DeveloperLogo
+                      src={r.logo_url}
+                      alt={r.developer_name || "Developer"}
+                      className="w-12 h-12"
+                      renderFallback
+                      loading="lazy"
+                    />
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-semibold text-[#1A1A1A]">{r.developer_name}</h3>
@@ -1264,7 +1290,8 @@ const DeveloperRegistryTab = () => {
           );})}
         </div>
       )}
-      </>
+        </CollapsibleContent>
+      </Collapsible>
       )}
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
