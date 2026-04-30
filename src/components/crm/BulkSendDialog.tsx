@@ -121,10 +121,14 @@ export const BulkSendDialog = ({
   }, [template, previewDev]);
 
   const sendTest = async () => {
-    if (!testEmail.includes("@")) { toast.error("Enter a valid test email"); return; }
+    const recipient = useCustomTestEmail ? testEmail : defaultTestEmail;
+    if (!recipient || !recipient.includes("@")) {
+      toast.error("No valid registered email — set one in Owner Settings or use a custom address");
+      return;
+    }
     await send.mutateAsync({
       variant,
-      testRecipient: testEmail,
+      testRecipient: recipient,
       testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
     });
   };
