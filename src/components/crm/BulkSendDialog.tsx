@@ -196,17 +196,34 @@ export const BulkSendDialog = ({
             </div>
           </div>
 
-          {/* Test send (left col) */}
+          {/* Test send (left col) — always sends to your registered email by default */}
           <div className="border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FAF5EA]">
             <div className="flex items-center gap-2 text-xs text-[#1A1A1A] mb-2">
               <FlaskConical className="w-4 h-4" /> <strong>Step 1 — Send test to yourself first</strong>
             </div>
-            <div className="flex gap-2">
-              <Input value={testEmail} onChange={(e) => setTestEmail(e.target.value)} placeholder="your@email" className="flex-1" />
-              <Button variant="outline" onClick={sendTest} disabled={send.isPending || running}>
-                <FlaskConical className="w-3 h-3 mr-1" />Send TEST
-              </Button>
+            <div className="text-[11px] text-[#5A4A2E] mb-2">
+              Test will be sent to your registered email:&nbsp;
+              <strong className="text-[#1A1A1A]">{defaultTestEmail || "—"}</strong>
             </div>
+            {useCustomTestEmail ? (
+              <div className="flex gap-2">
+                <Input value={testEmail} onChange={(e) => setTestEmail(e.target.value)} placeholder="your@email" className="flex-1" />
+                <Button variant="outline" onClick={sendTest} disabled={send.isPending || running}>
+                  <FlaskConical className="w-3 h-3 mr-1" />Send TEST
+                </Button>
+              </div>
+            ) : (
+              <Button variant="outline" onClick={sendTest} disabled={send.isPending || running || !defaultTestEmail} className="w-full">
+                <FlaskConical className="w-3 h-3 mr-1" />Send TEST to {defaultTestEmail || "your inbox"}
+              </Button>
+            )}
+            <button
+              type="button"
+              onClick={() => setUseCustomTestEmail((v) => !v)}
+              className="text-[10px] underline text-[#5A4A2E] mt-2 hover:text-[#1A1A1A]"
+            >
+              {useCustomTestEmail ? "Use my registered email" : "Use a different address"}
+            </button>
           </div>
 
           {/* Broadcast config (left col) */}
