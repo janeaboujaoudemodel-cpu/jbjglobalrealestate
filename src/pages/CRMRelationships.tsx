@@ -654,6 +654,7 @@ const DeveloperRegistryTab = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkRunning, setBulkRunning] = useState(false);
+  const [bulkResetting, setBulkResetting] = useState(false);
   const [emailFilter, setEmailFilter] = useState<"all" | "not_sent" | "sent" | "registered">("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
