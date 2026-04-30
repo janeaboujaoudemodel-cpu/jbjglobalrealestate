@@ -111,10 +111,11 @@ const CookiesConsentBanner = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="cookie-banner fixed bottom-0 left-0 right-0 z-50 p-4"
+          className="cookie-banner pointer-events-none fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4"
+          style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
           data-chrome="cookie-banner"
         >
-          <div className="max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden">
+          <div className="pointer-events-auto relative max-w-lg sm:max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border border-gold/40 rounded-2xl shadow-2xl shadow-gold/10 overflow-hidden max-h-[80vh] overflow-y-auto overscroll-contain">
             {/* Top gold accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
             

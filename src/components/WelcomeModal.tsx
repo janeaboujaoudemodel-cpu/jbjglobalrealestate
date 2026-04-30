@@ -73,7 +73,7 @@ const WelcomeModal = () => {
         }}
       >
         <DialogContent 
-          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl"
+          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
           dir={isRTL ? 'rtl' : 'ltr'}
           aria-describedby={undefined}
         >
@@ -101,7 +101,7 @@ const WelcomeModal = () => {
           <div className="absolute bottom-6 left-6 w-10 h-10 border-l-2 border-b-2 border-gold/40" />
           <div className="absolute bottom-6 right-6 w-10 h-10 border-r-2 border-b-2 border-gold/40" />
 
-          <div className="relative px-10 py-14">
+          <div className="relative px-6 sm:px-10 py-8 sm:py-14">
             {/* Transparent Logo - Larger and Centered */}
             <div className="flex justify-center mb-6">
               <img 
