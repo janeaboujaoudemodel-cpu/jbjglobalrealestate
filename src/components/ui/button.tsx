@@ -6,33 +6,38 @@ import { cn } from "@/lib/utils";
 
 /**
  * ============================================================
- * GLOBAL BUTTON SYSTEM - JBJ GLOBAL REAL ESTATE
- * MONOCHROME DESIGN SYSTEM — Black, White, Grayscale Only
+ * GLOBAL BUTTON SYSTEM — JBJ GLOBAL REAL ESTATE
+ * CHAMPAGNE / GOLD DESIGN SYSTEM
+ *  - Page #FDFBF7 · surface #F7F2EA · raised #EFE6D6
+ *  - Gold #B89555 · gold-deep #A68444 · ink #1A1A1A
  * ============================================================
  */
 
-// PRIMARY: Solid black button — strong CTA on white pages
+// PRIMARY: solid ink (still highest-contrast CTA on champagne)
 const BRAND_PRIMARY =
-  "bg-black text-white border-2 border-black hover:bg-gray-800 hover:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] hover:bg-[#A68444] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
 
-// SECONDARY: Outlined — black border on white
+// SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
-  "bg-transparent text-black border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400 hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#F7F2EA] text-[#1A1A1A] border-2 border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
 
-// TERTIARY: Subtle ghost
+// TERTIARY: subtle champagne ghost
 const BRAND_TERTIARY =
-  "bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200 hover:text-black hover:border-gray-300";
+  "bg-[#F7F2EA] text-[#5A4A2E] border-2 border-[#B89555]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]/40";
 
-// HERO: transparent with white border on dark images (keep dark for hero overlays)
+// GOLD: solid gold tile CTA — for in-dashboard primary actions
+const BRAND_GOLD =
+  "bg-[#B89555] text-white border-2 border-[#B89555] hover:bg-[#A68444] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+
+// HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
-  "bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 active:translate-y-0";
+  "bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white hover:text-[#1A1A1A] hover:border-white hover:-translate-y-0.5 active:translate-y-0";
 
-// MEDIA: alias to HERO
 const BRAND_MEDIA = BRAND_HERO;
 
 // DARK: dark surface (for dark sections only)
 const BRAND_DARK =
-  "bg-gray-900 text-white border-2 border-gray-700 hover:bg-white hover:text-black hover:border-gray-300 hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#1A1A1A] text-white border-2 border-[#B89555]/40 hover:bg-[#B89555] hover:text-white hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
 
 // AI Tool button variants — dark unified
 const AI_MONO = "bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 shadow-sm";
