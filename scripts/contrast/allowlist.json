@@ -16,5 +16,40 @@
       "selector": "[data-decorative='true']",
       "reason": "Marked decorative — explicitly aria-hidden."
     }
-  ]
+  ],
+  "lowOpacityTextBaseline": {
+    "$reason": "Pre-existing near-transparent body text (alpha<40) captured at the time check-low-opacity-text.mjs was introduced. New regressions MUST NOT be added — fix individual entries by raising alpha to /60+, switching to text-muted-foreground, or marking decorative with // contrast-ok. As the list shrinks, prune entries here.",
+    "entries": [
+      "src/components/admin/VisitorInsightsDashboard.tsx:381:text-*/30",
+      "src/components/area-detail/AreaProjectsGrid.tsx:118:text-*/20",
+      "src/components/books/BookShelf.tsx:130:text-*/20",
+      "src/components/broker/ProtectedContent.tsx:134:opacity-[0.08]",
+      "src/components/filters/AdvancedFilterPanel.tsx:318:text-*/30",
+      "src/components/marketing-hub/CampaignEditor.tsx:501:text-*/30",
+      "src/components/shared/CrossChannelToggle.tsx:46:text-*/30",
+      "src/components/shared/DocumentAttachmentPicker.tsx:176:text-*/30",
+      "src/components/shared/DocumentAttachmentPicker.tsx:202:text-*/30",
+      "src/components/ui/PremiumHorizontalScrollHint.tsx:100:text-*/20",
+      "src/components/ui/PremiumHorizontalScrollHint.tsx:132:text-*/20",
+      "src/pages/AdminLeads.tsx:951:text-*/20",
+      "src/pages/AdminLeads.tsx:963:text-*/20",
+      "src/pages/AdminLeads.tsx:975:text-*/20",
+      "src/pages/AdminLeads.tsx:1059:text-*/20",
+      "src/pages/AdminLeads.tsx:1071:text-*/20",
+      "src/pages/AdminLeads.tsx:1151:text-*/30",
+      "src/pages/AdminLeads.tsx:1156:text-*/30",
+      "src/pages/AdminLeads.tsx:1161:text-*/30",
+      "src/pages/Favorites.tsx:369:text-*/30",
+      "src/pages/Favorites.tsx:492:text-*/30",
+      "src/pages/Favorites.tsx:631:text-*/30",
+      "src/pages/Favorites.tsx:657:text-*/30",
+      "src/pages/TeamChat.tsx:571:text-*/35",
+      "src/pages/TeamChat.tsx:590:text-*/30",
+      "src/pages/TeamChat.tsx:596:text-*/30",
+      "src/pages/TeamChat.tsx:648:text-*/25",
+      "src/pages/TeamChat.tsx:763:text-*/30",
+      "src/pages/toolkit/VoiceStudioPro.tsx:463:text-*/30",
+      "src/pages/toolkit/VoiceStudioPro.tsx:695:text-*/30"
+    ]
+  }
 }
