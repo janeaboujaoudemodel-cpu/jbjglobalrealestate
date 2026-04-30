@@ -1,157 +1,90 @@
+# Owner Command Center — UX Fix Pack
 
-# Brokerage Hub v2 — Full Parity, Visibility Fix, Deal Intelligence & Per-Lead AI
+Five concrete bugs reported on `/owner` (the Founder & CEO Command Center). Each is fixed at the source — no feature is removed.
 
-This plan does five things in one pass. They're tightly related so we ship them together.
+## 1. Header gap above "Founder & CEO" — lift up to sidebar divider
 
----
+**File:** `src/pages/OwnerDashboardShell.tsx` (line 127)
 
-## 1. Fix the white-on-white readability bug (immediate)
+The header is currently `sticky top-[48px]` which leaves a ~48px empty band above it. The sidebar's "JBJ Owner" logo bar sits at `top: 0` with `h-16`. The two should share the same horizontal divider line.
 
-**Problem:** On the Brokerages tab, several cards/badges/tabs render white text + white icons on a champagne/white background — directory rows, source sub-tabs, AI suggestion banner, and the contact line are unreadable on first paint and on hover.
+**Change:**
+- Replace `sticky top-[48px] z-30` with `sticky top-0 z-30` on the `<header>`.
+- The sidebar logo bar (`h-16`) and main header (`h-16`) will then align on the same horizontal line, forming the "L-shaped frame" required by the Header Sidebar Alignment standard.
+- Remove any leftover top spacing in the page-content wrapper that compensated for the old offset.
 
-**Fix (no removal of any existing element):**
-- Audit `CRMRelationships.tsx` Brokerages tab + `BulkSendDialog.tsx` for any `text-white`, `bg-white`, `bg-purple-50`, low-alpha gold text, and unstated hover states. Replace with the locked tokens: ink `#1A1A1A` on champagne `#F7F2EA / #FDFBF7`, gold `#B89555` only as solid fill with white text, no faded gold, no white-on-light.
-- Replace the purple AI suggestion strip with the project's standard AI purple tile (`IconTile tone="purple"` + ink text) so it stays readable on champagne.
-- Wrap every brokerage status pill, source pill, and action button in the existing `<IconTile />` / `Button variant="gold|secondary"` primitives so they inherit the contrast guard.
-- Add a one-time visual sweep test: `scripts/contrast/check-rendered.mjs` run against `/crm/relationships` (Brokerages tab) so this regression can't ship again.
+## 2. Quick Actions hover tooltip — unreadable black-on-black
 
-This is the first thing we do so the rest of the work is reviewable.
+**Files:**
+- `src/components/ui/tooltip.tsx` (line 19)
+- `src/components/owner-dashboard/QuickActionsGrid.tsx` (line 75)
 
----
+Root cause: `TooltipContent` has `data-surface="light"` hard-coded. The global rule in `src/index.css` (`[data-surface="light"] :is(...)`) forces dark text on every span/p/h inside, which clobbers the explicit `text-white` set by QuickActionsGrid — so the tooltip renders as solid black with invisible (dark) text.
 
-## 2. Brokerage record gets full developer-style profile
+**Change:**
+- Remove the `data-surface="light"` attribute from `TooltipContent`. Tooltips already use `bg-popover text-popover-foreground` from the theme, which is correct.
+- In `QuickActionsGrid.tsx`, replace the inline override `bg-[#1A1A1A] text-white border-none` with a champagne-friendly readable tooltip: `bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/30` and add `[&_*]:!text-[#FDFBF7]` to defeat any residual contrast guard, OR simply rely on the default `bg-popover text-popover-foreground`.
 
-Today `crm_brokerages` already has `office_location`, `office_address`, `phone`, `email`, `logo_url`, `primary_contact (jsonb)`, `secondary_contact (jsonb)`. We extend the **UI** (not the schema, mostly) to surface and capture all of it, plus add what's missing.
+## 3. Empty / data tables show gray (`bg-muted`) blocks on champagne page
 
-**Schema additions (one migration):**
-- `crm_brokerages.active_broker_count int default 0`
-- `crm_brokerages.inquiry_count int default 0` (auto-incremented when an inbound message arrives)
-- `crm_brokerages.deal_count_cached int default 0` and `total_deal_value_cached numeric default 0` — refreshed by trigger on `crm_brokerage_deals` (table below).
-- `crm_brokerages.position_titles jsonb` — already covered by `primary_contact.role` / `secondary_contact.role`, no change needed.
+**Files:**
+- `src/components/crm/FlaggedLeadsView.tsx` (lines 338, 377, 537, 585, 594, 606)
 
-**Brokerage card / edit dialog gets:**
-- Logo upload (uses the existing `<DeveloperLogo />` allow-list rules, mirrored as `<BrokerageLogo />`) — falls back to `Building2` icon, never a substitute photo.
-- Office address + map link (already in DB, just expose), website, phone, primary email.
-- **Primary contact** + **Secondary contact** rows: name, **position/role**, phone, email, WhatsApp.
-- KPI strip on every card: **Active Brokers · Inquiries · Deals Closed · Total Value · Last Deal Date**.
+The Founder & CEO overview embeds `<FlaggedLeadsView />` which still uses raw `bg-muted` / `bg-muted/30` / `bg-muted/50` tokens. On the champagne page these render as gray rectangles with white text on muted-gray inputs (also unreadable).
 
----
+**Change (per-line):**
+- `bg-muted/50` (table header) → `bg-[#EFE6D6]`
+- `bg-muted/30` (selected row hover, expanded notes) → `bg-[#B89555]/10`
+- `bg-muted border-border text-white` (3 inputs) → `bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40`
 
-## 3. UAE Brokerage Directory — explanation + expansion to full UAE
+Sweep the rest of `src/components/owner-dashboard/*` and `src/components/crm/*` (used in the overview tabs) for any remaining `bg-muted|bg-gray-*|bg-zinc-*|bg-slate-*` and replace with the champagne palette per the Champagne-Gold Design Standard.
 
-**What "UAE Directory" means today:** The 73 rows tagged `entry_source = 'directory'` are pre-loaded reference companies (RERA-licensed brokerages we seeded). They're read-only reference data so you can find a company quickly, then either contact them or convert them into a "My Addition" (your own CRM record). The other two sub-tabs are:
-- **My Additions** — companies you added yourself.
-- **Existing Matches** — your additions that match a directory entry (so you can dedupe).
+## 4. Page freezes when scrolling up/down
 
-**Expansion to ~30,000+ brokerages:**
-- Add an admin-only **"Sync UAE Directory"** edge function `crm-brokerage-directory-sync` that pulls from the **Dubai Land Department / RERA public broker registry** + Abu Dhabi DMT registry on demand and upserts into `crm_brokerages` with `entry_source = 'directory'`. The function is idempotent (matches on normalized RERA license + normalized name) and writes to `crm_brokerage_sync_log` so we can see what changed.
-- Source URLs are stored in `partner-governance.ts` so you control them. First sync is run once; after that there's a "Refresh Directory" button on the page (admin only, rate-limited to once/24h).
-- The bulk-select + bulk-outreach already built keeps working — directory entries with an email become eligible for outreach.
+Likely caused by the same `sticky top-[48px]` header racing the `fixed` sidebar plus the `OwnerTasksPopupAlert` mounted at the root with no pointer-events guard.
 
-**Filter UX you asked for:**
-- Emirate filter already exists. We add a live count next to each option ("Dubai · 1,842", "Abu Dhabi · 612", …) computed from the current dataset so when you pick an emirate you immediately see the agency count.
-- Add filters: status, has-email, has-phone, has-deals, last-contacted range, RERA active/expired.
-- Add `7 / 30 / 90 day` activity filter to find dormant agencies.
+**File:** `src/pages/OwnerDashboardShell.tsx`
 
----
+**Change:**
+- After fix #1 (`top-0`), the sticky header no longer fights the 48px ghost band — eliminates the most common stutter.
+- Wrap `OwnerTasksPopupAlert` in a `pointer-events-none` container with the inner alert keeping `pointer-events-auto`, so the alert never blocks scroll wheel events on the body.
+- Add `overscroll-behavior: contain` to the `<main>` element to prevent scroll-chaining lockups between sidebar and content.
 
-## 4. Brokerage outreach reply handling + AI suggestions
+## 5. Before/After dev toggle does NOT show the real prior site
 
-The outbound flow we just built (Jane → Private Breakfast Briefing) already records sends in `crm_relationship_email_log`. We close the loop:
+The current `<DevStyleToggle />` flips an `html[data-style-mode="before"]` attribute that swaps a CSS overlay (`src/styles/dev-before-overlay.css`). It approximates the pre-refactor look but does **not** load the actual previous version of the page — that's why "Before" doesn't match what you remember.
 
-- **Inbound capture:** the existing Gmail watcher writes replies into `crm_brokerage_notes` and increments `inquiry_count`. Each inbound message becomes a thread on the brokerage card.
-- **AI reply suggestions:** for every inbound message, an edge function `crm-brokerage-reply-suggest` runs through Lovable AI Gateway (`google/gemini-3-flash-preview`) and produces:
-  1. A 1-line summary of what they said.
-  2. 2–3 suggested replies (warm / direct / qualifying), each with the JBJ template tone.
-  3. Recommended next step ("Schedule breakfast", "Send commission sheet", "Mark do_not_contact", "Move to qualified").
-  4. The exact email template to send (pulled from `crm_email_templates` — same `brokerage_partnership_intro` / `brokerage_breakfast_invite` / a new `brokerage_followup` variant).
-  5. Auto-CCs you (founder email) and the assigned account owner.
-- **Suspend agency** action on each card: sets `do_not_contact = true` with a reason — already supported in the schema.
+Two options. We will implement Option B by default, with a small Option A enhancement.
 
----
+**Option A (kept): Improve the CSS overlay accuracy.** Extend `dev-before-overlay.css` so `Before` mode also disables the new IconTile gold tones, the price-orange variable, the obsidian footer, and the AI purple gradients — bringing the simulation closer to the original neutral/white look.
 
-## 5. Deal tracking + leaderboard (the big one)
+**Option B (added): Real before-screenshot mode.** Add a third toggle state `Snapshot` to `<DevStyleToggle />`. When selected, the toggle overlays a stored PNG screenshot of the previous version of the current route on top of the live page (with a 50% opacity slider and an A/B wipe). Steps:
 
-**New table `crm_brokerage_deals`:**
-- `id`, `brokerage_id` (fk → `crm_brokerages`), `developer_id` (fk → `developers`, **defaults to City Developments / Citi Developers**), `developer_name_snapshot` (so a developer rename doesn't break history), `unit_label`, `client_name`, `deal_value_aed numeric`, `currency text default 'AED'`, `closed_on date`, `commission_aed numeric`, `notes`, `created_by`, `created_at`, `updated_at`.
-- RLS: only the founder + assigned account owner can see/edit; admins can see all.
-- Trigger: on insert/update/delete, recompute `deal_count_cached` and `total_deal_value_cached` on the parent brokerage.
+1. Add `public/before-snapshots/<route>.png` for the key Owner routes (`overview`, `crm`, `crm-leads`, `marketing-hub`, etc.). Snapshots are captured once from the last published build and committed.
+2. Extend `DevStyleToggle.tsx` with a third pill `Snapshot` and an opacity slider. When active, render a `<img>` fixed to the viewport at the current route, click-through (`pointer-events: none`), with a vertical wipe handle so you can drag the divider left/right to compare.
+3. Show a clear caption: "Snapshot · pre-refactor build · captured YYYY-MM-DD".
 
-**Register a deal UI:**
-- "Register Deal" button on every brokerage card. Modal:
-  - Brokerage (locked to current row)
-  - Developer (`<DeveloperPicker />` — same component used in CRM, prefilled with **City Developments** but searchable across all developers)
-  - Unit label, client name, value (AED), commission, closing date, notes
-  - On save: insert into `crm_brokerage_deals`, update brokerage cache, log to `crm_action_log`.
+This gives you a true before vs. after without rolling the codebase back.
 
-**Leaderboard / rankings page** at `/crm/relationships?view=rankings`:
-- Tabs: **This Month · This Quarter · This Year · All Time · Custom range**
-- Table: Rank · Brokerage · Logo · # Deals · Total Value (AED) · Avg Deal · Last Deal · vs Previous Period (delta arrow).
-- "Compare to my closing deals" panel: your personal totals (founder) for the same window pulled from `deals` table you already have, side-by-side.
-- **Downloadable**: PDF (jsPDF, branded letterhead per Institutional PDF Reporting standard) + CSV. Files written under `/mnt/documents/` for ad-hoc exports too.
+## Files touched
 
----
+- `src/pages/OwnerDashboardShell.tsx` — header `top-0`, scroll guards
+- `src/components/ui/tooltip.tsx` — drop `data-surface="light"`
+- `src/components/owner-dashboard/QuickActionsGrid.tsx` — readable tooltip styling
+- `src/components/crm/FlaggedLeadsView.tsx` — replace `bg-muted` tokens with champagne
+- `src/styles/dev-before-overlay.css` — extend overlay to cover new tokens
+- `src/components/dev/DevStyleToggle.tsx` — add Snapshot mode + wipe slider
+- `public/before-snapshots/*.png` — checked-in screenshots of prior build for major Owner routes
+- Sweep: any remaining `bg-muted|bg-gray|bg-zinc|bg-slate` inside components rendered under `/owner/*`
 
-## 6. Per-lead AI assistant (Brokerages, Clients, Brokers, Developers, Admins)
+## Out of scope
 
-You want one star button next to every record (across all five entity types) that opens the assistant scoped to *that lead*.
+- Rebuilding the prior site itself — only static snapshots are feasible. The live "After" stays the source of truth.
 
-- New component `<LeadAIStar entityType="brokerage|client|broker|developer|admin" entityId={...} />` rendered on every CRM card.
-- Click opens a slide-over assistant panel (reusing the existing `CRMAssistantPanel.tsx`) with the lead pre-loaded as context. Inside:
-  - **Voice note input** (existing `<VoiceNoteRecorder />`) — speak "remind me Tuesday 6pm to call them", AI parses intent and:
-    - Adds a note to the lead (`crm_brokerage_notes` / `crm_lead_notes` / etc.)
-    - Creates a calendar event in the founder's calendar (Google Calendar connector if linked, else internal `meeting_center` table)
-    - Creates a task in `web_developer_tasks` / `crm_action_log`
-    - Optionally moves the lead between CRM stages
-  - **Summarize this lead** — AI reads all notes, emails, deals, inquiries and produces a 5-line brief.
-  - **Suggest next step** — gives 2–3 options with one-click accept.
-  - Buttons: *Add to Calendar · Add Note · Move to CRM Stage · Send Email · Register Deal · Suspend*
-- The assistant has read access (via edge function `crm-lead-assistant`) to:
-  - the lead row
-  - all notes / messages / emails for that lead
-  - your calendar events
-  - your task list
-  - your closed deals (for "compare to my pipeline" answers)
-- All actions are logged to `crm_action_log` with `actor = founder`, source = "lead-ai-star".
+## Acceptance
 
----
-
-## What gets built — files
-
-```
-supabase/migrations/<ts>_brokerage_v2.sql
-  - add active_broker_count, inquiry_count, deal_count_cached, total_deal_value_cached
-  - create crm_brokerage_deals + RLS + trigger
-  - create crm_brokerage_sync_log
-
-supabase/functions/crm-brokerage-directory-sync/index.ts   (new)
-supabase/functions/crm-brokerage-reply-suggest/index.ts    (new, Lovable AI)
-supabase/functions/crm-lead-assistant/index.ts             (new, Lovable AI + calendar + tasks)
-
-src/components/crm/BrokerageLogo.tsx                       (mirror of DeveloperLogo)
-src/components/crm/BrokerageDealModal.tsx                  (Register Deal)
-src/components/crm/BrokerageRankings.tsx                   (leaderboard + PDF/CSV export)
-src/components/crm/LeadAIStar.tsx                          (universal star button)
-src/components/crm/LeadAssistantSheet.tsx                  (slide-over assistant)
-
-src/pages/CRMRelationships.tsx
-  - contrast fixes
-  - new KPI strip on each card
-  - logo + secondary contact + position fields
-  - Register Deal + Rankings + Refresh Directory buttons
-  - LeadAIStar on every brokerage row
-  - Emirate filter shows live counts
-
-src/pages/CRMLeads.tsx, CRMClients.tsx, CRMEmployees.tsx,
-src/pages/admin/AdminUsers.tsx, src/pages/developers/Developers.tsx
-  - mount <LeadAIStar /> on every row
-
-scripts/contrast/check-rendered.mjs
-  - add /crm/relationships to the rendered-contrast sweep
-```
-
-## Out of scope for this turn
-
-- Pulling all 30,000+ UAE brokerages on day one. The sync function is built; the first run pulls **Dubai (RERA)** which is ~7,500 active offices. Abu Dhabi + Sharjah follow once we confirm the Dubai sync is clean. We don't want to fill your CRM with 30k stale rows in one shot.
-- WhatsApp/SMS reply suggestions (email-only for v1, exactly like the developer flow).
-- A standalone mobile app for the assistant — it works inside the existing CRM today.
+- The "Founder & CEO" header sits flush with the "JBJ Owner" sidebar header (no gap above it).
+- Hovering any Quick Action shows a readable tooltip (light text on dark, or theme `popover`).
+- Empty states inside the overview render on champagne (`#EFE6D6` / `#B89555/10`), no gray boxes.
+- Scrolling the overview is smooth — no lock-ups on long scroll.
+- The `Before` toggle either matches the prior site visually (overlay improvements) or shows the real screenshot via the new `Snapshot` mode with an A/B wipe slider.

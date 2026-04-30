@@ -1,21 +1,35 @@
 /**
  * DevStyleToggle — DEV ONLY floating switch.
  *
- * Flips <html data-style-mode="before|after"> to overlay pre-refactor
- * typography & contrast rules (see styles/dev-before-overlay.css).
- * Lets reviewers spot any remaining wash-out in seconds.
+ * Modes:
+ *  - "after"    : the live build (no overlay).
+ *  - "before"   : a CSS-only simulation of the pre-refactor styling
+ *                 (see styles/dev-before-overlay.css). Approximate, not exact.
+ *  - "snapshot" : overlays a real stored screenshot of the previous build at
+ *                 /before-snapshots/<route>.png on top of the live page,
+ *                 with an A/B wipe slider. If no snapshot exists for the
+ *                 current route, falls back to "before" with a note.
  *
- * Renders nothing in production builds. Persists choice in localStorage.
- * Hotkey: Shift+B to toggle without clicking.
+ * Renders nothing in production. Persists choice in localStorage.
+ * Hotkey: Shift+B cycles through the three modes.
  */
 import { useEffect, useState, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import "@/styles/dev-before-overlay.css";
 
 const STORAGE_KEY = "dev:style-mode";
-type Mode = "before" | "after";
+type Mode = "before" | "after" | "snapshot";
 
 function applyMode(mode: Mode) {
-  document.documentElement.setAttribute("data-style-mode", mode);
+  // The CSS overlay only triggers for "before"; "snapshot" leaves the live
+  // page untouched and renders an absolute image overlay instead.
+  const cssMode = mode === "before" ? "before" : "after";
+  document.documentElement.setAttribute("data-style-mode", cssMode);
+}
+
+function snapshotPathForRoute(pathname: string): string {
+  const slug = pathname.replace(/^\/+|\/+$/g, "").replace(/\//g, "_") || "home";
+  return `/before-snapshots/${slug}.png`;
 }
 
 export default function DevStyleToggle() {
@@ -24,21 +38,33 @@ export default function DevStyleToggle() {
 
   const [mode, setMode] = useState<Mode>(() => {
     if (typeof window === "undefined") return "after";
-    return (localStorage.getItem(STORAGE_KEY) as Mode) || "after";
+    return ((localStorage.getItem(STORAGE_KEY) as Mode) || "after");
   });
   const [collapsed, setCollapsed] = useState(false);
+  const [wipe, setWipe] = useState(50); // 0–100 wipe % for snapshot mode
+  const [snapshotExists, setSnapshotExists] = useState<boolean | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     applyMode(mode);
-    try {
-      localStorage.setItem(STORAGE_KEY, mode);
-    } catch {
-      /* ignore */
-    }
+    try { localStorage.setItem(STORAGE_KEY, mode); } catch { /* ignore */ }
   }, [mode]);
 
-  const toggle = useCallback(() => {
-    setMode((m) => (m === "before" ? "after" : "before"));
+  // Probe snapshot existence whenever route changes or snapshot mode activates
+  useEffect(() => {
+    if (mode !== "snapshot") {
+      setSnapshotExists(null);
+      return;
+    }
+    const url = snapshotPathForRoute(location.pathname);
+    const img = new Image();
+    img.onload = () => setSnapshotExists(true);
+    img.onerror = () => setSnapshotExists(false);
+    img.src = url;
+  }, [mode, location.pathname]);
+
+  const cycle = useCallback(() => {
+    setMode((m) => (m === "after" ? "before" : m === "before" ? "snapshot" : "after"));
   }, []);
 
   // Shift+B hotkey
@@ -48,161 +74,171 @@ export default function DevStyleToggle() {
         const t = e.target as HTMLElement | null;
         if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
         e.preventDefault();
-        toggle();
+        cycle();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [toggle]);
+  }, [cycle]);
 
-  if (collapsed) {
-    return (
-      <button
-        type="button"
-        onClick={() => setCollapsed(false)}
-        aria-label="Show style toggle"
-        style={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-          zIndex: 2147483647,
-          width: 36,
-          height: 36,
-          borderRadius: 9999,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: "#fff",
-          boxShadow: "0 6px 20px rgba(0,0,0,0.18)",
-          cursor: "pointer",
-          fontSize: 16,
-        }}
-      >
-        🎨
-      </button>
-    );
-  }
-
-  const isBefore = mode === "before";
-
-  return (
-    <div
-      role="region"
-      aria-label="Developer style toggle"
-      style={{
-        position: "fixed",
-        bottom: 16,
-        right: 16,
-        zIndex: 2147483647,
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 10px 8px 12px",
-        borderRadius: 9999,
-        background: "rgba(255,255,255,0.96)",
-        border: "1px solid rgba(0,0,0,0.1)",
-        boxShadow: "0 8px 28px rgba(0,0,0,0.18)",
-        backdropFilter: "blur(8px)",
-        font: "500 12px/1 'Inter', ui-sans-serif, system-ui, sans-serif",
-        color: "#111",
-        userSelect: "none",
-      }}
-    >
-      <span
+  // Snapshot overlay (only when active AND image loads)
+  const snapshotOverlay =
+    mode === "snapshot" && snapshotExists ? (
+      <div
         aria-hidden
         style={{
-          fontSize: 9,
-          fontWeight: 700,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
-          color: "#71717a",
+          position: "fixed",
+          inset: 0,
+          zIndex: 2147483640,
+          pointerEvents: "none",
+          clipPath: `inset(0 ${100 - wipe}% 0 0)`,
         }}
       >
-        DEV
-      </span>
-
-      <button
-        type="button"
-        onClick={toggle}
-        aria-pressed={isBefore}
-        aria-label={`Style mode: ${mode}. Click to switch.`}
-        title="Toggle pre-refactor styles (Shift+B)"
-        style={{
-          position: "relative",
-          width: 132,
-          height: 28,
-          borderRadius: 9999,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: isBefore ? "#fef2f2" : "#ecfdf5",
-          cursor: "pointer",
-          padding: 0,
-          overflow: "hidden",
-        }}
-      >
-        <span
+        <img
+          src={snapshotPathForRoute(location.pathname)}
+          alt="Pre-refactor snapshot"
           style={{
-            position: "absolute",
-            top: 2,
-            left: isBefore ? 2 : 66,
-            width: 64,
-            height: 22,
-            borderRadius: 9999,
-            background: isBefore ? "#dc2626" : "#059669",
-            color: "#fff",
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: "0.15em",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transition: "left 180ms ease",
-            textTransform: "uppercase",
+            width: "100vw",
+            height: "100vh",
+            objectFit: "cover",
+            objectPosition: "top left",
+            display: "block",
           }}
-        >
-          {isBefore ? "Before" : "After"}
-        </span>
-        <span
-          aria-hidden
+        />
+        <div
           style={{
             position: "absolute",
             top: 0,
-            left: 0,
-            right: 0,
             bottom: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 12px",
-            fontSize: 10,
-            fontWeight: 600,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            color: "rgba(0,0,0,0.35)",
+            left: `${wipe}%`,
+            width: 2,
+            background: "#dc2626",
+            boxShadow: "0 0 12px rgba(220,38,38,0.6)",
           }}
-        >
-          <span style={{ visibility: isBefore ? "hidden" : "visible" }}>Before</span>
-          <span style={{ visibility: isBefore ? "visible" : "hidden" }}>After</span>
-        </span>
-      </button>
+        />
+      </div>
+    ) : null;
 
-      <button
-        type="button"
-        onClick={() => setCollapsed(true)}
-        aria-label="Hide style toggle"
-        title="Hide"
+  if (collapsed) {
+    return (
+      <>
+        {snapshotOverlay}
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          aria-label="Show style toggle"
+          style={{
+            position: "fixed", bottom: 16, right: 16, zIndex: 2147483647,
+            width: 36, height: 36, borderRadius: 9999,
+            border: "1px solid rgba(0,0,0,0.12)", background: "#fff",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.18)", cursor: "pointer", fontSize: 16,
+          }}
+        >🎨</button>
+      </>
+    );
+  }
+
+  const labels: Record<Mode, { text: string; bg: string; pillBg: string }> = {
+    before:   { text: "Before",   bg: "#fef2f2", pillBg: "#dc2626" },
+    after:    { text: "After",    bg: "#ecfdf5", pillBg: "#059669" },
+    snapshot: { text: "Snapshot", bg: "#eff6ff", pillBg: "#1d4ed8" },
+  };
+  const order: Mode[] = ["before", "after", "snapshot"];
+  const idx = order.indexOf(mode);
+
+  return (
+    <>
+      {snapshotOverlay}
+      <div
+        role="region"
+        aria-label="Developer style toggle"
         style={{
-          width: 22,
-          height: 22,
-          borderRadius: 9999,
-          border: "1px solid rgba(0,0,0,0.08)",
-          background: "transparent",
-          color: "#71717a",
-          cursor: "pointer",
-          fontSize: 14,
-          lineHeight: 1,
-          padding: 0,
+          position: "fixed", bottom: 16, right: 16, zIndex: 2147483647,
+          display: "flex", flexDirection: "column", gap: 6,
+          padding: "8px 10px", borderRadius: 16,
+          background: "rgba(255,255,255,0.96)",
+          border: "1px solid rgba(0,0,0,0.1)",
+          boxShadow: "0 8px 28px rgba(0,0,0,0.18)", backdropFilter: "blur(8px)",
+          font: "500 12px/1 'Inter', ui-sans-serif, system-ui, sans-serif",
+          color: "#111", userSelect: "none", minWidth: 220,
         }}
       >
-        ×
-      </button>
-    </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span aria-hidden style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#71717a" }}>DEV</span>
+
+          <button
+            type="button"
+            onClick={cycle}
+            aria-label={`Style mode: ${mode}. Click to cycle.`}
+            title="Cycle Before / After / Snapshot (Shift+B)"
+            style={{
+              position: "relative", width: 198, height: 28, borderRadius: 9999,
+              border: "1px solid rgba(0,0,0,0.12)",
+              background: labels[mode].bg, cursor: "pointer", padding: 0, overflow: "hidden", flex: 1,
+            }}
+          >
+            <span
+              style={{
+                position: "absolute", top: 2,
+                left: 2 + idx * 64, width: 64, height: 22, borderRadius: 9999,
+                background: labels[mode].pillBg, color: "#fff",
+                fontSize: 10, fontWeight: 700, letterSpacing: "0.12em",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "left 180ms ease, background 180ms ease", textTransform: "uppercase",
+              }}
+            >{labels[mode].text}</span>
+            <span
+              aria-hidden
+              style={{
+                position: "absolute", inset: 0, display: "flex",
+                alignItems: "center", justifyContent: "space-around",
+                fontSize: 9, fontWeight: 600, letterSpacing: "0.1em",
+                textTransform: "uppercase", color: "rgba(0,0,0,0.35)",
+              }}
+            >
+              <span style={{ visibility: mode === "before" ? "hidden" : "visible", width: 64, textAlign: "center" }}>Before</span>
+              <span style={{ visibility: mode === "after" ? "hidden" : "visible", width: 64, textAlign: "center" }}>After</span>
+              <span style={{ visibility: mode === "snapshot" ? "hidden" : "visible", width: 64, textAlign: "center" }}>Snap</span>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setCollapsed(true)}
+            aria-label="Hide style toggle"
+            title="Hide"
+            style={{ width: 22, height: 22, borderRadius: 9999, border: "1px solid rgba(0,0,0,0.08)", background: "transparent", color: "#71717a", cursor: "pointer", fontSize: 14, lineHeight: 1, padding: 0 }}
+          >×</button>
+        </div>
+
+        {/* Mode caption */}
+        <div style={{ fontSize: 10, color: "#52525b", lineHeight: 1.35 }}>
+          {mode === "after" && "Live build."}
+          {mode === "before" && "CSS simulation of pre-refactor styling. Approximate, not exact."}
+          {mode === "snapshot" && snapshotExists === true && "Real screenshot of pre-refactor build. Drag the slider to compare."}
+          {mode === "snapshot" && snapshotExists === false && (
+            <>No snapshot at <code style={{ background: "#f4f4f5", padding: "0 4px", borderRadius: 3 }}>{snapshotPathForRoute(location.pathname)}</code>. Capture it from the previous build and commit to <code style={{ background: "#f4f4f5", padding: "0 4px", borderRadius: 3 }}>public/before-snapshots/</code>.</>
+          )}
+          {mode === "snapshot" && snapshotExists === null && "Loading snapshot…"}
+        </div>
+
+        {/* Wipe slider — only relevant in snapshot mode with image present */}
+        {mode === "snapshot" && snapshotExists && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 9, color: "#71717a", letterSpacing: "0.1em", textTransform: "uppercase" }}>Wipe</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={wipe}
+              onChange={(e) => setWipe(Number(e.target.value))}
+              style={{ flex: 1 }}
+              aria-label="Snapshot wipe position"
+            />
+            <span style={{ fontSize: 10, color: "#52525b", width: 28, textAlign: "right" }}>{wipe}%</span>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

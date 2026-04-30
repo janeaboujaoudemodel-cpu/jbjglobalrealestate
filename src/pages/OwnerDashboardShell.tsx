@@ -88,8 +88,10 @@ const OwnerDashboardShell = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex">
-      {/* Owner Tasks Popup Alert */}
-      <OwnerTasksPopupAlert />
+      {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
+      <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
+        <OwnerTasksPopupAlert />
+      </div>
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -118,13 +120,13 @@ const OwnerDashboardShell = () => {
       {/* Main Content */}
       <main 
         className={cn(
-          "flex-1 transition-all duration-300",
+          "flex-1 transition-all duration-300 overscroll-contain",
           isMobile ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
         )}
         role="main"
       >
         {/* Top Bar - always horizontal, never vertical stacking */}
-        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
+        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
               <Button
