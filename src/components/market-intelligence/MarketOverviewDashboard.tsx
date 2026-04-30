@@ -9,6 +9,17 @@ import {
   QUARTERLY_TRENDS,
   PROPERTY_TYPE_TRENDS,
 } from "@/config/open-data-config";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_BODY,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+  MI_KPI,
+  MI_CHIP,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -49,14 +60,14 @@ const StatCard = ({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 text-sm font-bold px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'}`}>
+            <div className={`flex items-center gap-1 ${MI_CHIP} px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'}`}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-foreground font-medium text-sm mb-1">{title}</p>
-            <p className={`${accentColor} text-2xl font-bold truncate`}>
+            <p className={`${MI_BODY} mb-1`}>{title}</p>
+            <p className={`${MI_KPI} ${accentColor ?? 'text-foreground'} truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>
@@ -80,13 +91,13 @@ export const MarketOverviewDashboard = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-bold text-foreground">
+            <span className={`${MI_EYEBROW} mb-4 block`}>
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className={`${MI_H2} mb-4`}>
               Dubai Real Estate Dashboard
             </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
+            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
@@ -148,7 +159,7 @@ export const MarketOverviewDashboard = () => {
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="font-semibold text-sm w-20 text-foreground">{quarter.quarter}</span>
+                          <span className="text-sm font-semibold leading-none w-20 text-foreground">{quarter.quarter}</span>
                           <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-muted">
                             <motion.div
                               className={`h-full ${qBars[idx % qBars.length]}`}
@@ -157,7 +168,7 @@ export const MarketOverviewDashboard = () => {
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-foreground">
+                            <span className={`absolute right-3 top-1/2 -translate-y-1/2 ${MI_CHIP} text-foreground`}>
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>
@@ -165,7 +176,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-xs mt-4 font-medium text-muted-foreground">
+                  <p className={`${MI_CAPTION} mt-4`}>
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -186,12 +197,12 @@ export const MarketOverviewDashboard = () => {
                     {PROPERTY_TYPE_TRENDS.map((prop) => (
                       <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0 border-border/60">
                         <div>
-                          <p className="font-semibold text-foreground">{prop.type}</p>
-                          <p className="font-medium text-sm text-muted-foreground">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="text-base font-semibold leading-snug text-foreground">{prop.type}</p>
+                          <p className={MI_CAPTION}>{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold text-foreground">AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className={`text-sm font-bold ${prop.change >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+                          <p className="text-sm font-bold leading-none tracking-tight text-foreground">AED {prop.avgPrice.toLocaleString()}/sqft</p>
+                          <p className={`${MI_CHIP} mt-1 ${prop.change >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                             {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
                           </p>
                         </div>
@@ -210,11 +221,11 @@ export const MarketOverviewDashboard = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-muted border-border">
               <Calendar className="w-4 h-4 text-foreground" />
-              <span className="text-sm font-semibold text-foreground">
+              <span className="text-sm font-semibold leading-none text-foreground">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
               <span className="text-muted-foreground">•</span>
-              <span className="text-sm font-medium text-muted-foreground">
+              <span className={MI_BODY_MUTED}>
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>
