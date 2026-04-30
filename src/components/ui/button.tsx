@@ -39,11 +39,11 @@ const BRAND_MEDIA = BRAND_HERO;
 const BRAND_DARK =
   "bg-[#1A1A1A] text-white border-2 border-[#B89555]/40 hover:bg-[#B89555] hover:text-white hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
 
-// AI Tool button variants — dark unified
-const AI_MONO = "bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 shadow-sm";
+// AI Tool button variants — keep AI premium purple identity
+const AI_MONO = "bg-[#1A1A1A] hover:bg-[#A68444] text-white border border-[#B89555]/40 shadow-sm";
 
 // Dark theme variants (for use on dark sections)
-const DARK_GHOST = "bg-transparent text-white border-2 border-gray-600 hover:bg-white/10 hover:border-white/40 transition-all";
+const DARK_GHOST = "bg-transparent text-white border-2 border-[#B89555]/40 hover:bg-white/10 hover:border-[#B89555] transition-all";
 const DARK_OUTLINE = "bg-transparent text-white border-2 border-white/40 hover:bg-white/10 hover:border-white/60 transition-all";
 
 const buttonVariants = cva(
@@ -55,6 +55,7 @@ const buttonVariants = cva(
         primary: BRAND_PRIMARY,
         secondary: BRAND_SECONDARY,
         tertiary: BRAND_TERTIARY,
+        gold: BRAND_GOLD,
         hero: BRAND_HERO,
         media: BRAND_MEDIA,
         dark: BRAND_DARK,
