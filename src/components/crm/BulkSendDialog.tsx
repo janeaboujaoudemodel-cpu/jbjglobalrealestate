@@ -433,8 +433,8 @@ export const BulkSendDialog = ({
                     <div key={t.id} className="flex items-center justify-between px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         {icon}
-                        <span className="font-semibold text-[#1A1A1A] truncate">{t.developer_name}</span>
-                        <span className="text-[#8A7556] truncate">{t.developer_email}</span>
+                        <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
+                        <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
                       </div>
                       <span className={`uppercase tracking-wider font-bold ${
                         s === "ok" ? "text-emerald-700" :
