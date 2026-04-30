@@ -778,43 +778,31 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Careers — Rose (distinct from all others)
-    if (item.href === '/join') {
+    // Unified highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
+    // — all on the champagne+gold palette. No per-item color tint; no border framing on rest.
+    if (
+      item.href === '/join' ||
+      item.href === '/quiz' ||
+      (item.href === '/listing-portal' && item.highlight) ||
+      item.href === '/resale-properties'
+    ) {
       return shouldHighlight
-        ? "bg-rose-500 text-white border border-rose-400 font-bold"
-        : "bg-rose-50/80 text-rose-500 font-semibold hover:bg-rose-100/60 border border-rose-300/25";
-    }
-    // AI Home Finder — Violet
-    if (item.href === '/quiz') {
-      return shouldHighlight
-        ? "bg-violet-500 text-white border border-violet-400 font-bold"
-        : "bg-violet-50/80 text-violet-500 font-semibold hover:bg-violet-100/60 border border-violet-300/25";
-    }
-    // List Your Property — Sky Blue
-    if (item.href === '/listing-portal' && item.highlight) {
-      return shouldHighlight
-        ? "bg-sky-500 text-white border border-sky-400 font-bold"
-        : "bg-sky-50/80 text-sky-500 font-semibold hover:bg-sky-100/60 border border-sky-300/25";
-    }
-    // Resale Properties — Emerald
-    if (item.href === '/resale-properties') {
-      return shouldHighlight
-        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-50/80 text-emerald-600 font-semibold hover:bg-emerald-100/60 border border-emerald-300/25";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/85 font-semibold hover:bg-gold/10";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10 border border-[#1A1A1A]/10";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/50 font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10 border border-[#1A1A1A]/10";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
     }
     return shouldHighlight
-      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 font-bold"
-      : "text-[#1A1A1A]/80 hover:bg-gold/[0.08] hover:text-[#1A1A1A] border border-[#1A1A1A]/10 hover:border-gold/30";
+      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+      : "text-[#1A1A1A]/80 hover:bg-gold/[0.08] hover:text-[#1A1A1A]";
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
