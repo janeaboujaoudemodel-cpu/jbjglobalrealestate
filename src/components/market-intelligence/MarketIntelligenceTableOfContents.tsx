@@ -49,12 +49,10 @@ export const MarketIntelligenceTableOfContents = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // Skip observer updates during programmatic scroll
         if (isScrollingRef.current) return;
         
         const visibleEntries = entries.filter(entry => entry.isIntersecting);
         if (visibleEntries.length > 0) {
-          // Sort by top position to get the topmost visible section
           const sorted = visibleEntries.sort((a, b) => {
             return a.boundingClientRect.top - b.boundingClientRect.top;
           });
@@ -79,13 +77,11 @@ export const MarketIntelligenceTableOfContents = ({
   }, [items]);
 
   const scrollToSection = (id: string) => {
-    // Lock observer during scroll
     isScrollingRef.current = true;
     setActiveId(id);
     
     scrollToId(id, { extraOffset: 20 });
 
-    // Re-enable observer after scroll animation completes
     setTimeout(() => {
       isScrollingRef.current = false;
     }, 900);
@@ -97,7 +93,7 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 lg:right-8 top-32 z-40 w-64 lg:w-72">
+    <div className="surface-light fixed right-4 lg:right-8 top-32 z-40 w-64 lg:w-72" data-surface="light">
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -107,14 +103,14 @@ export const MarketIntelligenceTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="rounded-xl p-4 shadow-xl border" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}>
+            <div className="rounded-xl p-4 shadow-xl border bg-card border-border">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#000000' }}>
-                  <HelpCircle className="w-4 h-4" style={{ color: '#ffffff' }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-foreground">
+                  <HelpCircle className="w-4 h-4 text-background" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm mb-1" style={{ color: '#000000' }}>Quick Navigation</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>
+                  <h4 className="font-semibold text-sm mb-1 text-foreground">Quick Navigation</h4>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
                     Click any section button to jump directly to that part of the page. The active section is highlighted.
                   </p>
                 </div>
@@ -128,33 +124,31 @@ export const MarketIntelligenceTableOfContents = ({
                 I Understand
               </Button>
             </div>
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent" style={{ borderLeftColor: '#FFFFFF' }} />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-card" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container - Fixed position with always-visible gold scrollbar */}
+      {/* Main TOC Container */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] border"
-        style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}
+        className="rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] border bg-card border-border"
       >
-        <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: '#E5E7EB', backgroundColor: '#F9FAFB' }}>
+        <div className="flex items-center justify-between p-4 border-b bg-muted border-border">
           <div className="flex items-center gap-2">
-            <List className="w-5 h-5" style={{ color: '#000000' }} />
-            <h3 className="font-semibold" style={{ color: '#000000' }}>{title}</h3>
+            <List className="w-5 h-5 text-foreground" />
+            <h3 className="font-semibold text-foreground">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-            style={{ backgroundColor: '#F3F4F6' }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-muted hover:bg-accent"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4" style={{ color: '#374151' }} />
+              <ChevronDown className="w-4 h-4 text-muted-foreground" />
             ) : (
-              <ChevronUp className="w-4 h-4" style={{ color: '#374151' }} />
+              <ChevronUp className="w-4 h-4 text-muted-foreground" />
             )}
           </button>
         </div>
@@ -176,30 +170,24 @@ export const MarketIntelligenceTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all border",
                     activeId === item.id
-                      ? "font-semibold shadow-sm"
-                      : "border-transparent hover:bg-gray-50"
+                      ? "font-semibold shadow-sm bg-foreground text-background border-foreground"
+                      : "border-transparent text-muted-foreground bg-transparent hover:bg-accent"
                   )}
-                  style={
-                    activeId === item.id
-                      ? { backgroundColor: '#000000', color: '#ffffff', borderColor: '#000000' }
-                      : { color: '#374151', backgroundColor: 'transparent' }
-                  }
                 >
                   <span className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                  )} style={
+                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
                     activeId === item.id
-                      ? { backgroundColor: '#ffffff', color: '#000000' }
-                      : { backgroundColor: '#F3F4F6', color: '#000000' }
-                  }>
+                      ? "bg-background text-foreground"
+                      : "bg-muted text-foreground"
+                  )}>
                     {index + 1}
                   </span>
-                  {item.icon && <item.icon className="w-4 h-4" style={{ color: activeId === item.id ? '#ffffff' : '#374151' }} />}
+                  {item.icon && <item.icon className="w-4 h-4" />}
                   <span className="flex-1">{item.title}</span>
                 </button>
               ))}
               
-              {/* CTA Action Button - Premium 3D Glow Style with Hover Behavior */}
+              {/* CTA Action Button */}
               {ctaAction && (
                 <Link to={ctaAction.href} className="block mt-4">
                   <Button 

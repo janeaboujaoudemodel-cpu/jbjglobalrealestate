@@ -15,15 +15,12 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* ============================================================
- * ICON BOX STYLE - Solid black tile, white icon (max contrast)
- * ============================================================ */
+/* ICON BOX - inverted on light surfaces */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${className}`}
-    style={{ backgroundColor: '#000000' }}
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
   >
-    <Icon className="w-6 h-6" style={{ color: '#ffffff' }} />
+    <Icon className="w-6 h-6 text-background" />
   </div>
 );
 
@@ -34,7 +31,7 @@ const StatCard = ({
   icon: Icon, 
   suffix = "",
   prefix = "",
-  accentColor = "text-black"
+  accentColor = "text-foreground"
 }: { 
   title: string; 
   value: string | number; 
@@ -48,7 +45,7 @@ const StatCard = ({
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
+      <Card className="transition-all h-full bg-card border border-border">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -58,7 +55,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-black font-medium text-sm mb-1">{title}</p>
+            <p className="text-foreground font-medium text-sm mb-1">{title}</p>
             <p className={`${accentColor} text-2xl font-bold truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
@@ -71,7 +68,7 @@ const StatCard = ({
 
 export const MarketOverviewDashboard = () => {
   return (
-    <section className="py-16" style={{ backgroundColor: '#FFFFFF' }} data-surface="light">
+    <section className="surface-light py-16 bg-background" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -83,13 +80,13 @@ export const MarketOverviewDashboard = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-bold" style={{ color: '#000000' }}>
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-bold text-foreground">
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
-              <span style={{ color: '#000000' }}>Dubai</span> <span style={{ color: '#000000' }}>Real Estate Dashboard</span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              Dubai Real Estate Dashboard
             </h2>
-            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
@@ -101,7 +98,7 @@ export const MarketOverviewDashboard = () => {
               value={MARKET_OVERVIEW_STATS.totalTransactions}
               change={MARKET_OVERVIEW_STATS.totalTransactionsChange}
               icon={Building2}
-              accentColor="text-emerald-600"
+              accentColor="text-emerald-700"
             />
             <StatCard
               title="Avg. Price/Sqft"
@@ -109,7 +106,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.avgPriceChange}
               icon={DollarSign}
               prefix="AED "
-              accentColor="text-blue-600"
+              accentColor="text-blue-700"
             />
             <StatCard
               title="Avg. Rental Yield"
@@ -117,7 +114,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.yieldChange}
               icon={Percent}
               suffix="%"
-              accentColor="text-amber-600"
+              accentColor="text-amber-700"
             />
             <StatCard
               title="Days on Market"
@@ -125,7 +122,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.domChange}
               icon={Clock}
               suffix=" days"
-              accentColor="text-purple-600"
+              accentColor="text-foreground"
             />
           </div>
 
@@ -133,9 +130,9 @@ export const MarketOverviewDashboard = () => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
+              <Card className="h-full bg-card border border-border">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-3">
+                  <CardTitle className="text-foreground flex items-center gap-3">
                     <IconBox icon={BarChart3} className="w-10 h-10" />
                     <span>Quarterly Transaction Trends</span>
                   </CardTitle>
@@ -143,25 +140,24 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {QUARTERLY_TRENDS.map((quarter, idx) => {
-                      const qColors = [
-                        'linear-gradient(to right, #10B981, #34D399)', // emerald
-                        'linear-gradient(to right, #3B82F6, #60A5FA)', // blue
-                        'linear-gradient(to right, #F59E0B, #FBBF24)', // amber
-                        'linear-gradient(to right, #8B5CF6, #A78BFA)', // violet
+                      const qBars = [
+                        'bg-gradient-to-r from-emerald-500 to-emerald-400',
+                        'bg-gradient-to-r from-blue-500 to-blue-400',
+                        'bg-gradient-to-r from-amber-500 to-amber-400',
+                        'bg-gradient-to-r from-violet-500 to-violet-400',
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="font-semibold text-sm w-20" style={{ color: '#000000' }}>{quarter.quarter}</span>
-                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner" style={{ backgroundColor: '#F3F4F6' }}>
+                          <span className="font-semibold text-sm w-20 text-foreground">{quarter.quarter}</span>
+                          <div className="flex-1 h-8 rounded-lg overflow-hidden relative shadow-inner bg-muted">
                             <motion.div
-                              className="h-full"
-                              style={{ background: qColors[idx % qColors.length] }}
+                              className={`h-full ${qBars[idx % qBars.length]}`}
                               initial={{ width: 0 }}
                               whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 0.8, delay: idx * 0.1 }}
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold" style={{ color: '#000000' }}>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-foreground">
                               {quarter.transactions.toLocaleString()}
                             </span>
                           </div>
@@ -169,7 +165,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-xs mt-4 font-medium" style={{ color: '#374151' }}>
+                  <p className="text-xs mt-4 font-medium text-muted-foreground">
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -178,9 +174,9 @@ export const MarketOverviewDashboard = () => {
 
             {/* Property Type Breakdown */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
+              <Card className="h-full bg-card border border-border">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-3">
+                  <CardTitle className="text-foreground flex items-center gap-3">
                     <IconBox icon={Building2} className="w-10 h-10" />
                     <span>Price by Property Type</span>
                   </CardTitle>
@@ -188,14 +184,14 @@ export const MarketOverviewDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {PROPERTY_TYPE_TRENDS.map((prop) => (
-                      <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
+                      <div key={prop.type} className="flex items-center justify-between py-3 border-b last:border-0 border-border/60">
                         <div>
-                          <p className="font-semibold" style={{ color: '#000000' }}>{prop.type}</p>
-                          <p className="font-medium text-sm" style={{ color: '#374151' }}>{prop.volume.toLocaleString()} transactions</p>
+                          <p className="font-semibold text-foreground">{prop.type}</p>
+                          <p className="font-medium text-sm text-muted-foreground">{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold" style={{ color: '#000000' }}>AED {prop.avgPrice.toLocaleString()}/sqft</p>
-                          <p className="text-sm font-bold" style={{ color: prop.change >= 0 ? '#047857' : '#B91C1C' }}>
+                          <p className="font-bold text-foreground">AED {prop.avgPrice.toLocaleString()}/sqft</p>
+                          <p className={`text-sm font-bold ${prop.change >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                             {prop.change >= 0 ? '+' : ''}{prop.change}% YoY
                           </p>
                         </div>
@@ -212,13 +208,13 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border" style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' }}>
-              <Calendar className="w-4 h-4" style={{ color: '#000000' }} />
-              <span className="text-sm font-semibold" style={{ color: '#000000' }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border bg-muted border-border">
+              <Calendar className="w-4 h-4 text-foreground" />
+              <span className="text-sm font-semibold text-foreground">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span style={{ color: '#374151' }}>•</span>
-              <span className="text-sm font-medium" style={{ color: '#374151' }}>
+              <span className="text-muted-foreground">•</span>
+              <span className="text-sm font-medium text-muted-foreground">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>

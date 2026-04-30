@@ -38,15 +38,12 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
   );
 };
 
-/* ============================================================
- * ICON BOX STYLE - Solid black tile, white icon (max contrast on white card)
- * ============================================================ */
+/* ICON BOX - inverted on light surfaces (foreground bg, background icon) */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${className}`}
-    style={{ backgroundColor: '#000000' }}
+    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-foreground ${className}`}
   >
-    <Icon className="w-5 h-5" style={{ color: '#ffffff' }} />
+    <Icon className="w-5 h-5 text-background" />
   </div>
 );
 
@@ -55,17 +52,17 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="transition-all group h-full hover:shadow-lg" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
+      <Card className="transition-all group h-full hover:shadow-lg bg-card border border-border">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <IconBox icon={MapPin} />
               <div className="min-w-0">
-                <h3 className="font-semibold transition-colors truncate" style={{ color: '#000000' }}>
+                <h3 className="font-semibold transition-colors truncate text-foreground">
                   {area.area}
                 </h3>
-                <p className="font-medium text-xs" style={{ color: '#374151' }}>Dubai, UAE</p>
+                <p className="font-medium text-xs text-muted-foreground">Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
@@ -73,54 +70,54 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#F5F5F5' }}>
-              <div className="flex items-center gap-1 font-medium text-xs mb-1" style={{ color: '#374151' }}>
+            <div className="rounded-lg p-3 bg-muted">
+              <div className="flex items-center gap-1 font-medium text-xs mb-1 text-muted-foreground">
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
-              <p className="font-bold text-lg" style={{ color: '#000000' }}>{area.priceIndex}</p>
+              <p className="font-bold text-lg text-foreground">{area.priceIndex}</p>
             </div>
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#F5F5F5' }}>
-              <div className="flex items-center gap-1 font-medium text-xs mb-1" style={{ color: '#374151' }}>
+            <div className="rounded-lg p-3 bg-muted">
+              <div className="flex items-center gap-1 font-medium text-xs mb-1 text-muted-foreground">
                 <Building2 className="w-3 h-3" />
                 Rental Index
               </div>
-              <p className="font-bold text-lg" style={{ color: '#000000' }}>{area.rentalIndex}</p>
+              <p className="font-bold text-lg text-foreground">{area.rentalIndex}</p>
             </div>
           </div>
 
-          {/* Progress Bars */}
+          {/* Progress Bars (data-viz: emerald = demand, blue = supply) */}
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold" style={{ color: '#047857' }}>Demand Score</span>
-                <span className="font-bold" style={{ color: '#047857' }}>{area.demandScore}/100</span>
+                <span className="font-semibold text-emerald-700">Demand Score</span>
+                <span className="font-bold text-emerald-700">{area.demandScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner" style={{ backgroundColor: '#D1FAE5' }}>
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-emerald-100">
                 <div
-                  className="h-full rounded-full"
-                  style={{ width: `${area.demandScore}%`, background: 'linear-gradient(to right, #10B981, #34D399)' }}
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400"
+                  style={{ width: `${area.demandScore}%` }}
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold" style={{ color: '#1D4ED8' }}>Supply Score</span>
-                <span className="font-bold" style={{ color: '#1D4ED8' }}>{area.supplyScore}/100</span>
+                <span className="font-semibold text-blue-700">Supply Score</span>
+                <span className="font-bold text-blue-700">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2.5 rounded-full overflow-hidden shadow-inner" style={{ backgroundColor: '#DBEAFE' }}>
+              <div className="h-2.5 rounded-full overflow-hidden shadow-inner bg-blue-100">
                 <div
-                  className="h-full rounded-full"
-                  style={{ width: `${area.supplyScore}%`, background: 'linear-gradient(to right, #3B82F6, #60A5FA)' }}
+                  className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400"
+                  style={{ width: `${area.supplyScore}%` }}
                 />
               </div>
             </div>
           </div>
 
           {/* YoY Change */}
-          <div className="flex items-center justify-between py-3 border-t" style={{ borderColor: 'rgba(0,0,0,0.1)' }}>
-            <span className="font-medium text-sm" style={{ color: '#000000' }}>Year-over-Year</span>
-            <span className="font-bold" style={{ color: area.yoyChange >= 0 ? '#047857' : '#B91C1C' }}>
+          <div className="flex items-center justify-between py-3 border-t border-border/60">
+            <span className="font-medium text-sm text-foreground">Year-over-Year</span>
+            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>
@@ -128,8 +125,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4 mt-3">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-xs flex items-start gap-2" style={{ color: '#374151' }}>
-                <span className="mt-0.5 font-bold" style={{ color: '#000000' }}>•</span>
+              <p key={idx} className="text-xs flex items-start gap-2 text-muted-foreground">
+                <span className="mt-0.5 font-bold text-foreground">•</span>
                 {highlight}
               </p>
             ))}
@@ -138,13 +135,10 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Link */}
           <Link
             to={`/area/${slugify(area.area)}`}
-            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors"
-            style={{ color: '#000000', backgroundColor: '#F5F5F5' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#000000'; e.currentTarget.style.color = '#ffffff'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#F5F5F5'; e.currentTarget.style.color = '#000000'; }}
+            className="flex items-center justify-center gap-2 w-full py-2 text-sm font-semibold rounded-md transition-colors bg-muted text-foreground hover:bg-foreground hover:text-background"
           >
-            <span style={{ color: 'inherit' }}>View Area Details</span>
-            <ArrowUpRight className="w-4 h-4" style={{ color: 'inherit' }} />
+            <span>View Area Details</span>
+            <ArrowUpRight className="w-4 h-4" />
           </Link>
         </CardContent>
       </Card>
@@ -154,7 +148,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
 export const AreaIntelligenceGrid = () => {
   return (
-    <section className="py-16" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+    <section className="surface-light py-16 bg-muted" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -166,13 +160,13 @@ export const AreaIntelligenceGrid = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold" style={{ color: '#6b7280' }}>
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
               Area Intelligence
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Market Snapshot by Location
             </h2>
-            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>
@@ -188,10 +182,10 @@ export const AreaIntelligenceGrid = () => {
           {/* View All Link */}
           <motion.div className="text-center mt-10" variants={fadeInUp}>
             <Button variant="primary" asChild>
-              <Link to="/areas" style={{ color: '#ffffff' }}>
-                <BarChart2 className="w-5 h-5 mr-2" style={{ color: '#ffffff' }} />
-                <span style={{ color: '#ffffff' }}>Explore All Area Guides</span>
-                <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#ffffff' }} />
+              <Link to="/areas">
+                <BarChart2 className="w-5 h-5 mr-2" />
+                <span>Explore All Area Guides</span>
+                <ChevronRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
           </motion.div>
