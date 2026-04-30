@@ -940,10 +940,57 @@ const DeveloperRegistryTab = () => {
       )}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500">
-          {data.length === 0
-            ? <>No developers in your registry yet. Click <b>Import all developers</b> or <b>Pre-fill</b> to seed.</>
-            : <>No developers match the current filters. Clear search and status filters to see all {queuePool.length} pending and not-started developers.</>}
+        <Card><CardContent className="p-8 text-center text-gray-500 space-y-4">
+          {data.length === 0 ? (
+            <div className="space-y-3">
+              <p>No developers in your registry yet.</p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                <Button
+                  variant="outline"
+                  onClick={() => importAll.mutate()}
+                  disabled={importAll.isPending}
+                >
+                  {importAll.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Import all developers
+                </Button>
+                <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
+                  {seed.isPending ? "Seeding…" : "Pre-fill"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p>
+                No developers match the current filters
+                {(q || statusFilter !== "all" || emailFilter !== "all") && (
+                  <>
+                    {" "}(<span className="text-black font-semibold">
+                      {[
+                        q && `search: "${q}"`,
+                        statusFilter !== "all" && `status: ${STATUS_DEV.find(s => s.v === statusFilter)?.label || statusFilter}`,
+                        emailFilter !== "all" && `email: ${emailFilter.replace("_", " ")}`,
+                      ].filter(Boolean).join(" · ")}
+                    </span>)
+                  </>
+                )}.
+              </p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                <Button
+                  variant="outline"
+                  onClick={() => { setQ(""); setStatusFilter("all"); setEmailFilter("all"); }}
+                  disabled={!q && statusFilter === "all" && emailFilter === "all"}
+                >
+                  <RotateCcw className="w-3 h-3 mr-1" />Clear all filters
+                </Button>
+                <Button
+                  className="bg-black text-white hover:bg-gray-800"
+                  onClick={() => { setQ(""); setStatusFilter("all"); setEmailFilter("all"); setSubTab("queue"); }}
+                >
+                  Show full queue ({queuePool.length})
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
