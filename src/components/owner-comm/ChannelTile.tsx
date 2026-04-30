@@ -19,11 +19,12 @@ import {
   Facebook,
   Linkedin,
   Hash,
+  type LucideIcon,
 } from "lucide-react";
 import { ProviderState } from "@/hooks/useCommChannels";
 import { formatDistanceToNow } from "date-fns";
 
-const PROVIDER_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const PROVIDER_ICONS: Record<string, LucideIcon> = {
   email_gmail: Mail,
   email_outlook: Mail,
   email_resend: Send,
