@@ -134,7 +134,17 @@ Deno.serve(async (req) => {
           console.error("[comm-inbound-sync] message upsert failed", msgErr);
           continue;
         }
-        imported++;
+
+        // Only count + bump unread when a NEW row was actually inserted.
+        // With ignoreDuplicates:true, conflicting upserts return an empty array.
+        const wasNew = Array.isArray(insertedMsg) && insertedMsg.length > 0;
+        if (wasNew) {
+          await admin
+            .from("owner_comm_threads")
+            .update({ unread_count: (thread.unread_count ?? 0) + 1 })
+            .eq("id", threadId);
+          imported++;
+        }
       }
 
       await admin
