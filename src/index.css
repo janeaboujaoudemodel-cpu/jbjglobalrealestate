@@ -3657,6 +3657,21 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   color: #FDFBF7 !important;
 }
 
+/* FINAL ENFORCEMENT: SVG icons inside any dark icon tile or .jj-icon-keep
+   must always render white. Maximum specificity + !important on color AND
+   stroke (lucide icons use stroke="currentColor"). This is the last word. */
+.jj-icon-keep > svg,
+.jj-icon-keep svg.lucide,
+[class*="bg-[#1A1A1A]"] > svg.lucide,
+[class*="bg-[#1A1A1A]"] svg.lucide,
+.bg-black > svg.lucide,
+.bg-foreground > svg.lucide,
+[class*="bg-[#1A1A1A]"] .text-white,
+[class*="bg-[#1A1A1A]"] [class*="text-white"] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* Gold surfaces — children inherit white text by default */
 .bg-\[\#B89555\],
 .bg-\[\#A68444\],
