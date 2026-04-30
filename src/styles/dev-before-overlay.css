@@ -1,0 +1,94 @@
+/**
+ * Pre-refactor "before" style overlay — DEV ONLY.
+ *
+ * When <html> has `data-style-mode="before"`, these rules re-apply the
+ * faded / inconsistent typography & contrast that existed prior to the
+ * Market Intelligence + global contrast refactor. Toggling lets reviewers
+ * spot any wash-out that may still leak into the corrected build.
+ *
+ * Scope: presentation only. No layout/structural changes.
+ */
+
+html[data-style-mode="before"] {
+  /* ── Faded muted foregrounds (used in body copy + TOC) ─────────────── */
+  --before-muted: 113 113 122; /* zinc-500 */
+}
+
+/* Body copy & paragraphs — drop opacity to mimic pre-refactor */
+html[data-style-mode="before"] p,
+html[data-style-mode="before"] li,
+html[data-style-mode="before"] .text-muted-foreground {
+  opacity: 0.8 !important;
+  line-height: 1.45 !important;
+}
+
+/* Eyebrows — looser tracking, lower weight (pre-MI_EYEBROW) */
+html[data-style-mode="before"] [class*="uppercase"][class*="tracking-"] {
+  letter-spacing: 0.05em !important;
+  font-weight: 500 !important;
+  opacity: 0.7 !important;
+}
+
+/* Section H2 — under-sized, lighter weight */
+html[data-style-mode="before"] h2 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+}
+
+/* Card titles (H3) — soft hierarchy */
+html[data-style-mode="before"] h3 {
+  font-weight: 500 !important;
+}
+
+/* KPI / large stat numbers — under-emphasized */
+html[data-style-mode="before"] [class*="text-2xl"],
+html[data-style-mode="before"] [class*="text-3xl"] {
+  font-weight: 600 !important;
+}
+
+/* Re-introduce faded gold on chips/badges (banned token) */
+html[data-style-mode="before"] [class*="bg-gold"],
+html[data-style-mode="before"] [class*="text-gold"] {
+  color: rgba(184, 149, 106, 0.7) !important;
+}
+
+/* Dim white-on-image hero descriptions back to /85 */
+html[data-style-mode="before"] .text-white,
+html[data-style-mode="before"] [class*="text-white/95"],
+html[data-style-mode="before"] [class*="text-white/9"] {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Strip drop-shadows added to hero text in the refactor */
+html[data-style-mode="before"] [class*="drop-shadow-"] {
+  filter: none !important;
+}
+
+/* Soften the hero composite overlays (revert to single layer) */
+html[data-style-mode="before"] [data-mi-overlay="composite"] {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.55)
+  ) !important;
+}
+
+/* Visual marker so reviewers know overlay is active */
+html[data-style-mode="before"] body::before {
+  content: "BEFORE";
+  position: fixed;
+  bottom: 92px;
+  right: 16px;
+  z-index: 2147483646;
+  padding: 4px 10px;
+  font: 600 10px/1 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.25em;
+  color: #fff;
+  background: #b91c1c;
+  border-radius: 9999px;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
