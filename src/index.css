@@ -3507,3 +3507,85 @@ button:disabled:has(.lucide),
     color: #ffffff !important;
   }
 }
+
+/* ============================================================
+ * FINAL CONTRAST LOCK — runs LAST, beats every earlier !important.
+ *
+ * Problem we're solving:
+ *   Buttons / badges / chips painted with arbitrary hex backgrounds
+ *   (e.g. bg-[#1A1A1A], bg-[#B89555]) were being caught by global
+ *   "white-text-on-light-surface → force dark" rules because the
+ *   :not([class*="bg-black"]) exclusions didn't recognise hex
+ *   variants. Result: black text on a black/gold button — unreadable.
+ *
+ * Rule:
+ *   ANY element (or descendant) painted with a brand DARK hex or
+ *   brand GOLD hex MUST render text in white (#FFFFFF).
+ *   This holds regardless of ancestor surface, hover, or other
+ *   global enforcement layers.
+ * ============================================================ */
+
+/* Brand DARK ink tiles — text + descendants → white */
+[class*="bg-[#1A1A1A]"],
+[class*="bg-[#0F0F0F]"],
+[class*="bg-[#111111]"],
+[class*="bg-[#0A0A0A]"],
+[class*="bg-[#1F1F1F]"],
+[class*="bg-[#222222]"],
+[class*="hover:bg-[#1A1A1A]"]:hover,
+[class*="hover:bg-[#0F0F0F]"]:hover,
+[class*="bg-[#1A1A1A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#0F0F0F]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#111111]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#0A0A0A]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
+  color: #FFFFFF !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Brand DARK ink tiles — SVG icons → white */
+[class*="bg-[#1A1A1A]"] svg,
+[class*="bg-[#0F0F0F]"] svg,
+[class*="bg-[#111111]"] svg,
+[class*="bg-[#0A0A0A]"] svg {
+  color: #FFFFFF !important;
+}
+
+/* Brand GOLD tiles — text + descendants → white */
+[class*="bg-[#B89555]"],
+[class*="bg-[#A68444]"],
+[class*="bg-[#C8A766]"],
+[class*="bg-[#D4AF37]"],
+[class*="hover:bg-[#A68444]"]:hover,
+[class*="hover:bg-[#B89555]"]:hover,
+[class*="bg-[#B89555]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#A68444]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#C8A766]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li),
+[class*="bg-[#D4AF37]"] :is(span, p, h1, h2, h3, h4, h5, h6, a, label, small, strong, em, div, li) {
+  color: #FFFFFF !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Brand GOLD tiles — SVG icons → white */
+[class*="bg-[#B89555]"] svg,
+[class*="bg-[#A68444]"] svg,
+[class*="bg-[#C8A766]"] svg,
+[class*="bg-[#D4AF37]"] svg {
+  color: #FFFFFF !important;
+}
+
+/* Buttons explicitly opted into hover→light surface keep dark text on hover.
+   (e.g. variant="hero": hover:bg-[#FDFBF7] hover:text-[#1A1A1A]) */
+button[class*="hover:bg-[#FDFBF7]"]:hover,
+button[class*="hover:bg-[#F7F2EA]"]:hover,
+button[class*="hover:bg-white"]:hover,
+a[class*="hover:bg-[#FDFBF7]"]:hover,
+a[class*="hover:bg-white"]:hover {
+  color: #1A1A1A !important;
+}
+button[class*="hover:bg-[#FDFBF7]"]:hover :is(span, svg),
+button[class*="hover:bg-[#F7F2EA]"]:hover :is(span, svg),
+button[class*="hover:bg-white"]:hover :is(span, svg),
+a[class*="hover:bg-[#FDFBF7]"]:hover :is(span, svg),
+a[class*="hover:bg-white"]:hover :is(span, svg) {
+  color: #1A1A1A !important;
+}
