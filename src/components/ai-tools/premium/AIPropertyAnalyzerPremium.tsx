@@ -240,7 +240,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
               </div>
 
               {/* Report Options */}
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-800">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#1A1A1A]">
                 <div className="space-y-2">
                   <Label className="text-white/85">Unit</Label>
                   <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
@@ -291,7 +291,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
               {/* Data Sources */}
               <div className="flex flex-wrap gap-2 justify-center pt-2">
                 {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-                  <Badge key={source} variant="outline" className="text-white/90 border-gray-700 text-xs">
+                  <Badge key={source} variant="outline" className="text-white/90 border-[#1A1A1A] text-xs">
                     {source}
                   </Badge>
                 ))}
@@ -341,7 +341,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 {response.sections && (
                   <Accordion type="single" collapsible defaultValue="overview" className="space-y-2">
                     {response.sections.areaOverview && (
-                      <AccordionItem value="overview" className="border-gray-800 bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="overview" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-sky-400" />
@@ -355,7 +355,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.priceAnalysis && (
-                      <AccordionItem value="price" className="border-gray-800 bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="price" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <DollarSign className="w-4 h-4 text-sky-400" />
@@ -369,7 +369,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.investmentMetrics && (
-                      <AccordionItem value="investment" className="border-gray-800 bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="investment" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <TrendingUp className="w-4 h-4 text-sky-400" />
@@ -383,7 +383,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                     )}
 
                     {response.sections.recommendation && (
-                      <AccordionItem value="recommendation" className="border-gray-800 bg-zinc-900/50 rounded-lg px-4">
+                      <AccordionItem value="recommendation" className="border-[#1A1A1A] bg-zinc-900/50 rounded-lg px-4">
                         <AccordionTrigger className="text-white hover:no-underline">
                           <span className="flex items-center gap-2">
                             <Award className="w-4 h-4 text-sky-400" />
@@ -400,7 +400,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
 
                 {/* Full Analysis Fallback */}
                 {response.fullAnalysis && !response.sections && (
-                  <Card className="bg-zinc-900/50 border-gray-800">
+                  <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3">Full Analysis</h4>
                       <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">

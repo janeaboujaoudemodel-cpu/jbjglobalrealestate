@@ -158,7 +158,7 @@ const FitOut = () => {
       </section>
 
       {/* Services - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -173,7 +173,7 @@ const FitOut = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Fit-Out Solutions" />
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Comprehensive fit-out and renovation services for all project types.
               </p>
             </motion.div>
@@ -188,15 +188,15 @@ const FitOut = () => {
                           <service.icon className="w-7 h-7" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
                             {service.title}
                           </h3>
-                          <p className="text-black/70 text-sm mb-4">
+                          <p className="text-[#1A1A1A]/70 text-sm mb-4">
                             {service.description}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
-                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                              <div key={feature} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
                                 <CheckCircle className="w-3 h-3 text-gold flex-shrink-0" />
                                 {feature}
                               </div>
@@ -214,7 +214,7 @@ const FitOut = () => {
       </section>
 
       {/* Why Choose Us - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -239,10 +239,10 @@ const FitOut = () => {
                       <div className="jj-icon-box-active w-16 h-16 rounded-full mx-auto mb-4">
                         <item.icon className="w-8 h-8" />
                       </div>
-                      <h3 className="text-black font-semibold text-lg mb-2">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-black/70 text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         {item.description}
                       </p>
                     </CardContent>
@@ -255,7 +255,7 @@ const FitOut = () => {
       </section>
 
       {/* CTA Section - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -268,13 +268,13 @@ const FitOut = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Start Your Project" />
               </h2>
-              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Ready to transform your space? Get a detailed quote from our 
                 licensed fit-out contractors.
               </p>
               <Button variant="primary" size="lg" asChild>
                 <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                  <span className="text-black">Request</span><span className="text-gold"> Quote</span>
+                  <span className="text-[#1A1A1A]">Request</span><span className="text-gold"> Quote</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </a>
               </Button>

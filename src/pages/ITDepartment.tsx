@@ -133,8 +133,8 @@ const ITDepartment: React.FC = () => {
           <div className="w-20 h-20 rounded-2xl bg-gold/10 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-gold" />
           </div>
-          <h1 className="text-3xl font-bold text-black mb-4">Access Restricted</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">Access Restricted</h1>
+          <p className="text-[#5A4A2E] mb-8">
             This area is restricted to IT Department personnel and administrators.
           </p>
           <Button 
@@ -166,14 +166,14 @@ const ITDepartment: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-3 bg-white border-2 border-gold/30 rounded-full px-6 py-2 mb-6 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="inline-flex items-center gap-3 bg-[#FDFBF7] border-2 border-gold/30 rounded-full px-6 py-2 mb-6 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <Monitor className="w-5 h-5 text-gold" />
-              <span className="text-black font-medium">IT Department Portal</span>
+              <span className="text-[#1A1A1A] font-medium">IT Department Portal</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
               Information Technology <span className="text-gold">Hub</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-[#5A4A2E] max-w-2xl mx-auto">
               Manage new joiner onboarding, CRM credentials, and IT operations
             </p>
           </motion.div>
@@ -183,11 +183,11 @@ const ITDepartment: React.FC = () => {
       {/* Stats Cards - Premium White/Gold */}
       <section className="container mx-auto px-4 -mt-8 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Pending Applications</p>
+                  <p className="text-[#5A4A2E] text-sm">Pending Applications</p>
                   <p className="text-3xl font-bold text-orange-600">{stats.pendingApplications}</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center">
@@ -197,11 +197,11 @@ const ITDepartment: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Open IT Tasks</p>
+                  <p className="text-[#5A4A2E] text-sm">Open IT Tasks</p>
                   <p className="text-3xl font-bold text-blue-600">{stats.openTasks}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
@@ -211,11 +211,11 @@ const ITDepartment: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Completed Today</p>
+                  <p className="text-[#5A4A2E] text-sm">Completed Today</p>
                   <p className="text-3xl font-bold text-green-600">{stats.completedToday}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
@@ -225,11 +225,11 @@ const ITDepartment: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm">Active Employees</p>
+                  <p className="text-[#5A4A2E] text-sm">Active Employees</p>
                   <p className="text-3xl font-bold text-gold">{stats.activeEmployees}</p>
                 </div>
                 <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
@@ -245,16 +245,16 @@ const ITDepartment: React.FC = () => {
       <section className="container mx-auto px-4 py-12 pb-24">
         <Tabs defaultValue="applications" className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+            <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <UserPlus className="w-4 h-4 mr-2" />
                 New Joiner Applications
               </TabsTrigger>
-              <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <FileText className="w-4 h-4 mr-2" />
                 IT Tasks
               </TabsTrigger>
-              <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <Users className="w-4 h-4 mr-2" />
                 IT Team
               </TabsTrigger>
@@ -267,7 +267,7 @@ const ITDepartment: React.FC = () => {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gold/30 text-black w-64 placeholder:text-gray-600"
+                  className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-64 placeholder:text-[#5A4A2E]"
                 />
               </div>
               <Button

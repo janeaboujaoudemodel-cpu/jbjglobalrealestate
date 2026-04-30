@@ -31,7 +31,7 @@ const ACTION_COLORS: Record<string, string> = {
   update: "bg-yellow-100 text-yellow-700 border-yellow-200",
   delete: "bg-red-100 text-red-700 border-red-200",
   login: "bg-purple-100 text-purple-700 border-purple-200",
-  logout: "bg-gray-100 text-gray-700 border-gray-200",
+  logout: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30",
   export: "bg-cyan-100 text-cyan-700 border-cyan-200",
   import: "bg-indigo-100 text-indigo-700 border-indigo-200",
   approve: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -148,32 +148,32 @@ export default function AuditLogDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-black/60">Total Events</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#1A1A1A]/60">Total Events</CardTitle>
             <FileText className="h-4 w-4 text-gold" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-black">{stats.total}</div>
-            <p className="text-xs text-black/50">Last 200 records</p>
+            <div className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</div>
+            <p className="text-xs text-[#1A1A1A]/50">Last 200 records</p>
           </CardContent>
         </Card>
         <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-black/60">Today's Activity</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#1A1A1A]/60">Today's Activity</CardTitle>
             <Clock className="h-4 w-4 text-gold" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-black">{stats.today}</div>
-            <p className="text-xs text-black/50">Events logged today</p>
+            <div className="text-2xl font-bold text-[#1A1A1A]">{stats.today}</div>
+            <p className="text-xs text-[#1A1A1A]/50">Events logged today</p>
           </CardContent>
         </Card>
         <Card className="jj-card-inner">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-black/60">Critical Actions</CardTitle>
+            <CardTitle className="text-sm font-medium text-[#1A1A1A]/60">Critical Actions</CardTitle>
             <Shield className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">{stats.critical}</div>
-            <p className="text-xs text-black/50">Delete, block, reject</p>
+            <p className="text-xs text-[#1A1A1A]/50">Delete, block, reject</p>
           </CardContent>
         </Card>
       </div>
@@ -181,11 +181,11 @@ export default function AuditLogDashboard() {
       {/* Filters */}
       <Card className="jj-card-inner">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-black">
+          <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <Shield className="h-5 w-5 text-gold" />
             Audit Logs
           </CardTitle>
-          <CardDescription className="text-black/60">
+          <CardDescription className="text-[#1A1A1A]/60">
             Track all admin actions and sensitive data access for compliance
           </CardDescription>
         </CardHeader>
@@ -197,17 +197,17 @@ export default function AuditLogDashboard() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                className="flex-1 bg-white border-gold/20 text-black placeholder:text-black/40"
+                className="flex-1 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
               />
-              <Button onClick={handleSearch} variant="secondary" className="bg-gold/20 hover:bg-gold/30 text-black">
+              <Button onClick={handleSearch} variant="secondary" className="bg-gold/20 hover:bg-gold/30 text-[#1A1A1A]">
                 <Search className="h-4 w-4" />
               </Button>
             </div>
             <Select value={actionFilter} onValueChange={setActionFilter}>
-              <SelectTrigger className="w-[150px] bg-white border-gold/20 text-black">
+              <SelectTrigger className="w-[150px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]">
                 <SelectValue placeholder="Action type" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/20">
+              <SelectContent className="bg-[#FDFBF7] border-gold/20">
                 <SelectItem value="all">All Actions</SelectItem>
                 <SelectItem value="create">Create</SelectItem>
                 <SelectItem value="read">Read</SelectItem>
@@ -221,10 +221,10 @@ export default function AuditLogDashboard() {
               </SelectContent>
             </Select>
             <Select value={resourceFilter} onValueChange={setResourceFilter}>
-              <SelectTrigger className="w-[150px] bg-white border-gold/20 text-black">
+              <SelectTrigger className="w-[150px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]">
                 <SelectValue placeholder="Resource type" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gold/20">
+              <SelectContent className="bg-[#FDFBF7] border-gold/20">
                 <SelectItem value="all">All Resources</SelectItem>
                 <SelectItem value="user">User</SelectItem>
                 <SelectItem value="project">Project</SelectItem>
@@ -238,11 +238,11 @@ export default function AuditLogDashboard() {
                 <SelectItem value="role">Role</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={fetchLogs} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
+            <Button onClick={fetchLogs} variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
-            <Button onClick={exportToCSV} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
+            <Button onClick={exportToCSV} variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
@@ -253,11 +253,11 @@ export default function AuditLogDashboard() {
             <Table>
               <TableHeader>
                 <TableRow className="border-gold/20 hover:bg-gold/5 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
-                  <TableHead className="w-[160px] text-black/60">Timestamp</TableHead>
-                  <TableHead className="w-[180px] text-black/60">User</TableHead>
-                  <TableHead className="w-[100px] text-black/60">Action</TableHead>
-                  <TableHead className="w-[120px] text-black/60">Resource</TableHead>
-                  <TableHead className="text-black/60">Description</TableHead>
+                  <TableHead className="w-[160px] text-[#1A1A1A]/60">Timestamp</TableHead>
+                  <TableHead className="w-[180px] text-[#1A1A1A]/60">User</TableHead>
+                  <TableHead className="w-[100px] text-[#1A1A1A]/60">Action</TableHead>
+                  <TableHead className="w-[120px] text-[#1A1A1A]/60">Resource</TableHead>
+                  <TableHead className="text-[#1A1A1A]/60">Description</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -273,20 +273,20 @@ export default function AuditLogDashboard() {
                   ))
                 ) : logs.length === 0 ? (
                   <TableRow className="border-gold/10">
-                    <TableCell colSpan={5} className="text-center text-black/50 py-8">
+                    <TableCell colSpan={5} className="text-center text-[#1A1A1A]/50 py-8">
                       No audit logs found
                     </TableCell>
                   </TableRow>
                 ) : (
                   logs.map((log) => (
                     <TableRow key={log.id} className="border-gold/10 hover:bg-gold/5">
-                      <TableCell className="text-xs text-black/60">
+                      <TableCell className="text-xs text-[#1A1A1A]/60">
                         {format(new Date(log.created_at), "MMM d, yyyy HH:mm:ss")}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <User className="h-3 w-3 text-gold" />
-                          <span className="text-sm text-black truncate max-w-[140px]">
+                          <span className="text-sm text-[#1A1A1A] truncate max-w-[140px]">
                             {log.user_email || "System"}
                           </span>
                         </div>
@@ -294,21 +294,21 @@ export default function AuditLogDashboard() {
                       <TableCell>
                         <Badge 
                           variant="outline" 
-                          className={ACTION_COLORS[log.action_type] || "bg-gray-100 text-gray-700"}
+                          className={ACTION_COLORS[log.action_type] || "bg-[#F7F2EA] text-[#5A4A2E]"}
                         >
                           {log.action_type}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <span className="flex items-center gap-1 text-sm text-black/70">
+                        <span className="flex items-center gap-1 text-sm text-[#1A1A1A]/70">
                           <span>{RESOURCE_ICONS[log.resource_type] || "📦"}</span>
                           {log.resource_type}
                         </span>
                       </TableCell>
-                      <TableCell className="text-sm text-black/70">
+                      <TableCell className="text-sm text-[#1A1A1A]/70">
                         {log.description}
                         {log.resource_id && (
-                          <span className="ml-2 text-xs text-black/40">
+                          <span className="ml-2 text-xs text-[#1A1A1A]/40">
                             (ID: {log.resource_id.slice(0, 8)}...)
                           </span>
                         )}

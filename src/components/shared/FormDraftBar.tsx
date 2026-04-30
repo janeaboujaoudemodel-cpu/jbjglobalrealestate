@@ -17,28 +17,28 @@ interface FormDraftBarProps {
 
 const themeMap = {
   gold: {
-    bar: 'bg-white/40 border border-gold/30',
+    bar: 'bg-[#FDFBF7]/40 border border-gold/30',
     icon: 'text-gold',
-    save: 'bg-gold text-black hover:bg-gold/90',
+    save: 'bg-gold text-[#1A1A1A] hover:bg-gold/90',
     newBtn: 'border-gold/40 text-foreground hover:bg-gold/10',
   },
   blue: {
-    bar: 'bg-white/40 border border-blue-300/30',
+    bar: 'bg-[#FDFBF7]/40 border border-blue-300/30',
     icon: 'text-blue-600',
     save: 'bg-blue-600 text-white hover:bg-blue-700',
     newBtn: 'border-blue-400/40 text-foreground hover:bg-blue-50',
   },
   purple: {
-    bar: 'bg-white/40 border border-purple-300/30',
+    bar: 'bg-[#FDFBF7]/40 border border-purple-300/30',
     icon: 'text-purple-600',
     save: 'bg-purple-600 text-white hover:bg-purple-700',
     newBtn: 'border-purple-400/40 text-foreground hover:bg-purple-50',
   },
   dark: {
-    bar: 'bg-zinc-900/60 border border-gray-700/50',
+    bar: 'bg-zinc-900/60 border border-[#1A1A1A]/50',
     icon: 'text-gold',
-    save: 'bg-gold text-black hover:bg-gold/90',
-    newBtn: 'border-gray-600 text-gray-600 hover:bg-gray-800',
+    save: 'bg-gold text-[#1A1A1A] hover:bg-gold/90',
+    newBtn: 'border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]',
   },
 };
 

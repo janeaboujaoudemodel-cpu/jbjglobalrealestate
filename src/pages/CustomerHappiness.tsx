@@ -188,7 +188,7 @@ const SupportTicketForm = () => {
       <div ref={formTopRef} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="fullName" className="text-black">
+          <Label htmlFor="fullName" className="text-[#1A1A1A]">
             Full Name *
           </Label>
           <Input
@@ -196,12 +196,12 @@ const SupportTicketForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
             placeholder="John Smith"
           />
         </div>
         <div>
-          <Label htmlFor="email" className="text-black">
+          <Label htmlFor="email" className="text-[#1A1A1A]">
             Email *
           </Label>
           <Input
@@ -210,26 +210,26 @@ const SupportTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
             placeholder="john@example.com"
           />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="phone" className="text-black">
+          <Label htmlFor="phone" className="text-[#1A1A1A]">
             Phone Number
           </Label>
           <Input
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
             placeholder="+971 50 123 4567"
           />
         </div>
         <div>
-          <Label htmlFor="serviceCategory" className="text-black">
+          <Label htmlFor="serviceCategory" className="text-[#1A1A1A]">
             Service with Issue *
           </Label>
           <Select
@@ -241,7 +241,7 @@ const SupportTicketForm = () => {
               }
             }}
           >
-            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-black`}>
+            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-[#1A1A1A]`}>
               <SelectValue placeholder="Select service" />
             </SelectTrigger>
             <SelectContent>
@@ -258,7 +258,7 @@ const SupportTicketForm = () => {
         </div>
       </div>
       <div>
-        <Label htmlFor="subject" className="text-black">
+        <Label htmlFor="subject" className="text-[#1A1A1A]">
           Subject *
         </Label>
         <Input
@@ -266,16 +266,16 @@ const SupportTicketForm = () => {
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
           placeholder="Brief description of your inquiry"
         />
       </div>
       <div>
-        <Label htmlFor="priority" className="text-black">
+        <Label htmlFor="priority" className="text-[#1A1A1A]">
           Priority
         </Label>
         <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select priority" />
           </SelectTrigger>
           <SelectContent>
@@ -288,7 +288,7 @@ const SupportTicketForm = () => {
         </Select>
       </div>
       <div>
-        <Label htmlFor="description" className="text-black">
+        <Label htmlFor="description" className="text-[#1A1A1A]">
           Detailed Description *
         </Label>
         <Textarea
@@ -297,7 +297,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
@@ -315,9 +315,9 @@ const SupportTicketForm = () => {
         {isSubmitting ? (
           <BrandedLoaderInline size={20} className="mr-2" />
         ) : (
-          <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors mr-1" />
+          <Send className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors mr-1" />
         )}
-        <span className="text-black group-hover:text-gold transition-colors">
+        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">
           {isSubmitting ? "Submitting..." : "Submit Support Ticket"}
         </span>
       </button>
@@ -419,30 +419,30 @@ const FeedbackForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="reviewName" className="text-black">Your Name *</Label>
+          <Label htmlFor="reviewName" className="text-[#1A1A1A]">Your Name *</Label>
           <Input
             id="reviewName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
         <div>
-          <Label htmlFor="reviewEmail" className="text-black">Email *</Label>
+          <Label htmlFor="reviewEmail" className="text-[#1A1A1A]">Email *</Label>
           <Input
             id="reviewEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
       </div>
       
       <div>
-        <Label className="text-black">Your Rating *</Label>
+        <Label className="text-[#1A1A1A]">Your Rating *</Label>
         <div className="flex gap-2 mt-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -452,7 +452,7 @@ const FeedbackForm = () => {
               className="transition-transform hover:scale-110"
             >
               <Star
-                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-gray-600"}`}
+                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-[#5A4A2E]"}`}
               />
             </button>
           ))}
@@ -460,9 +460,9 @@ const FeedbackForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="serviceType" className="text-black">Service Used *</Label>
+        <Label htmlFor="serviceType" className="text-[#1A1A1A]">Service Used *</Label>
         <Select value={formData.serviceType} onValueChange={(v) => setFormData({ ...formData, serviceType: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select service" />
           </SelectTrigger>
           <SelectContent>
@@ -478,22 +478,22 @@ const FeedbackForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="review" className="text-black">Your Review *</Label>
+        <Label htmlFor="review" className="text-[#1A1A1A]">Your Review *</Label>
         <Textarea
           id="review"
           value={formData.review}
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
 
       <div>
-        <Label htmlFor="recommend" className="text-black">Would you recommend us?</Label>
+        <Label htmlFor="recommend" className="text-[#1A1A1A]">Would you recommend us?</Label>
         <Select value={formData.wouldRecommend} onValueChange={(v) => setFormData({ ...formData, wouldRecommend: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
@@ -516,11 +516,11 @@ const FeedbackForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <MessageSquareHeart className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
-        <span className="text-gold group-hover:text-black transition-colors">Review</span>
+        <MessageSquareHeart className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
+        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Review</span>
       </button>
-      <p className="text-xs text-gray-600 text-center">
+      <p className="text-xs text-[#5A4A2E] text-center">
         Reviews are moderated before being published on our website.
       </p>
     </form>
@@ -579,42 +579,42 @@ const IssueReportForm = () => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="issueName" className="text-black">Full Name *</Label>
+          <Label htmlFor="issueName" className="text-[#1A1A1A]">Full Name *</Label>
           <Input
             id="issueName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
         <div>
-          <Label htmlFor="issueEmail" className="text-black">Email *</Label>
+          <Label htmlFor="issueEmail" className="text-[#1A1A1A]">Email *</Label>
           <Input
             id="issueEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="issuePhone" className="text-black">Phone Number</Label>
+          <Label htmlFor="issuePhone" className="text-[#1A1A1A]">Phone Number</Label>
           <Input
             id="issuePhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
         <div>
-          <Label htmlFor="browser" className="text-black">Browser *</Label>
+          <Label htmlFor="browser" className="text-[#1A1A1A]">Browser *</Label>
           <Select value={formData.browser} onValueChange={(v) => setFormData({ ...formData, browser: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select browser" />
             </SelectTrigger>
             <SelectContent>
@@ -631,9 +631,9 @@ const IssueReportForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="device" className="text-black">Device *</Label>
+          <Label htmlFor="device" className="text-[#1A1A1A]">Device *</Label>
           <Select value={formData.device} onValueChange={(v) => setFormData({ ...formData, device: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select device" />
             </SelectTrigger>
             <SelectContent>
@@ -648,56 +648,56 @@ const IssueReportForm = () => {
           </Select>
         </div>
         <div>
-          <Label htmlFor="pageUrl" className="text-black">Page URL *</Label>
+          <Label htmlFor="pageUrl" className="text-[#1A1A1A]">Page URL *</Label>
           <Input
             id="pageUrl"
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="errorMessage" className="text-black">Error Message (if any)</Label>
+        <Label htmlFor="errorMessage" className="text-[#1A1A1A]">Error Message (if any)</Label>
         <Input
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Copy and paste any error message you see"
         />
       </div>
 
       <div>
-        <Label htmlFor="description" className="text-black">Issue Description *</Label>
+        <Label htmlFor="description" className="text-[#1A1A1A]">Issue Description *</Label>
         <Textarea
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Describe what's not working..."
         />
       </div>
 
       <div>
-        <Label htmlFor="steps" className="text-black">Steps Taken (Optional)</Label>
+        <Label htmlFor="steps" className="text-[#1A1A1A]">Steps Taken (Optional)</Label>
         <Textarea
           id="steps"
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
 
       <div>
-        <Label className="text-black">Screenshot (optional)</Label>
+        <Label className="text-[#1A1A1A]">Screenshot (optional)</Label>
         <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <input
             type="file"
@@ -708,7 +708,7 @@ const IssueReportForm = () => {
           />
           <label htmlFor="screenshot-upload" className="cursor-pointer">
             <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
-            <p className="text-gray-600 text-sm">
+            <p className="text-[#5A4A2E] text-sm">
               {screenshot ? screenshot.name : "Click to upload a screenshot"}
             </p>
           </label>
@@ -725,9 +725,9 @@ const IssueReportForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <AlertCircle className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Report"}</span>
-        <span className="text-gold group-hover:text-black transition-colors">Issue</span>
+        <AlertCircle className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Report"}</span>
+        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Issue</span>
       </button>
     </form>
   );
@@ -842,42 +842,42 @@ const IdeaBoxForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="ideaName" className="text-black">Full Name *</Label>
+          <Label htmlFor="ideaName" className="text-[#1A1A1A]">Full Name *</Label>
           <Input
             id="ideaName"
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
         <div>
-          <Label htmlFor="ideaEmail" className="text-black">Email *</Label>
+          <Label htmlFor="ideaEmail" className="text-[#1A1A1A]">Email *</Label>
           <Input
             id="ideaEmail"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="ideaPhone" className="text-black">Phone Number</Label>
+          <Label htmlFor="ideaPhone" className="text-[#1A1A1A]">Phone Number</Label>
           <Input
             id="ideaPhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]"
           />
         </div>
         <div>
-          <Label htmlFor="ideaCategory" className="text-black">Idea Category *</Label>
+          <Label htmlFor="ideaCategory" className="text-[#1A1A1A]">Idea Category *</Label>
           <Select value={formData.ideaCategory} onValueChange={(v) => setFormData({ ...formData, ideaCategory: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A]">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -894,38 +894,38 @@ const IdeaBoxForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="ideaTitle" className="text-black">Idea Title *</Label>
+        <Label htmlFor="ideaTitle" className="text-[#1A1A1A]">Idea Title *</Label>
         <Input
           id="ideaTitle"
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Give your idea a catchy title"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="ideaDescription" className="text-black">Your Idea *</Label>
+        <Label htmlFor="ideaDescription" className="text-[#1A1A1A]">Your Idea *</Label>
         <Textarea
           id="ideaDescription"
           value={formData.ideaDescription}
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="expectedBenefit" className="text-black">Expected Benefit</Label>
+        <Label htmlFor="expectedBenefit" className="text-[#1A1A1A]">Expected Benefit</Label>
         <Textarea
           id="expectedBenefit"
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-700"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
@@ -940,11 +940,11 @@ const IdeaBoxForm = () => {
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
       >
-        <Lightbulb className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-        <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
-        <span className="text-gold group-hover:text-black transition-colors">Enter Draw</span>
+        <Lightbulb className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
+        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Enter Draw</span>
       </button>
-      <p className="text-xs text-gray-600 text-center">
+      <p className="text-xs text-[#5A4A2E] text-center">
         By submitting, you agree to enter the monthly draw. Winners will be notified via email.
       </p>
     </form>
@@ -1000,7 +1000,7 @@ const CustomerHappiness = () => {
               </motion.h1>
 
               <motion.p
-                className="text-gray-600 text-lg max-w-2xl mx-auto mb-8"
+                className="text-[#5A4A2E] text-lg max-w-2xl mx-auto mb-8"
                 variants={fadeInUp}
               >
                 Your satisfaction is our priority. Whether you need support, want to share feedback, 
@@ -1026,19 +1026,19 @@ const CustomerHappiness = () => {
               <CardContent className="p-4 md:p-8">
                 <Tabs defaultValue="support">
                   <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
-                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                    <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <TicketCheck className="w-4 h-4" />
                       <span className="hidden sm:inline">Support</span> Ticket
                     </TabsTrigger>
-                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                    <TabsTrigger value="feedback" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <MessageSquareHeart className="w-4 h-4" />
                       <span className="hidden sm:inline">Write a</span> Review
                     </TabsTrigger>
-                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                    <TabsTrigger value="issue" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <AlertCircle className="w-4 h-4" />
                       Report <span className="hidden sm:inline">Issue</span>
                     </TabsTrigger>
-                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
+                    <TabsTrigger value="idea" className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]/80 data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold data-[state=active]:border-2 text-[#1A1A1A] py-3">
                       <Lightbulb className="w-4 h-4" />
                       Idea <span className="hidden sm:inline">Box</span>
                     </TabsTrigger>
@@ -1052,8 +1052,8 @@ const CustomerHappiness = () => {
                         <TicketCheck className="w-6 h-6 text-blue-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-black">Create Support Ticket</CardTitle>
-                        <CardDescription className="text-gray-600">
+                        <CardTitle className="text-[#1A1A1A]">Create Support Ticket</CardTitle>
+                        <CardDescription className="text-[#5A4A2E]">
                           Need help? Our team typically responds within 24 hours.
                         </CardDescription>
                       </div>
@@ -1073,8 +1073,8 @@ const CustomerHappiness = () => {
                         <MessageSquareHeart className="w-6 h-6 text-pink-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-black">Write a Review</CardTitle>
-                        <CardDescription className="text-gray-600">
+                        <CardTitle className="text-[#1A1A1A]">Write a Review</CardTitle>
+                        <CardDescription className="text-[#5A4A2E]">
                           Share your experience! Approved reviews will be featured on our website.
                         </CardDescription>
                       </div>
@@ -1094,8 +1094,8 @@ const CustomerHappiness = () => {
                         <AlertCircle className="w-6 h-6 text-red-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-black">Report an Issue</CardTitle>
-                        <CardDescription className="text-gray-600">
+                        <CardTitle className="text-[#1A1A1A]">Report an Issue</CardTitle>
+                        <CardDescription className="text-[#5A4A2E]">
                           Found a bug or something not working? Help us fix it!
                         </CardDescription>
                       </div>
@@ -1115,8 +1115,8 @@ const CustomerHappiness = () => {
                         <Lightbulb className="w-6 h-6 text-purple-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-black">Idea Box — We Value Your Creativity!</CardTitle>
-                        <CardDescription className="text-gray-600">
+                        <CardTitle className="text-[#1A1A1A]">Idea Box — We Value Your Creativity!</CardTitle>
+                        <CardDescription className="text-[#5A4A2E]">
                           Share your innovative ideas and win amazing prizes!
                         </CardDescription>
                       </div>
@@ -1152,8 +1152,8 @@ const CustomerHappiness = () => {
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/40 flex items-center justify-center">
                       <Phone className="w-7 h-7 text-blue-500" />
                     </div>
-                    <p className="text-black font-semibold mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-gray-600 hover:text-blue-500 transition-colors font-medium">
+                    <p className="text-[#1A1A1A] font-semibold mb-1">Call Us</p>
+                    <a href="tel:+971565911000" className="text-[#5A4A2E] hover:text-blue-500 transition-colors font-medium">
                       +971 56 591 1000
                     </a>
                   </CardContent>
@@ -1164,8 +1164,8 @@ const CustomerHappiness = () => {
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center">
                       <Mail className="w-7 h-7 text-purple-500" />
                     </div>
-                    <p className="text-black font-semibold mb-1">Email Us</p>
-                    <a href="mailto:CONTACT@JBJ.AE" className="text-gray-600 hover:text-purple-500 transition-colors font-medium">
+                    <p className="text-[#1A1A1A] font-semibold mb-1">Email Us</p>
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-[#5A4A2E] hover:text-purple-500 transition-colors font-medium">
                       CONTACT@JBJ.AE
                     </a>
                   </CardContent>
@@ -1176,8 +1176,8 @@ const CustomerHappiness = () => {
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
                       <Calendar className="w-7 h-7 text-gold" />
                     </div>
-                    <p className="text-black font-semibold mb-1">Office Hours</p>
-                    <p className="text-gray-600 font-medium">Mon–Sun: 9AM–9PM</p>
+                    <p className="text-[#1A1A1A] font-semibold mb-1">Office Hours</p>
+                    <p className="text-[#5A4A2E] font-medium">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>

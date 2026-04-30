@@ -13,7 +13,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ classNa
         "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
         "hover:border-gold/60 focus:border-gold",
         // LOCKED: Textarea text is ALWAYS black - never white
-        "text-black focus:text-black",
+        "text-[#1A1A1A] focus:text-[#1A1A1A]",
         className,
       )}
       ref={ref}

@@ -364,7 +364,7 @@ export const DEVELOPER_LOGO_LOCK = Object.freeze({
   RULES: Object.freeze([
     'logo_url values in the database are READ-ONLY — no overwriting',
     'No fake initials, generated letters, or placeholder logos',
-    'Logo container styling (bg-white/90, object-contain, padding) is LOCKED',
+    'Logo container styling (bg-[#FDFBF7]/90, object-contain, padding) is LOCKED',
     'Only the database source of truth may provide logo_url values',
     'All Supabase developer joins MUST include logo_url',
     'Property images must NEVER be used as logo substitutes',
@@ -373,7 +373,7 @@ export const DEVELOPER_LOGO_LOCK = Object.freeze({
 
   CONTAINER_SPEC: Object.freeze({
     DEFAULT_SIZE: 'w-14 h-14',
-    BACKGROUND: 'bg-white',
+    BACKGROUND: 'bg-[#FDFBF7]',
     FIT: 'object-contain',
     PADDING: 'p-1.5',
     BORDER_RADIUS: 'rounded-xl',
@@ -403,10 +403,10 @@ export const UI_CONTRAST_LOCK = Object.freeze({
   LOCK_DATE: '2026-03-31',
 
   LIGHT_SURFACE: Object.freeze({
-    PRIMARY_TEXT: 'text-black',
-    SECONDARY_TEXT: 'text-gray-700',
-    MUTED_TEXT: 'text-gray-500',
-    CTA_BG: 'bg-black',
+    PRIMARY_TEXT: 'text-[#1A1A1A]',
+    SECONDARY_TEXT: 'text-[#5A4A2E]',
+    MUTED_TEXT: 'text-[#8A7556]',
+    CTA_BG: 'bg-[#1A1A1A]',
     CTA_TEXT: 'text-white',
   }),
 
@@ -422,8 +422,8 @@ export const UI_CONTRAST_LOCK = Object.freeze({
   RULES: Object.freeze([
     'All button text MUST be white on dark/black backgrounds, black on light backgrounds',
     'No gold, champagne, or low-contrast text inside buttons or CTAs',
-    'text-gray-500 is the absolute minimum contrast on light surfaces (4.6:1)',
-    'text-gray-600 is auto-bumped to text-gray-700 on light surfaces via global CSS',
+    'text-[#8A7556] is the absolute minimum contrast on light surfaces (4.6:1)',
+    'text-[#5A4A2E] is auto-bumped to text-[#5A4A2E] on light surfaces via global CSS',
     'All image overlay text must use text-white with text-shadow for readability',
     'Per-component color overrides on buttons are FORBIDDEN without founder unlock',
   ]),
@@ -444,7 +444,7 @@ export const DATA_COLOR_LOCK = Object.freeze({
     'Off-Plan = emerald, Secondary = red, Cash = blue, Mortgage = amber',
     'Each data category MUST use a distinct semantic color',
     'Issues and alerts are ALWAYS highlighted in red',
-    'All metric labels must be text-black or text-black/80 with font-medium minimum',
+    'All metric labels must be text-[#1A1A1A] or text-[#1A1A1A]/80 with font-medium minimum',
     'Use src/lib/dataColors.ts as the single source of truth',
   ]),
 

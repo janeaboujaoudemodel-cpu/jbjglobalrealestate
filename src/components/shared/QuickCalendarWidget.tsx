@@ -43,7 +43,7 @@ export default function QuickCalendarWidget({
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 text-[10px] border border-[#B89555]/20 text-black/60 hover:bg-[#B89555]/10 hover:text-[#B89555]"
+          className="h-7 text-[10px] border border-[#B89555]/20 text-[#1A1A1A]/60 hover:bg-[#B89555]/10 hover:text-[#B89555]"
           onClick={() => {
             if (prefillTitle) {
               navigate(`/ai-calendar?title=${encodeURIComponent(prefillTitle)}&date=${date}`);
@@ -64,8 +64,8 @@ export default function QuickCalendarWidget({
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-[#B89555]" />
           <div>
-            <p className="text-xs font-semibold text-black">{dayName}</p>
-            <p className="text-[10px] text-black/50">{dateStr}</p>
+            <p className="text-xs font-semibold text-[#1A1A1A]">{dayName}</p>
+            <p className="text-[10px] text-[#1A1A1A]/50">{dateStr}</p>
           </div>
         </div>
         <Button
@@ -82,13 +82,13 @@ export default function QuickCalendarWidget({
         <Button
           variant="outline"
           size="sm"
-          className="w-full h-7 text-[10px] border-[#B89555]/20 text-black/60 hover:border-[#B89555]/40 hover:text-[#B89555]"
+          className="w-full h-7 text-[10px] border-[#B89555]/20 text-[#1A1A1A]/60 hover:border-[#B89555]/40 hover:text-[#B89555]"
           onClick={() => setShowForm(true)}
         >
           <Plus className="w-3 h-3 mr-1" /> Quick Event
         </Button>
       ) : (
-        <div className="space-y-1.5 bg-white/70 rounded-lg border border-[#B89555]/15 p-2">
+        <div className="space-y-1.5 bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-2">
           <Input
             placeholder="Event title..."
             value={title}
@@ -120,7 +120,7 @@ export default function QuickCalendarWidget({
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 text-[10px] text-black/40"
+              className="h-6 text-[10px] text-[#1A1A1A]/40"
               onClick={() => setShowForm(false)}
             >
               Cancel

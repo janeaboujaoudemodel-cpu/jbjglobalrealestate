@@ -302,10 +302,10 @@ const JBJAnalyticsDashboard: React.FC = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-black text-3xl font-bold">
+              <h1 className="text-[#1A1A1A] text-3xl font-bold">
                 JBJ Analytics Dashboard
               </h1>
-              <p className="text-gray-600 mt-1">Monitor platform performance and user activity</p>
+              <p className="text-[#5A4A2E] mt-1">Monitor platform performance and user activity</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
@@ -315,8 +315,8 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     onClick={() => setDateRange(range)}
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       dateRange === range 
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black shadow-md border border-gold/40' 
-                        : 'text-gray-600 hover:text-black hover:bg-gold/10'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-md border border-gold/40' 
+                        : 'text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-gold/10'
                     }`}
                   >
                     {range === 'today' ? 'Today' : range === 'week' ? '7 Days' : '30 Days'}
@@ -348,9 +348,9 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
                       <stat.icon className="w-4 h-4 text-[#8A7356]" />
                     </div>
-                    <span className="text-gray-600 text-xs font-medium">{stat.label}</span>
+                    <span className="text-[#5A4A2E] text-xs font-medium">{stat.label}</span>
                   </div>
-                  <p className="text-black text-2xl font-bold">{stat.value.toLocaleString()}</p>
+                  <p className="text-[#1A1A1A] text-2xl font-bold">{stat.value.toLocaleString()}</p>
                   <p className={`text-xs font-medium ${stat.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
                     {stat.change >= 0 ? '↑' : '↓'} {Math.abs(stat.change)}% vs {dateRange === 'today' ? 'yesterday' : dateRange === 'week' ? 'last week' : 'last month'}
                   </p>
@@ -362,15 +362,15 @@ const JBJAnalyticsDashboard: React.FC = () => {
 
         <Tabs defaultValue="visitors" className="space-y-6">
           <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
-            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+            <TabsTrigger value="visitors" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
               <Users className="w-4 h-4 mr-2" />
               Daily Visitors
             </TabsTrigger>
-            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+            <TabsTrigger value="usage" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
               <BarChart3 className="w-4 h-4 mr-2" />
               Tool Usage
             </TabsTrigger>
-            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+            <TabsTrigger value="issues" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-gold/40 text-[#1A1A1A]">
               <AlertCircle className="w-4 h-4 mr-2" />
               Issue Reports
             </TabsTrigger>
@@ -381,14 +381,14 @@ const JBJAnalyticsDashboard: React.FC = () => {
               {/* Daily Visitors Chart */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Users className="w-5 h-5 text-gold" />
                     Daily Visitors Trend
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {dailyVisitors.length === 0 ? (
-                    <p className="text-gray-600 text-center py-8">No visitor data for this period</p>
+                    <p className="text-[#5A4A2E] text-center py-8">No visitor data for this period</p>
                   ) : (
                     <ResponsiveContainer width="100%" height={320}>
                       <AreaChart data={dailyVisitors}>
@@ -420,8 +420,8 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
                       <Users className="w-5 h-5 text-gold" />
                     </div>
-                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
-                    <p className="text-xs text-gray-600">Total Unique Visitors</p>
+                    <p className="text-2xl font-bold text-[#1A1A1A]">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
+                    <p className="text-xs text-[#5A4A2E]">Total Unique Visitors</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
@@ -429,8 +429,8 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
                       <Eye className="w-5 h-5 text-gold" />
                     </div>
-                    <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
-                    <p className="text-xs text-gray-600">Total Page Views</p>
+                    <p className="text-2xl font-bold text-[#1A1A1A]">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
+                    <p className="text-xs text-[#5A4A2E]">Total Page Views</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
@@ -438,10 +438,10 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-2">
                       <Activity className="w-5 h-5 text-gold" />
                     </div>
-                    <p className="text-2xl font-bold text-black">
+                    <p className="text-2xl font-bold text-[#1A1A1A]">
                       {dailyVisitors.length > 0 ? Math.round(dailyVisitors.reduce((s, d) => s + d.visitors, 0) / dailyVisitors.length) : 0}
                     </p>
-                    <p className="text-xs text-gray-600">Avg. Daily Visitors</p>
+                    <p className="text-xs text-[#5A4A2E]">Avg. Daily Visitors</p>
                   </CardContent>
                 </Card>
               </div>
@@ -451,20 +451,20 @@ const JBJAnalyticsDashboard: React.FC = () => {
           <TabsContent value="usage">
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
               <CardHeader>
-                <CardTitle className="text-black">Tool Usage Rankings</CardTitle>
+                <CardTitle className="text-[#1A1A1A]">Tool Usage Rankings</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {toolUsage.length === 0 ? (
-                    <p className="text-gray-600 text-center py-8">No usage data for this period</p>
+                    <p className="text-[#5A4A2E] text-center py-8">No usage data for this period</p>
                   ) : (
                     toolUsage.map((tool, idx) => (
                       <div key={tool.tool_name} className="flex items-center gap-4">
-                        <span className="text-gray-600 w-6 font-medium">{idx + 1}</span>
+                        <span className="text-[#5A4A2E] w-6 font-medium">{idx + 1}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-black font-medium">{tool.tool_name}</span>
-                            <span className="text-gray-600 text-sm">{tool.usage_count} uses</span>
+                            <span className="text-[#1A1A1A] font-medium">{tool.tool_name}</span>
+                            <span className="text-[#5A4A2E] text-sm">{tool.usage_count} uses</span>
                           </div>
                           <div className="h-2 bg-gold/20 rounded-full overflow-hidden">
                             <div 
@@ -473,7 +473,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                             />
                           </div>
                         </div>
-                        <span className="text-gray-600 text-sm">{tool.unique_users} users</span>
+                        <span className="text-[#5A4A2E] text-sm">{tool.unique_users} users</span>
                       </div>
                     ))
                   )}
@@ -485,7 +485,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
           <TabsContent value="issues">
             <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
               <CardHeader>
-                <CardTitle className="text-black flex items-center gap-2">
+                <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                   User Issue Reports
                   <Badge className="bg-red-100 text-red-600 border-red-300">
                     {issueReports.filter(i => i.status === 'pending').length} pending
@@ -496,7 +496,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-4">
                     {issueReports.length === 0 ? (
-                      <p className="text-gray-600 text-center py-8">No issue reports</p>
+                      <p className="text-[#5A4A2E] text-center py-8">No issue reports</p>
                     ) : (
                       issueReports.map(issue => (
                         <div 
@@ -505,8 +505,8 @@ const JBJAnalyticsDashboard: React.FC = () => {
                         >
                           <div className="flex items-start justify-between mb-3">
                             <div>
-                              <h4 className="text-black font-medium">{issue.tool_name}</h4>
-                              <p className="text-gray-600 text-sm">
+                              <h4 className="text-[#1A1A1A] font-medium">{issue.tool_name}</h4>
+                              <p className="text-[#5A4A2E] text-sm">
                                 {issue.user_name || 'Anonymous'} • {issue.user_email || 'No email'}
                               </p>
                             </div>
@@ -514,15 +514,15 @@ const JBJAnalyticsDashboard: React.FC = () => {
                               className={
                                 issue.status === 'pending' ? 'bg-amber-100 text-amber-700 border-amber-300' :
                                 issue.status === 'resolved' ? 'bg-emerald-100 text-emerald-700 border-emerald-300' :
-                                'bg-gray-100 text-gray-600 border-gray-300'
+                                'bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30'
                               }
                             >
                               {issue.status}
                             </Badge>
                           </div>
-                          <p className="text-gray-700 text-sm mb-3">{issue.issue_description}</p>
+                          <p className="text-[#5A4A2E] text-sm mb-3">{issue.issue_description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-gray-600 text-xs">
+                            <span className="text-[#5A4A2E] text-xs">
                               {format(new Date(issue.created_at), 'MMM d, yyyy h:mm a')}
                             </span>
                             <div className="flex gap-2">

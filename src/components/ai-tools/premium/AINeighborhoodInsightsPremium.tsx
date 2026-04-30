@@ -169,7 +169,7 @@ const AINeighborhoodInsightsPremium = () => {
                               className={`h-5 w-5 ${
                                 star <= Math.round(response.score / 2)
                                   ? "text-teal-400 fill-teal-400"
-                                  : "text-gray-600"
+                                  : "text-[#5A4A2E]"
                               }`}
                             />
                           ))}
@@ -226,7 +226,7 @@ const AINeighborhoodInsightsPremium = () => {
                       ? 'bg-emerald-500/10 border-emerald-500/30' 
                       : response.investmentPotential === 'medium'
                       ? 'bg-amber-500/10 border-amber-500/30'
-                      : 'bg-zinc-900/50 border-gray-800'
+                      : 'bg-zinc-900/50 border-[#1A1A1A]'
                   }`}>
                     <div className="flex items-center gap-2">
                       <Building className={`h-5 w-5 ${

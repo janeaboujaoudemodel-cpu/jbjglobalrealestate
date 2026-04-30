@@ -112,7 +112,7 @@ const ReopenTicket = () => {
           <div className="space-y-3">
             <Button
               onClick={() => navigate("/")}
-              className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-semibold hover:from-gold/90 hover:to-gold/70"
+              className="w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-gold/70"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Return to Homepage

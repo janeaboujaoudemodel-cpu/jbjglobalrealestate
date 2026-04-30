@@ -78,7 +78,7 @@ export default function MarketReportCTAModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gradient-to-b from-white via-zinc-50 to-white border-gold/30 text-gray-900 sm:max-w-2xl">
+      <DialogContent className="bg-gradient-to-b from-white via-zinc-50 to-white border-gold/30 text-[#1A1A1A] sm:max-w-2xl">
         <DialogHeader className="text-center pb-4">
           <div className="flex items-center justify-center mb-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold via-gold to-gold-dark flex items-center justify-center shadow-lg">
@@ -88,13 +88,13 @@ export default function MarketReportCTAModal({
           <DialogTitle className="text-2xl">
             {userName ? `Welcome, ${userName}!` : "Your Report is Ready!"}
           </DialogTitle>
-          <DialogDescription className="text-gray-600 text-base">
+          <DialogDescription className="text-[#5A4A2E] text-base">
             Found the insights valuable? Take your real estate career to the next level.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-center text-sm text-gray-600 mb-4">
+          <p className="text-center text-sm text-[#5A4A2E] mb-4">
             Choose the path that fits your goals:
           </p>
 
@@ -107,11 +107,11 @@ export default function MarketReportCTAModal({
               className={`w-full text-left rounded-xl border-2 p-4 transition-all relative overflow-hidden ${
                 selectedOption === option.id
                   ? "border-gold bg-gold/5 shadow-lg"
-                  : "border-gray-200 hover:border-gray-300 bg-white"
+                  : "border-[#B89555]/30 hover:border-[#B89555]/30 bg-[#FDFBF7]"
               }`}
             >
               {option.recommended && (
-                <Badge className="absolute top-3 right-3 bg-gold text-black text-xs">
+                <Badge className="absolute top-3 right-3 bg-gold text-[#1A1A1A] text-xs">
                   Recommended
                 </Badge>
               )}
@@ -121,19 +121,19 @@ export default function MarketReportCTAModal({
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold text-gray-900">{option.title}</span>
+                    <span className="font-semibold text-[#1A1A1A]">{option.title}</span>
                     {selectedOption === option.id && (
                       <CheckCircle2 className="w-4 h-4 text-gold" />
                     )}
                   </div>
                   <p className="text-gold text-sm font-medium">{option.subtitle}</p>
-                  <p className="text-gray-600 text-sm mt-1">{option.description}</p>
+                  <p className="text-[#5A4A2E] text-sm mt-1">{option.description}</p>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {option.benefits.map((benefit, i) => (
                       <Badge 
                         key={i}
                         variant="outline" 
-                        className="text-xs border-gray-300 text-gray-600"
+                        className="text-xs border-[#B89555]/30 text-[#5A4A2E]"
                       >
                         {benefit}
                       </Badge>
@@ -145,18 +145,18 @@ export default function MarketReportCTAModal({
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#B89555]/30">
           <Button
             variant="ghost"
             onClick={handleSkip}
-            className="text-gray-600 hover:text-gray-700"
+            className="text-[#5A4A2E] hover:text-[#5A4A2E]"
           >
             Maybe Later
           </Button>
           <Button
             onClick={handleContinue}
             disabled={!selectedOption}
-            className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black hover:brightness-110"
+            className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] hover:brightness-110"
           >
             Explore {selectedOption ? CTA_OPTIONS.find(o => o.id === selectedOption)?.title : "Options"}
             <ArrowRight className="w-4 h-4 ml-2" />
@@ -165,9 +165,9 @@ export default function MarketReportCTAModal({
 
         <div className="text-center mt-4">
           <FounderContent fallback={null}>
-            <p className="text-gray-600 text-xs font-medium">Jane Bou Jaoude</p>
+            <p className="text-[#5A4A2E] text-xs font-medium">Jane Bou Jaoude</p>
             <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-            <p className="text-gray-600 text-xs mt-0.5">JBJ Global Real Estate</p>
+            <p className="text-[#5A4A2E] text-xs mt-0.5">JBJ Global Real Estate</p>
           </FounderContent>
         </div>
       </DialogContent>

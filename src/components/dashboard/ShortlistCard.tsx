@@ -109,8 +109,8 @@ const ShortlistCard = () => {
               to="/favorites?tab=designs"
               className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl border border-gold/20 hover:border-gold/40 hover:bg-gold/5 transition-all duration-300 group"
             >
-              <PenTool className="w-3.5 h-3.5 text-gray-700" />
-              <span className="text-xs font-medium text-gray-700">{designShortCount} Shortlisted Design{designShortCount !== 1 ? 's' : ''}</span>
+              <PenTool className="w-3.5 h-3.5 text-[#5A4A2E]" />
+              <span className="text-xs font-medium text-[#5A4A2E]">{designShortCount} Shortlisted Design{designShortCount !== 1 ? 's' : ''}</span>
             </Link>
           )}
         </div>

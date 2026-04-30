@@ -43,7 +43,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active": return "bg-green-500";
-      case "closed": return "bg-gray-500";
+      case "closed": return "bg-[#B89555]";
       case "pending": return "bg-amber-500";
       default: return "bg-blue-500";
     }
@@ -51,8 +51,8 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] bg-zinc-950 border-gray-800 p-0 overflow-hidden">
-        <DialogHeader className="p-6 pb-4 border-b border-gray-800">
+      <DialogContent className="max-w-2xl max-h-[80vh] bg-zinc-950 border-[#1A1A1A] p-0 overflow-hidden">
+        <DialogHeader className="p-6 pb-4 border-b border-[#1A1A1A]">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-white flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-gold" />
@@ -127,14 +127,14 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                   <div
                     className={`max-w-[70%] rounded-2xl px-4 py-3 ${
                       message.role === "user"
-                        ? "bg-gold text-black"
+                        ? "bg-gold text-[#1A1A1A]"
                         : "bg-zinc-800 text-white"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     {message.timestamp && (
                       <p className={`text-xs mt-1 ${
-                        message.role === "user" ? "text-black/60" : "text-white/90"
+                        message.role === "user" ? "text-[#1A1A1A]/60" : "text-white/90"
                       }`}>
                         {format(new Date(message.timestamp), "h:mm a")}
                       </p>
@@ -153,11 +153,11 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
         </ScrollArea>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-800 flex justify-between items-center">
+        <div className="p-4 border-t border-[#1A1A1A] flex justify-between items-center">
           <p className="text-xs text-white/90">
             {messages.length} messages • Last updated {format(new Date(conversation.updated_at), "MMM d, h:mm a")}
           </p>
-          <Button onClick={onClose} variant="outline" className="border-gray-700">
+          <Button onClick={onClose} variant="outline" className="border-[#1A1A1A]">
             Close
           </Button>
         </div>

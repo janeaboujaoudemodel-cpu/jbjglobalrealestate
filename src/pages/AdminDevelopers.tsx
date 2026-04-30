@@ -296,7 +296,7 @@ const AdminDevelopers = () => {
               setDevForm({ name: "", slug: "", location_city: "Dubai", location_emirate: "Dubai", description: "", website_url: "" });
               setIsDevDialogOpen(true);
             }}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Developer
@@ -313,13 +313,13 @@ const AdminDevelopers = () => {
               placeholder="Search developers..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-white border-gold/20"
+              className="pl-10 bg-[#FDFBF7] border-gold/20"
             />
           </div>
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-muted-foreground" />
             <Select value={titleFilter} onValueChange={setTitleFilter}>
-              <SelectTrigger className="w-[180px] bg-white border-gold/20">
+              <SelectTrigger className="w-[180px] bg-[#FDFBF7] border-gold/20">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
               <SelectContent>
@@ -332,7 +332,7 @@ const AdminDevelopers = () => {
               </SelectContent>
             </Select>
             <Select value={genderFilter} onValueChange={setGenderFilter}>
-              <SelectTrigger className="w-[140px] bg-white border-gold/20">
+              <SelectTrigger className="w-[140px] bg-[#FDFBF7] border-gold/20">
                 <SelectValue placeholder="Gender" />
               </SelectTrigger>
               <SelectContent>
@@ -345,7 +345,7 @@ const AdminDevelopers = () => {
               placeholder="Filter nationality..."
               value={nationalityFilter}
               onChange={(e) => setNationalityFilter(e.target.value)}
-              className="w-[160px] bg-white border-gold/20"
+              className="w-[160px] bg-[#FDFBF7] border-gold/20"
             />
           </div>
         </div>
@@ -388,17 +388,17 @@ const AdminDevelopers = () => {
         {/* Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center gap-1.5">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md flex items-center gap-1.5">
               <BarChart3 className="w-4 h-4" />
               Overview
             </TabsTrigger>
-            <TabsTrigger value="dubai" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+            <TabsTrigger value="dubai" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
             </TabsTrigger>
-            <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+            <TabsTrigger value="all" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
               All UAE ({filteredDevelopers.length})
             </TabsTrigger>
-            <TabsTrigger value="briefings" className="data-[state=active]:bg-white data-[state=active]:shadow-md flex items-center gap-1.5">
+            <TabsTrigger value="briefings" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               Briefings
             </TabsTrigger>
@@ -470,35 +470,35 @@ const AdminDevelopers = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Developer Name *</Label>
-                <Input value={devForm.name} onChange={(e) => setDevForm(f => ({ ...f, name: e.target.value }))} placeholder="Emaar Properties" className="bg-white border-gold/20" />
+                <Input value={devForm.name} onChange={(e) => setDevForm(f => ({ ...f, name: e.target.value }))} placeholder="Emaar Properties" className="bg-[#FDFBF7] border-gold/20" />
               </div>
               <div>
                 <Label>Slug *</Label>
-                <Input value={devForm.slug} onChange={(e) => setDevForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))} placeholder="emaar" className="bg-white border-gold/20" />
+                <Input value={devForm.slug} onChange={(e) => setDevForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))} placeholder="emaar" className="bg-[#FDFBF7] border-gold/20" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>City</Label>
-                <Input value={devForm.location_city} onChange={(e) => setDevForm(f => ({ ...f, location_city: e.target.value }))} placeholder="Dubai" className="bg-white border-gold/20" />
+                <Input value={devForm.location_city} onChange={(e) => setDevForm(f => ({ ...f, location_city: e.target.value }))} placeholder="Dubai" className="bg-[#FDFBF7] border-gold/20" />
               </div>
               <div>
                 <Label>Emirate</Label>
-                <Input value={devForm.location_emirate} onChange={(e) => setDevForm(f => ({ ...f, location_emirate: e.target.value }))} placeholder="Dubai" className="bg-white border-gold/20" />
+                <Input value={devForm.location_emirate} onChange={(e) => setDevForm(f => ({ ...f, location_emirate: e.target.value }))} placeholder="Dubai" className="bg-[#FDFBF7] border-gold/20" />
               </div>
             </div>
             <div>
               <Label>Website URL</Label>
-              <Input value={devForm.website_url} onChange={(e) => setDevForm(f => ({ ...f, website_url: e.target.value }))} placeholder="https://emaar.com" className="bg-white border-gold/20" />
+              <Input value={devForm.website_url} onChange={(e) => setDevForm(f => ({ ...f, website_url: e.target.value }))} placeholder="https://emaar.com" className="bg-[#FDFBF7] border-gold/20" />
             </div>
             <div>
               <Label>Description</Label>
-              <Textarea value={devForm.description} onChange={(e) => setDevForm(f => ({ ...f, description: e.target.value }))} placeholder="Brief description..." className="bg-white border-gold/20" />
+              <Textarea value={devForm.description} onChange={(e) => setDevForm(f => ({ ...f, description: e.target.value }))} placeholder="Brief description..." className="bg-[#FDFBF7] border-gold/20" />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDevDialogOpen(false)} className="border-gold/30">Cancel</Button>
-            <Button onClick={handleSaveDeveloper} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleSaveDeveloper} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               {editingDev ? "Update" : "Add Developer"}
             </Button>
           </DialogFooter>
@@ -522,36 +522,36 @@ const AdminDevelopers = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Full Name *</Label>
-                <Input value={repForm.full_name} onChange={(e) => setRepForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Ahmed Khan" className="bg-white border-gold/20" />
+                <Input value={repForm.full_name} onChange={(e) => setRepForm(f => ({ ...f, full_name: e.target.value }))} placeholder="Ahmed Khan" className="bg-[#FDFBF7] border-gold/20" />
               </div>
               <div>
                 <Label>Title</Label>
-                <Input value={repForm.title} onChange={(e) => setRepForm(f => ({ ...f, title: e.target.value }))} placeholder="Sales Representative" className="bg-white border-gold/20" />
+                <Input value={repForm.title} onChange={(e) => setRepForm(f => ({ ...f, title: e.target.value }))} placeholder="Sales Representative" className="bg-[#FDFBF7] border-gold/20" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Phone Number *</Label>
-                <Input value={repForm.phone_e164} onChange={(e) => setRepForm(f => ({ ...f, phone_e164: e.target.value }))} placeholder="+971 50 123 4567" className="bg-white border-gold/20" />
+                <Input value={repForm.phone_e164} onChange={(e) => setRepForm(f => ({ ...f, phone_e164: e.target.value }))} placeholder="+971 50 123 4567" className="bg-[#FDFBF7] border-gold/20" />
               </div>
               <div>
                 <Label>WhatsApp</Label>
-                <Input value={repForm.whatsapp_number} onChange={(e) => setRepForm(f => ({ ...f, whatsapp_number: e.target.value }))} placeholder="+971 50 123 4567" className="bg-white border-gold/20" />
+                <Input value={repForm.whatsapp_number} onChange={(e) => setRepForm(f => ({ ...f, whatsapp_number: e.target.value }))} placeholder="+971 50 123 4567" className="bg-[#FDFBF7] border-gold/20" />
               </div>
             </div>
             <div>
               <Label>Email</Label>
-              <Input value={repForm.email} onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))} placeholder="ahmed@developer.com" type="email" className="bg-white border-gold/20" />
+              <Input value={repForm.email} onChange={(e) => setRepForm(f => ({ ...f, email: e.target.value }))} placeholder="ahmed@developer.com" type="email" className="bg-[#FDFBF7] border-gold/20" />
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label>Nationality</Label>
-                <Input value={repForm.nationality} onChange={(e) => setRepForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian" className="bg-white border-gold/20" />
+                <Input value={repForm.nationality} onChange={(e) => setRepForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian" className="bg-[#FDFBF7] border-gold/20" />
               </div>
               <div>
                 <Label>Gender</Label>
                 <Select value={repForm.gender} onValueChange={(v) => setRepForm(f => ({ ...f, gender: v }))}>
-                  <SelectTrigger className="bg-white border-gold/20">
+                  <SelectTrigger className="bg-[#FDFBF7] border-gold/20">
                     <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
@@ -563,12 +563,12 @@ const AdminDevelopers = () => {
               </div>
               <div>
                 <Label>Years in RE</Label>
-                <Input type="number" min="0" max="50" value={repForm.years_in_real_estate} onChange={(e) => setRepForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="5" className="bg-white border-gold/20" />
+                <Input type="number" min="0" max="50" value={repForm.years_in_real_estate} onChange={(e) => setRepForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="5" className="bg-[#FDFBF7] border-gold/20" />
               </div>
             </div>
             <div>
               <Label>Notes</Label>
-              <Textarea value={repForm.notes} onChange={(e) => setRepForm(f => ({ ...f, notes: e.target.value }))} placeholder="Any additional notes..." className="bg-white border-gold/20" />
+              <Textarea value={repForm.notes} onChange={(e) => setRepForm(f => ({ ...f, notes: e.target.value }))} placeholder="Any additional notes..." className="bg-[#FDFBF7] border-gold/20" />
             </div>
             <div className="flex items-center gap-2">
               <input type="checkbox" id="is_primary" checked={repForm.is_primary} onChange={(e) => setRepForm(f => ({ ...f, is_primary: e.target.checked }))} className="rounded border-gold/30" />
@@ -577,7 +577,7 @@ const AdminDevelopers = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsRepDialogOpen(false)} className="border-gold/30">Cancel</Button>
-            <Button onClick={handleSaveRep} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleSaveRep} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               {editingRep ? "Update" : "Add Sales Rep"}
             </Button>
           </DialogFooter>
@@ -651,7 +651,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
             {reps.map(rep => (
               <div
                 key={rep.id}
-                className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-gold/15"
+                className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 rounded-lg border border-gold/15"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">

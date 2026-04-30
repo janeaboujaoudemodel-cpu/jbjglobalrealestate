@@ -11,7 +11,7 @@ const AuditorReadOnlyBanner = () => {
   if (!isAuditor || isOwner) return null;
 
   return (
-    <div className="bg-amber-500/90 text-black px-4 py-2 text-center text-sm font-semibold flex items-center justify-center gap-2 z-50 sticky top-0">
+    <div className="bg-amber-500/90 text-[#1A1A1A] px-4 py-2 text-center text-sm font-semibold flex items-center justify-center gap-2 z-50 sticky top-0">
       <Eye className="w-4 h-4" />
       <span>Read-Only Audit Mode — You can view all pages but cannot make changes</span>
     </div>

@@ -47,7 +47,7 @@ export function BrokerToolkitGrowth() {
   const { user } = useAuth();
 
   return (
-    <section id="section-growth" className="py-8 md:py-10 bg-black">
+    <section id="section-growth" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-3 sm:px-4">
         {/* Active Champagne Layer for Growth Section - matching global design */}
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -57,15 +57,15 @@ export function BrokerToolkitGrowth() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <Badge className="bg-black/80 text-gold border-gold/50 mb-4 shadow-sm">
+            <Badge className="bg-[#1A1A1A]/80 text-gold border-gold/50 mb-4 shadow-sm">
               <TrendingUp className="w-3 h-3 mr-1 text-gold" />
               <span className="text-gold">Growth</span>
               <span className="text-white ml-1">& Rewards</span>
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
               Level Up Your <span className="text-gold">Career</span>
             </h2>
-            <p className="text-gray-700 max-w-2xl mx-auto">
+            <p className="text-[#5A4A2E] max-w-2xl mx-auto">
               Earn points for every action, unlock rewards, and climb the leaderboard.
             </p>
           </motion.div>
@@ -79,22 +79,22 @@ export function BrokerToolkitGrowth() {
             >
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                  <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
                     <Crown className="w-5 h-5 text-gold" />
                     Broker Levels
                   </h3>
                   <div className="space-y-4">
                     {LEVELS.map((level, i) => (
                       <div key={i} className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 flex items-center justify-center text-[#1A1A1A] font-bold text-sm shadow-md">
                           {level.level}
                         </div>
                         <div className="flex-1">
                           <div className="flex justify-between items-center mb-1">
-                            <span className="text-black font-medium">{level.name}</span>
+                            <span className="text-[#1A1A1A] font-medium">{level.name}</span>
                             <span className="text-gold text-sm font-semibold">{level.points.toLocaleString()} pts</span>
                           </div>
-                          <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-gray-200" />
+                          <Progress value={i === 0 ? 100 : 0} className="h-1.5 bg-[#EFE6D6]" />
                         </div>
                       </div>
                     ))}
@@ -111,7 +111,7 @@ export function BrokerToolkitGrowth() {
             >
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
+                  <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-gold" />
                     Earn Points
                   </h3>
@@ -122,7 +122,7 @@ export function BrokerToolkitGrowth() {
                           <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
                             <activity.icon className="w-4 h-4 text-gold" />
                           </div>
-                          <span className="text-gray-700 text-sm">{activity.activity}</span>
+                          <span className="text-[#5A4A2E] text-sm">{activity.activity}</span>
                         </div>
                         <span className="text-gold font-semibold">+{activity.points}</span>
                       </div>
@@ -140,7 +140,7 @@ export function BrokerToolkitGrowth() {
             viewport={{ once: true }}
             className="mb-12"
           >
-            <h3 className="text-xl font-semibold text-black mb-6 text-center flex items-center justify-center gap-2">
+            <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6 text-center flex items-center justify-center gap-2">
               <Gift className="w-5 h-5 text-gold" />
               Redeem Rewards
             </h3>
@@ -158,7 +158,7 @@ export function BrokerToolkitGrowth() {
                       <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
                         <reward.icon className="w-6 h-6 text-gold" />
                       </div>
-                      <h4 className="text-black font-medium mb-1">{reward.name}</h4>
+                      <h4 className="text-[#1A1A1A] font-medium mb-1">{reward.name}</h4>
                       <p className="text-gold font-semibold">{reward.points.toLocaleString()} points</p>
                     </CardContent>
                   </Card>
@@ -195,8 +195,8 @@ export function BrokerToolkitGrowth() {
               <span className="relative flex items-center justify-center gap-2">
                 <Trophy className="w-5 h-5 text-gold" />
                 <span className="text-gold">{user ? 'View My' : 'Start Earning'}</span>
-                <span className="text-black">{user ? 'Progress' : 'Points'}</span>
-                <ArrowUpRight className="w-5 h-5 text-black" />
+                <span className="text-[#1A1A1A]">{user ? 'Progress' : 'Points'}</span>
+                <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
               </span>
             </button>
           </motion.div>

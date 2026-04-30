@@ -78,7 +78,7 @@ export default function BrandIntroSplash() {
 
   return (
     <div
-      className={`fixed inset-0 z-[99999] bg-black flex flex-col items-center justify-center transition-opacity duration-600 ${
+      className={`fixed inset-0 z-[99999] bg-[#1A1A1A] flex flex-col items-center justify-center transition-opacity duration-600 ${
         fadeOut ? "opacity-0" : "opacity-100"
       }`}
     >
@@ -129,7 +129,7 @@ export default function BrandIntroSplash() {
 
       {/* Audio indicator */}
       {audioPlaying && (
-        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-gray-500 text-[10px] tracking-wider uppercase">
+        <div className="absolute bottom-6 right-6 flex items-center gap-1.5 text-[#8A7556] text-[10px] tracking-wider uppercase">
           <Volume2 className="w-3 h-3" />
           <span>♪</span>
         </div>

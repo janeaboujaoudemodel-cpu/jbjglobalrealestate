@@ -214,7 +214,7 @@ const SellingAdvisory = () => {
       {/* HERO SECTION - Full-screen with video background */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           <VideoBackground 
             src={sellingAdvisoryHeroVideo}
             poster="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80"
@@ -235,7 +235,7 @@ const SellingAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Briefcase className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Professional Representation
@@ -269,13 +269,13 @@ const SellingAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* SECTION 1: WHAT SELLING ADVISORY MEANS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -286,7 +286,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What Selling Advisory Means
@@ -295,7 +295,7 @@ const SellingAdvisory = () => {
               variants={fadeInUp}
               className="jj-card-inner"
             >
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-[#5A4A2E] leading-relaxed">
                 Selling advisory is a professional service where JBJ represents
                 the seller throughout the sales process. Unlike general
                 educational guides, advisory includes{" "}
@@ -311,7 +311,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 2: WHO THIS SERVICE IS FOR */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -321,7 +321,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Who This Service Is For
@@ -330,13 +330,13 @@ const SellingAdvisory = () => {
               {whoIsForData.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner text-center">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
                       <item.icon className="w-7 h-7 text-gold" />
                     </div>
-                    <h3 className="font-semibold text-black mb-2">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <p className="text-sm text-[#5A4A2E]">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -346,7 +346,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 3: PRIMARY VS SECONDARY MARKET */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -356,7 +356,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Primary vs Secondary Market Sales
@@ -366,10 +366,10 @@ const SellingAdvisory = () => {
               <motion.div variants={fadeInUp}>
                 <div className="h-full jj-card-inner">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
                       <Building2 className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-xl font-bold text-black">
+                    <h3 className="text-xl font-bold text-[#1A1A1A]">
                       Developer-Related / Off-Plan Assignments
                     </h3>
                   </div>
@@ -377,7 +377,7 @@ const SellingAdvisory = () => {
                     {offPlanFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-gray-700"
+                        className="flex items-start gap-3 text-[#5A4A2E]"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -391,10 +391,10 @@ const SellingAdvisory = () => {
               <motion.div variants={fadeInUp}>
                 <div className="h-full jj-card-inner">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
                       <Key className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-xl font-bold text-black">
+                    <h3 className="text-xl font-bold text-[#1A1A1A]">
                       Ready / Resale Properties
                     </h3>
                   </div>
@@ -402,7 +402,7 @@ const SellingAdvisory = () => {
                     {resaleFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-gray-700"
+                        className="flex items-start gap-3 text-[#5A4A2E]"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -417,7 +417,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 4: OUR SELLING ADVISORY PROCESS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -427,7 +427,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Our Selling Advisory Process
@@ -444,13 +444,13 @@ const SellingAdvisory = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0" />
-                          <span className="font-semibold text-black">
+                          <span className="font-semibold text-[#1A1A1A]">
                             {step.title}
                           </span>
                         </div>
@@ -465,7 +465,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 5: FEES & TRANSPARENCY */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -476,7 +476,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Fees & Transparency
@@ -487,24 +487,24 @@ const SellingAdvisory = () => {
             >
               <div className="flex items-start gap-4 mb-6">
                 <Banknote className="w-8 h-8 text-gold shrink-0" />
-                <h3 className="text-xl font-bold text-black">Important Notice</h3>
+                <h3 className="text-xl font-bold text-[#1A1A1A]">Important Notice</h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-gray-700">
+                <li className="flex items-start gap-3 text-[#5A4A2E]">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>Selling advisory fees are disclosed upfront</span>
                 </li>
-                <li className="flex items-start gap-3 text-gray-700">
+                <li className="flex items-start gap-3 text-[#5A4A2E]">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>
                     Commission structures align with UAE regulations
                   </span>
                 </li>
-                <li className="flex items-start gap-3 text-gray-700">
+                <li className="flex items-start gap-3 text-[#5A4A2E]">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>No hidden charges or undisclosed markups</span>
                 </li>
-                <li className="flex items-start gap-3 text-gray-700">
+                <li className="flex items-start gap-3 text-[#5A4A2E]">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>Final terms confirmed before engagement</span>
                 </li>
@@ -515,7 +515,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 6: COMPLIANCE & LICENSING */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -525,20 +525,20 @@ const SellingAdvisory = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
                 <Shield className="w-8 h-8 text-gold" />
               </div>
             </motion.div>
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-6"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Compliance & Licensing
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-lg text-gray-700 leading-relaxed"
+              className="text-lg text-[#5A4A2E] leading-relaxed"
             >
               JBJ Global Real Estate operates as a licensed UAE brokerage.
               Selling advisory services are delivered within applicable
@@ -551,7 +551,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 7: COMPARISON TABLE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -562,7 +562,7 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               How This Differs From the Seller Guide
@@ -573,7 +573,7 @@ const SellingAdvisory = () => {
             >
               <table className="w-full">
                 <thead>
-                  <tr className="bg-black">
+                  <tr className="bg-[#1A1A1A]">
                     <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
                       Aspect
                     </th>
@@ -588,8 +588,8 @@ const SellingAdvisory = () => {
                 <tbody className="divide-y divide-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   {comparisonData.map((row, index) => (
                     <tr key={index}>
-                      <td className="px-6 py-4 text-black font-medium">{row.aspect}</td>
-                      <td className="px-6 py-4 text-gray-600">{row.guide}</td>
+                      <td className="px-6 py-4 text-[#1A1A1A] font-medium">{row.aspect}</td>
+                      <td className="px-6 py-4 text-[#5A4A2E]">{row.guide}</td>
                       <td className="px-6 py-4 text-gold font-semibold">
                         {row.advisory}
                       </td>
@@ -603,7 +603,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* SECTION 8: FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -613,13 +613,13 @@ const SellingAdvisory = () => {
             className="max-w-3xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
                 <HelpCircle className="w-7 h-7 text-gold" />
               </div>
             </motion.div>
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-10"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -632,10 +632,10 @@ const SellingAdvisory = () => {
                     value={`faq-${index}`}
                     className="jj-card-inner overflow-hidden"
                   >
-                    <AccordionTrigger className="px-6 py-4 text-left font-semibold text-black hover:text-gold hover:no-underline">
+                    <AccordionTrigger className="px-6 py-4 text-left font-semibold text-[#1A1A1A] hover:text-gold hover:no-underline">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-gray-600">
+                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -647,7 +647,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* FINAL CTA */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -658,14 +658,14 @@ const SellingAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-6"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Ready to Sell with Professional Representation?
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-gray-700 text-lg mb-8"
+              className="text-[#5A4A2E] text-lg mb-8"
             >
               Let our experienced team maximize your property value through
               strategic positioning and expert negotiation.
@@ -677,7 +677,7 @@ const SellingAdvisory = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8"
+                className="bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold px-8"
               >
                 <Link to="/contact?service=selling-advisory">
                   Book Selling Advisory Consultation
@@ -698,7 +698,7 @@ const SellingAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-black py-12 border-t border-gold/20">
+      <section className="bg-[#1A1A1A] py-12 border-t border-gold/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link

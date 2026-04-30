@@ -91,7 +91,7 @@ const ROLES: RoleOption[] = [
     title: 'Just Browsing',
     subtitle: 'Explore our platform first',
     icon: Eye,
-    color: 'text-gray-600',
+    color: 'text-[#5A4A2E]',
     bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',
@@ -280,7 +280,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
       <DialogContent 
-        className="bg-white border-0 text-gray-900 max-w-2xl p-0 overflow-hidden shadow-2xl rounded-2xl"
+        className="bg-[#FDFBF7] border-0 text-[#1A1A1A] max-w-2xl p-0 overflow-hidden shadow-2xl rounded-2xl"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
@@ -304,14 +304,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     <JJLogoImage variant="light" size="xl" showText={false} />
                   </div>
                   <h3 
-                    className="text-lg md:text-xl font-bold tracking-[0.1em] text-black uppercase mb-3"
+                    className="text-lg md:text-xl font-bold tracking-[0.1em] text-[#1A1A1A] uppercase mb-3"
                   >
                     JBJ GLOBAL REAL ESTATE
                   </h3>
-                  <h2 className="text-2xl md:text-3xl font-semibold text-black mb-2">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-2">
                     How Can We Help You?
                   </h2>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-[#5A4A2E] text-sm">
                     Select your role to personalize your experience
                   </p>
                 </div>
@@ -328,7 +328,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         className={`relative p-5 rounded-xl border-2 text-left transition-all duration-300 ${
                           isSelected 
                             ? 'border-gold bg-gradient-to-br from-gold/10 to-amber-500/5 shadow-lg shadow-gold/20' 
-                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                            : 'border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA]'
                         }`}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -345,18 +345,18 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                           <Icon className={`w-6 h-6 ${role.color}`} />
                         </div>
 
-                        <h3 className="font-semibold text-black text-base mb-1">{role.title}</h3>
-                        <p className="text-gray-600 text-xs mb-3">{role.subtitle}</p>
+                        <h3 className="font-semibold text-[#1A1A1A] text-base mb-1">{role.title}</h3>
+                        <p className="text-[#5A4A2E] text-xs mb-3">{role.subtitle}</p>
 
                         <div className="space-y-1">
                           {role.benefits.slice(0, 3).map((benefit, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-xs text-gray-600">
+                            <div key={idx} className="flex items-center gap-2 text-xs text-[#5A4A2E]">
                               <Sparkles className="w-3 h-3 text-gold flex-shrink-0" />
                               <span className="truncate">{benefit}</span>
                             </div>
                           ))}
                           {role.benefits.length > 3 && (
-                            <p className="text-xs text-gray-600">+{role.benefits.length - 3} more</p>
+                            <p className="text-xs text-[#5A4A2E]">+{role.benefits.length - 3} more</p>
                           )}
                         </div>
                       </motion.button>
@@ -367,7 +367,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 <Button
                   onClick={handleConfirmRole}
                   disabled={!selectedRole}
-                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20 disabled:opacity-50"
+                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20 disabled:opacity-50"
                 >
                   Continue
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -389,7 +389,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-black mb-4">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">
                   Important Notice for Brokers
                 </h2>
 
@@ -402,12 +402,12 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 )}
 
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
-                  <p className="text-gray-700 mb-4">
-                    <strong className="text-black">We're excited to have you join us!</strong> As a Broker Circle member, you'll receive:
+                <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-6 mb-6 text-left">
+                  <p className="text-[#5A4A2E] mb-4">
+                    <strong className="text-[#1A1A1A]">We're excited to have you join us!</strong> As a Broker Circle member, you'll receive:
                   </p>
                   
-                  <ul className="space-y-3 text-sm text-gray-600">
+                  <ul className="space-y-3 text-sm text-[#5A4A2E]">
                     <li className="flex items-start gap-3">
                       <Brain className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
                       <span><strong>Free AI Tools</strong> – Unlimited access to all AI-powered property tools</span>
@@ -436,7 +436,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     onCheckedChange={(checked) => setConfirmedAccurate(checked === true)}
                     className="mt-0.5"
                   />
-                  <label htmlFor="confirm-accurate" className="text-sm text-gray-600 cursor-pointer">
+                  <label htmlFor="confirm-accurate" className="text-sm text-[#5A4A2E] cursor-pointer">
                     I confirm that I am a <strong>licensed real estate broker</strong> or work for a real estate agency, and I understand the onboarding requirements.
                   </label>
                 </div>
@@ -445,14 +445,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   <Button
                     onClick={handleBackFromWarning}
                     variant="outline"
-                    className="flex-1 py-5 border-gray-300"
+                    className="flex-1 py-5 border-[#B89555]/30"
                   >
                     Go Back
                   </Button>
                   <Button
                     onClick={handleConfirmRole}
                     disabled={!canDismissWarning || !confirmedAccurate}
-                    className="flex-1 py-5 bg-gold hover:bg-gold/90 text-black font-semibold disabled:opacity-50"
+                    className="flex-1 py-5 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold disabled:opacity-50"
                   >
                     Join Broker Circle
                     <ArrowRight className="w-5 h-5 ml-2" />
@@ -475,17 +475,17 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3">
                   {selectedRoleData.welcomeTitle}
                 </h2>
 
-                <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                <p className="text-[#5A4A2E] mb-8 max-w-md mx-auto">
                   {selectedRoleData.welcomeMessage}
                 </p>
 
                 {/* Quick Start Guide */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
-                  <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+                <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-6 mb-6 text-left">
+                  <h3 className="font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
                     <BookOpen className="w-5 h-5 text-gold" />
                     Quick Start Guide
                   </h3>
@@ -493,15 +493,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   <div className="space-y-3">
                     {selectedRole === 'broker' && (
                       <>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
                           <span>Explore <strong>Free AI Tools</strong> in the JBJ Broker Hub</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
                           <span>Access <strong>Free Courses</strong> in the Broker Toolkit</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
                           <span>Your <strong>Dedicated HR & Coach</strong> will be in touch</span>
                         </div>
@@ -509,15 +509,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     )}
                     {selectedRole === 'investor' && (
                       <>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">1</div>
                           <span>Browse <strong>Off-Plan Properties</strong> in Properties</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">2</div>
                           <span>Use <strong>Compare</strong> to shortlist your favorites</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                           <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-600">3</div>
                           <span>Book a <strong>Free Consultation</strong> with our experts</span>
                         </div>
@@ -525,16 +525,16 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     )}
                     {selectedRole === 'visitor' && (
                       <>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">1</div>
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
+                          <div className="w-6 h-6 rounded-full bg-[#B89555]/20 flex items-center justify-center text-xs font-bold text-[#5A4A2E]">1</div>
                           <span>Explore <strong>Properties & Market Data</strong></span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">2</div>
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
+                          <div className="w-6 h-6 rounded-full bg-[#B89555]/20 flex items-center justify-center text-xs font-bold text-[#5A4A2E]">2</div>
                           <span>Learn About <strong>UAE Real Estate Market</strong></span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">3</div>
+                        <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
+                          <div className="w-6 h-6 rounded-full bg-[#B89555]/20 flex items-center justify-center text-xs font-bold text-[#5A4A2E]">3</div>
                           <span>Access <strong>Tools Anytime</strong> from the Menu</span>
                         </div>
                       </>
@@ -543,14 +543,14 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 </div>
 
                 {/* Change Role Hint */}
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-6">
+                <div className="flex items-center justify-center gap-2 text-sm text-[#5A4A2E] mb-6">
                   <Settings className="w-4 h-4" />
                   <span>Made a mistake? Change your role anytime from the <strong>Menu → Settings</strong></span>
                 </div>
 
                 <Button
                   onClick={handleCloseWelcome}
-                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
                 >
                   <Home className="w-5 h-5 mr-2" />
                   Start Exploring
@@ -574,33 +574,33 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                   Welcome Onboard!
                 </h2>
                 
                 <p className="text-lg text-gold font-semibold mb-4">{employeeName}</p>
 
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                <p className="text-[#5A4A2E] mb-6 max-w-md mx-auto">
                   Welcome to <strong>JBJ Global Real Estate</strong>! We're thrilled to have you join our team as <strong>{employeeRole}</strong>.
                 </p>
 
                 {/* What's Next Section */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6 text-left">
-                  <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+                <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-6 mb-6 text-left">
+                  <h3 className="font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-gold" />
                     Your CRM Dashboard Awaits
                   </h3>
                   
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                    <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                       <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">1</div>
                       <span>Access your <strong>Leads & Pipeline</strong> dashboard</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                    <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                       <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">2</div>
                       <span>Manage <strong>Tasks & Calendar</strong> from the sidebar</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-600">
+                    <div className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                       <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">3</div>
                       <span>Get AI assistance with <strong>Smart Reminders</strong></span>
                     </div>
@@ -615,7 +615,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <Button
                   onClick={handleEmployeeWelcomeClose}
-                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                  className="w-full py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
                 >
                   <Briefcase className="w-5 h-5 mr-2" />
                   Go to My CRM Dashboard

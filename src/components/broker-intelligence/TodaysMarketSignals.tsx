@@ -121,7 +121,7 @@ export function TodaysMarketSignals() {
   };
 
   return (
-    <Card className="bg-zinc-900/50 border-gray-800">
+    <Card className="bg-zinc-900/50 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-white text-lg flex items-center gap-2">
@@ -144,7 +144,7 @@ export function TodaysMarketSignals() {
           signals.map((signal, index) => (
             <div
               key={index}
-              className="bg-zinc-800/50 rounded-lg p-3 border border-gray-700/50 hover:border-gold/20 transition-colors"
+              className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -174,8 +174,8 @@ export function TodaysMarketSignals() {
           ))
         )}
 
-        <div className="pt-3 border-t border-gray-800">
-          <p className="text-gray-600 text-xs text-center">
+        <div className="pt-3 border-t border-[#1A1A1A]">
+          <p className="text-[#5A4A2E] text-xs text-center">
             Internal signals based on aggregated Open Data · Descriptive only, not advice
           </p>
         </div>

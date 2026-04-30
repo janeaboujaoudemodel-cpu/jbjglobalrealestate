@@ -91,7 +91,7 @@ export function DocuSignIntegration() {
   return (
     <div className="space-y-6">
       {/* Send New Contract */}
-      <Card className="bg-zinc-900/50 border-gray-800">
+      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-lg flex items-center gap-2">
             <FileSignature className="w-5 h-5 text-gold" />
@@ -137,7 +137,7 @@ export function DocuSignIntegration() {
                 placeholder="Full name"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -151,7 +151,7 @@ export function DocuSignIntegration() {
                 placeholder="email@example.com"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export function DocuSignIntegration() {
               placeholder="e.g., JBJ-2024-001"
               value={propertyRef}
               onChange={(e) => setPropertyRef(e.target.value)}
-              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
+              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
             />
           </div>
 
@@ -181,7 +181,7 @@ export function DocuSignIntegration() {
       </Card>
 
       {/* Pending Signatures */}
-      <Card className="bg-zinc-900/50 border-gray-800">
+      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <CardTitle className="text-white text-base flex items-center gap-2">
             <Clock className="w-5 h-5 text-amber-400" />
@@ -198,7 +198,7 @@ export function DocuSignIntegration() {
             pendingSignatures.map((sig) => (
               <div
                 key={sig.id}
-                className="bg-zinc-800/50 rounded-lg p-3 border border-gray-700/50 hover:border-gold/20 transition-colors"
+                className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
@@ -212,7 +212,7 @@ export function DocuSignIntegration() {
                     <FileText className="w-4 h-4 text-white/90" />
                     <span className="text-white/70 text-xs">{sig.template}</span>
                   </div>
-                  <span className="text-gray-600 text-xs">
+                  <span className="text-[#5A4A2E] text-xs">
                     {new Date(sig.sentAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -233,7 +233,7 @@ export function DocuSignIntegration() {
         <Shield className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
         <div>
           <p className="text-emerald-400 text-xs font-medium">DocuSign Connected</p>
-          <p className="text-gray-600 text-xs">
+          <p className="text-[#5A4A2E] text-xs">
             Contracts are legally binding and stored securely. All signatures comply with UAE electronic signature regulations.
           </p>
         </div>

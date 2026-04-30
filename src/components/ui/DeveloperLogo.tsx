@@ -44,12 +44,12 @@ export function DeveloperLogo({
     return (
       <div
         className={cn(
-          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-2.5 shadow-sm border border-gray-200",
+          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-2.5 shadow-sm border border-[#B89555]/30",
           className,
         )}
         aria-label={`${alt} (logo unavailable)`}
       >
-        <Building2 className="w-6 h-6 text-gray-400" />
+        <Building2 className="w-6 h-6 text-[#8A7556]" />
       </div>
     );
   }
@@ -57,7 +57,7 @@ export function DeveloperLogo({
   return (
     <div
       className={cn(
-        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-2.5 shadow-sm border border-gray-200",
+        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-2.5 shadow-sm border border-[#B89555]/30",
         className,
       )}
     >

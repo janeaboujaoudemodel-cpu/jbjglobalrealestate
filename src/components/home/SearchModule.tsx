@@ -194,10 +194,10 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300",
               purpose === 'buy'
-                ? 'bg-gold text-black shadow-lg'
+                ? 'bg-gold text-[#1A1A1A] shadow-lg'
                 : isHero 
-                  ? 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm' 
-                  : 'bg-black/5 text-black hover:bg-black/10'
+                  ? 'bg-[#FDFBF7]/10 text-white hover:bg-[#FDFBF7]/20 backdrop-blur-sm' 
+                  : 'bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-[#1A1A1A]/10'
             )}
           >
             <Home className="w-5 h-5" />
@@ -208,10 +208,10 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300",
               purpose === 'rent'
-                ? 'bg-gold text-black shadow-lg'
+                ? 'bg-gold text-[#1A1A1A] shadow-lg'
                 : isHero 
-                  ? 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm' 
-                  : 'bg-black/5 text-black hover:bg-black/10'
+                  ? 'bg-[#FDFBF7]/10 text-white hover:bg-[#FDFBF7]/20 backdrop-blur-sm' 
+                  : 'bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-[#1A1A1A]/10'
             )}
           >
             <Key className="w-5 h-5" />
@@ -222,7 +222,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
         {/* Currency Selector */}
         <div className={cn(
           "flex items-center gap-1 px-2 py-1.5 rounded-full",
-          isHero ? 'bg-white/10 backdrop-blur-sm' : 'bg-black/5'
+          isHero ? 'bg-[#FDFBF7]/10 backdrop-blur-sm' : 'bg-[#1A1A1A]/5'
         )}>
           {(['AED', 'USD', 'EUR'] as const).map((c) => (
             <button
@@ -231,8 +231,8 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                 currency === c 
-                  ? 'bg-gold text-black' 
-                  : isHero ? 'text-white/80 hover:text-white' : 'text-black/60 hover:text-black'
+                  ? 'bg-gold text-[#1A1A1A]' 
+                  : isHero ? 'text-white/80 hover:text-white' : 'text-[#1A1A1A]/60 hover:text-[#1A1A1A]'
               )}
             >
               {c}
@@ -243,9 +243,9 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
         {/* Area Unit Toggle */}
         <div className={cn(
           "flex items-center gap-1 px-2 py-1.5 rounded-full",
-          isHero ? 'bg-white/10 backdrop-blur-sm' : 'bg-black/5'
+          isHero ? 'bg-[#FDFBF7]/10 backdrop-blur-sm' : 'bg-[#1A1A1A]/5'
         )}>
-          <Ruler className={cn("w-4 h-4 mx-1", isHero ? 'text-white/90' : 'text-black/50')} />
+          <Ruler className={cn("w-4 h-4 mx-1", isHero ? 'text-white/90' : 'text-[#1A1A1A]/50')} />
           {(['sqft', 'sqm'] as const).map((u) => (
             <button
               key={u}
@@ -253,8 +253,8 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                 areaUnit === u 
-                  ? 'bg-gold text-black' 
-                  : isHero ? 'text-white/80 hover:text-white' : 'text-black/60 hover:text-black'
+                  ? 'bg-gold text-[#1A1A1A]' 
+                  : isHero ? 'text-white/80 hover:text-white' : 'text-[#1A1A1A]/60 hover:text-[#1A1A1A]'
               )}
             >
               {u}
@@ -267,18 +267,18 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
       <div className={cn(
         "w-full",
         isHero 
-          ? 'bg-black/40 backdrop-blur-md border border-white/20 rounded-2xl p-5' 
-          : 'bg-white border-2 border-gold/30 rounded-xl p-5'
+          ? 'bg-[#1A1A1A]/40 backdrop-blur-md border border-white/20 rounded-2xl p-5' 
+          : 'bg-[#FDFBF7] border-2 border-gold/30 rounded-xl p-5'
       )}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Area */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-[#5A4A2E]')}>
               <MapPin className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.area', 'Area')}
             </label>
             <Select value={area} onValueChange={setArea}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
                 <SelectValue placeholder="Select area" />
               </SelectTrigger>
               <SelectContent className="max-h-64 overflow-y-auto">
@@ -293,12 +293,12 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Property Type */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-[#5A4A2E]')}>
               <Building2 className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.propertyType', 'Type')}
             </label>
             <Select value={propertyType} onValueChange={setPropertyType}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
                 <SelectValue placeholder="Property type" />
               </SelectTrigger>
               <SelectContent>
@@ -313,12 +313,12 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Bedrooms */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-[#5A4A2E]')}>
               <Bed className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.bedrooms', 'Beds')}
             </label>
             <Select value={bedrooms} onValueChange={setBedrooms}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
                 <SelectValue placeholder="Bedrooms" />
               </SelectTrigger>
               <SelectContent>
@@ -333,12 +333,12 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Size Range */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-[#5A4A2E]')}>
               <Ruler className="w-3.5 h-3.5 inline mr-1.5" />
               Size ({areaUnit})
             </label>
             <Select value={sizeRange} onValueChange={setSizeRange}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
                 <SelectValue placeholder="Size" />
               </SelectTrigger>
               <SelectContent>
@@ -353,12 +353,12 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Price Range */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-[#5A4A2E]')}>
               <DollarSign className="w-3.5 h-3.5 inline mr-1.5" />
               Price ({currency})
             </label>
             <Select value={priceRange} onValueChange={setPriceRange}>
-              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-white/10 border-white/20 text-white' : 'bg-white border-gold/30')}>
+              <SelectTrigger className={cn("h-12 text-base", isHero ? 'bg-[#FDFBF7]/10 border-white/20 text-white' : 'bg-[#FDFBF7] border-gold/30')}>
                 <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent>
@@ -375,7 +375,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
           <div className="flex items-end">
             <Button
               onClick={handleSearch}
-              className="w-full h-12 bg-gold hover:bg-gold-dark text-black font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-gold hover:bg-gold-dark text-[#1A1A1A] font-bold text-base rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <Search className="w-5 h-5 mr-2" />
               {t('search.button', 'Search')}

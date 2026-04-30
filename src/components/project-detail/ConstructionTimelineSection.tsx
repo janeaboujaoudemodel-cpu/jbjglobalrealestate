@@ -50,7 +50,7 @@ export default function ConstructionTimelineSection({
 
   // Determine stage based on progress
   const getConstructionStage = (progress: number) => {
-    if (progress === 0) return { label: "Pre-Construction", color: "bg-gray-500" };
+    if (progress === 0) return { label: "Pre-Construction", color: "bg-[#B89555]" };
     if (progress < 30) return { label: "Foundation", color: "bg-orange-500" };
     if (progress < 60) return { label: "Superstructure", color: "bg-amber-500" };
     if (progress < 90) return { label: "Finishing", color: "bg-emerald-500" };
@@ -150,7 +150,7 @@ export default function ConstructionTimelineSection({
           <div className="flex justify-between relative">
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress > 0 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress > 0 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <Flag className="w-4 h-4" />
               </div>
@@ -159,7 +159,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 50 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress >= 50 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <HardHat className="w-4 h-4" />
               </div>
@@ -168,7 +168,7 @@ export default function ConstructionTimelineSection({
             
             <div className="flex flex-col items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
-                validatedProgress >= 100 ? "bg-gold text-black" : "bg-muted text-muted-foreground"
+                validatedProgress >= 100 ? "bg-gold text-[#1A1A1A]" : "bg-muted text-muted-foreground"
               }`}>
                 <Home className="w-4 h-4" />
               </div>

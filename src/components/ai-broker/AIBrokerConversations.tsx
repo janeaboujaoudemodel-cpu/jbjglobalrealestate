@@ -71,7 +71,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return <Phone className="h-4 w-4 text-purple-500" />;
       default:
-        return <MessageSquare className="h-4 w-4 text-gray-600" />;
+        return <MessageSquare className="h-4 w-4 text-[#5A4A2E]" />;
     }
   };
 
@@ -84,7 +84,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return "border-purple-500/30 text-purple-400";
       default:
-        return "border-gray-500/30 text-white/70";
+        return "border-[#B89555]/30/30 text-white/70";
     }
   };
 
@@ -113,11 +113,11 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
 
   if (conversations.length === 0) {
     return (
-      <Card className="bg-zinc-900 border-gray-800 border-dashed">
+      <Card className="bg-zinc-900 border-[#1A1A1A] border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-16">
-          <MessageSquare className="h-16 w-16 text-gray-600 mb-4" />
+          <MessageSquare className="h-16 w-16 text-[#5A4A2E] mb-4" />
           <h3 className="text-white text-lg font-medium mb-2">No Conversations Yet</h3>
-          <p className="text-gray-600 text-center">
+          <p className="text-[#5A4A2E] text-center">
             Start contacting leads to see conversations here
           </p>
         </CardContent>
@@ -129,14 +129,14 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Conversation List */}
       <div className="lg:col-span-1">
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-0">
             <ScrollArea className="h-[600px]">
               {conversations.map((conv) => (
                 <button
                   key={conv.id}
                   onClick={() => setSelectedConversation(conv.id)}
-                  className={`w-full p-4 text-left border-b border-gray-800 hover:bg-gray-800/50 transition-colors ${
+                  className={`w-full p-4 text-left border-b border-[#1A1A1A] hover:bg-[#1A1A1A]/50 transition-colors ${
                     selectedConversation === conv.id ? "bg-zinc-800" : ""
                   }`}
                 >
@@ -152,10 +152,10 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">
+                    <span className="text-[#5A4A2E]">
                       {conv.message_count || 0} messages
                     </span>
-                    <span className="text-gray-600 flex items-center gap-1">
+                    <span className="text-[#5A4A2E] flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {formatTime(conv.last_message_at)}
                     </span>
@@ -172,10 +172,10 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
         {selectedConversation ? (
           <ConversationDetail conversationId={selectedConversation} />
         ) : (
-          <Card className="bg-zinc-900 border-gray-800 h-[600px]">
+          <Card className="bg-zinc-900 border-[#1A1A1A] h-[600px]">
             <CardContent className="flex flex-col items-center justify-center h-full">
-              <ChevronRight className="h-12 w-12 text-gray-600 mb-4" />
-              <p className="text-gray-600">Select a conversation to view details</p>
+              <ChevronRight className="h-12 w-12 text-[#5A4A2E] mb-4" />
+              <p className="text-[#5A4A2E]">Select a conversation to view details</p>
             </CardContent>
           </Card>
         )}
@@ -216,7 +216,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
 
   if (loading) {
     return (
-      <Card className="bg-zinc-900 border-gray-800 h-[600px]">
+      <Card className="bg-zinc-900 border-[#1A1A1A] h-[600px]">
         <CardContent className="flex items-center justify-center h-full">
           <Loader2 className="h-8 w-8 animate-spin text-gold" />
         </CardContent>
@@ -225,7 +225,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
   }
 
   return (
-    <Card className="bg-zinc-900 border-gray-800 h-[600px] flex flex-col">
+    <Card className="bg-zinc-900 border-[#1A1A1A] h-[600px] flex flex-col">
       <CardContent className="flex-1 p-4 overflow-hidden">
         <ScrollArea className="h-full">
           <div className="space-y-4">
@@ -239,14 +239,14 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
                 <div
                   className={`max-w-[70%] rounded-lg p-3 ${
                     msg.direction === "outbound"
-                      ? "bg-gold text-black"
+                      ? "bg-gold text-[#1A1A1A]"
                       : "bg-zinc-800 text-white"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   <p
                     className={`text-xs mt-1 ${
-                      msg.direction === "outbound" ? "text-black/60" : "text-gray-600"
+                      msg.direction === "outbound" ? "text-[#1A1A1A]/60" : "text-[#5A4A2E]"
                     }`}
                   >
                     {new Date(msg.created_at).toLocaleTimeString()}
@@ -257,7 +257,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
 
             {messages.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-gray-600">No messages in this conversation</p>
+                <p className="text-[#5A4A2E]">No messages in this conversation</p>
               </div>
             )}
           </div>

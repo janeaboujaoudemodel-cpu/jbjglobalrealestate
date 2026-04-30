@@ -107,7 +107,7 @@ export function OverlayEffectsPanel({
 
                         {/* Lock badge */}
                         {isLocked && (
-                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-amber-400 bg-black/70 px-1 py-0.5 rounded-full animate-pulse">
+                          <div className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[7px] font-bold text-amber-400 bg-[#1A1A1A]/70 px-1 py-0.5 rounded-full animate-pulse">
                             <Lock className="w-1.5 h-1.5" />
                             ON
                           </div>
@@ -129,7 +129,7 @@ export function OverlayEffectsPanel({
                               toast.success(`${effect.label} added to timeline!`)
                             );
                           }}
-                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-black text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
+                          className="mt-1 flex items-center gap-0.5 w-full justify-center py-0.5 rounded text-[9px] font-bold bg-slate-700 hover:bg-amber-500 hover:text-[#1A1A1A] text-slate-300 border border-slate-600 hover:border-amber-500 transition-all"
                         >
                           <Plus className="w-2.5 h-2.5" />
                           Add

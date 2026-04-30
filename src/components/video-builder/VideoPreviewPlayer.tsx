@@ -141,7 +141,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
         {/* Video Container */}
         <div
           ref={containerRef}
-          className={`relative bg-black rounded-lg overflow-hidden ${
+          className={`relative bg-[#1A1A1A] rounded-lg overflow-hidden ${
             project.format === "9:16" ? "aspect-[9/16] max-h-[500px] mx-auto" : 
             project.format === "1:1" ? "aspect-square" : "aspect-video"
           }`}
@@ -174,7 +174,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
 
           {/* Intro Overlay */}
           {project.branding.showIntro && currentTime < 3 && (
-            <div className="absolute inset-0 bg-black flex items-center justify-center z-20">
+            <div className="absolute inset-0 bg-[#1A1A1A] flex items-center justify-center z-20">
               <div className="text-center animate-fade-in">
                 <img
                   src={jbjLogo}
@@ -211,7 +211,7 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
           {/* Subtitles */}
           {currentSubtitle && (
             <div className="absolute bottom-16 left-4 right-4 z-10">
-              <div className="bg-black/75 text-white text-center py-2 px-4 rounded-lg text-sm">
+              <div className="bg-[#1A1A1A]/75 text-white text-center py-2 px-4 rounded-lg text-sm">
                 {currentSubtitle.text}
               </div>
             </div>
@@ -220,10 +220,10 @@ const VideoPreviewPlayer = ({ project }: VideoPreviewPlayerProps) => {
           {/* Play/Pause Overlay */}
           <button
             onClick={handlePlayPause}
-            className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/20 transition-colors z-5"
+            className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/0 hover:bg-[#1A1A1A]/20 transition-colors z-5"
           >
             {!isPlaying && (
-              <div className="h-16 w-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="h-16 w-16 rounded-full bg-[#FDFBF7]/20 backdrop-blur-sm flex items-center justify-center">
                 <Play className="h-8 w-8 text-white fill-white" />
               </div>
             )}

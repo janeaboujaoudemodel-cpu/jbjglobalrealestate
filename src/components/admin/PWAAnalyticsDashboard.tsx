@@ -108,7 +108,7 @@ const PWAAnalyticsDashboard = () => {
     if (eventType === 'install_accepted') return <TrendingUp className="w-5 h-5 text-green-600" />;
     if (eventType === 'install_dismissed') return <TrendingDown className="w-5 h-5 text-red-500" />;
     if (eventType === 'app_opened') return <Smartphone className="w-5 h-5 text-gold" />;
-    return <Users className="w-5 h-5 text-black/60" />;
+    return <Users className="w-5 h-5 text-[#1A1A1A]/60" />;
   };
 
   const getDeviceIcon = (deviceType: string) => {
@@ -131,17 +131,17 @@ const PWAAnalyticsDashboard = () => {
             <Smartphone className="w-6 h-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-black">PWA Analytics</h2>
-            <p className="text-black/60 text-sm">Track app downloads and user engagement</p>
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">PWA Analytics</h2>
+            <p className="text-[#1A1A1A]/60 text-sm">Track app downloads and user engagement</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           {pwaGuide && <PageGuide guide={pwaGuide} />}
           <Tabs value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
-            <TabsList className="bg-white/80 border-2 border-gold/30">
-              <TabsTrigger value="7d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">7 Days</TabsTrigger>
-              <TabsTrigger value="30d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">30 Days</TabsTrigger>
-              <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">All Time</TabsTrigger>
+            <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
+              <TabsTrigger value="7d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">7 Days</TabsTrigger>
+              <TabsTrigger value="30d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">30 Days</TabsTrigger>
+              <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">All Time</TabsTrigger>
             </TabsList>
           </Tabs>
           <Button
@@ -149,7 +149,7 @@ const PWAAnalyticsDashboard = () => {
             size="icon"
             onClick={fetchAnalytics}
             disabled={loading}
-            className="border-2 border-gold/40 bg-white/80 hover:bg-gold/10 hover:border-gold text-black"
+            className="border-2 border-gold/40 bg-[#FDFBF7]/80 hover:bg-gold/10 hover:border-gold text-[#1A1A1A]"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </Button>
@@ -160,19 +160,19 @@ const PWAAnalyticsDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-black/60 flex items-center gap-2">
+            <CardTitle className="text-sm text-[#1A1A1A]/60 flex items-center gap-2">
               <Download className="w-4 h-4 text-gold" />
               Download Clicks
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-black">{totalClicks}</div>
+            <div className="text-3xl font-bold text-[#1A1A1A]">{totalClicks}</div>
           </CardContent>
         </Card>
         
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-black/60 flex items-center gap-2">
+            <CardTitle className="text-sm text-[#1A1A1A]/60 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-green-600" />
               Successful Installs
             </CardTitle>
@@ -184,7 +184,7 @@ const PWAAnalyticsDashboard = () => {
         
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-black/60 flex items-center gap-2">
+            <CardTitle className="text-sm text-[#1A1A1A]/60 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-gold" />
               Conversion Rate
             </CardTitle>
@@ -196,7 +196,7 @@ const PWAAnalyticsDashboard = () => {
         
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-black/60 flex items-center gap-2">
+            <CardTitle className="text-sm text-[#1A1A1A]/60 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-blue-600" />
               App Opens
             </CardTitle>
@@ -213,21 +213,21 @@ const PWAAnalyticsDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader>
-            <CardTitle className="text-black">Events Breakdown</CardTitle>
+            <CardTitle className="text-[#1A1A1A]">Events Breakdown</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {eventCounts.map((event) => (
-                <div key={event.event_type} className="flex items-center justify-between p-3 bg-white/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
+                <div key={event.event_type} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg hover:border-gold/40 transition-colors">
                   <div className="flex items-center gap-3">
                     {getEventIcon(event.event_type)}
-                    <span className="text-black">{getEventLabel(event.event_type)}</span>
+                    <span className="text-[#1A1A1A]">{getEventLabel(event.event_type)}</span>
                   </div>
                   <span className="text-gold font-semibold">{event.count}</span>
                 </div>
               ))}
               {eventCounts.length === 0 && (
-                <p className="text-black/50 text-center py-4">No events recorded yet</p>
+                <p className="text-[#1A1A1A]/50 text-center py-4">No events recorded yet</p>
               )}
             </div>
           </CardContent>
@@ -235,7 +235,7 @@ const PWAAnalyticsDashboard = () => {
 
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader>
-            <CardTitle className="text-black">Device & Platform</CardTitle>
+            <CardTitle className="text-[#1A1A1A]">Device & Platform</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -246,8 +246,8 @@ const PWAAnalyticsDashboard = () => {
                   size="sm"
                   onClick={() => setPwaView('device')}
                   className={pwaView === 'device' 
-                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold/40 font-semibold' 
-                    : 'border-gold/30 text-black hover:bg-gold/10'}
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold/40 font-semibold' 
+                    : 'border-gold/30 text-[#1A1A1A] hover:bg-gold/10'}
                 >
                   <Monitor className="w-3.5 h-3.5 mr-1.5" />
                   By Device
@@ -257,8 +257,8 @@ const PWAAnalyticsDashboard = () => {
                   size="sm"
                   onClick={() => setPwaView('platform')}
                   className={pwaView === 'platform' 
-                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold/40 font-semibold' 
-                    : 'border-gold/30 text-black hover:bg-gold/10'}
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold/40 font-semibold' 
+                    : 'border-gold/30 text-[#1A1A1A] hover:bg-gold/10'}
                 >
                   <Smartphone className="w-3.5 h-3.5 mr-1.5" />
                   By Platform
@@ -268,28 +268,28 @@ const PWAAnalyticsDashboard = () => {
               {pwaView === 'device' ? (
                 <div className="space-y-2">
                   {deviceBreakdown.map((device) => (
-                    <div key={device.device_type} className="flex items-center justify-between p-2 bg-white/60 border border-gold/20 rounded-lg">
+                    <div key={device.device_type} className="flex items-center justify-between p-2 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg">
                       <div className="flex items-center gap-2">
                         {getDeviceIcon(device.device_type)}
-                        <span className="text-black capitalize">{device.device_type}</span>
+                        <span className="text-[#1A1A1A] capitalize">{device.device_type}</span>
                       </div>
-                      <span className="text-black/70 font-medium">{device.count}</span>
+                      <span className="text-[#1A1A1A]/70 font-medium">{device.count}</span>
                     </div>
                   ))}
                   {deviceBreakdown.length === 0 && (
-                    <p className="text-black/50 text-center py-4">No device data yet</p>
+                    <p className="text-[#1A1A1A]/50 text-center py-4">No device data yet</p>
                   )}
                 </div>
               ) : (
                 <div className="space-y-2">
                   {platformBreakdown.map((platform) => (
-                    <div key={platform.platform} className="flex items-center justify-between p-2 bg-white/60 border border-gold/20 rounded-lg">
-                      <span className="text-black capitalize">{platform.platform}</span>
-                      <span className="text-black/70 font-medium">{platform.count}</span>
+                    <div key={platform.platform} className="flex items-center justify-between p-2 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg">
+                      <span className="text-[#1A1A1A] capitalize">{platform.platform}</span>
+                      <span className="text-[#1A1A1A]/70 font-medium">{platform.count}</span>
                     </div>
                   ))}
                   {platformBreakdown.length === 0 && (
-                    <p className="text-black/50 text-center py-4">No platform data yet</p>
+                    <p className="text-[#1A1A1A]/50 text-center py-4">No platform data yet</p>
                   )}
                 </div>
               )}
@@ -301,34 +301,34 @@ const PWAAnalyticsDashboard = () => {
       {/* Recent Events */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <CardHeader>
-          <CardTitle className="text-black">Recent Events</CardTitle>
+          <CardTitle className="text-[#1A1A1A]">Recent Events</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b-2 border-gold/20">
-                  <th className="text-left text-black/60 py-3 font-medium">Event</th>
-                  <th className="text-left text-black/60 py-3 font-medium">Device</th>
-                  <th className="text-left text-black/60 py-3 font-medium">Platform</th>
-                  <th className="text-left text-black/60 py-3 font-medium">Browser</th>
-                  <th className="text-left text-black/60 py-3 font-medium">Time</th>
+                  <th className="text-left text-[#1A1A1A]/60 py-3 font-medium">Event</th>
+                  <th className="text-left text-[#1A1A1A]/60 py-3 font-medium">Device</th>
+                  <th className="text-left text-[#1A1A1A]/60 py-3 font-medium">Platform</th>
+                  <th className="text-left text-[#1A1A1A]/60 py-3 font-medium">Browser</th>
+                  <th className="text-left text-[#1A1A1A]/60 py-3 font-medium">Time</th>
                 </tr>
               </thead>
               <tbody>
                 {analytics.slice(0, 20).map((row) => (
-                  <tr key={row.id} className="border-b border-gold/10 hover:bg-white/40 transition-colors">
-                    <td className="py-3 text-black font-medium">{getEventLabel(row.event_type)}</td>
-                    <td className="py-3 text-black/70 capitalize">{row.device_type || '-'}</td>
-                    <td className="py-3 text-black/70 capitalize">{row.platform || '-'}</td>
-                    <td className="py-3 text-black/70 capitalize">{row.browser || '-'}</td>
-                    <td className="py-3 text-black/50">{format(new Date(row.created_at), 'MMM d, HH:mm')}</td>
+                  <tr key={row.id} className="border-b border-gold/10 hover:bg-[#FDFBF7]/40 transition-colors">
+                    <td className="py-3 text-[#1A1A1A] font-medium">{getEventLabel(row.event_type)}</td>
+                    <td className="py-3 text-[#1A1A1A]/70 capitalize">{row.device_type || '-'}</td>
+                    <td className="py-3 text-[#1A1A1A]/70 capitalize">{row.platform || '-'}</td>
+                    <td className="py-3 text-[#1A1A1A]/70 capitalize">{row.browser || '-'}</td>
+                    <td className="py-3 text-[#1A1A1A]/50">{format(new Date(row.created_at), 'MMM d, HH:mm')}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
             {analytics.length === 0 && (
-              <p className="text-black/50 text-center py-8">No analytics data yet</p>
+              <p className="text-[#1A1A1A]/50 text-center py-8">No analytics data yet</p>
             )}
           </div>
         </CardContent>

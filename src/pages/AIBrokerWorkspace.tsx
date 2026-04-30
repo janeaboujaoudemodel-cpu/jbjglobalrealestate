@@ -185,7 +185,7 @@ export default function AIBrokerWorkspace() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );
@@ -194,7 +194,7 @@ export default function AIBrokerWorkspace() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
-      <header className="bg-black border-b border-gray-800 sticky top-0 lg:top-[48px] z-50">
+      <header className="bg-[#1A1A1A] border-b border-[#1A1A1A] sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -231,7 +231,7 @@ export default function AIBrokerWorkspace() {
                 size="sm"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="border-gray-700 text-gray-600 hover:bg-gray-800"
+                className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
               >
                 <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
               </Button>
@@ -242,7 +242,7 @@ export default function AIBrokerWorkspace() {
 
       <div className="flex">
         {/* Sidebar - Broker Profile */}
-        <aside className="w-64 bg-black border-r border-gray-800 min-h-[calc(100vh-65px)] p-4">
+        <aside className="w-64 bg-[#1A1A1A] border-r border-[#1A1A1A] min-h-[calc(100vh-65px)] p-4">
           {activeBroker && (
             <div className="space-y-6">
               {/* Broker Card */}
@@ -257,13 +257,13 @@ export default function AIBrokerWorkspace() {
                       style={{ objectFit: "cover", objectPosition: "center 15%" }}
                     />
                   ) : (
-                    <span className="text-black text-2xl font-bold">
+                    <span className="text-[#1A1A1A] text-2xl font-bold">
                       {activeBroker.name.split(" ").map((n) => n[0]).join("")}
                     </span>
                   )}
                 </div>
                 <h2 className="text-white font-semibold">{activeBroker.name}</h2>
-                <p className="text-gray-600 text-sm">{activeBroker.email}</p>
+                <p className="text-[#5A4A2E] text-sm">{activeBroker.email}</p>
                 <Badge className="mt-2 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
                   Active
                 </Badge>
@@ -272,7 +272,7 @@ export default function AIBrokerWorkspace() {
               {/* Capacity Bar */}
               <div className="bg-zinc-900 rounded-lg p-4">
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-600">Daily Capacity</span>
+                  <span className="text-[#5A4A2E]">Daily Capacity</span>
                   <span className="text-white">{capacityUsed}/{capacityLimit}</span>
                 </div>
                 <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
@@ -292,35 +292,35 @@ export default function AIBrokerWorkspace() {
               {/* Quick Stats */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-[#5A4A2E] flex items-center gap-2">
                     <Users className="h-4 w-4" />
                     Leads Today
                   </span>
                   <span className="text-white font-medium">{dailyStats.leads_contacted}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-[#5A4A2E] flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" />
                     Messages
                   </span>
                   <span className="text-white font-medium">{dailyStats.messages_sent}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-[#5A4A2E] flex items-center gap-2">
                     <Mail className="h-4 w-4" />
                     Emails
                   </span>
                   <span className="text-white font-medium">{dailyStats.emails_sent}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-[#5A4A2E] flex items-center gap-2">
                     <Phone className="h-4 w-4" />
                     Calls
                   </span>
                   <span className="text-white font-medium">{dailyStats.calls_made}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-[#5A4A2E] flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     Conversions
                   </span>
@@ -329,24 +329,24 @@ export default function AIBrokerWorkspace() {
               </div>
 
               {/* Navigation */}
-              <nav className="space-y-1 pt-4 border-t border-gray-800">
+              <nav className="space-y-1 pt-4 border-t border-[#1A1A1A]">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-600 hover:text-white hover:bg-gray-800"
+                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <Users className="h-4 w-4 mr-3" />
                   My Leads
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-600 hover:text-white hover:bg-gray-800"
+                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <MessageSquare className="h-4 w-4 mr-3" />
                   Conversations
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-600 hover:text-white hover:bg-gray-800"
+                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <BarChart3 className="h-4 w-4 mr-3" />
                   Analytics
@@ -360,24 +360,24 @@ export default function AIBrokerWorkspace() {
         <main className="flex-1 p-6 bg-zinc-950">
           <Tabs defaultValue="leads" className="space-y-6">
             <div className="flex items-center justify-between">
-              <TabsList className="bg-zinc-900 border border-gray-800">
+              <TabsList className="bg-zinc-900 border border-[#1A1A1A]">
                 <TabsTrigger
                   value="leads"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Leads ({filteredLeads.length})
                 </TabsTrigger>
                 <TabsTrigger
                   value="conversations"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Conversations
                 </TabsTrigger>
                 <TabsTrigger
                   value="activity"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]"
                 >
                   <Clock className="h-4 w-4 mr-2" />
                   Activity
@@ -386,15 +386,15 @@ export default function AIBrokerWorkspace() {
 
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
                   <Input
                     placeholder="Search leads..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-zinc-900 border-gray-700 text-white w-64"
+                    className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white w-64"
                   />
                 </div>
-                <Button variant="outline" className="border-gray-700 text-gray-600">
+                <Button variant="outline" className="border-[#1A1A1A] text-[#5A4A2E]">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>
@@ -414,9 +414,9 @@ export default function AIBrokerWorkspace() {
 
                 {filteredLeads.length === 0 && (
                   <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                    <Users className="h-16 w-16 text-gray-600 mb-4" />
+                    <Users className="h-16 w-16 text-[#5A4A2E] mb-4" />
                     <h3 className="text-white text-lg font-medium mb-2">No Leads Found</h3>
-                    <p className="text-gray-600">
+                    <p className="text-[#5A4A2E]">
                       {searchQuery
                         ? "Try adjusting your search query"
                         : "Leads will appear here when assigned"}

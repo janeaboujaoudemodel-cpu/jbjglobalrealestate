@@ -189,7 +189,7 @@ export default function OwnerCommSettings() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <Button
                 variant="ghost"
                 size="icon"
@@ -202,15 +202,15 @@ export default function OwnerCommSettings() {
                 <Settings className="h-6 w-6 text-gold" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-black">Communication Settings</h1>
-                <p className="text-gray-600 text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
+                <h1 className="text-2xl font-bold text-[#1A1A1A]">Communication Settings</h1>
+                <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
               </div>
             </div>
           </motion.div>
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 mb-6 bg-white/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
               <TabsTrigger value="channels">Channels</TabsTrigger>
               <TabsTrigger value="ai">AI Settings</TabsTrigger>
               <TabsTrigger value="tone">Tone Profile</TabsTrigger>
@@ -221,7 +221,7 @@ export default function OwnerCommSettings() {
             <TabsContent value="channels">
               <div className="grid gap-4">
                 {/* Connected Channels */}
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">Connected Channels</CardTitle>
@@ -252,7 +252,7 @@ export default function OwnerCommSettings() {
                               );
                             })}
                           </div>
-                          <p className="text-xs text-gray-600 text-center mt-4">
+                          <p className="text-xs text-[#5A4A2E] text-center mt-4">
                             Note: OAuth integrations coming soon. Manual setup available.
                           </p>
                         </DialogContent>
@@ -266,9 +266,9 @@ export default function OwnerCommSettings() {
                       </div>
                     ) : channels.length === 0 ? (
                       <div className="text-center py-8">
-                        <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                        <p className="text-gray-600">No channels connected</p>
-                        <p className="text-gray-600 text-sm">Add your first channel to start receiving messages</p>
+                        <MessageSquare className="h-12 w-12 text-[#8A7556] mx-auto mb-3" />
+                        <p className="text-[#5A4A2E]">No channels connected</p>
+                        <p className="text-[#5A4A2E] text-sm">Add your first channel to start receiving messages</p>
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -278,15 +278,15 @@ export default function OwnerCommSettings() {
                           return (
                             <div
                               key={channel.id}
-                              className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-white"
+                              className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-[#FDFBF7]"
                             >
                               <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-lg bg-gray-50 ${chType?.color || 'text-gray-600'}`}>
+                                <div className={`p-2 rounded-lg bg-[#F7F2EA] ${chType?.color || 'text-[#5A4A2E]'}`}>
                                   <Icon className="h-5 w-5" />
                                 </div>
                                 <div>
-                                  <p className="font-medium text-black">{channel.display_name}</p>
-                                  <p className="text-xs text-gray-600">{channel.identifier}</p>
+                                  <p className="font-medium text-[#1A1A1A]">{channel.display_name}</p>
+                                  <p className="text-xs text-[#5A4A2E]">{channel.identifier}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
@@ -318,7 +318,7 @@ export default function OwnerCommSettings() {
             {/* AI Settings Tab */}
             <TabsContent value="ai">
               <div className="grid gap-4">
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Brain className="h-5 w-5 text-gold" />
@@ -330,7 +330,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Send Replies</Label>
-                        <p className="text-sm text-gray-600">AI sends responses automatically without approval</p>
+                        <p className="text-sm text-[#5A4A2E]">AI sends responses automatically without approval</p>
                       </div>
                       <Switch
                         checked={settings?.auto_send_enabled || false}
@@ -341,7 +341,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Draft by Default</Label>
-                        <p className="text-sm text-gray-600">Automatically generate AI drafts for new messages</p>
+                        <p className="text-sm text-[#5A4A2E]">Automatically generate AI drafts for new messages</p>
                       </div>
                       <Switch
                         checked={settings?.ai_draft_by_default ?? true}
@@ -352,7 +352,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Link to CRM</Label>
-                        <p className="text-sm text-gray-600">Automatically link conversations to matching leads</p>
+                        <p className="text-sm text-[#5A4A2E]">Automatically link conversations to matching leads</p>
                       </div>
                       <Switch
                         checked={settings?.auto_link_leads ?? true}
@@ -363,7 +363,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Log to CRM</Label>
-                        <p className="text-sm text-gray-600">Record all communications in CRM activity</p>
+                        <p className="text-sm text-[#5A4A2E]">Record all communications in CRM activity</p>
                       </div>
                       <Switch
                         checked={settings?.auto_log_to_crm ?? true}
@@ -373,7 +373,7 @@ export default function OwnerCommSettings() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Sparkles className="h-5 w-5 text-gold" />
@@ -384,8 +384,8 @@ export default function OwnerCommSettings() {
                   <CardContent>
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gold/5 border border-gold/20">
                       <div>
-                        <p className="font-medium text-black">Learning Enabled</p>
-                        <p className="text-sm text-gray-600">AI adapts to your writing style and preferences</p>
+                        <p className="font-medium text-[#1A1A1A]">Learning Enabled</p>
+                        <p className="text-sm text-[#5A4A2E]">AI adapts to your writing style and preferences</p>
                       </div>
                       <CheckCircle className="h-6 w-6 text-green-500" />
                     </div>
@@ -396,7 +396,7 @@ export default function OwnerCommSettings() {
 
             {/* Tone Profile Tab */}
             <TabsContent value="tone">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">Your Tone Profile</CardTitle>
                   <CardDescription>Define how the AI should communicate in your style</CardDescription>
@@ -405,7 +405,7 @@ export default function OwnerCommSettings() {
                   <div>
                     <Label className="text-base mb-3 block">Formality Level</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-gray-600 w-16">Casual</span>
+                      <span className="text-sm text-[#5A4A2E] w-16">Casual</span>
                       <Slider
                         value={[toneProfile?.formality_level || 3]}
                         min={1}
@@ -414,14 +414,14 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ formality_level: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-gray-600 w-16 text-right">Formal</span>
+                      <span className="text-sm text-[#5A4A2E] w-16 text-right">Formal</span>
                     </div>
                   </div>
 
                   <div>
                     <Label className="text-base mb-3 block">Emoji Usage</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-gray-600 w-16">Never</span>
+                      <span className="text-sm text-[#5A4A2E] w-16">Never</span>
                       <Slider
                         value={[toneProfile?.emoji_usage || 2]}
                         min={0}
@@ -430,7 +430,7 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ emoji_usage: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-gray-600 w-16 text-right">Often</span>
+                      <span className="text-sm text-[#5A4A2E] w-16 text-right">Often</span>
                     </div>
                   </div>
 
@@ -463,7 +463,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Language Switching</Label>
-                      <p className="text-sm text-gray-600">Reply in the same language as the sender</p>
+                      <p className="text-sm text-[#5A4A2E]">Reply in the same language as the sender</p>
                     </div>
                     <Switch
                       checked={toneProfile?.language_switching ?? true}
@@ -476,7 +476,7 @@ export default function OwnerCommSettings() {
 
             {/* Voice Tab */}
             <TabsContent value="voice">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Volume2 className="h-5 w-5 text-gold" />
@@ -488,7 +488,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Voice Enabled</Label>
-                      <p className="text-sm text-gray-600">Generate voice replies using your cloned voice</p>
+                      <p className="text-sm text-[#5A4A2E]">Generate voice replies using your cloned voice</p>
                     </div>
                     <Switch
                       checked={settings?.voice_enabled ?? true}
@@ -507,7 +507,7 @@ export default function OwnerCommSettings() {
                   </div>
 
                   <div className="p-4 rounded-xl bg-gold/5 border border-gold/20">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-[#5A4A2E]">
                       <Shield className="h-4 w-4 inline mr-1 text-gold" />
                       Your voice clone is used exclusively for generating voice notes. 
                       It is never used for phone calls or real-time conversations.

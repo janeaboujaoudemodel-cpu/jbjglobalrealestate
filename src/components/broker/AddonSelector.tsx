@@ -148,7 +148,7 @@ export default function AddonSelector({
     <div className="space-y-6">
       <div className="text-center mb-4">
         <h3 className="text-lg font-semibold text-white mb-2">Customize Your Package</h3>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#5A4A2E] text-sm">
           Add individual tools or courses to your plan. Items included in your tier are marked.
         </p>
       </div>
@@ -179,7 +179,7 @@ export default function AddonSelector({
                         ? "border-green-500/30 bg-green-500/5 cursor-default"
                         : isSelected
                         ? "border-gold/50 bg-gold/5 cursor-pointer"
-                        : "border-gray-700 hover:border-gray-600 cursor-pointer"
+                        : "border-[#1A1A1A] hover:border-[#1A1A1A] cursor-pointer"
                     }`}
                     onClick={() => !isIncluded && toggleAddon(addon.id)}
                   >
@@ -187,13 +187,13 @@ export default function AddonSelector({
                       <Checkbox
                         checked={isSelected}
                         onCheckedChange={() => toggleAddon(addon.id)}
-                        className="border-gray-600"
+                        className="border-[#1A1A1A]"
                       />
                     )}
                     {isIncluded && (
                       <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                     )}
-                    <AddonIcon className={`w-5 h-5 ${isIncluded ? "text-green-400" : "text-gray-600"}`} />
+                    <AddonIcon className={`w-5 h-5 ${isIncluded ? "text-green-400" : "text-[#5A4A2E]"}`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className={`text-sm font-medium truncate ${isIncluded ? "text-green-300" : "text-white"}`}>
@@ -220,9 +220,9 @@ export default function AddonSelector({
       })}
 
       {calculateTotal() > 0 && (
-        <div className="border-t border-gray-700 pt-4 mt-4">
+        <div className="border-t border-[#1A1A1A] pt-4 mt-4">
           <div className="flex items-center justify-between text-lg">
-            <span className="text-gray-600">Add-ons Total:</span>
+            <span className="text-[#5A4A2E]">Add-ons Total:</span>
             <span className="text-gold font-bold">
               +{getCurrencySymbol()}{calculateTotal()}
             </span>

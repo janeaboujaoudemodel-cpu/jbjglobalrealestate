@@ -118,7 +118,7 @@ export default function CreativeSuiteEditor() {
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <p className="text-slate-400 mb-4">Project not found</p>
-          <Button onClick={() => navigate('/studio')} className="bg-gold hover:bg-gold/90 text-black">
+          <Button onClick={() => navigate('/studio')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
             Back to Studio
           </Button>
         </div>
@@ -149,7 +149,7 @@ export default function CreativeSuiteEditor() {
                   className="w-64 h-8 bg-slate-800 border-gold/30 text-white"
                   autoFocus
                 />
-                <Button size="sm" onClick={handleRename} className="h-8 bg-gold hover:bg-gold/90 text-black">
+                <Button size="sm" onClick={handleRename} className="h-8 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                   Save
                 </Button>
               </div>
@@ -209,7 +209,7 @@ export default function CreativeSuiteEditor() {
           </Button>
 
           {/* Publish */}
-          <Button onClick={() => setIsPublishPanelOpen(true)} className="bg-gold hover:bg-gold/90 text-black">
+          <Button onClick={() => setIsPublishPanelOpen(true)} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
             <Download className="w-4 h-4 mr-2" />
             Export & Publish
           </Button>

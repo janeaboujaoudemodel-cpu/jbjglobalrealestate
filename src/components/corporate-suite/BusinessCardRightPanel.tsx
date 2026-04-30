@@ -180,7 +180,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
     <div className="lg:overflow-y-auto lg:max-h-full lg:pr-1 space-y-4 scrollbar-thin scrollbar-thumb-[hsl(var(--border))] scrollbar-track-transparent">
       {/* Per-Side Color System */}
       <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Brand Assets */}
       <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Stamp Overlay */}
       <Collapsible open={stampOpen} onOpenChange={setStampOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -435,7 +435,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Typography panel */}
       <Collapsible open={typographyOpen} onOpenChange={setTypographyOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -584,7 +584,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* QR Code */}
       <Collapsible open={qrOpen} onOpenChange={setQrOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -811,7 +811,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Smart Design Generator */}
       <Collapsible open={aiDesignOpen} onOpenChange={setAiDesignOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -979,7 +979,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Finishing Effects */}
       <Collapsible open={finishOpen} onOpenChange={setFinishOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -1034,7 +1034,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Mockup Previews */}
       <Collapsible open={mockupOpen} onOpenChange={setMockupOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -1105,7 +1105,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
 
       {/* Share Analytics */}
       <Collapsible>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">

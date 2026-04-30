@@ -27,7 +27,7 @@ const INQUIRY_FORM_URL = "https://jbj.ae/contact";
 const badgeLabels: Record<string, { label: string; color: string }> = {
   top1: { label: "Top 1 — Gold", color: "bg-yellow-500/20 border-yellow-500/50 text-yellow-400" },
   top2: { label: "Top 2 — Silver", color: "bg-orange-600/20 border-orange-600/50 text-orange-400" },
-  top3: { label: "Top 3 — Bronze", color: "bg-gray-400/20 border-gray-400/50 text-gray-600" },
+  top3: { label: "Top 3 — Bronze", color: "bg-[#B89555]/20 border-[#B89555]/30/50 text-[#5A4A2E]" },
 };
 
 const ComparisonBar = () => {
@@ -89,7 +89,7 @@ const ComparisonBar = () => {
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <button className="flex items-center gap-3 px-6 py-3 bg-white text-gray-900 rounded-full shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 group">
+            <button className="flex items-center gap-3 px-6 py-3 bg-[#FDFBF7] text-[#1A1A1A] rounded-full shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 group">
               <div className="flex items-center gap-1">
                 {shortlistedProjects?.slice(0, 3).map((project, index) => (
                   <div
@@ -105,7 +105,7 @@ const ComparisonBar = () => {
                   </div>
                 ))}
                 {shortlist.length > 3 && (
-                  <div className="w-8 h-8 rounded-full bg-gray-200 -ml-2 flex items-center justify-center text-xs font-bold">
+                  <div className="w-8 h-8 rounded-full bg-[#EFE6D6] -ml-2 flex items-center justify-center text-xs font-bold">
                     +{shortlist.length - 3}
                   </div>
                 )}
@@ -121,9 +121,9 @@ const ComparisonBar = () => {
           
           <SheetContent 
             side="bottom" 
-            className="h-[90vh] bg-zinc-950 border-t border-gray-800 rounded-t-3xl"
+            className="h-[90vh] bg-zinc-950 border-t border-[#1A1A1A] rounded-t-3xl"
           >
-            <SheetHeader className="pb-4 border-b border-gray-800">
+            <SheetHeader className="pb-4 border-b border-[#1A1A1A]">
               <SheetTitle className="text-white text-2xl flex items-center gap-3">
                 <Scale className="w-6 h-6 text-gold" />
                 Property Shortlist & Comparison
@@ -147,7 +147,7 @@ const ComparisonBar = () => {
                       <div
                         key={project.id}
                         className={`relative bg-zinc-900 rounded-2xl overflow-hidden border transition-all ${
-                          badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-gray-800'
+                          badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-[#1A1A1A]'
                         }`}
                       >
                         {/* Badge Selector */}
@@ -157,34 +157,34 @@ const ComparisonBar = () => {
                               <button className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                                 badgeInfo 
                                   ? `${badgeInfo.color} border` 
-                                  : 'bg-black/60 text-white hover:bg-black/80'
+                                  : 'bg-[#1A1A1A]/60 text-white hover:bg-[#1A1A1A]/80'
                               }`}>
                                 {badgeInfo ? badgeInfo.label : <Trophy className="w-3 h-3" />}
                               </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-zinc-900 border-gray-800">
+                            <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]">
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top1')}
-                                className="text-yellow-400 hover:bg-gray-800 cursor-pointer"
+                                className="text-yellow-400 hover:bg-[#1A1A1A] cursor-pointer"
                               >
                                 Set as Top 1 — Gold
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-orange-400 hover:bg-gray-800 cursor-pointer"
+                                className="text-orange-400 hover:bg-[#1A1A1A] cursor-pointer"
                               >
                                 Set as Top 2 — Silver
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-gray-600 hover:bg-gray-800 cursor-pointer"
+                                className="text-[#5A4A2E] hover:bg-[#1A1A1A] cursor-pointer"
                               >
                                 Set as Top 3 — Bronze
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem 
                                   onClick={() => handleSetBadge(project.id, null)}
-                                  className="text-white/70 hover:bg-gray-800 cursor-pointer"
+                                  className="text-white/70 hover:bg-[#1A1A1A] cursor-pointer"
                                 >
                                   Remove Badge
                                 </DropdownMenuItem>
@@ -196,7 +196,7 @@ const ComparisonBar = () => {
                         {/* Remove Button */}
                         <button
                           onClick={() => handleRemove(project.id)}
-                          className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                          className="absolute top-3 right-3 z-10 w-8 h-8 bg-[#1A1A1A]/60 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
                         >
                           <X className="w-4 h-4 text-white" />
                         </button>
@@ -252,7 +252,7 @@ const ComparisonBar = () => {
             </div>
 
             {/* Action buttons */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-gray-800">
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-[#1A1A1A]">
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/compare" className="flex-1" onClick={() => setIsOpen(false)}>
                   <Button 
@@ -265,7 +265,7 @@ const ComparisonBar = () => {
                 </Link>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button 
-                    className="w-full bg-white text-gray-900 hover:bg-gray-100 h-12 text-base font-semibold"
+                    className="w-full bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] h-12 text-base font-semibold"
                   >
                     <Users className="w-5 h-5 mr-2" />
                     Expert Consultation

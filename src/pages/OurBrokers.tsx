@@ -23,7 +23,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
     <motion.div variants={fadeInUp}>
       <Card
         className={
-          "bg-zinc-900/60 border-gray-800 transition-all duration-300 h-full " +
+          "bg-zinc-900/60 border-[#1A1A1A] transition-all duration-300 h-full " +
           (senior
             ? "hover:border-gold/60 ring-1 ring-gold/20"
             : "hover:border-gold/40")
@@ -58,7 +58,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <Badge
                 key={spec}
                 variant="outline"
-                className="text-xs border-gold/30 text-gray-800"
+                className="text-xs border-gold/30 text-[#1A1A1A]"
               >
                 {spec}
               </Badge>
@@ -70,14 +70,14 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <Badge
                 key={lang}
                 variant="outline"
-                className="text-xs border-gray-700 text-white/70"
+                className="text-xs border-[#1A1A1A] text-white/70"
               >
                 {lang}
               </Badge>
             ))}
           </div>
 
-          <p className="text-gray-600 text-xs mt-2">
+          <p className="text-[#5A4A2E] text-xs mt-2">
             {broker.yearsExperience} years experience
           </p>
         </CardContent>
@@ -150,7 +150,7 @@ const OurBrokers = () => {
                 variant={tier === "all" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setTier("all")}
-                className={tier === "all" ? "bg-gold text-black" : "border-gray-700"}
+                className={tier === "all" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A]"}
               >
                 All ({allBrokers.length})
               </Button>
@@ -159,7 +159,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("senior")}
                 className={
-                  tier === "senior" ? "bg-gold text-black" : "border-gray-700 text-white/70"
+                  tier === "senior" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
                 }
               >
                 Senior ({seniorCount})
@@ -169,7 +169,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("broker")}
                 className={
-                  tier === "broker" ? "bg-gold text-black" : "border-gray-700 text-white/70"
+                  tier === "broker" ? "bg-gold text-[#1A1A1A]" : "border-[#1A1A1A] text-white/70"
                 }
               >
                 Brokers ({allBrokers.length - seniorCount})
@@ -179,7 +179,7 @@ const OurBrokers = () => {
         </section>
 
         {/* Filters */}
-        <section className="py-6 border-y border-gray-800">
+        <section className="py-6 border-y border-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative flex-1 max-w-md">
@@ -188,7 +188,7 @@ const OurBrokers = () => {
                   placeholder="Search by name or specialization..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 bg-zinc-900 border-gray-700"
+                  className="pl-10 bg-zinc-900 border-[#1A1A1A]"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -198,8 +198,8 @@ const OurBrokers = () => {
                   onClick={() => setNationality(null)}
                   className={
                     nationality === null
-                      ? "bg-gold text-black"
-                      : "border-gray-700"
+                      ? "bg-gold text-[#1A1A1A]"
+                      : "border-[#1A1A1A]"
                   }
                 >
                   All
@@ -212,8 +212,8 @@ const OurBrokers = () => {
                     onClick={() => setNationality(nat)}
                     className={
                       nationality === nat
-                        ? "bg-gold text-black"
-                        : "border-gray-700 text-white/70"
+                        ? "bg-gold text-[#1A1A1A]"
+                        : "border-[#1A1A1A] text-white/70"
                     }
                   >
                     {nat}

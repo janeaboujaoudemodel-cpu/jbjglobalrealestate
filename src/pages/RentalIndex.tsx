@@ -188,7 +188,7 @@ const RentalIndex = () => {
       </section>
 
       {/* Analysis Form - Emerald Green Theme */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -316,7 +316,7 @@ const RentalIndex = () => {
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-6 mb-8">
-                    <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                    <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-white/70 text-sm mb-2">Minimum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
                       <p className="text-white/90 text-xs mt-1">/year</p>
@@ -326,7 +326,7 @@ const RentalIndex = () => {
                       <p className="text-white text-4xl font-bold">{formatCurrency(analysis.averageRent)}</p>
                       <p className="text-white/70 text-xs mt-1">/year</p>
                     </div>
-                    <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                    <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                       <p className="text-white/70 text-sm mb-2">Maximum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
                       <p className="text-white/90 text-xs mt-1">/year</p>
@@ -381,7 +381,7 @@ const RentalIndex = () => {
                 </div>
 
                 {/* Disclaimer - Neutral dark styling */}
-                <div className="bg-zinc-800/50 border border-gray-700 rounded-2xl p-6">
+                <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-6 h-6 text-white/70 flex-shrink-0" />
                     <div>

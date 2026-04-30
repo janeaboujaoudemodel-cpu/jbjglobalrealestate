@@ -131,7 +131,7 @@ const RentalAdvisory = () => {
       {/* HERO SECTION - Full-screen with video background */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           <VideoBackground src={rentalAdvisoryHeroVideo} poster="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
         </div>
@@ -149,7 +149,7 @@ const RentalAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Briefcase className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Rental Advisory
@@ -183,13 +183,13 @@ const RentalAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* What Rental Advisory Covers */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -200,7 +200,7 @@ const RentalAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What Rental Advisory Covers
@@ -214,17 +214,17 @@ const RentalAdvisory = () => {
                   className="jj-card-inner"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
                       <service.icon className="w-6 h-6 text-gold" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{service.title}</h3>
-                      <p className="text-gray-600 mb-4">{service.description}</p>
+                      <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{service.title}</h3>
+                      <p className="text-[#5A4A2E] mb-4">{service.description}</p>
                       <ul className="space-y-2">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
                             <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700 text-sm">{item}</span>
+                            <span className="text-[#5A4A2E] text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -238,7 +238,7 @@ const RentalAdvisory = () => {
       </section>
 
       {/* Who This Service Is For */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -249,7 +249,7 @@ const RentalAdvisory = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Who This Service Is For
@@ -262,10 +262,10 @@ const RentalAdvisory = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
-                  <div className="w-10 h-10 bg-black border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-[#1A1A1A] border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
                   </div>
-                  <span className="text-gray-800 font-medium">{item.label}</span>
+                  <span className="text-[#1A1A1A] font-medium">{item.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -274,7 +274,7 @@ const RentalAdvisory = () => {
       </section>
 
       {/* Rental Advisory vs. Rental Management */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -284,13 +284,13 @@ const RentalAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+              <div className="w-14 h-14 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
                 <HelpCircle className="w-7 h-7 text-gold" />
               </div>
             </motion.div>
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Rental Advisory vs. Rental Management
@@ -303,13 +303,13 @@ const RentalAdvisory = () => {
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-gray-700">
-                    <span className="font-semibold text-black">Rental Advisory</span> focuses on strategic guidance and transaction execution.
+                  <p className="text-[#5A4A2E]">
+                    <span className="font-semibold text-[#1A1A1A]">Rental Advisory</span> focuses on strategic guidance and transaction execution.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-gray-700">
+                  <p className="text-[#5A4A2E]">
                     If you require ongoing property management, we introduce licensed third-party partners where appropriate.
                   </p>
                 </div>
@@ -320,7 +320,7 @@ const RentalAdvisory = () => {
       </section>
 
       {/* Why JBJ Global Real Estate */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -330,13 +330,13 @@ const RentalAdvisory = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div variants={fadeInUp} className="flex justify-center mb-6">
-              <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+              <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
                 <Shield className="w-8 h-8 text-gold" />
               </div>
             </motion.div>
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Why JBJ Global Real Estate
@@ -350,7 +350,7 @@ const RentalAdvisory = () => {
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
-                  <span className="text-gray-800">{reason}</span>
+                  <span className="text-[#1A1A1A]">{reason}</span>
                 </motion.div>
               ))}
             </div>
@@ -359,7 +359,7 @@ const RentalAdvisory = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -370,7 +370,7 @@ const RentalAdvisory = () => {
           >
             <motion.h2 
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-6"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Start Your Rental Advisory
@@ -378,7 +378,7 @@ const RentalAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-gray-700 mb-10"
+              className="text-lg text-[#5A4A2E] mb-10"
             >
               Whether you're leasing a single unit or managing a portfolio, our advisory ensures your rental performs efficiently and compliantly.
             </motion.p>
@@ -387,7 +387,7 @@ const RentalAdvisory = () => {
               <Button 
                 asChild
                 size="lg"
-                className="bg-gold hover:bg-gold-dark text-black font-semibold px-8 whitespace-nowrap"
+                className="bg-gold hover:bg-gold-dark text-[#1A1A1A] font-semibold px-8 whitespace-nowrap"
               >
                 <Link to="/seller-listing" className="inline-flex items-center gap-2">
                   <span>List Your Property for Rent</span>
@@ -410,7 +410,7 @@ const RentalAdvisory = () => {
       </section>
 
       {/* INTERNAL LINKS */}
-      <section className="bg-black py-12 border-t border-gold/20">
+      <section className="bg-[#1A1A1A] py-12 border-t border-gold/20">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link

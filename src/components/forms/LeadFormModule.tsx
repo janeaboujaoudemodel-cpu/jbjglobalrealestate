@@ -236,10 +236,10 @@ const LeadFormModule = ({
         <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-green-600" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2">
+        <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           {t('form.thankYou', 'Thank You!')}
         </h3>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#5A4A2E] text-sm">
           {t('form.weWillContact', 'We\'ll be in touch with you shortly.')}
         </p>
       </motion.div>
@@ -250,11 +250,11 @@ const LeadFormModule = ({
     <div className={compact ? '' : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 p-6 md:p-8'}>
       {title && (
         <div className="text-center mb-6">
-          <h3 className="text-xl font-semibold text-black mb-2">
+          <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
             {title}
           </h3>
           {subtitle && (
-            <p className="text-gray-600 text-sm">{subtitle}</p>
+            <p className="text-[#5A4A2E] text-sm">{subtitle}</p>
           )}
         </div>
       )}
@@ -262,7 +262,7 @@ const LeadFormModule = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         {fields.map((field) => (
           <div key={field.name}>
-            <Label htmlFor={field.name} className="text-black text-sm font-medium">
+            <Label htmlFor={field.name} className="text-[#1A1A1A] text-sm font-medium">
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </Label>
@@ -272,7 +272,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onValueChange={(value) => handleInputChange(field.name, value)}
               >
-                <SelectTrigger className="mt-1.5 bg-white border-gold/30 focus:border-gold">
+                <SelectTrigger className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold">
                   <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
                 </SelectTrigger>
                 <SelectContent>
@@ -289,7 +289,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
-                className="mt-1.5 bg-white border-gold/30 focus:border-gold min-h-[100px]"
+                className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold min-h-[100px]"
               />
             ) : (
               <Input
@@ -298,7 +298,7 @@ const LeadFormModule = ({
                 value={formData[field.name] || ''}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
                 placeholder={field.placeholder}
-                className="mt-1.5 bg-white border-gold/30 focus:border-gold"
+                className="mt-1.5 bg-[#FDFBF7] border-gold/30 focus:border-gold"
               />
             )}
             
@@ -317,7 +317,7 @@ const LeadFormModule = ({
               onCheckedChange={(checked) => setPrivacyAccepted(checked as boolean)}
               className="mt-0.5"
             />
-            <label htmlFor="privacy" className="text-xs text-gray-600 leading-tight cursor-pointer">
+            <label htmlFor="privacy" className="text-xs text-[#5A4A2E] leading-tight cursor-pointer">
               {t('form.privacyConsent', 'I agree to the')}{' '}
               <a href="/privacy" target="_blank" className="text-gold hover:underline">
                 {t('form.privacyPolicy', 'Privacy Policy')}
@@ -336,7 +336,7 @@ const LeadFormModule = ({
               onCheckedChange={(checked) => setMarketingOptIn(checked as boolean)}
               className="mt-0.5"
             />
-            <label htmlFor="marketing" className="text-xs text-gray-600 leading-tight cursor-pointer">
+            <label htmlFor="marketing" className="text-xs text-[#5A4A2E] leading-tight cursor-pointer">
               {t('form.marketingConsent', 'I\'d like to receive market updates and property alerts')}
             </label>
           </div>
@@ -346,7 +346,7 @@ const LeadFormModule = ({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gold hover:bg-gold-dark text-black font-medium py-3 rounded-lg transition-all duration-300"
+          className="w-full bg-gold hover:bg-gold-dark text-[#1A1A1A] font-medium py-3 rounded-lg transition-all duration-300"
         >
           {isSubmitting ? (
             <>

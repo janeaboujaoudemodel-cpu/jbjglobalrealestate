@@ -37,13 +37,13 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
     if (!rank) return null;
     if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-gold bg-gold/10 border-gold/30" };
     if (rank <= 10) return { icon: Award, label: "Premier", color: "text-amber-400 bg-amber-400/10 border-amber-400/30" };
-    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-zinc-300/10 border-gray-300/30" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-zinc-300/10 border-[#B89555]/30/30" };
     return null;
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-950 border-gray-800 text-white max-w-3xl max-h-[85vh] overflow-hidden">
+      <DialogContent className="bg-zinc-950 border-[#1A1A1A] text-white max-w-3xl max-h-[85vh] overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
             <Building2 className="w-6 h-6 text-gold" />
@@ -60,7 +60,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search developers by name or headquarters..."
-            className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600 focus:border-gold h-12"
+            className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold h-12"
             autoFocus
           />
         </div>
@@ -82,16 +82,16 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                   className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all group text-left border ${
                     isTopTier 
                       ? "bg-gradient-to-r from-zinc-900 via-zinc-900/95 to-gold/5 border-gold/20 hover:border-gold/40" 
-                      : "bg-zinc-900/50 hover:bg-gray-800 border-gray-800 hover:border-gray-700"
+                      : "bg-zinc-900/50 hover:bg-[#1A1A1A] border-[#1A1A1A] hover:border-[#1A1A1A]"
                   }`}
                 >
                   {/* Rank Number */}
-                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-gray-600"}`}>
+                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-[#5A4A2E]"}`}>
                     #{developer.rank || index + 1}
                   </div>
                   
                   {/* Logo */}
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden bg-white ${
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden bg-[#FDFBF7] ${
                     isTopTier ? "border-2 border-gold shadow-[0_4px_16px_rgba(200,167,102,0.3)]" : "border-2 border-gold/40"
                   }`}>
                     {isValidDeveloperLogoUrl(developer.logo_url) ? (
@@ -127,7 +127,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     </div>
                   </div>
                   
-                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-gray-600 group-hover:text-gold" : "text-gray-600 group-hover:text-white"}`} />
+                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-[#5A4A2E] group-hover:text-gold" : "text-[#5A4A2E] group-hover:text-white"}`} />
                 </button>
               );
             })

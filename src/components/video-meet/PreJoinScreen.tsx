@@ -124,7 +124,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
         className="w-full max-w-4xl"
       >
         <Card className="bg-zinc-900/80 backdrop-blur-sm border-gold/20 overflow-hidden">
-          <CardHeader className="text-center border-b border-gray-800 bg-gradient-to-r from-gold/10 via-transparent to-gold/10">
+          <CardHeader className="text-center border-b border-[#1A1A1A] bg-gradient-to-r from-gold/10 via-transparent to-gold/10">
             <CardTitle className="text-2xl font-bold text-white flex items-center justify-center gap-3">
               <Sparkles className="w-7 h-7 text-gold" />
               JBJ Meet
@@ -140,7 +140,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
               {/* Video Preview */}
               <div className="space-y-4">
                 <Label className="text-white/85 text-sm">Camera Preview</Label>
-                <div className="relative aspect-video bg-zinc-800 rounded-xl overflow-hidden border border-gray-700">
+                <div className="relative aspect-video bg-zinc-800 rounded-xl overflow-hidden border border-[#1A1A1A]">
                   {!isVideoOff ? (
                     <video
                       ref={videoRef}
@@ -158,7 +158,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                           className="w-32 h-32 rounded-full object-cover border-4 border-gold/30"
                         />
                       ) : (
-                        <div className="w-32 h-32 rounded-full bg-zinc-700 flex items-center justify-center border-4 border-gray-600">
+                        <div className="w-32 h-32 rounded-full bg-zinc-700 flex items-center justify-center border-4 border-[#1A1A1A]">
                           <User className="w-16 h-16 text-white/90" />
                         </div>
                       )}
@@ -204,7 +204,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
-                    className="bg-zinc-800 border-gray-700 text-white"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white"
                   />
                 </div>
 
@@ -218,7 +218,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                     value={enteredRoomCode}
                     onChange={(e) => setEnteredRoomCode(e.target.value.toUpperCase())}
                     placeholder="Enter room code"
-                    className="bg-zinc-800 border-gray-700 text-white font-mono uppercase"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white font-mono uppercase"
                     maxLength={8}
                   />
                 </div>
@@ -236,7 +236,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                   <Button
                     variant="outline"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full bg-zinc-800 border-gray-700 text-white/85 hover:bg-gray-700"
+                    className="w-full bg-zinc-800 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     {photo ? 'Change Photo' : 'Upload Photo'}
@@ -262,7 +262,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                       className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
                         roomType === 'video-call'
                           ? 'border-gold bg-gold/10'
-                          : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
+                          : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
                       }`}
                     >
                       <RadioGroupItem value="video-call" id="video-call" />
@@ -279,7 +279,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                       className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
                         roomType === 'meeting-room'
                           ? 'border-gold bg-gold/10'
-                          : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
+                          : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
                       }`}
                     >
                       <RadioGroupItem value="meeting-room" id="meeting-room" />
@@ -295,22 +295,22 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                 </div>
 
                 {/* Features preview */}
-                <div className="p-4 bg-zinc-800/50 rounded-xl border border-gray-700">
+                <div className="p-4 bg-zinc-800/50 rounded-xl border border-[#1A1A1A]">
                   <p className="text-xs text-white/70 mb-2">Available Features:</p>
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline" className="border-gray-600 text-white/70">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
                       <Camera className="w-3 h-3 mr-1" />
                       4K Camera
                     </Badge>
-                    <Badge variant="outline" className="border-gray-600 text-white/70">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
                       <Sparkles className="w-3 h-3 mr-1" />
                       Beauty Filters
                     </Badge>
-                    <Badge variant="outline" className="border-gray-600 text-white/70">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
                       <Image className="w-3 h-3 mr-1" />
                       AI Backgrounds
                     </Badge>
-                    <Badge variant="outline" className="border-gray-600 text-white/70">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
                       <Shirt className="w-3 h-3 mr-1" />
                       AI Outfit
                     </Badge>
@@ -321,7 +321,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                 <Button
                   onClick={handleJoin}
                   disabled={!name.trim() || !enteredRoomCode.trim()}
-                  className="w-full h-12 bg-gradient-to-r from-gold to-gold/80 text-black font-semibold hover:from-gold/90 hover:to-gold/70"
+                  className="w-full h-12 bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-gold/70"
                 >
                   Join Meeting
                   <ChevronRight className="w-5 h-5 ml-2" />
@@ -331,7 +331,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                   <Button
                     variant="outline"
                     onClick={onCancel}
-                    className="w-full border-gray-700 text-white/70"
+                    className="w-full border-[#1A1A1A] text-white/70"
                   >
                     Cancel
                   </Button>

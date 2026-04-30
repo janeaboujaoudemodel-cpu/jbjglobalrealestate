@@ -196,7 +196,7 @@ const BrokerAccount = () => {
   if (loading || authLoading || roleLoading) {
     return (
       <MainLayout>
-        <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <BrandedLoader text="Loading..." className="min-h-screen" />
         </div>
       </MainLayout>

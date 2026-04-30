@@ -220,7 +220,7 @@ JBJ Contact Information:
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-gold to-amber-600 text-black rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border-2 border-gold/50"
+        className="fixed bottom-24 right-6 z-[8000] w-14 h-14 bg-gradient-to-br from-gold to-amber-600 text-[#1A1A1A] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border-2 border-gold/50"
         onClick={() => setIsAssistantOpen(true)}
       >
         <MessageCircle className="w-6 h-6" />
@@ -250,19 +250,19 @@ JBJ Contact Information:
             <div>
               <button 
                 onClick={() => setShowAgentPicker(!showAgentPicker)}
-                className="flex items-center gap-1 text-black font-semibold hover:text-gold transition-colors"
+                className="flex items-center gap-1 text-[#1A1A1A] font-semibold hover:text-gold transition-colors"
               >
                 {userAssistant.name}
                 <ChevronDown className="w-4 h-4" />
               </button>
-              <p className="text-gray-600 text-xs">{userAssistant.role}</p>
+              <p className="text-[#5A4A2E] text-xs">{userAssistant.role}</p>
             </div>
           </div>
           <button
             onClick={() => setIsAssistantOpen(false)}
-            className="w-8 h-8 rounded-full bg-white/50 hover:bg-white flex items-center justify-center transition-colors border border-gold/30"
+            className="w-8 h-8 rounded-full bg-[#FDFBF7]/50 hover:bg-[#FDFBF7] flex items-center justify-center transition-colors border border-gold/30"
           >
-            <X className="w-4 h-4 text-black" />
+            <X className="w-4 h-4 text-[#1A1A1A]" />
           </button>
         </div>
 
@@ -273,7 +273,7 @@ JBJ Contact Information:
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-16 left-4 right-4 bg-white border-2 border-gold/30 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
+              className="absolute top-16 left-4 right-4 bg-[#FDFBF7] border-2 border-gold/30 rounded-xl shadow-xl z-10 max-h-64 overflow-y-auto"
             >
               {agents.map(agent => (
                 <button
@@ -297,8 +297,8 @@ JBJ Contact Information:
                     <AvatarFallback className="bg-gold/20 text-gold">{agent.name[0]}</AvatarFallback>
                   </Avatar>
                   <div className="text-left">
-                    <p className="text-black text-sm font-medium">{agent.name}</p>
-                    <p className="text-gray-600 text-xs">{agent.title}</p>
+                    <p className="text-[#1A1A1A] text-sm font-medium">{agent.name}</p>
+                    <p className="text-[#5A4A2E] text-xs">{agent.title}</p>
                   </div>
                 </button>
               ))}
@@ -318,8 +318,8 @@ JBJ Contact Information:
               >
                 <div className={`max-w-[85%] ${
                   message.role === 'user' 
-                    ? 'bg-gradient-to-r from-gold to-amber-500 text-black' 
-                    : 'bg-white text-black border border-gold/30 shadow-sm'
+                    ? 'bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A]' 
+                    : 'bg-[#FDFBF7] text-[#1A1A1A] border border-gold/30 shadow-sm'
                 } rounded-2xl px-4 py-3`}>
                   {message.isTyping ? (
                     <div className="flex gap-1">
@@ -345,18 +345,18 @@ JBJ Contact Information:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 focus:border-gold"
+              className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
               disabled={isLoading}
             />
             <Button
               onClick={handleSendMessage}
               disabled={!input.trim() || isLoading}
-              className="bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-black"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-[#1A1A1A]"
             >
               <Send className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-gray-600 text-xs text-center mt-2">
+          <p className="text-[#5A4A2E] text-xs text-center mt-2">
             Powered by JBJ AI • Available 24/7
           </p>
         </div>

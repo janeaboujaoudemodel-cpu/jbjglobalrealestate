@@ -516,11 +516,11 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // Theme-based styling - CHAMPAGNE gradient for light variant, GOLD borders
     const isLight = variant === 'light';
     const buttonStyles = isLight 
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-gray-800 hover:text-white hover:border-gold focus:border-gold";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold"
+      : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-[#1A1A1A] hover:text-white hover:border-gold focus:border-gold";
     const inputStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-400 focus:border-gold hover:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-gray-400 focus:border-gold hover:border-gold";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#8A7556] focus:border-gold hover:border-gold"
+      : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-[#8A7556] focus:border-gold hover:border-gold";
     const popoverStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
@@ -528,16 +528,16 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "bg-transparent"
       : "bg-transparent";
     const commandInputStyles = isLight
-      ? "text-black border-gold/40"
-      : "text-black border-gold/40";
+      ? "text-[#1A1A1A] border-gold/40"
+      : "text-[#1A1A1A] border-gold/40";
     const commandItemStyles = isLight
-      ? "text-black hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-black"
-      : "text-black hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-black";
+      ? "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]"
+      : "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]";
     const commandEmptyStyles = isLight
-      ? "text-gray-600"
-      : "text-gray-600";
+      ? "text-[#5A4A2E]"
+      : "text-[#5A4A2E]";
     const helperTextStyles = isLight
-      ? "text-gray-600"
+      ? "text-[#5A4A2E]"
       : "text-white/90";
     const countryNameStyles = isLight
       ? "text-gold font-medium"

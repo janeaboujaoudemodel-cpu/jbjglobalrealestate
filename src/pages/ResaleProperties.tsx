@@ -229,10 +229,10 @@ const ResaleProperties = () => {
             Back to Properties
           </Link>
           <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-black mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
             Exclusive Resale <span className="text-gold">Properties</span>
           </h1>
-          <p className="text-lg text-black/60 max-w-2xl mx-auto">
+          <p className="text-lg text-[#1A1A1A]/60 max-w-2xl mx-auto">
             Exclusive investor resale portfolio curated by JBJ Global Real Estate — premium properties from verified investors at competitive prices, available for immediate purchase.
           </p>
         </div>
@@ -241,7 +241,7 @@ const ResaleProperties = () => {
       {/* Filters - Champagne bar connected to hero (no black gap) */}
       <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 border-b border-gold/30 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="bg-white/60 border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
+          <div className="bg-[#FDFBF7]/60 border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
             {/* Search Bar */}
             <div className="relative w-full mb-3">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold" />
@@ -249,7 +249,7 @@ const ResaleProperties = () => {
                 placeholder="Search by property name, project, area..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-600 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-lg text-base shadow-sm w-full"
               />
             </div>
 
@@ -257,7 +257,7 @@ const ResaleProperties = () => {
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {/* Area */}
               <Select value={areaFilter} onValueChange={setAreaFilter}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{areaFilter === "all" ? "All Areas" : areaFilter}</span>
                 </SelectTrigger>
@@ -273,7 +273,7 @@ const ResaleProperties = () => {
 
               {/* Property Type */}
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <Building2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{typeFilter === "all" ? "All Types" : typeFilter}</span>
                 </SelectTrigger>
@@ -286,7 +286,7 @@ const ResaleProperties = () => {
 
               {/* Bedrooms */}
               <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-                <SelectTrigger className="w-[130px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[130px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <BedDouble className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{BEDROOM_OPTIONS.find(b => b.value === bedroomFilter)?.label || "Any Beds"}</span>
                 </SelectTrigger>
@@ -299,7 +299,7 @@ const ResaleProperties = () => {
 
               {/* Price */}
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{PRICE_RANGES.find(p => p.value === priceFilter)?.label || "Any Price"}</span>
                 </SelectTrigger>
@@ -312,7 +312,7 @@ const ResaleProperties = () => {
 
               {/* Handover */}
               <Select value={handoverFilter} onValueChange={setHandoverFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <Calendar className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{HANDOVER_OPTIONS.find(h => h.value === handoverFilter)?.label || "All Status"}</span>
                 </SelectTrigger>
@@ -325,7 +325,7 @@ const ResaleProperties = () => {
 
               {/* Furnishing */}
               <Select value={furnishingFilter} onValueChange={setFurnishingFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <Sofa className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Any Furnishing"}</span>
                 </SelectTrigger>
@@ -338,7 +338,7 @@ const ResaleProperties = () => {
 
               {/* Developer */}
               <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <Users className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{developerFilter === "all" ? "All Developers" : developerFilter}</span>
                 </SelectTrigger>
@@ -352,7 +352,7 @@ const ResaleProperties = () => {
 
               {/* View */}
               <Select value={viewFilter} onValueChange={setViewFilter}>
-                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{VIEW_OPTIONS.find(v => v.value === viewFilter)?.label || "Any View"}</span>
                 </SelectTrigger>
@@ -365,7 +365,7 @@ const ResaleProperties = () => {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm">
                   <ArrowUpDown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{SORT_OPTIONS.find(s => s.value === sortBy)?.label || "Sort"}</span>
                 </SelectTrigger>
@@ -390,15 +390,15 @@ const ResaleProperties = () => {
                   placeholder={`Min ${unitLabel}`}
                   value={sizeMin}
                   onChange={(e) => setSizeMin(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm"
                 />
-                <span className="text-black/40 text-xs">–</span>
+                <span className="text-[#1A1A1A]/40 text-xs">–</span>
                 <Input
                   type="number"
                   placeholder={`Max ${unitLabel}`}
                   value={sizeMax}
                   onChange={(e) => setSizeMax(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl text-sm shadow-sm"
                 />
               </div>
 
@@ -422,7 +422,7 @@ const ResaleProperties = () => {
                     setSortBy("newest");
                     setSearchQuery("");
                   }}
-                  className="h-11 px-4 border-gold/40 text-black hover:bg-gold/10 rounded-xl"
+                  className="h-11 px-4 border-gold/40 text-[#1A1A1A] hover:bg-gold/10 rounded-xl"
                 >
                   Clear All
                 </Button>
@@ -437,7 +437,7 @@ const ResaleProperties = () => {
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-black/50">
+            <p className="text-sm text-[#1A1A1A]/50">
               {filteredListings.length} {filteredListings.length === 1 ? "property" : "properties"} found
             </p>
           </div>
@@ -453,17 +453,17 @@ const ResaleProperties = () => {
               {filteredListings.map((listing: any) => (
                 <div
                   key={listing.id}
-                  className="rounded-2xl border border-gold/30 bg-white/80 backdrop-blur-sm overflow-hidden hover:shadow-xl transition-shadow group"
+                  className="rounded-2xl border border-gold/30 bg-[#FDFBF7]/80 backdrop-blur-sm overflow-hidden hover:shadow-xl transition-shadow group"
                 >
                   <div className="h-48 bg-gradient-to-br from-gold/10 to-gold/5 flex items-center justify-center relative">
                     {listing.images?.[0] ? (
                       <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                     ) : (
-                      <Building2 className="w-12 h-12 text-gray-400" />
+                      <Building2 className="w-12 h-12 text-[#8A7556]" />
                     )}
                     {listing.is_premium && (
                       <div className="absolute top-3 right-3">
-                        <Badge className="bg-gold text-black text-xs font-bold">
+                        <Badge className="bg-gold text-[#1A1A1A] text-xs font-bold">
                           <Crown className="w-3 h-3 mr-1" />
                           Premium
                         </Badge>
@@ -471,13 +471,13 @@ const ResaleProperties = () => {
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="font-bold text-black text-lg mb-1 group-hover:text-gold transition-colors">
+                    <h3 className="font-bold text-[#1A1A1A] text-lg mb-1 group-hover:text-gold transition-colors">
                       {listing.title}
                     </h3>
                     {listing.project_name && (
-                      <p className="text-sm text-black/50 mb-2">{listing.project_name}</p>
+                      <p className="text-sm text-[#1A1A1A]/50 mb-2">{listing.project_name}</p>
                     )}
-                    <div className="flex items-center gap-3 text-sm text-black/60 mb-3 flex-wrap">
+                    <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/60 mb-3 flex-wrap">
                       {listing.area_name && (
                         <span className="flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5 text-gold" />
@@ -500,7 +500,7 @@ const ResaleProperties = () => {
                     {listing.asking_price && (
                       <div className="flex items-center gap-1.5">
                         <DollarSign className="w-4 h-4 text-gold" />
-                        <span className="text-xl font-bold text-black">
+                        <span className="text-xl font-bold text-[#1A1A1A]">
                           {listing.currency || "AED"} {Number(listing.asking_price).toLocaleString()}
                         </span>
                       </div>
@@ -510,12 +510,12 @@ const ResaleProperties = () => {
                         {listing.handover_status === 'ready' ? 'Ready' : 'Under Construction'}
                       </Badge>
                       {listing.property_type && (
-                        <Badge variant="outline" className="text-xs border-gold/20 text-black/50">
+                        <Badge variant="outline" className="text-xs border-gold/20 text-[#1A1A1A]/50">
                           {listing.property_type}
                         </Badge>
                       )}
                     </div>
-                    <Button className="w-full mt-4 bg-gold hover:bg-gold/90 text-black font-semibold">
+                    <Button className="w-full mt-4 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold">
                       Register Interest
                     </Button>
                   </div>
@@ -528,24 +528,24 @@ const ResaleProperties = () => {
               <div className="w-20 h-20 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center mx-auto mb-6">
                 <Building2 className="w-10 h-10 text-gold" />
               </div>
-              <h3 className="text-2xl font-bold text-black mb-3">
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
                 Recently Sold Out
               </h3>
-              <p className="text-black/60 mb-2">
+              <p className="text-[#1A1A1A]/60 mb-2">
                 The latest resale properties from our investor network have been snapped up.
                 Our verified investors regularly list new opportunities — don't miss the next one.
               </p>
-              <p className="text-black/40 text-sm mb-8">
+              <p className="text-[#1A1A1A]/40 text-sm mb-8">
                 Subscribe below to get notified when new resale properties become available.
               </p>
 
               {/* Subscribe CTA */}
-              <div className="bg-white/80 border border-gold/30 rounded-2xl p-6 backdrop-blur-sm shadow-sm">
+              <div className="bg-[#FDFBF7]/80 border border-gold/30 rounded-2xl p-6 backdrop-blur-sm shadow-sm">
                 <div className="flex items-center gap-2 justify-center mb-4">
                   <Bell className="w-5 h-5 text-gold" />
-                  <h4 className="font-semibold text-black text-lg">Stay in the Loop</h4>
+                  <h4 className="font-semibold text-[#1A1A1A] text-lg">Stay in the Loop</h4>
                 </div>
-                <p className="text-sm text-black/60 mb-4">
+                <p className="text-sm text-[#1A1A1A]/60 mb-4">
                   Get instant alerts when our investors list new resale properties. Be the first to know.
                 </p>
                 {subscribed ? (
@@ -560,11 +560,11 @@ const ResaleProperties = () => {
                       placeholder="Enter your email"
                       value={subscribeEmail}
                       onChange={(e) => setSubscribeEmail(e.target.value)}
-                      className="flex-1 h-11 border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-black"
+                      className="flex-1 h-11 border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-[#1A1A1A]"
                     />
                     <Button
                       onClick={handleSubscribe}
-                      className="bg-gold hover:bg-gold/90 text-black font-semibold h-11 px-6"
+                      className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold h-11 px-6"
                     >
                       Subscribe
                     </Button>

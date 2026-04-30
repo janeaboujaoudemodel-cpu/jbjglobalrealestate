@@ -102,7 +102,7 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-4">
+    <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-4">
       {/* ── Signature Section ── */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
           <select
             value={sigStyle}
             onChange={e => setSigStyle(e.target.value)}
-            className="h-7 text-[10px] border border-[hsl(var(--border))] rounded-md px-1.5 bg-white"
+            className="h-7 text-[10px] border border-[hsl(var(--border))] rounded-md px-1.5 bg-[#FDFBF7]"
           >
             {SIG_STYLES.map(s => (
               <option key={s.id} value={s.id}>{s.label}</option>

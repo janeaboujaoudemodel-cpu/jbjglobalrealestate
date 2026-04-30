@@ -265,7 +265,7 @@ export default function CRMLeadsBulkBar({
     <div className="sticky top-0 z-40">
       <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.18)] px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-sm font-bold text-black">
+          <span className="text-sm font-bold text-[#1A1A1A]">
             {count} selected
           </span>
           <Button
@@ -273,7 +273,7 @@ export default function CRMLeadsBulkBar({
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="h-8 px-2 text-black hover:text-gold hover:bg-gold/10"
+            className="h-8 px-2 text-[#1A1A1A] hover:text-gold hover:bg-gold/10"
             disabled={busy}
           >
             <X className="h-4 w-4 mr-1" />
@@ -303,15 +303,15 @@ export default function CRMLeadsBulkBar({
               <select
                 value={assigneeId}
                 onChange={(e) => setAssigneeId(e.target.value)}
-                className="h-9 rounded-lg border-2 border-gold/40 bg-white px-3 text-sm font-semibold text-black focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
+                className="h-9 rounded-lg border-2 border-gold/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
                 disabled={busy}
               >
-                <option value="" className="text-black">Assign broker…</option>
+                <option value="" className="text-[#1A1A1A]">Assign broker…</option>
                 {brokers.map((b) => (
                   <option
                     key={b.user_id}
                     value={b.user_id}
-                    className="text-black bg-white"
+                    className="text-[#1A1A1A] bg-[#FDFBF7]"
                   >
                     {b.display_name || b.user_id.slice(0, 8)}
                   </option>
@@ -335,12 +335,12 @@ export default function CRMLeadsBulkBar({
           <select
             value={nextStatus}
             onChange={(e) => setNextStatus(e.target.value)}
-            className="h-9 rounded-lg border-2 border-gold/40 bg-white px-3 text-sm font-semibold text-black focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
+            className="h-9 rounded-lg border-2 border-gold/40 bg-[#FDFBF7] px-3 text-sm font-semibold text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold"
             disabled={busy}
           >
-            <option value="" className="text-black">Change status…</option>
+            <option value="" className="text-[#1A1A1A]">Change status…</option>
             {statusOptions.map((s) => (
-              <option key={s.value} value={s.value} className="text-black bg-white">
+              <option key={s.value} value={s.value} className="text-[#1A1A1A] bg-[#FDFBF7]">
                 {s.label}
               </option>
             ))}
@@ -384,7 +384,7 @@ export default function CRMLeadsBulkBar({
       </div>
 
       {showBroadcast && (
-        <div className="mt-2 rounded-xl border-2 border-gold/40 bg-white p-4 space-y-3 shadow-md">
+        <div className="mt-2 rounded-xl border-2 border-gold/40 bg-[#FDFBF7] p-4 space-y-3 shadow-md">
           <div className="flex items-center gap-2">
             <Button
               type="button"
@@ -402,8 +402,8 @@ export default function CRMLeadsBulkBar({
             >
               <Mail className="h-4 w-4 mr-2" /> Email
             </Button>
-            <span className="ml-auto text-xs text-black/60">
-              Use <code className="text-black">{"{name}"}</code> for personalisation
+            <span className="ml-auto text-xs text-[#1A1A1A]/60">
+              Use <code className="text-[#1A1A1A]">{"{name}"}</code> for personalisation
             </span>
           </div>
           {broadcastChannel === "email" && (
@@ -411,7 +411,7 @@ export default function CRMLeadsBulkBar({
               value={broadcastSubject}
               onChange={(e) => setBroadcastSubject(e.target.value)}
               placeholder="Subject"
-              className="w-full h-10 rounded-lg border-2 border-gold/30 bg-white px-3 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+              className="w-full h-10 rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-gold"
             />
           )}
           <textarea
@@ -419,7 +419,7 @@ export default function CRMLeadsBulkBar({
             onChange={(e) => setBroadcastMessage(e.target.value)}
             placeholder={`Hi {name}, ...`}
             rows={4}
-            className="w-full rounded-lg border-2 border-gold/30 bg-white px-3 py-2 text-sm text-black placeholder:text-black/40 focus:outline-none focus:border-gold"
+            className="w-full rounded-lg border-2 border-gold/30 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-gold"
           />
           <div className="flex items-center justify-end gap-2">
             <Button type="button" size="sm" variant="ghost" onClick={() => setShowBroadcast(false)} disabled={busy}>

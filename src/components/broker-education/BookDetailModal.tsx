@@ -23,7 +23,7 @@ const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = 
   'Advanced (Restricted)': { badge: 'bg-red-500/20 text-red-700 border-red-500/30', accent: 'text-red-600' },
 };
 
-const DEFAULT_PATH_COLORS = { badge: 'bg-gray-500/20 text-gray-700 border-gray-500/30', accent: 'text-gray-600' };
+const DEFAULT_PATH_COLORS = { badge: 'bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30', accent: 'text-[#5A4A2E]' };
 
 export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);
@@ -98,7 +98,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
         )}
 
         {/* Progress Bar */}
-        <div className="mt-4 p-4 bg-white/50 rounded-lg border border-gold/20">
+        <div className="mt-4 p-4 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-foreground">Your Progress</span>
             <span className="text-xs text-muted-foreground">{completedModules} of {modules.length} modules completed</span>
@@ -147,7 +147,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                         {/* Status Icon */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isLocked
-                            ? 'bg-gold/10 border border-gold/30 text-gray-500'
+                            ? 'bg-gold/10 border border-gold/30 text-[#8A7556]'
                             : isCompleted 
                               ? 'bg-emerald-500 text-white' 
                               : isCurrentModule 
@@ -169,7 +169,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <Clock className="w-3 h-3" />
                             {module.estimated_minutes} min
                             {isLocked && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-gray-500">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-[#8A7556]">
                                 Locked
                               </Badge>
                             )}
@@ -188,7 +188,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                           {module.description || "Complete this module to learn key concepts and best practices."}
                         </p>
                         {isLocked ? (
-                          <div className="flex items-center gap-2 text-gray-700 text-sm">
+                          <div className="flex items-center gap-2 text-[#5A4A2E] text-sm">
                             <Lock className="w-4 h-4" />
                             <span>Join JBJ Broker Circle to access this module</span>
                           </div>
@@ -196,7 +196,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                           <Button 
                             size="sm"
                             variant="secondary"
-                            className="bg-gold hover:bg-gold-dark text-black"
+                            className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
                           >
                             <Play className="w-3 h-3 mr-2" />
                             {isCompleted ? 'Review Module' : 'Start Module'}
@@ -217,7 +217,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <Lock className="w-6 h-6 text-gold mx-auto mb-2" />
             <p className="text-foreground font-medium mb-1">Content Locked</p>
             <p className="text-muted-foreground text-xs mb-3">Join the JBJ Broker Circle to access all training modules.</p>
-            <Button size="sm" variant="secondary" className="bg-gold hover:bg-gold/90 text-black" asChild>
+            <Button size="sm" variant="secondary" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]" asChild>
               <Link to="/join">
                 <ArrowRight className="w-3 h-3 mr-2" />
                 Apply to Join

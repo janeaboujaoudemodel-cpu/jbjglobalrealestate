@@ -93,7 +93,7 @@ export function BrokerToolkitCRM() {
   return (
     <>
       {/* CRM Section - with gold/amber premium layer */}
-      <section id="section-crm" className="py-8 md:py-10 bg-black">
+      <section id="section-crm" className="py-8 md:py-10 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           {/* Active Gold/Amber Premium Layer */}
           <div className="bg-gradient-to-br from-amber-900/90 via-amber-900/80 to-amber-950/90 border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -150,16 +150,16 @@ export function BrokerToolkitCRM() {
             >
               <Card className="bg-gradient-to-br from-gold/80 via-gold/70 to-amber-600/80 border-2 border-gold/50 shadow-xl shadow-gold/30">
                 <CardContent className="p-8 text-center">
-                  <div className="w-16 h-16 bg-black/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(200,167,102,0.5)] border-2 border-gold/60">
+                  <div className="w-16 h-16 bg-[#1A1A1A]/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_25px_rgba(200,167,102,0.5)] border-2 border-gold/60">
                     <Lock className="w-8 h-8 text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
                   </div>
-                  <h3 className="text-2xl font-bold text-black mb-4">
+                  <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">
                     Ready to Organize Your Leads?
                   </h3>
-                  <p className="text-black/80 mb-2 max-w-xl mx-auto">
+                  <p className="text-[#1A1A1A]/80 mb-2 max-w-xl mx-auto">
                     Access the full JBJ CRM with lead scoring, pipeline management, and insights.
                   </p>
-                  <p className="text-black/60 text-sm mb-6">
+                  <p className="text-[#1A1A1A]/60 text-sm mb-6">
                     <Lock className="w-3 h-3 inline mr-1" />
                     Available exclusively to registered JBJ brokers
                   </p>

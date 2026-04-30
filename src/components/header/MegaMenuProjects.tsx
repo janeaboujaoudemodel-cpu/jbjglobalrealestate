@@ -33,7 +33,7 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
           </div>
 
           {/* Right: Section with divider */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-2 border-t lg:border-t-0 border-gray-200 mt-6 lg:mt-0 pt-6 lg:pt-0">
+          <div className="lg:col-span-6 lg:border-l lg:border-[#B89555]/30 lg:pl-2 border-t lg:border-t-0 border-[#B89555]/30 mt-6 lg:mt-0 pt-6 lg:pt-0">
             <MegaMenuSection icon={Building2} title="Project Categories">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                 {projectCategories.map((item) => (

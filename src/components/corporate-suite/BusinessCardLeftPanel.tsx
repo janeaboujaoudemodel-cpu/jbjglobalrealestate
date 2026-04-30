@@ -114,7 +114,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
 
       {/* Card Shape */}
       <Collapsible open={shapeOpen} onOpenChange={setShapeOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
       </Collapsible>
 
       {/* Template picker */}
-      <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
         <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-1 block flex items-center gap-1.5">
           <Layers size={11} /> Template
           <span className="ml-auto text-[9px] font-semibold px-2 py-0.5 rounded-full bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))]">
@@ -204,7 +204,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
 
       {/* Trade License Auto-Fill */}
       <Collapsible open={tradeLicenseOpen} onOpenChange={setTradeLicenseOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
 
       {/* Load Saved Designs */}
       <Collapsible open={loadSavedOpen} onOpenChange={(open) => { setLoadSavedOpen(open); if (open) handleLoadSavedDesigns(); }}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -301,7 +301,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
 
       {/* Bilingual */}
       <Collapsible open={bilingualOpen} onOpenChange={setBilingualOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -402,7 +402,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
 
       {/* Smart Gallery */}
       <Collapsible open={galleryOpen} onOpenChange={setGalleryOpen}>
-        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+        <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
               <div className="flex items-center gap-2">
@@ -478,7 +478,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleGalleryFavorite(design.id); }}
                             className={`absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center shadow-sm transition-all ${
-                              isFav ? "bg-amber-400 text-white" : "bg-white/80 text-[hsl(var(--muted-foreground))] hover:bg-amber-100"
+                              isFav ? "bg-amber-400 text-white" : "bg-[#FDFBF7]/80 text-[hsl(var(--muted-foreground))] hover:bg-amber-100"
                             }`}
                           >
                             <Star size={10} fill={isFav ? "currentColor" : "none"} />
@@ -508,7 +508,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
                             <button
                               key={fId}
                               onClick={() => applyGalleryDesign(d)}
-                              className="text-[8px] bg-white border border-amber-300 rounded-lg px-2 py-1 font-semibold text-amber-700 hover:bg-amber-100 transition-colors truncate max-w-[120px]"
+                              className="text-[8px] bg-[#FDFBF7] border border-amber-300 rounded-lg px-2 py-1 font-semibold text-amber-700 hover:bg-amber-100 transition-colors truncate max-w-[120px]"
                             >
                               {d.name}
                             </button>
@@ -542,7 +542,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
       </Collapsible>
 
       {/* Card info fields */}
-      <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm space-y-3.5">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm space-y-3.5">
         <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] block">
           Card Information
         </Label>

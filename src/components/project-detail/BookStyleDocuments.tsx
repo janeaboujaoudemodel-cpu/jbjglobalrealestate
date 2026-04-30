@@ -92,13 +92,13 @@ export default function BookStyleDocuments({
         <>
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 rounded-full p-1.5 text-white hover:bg-black/80 transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A]/60 rounded-full p-1.5 text-white hover:bg-[#1A1A1A]/80 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 rounded-full p-1.5 text-white hover:bg-black/80 transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A]/60 rounded-full p-1.5 text-white hover:bg-[#1A1A1A]/80 transition-colors"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -164,8 +164,8 @@ export default function BookStyleDocuments({
 
               {/* Page edges effect (bottom) */}
               <div className="absolute bottom-0 left-1 right-1">
-                <div className="h-[2px] bg-white/10 rounded-b mx-0.5" />
-                <div className="h-[2px] bg-white/5 rounded-b mx-1 mt-[1px]" />
+                <div className="h-[2px] bg-[#FDFBF7]/10 rounded-b mx-0.5" />
+                <div className="h-[2px] bg-[#FDFBF7]/5 rounded-b mx-1 mt-[1px]" />
               </div>
             </motion.button>
           );
@@ -199,7 +199,7 @@ export default function BookStyleDocuments({
                     onDownload(viewerUrl, viewerFilename);
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-black text-sm font-semibold border border-gold/60 hover:border-gold shadow-sm transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-[#1A1A1A] text-sm font-semibold border border-gold/60 hover:border-gold shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Download

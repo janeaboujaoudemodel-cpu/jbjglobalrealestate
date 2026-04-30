@@ -112,7 +112,7 @@ export default function EmailProductivityPanel({
       <div className="p-4 space-y-4">
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-4 h-4 text-[#B89555]" />
-          <span className="text-sm font-semibold text-black">Productivity Hub</span>
+          <span className="text-sm font-semibold text-[#1A1A1A]">Productivity Hub</span>
         </div>
 
         {/* Section Tabs */}
@@ -120,8 +120,8 @@ export default function EmailProductivityPanel({
           <button
             className={`flex-1 text-[10px] font-medium py-1.5 rounded-md transition-all ${
               activeSection === "overview"
-                ? "bg-white text-black shadow-sm"
-                : "text-black/50 hover:text-black/70"
+                ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm"
+                : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]/70"
             }`}
             onClick={() => setActiveSection("overview")}
           >
@@ -130,8 +130,8 @@ export default function EmailProductivityPanel({
           <button
             className={`flex-1 text-[10px] font-medium py-1.5 rounded-md transition-all ${
               activeSection === "automation"
-                ? "bg-white text-black shadow-sm"
-                : "text-black/50 hover:text-black/70"
+                ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm"
+                : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]/70"
             }`}
             onClick={() => setActiveSection("automation")}
           >
@@ -179,7 +179,7 @@ export default function EmailProductivityPanel({
             {/* Reply Queue */}
             {needsReply.length > 0 && (
               <div>
-                <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-2">Reply Queue</p>
+                <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-2">Reply Queue</p>
                 <div className="space-y-1">
                   {needsReply.map(e => (
                     <button
@@ -187,8 +187,8 @@ export default function EmailProductivityPanel({
                       onClick={() => onSelectEmail(e.id)}
                       className="w-full text-left px-3 py-2 rounded-lg border border-[#B89555]/15 hover:bg-[#B89555]/5 transition-colors"
                     >
-                      <p className="text-xs font-medium text-black truncate">{e.subject}</p>
-                      <p className="text-[10px] text-black/50">{e.from}</p>
+                      <p className="text-xs font-medium text-[#1A1A1A] truncate">{e.subject}</p>
+                      <p className="text-[10px] text-[#1A1A1A]/50">{e.from}</p>
                     </button>
                   ))}
                 </div>
@@ -198,12 +198,12 @@ export default function EmailProductivityPanel({
             {/* Action Items */}
             {allActionItems.length > 0 && (
               <div>
-                <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-2">Tasks from Emails</p>
+                <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-2">Tasks from Emails</p>
                 <div className="space-y-1">
                   {allActionItems.map((ai, i) => (
                     <div
                       key={i}
-                      className="text-xs text-black/70 flex items-start gap-2 px-2 py-1.5 rounded-lg hover:bg-[#B89555]/5 cursor-pointer"
+                      className="text-xs text-[#1A1A1A]/70 flex items-start gap-2 px-2 py-1.5 rounded-lg hover:bg-[#B89555]/5 cursor-pointer"
                       onClick={() => onSelectEmail(ai.emailId)}
                     >
                       <CheckCircle2 className="w-3 h-3 text-[#B89555] mt-0.5 flex-shrink-0" />
@@ -220,7 +220,7 @@ export default function EmailProductivityPanel({
                 <Separator className="bg-[#B89555]/10" />
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider">Brand Assets</p>
+                    <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">Brand Assets</p>
                     <a href="/owner/brand-assets" className="text-[10px] text-[#B89555] hover:underline flex items-center gap-0.5">
                       <ExternalLink className="w-2.5 h-2.5" /> Manage
                     </a>
@@ -229,17 +229,17 @@ export default function EmailProductivityPanel({
                     {brandAssets.map(asset => (
                       <div
                         key={asset.id}
-                        className="flex flex-col items-center bg-white/70 rounded-lg border border-[#B89555]/15 p-2 hover:border-[#B89555]/30 cursor-pointer transition-colors"
+                        className="flex flex-col items-center bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-2 hover:border-[#B89555]/30 cursor-pointer transition-colors"
                         title={asset.name}
                       >
                         {asset.thumbnail_url ? (
                           <img src={asset.thumbnail_url} alt={asset.name} className="w-8 h-8 object-contain rounded" />
                         ) : (
                           <div className="w-8 h-8 flex items-center justify-center">
-                            {assetIcons[asset.asset_type] || <Image className="w-4 h-4 text-black/30" />}
+                            {assetIcons[asset.asset_type] || <Image className="w-4 h-4 text-[#1A1A1A]/30" />}
                           </div>
                         )}
-                        <span className="text-[8px] text-black/50 mt-1 truncate max-w-full">{asset.name}</span>
+                        <span className="text-[8px] text-[#1A1A1A]/50 mt-1 truncate max-w-full">{asset.name}</span>
                       </div>
                     ))}
                   </div>
@@ -248,7 +248,7 @@ export default function EmailProductivityPanel({
             )}
 
             {needsReply.length === 0 && allActionItems.length === 0 && (
-              <div className="text-center py-4 text-black/40">
+              <div className="text-center py-4 text-[#1A1A1A]/40">
                 <CheckCircle2 className="w-6 h-6 mx-auto mb-1.5 opacity-40" />
                 <p className="text-xs">All caught up!</p>
                 <p className="text-[10px]">No pending actions</p>

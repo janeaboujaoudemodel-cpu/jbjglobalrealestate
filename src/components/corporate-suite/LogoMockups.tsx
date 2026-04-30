@@ -176,7 +176,7 @@ function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
   );
 
   return (
-    <div className="rounded-xl border border-[hsl(var(--border))] bg-white p-5 space-y-3" style={{ maxWidth: 420 }}>
+    <div className="rounded-xl border border-[hsl(var(--border))] bg-[#FDFBF7] p-5 space-y-3" style={{ maxWidth: 420 }}>
       {/* Header */}
       <div className={`flex items-center pb-3 border-b-2 ${
         layout === "logo-center" ? "flex-col gap-2 text-center" : layout === "logo-right" ? "flex-row-reverse" : ""
@@ -186,11 +186,11 @@ function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
       </div>
       {/* Body lines */}
       <div className="space-y-1.5 pt-2">
-        <div className="h-2 rounded bg-gray-100 w-full" />
-        <div className="h-2 rounded bg-gray-100 w-4/5" />
-        <div className="h-2 rounded bg-gray-100 w-3/4" />
-        <div className="h-2 rounded bg-gray-100 w-5/6 mt-3" />
-        <div className="h-2 rounded bg-gray-100 w-2/3" />
+        <div className="h-2 rounded bg-[#F7F2EA] w-full" />
+        <div className="h-2 rounded bg-[#F7F2EA] w-4/5" />
+        <div className="h-2 rounded bg-[#F7F2EA] w-3/4" />
+        <div className="h-2 rounded bg-[#F7F2EA] w-5/6 mt-3" />
+        <div className="h-2 rounded bg-[#F7F2EA] w-2/3" />
       </div>
       {/* Footer with optional stamp */}
       <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: colors.accent + "40" }}>

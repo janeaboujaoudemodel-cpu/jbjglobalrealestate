@@ -184,7 +184,7 @@ export default function CoverLetterGenerator() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")} className="gap-1.5">
@@ -280,7 +280,7 @@ export default function CoverLetterGenerator() {
 
           {/* Brand Assets */}
           <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-3 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -316,7 +316,7 @@ export default function CoverLetterGenerator() {
           <DocumentTypographyControls settings={typo} onChange={setTypo} />
 
           {/* Divider Style */}
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-2">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-2">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] block">
               Divider Style
             </Label>
@@ -361,7 +361,7 @@ export default function CoverLetterGenerator() {
                   className={`relative rounded-lg border-2 p-2 text-left transition-all ${
                     templateId === t.id
                       ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
-                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white"
+                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -389,7 +389,7 @@ export default function CoverLetterGenerator() {
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg border text-left transition-all ${
                     tone === t.id
                       ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]"
-                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white"
+                      : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]"
                   }`}
                 >
                   <div>
@@ -411,7 +411,7 @@ export default function CoverLetterGenerator() {
           />
 
           {/* Form Fields */}
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
             <p className="text-xs font-bold text-[hsl(var(--foreground))]">Your Information</p>
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -435,7 +435,7 @@ export default function CoverLetterGenerator() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
             <p className="text-xs font-bold text-[hsl(var(--foreground))]">Document Details</p>
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -505,7 +505,7 @@ export default function CoverLetterGenerator() {
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden w-full"
               >
-                <div className="bg-white rounded-xl border border-violet-200 p-3 shadow-sm">
+                <div className="bg-[#FDFBF7] rounded-xl border border-violet-200 p-3 shadow-sm">
                   <Label className="text-[10px] font-semibold text-violet-700 mb-2 block">Edit Document Body</Label>
                   <Textarea
                     value={letter}
@@ -545,7 +545,7 @@ export default function CoverLetterGenerator() {
           </AnimatePresence>
 
           {/* Template mini switcher */}
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 shadow-sm w-full">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 shadow-sm w-full">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-3 block">
               Switch Template
             </Label>

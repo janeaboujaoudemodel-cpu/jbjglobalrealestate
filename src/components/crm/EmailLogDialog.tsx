@@ -26,26 +26,26 @@ export const EmailLogDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg bg-white">
+      <DialogContent className="max-w-lg bg-[#FDFBF7]">
         <DialogHeader>
-          <DialogTitle className="text-black">Email log — {developerName}</DialogTitle>
+          <DialogTitle className="text-[#1A1A1A]">Email log — {developerName}</DialogTitle>
         </DialogHeader>
-        <div className="text-xs text-gray-600 mb-2">{recipientEmail}</div>
+        <div className="text-xs text-[#5A4A2E] mb-2">{recipientEmail}</div>
         {isLoading ? (
-          <div className="text-sm text-gray-500">Loading…</div>
+          <div className="text-sm text-[#8A7556]">Loading…</div>
         ) : history.length === 0 ? (
-          <div className="text-sm text-gray-500 py-4 text-center">No email log entries yet.</div>
+          <div className="text-sm text-[#8A7556] py-4 text-center">No email log entries yet.</div>
         ) : (
           <div className="max-h-[60vh] overflow-y-auto space-y-2">
             {history.map((row, i) => (
-              <div key={i} className="border border-black/10 rounded-lg p-3 bg-white">
+              <div key={i} className="border border-[#1A1A1A]/10 rounded-lg p-3 bg-[#FDFBF7]">
                 <div className="flex items-center justify-between">
-                  <Badge className={`${STATUS_STYLE[row.status] || "bg-gray-200 text-black"} border font-semibold`}>
+                  <Badge className={`${STATUS_STYLE[row.status] || "bg-[#EFE6D6] text-[#1A1A1A]"} border font-semibold`}>
                     {row.status}
                   </Badge>
-                  <span className="text-xs text-gray-600">{new Date(row.created_at).toLocaleString()}</span>
+                  <span className="text-xs text-[#5A4A2E]">{new Date(row.created_at).toLocaleString()}</span>
                 </div>
-                <div className="mt-1 text-xs text-black">
+                <div className="mt-1 text-xs text-[#1A1A1A]">
                   Variant: <strong>{row.template_name === "developer_registration" ? "New registration" : "Confirm registered"}</strong>
                 </div>
                 {row.error_message && (

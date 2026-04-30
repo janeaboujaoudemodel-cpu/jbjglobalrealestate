@@ -142,7 +142,7 @@ export function AIBrokerEditDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-gray-700 max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-white text-xl">
             Edit AI Broker: {broker?.name}
@@ -150,7 +150,7 @@ export function AIBrokerEditDialog({
         </DialogHeader>
 
         <Tabs defaultValue="profile" className="mt-4">
-          <TabsList className="bg-zinc-800 border-gray-700">
+          <TabsList className="bg-zinc-800 border-[#1A1A1A]">
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="behavior">Behavior</TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
@@ -160,64 +160,64 @@ export function AIBrokerEditDialog({
           <TabsContent value="profile" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-gray-600">Name</Label>
+                <Label className="text-[#5A4A2E]">Name</Label>
                 <Input
                   value={formData.name || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
-                <Label className="text-gray-600">Email</Label>
+                <Label className="text-[#5A4A2E]">Email</Label>
                 <Input
                   value={formData.email || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-gray-600">Phone</Label>
+                <Label className="text-[#5A4A2E]">Phone</Label>
                 <Input
                   value={formData.phone || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
-                <Label className="text-gray-600">Avatar URL</Label>
+                <Label className="text-[#5A4A2E]">Avatar URL</Label>
                 <Input
                   value={formData.avatar_url || ""}
                   onChange={(e) =>
                     setFormData({ ...formData, avatar_url: e.target.value })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
 
             <div>
-              <Label className="text-gray-600">Bio</Label>
+              <Label className="text-[#5A4A2E]">Bio</Label>
               <Textarea
                 value={formData.bio || ""}
                 onChange={(e) =>
                   setFormData({ ...formData, bio: e.target.value })
                 }
-                className="bg-zinc-800 border-gray-700 text-white mt-1 min-h-[80px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[80px]"
                 placeholder="Professional bio for the AI broker..."
               />
             </div>
 
             <div>
-              <Label className="text-gray-600 mb-2 block">Languages</Label>
+              <Label className="text-[#5A4A2E] mb-2 block">Languages</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {formData.languages?.map((lang) => (
                   <Badge
@@ -241,7 +241,7 @@ export function AIBrokerEditDialog({
                     variant="outline"
                     size="sm"
                     onClick={() => addLanguage(lang)}
-                    className="border-gray-700 text-gray-600 hover:bg-gray-800"
+                    className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
                   >
                     <Plus className="h-3 w-3 mr-1" />
                     {lang}
@@ -251,7 +251,7 @@ export function AIBrokerEditDialog({
             </div>
 
             <div>
-              <Label className="text-gray-600 mb-2 block">Specializations</Label>
+              <Label className="text-[#5A4A2E] mb-2 block">Specializations</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {formData.specialization?.map((spec) => (
                   <Badge
@@ -275,7 +275,7 @@ export function AIBrokerEditDialog({
                     variant="outline"
                     size="sm"
                     onClick={() => addSpecialization(spec)}
-                    className="border-gray-700 text-gray-600 hover:bg-gray-800"
+                    className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
                   >
                     <Plus className="h-3 w-3 mr-1" />
                     {spec}
@@ -287,7 +287,7 @@ export function AIBrokerEditDialog({
 
           <TabsContent value="behavior" className="space-y-4 mt-4">
             <div>
-              <Label className="text-gray-600">Daily Interaction Limit</Label>
+              <Label className="text-[#5A4A2E]">Daily Interaction Limit</Label>
               <Input
                 type="number"
                 value={formData.daily_interaction_limit || 150}
@@ -297,16 +297,16 @@ export function AIBrokerEditDialog({
                     daily_interaction_limit: parseInt(e.target.value) || 150,
                   })
                 }
-                className="bg-zinc-800 border-gray-700 text-white mt-1"
+                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
               />
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-[#5A4A2E] text-sm mt-1">
                 Maximum leads this broker can handle per day
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-gray-600">Min Response Delay (seconds)</Label>
+                <Label className="text-[#5A4A2E]">Min Response Delay (seconds)</Label>
                 <Input
                   type="number"
                   value={formData.response_delay_min_seconds || 3}
@@ -316,11 +316,11 @@ export function AIBrokerEditDialog({
                       response_delay_min_seconds: parseInt(e.target.value) || 3,
                     })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
-                <Label className="text-gray-600">Max Response Delay (seconds)</Label>
+                <Label className="text-[#5A4A2E]">Max Response Delay (seconds)</Label>
                 <Input
                   type="number"
                   value={formData.response_delay_max_seconds || 10}
@@ -330,11 +330,11 @@ export function AIBrokerEditDialog({
                       response_delay_max_seconds: parseInt(e.target.value) || 10,
                     })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className="text-[#5A4A2E] text-sm">
               Randomized delay to simulate human-like response times
             </p>
           </TabsContent>
@@ -342,7 +342,7 @@ export function AIBrokerEditDialog({
           <TabsContent value="schedule" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-gray-600">Working Hours Start</Label>
+                <Label className="text-[#5A4A2E]">Working Hours Start</Label>
                 <Input
                   type="time"
                   value={formData.working_hours_start || "09:00"}
@@ -352,11 +352,11 @@ export function AIBrokerEditDialog({
                       working_hours_start: e.target.value,
                     })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
-                <Label className="text-gray-600">Working Hours End</Label>
+                <Label className="text-[#5A4A2E]">Working Hours End</Label>
                 <Input
                   type="time"
                   value={formData.working_hours_end || "18:00"}
@@ -366,13 +366,13 @@ export function AIBrokerEditDialog({
                       working_hours_end: e.target.value,
                     })
                   }
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
             </div>
 
             <div>
-              <Label className="text-gray-600 mb-3 block">Working Days</Label>
+              <Label className="text-[#5A4A2E] mb-3 block">Working Days</Label>
               <div className="flex gap-2">
                 {DAYS_OF_WEEK.map((day) => (
                   <Button
@@ -386,8 +386,8 @@ export function AIBrokerEditDialog({
                     onClick={() => toggleWorkingDay(day.value)}
                     className={
                       formData.working_days?.includes(day.value)
-                        ? "bg-gold text-black hover:bg-gold/90"
-                        : "border-gray-700 text-gray-600 hover:bg-gray-800"
+                        ? "bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                        : "border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
                     }
                   >
                     {day.label}
@@ -399,7 +399,7 @@ export function AIBrokerEditDialog({
 
           <TabsContent value="personality" className="space-y-4 mt-4">
             <div>
-              <Label className="text-gray-600">Personality Prompt</Label>
+              <Label className="text-[#5A4A2E]">Personality Prompt</Label>
               <Textarea
                 value={formData.personality_prompt || ""}
                 onChange={(e) =>
@@ -408,10 +408,10 @@ export function AIBrokerEditDialog({
                     personality_prompt: e.target.value,
                   })
                 }
-                className="bg-zinc-800 border-gray-700 text-white mt-1 min-h-[200px] font-mono text-sm"
+                className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[200px] font-mono text-sm"
                 placeholder="System prompt that defines the AI broker's personality, tone, and behavior..."
               />
-              <p className="text-gray-600 text-sm mt-2">
+              <p className="text-[#5A4A2E] text-sm mt-2">
                 This prompt defines how the AI broker communicates. Include tone,
                 style, and any specific behaviors or restrictions.
               </p>
@@ -419,15 +419,15 @@ export function AIBrokerEditDialog({
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-800">
+        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-[#1A1A1A]">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-gray-700 text-gray-600"
+            className="border-[#1A1A1A] text-[#5A4A2E]"
           >
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-gold text-black hover:bg-gold/90">
+          <Button onClick={handleSave} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
             Save Changes
           </Button>
         </div>

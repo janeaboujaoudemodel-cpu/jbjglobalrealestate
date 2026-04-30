@@ -140,7 +140,7 @@ export function ComparisonPDFTemplate({
 
   return (
     <>
-      <Card className="bg-zinc-900 border-gray-800">
+      <Card className="bg-zinc-900 border-[#1A1A1A]">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -149,7 +149,7 @@ export function ComparisonPDFTemplate({
               </div>
               <div>
                 <CardTitle className="text-white">Property Comparison PDF</CardTitle>
-                <p className="text-gray-600 text-sm mt-1">
+                <p className="text-[#5A4A2E] text-sm mt-1">
                   Generate branded comparison documents
                 </p>
               </div>
@@ -163,12 +163,12 @@ export function ComparisonPDFTemplate({
           {/* Selected Properties */}
           {selectedProperties.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-600">Selected Properties</h4>
+              <h4 className="text-sm font-medium text-[#5A4A2E]">Selected Properties</h4>
               <div className="grid grid-cols-2 gap-2">
                 {selectedProperties.map((property) => (
                   <div
                     key={property.id}
-                    className="p-3 rounded-lg bg-zinc-800 border border-gray-700 relative group"
+                    className="p-3 rounded-lg bg-zinc-800 border border-[#1A1A1A] relative group"
                   >
                     <button
                       onClick={() => removeProperty(property.id)}
@@ -177,7 +177,7 @@ export function ComparisonPDFTemplate({
                       <X className="h-3 w-3" />
                     </button>
                     <p className="text-white font-medium text-sm truncate">{property.name}</p>
-                    <p className="text-gray-600 text-xs">{property.location}</p>
+                    <p className="text-[#5A4A2E] text-xs">{property.location}</p>
                     <p className="text-price-orange text-sm font-medium mt-1">{property.price}</p>
                   </div>
                 ))}
@@ -187,18 +187,18 @@ export function ComparisonPDFTemplate({
 
           {/* Available Properties */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-600">Add Properties</h4>
+            <h4 className="text-sm font-medium text-[#5A4A2E]">Add Properties</h4>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {availableProperties.map((property) => (
                 <div
                   key={property.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-gray-700/50 hover:bg-gray-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-[#1A1A1A]/50 hover:bg-[#1A1A1A] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Building2 className="h-4 w-4 text-gray-600" />
+                    <Building2 className="h-4 w-4 text-[#5A4A2E]" />
                     <div>
                       <p className="text-white text-sm">{property.name}</p>
-                      <p className="text-gray-600 text-xs">{property.location} • {property.bedrooms}</p>
+                      <p className="text-[#5A4A2E] text-xs">{property.location} • {property.bedrooms}</p>
                     </div>
                   </div>
                   <Button
@@ -216,11 +216,11 @@ export function ComparisonPDFTemplate({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-2 pt-4 border-t border-gray-800">
+          <div className="flex gap-2 pt-4 border-t border-[#1A1A1A]">
             <Button
               onClick={generatePDF}
               disabled={selectedProperties.length < 2 || generating}
-              className="flex-1 bg-zinc-800 hover:bg-gray-700 text-white"
+              className="flex-1 bg-zinc-800 hover:bg-[#1A1A1A] text-white"
             >
               <Download className="h-4 w-4 mr-2" />
               {generating ? "Generating..." : "Download PDF"}
@@ -228,7 +228,7 @@ export function ComparisonPDFTemplate({
             <Button
               onClick={() => setSendDialogOpen(true)}
               disabled={selectedProperties.length < 2 || !leadEmail}
-              className="flex-1 bg-gold hover:bg-gold-dark text-black"
+              className="flex-1 bg-gold hover:bg-gold-dark text-[#1A1A1A]"
             >
               <Send className="h-4 w-4 mr-2" />
               Send to Lead
@@ -239,7 +239,7 @@ export function ComparisonPDFTemplate({
 
       {/* Send Email Dialog */}
       <Dialog open={sendDialogOpen} onOpenChange={setSendDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-gray-700 text-white">
+        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -248,28 +248,28 @@ export function ComparisonPDFTemplate({
           </DialogHeader>
           
           <div className="space-y-4">
-            <div className="p-3 rounded-lg bg-zinc-800 border border-gray-700">
-              <p className="text-sm text-gray-600">Sending to:</p>
+            <div className="p-3 rounded-lg bg-zinc-800 border border-[#1A1A1A]">
+              <p className="text-sm text-[#5A4A2E]">Sending to:</p>
               <p className="text-white font-medium">{leadName || "Lead"}</p>
-              <p className="text-gray-600 text-sm">{leadEmail}</p>
+              <p className="text-[#5A4A2E] text-sm">{leadEmail}</p>
             </div>
             
             <div>
-              <label className="text-sm text-gray-600 mb-2 block">Subject</label>
+              <label className="text-sm text-[#5A4A2E] mb-2 block">Subject</label>
               <Input
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
-                className="bg-zinc-800 border-gray-700 text-white"
+                className="bg-zinc-800 border-[#1A1A1A] text-white"
               />
             </div>
             
             <div>
-              <label className="text-sm text-gray-600 mb-2 block">Personal Message (Optional)</label>
+              <label className="text-sm text-[#5A4A2E] mb-2 block">Personal Message (Optional)</label>
               <Textarea
                 value={emailMessage}
                 onChange={(e) => setEmailMessage(e.target.value)}
                 placeholder="Add a personal note to accompany the comparison..."
-                className="bg-zinc-800 border-gray-700 text-white min-h-[100px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white min-h-[100px]"
               />
             </div>
 
@@ -279,7 +279,7 @@ export function ComparisonPDFTemplate({
               </p>
               <ul className="mt-2 space-y-1">
                 {selectedProperties.map((p) => (
-                  <li key={p.id} className="text-xs text-gray-600">• {p.name}</li>
+                  <li key={p.id} className="text-xs text-[#5A4A2E]">• {p.name}</li>
                 ))}
               </ul>
             </div>
@@ -289,14 +289,14 @@ export function ComparisonPDFTemplate({
             <Button
               variant="outline"
               onClick={() => setSendDialogOpen(false)}
-              className="border-gray-700 text-gray-600"
+              className="border-[#1A1A1A] text-[#5A4A2E]"
             >
               Cancel
             </Button>
             <Button
               onClick={sendComparison}
               disabled={generating}
-              className="bg-gold hover:bg-gold-dark text-black"
+              className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
             >
               {generating ? "Sending..." : "Send Email"}
             </Button>

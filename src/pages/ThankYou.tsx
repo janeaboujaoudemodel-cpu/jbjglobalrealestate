@@ -166,7 +166,7 @@ const ThankYou = () => {
               {/* Message */}
               <motion.p
                 variants={fadeInUp}
-                className="text-lg text-gray-600 mb-8"
+                className="text-lg text-[#5A4A2E] mb-8"
               >
                 {content.message}
               </motion.p>
@@ -183,7 +183,7 @@ const ThankYou = () => {
                       <div className="w-6 h-6 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-gold text-xs font-bold">{index + 1}</span>
                       </div>
-                      <span className="text-gray-600">{step}</span>
+                      <span className="text-[#5A4A2E]">{step}</span>
                     </li>
                   ))}
                 </ul>
@@ -194,7 +194,7 @@ const ThankYou = () => {
                 variants={fadeInUp}
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
-                <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-black font-semibold">
+                <Button asChild size="lg" className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold">
                   <Link to={content.primaryCta.href}>
                     <Home className="mr-2 h-5 w-5" />
                     {content.primaryCta.label}
@@ -202,7 +202,7 @@ const ThankYou = () => {
                 </Button>
                 
                 {content.secondaryCta && (
-                  <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
+                  <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-[#FDFBF7]/10">
                     <Link to={content.secondaryCta.href}>
                       {content.secondaryCta.label}
                       <ArrowRight className="ml-2 h-5 w-5" />

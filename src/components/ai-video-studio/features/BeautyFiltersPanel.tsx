@@ -391,7 +391,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                 onClick={() => applyPreset(preset.id)}
                 className={`px-2 py-1 rounded text-xs transition-all ${
                   selectedPreset === preset.id && !activeLUT
-                    ? 'bg-amber-500 text-black font-medium'
+                    ? 'bg-amber-500 text-[#1A1A1A] font-medium'
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                 }`}
               >
@@ -459,7 +459,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-bold transition-all border ${
                     exportFilterActive
                       ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-red-500/20 hover:text-red-300 hover:border-red-500/40'
-                      : 'bg-amber-500 text-black border-amber-500 hover:bg-amber-400'
+                      : 'bg-amber-500 text-[#1A1A1A] border-amber-500 hover:bg-amber-400'
                   }`}
                 >
                   {exportFilterActive ? (
@@ -528,7 +528,7 @@ export function BeautyFiltersPanel({ onFilterChange, onApplyToExport, exportFilt
               <Button
                 variant="default"
                 size="sm"
-                className="w-full bg-amber-500 text-black hover:bg-amber-400"
+                className="w-full bg-amber-500 text-[#1A1A1A] hover:bg-amber-400"
                 onClick={handleDownload}
               >
                 <Download className="h-4 w-4 mr-2" />

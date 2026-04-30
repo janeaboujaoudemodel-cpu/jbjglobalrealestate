@@ -98,7 +98,7 @@ export function AdminNotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative text-black hover:text-gold hover:bg-gold/10 h-9 w-9"
+          className="relative text-[#1A1A1A] hover:text-gold hover:bg-gold/10 h-9 w-9"
         >
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
@@ -109,12 +109,12 @@ export function AdminNotificationBell() {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-96 p-0 bg-white border-2 border-gold/30 shadow-xl"
+        className="w-96 p-0 bg-[#FDFBF7] border-2 border-gold/30 shadow-xl"
         align="end"
         sideOffset={8}
       >
         <div className="flex items-center justify-between p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
-          <h3 className="text-black font-semibold text-sm flex items-center gap-2">
+          <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-gold" />
             System Alerts
           </h3>
@@ -123,7 +123,7 @@ export function AdminNotificationBell() {
               variant="ghost"
               size="sm"
               onClick={handleDismissAll}
-              className="text-xs text-black/50 hover:text-black h-7"
+              className="text-xs text-[#1A1A1A]/50 hover:text-[#1A1A1A] h-7"
             >
               Dismiss all
             </Button>
@@ -134,8 +134,8 @@ export function AdminNotificationBell() {
           {alerts.length === 0 ? (
             <div className="p-6 text-center">
               <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-              <p className="text-black/60 text-sm">All systems operational</p>
-              <p className="text-black/40 text-xs mt-1">No recent errors detected</p>
+              <p className="text-[#1A1A1A]/60 text-sm">All systems operational</p>
+              <p className="text-[#1A1A1A]/40 text-xs mt-1">No recent errors detected</p>
             </div>
           ) : (
             <div className="divide-y divide-gold/10">
@@ -145,14 +145,14 @@ export function AdminNotificationBell() {
                     <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-black text-sm font-medium truncate">
+                        <span className="text-[#1A1A1A] text-sm font-medium truncate">
                           {alert.function_name}
                         </span>
                         <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-red-200 text-red-600 flex-shrink-0">
                           {alert.error_type || "error"}
                         </Badge>
                       </div>
-                      <p className="text-black/50 text-xs mt-0.5">
+                      <p className="text-[#1A1A1A]/50 text-xs mt-0.5">
                         {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true })}
                       </p>
                       

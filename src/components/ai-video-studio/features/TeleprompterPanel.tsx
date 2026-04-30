@@ -197,7 +197,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
               <Button
                 size="sm"
                 onClick={handlePlayPause}
-                className="bg-gold text-black hover:bg-gold/90"
+                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
               >
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               </Button>
@@ -217,7 +217,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
       {/* Preview / Fullscreen Mode */}
       <div 
         ref={scrollRef}
-        className={`flex-1 overflow-y-auto bg-black p-4 ${isFullscreen ? 'cursor-pointer' : ''}`}
+        className={`flex-1 overflow-y-auto bg-[#1A1A1A] p-4 ${isFullscreen ? 'cursor-pointer' : ''}`}
         style={{
           transform: mirrorMode ? 'scaleX(-1)' : 'none',
         }}
@@ -225,7 +225,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
       >
         {/* Countdown Overlay */}
         {showCountdown && (
-          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-[#1A1A1A]/90 flex items-center justify-center z-50">
             <span className="text-9xl font-bold text-gold animate-pulse">
               {countdown}
             </span>
@@ -242,7 +242,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
 
         {/* Fullscreen Controls */}
         {isFullscreen && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/80 rounded-full px-4 py-2">
+          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-[#1A1A1A]/80 rounded-full px-4 py-2">
             <Button
               size="sm"
               variant="ghost"
@@ -254,7 +254,7 @@ export function TeleprompterPanel({ onScriptChange, initialScript = '' }: Telepr
             <Button
               size="sm"
               onClick={handlePlayPause}
-              className="bg-gold text-black hover:bg-gold/90"
+              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>

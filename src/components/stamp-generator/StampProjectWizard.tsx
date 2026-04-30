@@ -115,7 +115,7 @@ const OptionButton = ({ selected, onClick, children, className = '' }: {
     className={`relative px-2.5 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${
       selected
         ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold-dark))]'
-        : 'border-[hsl(var(--border))] bg-white text-[hsl(var(--foreground))] hover:border-[hsl(var(--gold)/0.4)]'
+        : 'border-[hsl(var(--border))] bg-[#FDFBF7] text-[hsl(var(--foreground))] hover:border-[hsl(var(--gold)/0.4)]'
     } ${className}`}
   >
     {selected && <Check size={8} className="absolute top-0.5 right-0.5 text-[hsl(var(--gold))]"/>}
@@ -744,7 +744,7 @@ export default function StampProjectWizard() {
   return (
     <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
       {/* ── Top toolbar — professional header with premium spacing ── */}
-      <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-md px-5 py-3.5 flex items-center gap-3 shadow-sm">
+      <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-md px-5 py-3.5 flex items-center gap-3 shadow-sm">
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-sm">
           <Stamp size={16} className="text-white"/>
         </div>
@@ -760,7 +760,7 @@ export default function StampProjectWizard() {
         )}
 
         {/* Undo/Redo/Reset */}
-        <div className="flex items-center gap-0.5 bg-white rounded-lg border border-[hsl(var(--border))] shadow-sm px-1 py-0.5">
+        <div className="flex items-center gap-0.5 bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] shadow-sm px-1 py-0.5">
           <button onClick={handleUndo} disabled={!history.canUndo} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] disabled:opacity-30" title="Undo"><Undo2 size={11}/></button>
           <button onClick={handleRedo} disabled={!history.canRedo} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] disabled:opacity-30" title="Redo"><Redo2 size={11}/></button>
           <div className="w-px h-3.5 bg-[hsl(var(--border))]"/>
@@ -782,13 +782,13 @@ export default function StampProjectWizard() {
       {/* ── Main body: controls left + centered preview right ── */}
       <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* Left: Tabbed controls panel — narrower */}
-        <div className="w-[320px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white flex flex-col min-h-0">
+        <div className="w-[320px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-[#FDFBF7] flex flex-col min-h-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
             <TabsList className="flex-shrink-0 w-full rounded-none border-b border-[hsl(var(--border))] bg-[hsl(var(--pearl-1))] h-9 px-1">
-              <TabsTrigger value="company" className="text-[11px] gap-1 data-[state=active]:bg-white"><Building2 size={11}/>Company</TabsTrigger>
-              <TabsTrigger value="style" className="text-[11px] gap-1 data-[state=active]:bg-white"><Palette size={11}/>Style</TabsTrigger>
-              <TabsTrigger value="logo" className="text-[11px] gap-1 data-[state=active]:bg-white"><Image size={11}/>Logo</TabsTrigger>
-              <TabsTrigger value="export" className="text-[11px] gap-1 data-[state=active]:bg-white"><Download size={11}/>Export</TabsTrigger>
+              <TabsTrigger value="company" className="text-[11px] gap-1 data-[state=active]:bg-[#FDFBF7]"><Building2 size={11}/>Company</TabsTrigger>
+              <TabsTrigger value="style" className="text-[11px] gap-1 data-[state=active]:bg-[#FDFBF7]"><Palette size={11}/>Style</TabsTrigger>
+              <TabsTrigger value="logo" className="text-[11px] gap-1 data-[state=active]:bg-[#FDFBF7]"><Image size={11}/>Logo</TabsTrigger>
+              <TabsTrigger value="export" className="text-[11px] gap-1 data-[state=active]:bg-[#FDFBF7]"><Download size={11}/>Export</TabsTrigger>
             </TabsList>
 
             {/* ── Company Tab ── */}
@@ -1129,7 +1129,7 @@ export default function StampProjectWizard() {
                       <div>
                         <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1 block">Font Family</label>
                         <select value={form.arabic_font} onChange={e => set('arabic_font', e.target.value)}
-                          className="w-full h-8 rounded-lg border-2 border-[hsl(var(--border))] bg-white text-xs px-2 focus:outline-none focus:border-[hsl(var(--gold)/0.5)]">
+                          className="w-full h-8 rounded-lg border-2 border-[hsl(var(--border))] bg-[#FDFBF7] text-xs px-2 focus:outline-none focus:border-[hsl(var(--gold)/0.5)]">
                           <option value="Noto Naskh Arabic">Noto Naskh Arabic</option>
                           <option value="Amiri">Amiri</option>
                           <option value="Cairo">Cairo</option>
@@ -1403,7 +1403,7 @@ export default function StampProjectWizard() {
           <div className="flex flex-col items-center gap-4">
             <div
               id="stamp-preview-container"
-              className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.15)] shadow-[0_8px_40px_hsl(var(--gold)/0.06)] p-8"
+              className="bg-[#FDFBF7] rounded-2xl border-2 border-[hsl(var(--gold)/0.15)] shadow-[0_8px_40px_hsl(var(--gold)/0.06)] p-8"
             >
               <LiveStampPreview {...previewProps} size={380} selectedElement={selectedElement} />
             </div>

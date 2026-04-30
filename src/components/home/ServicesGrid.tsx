@@ -121,13 +121,13 @@ const ServicesGrid = () => {
 
           {/* Title */}
           <h3
-            className="text-xl font-bold text-black mb-3 group-hover:text-gold transition-colors"
+            className="text-xl font-bold text-[#1A1A1A] mb-3 group-hover:text-gold transition-colors"
           >
             {service.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+          <p className="text-sm text-[#5A4A2E] mb-4 leading-relaxed">
             {service.description}
           </p>
 
@@ -147,11 +147,11 @@ const ServicesGrid = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2
-            className="text-2xl md:text-3xl font-bold text-black mb-3"
+            className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3"
           >
             {t('services.howCanWeHelp', 'How Can We Help?')}
           </h2>
-          <p className="text-gray-600 text-sm max-w-md mx-auto">
+          <p className="text-[#5A4A2E] text-sm max-w-md mx-auto">
             {t('services.subtitle', 'Whether you\'re buying, selling, renting, or investing—we\'ve got you covered.')}
           </p>
         </div>
@@ -164,10 +164,10 @@ const ServicesGrid = () => {
             whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("left")}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Previous service"
           >
-            <ChevronLeft className="w-5 h-5 text-gray-800 active:text-gold transition-colors" />
+            <ChevronLeft className="w-5 h-5 text-[#1A1A1A] active:text-gold transition-colors" />
           </motion.button>
 
           {/* Right Arrow */}
@@ -176,10 +176,10 @@ const ServicesGrid = () => {
             whileTap={{ scale: 0.8, backgroundColor: "rgba(200,167,102,0.25)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.15)" }}
             transition={{ type: "spring", stiffness: 400, damping: 15 }}
             onClick={() => scroll("right")}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-[#FDFBF7]/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Next service"
           >
-            <ChevronRight className="w-5 h-5 text-gray-800 active:text-gold transition-colors" />
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A] active:text-gold transition-colors" />
           </motion.button>
 
           {/* Cards container: horizontal scroll on mobile, grid on desktop */}

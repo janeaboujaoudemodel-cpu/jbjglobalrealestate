@@ -430,8 +430,8 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       case 'active': return 'bg-green-500';
       case 'away': return 'bg-yellow-500';
       case 'busy': return 'bg-red-500';
-      case 'inactive': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+      case 'inactive': return 'bg-[#B89555]';
+      default: return 'bg-[#B89555]';
     }
   };
 
@@ -544,7 +544,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-white rounded-xl border border-crm-border shadow-sm">
+      <div className="flex items-center justify-between flex-wrap gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-crm-border shadow-sm">
         <div>
           <h2 className="text-2xl font-bold text-crm-text flex items-center gap-3">
             <Building2 className="h-7 w-7 text-gold" />
@@ -565,7 +565,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
       {/* Stats Cards - CLICKABLE to filter - WHITE BACKGROUND */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'all' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'all' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('all')}
         >
           <CardContent className="p-4 text-center">
@@ -575,7 +575,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'human' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'human' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('human')}
         >
           <CardContent className="p-4 text-center">
@@ -585,7 +585,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'executive' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'executive' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('executive')}
         >
           <CardContent className="p-4 text-center">
@@ -595,7 +595,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'sales' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'sales' ? 'border-green-500 ring-2 ring-green-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('sales')}
         >
           <CardContent className="p-4 text-center">
@@ -605,7 +605,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'hr' ? 'border-pink-500 ring-2 ring-pink-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'hr' ? 'border-pink-500 ring-2 ring-pink-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('hr')}
         >
           <CardContent className="p-4 text-center">
@@ -615,7 +615,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'marketing' ? 'border-orange-500 ring-2 ring-orange-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'marketing' ? 'border-orange-500 ring-2 ring-orange-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('marketing')}
         >
           <CardContent className="p-4 text-center">
@@ -625,7 +625,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'cv' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'cv' ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
           onClick={() => setActiveTab('cv')}
         >
           <CardContent className="p-4 text-center">
@@ -635,7 +635,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'training' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'training' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('training')}
         >
           <CardContent className="p-4 text-center">
@@ -645,7 +645,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'email' ? 'border-teal-500 ring-2 ring-teal-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer hover:shadow-md transition-all duration-200 ${activeTab === 'email' ? 'border-teal-500 ring-2 ring-teal-200' : 'border-crm-border'}`}
           onClick={() => setActiveTab('email')}
         >
           <CardContent className="p-4 text-center">
@@ -669,7 +669,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                 placeholder="Search employees by name, role, or department..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
               />
             </div>
           </div>
@@ -723,7 +723,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
                       {grouped[dept].map((employee) => (
                         <Card 
                           key={employee.id} 
-                          className="bg-white border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
+                          className="bg-[#FDFBF7] border border-crm-border hover:border-gold/50 hover:shadow-md transition-all duration-200 cursor-pointer"
                           onClick={() => setSelectedEmployee(employee)}
                         >
                           <CardContent className="p-4">
@@ -823,7 +823,7 @@ const EmployeesHub = ({ userId, brokers = [] }: EmployeesHubProps) => {
               })()}
 
               {getFilteredEmployees().length === 0 && (
-                <Card className="bg-white border-crm-border">
+                <Card className="bg-[#FDFBF7] border-crm-border">
                   <CardContent className="py-12 text-center">
                     <Users className="h-12 w-12 mx-auto mb-4 text-crm-text-muted opacity-50" />
                     <p className="text-crm-text-muted">No employees found in this category</p>

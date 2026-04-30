@@ -296,14 +296,14 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
                 {/* Drag handle */}
                 <div className="absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="bg-black/70 text-white p-1 rounded">
+                  <div className="bg-[#1A1A1A]/70 text-white p-1 rounded">
                     <GripVertical className="w-4 h-4" />
                   </div>
                 </div>
 
                 {/* Order badge */}
                 <div className="absolute top-2 right-2 z-10">
-                  <div className="bg-black/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                  <div className="bg-[#1A1A1A]/60 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                     #{index + 1}
                   </div>
                 </div>
@@ -332,7 +332,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
                           disabled={!!isSettingRole}
                           className={cn(
                             "text-[9px] px-1.5 py-0.5 rounded font-medium transition-colors",
-                            isActive ? `${config.color} text-white` : "bg-white/20 text-white hover:bg-white/40"
+                            isActive ? `${config.color} text-white` : "bg-[#FDFBF7]/20 text-white hover:bg-[#FDFBF7]/40"
                           )}
                         >
                           {isLoading ? "..." : isActive ? `✓ ${config.label}` : config.label}

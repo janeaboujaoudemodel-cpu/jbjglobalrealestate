@@ -247,7 +247,7 @@ const MyTickets = () => {
   const renderTicketDetail = () => {
     if (!selectedTicket) {
       return (
-        <div className="h-[450px] flex items-center justify-center text-gray-600">
+        <div className="h-[450px] flex items-center justify-center text-[#5A4A2E]">
           <div className="text-center">
             <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-40" />
             <p>Select a ticket to view details</p>
@@ -280,8 +280,8 @@ const MyTickets = () => {
               </Badge>
             )}
           </div>
-          <h3 className="font-semibold text-black mt-2 truncate">{selectedTicket.subject}</h3>
-          <p className="text-xs text-gray-600 mt-1">
+          <h3 className="font-semibold text-[#1A1A1A] mt-2 truncate">{selectedTicket.subject}</h3>
+          <p className="text-xs text-[#5A4A2E] mt-1">
             {format(new Date(selectedTicket.created_at), "MMM d, yyyy h:mm a")} · {selectedTicket.service_category}
           </p>
         </div>
@@ -291,7 +291,7 @@ const MyTickets = () => {
             {/* Original Description */}
             <div className="bg-[#FDFBF7] rounded-lg p-3 border border-gold/10">
               <p className="text-[10px] text-gold uppercase tracking-wide mb-1 font-semibold">Your Message</p>
-              <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
+              <p className="text-[#5A4A2E] text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
             </div>
 
             {/* Messages */}
@@ -308,15 +308,15 @@ const MyTickets = () => {
                 <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-gold">
                   {msg.sender_type === "staff" ? "📩 Staff Reply" : "You"}
                 </p>
-                <p className="text-gray-700 text-sm whitespace-pre-wrap">{msg.message}</p>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-[#5A4A2E] text-sm whitespace-pre-wrap">{msg.message}</p>
+                <p className="text-xs text-[#5A4A2E] mt-1">
                   {format(new Date(msg.created_at), "MMM d, h:mm a")}
                 </p>
               </div>
             ))}
 
             {selectedTicket.messages.length === 0 && (
-              <p className="text-center text-gray-600 text-sm py-4">
+              <p className="text-center text-[#5A4A2E] text-sm py-4">
                 Waiting for staff response...
               </p>
             )}
@@ -343,7 +343,7 @@ const MyTickets = () => {
             </Button>
           )}
 
-          <p className="text-[10px] text-gray-600 mb-1 flex items-center gap-1">
+          <p className="text-[10px] text-[#5A4A2E] mb-1 flex items-center gap-1">
             <Mic className="w-3 h-3" /> Speak in any language — auto-translated
           </p>
           <div className="flex gap-2">
@@ -353,7 +353,7 @@ const MyTickets = () => {
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply..."
                 rows={2}
-                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-white border border-gold/30 text-black text-sm placeholder:text-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#5A4A2E] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
               />
               <div className="absolute top-2 right-2">
                 <VoiceInputButton
@@ -366,14 +366,14 @@ const MyTickets = () => {
                   }}
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 text-gray-600 hover:text-gold"
+                  className="h-6 w-6 text-[#5A4A2E] hover:text-gold"
                 />
               </div>
             </div>
             <Button
               onClick={handleSendReply}
               disabled={!replyMessage.trim() || sendReplyMutation.isPending}
-              className="bg-gold hover:bg-gold/90 text-black self-end"
+              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] self-end"
             >
               {sendReplyMutation.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -395,10 +395,10 @@ const MyTickets = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-4">
               <Ticket className="w-8 h-8 text-gold" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
               My Support Tickets
             </h1>
-            <p className="text-gray-600">
+            <p className="text-[#5A4A2E]">
               {user
                 ? "View, track, and reply to your support tickets"
                 : "Enter your details to track your support ticket"}
@@ -407,17 +407,17 @@ const MyTickets = () => {
 
           {/* Guest Tracking Form */}
           {!user && (
-            <div className="bg-white rounded-2xl border-2 border-gold/30 p-8 shadow-lg mb-8 max-w-lg mx-auto">
-              <h2 className="text-lg font-semibold text-black mb-6 flex items-center gap-2">
+            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 p-8 shadow-lg mb-8 max-w-lg mx-auto">
+              <h2 className="text-lg font-semibold text-[#1A1A1A] mb-6 flex items-center gap-2">
                 <Search className="w-5 h-5 text-gold" />
                 Track Your Ticket
               </h2>
 
               <div className="space-y-4">
                 <div>
-                  <Label className="text-gray-700">Email Address</Label>
+                  <Label className="text-[#5A4A2E]">Email Address</Label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                     <Input
                       type="email"
                       value={trackEmail}
@@ -429,9 +429,9 @@ const MyTickets = () => {
                 </div>
 
                 <div>
-                  <Label className="text-gray-700">Ticket Number</Label>
+                  <Label className="text-[#5A4A2E]">Ticket Number</Label>
                   <div className="relative mt-1">
-                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                     <Input
                       value={trackTicketNumber}
                       onChange={(e) => setTrackTicketNumber(e.target.value.toUpperCase())}
@@ -451,7 +451,7 @@ const MyTickets = () => {
                 <Button
                   onClick={handleTrackTicket}
                   disabled={isTracking}
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-semibold"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
                 >
                   {isTracking ? (
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -466,7 +466,7 @@ const MyTickets = () => {
 
           {/* Guest Ticket Detail */}
           {!user && selectedTicket && (
-            <div className="bg-white rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden max-w-2xl mx-auto">
+            <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden max-w-2xl mx-auto">
               {renderTicketDetail()}
             </div>
           )}
@@ -474,7 +474,7 @@ const MyTickets = () => {
           {/* Authenticated User Tabs: Tickets + Inbox */}
           {user && (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-              <TabsList className="bg-white border-2 border-gold/30 p-1">
+              <TabsList className="bg-[#FDFBF7] border-2 border-gold/30 p-1">
               <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground">
                   <Ticket className="w-4 h-4 mr-2" />
                   Tickets
@@ -494,9 +494,9 @@ const MyTickets = () => {
               <TabsContent value="tickets">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Ticket List */}
-                  <div className="bg-white rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
+                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
                     <div className="p-4 border-b border-gold/20 bg-gold/5">
-                      <h2 className="font-semibold text-black flex items-center gap-2">
+                      <h2 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
                         <Ticket className="w-4 h-4 text-gold" />
                         Your Tickets ({userTickets?.length || 0})
                       </h2>
@@ -534,8 +534,8 @@ const MyTickets = () => {
                                     <Badge className="bg-orange-500/20 text-orange-600 text-[10px] shrink-0">🔄</Badge>
                                   )}
                                 </div>
-                                <p className="text-black font-medium truncate text-sm">{ticket.subject}</p>
-                                <p className="text-gray-600 text-xs mt-1">
+                                <p className="text-[#1A1A1A] font-medium truncate text-sm">{ticket.subject}</p>
+                                <p className="text-[#5A4A2E] text-xs mt-1">
                                   {format(new Date(ticket.created_at), "MMM d, yyyy")}
                                 </p>
                               </button>
@@ -544,7 +544,7 @@ const MyTickets = () => {
                         </div>
                       </ScrollArea>
                     ) : (
-                      <div className="p-8 text-center text-gray-600">
+                      <div className="p-8 text-center text-[#5A4A2E]">
                         <Ticket className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No tickets found</p>
                       </div>
@@ -552,7 +552,7 @@ const MyTickets = () => {
                   </div>
 
                   {/* Ticket Detail */}
-                  <div className="bg-white rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
+                  <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
                     {renderTicketDetail()}
                   </div>
                 </div>
@@ -560,9 +560,9 @@ const MyTickets = () => {
 
               {/* Inbox Tab - JBJ messages only */}
               <TabsContent value="inbox">
-                <div className="bg-white rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
+                <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
                   <div className="p-4 border-b border-gold/20 bg-gold/5">
-                    <h2 className="font-semibold text-black flex items-center gap-2">
+                    <h2 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
                       <Inbox className="w-4 h-4 text-gold" />
                       JBJ Messages Inbox
                       {inboxCount > 0 && (
@@ -584,22 +584,22 @@ const MyTickets = () => {
                             className="w-full p-4 text-left hover:bg-gold/5 transition-colors"
                           >
                             <div className="flex items-center justify-between mb-1 gap-2">
-                              <span className="text-sm font-semibold text-black truncate">
+                              <span className="text-sm font-semibold text-[#1A1A1A] truncate">
                                 {msg.support_tickets?.subject || "Message from JBJ"}
                               </span>
                               <span className="font-mono text-[11px] text-gold shrink-0">
                                 {msg.support_tickets?.ticket_number || ""}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600 line-clamp-2">{msg.message}</p>
-                            <p className="text-xs text-gray-600 mt-1">
+                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{msg.message}</p>
+                            <p className="text-xs text-[#5A4A2E] mt-1">
                               {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                             </p>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <div className="p-12 text-center text-gray-600">
+                      <div className="p-12 text-center text-[#5A4A2E]">
                         <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No JBJ messages yet</p>
                         <p className="text-xs mt-1">Only direct JBJ replies appear here</p>

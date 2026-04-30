@@ -135,11 +135,11 @@ export default function BookDownloadDialog({
             <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <DialogTitle className="text-xl font-bold text-black">Opening Your Book!</DialogTitle>
-            <p className="text-black/60 text-sm">
-              Your copy of <span className="font-semibold text-black">{bookTitle}</span> is being prepared. Redirecting you now...
+            <DialogTitle className="text-xl font-bold text-[#1A1A1A]">Opening Your Book!</DialogTitle>
+            <p className="text-[#1A1A1A]/60 text-sm">
+              Your copy of <span className="font-semibold text-[#1A1A1A]">{bookTitle}</span> is being prepared. Redirecting you now...
             </p>
-            <div className="flex items-center justify-center gap-2 text-gray-600">
+            <div className="flex items-center justify-center gap-2 text-[#5A4A2E]">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="text-xs">Preparing book...</span>
             </div>
@@ -153,36 +153,36 @@ export default function BookDownloadDialog({
                 <DialogTitle className="text-lg font-bold text-white tracking-tight">Free Download</DialogTitle>
               </div>
               <p className="text-gold text-sm font-semibold">{bookTitle}</p>
-              <p className="text-gray-600 text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
+              <p className="text-[#5A4A2E] text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
             </div>
 
             {/* Form */}
             <div className="p-6 space-y-4">
-              <p className="text-black/70 text-sm text-center">
+              <p className="text-[#1A1A1A]/70 text-sm text-center">
                 Enter your details to receive your complimentary copy
               </p>
 
               <div className="space-y-3">
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                   <Input
                     type="text"
                     placeholder="Your name (optional)"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10 h-11 bg-white/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
+                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
                   />
                 </div>
 
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                   <Input
                     type="email"
                     placeholder="Your email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleDownload()}
-                    className="pl-10 h-11 bg-white/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
+                    className="pl-10 h-11 bg-[#FDFBF7]/90 border-gold/25 rounded-xl focus:border-gold focus:ring-2 focus:ring-gold/20"
                     required
                   />
                 </div>
@@ -201,7 +201,7 @@ export default function BookDownloadDialog({
                 {isSubmitting ? "Processing..." : "Download Free Report"}
               </Button>
 
-              <p className="text-[10px] text-black/40 text-center">
+              <p className="text-[10px] text-[#1A1A1A]/40 text-center">
                 By downloading, you agree to receive market updates from JBJ Global Real Estate. Unsubscribe anytime.
               </p>
             </div>

@@ -293,7 +293,7 @@ export default function CompanyProfileBuilder() {
   return (
     <div className="min-h-screen bg-[hsl(var(--background))]">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")} className="gap-1.5">
@@ -311,7 +311,7 @@ export default function CompanyProfileBuilder() {
           <Button
             onClick={exportPDF}
             disabled={exporting || !data.companyName}
-            className="gap-2 bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-black font-semibold text-sm"
+            className="gap-2 bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-[#1A1A1A] font-semibold text-sm"
           >
             {exporting ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
             {exporting ? "Exporting…" : "Export PDF"}
@@ -324,7 +324,7 @@ export default function CompanyProfileBuilder() {
         <div className="space-y-4">
 
           {/* ── URL Extraction Panel ── */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden hover:border-[hsl(var(--gold))] transition-colors">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden hover:border-[hsl(var(--gold))] transition-colors">
             <div className="flex items-center gap-2 p-4 border-b border-[hsl(var(--border))]">
               <Globe2 size={13} className="text-[hsl(var(--gold))]" />
               <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Generate from Website</span>
@@ -342,7 +342,7 @@ export default function CompanyProfileBuilder() {
                 <Button
                   onClick={extractFromUrl}
                   disabled={extractingUrl || !urlInput.trim()}
-                  className="gap-1.5 bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-black text-xs font-semibold shrink-0"
+                  className="gap-1.5 bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-[#1A1A1A] text-xs font-semibold shrink-0"
                 >
                   {extractingUrl ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
                   {extractingUrl ? "Extracting…" : "Extract"}
@@ -377,7 +377,7 @@ export default function CompanyProfileBuilder() {
 
           {/* Brand Assets */}
           <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors hover:border-[hsl(var(--gold))]">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors hover:border-[hsl(var(--gold))]">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -446,7 +446,7 @@ export default function CompanyProfileBuilder() {
 
           {/* ── Brand Color Palette ── */}
           <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors hover:border-[hsl(var(--gold))]">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors hover:border-[hsl(var(--gold))]">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -497,7 +497,7 @@ export default function CompanyProfileBuilder() {
           </Collapsible>
 
           {/* Template picker */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-3 shadow-sm">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 space-y-3 shadow-sm">
             <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Template</h3>
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin">
               {TEMPLATES.map(t => (
@@ -527,7 +527,7 @@ export default function CompanyProfileBuilder() {
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   "flex-1 py-1.5 rounded-lg text-[11px] font-medium transition-all",
-                  activeTab === tab.id ? "bg-white shadow-sm text-[hsl(var(--foreground))]" : "text-[hsl(var(--muted-foreground))]"
+                  activeTab === tab.id ? "bg-[#FDFBF7] shadow-sm text-[hsl(var(--foreground))]" : "text-[hsl(var(--muted-foreground))]"
                 )}
               >
                 {tab.label}
@@ -535,7 +535,7 @@ export default function CompanyProfileBuilder() {
             ))}
           </div>
 
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4 shadow-sm">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4 shadow-sm">
             {activeTab === "company" && (
               <>
                 <div className="space-y-1.5">
@@ -634,7 +634,7 @@ export default function CompanyProfileBuilder() {
         <div className="space-y-4">
           {/* ── Completion Score Panel ── */}
           <Collapsible open={scoreOpen} onOpenChange={setScoreOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.4)] transition-colors">
                   <div className="flex items-center gap-3 flex-1">
@@ -670,7 +670,7 @@ export default function CompanyProfileBuilder() {
           <div className="bg-[hsl(var(--muted)/0.5)] rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-bold text-[hsl(var(--foreground))] text-sm">Live Preview</h2>
-              <span className="text-[10px] text-[hsl(var(--muted-foreground))] bg-white px-2 py-1 rounded-full border border-[hsl(var(--border))]">A4 · {cfg.label}</span>
+              <span className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[#FDFBF7] px-2 py-1 rounded-full border border-[hsl(var(--border))]">A4 · {cfg.label}</span>
             </div>
             <div className="overflow-y-auto max-h-[800px] overflow-x-hidden">
               <div style={{ transform: "scale(0.58)", transformOrigin: "top left", width: `${100/0.58}%` }}>

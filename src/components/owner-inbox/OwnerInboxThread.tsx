@@ -156,7 +156,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
   };
 
   return (
-    <Card className="border-2 border-gold/20 bg-white/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
+    <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
       {/* Header */}
       <CardHeader className="border-b border-gold/10 py-3 px-4 flex-shrink-0">
         <div className="flex items-center justify-between">
@@ -169,10 +169,10 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               )}
             </div>
             <div>
-              <h3 className="font-semibold text-black">
+              <h3 className="font-semibold text-[#1A1A1A]">
                 {thread.contact_name || thread.contact_identifier}
               </h3>
-              <p className="text-xs text-gray-600">{thread.contact_identifier}</p>
+              <p className="text-xs text-[#5A4A2E]">{thread.contact_identifier}</p>
             </div>
           </div>
 
@@ -232,8 +232,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <Clock className="h-12 w-12 text-gray-400 mb-4" />
-                <p className="text-gray-600">No messages yet</p>
+                <Clock className="h-12 w-12 text-[#8A7556] mb-4" />
+                <p className="text-[#5A4A2E]">No messages yet</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -246,8 +246,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                   >
                     <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                       message.direction === 'outbound'
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black rounded-tr-sm'
-                        : 'bg-white border border-gold/20 text-black rounded-tl-sm'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] rounded-tr-sm'
+                        : 'bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A] rounded-tl-sm'
                     }`}>
                       {message.voice_url && (
                         <div className="flex items-center gap-2 mb-2">
@@ -266,13 +266,13 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                           <div className="h-1 flex-1 bg-gold/20 rounded-full">
                             <div className="h-full w-1/3 bg-gold rounded-full" />
                           </div>
-                          <span className="text-xs text-gray-600">
+                          <span className="text-xs text-[#5A4A2E]">
                             {message.voice_duration_seconds || 0}s
                           </span>
                         </div>
                       )}
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                      <div className="flex items-center justify-between mt-2 text-[10px] text-gray-600">
+                      <div className="flex items-center justify-between mt-2 text-[10px] text-[#5A4A2E]">
                         <span>
                           {format(new Date(message.created_at), 'HH:mm')}
                         </span>
@@ -302,7 +302,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-gold" />
-                    <span className="text-sm font-medium text-black">AI Draft — Jane Bou Jaoude's style</span>
+                    <span className="text-sm font-medium text-[#1A1A1A]">AI Draft — Jane Bou Jaoude's style</span>
                   </div>
                   <Button
                     variant="ghost"
@@ -313,7 +313,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     <X className="h-3 w-3" />
                   </Button>
                 </div>
-                <p className="text-sm text-gray-600 mb-3">{aiDraft}</p>
+                <p className="text-sm text-[#5A4A2E] mb-3">{aiDraft}</p>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="primary"
@@ -397,8 +397,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 </Button>
               </div>
             </div>
-            <p className="text-[10px] text-gray-600 mt-2 text-center">
-              Press <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Shift+Enter</kbd> for new line
+            <p className="text-[10px] text-[#5A4A2E] mt-2 text-center">
+              Press <kbd className="px-1 py-0.5 bg-[#F7F2EA] rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1 py-0.5 bg-[#F7F2EA] rounded text-[10px]">Shift+Enter</kbd> for new line
             </p>
           </div>
         </TabsContent>
@@ -411,8 +411,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                   <User className="h-8 w-8 text-gold" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-black">{thread.lead.full_name}</h3>
-                  <p className="text-sm text-gray-600">CRM Lead</p>
+                  <h3 className="text-lg font-semibold text-[#1A1A1A]">{thread.lead.full_name}</h3>
+                  <p className="text-sm text-[#5A4A2E]">CRM Lead</p>
                 </div>
               </div>
               <Button variant="outline" className="w-full border-gold/30">
@@ -421,9 +421,9 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <LinkIcon className="h-12 w-12 text-gray-400 mb-4" />
-              <p className="text-gray-600 font-medium">Not linked to a lead</p>
-              <p className="text-gray-600 text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
+              <LinkIcon className="h-12 w-12 text-[#8A7556] mb-4" />
+              <p className="text-[#5A4A2E] font-medium">Not linked to a lead</p>
+              <p className="text-[#5A4A2E] text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
               <div className="flex gap-2 mt-4">
                 <Button variant="outline" className="border-gold/30">
                   Link to Lead
@@ -438,14 +438,14 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
         <TabsContent value="activity" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <FileText className="h-12 w-12 text-gray-400 mb-4" />
-            <p className="text-gray-600">Activity timeline coming soon</p>
+            <FileText className="h-12 w-12 text-[#8A7556] mb-4" />
+            <p className="text-[#5A4A2E]">Activity timeline coming soon</p>
           </div>
         </TabsContent>
 
         <TabsContent value="ai" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
           <div className="space-y-4">
-            <h4 className="font-medium text-black flex items-center gap-2">
+            <h4 className="font-medium text-[#1A1A1A] flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-gold" />
               Quick Templates
             </h4>
@@ -459,7 +459,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 >
                   <div>
                     <p className="font-medium text-sm">{template.name}</p>
-                    <p className="text-xs text-gray-600 truncate">{template.content.substring(0, 50)}...</p>
+                    <p className="text-xs text-[#5A4A2E] truncate">{template.content.substring(0, 50)}...</p>
                   </div>
                 </Button>
               ))}

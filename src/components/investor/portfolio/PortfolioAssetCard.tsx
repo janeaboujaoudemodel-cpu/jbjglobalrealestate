@@ -29,7 +29,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
       owned: "bg-emerald-500/10 text-emerald-600 border-emerald-500/30",
       reserved: "bg-amber-500/10 text-amber-600 border-amber-500/30",
       "under-evaluation": "bg-blue-500/10 text-blue-600 border-blue-500/30",
-      sold: "bg-gray-500/10 text-gray-600 border-gray-500/30",
+      sold: "bg-[#B89555]/10 text-[#5A4A2E] border-[#B89555]/30/30",
     };
     const labels = {
       owned: "Owned",
@@ -88,7 +88,7 @@ export default function PortfolioAssetCard({ asset }: PortfolioAssetCardProps) {
   return (
     <Card className="border-2 border-gold/30 overflow-hidden group hover:border-gold transition-colors">
       {/* Image Header */}
-      <div className="aspect-video relative overflow-hidden bg-gray-100">
+      <div className="aspect-video relative overflow-hidden bg-[#F7F2EA]">
         {asset.imageUrl ? (
           <img
             src={asset.imageUrl}

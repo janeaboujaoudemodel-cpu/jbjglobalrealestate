@@ -44,11 +44,11 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Price Per Sqft</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
@@ -77,7 +77,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+      <div className="flex items-center gap-3 text-xs text-[#5A4A2E] mb-3">
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
@@ -85,7 +85,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -103,11 +103,11 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Investment Metrics</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
           <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
@@ -139,7 +139,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
         {yieldMetrics.map((m) => (
           <span key={m.name} className="flex items-center gap-1">
             <div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} />
-            <span className="text-gray-600">{m.name}</span>
+            <span className="text-[#5A4A2E]">{m.name}</span>
           </span>
         ))}
       </div>
@@ -147,7 +147,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -238,11 +238,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Supply vs Demand</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
           ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
@@ -283,11 +283,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} />
-          <span className="text-gray-600">Supply (New Units)</span>
+          <span className="text-[#5A4A2E]">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full bg-emerald-500" />
-          <span className="text-gray-600">Demand (Absorption)</span>
+          <span className="text-[#5A4A2E]">Demand (Absorption)</span>
         </div>
       </div>
 
@@ -295,7 +295,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -319,11 +319,11 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
   const totalDevs = stats?.developers?.length || devEntries.length;
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Building2 className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
         </div>
         <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
           {totalDevs} Developers
@@ -333,22 +333,22 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
               <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-black font-semibold text-sm truncate">{dev.name}</p>
+              <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
               {dev.projects && (
-                <p className="text-gray-600 text-xs mt-0.5 truncate">{dev.projects}</p>
+                <p className="text-[#5A4A2E] text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-gray-500 flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#8A7556] flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
 
       {devEntries.length === 0 && (
-        <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+        <div className="text-[#5A4A2E] text-sm leading-relaxed whitespace-pre-line">
           {text}
         </div>
       )}
@@ -472,7 +472,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Area Intelligence
           </h2>
         </div>
@@ -480,24 +480,24 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {/* Quick Stats */}
         {hasStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
-              <div className="text-gray-600 text-xs mt-1">Active Projects</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Active Projects</div>
             </div>
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
-              <div className="text-gray-600 text-xs mt-1">Developers</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
-              <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                <div className="text-gray-600 text-xs mt-1">Avg. Starting Price</div>
+                <div className="text-[#5A4A2E] text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
-              <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {stats.pricePerSqft.toLocaleString()}</div>
-                <div className="text-gray-600 text-xs mt-1">Est. Price/sqft</div>
+                <div className="text-[#5A4A2E] text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}
           </div>
@@ -516,7 +516,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
-                <p className="text-gray-600 text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-[#5A4A2E] text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -525,7 +525,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             ) : (
               <>
                 <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-                <p className="text-gray-600 text-sm">Analyzing {areaName}...</p>
+                <p className="text-[#5A4A2E] text-sm">Analyzing {areaName}...</p>
               </>
             )}
           </div>
@@ -535,47 +535,47 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Overview Card - Enhanced */}
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center">
                         <Building2 className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-black text-lg">Area Overview</h3>
-                        <span className="text-gray-600 text-xs">{areaName} Community Profile</span>
+                        <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
+                        <span className="text-[#5A4A2E] text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
+                    <p className="text-[#5A4A2E] text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
                     
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Home className="w-4 h-4 text-gold mx-auto mb-1" />
-                          <div className="text-lg font-bold text-black">{stats.totalProjects}</div>
-                          <div className="text-[10px] text-gray-600 uppercase tracking-wider">Projects</div>
+                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
+                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
-                          <div className="text-lg font-bold text-black">{stats.developers.length}</div>
-                          <div className="text-[10px] text-gray-600 uppercase tracking-wider">Developers</div>
+                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.developers.length}</div>
+                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
-                          <div className="text-lg font-bold text-black">{stats.pricePerSqft.toLocaleString()}</div>
-                          <div className="text-[10px] text-gray-600 uppercase tracking-wider">AED/sqft</div>
+                          <div className="text-lg font-bold text-[#1A1A1A]">{stats.pricePerSqft.toLocaleString()}</div>
+                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
-                          <div className="text-lg font-bold text-black">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                          <div className="text-[10px] text-gray-600 uppercase tracking-wider">Avg Price</div>
+                          <div className="text-lg font-bold text-[#1A1A1A]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Avg Price</div>
                         </div>
                       )}
                     </div>
@@ -585,7 +585,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
                     <div className="border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-[10px] text-gray-600 uppercase tracking-widest font-semibold">Status Mix</span>
+                        <span className="text-[10px] text-[#5A4A2E] uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
@@ -593,7 +593,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                               status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
                               status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-zinc-400'
                             }`} />
-                            <span className="text-xs text-gray-600">{status} <span className="font-semibold text-black">({count as number})</span></span>
+                            <span className="text-xs text-[#5A4A2E]">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
                           </div>
                         ))}
                       </div>
@@ -604,7 +604,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
               
               {/* Rating Card - Enhanced with radial gauge */}
               {ratingScore !== null && (
-                <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
+                <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
                   {/* Ambient glow */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gold/10 rounded-full blur-[60px] pointer-events-none" />
                   
@@ -635,13 +635,13 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-4xl font-bold text-gold">{ratingScore}</span>
-                      <span className="text-gray-500 text-[10px] font-medium">/10</span>
+                      <span className="text-[#8A7556] text-[10px] font-medium">/10</span>
                     </div>
                   </div>
                   
-                  <div className="text-gray-700 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-[#5A4A2E] text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-gray-600 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-[#5A4A2E] text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
@@ -705,7 +705,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-gray-600 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-[#5A4A2E] text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

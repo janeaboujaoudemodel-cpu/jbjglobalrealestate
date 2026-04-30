@@ -192,14 +192,14 @@ export function FloorPlanGallery({
             <>
               <button
                 onClick={handlePrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#1A1A1A]/70 transition-colors"
                 aria-label="Previous floor plan"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={handleNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#1A1A1A]/70 transition-colors"
                 aria-label="Next floor plan"
               >
                 <ChevronRight className="w-5 h-5" />

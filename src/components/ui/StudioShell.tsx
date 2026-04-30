@@ -104,7 +104,7 @@ export function StudioShell({
     <div className="flex flex-col h-screen overflow-hidden bg-[hsl(var(--background))]">
 
       {/* ── Top Bar ──────────────────────────────────────────────────────── */}
-      <header className="h-14 flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm z-30 flex items-center px-3 gap-2">
+      <header className="h-14 flex-shrink-0 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-sm z-30 flex items-center px-3 gap-2">
         {/* Back */}
         <button
           onClick={() => navigate(backPath)}
@@ -189,7 +189,7 @@ export function StudioShell({
         <nav
           className={cn(
             // Desktop: vertical rail
-            "hidden lg:flex flex-col items-center gap-1 py-3 px-1.5 border-r border-[hsl(var(--border))] bg-white/95 overflow-y-auto",
+            "hidden lg:flex flex-col items-center gap-1 py-3 px-1.5 border-r border-[hsl(var(--border))] bg-[#FDFBF7]/95 overflow-y-auto",
             "w-16 flex-shrink-0",
             fullscreen && "lg:hidden"
           )}
@@ -234,7 +234,7 @@ export function StudioShell({
 
         {/* Mobile: horizontal tab bar below top bar (rendered above canvas) */}
         <div className={cn(
-          "lg:hidden absolute left-0 right-0 z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm flex overflow-x-auto",
+          "lg:hidden absolute left-0 right-0 z-20 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-sm flex overflow-x-auto",
           "top-14",
           fullscreen && "hidden"
         )}>
@@ -290,13 +290,13 @@ export function StudioShell({
         {activePanel && !fullscreen && (
           <aside
             className={cn(
-              "hidden lg:flex flex-col border-l border-[hsl(var(--border))] bg-white overflow-y-auto flex-shrink-0",
+              "hidden lg:flex flex-col border-l border-[hsl(var(--border))] bg-[#FDFBF7] overflow-y-auto flex-shrink-0",
               "w-80"
             )}
           >
             {/* Panel header */}
             <div
-              className="flex items-center gap-2 px-4 py-3 border-b border-[hsl(var(--border))] flex-shrink-0 sticky top-0 bg-white z-10"
+              className="flex items-center gap-2 px-4 py-3 border-b border-[hsl(var(--border))] flex-shrink-0 sticky top-0 bg-[#FDFBF7] z-10"
             >
               <span style={{ color: toolColor }}>
                 {sections.find(s => s.id === activeSection)?.icon}
@@ -325,7 +325,7 @@ export function StudioShell({
         {/* Mobile: Bottom Sheet Panel (static container, crossfade content) */}
         {activePanel && !fullscreen && (
           <div
-            className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[hsl(var(--border))] rounded-t-2xl shadow-2xl"
+            className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FDFBF7] border-t border-[hsl(var(--border))] rounded-t-2xl shadow-2xl"
             style={{ maxHeight: "55vh" }}
           >
             {/* Drag handle */}

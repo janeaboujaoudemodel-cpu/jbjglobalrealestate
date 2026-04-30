@@ -61,7 +61,7 @@ const CERTIFICATIONS = [
 
 // Unified light blue theme for all certification cards with glow effect
 const CARD_THEME = {
-  bg: "bg-black/40 backdrop-blur-sm",
+  bg: "bg-[#1A1A1A]/40 backdrop-blur-sm",
   border: "border-2 border-sky-400/50 hover:border-sky-300",
   glow: "shadow-[0_0_20px_rgba(56,189,248,0.2)] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]",
   iconBg: "bg-sky-500/20 border border-sky-400/30",
@@ -71,7 +71,7 @@ const CARD_THEME = {
 
 export function BrokerToolkitAcademy() {
   return (
-    <section id="section-academy" className="py-8 md:py-10 bg-black">
+    <section id="section-academy" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-4">
         {/* Active Sky Blue Layer */}
         <div className="bg-gradient-to-br from-sky-900/90 via-sky-900/80 to-sky-950/90 border border-sky-500/30 rounded-2xl p-6 md:p-8 shadow-lg">

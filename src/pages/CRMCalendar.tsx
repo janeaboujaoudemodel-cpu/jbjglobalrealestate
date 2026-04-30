@@ -119,23 +119,23 @@ const CRMCalendar = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 lg:top-[48px] z-50">
+      <header className="border-b border-[#B89555]/30 bg-[#FDFBF7] sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
             </Link>
-            <div className="h-6 w-px bg-gray-200" />
+            <div className="h-6 w-px bg-[#EFE6D6]" />
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg bg-purple-500/20">
                 <CalendarIcon className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">Calendar</h1>
-                <p className="text-xs text-gray-600">{events.length} events this month</p>
+                <h1 className="text-lg font-bold text-[#1A1A1A]">Calendar</h1>
+                <p className="text-xs text-[#5A4A2E]">{events.length} events this month</p>
               </div>
             </div>
           </div>
@@ -150,9 +150,9 @@ const CRMCalendar = () => {
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Calendar */}
-          <Card className="lg:col-span-2 border-gray-200 bg-white">
+          <Card className="lg:col-span-2 border-[#B89555]/30 bg-[#FDFBF7]">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-bold text-gray-900">
+              <CardTitle className="text-lg font-bold text-[#1A1A1A]">
                 {format(currentMonth, 'MMMM yyyy')}
               </CardTitle>
               <div className="flex gap-2">
@@ -183,7 +183,7 @@ const CRMCalendar = () => {
               {/* Day Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="text-center text-xs font-semibold text-gray-600 py-2">
+                  <div key={day} className="text-center text-xs font-semibold text-[#5A4A2E] py-2">
                     {day}
                   </div>
                 ))}
@@ -209,11 +209,11 @@ const CRMCalendar = () => {
                           ? 'border-gold bg-gold/5' 
                           : isSelected 
                             ? 'border-blue-500 bg-blue-50' 
-                            : 'border-transparent hover:bg-gray-50'
+                            : 'border-transparent hover:bg-[#F7F2EA]'
                       }`}
                     >
                       <span className={`text-sm font-medium ${
-                        isToday(day) ? 'text-gold' : 'text-gray-900'
+                        isToday(day) ? 'text-gold' : 'text-[#1A1A1A]'
                       }`}>
                         {format(day, 'd')}
                       </span>
@@ -227,7 +227,7 @@ const CRMCalendar = () => {
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
-                          <span className="text-xs text-gray-600">+{dayEvents.length - 2} more</span>
+                          <span className="text-xs text-[#5A4A2E]">+{dayEvents.length - 2} more</span>
                         )}
                       </div>
                     </button>
@@ -238,30 +238,30 @@ const CRMCalendar = () => {
           </Card>
 
           {/* Sidebar - Selected Day Events */}
-          <Card className="border-gray-200 bg-white">
+          <Card className="border-[#B89555]/30 bg-[#FDFBF7]">
             <CardHeader>
-              <CardTitle className="text-base font-bold text-gray-900">
+              <CardTitle className="text-base font-bold text-[#1A1A1A]">
                 {selectedDate ? format(selectedDate, 'EEEE, MMMM d') : 'Select a day'}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {todayEvents.length === 0 ? (
                 <div className="text-center py-8">
-                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-gray-600" />
-                  <p className="text-sm text-gray-600">No events scheduled</p>
+                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-[#5A4A2E]" />
+                  <p className="text-sm text-[#5A4A2E]">No events scheduled</p>
                 </div>
               ) : (
                 todayEvents.map(event => {
                   const Icon = getEventIcon(event.type);
                   return (
-                    <div key={event.id} className="p-3 rounded-lg bg-gray-50 border border-gray-100">
+                    <div key={event.id} className="p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                       <div className="flex items-start gap-3">
                         <div className={`p-2 rounded-lg ${getEventColor(event.type)}/20`}>
                           <Icon className={`h-4 w-4 ${getEventColor(event.type).replace('bg-', 'text-')}`} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 truncate">{event.title}</p>
-                          <p className="text-xs text-gray-600">{event.time}</p>
+                          <p className="font-medium text-[#1A1A1A] truncate">{event.title}</p>
+                          <p className="text-xs text-[#5A4A2E]">{event.time}</p>
                           {event.leadName && (
                             <Badge variant="outline" className="mt-1 text-xs">
                               {event.leadName}

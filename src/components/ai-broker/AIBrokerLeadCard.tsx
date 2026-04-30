@@ -91,18 +91,18 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
   return (
     <>
-      <Card className="bg-zinc-900 border-gray-800 hover:border-gray-700 transition-all duration-200 hover:shadow-lg">
+      <Card className="bg-zinc-900 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all duration-200 hover:shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 border border-gray-700">
+              <Avatar className="h-10 w-10 border border-[#1A1A1A]">
                 <AvatarFallback className="bg-zinc-800 text-gold text-sm">
                   {getInitials(lead.full_name)}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h3 className="text-white font-medium">{lead.full_name}</h3>
-                <p className="text-gray-600 text-sm flex items-center gap-1">
+                <p className="text-[#5A4A2E] text-sm flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {getTimeAgo(lead.created_at)}
                 </p>
@@ -111,12 +111,12 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-600 h-8 w-8">
+                <Button variant="ghost" size="icon" className="text-[#5A4A2E] h-8 w-8">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-900 border-gray-700">
-                <DropdownMenuItem className="text-gray-600 focus:bg-zinc-800">
+              <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A]">
+                <DropdownMenuItem className="text-[#5A4A2E] focus:bg-zinc-800">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Details
                 </DropdownMenuItem>
@@ -126,7 +126,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
           {/* Interest Note */}
           {lead.interest_note && (
-            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+            <p className="text-[#5A4A2E] text-sm mb-3 line-clamp-2">
               {lead.interest_note}
             </p>
           )}
@@ -134,10 +134,10 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
           {/* Contact Info */}
           <div className="space-y-1 mb-4 text-sm">
             {lead.email && (
-              <p className="text-gray-600 truncate">{lead.email}</p>
+              <p className="text-[#5A4A2E] truncate">{lead.email}</p>
             )}
             {lead.phone && (
-              <p className="text-gray-600">{lead.phone}</p>
+              <p className="text-[#5A4A2E]">{lead.phone}</p>
             )}
           </div>
 
@@ -166,7 +166,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               onClick={handleCallClick}
               disabled={!lead.phone}
               variant="outline"
-              className="border-gray-700 text-gray-600 hover:bg-gray-800"
+              className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
             >
               <Phone className="h-4 w-4" />
             </Button>

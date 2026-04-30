@@ -190,20 +190,20 @@ export const FAQTableOfContents = ({
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
+      <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
         <div className="flex items-center gap-2">
           <List className="w-5 h-5 text-gold" />
-          <h3 className="text-black font-semibold">{title}</h3>
+          <h3 className="text-[#1A1A1A] font-semibold">{title}</h3>
         </div>
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+          className="w-8 h-8 rounded-lg bg-[#F7F2EA] hover:bg-gold/10 flex items-center justify-center transition-colors"
           aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
         >
           {isMinimized ? (
-            <ChevronDown className="w-4 h-4 text-gray-600" />
+            <ChevronDown className="w-4 h-4 text-[#5A4A2E]" />
           ) : (
-            <ChevronUp className="w-4 h-4 text-gray-600" />
+            <ChevronUp className="w-4 h-4 text-[#5A4A2E]" />
           )}
         </button>
       </div>
@@ -220,14 +220,14 @@ export const FAQTableOfContents = ({
           >
             {/* Search Bar */}
             <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
               <Input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search your question..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 pr-10 bg-gray-50 border-gray-200 focus:border-gold focus:ring-gold/20"
+                className="pl-10 pr-10 bg-[#F7F2EA] border-[#B89555]/30 focus:border-gold focus:ring-gold/20"
               />
               {searchQuery && (
                 <button
@@ -237,9 +237,9 @@ export const FAQTableOfContents = ({
                     setShowNoResults(false);
                     setShowContactForm(false);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFE6D6] hover:bg-[#EFE6D6] flex items-center justify-center transition-colors"
                 >
-                  <X className="w-3 h-3 text-gray-600" />
+                  <X className="w-3 h-3 text-[#5A4A2E]" />
                 </button>
               )}
             </div>
@@ -247,13 +247,13 @@ export const FAQTableOfContents = ({
             {/* Search Results */}
             {searchResults.length > 0 && (
               <div className="mb-4 p-2 bg-gold/5 rounded-lg border border-gold/20">
-                <p className="text-xs text-gray-600 mb-2">{searchResults.length} result(s) found:</p>
+                <p className="text-xs text-[#5A4A2E] mb-2">{searchResults.length} result(s) found:</p>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {searchResults.map((result, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleResultClick(result.categoryIndex, result.questionIndex)}
-                      className="w-full text-left text-sm text-gray-700 hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
+                      className="w-full text-left text-sm text-[#5A4A2E] hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
                     >
                       {result.question}
                     </button>
@@ -264,12 +264,12 @@ export const FAQTableOfContents = ({
 
             {/* No Results - Show submit option */}
             {showNoResults && !showContactForm && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
                 <div className="flex items-start gap-2 mb-3">
                   <HelpCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-black">Question not found</p>
-                    <p className="text-xs text-gray-600 mt-1">
+                    <p className="text-sm font-medium text-[#1A1A1A]">Question not found</p>
+                    <p className="text-xs text-[#5A4A2E] mt-1">
                       Would you like to submit this question? We'll add it to our FAQ and contact you with the answer.
                     </p>
                   </div>
@@ -277,7 +277,7 @@ export const FAQTableOfContents = ({
                 <Button
                   onClick={() => setShowContactForm(true)}
                   size="sm"
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-medium"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-medium"
                 >
                   <Send className="w-3 h-3 mr-2" />
                   Submit Question
@@ -287,33 +287,33 @@ export const FAQTableOfContents = ({
 
             {/* Contact Form for submitting question */}
             {showContactForm && (
-              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
-                <p className="text-sm font-medium text-black">Your Contact Details (Optional)</p>
+              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30 space-y-3">
+                <p className="text-sm font-medium text-[#1A1A1A]">Your Contact Details (Optional)</p>
                 <Input
                   type="text"
                   placeholder="Your Name"
                   value={contactInfo.name}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-white border-gray-200 text-sm"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
                 />
                 <Input
                   type="email"
                   placeholder="Your Email"
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-white border-gray-200 text-sm"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
                 />
                 <Input
                   type="tel"
                   placeholder="Your Phone"
                   value={contactInfo.phone}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-white border-gray-200 text-sm"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
                 />
                 <Button
                   onClick={handleSubmitQuestion}
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-medium"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-medium"
                 >
                   {isSubmitting ? (
                     <>
@@ -339,19 +339,19 @@ export const FAQTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-gold/40"
+                      : "text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <category.icon className={cn(
                     "w-4 h-4 flex-shrink-0",
-                    activeId === `category-${index}` ? "text-black" : "text-gold"
+                    activeId === `category-${index}` ? "text-[#1A1A1A]" : "text-gold"
                   )} />
                   <span className="flex-1 truncate">{category.title}</span>
                   <span className={cn(
                     "text-xs px-2 py-0.5 rounded-full",
                     activeId === `category-${index}`
-                      ? "bg-black/10 text-black"
+                      ? "bg-[#1A1A1A]/10 text-[#1A1A1A]"
                       : "bg-gold/10 text-gold"
                   )}>
                     {category.questions.length}

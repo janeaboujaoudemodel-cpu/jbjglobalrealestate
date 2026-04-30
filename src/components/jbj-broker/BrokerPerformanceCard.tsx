@@ -40,8 +40,8 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
             )}
           </Avatar>
           <div>
-            <h3 className="text-black font-semibold text-lg">{broker.name}</h3>
-            <p className="text-black/60 text-sm">{broker.email}</p>
+            <h3 className="text-[#1A1A1A] font-semibold text-lg">{broker.name}</h3>
+            <p className="text-[#1A1A1A]/60 text-sm">{broker.email}</p>
             {broker.specialization && (
               <p className="text-gold text-xs mt-1">{broker.specialization}</p>
             )}
@@ -53,7 +53,7 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
               ? "bg-emerald-500/20 text-emerald-700 border-emerald-500/30"
               : broker.status === "paused"
               ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
-              : "bg-gray-500/20 text-gray-700 border-gray-500/30"
+              : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30"
           }
         >
           {broker.status}
@@ -63,12 +63,12 @@ export function BrokerPerformanceCard({ broker, onToggleStatus }: BrokerPerforma
       {/* Capacity Bar */}
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-2">
-          <span className="text-black/60 flex items-center gap-1">
+          <span className="text-[#1A1A1A]/60 flex items-center gap-1">
             <Users className="h-3 w-3" /> Active Leads
           </span>
-          <span className="text-black font-medium">{broker.active_leads} / {broker.capacity}</span>
+          <span className="text-[#1A1A1A] font-medium">{broker.active_leads} / {broker.capacity}</span>
         </div>
-        <div className="h-2 bg-black/10 rounded-full overflow-hidden">
+        <div className="h-2 bg-[#1A1A1A]/10 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all ${
               usagePercent > 90 ? "bg-red-500" : usagePercent > 70 ? "bg-amber-500" : "bg-emerald-500"

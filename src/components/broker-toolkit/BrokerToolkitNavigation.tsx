@@ -23,7 +23,7 @@ const SECTIONS = [
 
 export function BrokerToolkitNavigation({ activeSection, onSectionChange }: BrokerToolkitNavigationProps) {
   return (
-    <section id="what-you-get" className="py-8 sticky top-16 z-40 bg-black/95 backdrop-blur-lg relative transform-gpu">
+    <section id="what-you-get" className="py-8 sticky top-16 z-40 bg-[#1A1A1A]/95 backdrop-blur-lg relative transform-gpu">
       {/* Bottom gold glow divider */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-1"
@@ -49,12 +49,12 @@ export function BrokerToolkitNavigation({ activeSection, onSectionChange }: Brok
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${
                   isActive
                     ? isGrowth
-                      ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black shadow-lg border border-gold/50"
+                      ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] shadow-lg border border-gold/50"
                       : `${section.activeBg} text-white shadow-lg`
-                    : "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-black text-black hover:border-gold"
+                    : "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#1A1A1A] text-[#1A1A1A] hover:border-gold"
                 }`}
               >
-                <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-black" : isActive ? "" : "text-gold"}`} />
+                <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-[#1A1A1A]" : isActive ? "" : "text-gold"}`} />
                 <span className={`text-sm font-medium ${isActive && isGrowth ? "text-gold" : ""}`}>{section.label}</span>
               </button>
             );

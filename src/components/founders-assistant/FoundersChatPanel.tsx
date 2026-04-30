@@ -413,14 +413,14 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
               </div>
               <div>
-                <h3 className="text-black font-semibold text-sm flex items-center gap-2">
+                <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
                   Amanda Clarke
                   <Badge className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30 text-[10px]">
                     <Sparkles className="w-2.5 h-2.5 mr-0.5" />
                     Online
                   </Badge>
                 </h3>
-                <p className="text-gray-600 text-xs">Your Personal Executive Assistant</p>
+                <p className="text-[#5A4A2E] text-xs">Your Personal Executive Assistant</p>
               </div>
             </>
           )}
@@ -429,7 +429,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={handleNewChat}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -438,7 +438,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={() => setShowHistoryDialog(true)}
           >
             <History className="w-3.5 h-3.5" />
@@ -452,7 +452,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
+            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
             onClick={handleSummarize}
             disabled={isSummarizing || localMessages.length < 3}
             title="Summarize & save chat"
@@ -481,7 +481,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               <div className={`max-w-[80%] ${
                 message.role === 'user' 
                   ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' 
-                  : 'bg-white text-black border border-[hsl(var(--gold))]/30 shadow-sm'
+                  : 'bg-[#FDFBF7] text-[#1A1A1A] border border-[hsl(var(--gold))]/30 shadow-sm'
               } rounded-2xl px-4 py-3`}>
                 {message.isTyping ? (
                   <div className="flex gap-1.5 py-1 px-2">
@@ -545,12 +545,12 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="w-4 h-4 text-[hsl(var(--gold))]" />
-              <span className="text-xs text-gray-600 font-medium">Quick Actions & Suggested Prompts</span>
+              <span className="text-xs text-[#5A4A2E] font-medium">Quick Actions & Suggested Prompts</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
                 <button key={i} onClick={() => handleSuggestedPrompt(prompt)}
-                  className="text-left px-3 py-2 rounded-lg bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] text-sm text-black hover:shadow-md transition-all group">
+                  className="text-left px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] text-sm text-[#1A1A1A] hover:shadow-md transition-all group">
                   <span className="text-[hsl(var(--gold))] group-hover:text-[#A68444]">→</span> {prompt}
                 </button>
               ))}
@@ -575,18 +575,18 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showCommands && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3">
-            <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
+            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
               <Command className="w-3 h-3 text-[hsl(var(--gold))]" />
               Available Commands
             </p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {SUGGESTED_COMMANDS.map((cmd, i) => (
                 <button key={i} onClick={() => insertCommand(cmd.command)}
-                  className="flex items-start gap-2 px-3 py-2 rounded-lg bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] hover:shadow-md transition-all text-left group">
+                  className="flex items-start gap-2 px-3 py-2 rounded-lg bg-[#FDFBF7] border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] hover:shadow-md transition-all text-left group">
                   <cmd.icon className="w-4 h-4 text-[hsl(var(--gold))] mt-0.5" />
                   <div>
-                    <p className="text-sm text-black group-hover:text-[hsl(var(--gold))] transition-colors">{cmd.label}</p>
-                    <p className="text-xs text-gray-600">{cmd.description}</p>
+                    <p className="text-sm text-[#1A1A1A] group-hover:text-[hsl(var(--gold))] transition-colors">{cmd.label}</p>
+                    <p className="text-xs text-[#5A4A2E]">{cmd.description}</p>
                   </div>
                 </button>
               ))}
@@ -597,21 +597,21 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showMentions && filteredMembers.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3 max-h-48 overflow-y-auto">
-            <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
+            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
               <AtSign className="w-3 h-3 text-[hsl(var(--gold))]" />
               Mention Team Member
             </p>
             <div className="space-y-1">
               {filteredMembers.slice(0, 6).map((member) => (
                 <button key={member.id} onClick={() => insertMention(member)}
-                  className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-white hover:shadow-sm transition-colors">
-                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/30 bg-white">
+                  className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#FDFBF7] hover:shadow-sm transition-colors">
+                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/30 bg-[#FDFBF7]">
                     <img src={member.avatar} alt={member.name} className="w-full h-full"
                       style={{ objectFit: "cover", objectPosition: "center 15%" }} />
                   </div>
                   <div className="text-left flex-1">
-                    <p className="text-sm text-black">{member.name}</p>
-                    <p className="text-xs text-gray-600">{member.role}</p>
+                    <p className="text-sm text-[#1A1A1A]">{member.name}</p>
+                    <p className="text-xs text-[#5A4A2E]">{member.role}</p>
                   </div>
                   {member.isAI && <Sparkles className="w-4 h-4 text-[hsl(var(--gold))] flex-shrink-0" />}
                 </button>
@@ -624,16 +624,16 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
       {/* Pending files */}
       {pendingFiles.length > 0 && (
         <div className="px-4 py-2 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-          <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
+          <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
             <Upload className="w-3 h-3 text-[hsl(var(--gold))]" /> Files ready to send ({pendingFiles.length})
           </p>
           <div className="flex flex-wrap gap-2">
             {pendingFiles.map((file) => (
-              <div key={file.id} className="flex items-center gap-2 bg-white border border-[hsl(var(--gold))]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
+              <div key={file.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[hsl(var(--gold))]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
                 {getFileIcon(file.type)}
-                <span className="text-black truncate max-w-[120px]">{file.name}</span>
-                <span className="text-gray-600">{formatFileSize(file.size)}</span>
-                <button onClick={() => removePendingFile(file.id)} className="text-gray-600 hover:text-red-500 transition-colors">
+                <span className="text-[#1A1A1A] truncate max-w-[120px]">{file.name}</span>
+                <span className="text-[#5A4A2E]">{formatFileSize(file.size)}</span>
+                <button onClick={() => removePendingFile(file.id)} className="text-[#5A4A2E] hover:text-red-500 transition-colors">
                   <X className="w-3 h-3" />
                 </button>
               </div>
@@ -646,20 +646,20 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
       <div className="flex-shrink-0 p-4 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="flex items-center gap-2 max-w-4xl mx-auto">
           <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} variant="ghost" size="icon"
-            className="w-10 h-10 rounded-full bg-white/80 text-[hsl(var(--gold))] hover:bg-white border border-[hsl(var(--gold))]/30" />
+            className="w-10 h-10 rounded-full bg-[#FDFBF7]/80 text-[hsl(var(--gold))] hover:bg-[#FDFBF7] border border-[hsl(var(--gold))]/30" />
           <button onClick={handleFileUpload} disabled={isUploadingFiles}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-              isUploadingFiles ? 'bg-[hsl(var(--gold))]/30 text-[hsl(var(--gold))] animate-pulse' : 'bg-white/80 text-[hsl(var(--gold))] hover:bg-white border border-[hsl(var(--gold))]/30'
+              isUploadingFiles ? 'bg-[hsl(var(--gold))]/30 text-[hsl(var(--gold))] animate-pulse' : 'bg-[#FDFBF7]/80 text-[hsl(var(--gold))] hover:bg-[#FDFBF7] border border-[hsl(var(--gold))]/30'
             }`} title="Attach file">
             {isUploadingFiles ? <Loader2 className="w-5 h-5 animate-spin" /> : <Paperclip className="w-5 h-5" />}
           </button>
           <div className="relative flex-1">
             <Input ref={inputRef} value={input} onChange={handleInputChange} onKeyPress={handleKeyPress}
               placeholder="Type your message or command..."
-              className="flex-1 bg-white border-2 border-[hsl(var(--gold))]/30 text-black placeholder:text-gray-600 focus:border-[hsl(var(--gold))] pr-10 h-11"
+              className="flex-1 bg-[#FDFBF7] border-2 border-[hsl(var(--gold))]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-[hsl(var(--gold))] pr-10 h-11"
               disabled={isLoading} />
             <button onClick={() => setShowCommands(!showCommands)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4A2E] hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
               <Command className="w-4 h-4" />
             </button>
           </div>
@@ -668,7 +668,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </Button>
         </div>
-        <p className="text-gray-600 text-xs text-center mt-3 opacity-80">
+        <p className="text-[#5A4A2E] text-xs text-center mt-3 opacity-80">
           Use <span className="text-[hsl(var(--gold))] font-semibold">@name</span> to mention | <span className="text-[hsl(var(--gold))] font-semibold">/command</span> for actions | <span className="text-[hsl(var(--gold))] font-semibold">Attach files</span> (no size limit)
         </p>
       </div>
@@ -694,7 +694,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   </>
                 ) : (
                   <>
-                    <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-600" onClick={() => setSelectMode(true)}>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-[#5A4A2E]" onClick={() => setSelectMode(true)}>
                       <CheckSquare className="w-3 h-3 mr-1" /> Select
                     </Button>
                     {sessions.length > 0 && (
@@ -712,8 +712,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {sessions.length === 0 ? (
               <div className="text-center py-12">
                 <MessageSquare className="w-10 h-10 text-[hsl(var(--gold))]/30 mx-auto mb-3" />
-                <p className="text-sm text-gray-600">No chat history yet</p>
-                <p className="text-xs text-gray-600 mt-1">Start a conversation with Amanda</p>
+                <p className="text-sm text-[#5A4A2E]">No chat history yet</p>
+                <p className="text-xs text-[#5A4A2E] mt-1">Start a conversation with Amanda</p>
               </div>
             ) : (
               <div className="space-y-2 pb-4">
@@ -723,7 +723,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                     className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all ${
                       activeSessionId === session.id
                         ? 'bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] border-2 border-[hsl(var(--gold))]/40'
-                        : 'bg-white/60 border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:bg-white'
+                        : 'bg-[#FDFBF7]/60 border border-[hsl(var(--gold))]/20 hover:border-[hsl(var(--gold))]/40 hover:bg-[#FDFBF7]'
                     }`}
                     onClick={() => {
                       if (selectMode) {
@@ -736,7 +736,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   >
                     {selectMode && (
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-gray-300'
+                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-[#B89555]/30'
                       }`}>
                         {selectedForDelete.has(session.id) && (
                           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -746,11 +746,11 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       </div>
                     )}
                     <MessageSquare className={`w-4 h-4 flex-shrink-0 ${
-                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-gray-600'
+                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-[#5A4A2E]'
                     }`} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-black truncate">{session.title}</p>
-                      <p className="text-[10px] text-gray-600 flex items-center gap-1 mt-0.5">
+                      <p className="text-sm font-medium text-[#1A1A1A] truncate">{session.title}</p>
+                      <p className="text-[10px] text-[#5A4A2E] flex items-center gap-1 mt-0.5">
                         <Clock className="w-2.5 h-2.5" />
                         {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
                         {session.message_count > 0 && (
@@ -762,7 +762,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-gray-600 hover:text-red-500 flex-shrink-0"
+                        className="h-7 w-7 text-[#5A4A2E] hover:text-red-500 flex-shrink-0"
                         onClick={(e) => { e.stopPropagation(); deleteSession(session.id); }}
                       >
                         <Trash2 className="w-3.5 h-3.5" />

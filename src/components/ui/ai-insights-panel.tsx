@@ -93,7 +93,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
         className={cn(
           'fixed right-4 top-1/2 -translate-y-1/2 z-40',
           'flex items-center justify-center w-12 h-12',
-          'bg-white border border-gold/20 rounded-xl shadow-lg',
+          'bg-[#FDFBF7] border border-gold/20 rounded-xl shadow-lg',
           'hover:shadow-xl hover:border-gold/40 transition-all',
           className
         )}
@@ -123,15 +123,15 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               <Sparkles className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <h3 className="font-semibold text-black">AI Insights</h3>
-              <p className="text-xs text-gray-600">Real-time intelligence</p>
+              <h3 className="font-semibold text-[#1A1A1A]">AI Insights</h3>
+              <p className="text-xs text-[#5A4A2E]">Real-time intelligence</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
             <button
               onClick={onRefresh}
               className={cn(
-                'p-2 rounded-lg text-gray-600 hover:text-gold hover:bg-gold/10 transition-colors',
+                'p-2 rounded-lg text-[#5A4A2E] hover:text-gold hover:bg-gold/10 transition-colors',
                 isLoading && 'animate-spin'
               )}
             >
@@ -140,7 +140,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-2 rounded-lg text-gray-600 hover:text-gold hover:bg-gold/10 transition-colors"
+                className="p-2 rounded-lg text-[#5A4A2E] hover:text-gold hover:bg-gold/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -161,7 +161,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               {stat.icon}
               {stat.value}
             </div>
-            <div className="text-[10px] text-gray-600 uppercase tracking-wider">{stat.label}</div>
+            <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -184,7 +184,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               onClick={() => setExpandedInsight(expandedInsight === insight.id ? null : insight.id)}
             >
               <div className="flex items-start gap-3">
-                <div className="p-1.5 rounded-lg bg-white/80">
+                <div className="p-1.5 rounded-lg bg-[#FDFBF7]/80">
                   {getInsightIcon(insight.type)}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -211,7 +211,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
                         
                         {insight.confidence && (
                           <div className="flex items-center gap-2 mt-2">
-                            <div className="flex-1 h-1.5 bg-white/50 rounded-full overflow-hidden">
+                            <div className="flex-1 h-1.5 bg-[#FDFBF7]/50 rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${insight.confidence}%` }}

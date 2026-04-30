@@ -113,8 +113,8 @@ export default function BookHubDashboard() {
             <BookOpen className="w-5 h-5 text-gold" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-black tracking-tight">Book Hub</h2>
-            <p className="text-sm text-black/50">Download analytics & tracking</p>
+            <h2 className="text-xl font-bold text-[#1A1A1A] tracking-tight">Book Hub</h2>
+            <p className="text-sm text-[#1A1A1A]/50">Download analytics & tracking</p>
           </div>
         </div>
         <Button
@@ -131,57 +131,57 @@ export default function BookHubDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                 <Download className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <span className="text-black/50 text-sm">Total Downloads</span>
-                <p className="text-black text-2xl font-bold">{totalCount}</p>
+                <span className="text-[#1A1A1A]/50 text-sm">Total Downloads</span>
+                <p className="text-[#1A1A1A] text-2xl font-bold">{totalCount}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                 <Users className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <span className="text-black/50 text-sm">Unique Users</span>
-                <p className="text-black text-2xl font-bold">{uniqueEmails}</p>
+                <span className="text-[#1A1A1A]/50 text-sm">Unique Users</span>
+                <p className="text-[#1A1A1A] text-2xl font-bold">{uniqueEmails}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                 <TrendingUp className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <span className="text-black/50 text-sm">Today</span>
-                <p className="text-black text-2xl font-bold">{todayCount}</p>
+                <span className="text-[#1A1A1A]/50 text-sm">Today</span>
+                <p className="text-[#1A1A1A] text-2xl font-bold">{todayCount}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                 <Globe className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <span className="text-black/50 text-sm">Sources</span>
-                <p className="text-black text-2xl font-bold">{sourceStats.length}</p>
+                <span className="text-[#1A1A1A]/50 text-sm">Sources</span>
+                <p className="text-[#1A1A1A] text-2xl font-bold">{sourceStats.length}</p>
               </div>
             </div>
           </CardContent>
@@ -190,21 +190,21 @@ export default function BookHubDashboard() {
 
       {/* Source & Device Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-white border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
               <Globe className="w-4 h-4 text-gold" />
               Traffic Sources
             </CardTitle>
           </CardHeader>
           <CardContent>
             {sourceStats.length === 0 ? (
-              <p className="text-sm text-black/40 text-center py-4">No downloads yet</p>
+              <p className="text-sm text-[#1A1A1A]/40 text-center py-4">No downloads yet</p>
             ) : (
               <div className="space-y-3">
                 {sourceStats.map((s) => (
                   <div key={s.source} className="flex items-center justify-between">
-                    <span className="text-sm text-black/70 capitalize">{s.source.replace(/-/g, " ")}</span>
+                    <span className="text-sm text-[#1A1A1A]/70 capitalize">{s.source.replace(/-/g, " ")}</span>
                     <div className="flex items-center gap-2">
                       <div className="w-24 h-2 bg-gold/10 rounded-full overflow-hidden">
                         <div
@@ -212,7 +212,7 @@ export default function BookHubDashboard() {
                           style={{ width: `${totalCount > 0 ? (s.count / totalCount) * 100 : 0}%` }}
                         />
                       </div>
-                      <span className="text-xs font-bold text-black min-w-[24px] text-right">{s.count}</span>
+                      <span className="text-xs font-bold text-[#1A1A1A] min-w-[24px] text-right">{s.count}</span>
                     </div>
                   </div>
                 ))}
@@ -221,23 +221,23 @@ export default function BookHubDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
+            <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
               <Monitor className="w-4 h-4 text-gold" />
               Device Breakdown
             </CardTitle>
           </CardHeader>
           <CardContent>
             {deviceStats.length === 0 ? (
-              <p className="text-sm text-black/40 text-center py-4">No downloads yet</p>
+              <p className="text-sm text-[#1A1A1A]/40 text-center py-4">No downloads yet</p>
             ) : (
               <div className="space-y-3">
                 {deviceStats.map((d) => (
                   <div key={d.device} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {getDeviceIcon(d.device)}
-                      <span className="text-sm text-black/70 capitalize">{d.device}</span>
+                      <span className="text-sm text-[#1A1A1A]/70 capitalize">{d.device}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-24 h-2 bg-gold/10 rounded-full overflow-hidden">
@@ -246,7 +246,7 @@ export default function BookHubDashboard() {
                           style={{ width: `${totalCount > 0 ? (d.count / totalCount) * 100 : 0}%` }}
                         />
                       </div>
-                      <span className="text-xs font-bold text-black min-w-[24px] text-right">{d.count}</span>
+                      <span className="text-xs font-bold text-[#1A1A1A] min-w-[24px] text-right">{d.count}</span>
                     </div>
                   </div>
                 ))}
@@ -257,51 +257,51 @@ export default function BookHubDashboard() {
       </div>
 
       {/* Recent Downloads Table */}
-      <Card className="bg-white border-2 border-gold/20">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/20">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
+          <CardTitle className="text-sm font-bold text-[#1A1A1A] flex items-center gap-2">
             <Download className="w-4 h-4 text-gold" />
             Recent Downloads
           </CardTitle>
         </CardHeader>
         <CardContent>
           {downloads.length === 0 ? (
-            <p className="text-sm text-black/40 text-center py-8">No downloads recorded yet</p>
+            <p className="text-sm text-[#1A1A1A]/40 text-center py-8">No downloads recorded yet</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gold/20">
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">User</th>
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">Email</th>
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">Source</th>
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">UTM</th>
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">Device</th>
-                    <th className="text-left py-2 px-3 text-black/50 font-semibold text-xs uppercase">Date</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">User</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Email</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Source</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">UTM</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Device</th>
+                    <th className="text-left py-2 px-3 text-[#1A1A1A]/50 font-semibold text-xs uppercase">Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {downloads.map((dl) => (
                     <tr key={dl.id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors">
-                      <td className="py-2.5 px-3 text-black/80 font-medium">
+                      <td className="py-2.5 px-3 text-[#1A1A1A]/80 font-medium">
                         {dl.downloader_name || "—"}
                       </td>
-                      <td className="py-2.5 px-3 text-black/70">{dl.downloader_email}</td>
+                      <td className="py-2.5 px-3 text-[#1A1A1A]/70">{dl.downloader_email}</td>
                       <td className="py-2.5 px-3">
                         <span className="px-2 py-0.5 rounded-full bg-gold/10 text-gold text-xs font-medium capitalize">
                           {dl.page_source || "direct"}
                         </span>
                       </td>
-                      <td className="py-2.5 px-3 text-black/50 text-xs">
+                      <td className="py-2.5 px-3 text-[#1A1A1A]/50 text-xs">
                         {dl.utm_source ? `${dl.utm_source}/${dl.utm_medium || "—"}` : "—"}
                       </td>
                       <td className="py-2.5 px-3">
                         <div className="flex items-center gap-1.5">
                           {getDeviceIcon(dl.device_type || "desktop")}
-                          <span className="text-xs text-black/50 capitalize">{dl.browser || "—"}</span>
+                          <span className="text-xs text-[#1A1A1A]/50 capitalize">{dl.browser || "—"}</span>
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 text-black/50 text-xs">
+                      <td className="py-2.5 px-3 text-[#1A1A1A]/50 text-xs">
                         {format(new Date(dl.created_at), "MMM d, yyyy HH:mm")}
                       </td>
                     </tr>

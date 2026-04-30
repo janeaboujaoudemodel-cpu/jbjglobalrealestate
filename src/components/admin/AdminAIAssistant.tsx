@@ -170,12 +170,12 @@ export const AdminAIAssistant = () => {
   return (
     <Card className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] overflow-hidden">
       <CardHeader className="border-b border-gold/30 bg-gradient-to-r from-white/50 to-transparent">
-        <CardTitle className="text-black flex items-center gap-2">
+        <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
           <div className="p-2 rounded-lg bg-gold/30 border border-gold/40">
-            <Brain className="w-5 h-5 text-black" />
+            <Brain className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           Admin Assistant
-          <Badge className="ml-auto bg-gold/30 text-black border-gold/50 font-medium">
+          <Badge className="ml-auto bg-gold/30 text-[#1A1A1A] border-gold/50 font-medium">
             <Sparkles className="w-3 h-3 mr-1" />
             Live
           </Badge>
@@ -189,12 +189,12 @@ export const AdminAIAssistant = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAskAI()}
             placeholder="Ask about leads, campaigns, analytics..."
-            className="bg-white/80 border-gold/30 text-black placeholder:text-black/50 focus:border-gold focus:ring-gold/20"
+            className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus:border-gold focus:ring-gold/20"
           />
           <Button
             onClick={handleAskAI}
             disabled={loading || !query.trim()}
-            className="bg-black hover:bg-black/90 text-gold shadow-lg"
+            className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-gold shadow-lg"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -211,13 +211,13 @@ export const AdminAIAssistant = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="p-4 rounded-xl bg-white/80 border-2 border-gold/30 shadow-inner"
+              className="p-4 rounded-xl bg-[#FDFBF7]/80 border-2 border-gold/30 shadow-inner"
             >
               <div className="flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-gold/20 shrink-0">
-                  <Brain className="w-4 h-4 text-black" />
+                  <Brain className="w-4 h-4 text-[#1A1A1A]" />
                 </div>
-                <div className="text-sm text-black/80 whitespace-pre-wrap leading-relaxed">
+                <div className="text-sm text-[#1A1A1A]/80 whitespace-pre-wrap leading-relaxed">
                   {response}
                 </div>
               </div>
@@ -227,7 +227,7 @@ export const AdminAIAssistant = () => {
 
         {/* Smart Insights */}
         <div className="pt-2">
-          <p className="text-xs text-black/60 uppercase tracking-wider mb-3 font-medium">Live Insights</p>
+          <p className="text-xs text-[#1A1A1A]/60 uppercase tracking-wider mb-3 font-medium">Live Insights</p>
           <ScrollArea className="h-[200px]">
             {loadingInsights ? (
               <div className="flex items-center justify-center h-full">

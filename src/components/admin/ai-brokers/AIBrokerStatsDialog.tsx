@@ -123,7 +123,7 @@ export function AIBrokerStatsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-gray-700 sm:max-w-4xl">
+      <DialogContent className="bg-zinc-900 border-[#1A1A1A] sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-white text-xl">
             Analytics: {brokerName}
@@ -136,7 +136,7 @@ export function AIBrokerStatsDialog({
           </div>
         ) : (
           <Tabs defaultValue="overview" className="mt-4">
-            <TabsList className="bg-zinc-800 border-gray-700">
+            <TabsList className="bg-zinc-800 border-[#1A1A1A]">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="performance">Performance</TabsTrigger>
@@ -146,7 +146,7 @@ export function AIBrokerStatsDialog({
               {/* Summary Cards */}
               <div className="grid grid-cols-4 gap-4">
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 text-[#5A4A2E] mb-2">
                     <Users className="h-4 w-4" />
                     <span className="text-sm">Leads Contacted</span>
                   </div>
@@ -155,7 +155,7 @@ export function AIBrokerStatsDialog({
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 text-[#5A4A2E] mb-2">
                     <TrendingUp className="h-4 w-4" />
                     <span className="text-sm">Conversions</span>
                   </div>
@@ -165,7 +165,7 @@ export function AIBrokerStatsDialog({
                   <p className="text-emerald-500 text-sm">{conversionRate}% rate</p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 text-[#5A4A2E] mb-2">
                     <MessageSquare className="h-4 w-4" />
                     <span className="text-sm">Messages Sent</span>
                   </div>
@@ -174,7 +174,7 @@ export function AIBrokerStatsDialog({
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                  <div className="flex items-center gap-2 text-[#5A4A2E] mb-2">
                     <Mail className="h-4 w-4" />
                     <span className="text-sm">Emails Sent</span>
                   </div>

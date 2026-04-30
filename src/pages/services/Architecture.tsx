@@ -148,7 +148,7 @@ const Architecture = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-black">Start Your</span><span className="text-gold"> Project</span>
+                <span className="text-[#1A1A1A]">Start Your</span><span className="text-gold"> Project</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -157,7 +157,7 @@ const Architecture = () => {
       </section>
 
       {/* Services - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -172,7 +172,7 @@ const Architecture = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Architectural Excellence" />
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Comprehensive architectural services for residential and commercial projects.
               </p>
             </motion.div>
@@ -183,19 +183,19 @@ const Architecture = () => {
                   <Card className="jj-card-inner hover:border-white transition-all group h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <service.icon className="w-7 h-7 text-gold" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
                             {service.title}
                           </h3>
-                          <p className="text-black/70 text-sm mb-4">
+                          <p className="text-[#1A1A1A]/70 text-sm mb-4">
                             {service.description}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
-                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                              <div key={feature} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
                                 <CheckCircle className="w-3 h-3 text-gold" />
                                 {feature}
                               </div>
@@ -213,7 +213,7 @@ const Architecture = () => {
       </section>
 
       {/* Portfolio - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -243,10 +243,10 @@ const Architecture = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-4">
-                      <h3 className="text-black font-semibold text-lg mb-1">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">
                         {project.title}
                       </h3>
-                      <div className="flex items-center gap-1 text-black/60 text-sm mb-1">
+                      <div className="flex items-center gap-1 text-[#1A1A1A]/60 text-sm mb-1">
                         <MapPin className="w-3 h-3" />
                         {project.location}
                       </div>
@@ -263,7 +263,7 @@ const Architecture = () => {
       </section>
 
       {/* CTA Section - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -276,13 +276,13 @@ const Architecture = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Let's Build Your Vision" />
               </h2>
-              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Ready to transform your architectural vision into reality? 
                 Connect with our partner architects today.
               </p>
               <Button variant="primary" size="lg" asChild>
                 <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                  <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
+                  <span className="text-[#1A1A1A]">Schedule</span><span className="text-gold"> Consultation</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </a>
               </Button>

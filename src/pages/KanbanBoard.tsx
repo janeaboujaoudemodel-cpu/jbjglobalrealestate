@@ -181,7 +181,7 @@ const KanbanBoard = () => {
       <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-[#B89555]/10">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-[#1A1A1A] hover:bg-[#B89555]/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
@@ -192,26 +192,26 @@ const KanbanBoard = () => {
                 <Input
                   value={boardName}
                   onChange={(e) => setBoardName(e.target.value)}
-                  className="bg-transparent border-none text-xl font-bold w-64 focus-visible:ring-0 text-black p-0 h-auto"
+                  className="bg-transparent border-none text-xl font-bold w-64 focus-visible:ring-0 text-[#1A1A1A] p-0 h-auto"
                 />
-                <p className="text-xs text-black/60">{totalTasks} tasks across {columns.length} columns</p>
+                <p className="text-xs text-[#1A1A1A]/60">{totalTasks} tasks across {columns.length} columns</p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-black/40" />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#1A1A1A]/40" />
               <Input
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search tasks..."
-                className="pl-8 w-44 h-9 text-xs border-[#B89555]/30 bg-white/60"
+                className="pl-8 w-44 h-9 text-xs border-[#B89555]/30 bg-[#FDFBF7]/60"
               />
             </div>
             {/* Priority filter */}
             <Select value={filterPriority} onValueChange={setFilterPriority}>
-              <SelectTrigger className="w-28 h-9 text-xs border-[#B89555]/30 bg-white/60">
+              <SelectTrigger className="w-28 h-9 text-xs border-[#B89555]/30 bg-[#FDFBF7]/60">
                 <Filter className="w-3 h-3 mr-1" />
                 <SelectValue />
               </SelectTrigger>
@@ -240,7 +240,7 @@ const KanbanBoard = () => {
                 </Button>
               </div>
             )}
-            <Button onClick={addColumn} className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#B89555]/20 h-9 text-xs">
+            <Button onClick={addColumn} className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold shadow-lg shadow-[#B89555]/20 h-9 text-xs">
               <Plus className="w-3.5 h-3.5 mr-1.5" />
               Add Column
             </Button>
@@ -267,13 +267,13 @@ const KanbanBoard = () => {
                     <Input
                       value={column.title}
                       onChange={(e) => setColumns(columns.map(col => col.id === column.id ? { ...col, title: e.target.value } : col))}
-                      className="bg-transparent border-none font-semibold text-lg p-0 h-auto focus-visible:ring-0 text-black flex-1 min-w-0"
+                      className="bg-transparent border-none font-semibold text-lg p-0 h-auto focus-visible:ring-0 text-[#1A1A1A] flex-1 min-w-0"
                     />
                     <Badge className="ml-1 bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 shrink-0">{filtered.length}</Badge>
                   </div>
                   <Button
                     variant="ghost" size="icon"
-                    className="h-7 w-7 text-black/40 hover:text-red-600 hover:bg-red-50 shrink-0"
+                    className="h-7 w-7 text-[#1A1A1A]/40 hover:text-red-600 hover:bg-red-50 shrink-0"
                     onClick={() => deleteColumn(column.id)}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -288,7 +288,7 @@ const KanbanBoard = () => {
                       value={inlineTaskText[column.id] || ""}
                       onChange={e => setInlineTaskText(prev => ({ ...prev, [column.id]: e.target.value }))}
                       placeholder={`+ Add task to ${column.title}...`}
-                      className="border-[#B89555]/20 bg-white/60 h-8 text-xs placeholder:text-black/30 focus:border-[#B89555]/50 focus:bg-white"
+                      className="border-[#B89555]/20 bg-[#FDFBF7]/60 h-8 text-xs placeholder:text-[#1A1A1A]/30 focus:border-[#B89555]/50 focus:bg-[#FDFBF7]"
                       onKeyDown={e => {
                         if (e.key === "Enter") addTaskInline(column.id);
                       }}
@@ -297,7 +297,7 @@ const KanbanBoard = () => {
                     {(inlineTaskText[column.id] || "").trim() && (
                       <Button
                         size="icon"
-                        className="h-8 w-8 bg-gradient-to-r from-[#B89555] to-amber-600 text-black shrink-0"
+                        className="h-8 w-8 bg-gradient-to-r from-[#B89555] to-amber-600 text-[#1A1A1A] shrink-0"
                         onClick={() => addTaskInline(column.id)}
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -315,7 +315,7 @@ const KanbanBoard = () => {
                     return (
                       <Card
                         key={task.id}
-                        className={`border-2 bg-white/80 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all ${
+                        className={`border-2 bg-[#FDFBF7]/80 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all ${
                           isSelected ? "border-[#B89555] ring-2 ring-[#B89555]/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"
                         }`}
                         draggable
@@ -329,16 +329,16 @@ const KanbanBoard = () => {
                               onChange={() => toggleSelect(task.id)}
                               className="mt-1 accent-[#B89555] shrink-0"
                             />
-                            <h4 className="font-medium text-black text-sm flex-1 min-w-0 break-words">{task.title}</h4>
+                            <h4 className="font-medium text-[#1A1A1A] text-sm flex-1 min-w-0 break-words">{task.title}</h4>
                             <Dialog>
                               <DialogTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#B89555]/10 shrink-0">
-                                  <MoreVertical className="w-4 h-4 text-black/50" />
+                                  <MoreVertical className="w-4 h-4 text-[#1A1A1A]/50" />
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="bg-white border-2 border-[#B89555]/30">
+                              <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
                                 <DialogHeader>
-                                  <DialogTitle className="text-black">Edit Task</DialogTitle>
+                                  <DialogTitle className="text-[#1A1A1A]">Edit Task</DialogTitle>
                                 </DialogHeader>
                                 <div className="space-y-4">
                                   <Input
@@ -354,7 +354,7 @@ const KanbanBoard = () => {
                                     className="border-[#B89555]/30 min-h-[100px]"
                                   />
                                   <div>
-                                    <p className="text-xs font-medium text-black/60 mb-2">Priority</p>
+                                    <p className="text-xs font-medium text-[#1A1A1A]/60 mb-2">Priority</p>
                                     <div className="flex gap-2 flex-wrap">
                                       {(["low", "medium", "high", "urgent"] as const).map((p) => (
                                         <Button
@@ -363,8 +363,8 @@ const KanbanBoard = () => {
                                           variant={task.priority === p ? "default" : "outline"}
                                           onClick={() => updateTask(column.id, task.id, { priority: p })}
                                           className={task.priority === p
-                                            ? "bg-gradient-to-r from-[#B89555] to-amber-600 text-black capitalize"
-                                            : "border-[#B89555]/30 text-black capitalize hover:bg-[#B89555]/10"}
+                                            ? "bg-gradient-to-r from-[#B89555] to-amber-600 text-[#1A1A1A] capitalize"
+                                            : "border-[#B89555]/30 text-[#1A1A1A] capitalize hover:bg-[#B89555]/10"}
                                         >
                                           {p}
                                         </Button>
@@ -372,7 +372,7 @@ const KanbanBoard = () => {
                                     </div>
                                   </div>
                                   <div>
-                                    <p className="text-xs font-medium text-black/60 mb-2">Due Date</p>
+                                    <p className="text-xs font-medium text-[#1A1A1A]/60 mb-2">Due Date</p>
                                     <Input
                                       type="date"
                                       value={task.dueDate || ""}
@@ -381,7 +381,7 @@ const KanbanBoard = () => {
                                     />
                                   </div>
                                   <div>
-                                    <p className="text-xs font-medium text-black/60 mb-2">Assignee</p>
+                                    <p className="text-xs font-medium text-[#1A1A1A]/60 mb-2">Assignee</p>
                                     <Input
                                       value={task.assignee || ""}
                                       onChange={(e) => updateTask(column.id, task.id, { assignee: e.target.value })}
@@ -392,7 +392,7 @@ const KanbanBoard = () => {
                                   <div className="flex gap-2">
                                     <Button
                                       variant="outline"
-                                      className="flex-1 border-[#B89555]/30 text-black hover:bg-[#B89555]/10"
+                                      className="flex-1 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/10"
                                       onClick={() => duplicateTask(column.id, task)}
                                     >
                                       <Copy className="w-3.5 h-3.5 mr-1.5" /> Duplicate
@@ -411,7 +411,7 @@ const KanbanBoard = () => {
                           </div>
 
                           {task.description && (
-                            <p className="text-xs text-black/50 mb-2.5 line-clamp-2 ml-6">{task.description}</p>
+                            <p className="text-xs text-[#1A1A1A]/50 mb-2.5 line-clamp-2 ml-6">{task.description}</p>
                           )}
 
                           <div className="flex items-center gap-1.5 flex-wrap ml-6">
@@ -420,7 +420,7 @@ const KanbanBoard = () => {
                               {pConfig.label}
                             </Badge>
                             {task.dueDate && (
-                              <Badge className="bg-white border border-[#B89555]/20 text-black/60 text-[10px]">
+                              <Badge className="bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/60 text-[10px]">
                                 <Calendar className="w-2.5 h-2.5 mr-0.5" />
                                 {new Date(task.dueDate).toLocaleDateString()}
                               </Badge>

@@ -103,7 +103,7 @@ const BrokerIntelligence = () => {
       <section className="py-8">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="signals" className="w-full">
-            <TabsList className="bg-zinc-900 border border-gray-800 w-full flex flex-wrap justify-start gap-1 h-auto p-1">
+            <TabsList className="bg-zinc-900 border border-[#1A1A1A] w-full flex flex-wrap justify-start gap-1 h-auto p-1">
               <TabsTrigger 
                 value="signals" 
                 className="flex items-center gap-2 data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
@@ -171,8 +171,8 @@ const BrokerIntelligence = () => {
                 >
                   <LeadMarketContext leadArea={selectedArea} leadIntent={leadIntent} />
                   {!selectedArea && (
-                    <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-gray-700/50 text-center">
-                      <MapPin className="w-6 h-6 text-gray-600 mx-auto mb-2" />
+                    <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-[#1A1A1A]/50 text-center">
+                      <MapPin className="w-6 h-6 text-[#5A4A2E] mx-auto mb-2" />
                       <p className="text-white/90 text-sm">Select an area from the dropdown above to view market context</p>
                     </div>
                   )}

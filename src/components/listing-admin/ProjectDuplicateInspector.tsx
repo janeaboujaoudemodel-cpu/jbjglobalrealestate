@@ -136,7 +136,7 @@ export function ProjectDuplicateInspector({
           <>
             <div className="space-y-2 mb-3">
               {matches.map((match) => (
-                <div key={match.id} className="flex items-center justify-between p-2 rounded-lg border border-amber-200 bg-white/80">
+                <div key={match.id} className="flex items-center justify-between p-2 rounded-lg border border-amber-200 bg-[#FDFBF7]/80">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-foreground truncate">{match.name}</span>

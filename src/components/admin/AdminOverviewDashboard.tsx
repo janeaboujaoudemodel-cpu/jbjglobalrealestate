@@ -280,8 +280,8 @@ export const AdminOverviewDashboard = () => {
       {/* Header with refresh */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Dashboard Overview</h2>
-          <p className="text-gray-600 text-sm">
+          <h2 className="text-2xl font-bold text-[#1A1A1A]">Dashboard Overview</h2>
+          <p className="text-[#5A4A2E] text-sm">
             Last updated: {formatDistanceToNow(lastUpdated, { addSuffix: true })}
           </p>
         </div>
@@ -299,7 +299,7 @@ export const AdminOverviewDashboard = () => {
       {/* System Health Panel - Champagne theme */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-xl">
         <CardHeader className="pb-2">
-          <CardTitle className="text-black flex items-center gap-2">
+          <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
             <Activity className="w-5 h-5 text-gold" />
             System Health
           </CardTitle>
@@ -316,12 +316,12 @@ export const AdminOverviewDashboard = () => {
                 key={service.name}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-xl bg-white border-2 border-gold/20 shadow-sm`}
+                className={`p-4 rounded-xl bg-[#FDFBF7] border-2 border-gold/20 shadow-sm`}
               >
                 <div className="flex items-center gap-3">
                   <div className={getHealthColor(service.status)}>{service.icon}</div>
                   <div>
-                    <p className="text-black font-medium text-sm">{service.name}</p>
+                    <p className="text-[#1A1A1A] font-medium text-sm">{service.name}</p>
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${
                         service.status === "healthy" ? "bg-emerald-500" :
@@ -349,18 +349,18 @@ export const AdminOverviewDashboard = () => {
             transition={{ delay: index * 0.05 }}
           >
             <Card 
-              className="bg-white border-2 border-gold/20 hover:border-gold/40 transition-all cursor-pointer group shadow-lg hover:shadow-xl"
+              className="bg-[#FDFBF7] border-2 border-gold/20 hover:border-gold/40 transition-all cursor-pointer group shadow-lg hover:shadow-xl"
               onClick={() => stat.href?.startsWith("/") ? navigate(stat.href) : undefined}
             >
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 rounded-lg bg-gold/10 text-gold group-hover:bg-gold group-hover:text-black transition-colors">
+                  <div className="p-2 rounded-lg bg-gold/10 text-gold group-hover:bg-gold group-hover:text-[#1A1A1A] transition-colors">
                     {stat.icon}
                   </div>
                   {stat.trend && stat.change && (
                     <div className={`flex items-center gap-1 text-xs font-medium ${
                       stat.trend === "up" ? "text-emerald-600" : 
-                      stat.trend === "down" ? "text-red-600" : "text-gray-600"
+                      stat.trend === "down" ? "text-red-600" : "text-[#5A4A2E]"
                     }`}>
                       {stat.trend === "up" && <ArrowUpRight className="w-3 h-3" />}
                       {stat.trend === "down" && <ArrowDownRight className="w-3 h-3" />}
@@ -368,8 +368,8 @@ export const AdminOverviewDashboard = () => {
                     </div>
                   )}
                 </div>
-                <p className="text-2xl font-bold text-black">{stat.value}</p>
-                <p className="text-xs text-gray-600 mt-1">{stat.label}</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{stat.value}</p>
+                <p className="text-xs text-[#5A4A2E] mt-1">{stat.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -379,9 +379,9 @@ export const AdminOverviewDashboard = () => {
       {/* Two Column Layout: Quick Actions + Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
-        <Card className="bg-white border-2 border-gold/20 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-black flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Zap className="w-5 h-5 text-gold" />
               Quick Actions
             </CardTitle>
@@ -416,18 +416,18 @@ export const AdminOverviewDashboard = () => {
         </Card>
 
         {/* Recent Activity Feed */}
-        <Card className="bg-white border-2 border-gold/20 shadow-lg">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/20 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-black flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Activity className="w-5 h-5 text-gold" />
               Recent Activity
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[320px]">
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[#B89555]/20">
                 {recentActivities.length === 0 ? (
-                  <div className="p-6 text-center text-gray-600">
+                  <div className="p-6 text-center text-[#5A4A2E]">
                     <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p>No recent activity</p>
                   </div>
@@ -437,16 +437,16 @@ export const AdminOverviewDashboard = () => {
                       key={activity.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="flex items-start gap-3 p-4 hover:bg-gray-50 transition-colors"
+                      className="flex items-start gap-3 p-4 hover:bg-[#F7F2EA] transition-colors"
                     >
                       <div className={`p-2 rounded-lg ${getSeverityColor(activity.severity)}`}>
                         {getActivityIcon(activity.type)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-black">{activity.title}</p>
-                        <p className="text-xs text-gray-600 truncate">{activity.description}</p>
+                        <p className="text-sm font-medium text-[#1A1A1A]">{activity.title}</p>
+                        <p className="text-xs text-[#5A4A2E] truncate">{activity.description}</p>
                       </div>
-                      <span className="text-xs text-gray-600 whitespace-nowrap">
+                      <span className="text-xs text-[#5A4A2E] whitespace-nowrap">
                         {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
                       </span>
                     </motion.div>

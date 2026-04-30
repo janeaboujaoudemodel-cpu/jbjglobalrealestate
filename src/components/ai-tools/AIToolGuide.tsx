@@ -39,7 +39,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
         <div className="flex items-start gap-3">
           <Lightbulb className={`h-5 w-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
           <div className="flex-1">
-            <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+            <p className="text-[#5A4A2E] text-sm leading-relaxed">{description}</p>
             
             <button
               onClick={() => setIsExpanded(!isExpanded)}
@@ -70,7 +70,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="mt-4 pt-4 border-t border-gray-700/50 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="mt-4 pt-4 border-t border-[#1A1A1A]/50 grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Steps */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
@@ -79,7 +79,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
                   </div>
                   <ol className="space-y-2">
                     {steps.map((step, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
                         <span className={`w-5 h-5 rounded-full ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0 text-xs font-bold`}>
                           {idx + 1}
                         </span>
@@ -97,7 +97,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
                   </div>
                   <ul className="space-y-2">
                     {benefits.map((benefit, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-600">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
                         <CheckCircle className={`h-4 w-4 ${colors.icon} flex-shrink-0 mt-0.5`} />
                         {benefit}
                       </li>

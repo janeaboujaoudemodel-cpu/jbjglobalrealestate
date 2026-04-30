@@ -146,13 +146,13 @@ const BestIdeaAward = () => {
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black">
+                      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                         Best Idea Award
                       </h2>
                     </div>
                   </div>
                   
-                  <p className="text-gray-700 mb-6 leading-relaxed">
+                  <p className="text-[#5A4A2E] mb-6 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
@@ -194,7 +194,7 @@ const BestIdeaAward = () => {
                       <div className="w-8 h-8 bg-gold/20 rounded-lg flex items-center justify-center">
                         <Sparkles className="w-4 h-4 text-gold" />
                       </div>
-                      <span className="text-black font-bold text-sm">Winner's Recognition Package</span>
+                      <span className="text-[#1A1A1A] font-bold text-sm">Winner's Recognition Package</span>
                     </div>
                     <ul className="space-y-2 text-xs" style={{ color: '#374151' }}>
                       <li className="flex items-start gap-2">
@@ -224,7 +224,7 @@ const BestIdeaAward = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                        <Button
-                        className="relative bg-black text-white border-2 border-black px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-gray-800 hover:border-gray-800 hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                        className="relative bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
                         <span className="relative flex items-center gap-2 whitespace-nowrap">
                           <Lightbulb className="w-6 h-6 text-white" />
@@ -234,9 +234,9 @@ const BestIdeaAward = () => {
                       </Button>
                     </DialogTrigger>
                     
-                    <DialogContent className="bg-white border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
+                    <DialogContent className="bg-[#FDFBF7] border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
                       <DialogHeader>
-                        <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
+                        <DialogTitle className="text-[#1A1A1A] text-xl font-bold flex items-center gap-2">
                           <Lightbulb className="w-5 h-5 text-gold" />
                           Submit Your Idea
                         </DialogTitle>
@@ -252,32 +252,32 @@ const BestIdeaAward = () => {
                           <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 rounded-full flex items-center justify-center mx-auto mb-5">
                             <CheckCircle className="w-10 h-10 text-green-500" />
                           </div>
-                          <h3 className="text-2xl font-bold text-black mb-3">Idea Received Successfully!</h3>
+                          <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">Idea Received Successfully!</h3>
                           
                           {!formData.isAnonymous && (
                             <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
-                              <p className="text-sm text-gray-600 mb-2">Your Draw Ticket Number</p>
+                              <p className="text-sm text-[#5A4A2E] mb-2">Your Draw Ticket Number</p>
                               <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
-                              <p className="text-xs text-gray-600">This ticket is linked to your account</p>
+                              <p className="text-xs text-[#5A4A2E]">This ticket is linked to your account</p>
                             </div>
                           )}
 
-                          <div className="bg-gray-50 rounded-xl p-5 mb-5 text-left">
-                            <p className="text-gray-700 mb-3">
+                          <div className="bg-[#F7F2EA] rounded-xl p-5 mb-5 text-left">
+                            <p className="text-[#5A4A2E] mb-3">
                               <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
                             </p>
                             {!formData.isAnonymous ? (
                               <>
-                                <p className="text-gray-600 text-sm mb-2">
+                                <p className="text-[#5A4A2E] text-sm mb-2">
                                   Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
                                 </p>
-                                <p className="text-gray-600 text-sm">
+                                <p className="text-[#5A4A2E] text-sm">
                                   <Sparkles className="w-4 h-4 inline text-gold mr-1" />
                                   <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
                                 </p>
                               </>
                             ) : (
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-[#5A4A2E] text-sm">
                                 Note: Anonymous submissions don't enter the draw, but your idea will still be considered.
                               </p>
                             )}
@@ -285,7 +285,7 @@ const BestIdeaAward = () => {
 
                           <Button
                             onClick={handleCloseSuccess}
-                            className="bg-black text-white hover:bg-gray-800 border-2 border-black px-8 py-5 font-bold shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                            className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] border-2 border-[#1A1A1A] px-8 py-5 font-bold shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                           >
                             Close & Submit Another Idea
                           </Button>
@@ -293,16 +293,16 @@ const BestIdeaAward = () => {
                       ) : (
                         <form onSubmit={handleSubmit} className="space-y-4 py-4">
                           {/* Anonymous Toggle */}
-                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="flex items-center justify-between p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
                             <div className="flex items-center gap-3">
                               {formData.isAnonymous ? (
-                                <EyeOff className="w-5 h-5 text-gray-600" />
+                                <EyeOff className="w-5 h-5 text-[#5A4A2E]" />
                               ) : (
                                 <Eye className="w-5 h-5 text-gold" />
                               )}
                               <div>
-                                <Label className="text-sm font-medium text-black">Post Anonymously</Label>
-                                <p className="text-xs text-gray-600">
+                                <Label className="text-sm font-medium text-[#1A1A1A]">Post Anonymously</Label>
+                                <p className="text-xs text-[#5A4A2E]">
                                   {formData.isAnonymous 
                                     ? "Your details won't be visible, but you won't enter the draw"
                                     : "Enter your details to join the iPad draw"
@@ -325,7 +325,7 @@ const BestIdeaAward = () => {
                               className="space-y-4"
                             >
                               <div>
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -333,11 +333,11 @@ const BestIdeaAward = () => {
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                className="mt-1 border-gray-300 focus:border-gold"
+                                className="mt-1 border-[#B89555]/30 focus:border-gold"
                                 />
                               </div>
                               <div>
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -346,11 +346,11 @@ const BestIdeaAward = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="mt-1 border-gray-300 focus:border-gold"
+                                className="mt-1 border-[#B89555]/30 focus:border-gold"
                                 />
                               </div>
                               <div>
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <Phone className="w-4 h-4 text-gold" />
                                   Phone Number *
                                 </Label>
@@ -359,7 +359,7 @@ const BestIdeaAward = () => {
                                   placeholder="+971 50 123 4567"
                                   value={formData.phone}
                                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                  className="mt-1 border-gray-300 focus:border-gold"
+                                  className="mt-1 border-[#B89555]/30 focus:border-gold"
                                 />
                               </div>
                             </motion.div>
@@ -367,7 +367,7 @@ const BestIdeaAward = () => {
 
                           {/* Idea Field */}
                           <div>
-                            <Label className="text-gray-700 flex items-center gap-2">
+                            <Label className="text-[#5A4A2E] flex items-center gap-2">
                               <Lightbulb className="w-4 h-4 text-gold" />
                               Your Idea *
                             </Label>
@@ -375,14 +375,14 @@ const BestIdeaAward = () => {
                               placeholder="Describe your idea in detail... How can we improve our services, processes, or customer experience?"
                               value={formData.idea}
                               onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
-                              className="mt-1 min-h-[120px] border-gray-300 focus:border-gold"
+                              className="mt-1 min-h-[120px] border-[#B89555]/30 focus:border-gold"
                             />
                           </div>
 
                           <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-black text-white hover:bg-gray-800 border-2 border-black py-6 font-bold shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                            className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] border-2 border-[#1A1A1A] py-6 font-bold shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                           >
                             {isSubmitting ? (
                               <>Submitting...</>

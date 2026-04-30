@@ -92,7 +92,7 @@ const ChatMessages = React.memo(({
               className={`flex gap-3 group ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
               {message.role === 'user' ? (
-                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gold text-black shadow-lg shadow-gold/20">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gold text-[#1A1A1A] shadow-lg shadow-gold/20">
                   <User className="w-4 h-4" />
                 </div>
               ) : (
@@ -108,12 +108,12 @@ const ChatMessages = React.memo(({
                 <div
                   className={`p-3.5 rounded-2xl shadow-md select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 rounded-tr-sm'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 rounded-tr-sm'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 rounded-tl-sm'
                   }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium select-text">{message.content}</p>
-                  <p className="text-[10px] mt-1.5 text-black/60 select-none">
+                  <p className="text-[10px] mt-1.5 text-[#1A1A1A]/60 select-none">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -122,7 +122,7 @@ const ChatMessages = React.memo(({
                     await navigator.clipboard.writeText(message.content);
                     toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                     message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                   }`}
                 >
@@ -159,10 +159,10 @@ const ChatMessages = React.memo(({
         <div className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-black">
+              <p className="text-sm font-semibold text-[#1A1A1A]">
                 <T>Describe your inquiry</T>
               </p>
-              <button onClick={() => setShowSubmitPanel(false)} className="text-gray-600 hover:text-black">
+              <button onClick={() => setShowSubmitPanel(false)} className="text-[#5A4A2E] hover:text-[#1A1A1A]">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -175,7 +175,7 @@ const ChatMessages = React.memo(({
             <div className="flex gap-2">
               <Button
                 onClick={handleSubmitConfirm}
-                className="flex-1 bg-gold hover:bg-gold-light text-black text-sm font-bold shadow-lg shadow-gold/20"
+                className="flex-1 bg-gold hover:bg-gold-light text-[#1A1A1A] text-sm font-bold shadow-lg shadow-gold/20"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 <T>Submit Now</T>
@@ -183,7 +183,7 @@ const ChatMessages = React.memo(({
               <Button
                 variant="outline"
                 onClick={() => setShowSubmitPanel(false)}
-                className="border-gold/30 text-gray-600"
+                className="border-gold/30 text-[#5A4A2E]"
               >
                 <T>Cancel</T>
               </Button>
@@ -209,7 +209,7 @@ const ChatMessages = React.memo(({
           {userMessageCount > 0 && (
             <Button
               onClick={() => setShowSubmitPanel(true)}
-              className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-black text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
+              className={`${isExistingUser ? 'flex-1' : 'w-full'} bg-gold hover:bg-gold-light text-[#1A1A1A] text-sm py-2.5 font-bold shadow-lg shadow-gold/20`}
             >
               <Shield className="w-4 h-4 mr-2" />
               <T>Submit to Team</T>
@@ -232,12 +232,12 @@ const ChatMessages = React.memo(({
             autoComplete="off"
             autoCorrect="off"
             disabled={isLoading}
-            className="flex-1 bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
+            className="flex-1 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold focus:ring-2 focus:ring-gold/30 h-12 rounded-xl text-sm px-4 py-2 outline-none transition-all duration-200"
           />
           <Button
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            className="bg-gold hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-gold-dark text-black h-12 w-12 rounded-xl transition-all duration-200"
+            className="bg-gold hover:bg-gold-light hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] active:bg-gold-dark text-[#1A1A1A] h-12 w-12 rounded-xl transition-all duration-200"
           >
             <Send className="w-5 h-5" />
           </Button>

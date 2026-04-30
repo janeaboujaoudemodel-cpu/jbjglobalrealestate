@@ -87,7 +87,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
 
   if (authLoading || ownerLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
           <p className="text-white/70">Verifying broker registration...</p>
@@ -98,7 +98,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
             <Lock className="w-10 h-10 text-amber-500" />
@@ -116,7 +116,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
             </p>
           )}
 
-          <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6 mb-6">
+          <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6 mb-6">
             <h3 className="text-white font-semibold mb-3">How to Get Access</h3>
             <ol className="text-left text-white/70 text-sm space-y-2">
               <li className="flex items-start gap-2">
@@ -141,7 +141,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => navigate(fallbackPath)}
-              className="bg-gold hover:bg-gold/90 text-black"
+              className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
             >
               <UserPlus className="w-4 h-4 mr-2" />
               Apply to Join
@@ -150,7 +150,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
             <Button
               onClick={() => navigate("/")}
               variant="outline"
-              className="border-gray-700 text-white/85 hover:bg-gray-800"
+              className="border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
             >
               Return to Home
             </Button>

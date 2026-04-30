@@ -68,7 +68,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
         >
           {selectedDev ? (
             <>
-              <div className="w-7 h-7 rounded-md bg-white border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-7 h-7 rounded-md bg-[#FDFBF7] border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
                 {getLogoUrl(selectedDev) ? (
                   <SafeImage
                     src={getLogoUrl(selectedDev)!}
@@ -131,7 +131,7 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
                     isSelected ? 'bg-gold/15 border-l-2 border-gold' : ''
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-md bg-white border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-8 h-8 rounded-md bg-[#FDFBF7] border border-gold/20 flex items-center justify-center overflow-hidden shrink-0">
                     {logo ? (
                       <SafeImage
                         src={logo}

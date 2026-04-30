@@ -337,7 +337,7 @@ export default function CRMLeadsTableV2({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search name, phone, email…"
-            className="bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+            className="bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -346,7 +346,7 @@ export default function CRMLeadsTableV2({
             variant="outline"
             size="sm"
             onClick={() => { setSelected(new Set()); setSearch(""); navigate(0); }}
-            className="font-semibold border-gold/30 text-black hover:bg-gold/10"
+            className="font-semibold border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             Reset
           </Button>
@@ -374,27 +374,27 @@ export default function CRMLeadsTableV2({
                   }}
                 />
               </TableHead>
-              <TableHead className="text-black/70 font-bold">Name</TableHead>
-              <TableHead className="w-[140px] text-black/70 font-bold">Phone</TableHead>
-              <TableHead className="min-w-[200px] text-black/70 font-bold">Email</TableHead>
-              <TableHead className="text-black/70 font-bold">Source</TableHead>
-              <TableHead className="w-[160px] text-black/70 font-bold">Status</TableHead>
-              <TableHead className="w-[100px] text-black/70 font-bold">Date</TableHead>
-              <TableHead className="w-20 text-black/70 font-bold">VIP</TableHead>
-              <TableHead className="text-black/70 font-bold">Assigned Broker</TableHead>
-              <TableHead className="text-right text-black/70 font-bold">Actions</TableHead>
+              <TableHead className="text-[#1A1A1A]/70 font-bold">Name</TableHead>
+              <TableHead className="w-[140px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
+              <TableHead className="min-w-[200px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
+              <TableHead className="text-[#1A1A1A]/70 font-bold">Source</TableHead>
+              <TableHead className="w-[160px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
+              <TableHead className="w-[100px] text-[#1A1A1A]/70 font-bold">Date</TableHead>
+              <TableHead className="w-20 text-[#1A1A1A]/70 font-bold">VIP</TableHead>
+              <TableHead className="text-[#1A1A1A]/70 font-bold">Assigned Broker</TableHead>
+              <TableHead className="text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={10} className="py-10 text-center text-black/50">
+                <TableCell colSpan={10} className="py-10 text-center text-[#1A1A1A]/50">
                   Loading leads…
                 </TableCell>
               </TableRow>
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="py-10 text-center text-black/50">
+                <TableCell colSpan={10} className="py-10 text-center text-[#1A1A1A]/50">
                   No leads found.
                 </TableCell>
               </TableRow>
@@ -419,8 +419,8 @@ export default function CRMLeadsTableV2({
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold text-black whitespace-nowrap">{lead.full_name || "—"}</TableCell>
-                    <TableCell className="font-mono text-sm text-black/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
+                    <TableCell className="font-semibold text-[#1A1A1A] whitespace-nowrap">{lead.full_name || "—"}</TableCell>
+                    <TableCell className="font-mono text-sm text-[#1A1A1A]/80 whitespace-nowrap">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.email_lower ? (
                         <button
@@ -431,10 +431,10 @@ export default function CRMLeadsTableV2({
                           {lead.email_lower}
                         </button>
                       ) : (
-                        <span className="text-black/40">—</span>
+                        <span className="text-[#1A1A1A]/40">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-sm text-black/80 whitespace-nowrap">{renderSource(lead)}</TableCell>
+                    <TableCell className="text-sm text-[#1A1A1A]/80 whitespace-nowrap">{renderSource(lead)}</TableCell>
                     <TableCell onClick={(e) => e.stopPropagation()}>
                       <InlineStatusSelect
                         leadId={lead.id}
@@ -442,7 +442,7 @@ export default function CRMLeadsTableV2({
                         onStatusChange={() => fetchLeads()}
                       />
                     </TableCell>
-                    <TableCell className="text-xs text-black/60 whitespace-nowrap">
+                    <TableCell className="text-xs text-[#1A1A1A]/60 whitespace-nowrap">
                       {formatDisplayDate(lead.created_at)}
                     </TableCell>
                     <TableCell>
@@ -451,7 +451,7 @@ export default function CRMLeadsTableV2({
                         size="sm"
                         variant={vip ? "default" : "outline"}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
-                        className={`min-w-[60px] ${vip ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30 text-black/60 hover:bg-gold/10"}`}
+                        className={`min-w-[60px] ${vip ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10"}`}
                       >
                         {vip ? "★ VIP" : "—"}
                       </Button>
@@ -459,16 +459,16 @@ export default function CRMLeadsTableV2({
                     <TableCell className="text-sm">
                       <div className="flex items-center gap-2">
                         {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-black whitespace-nowrap">{assignedNames[lead.id]}</span>
+                          <span className="font-semibold text-[#1A1A1A] whitespace-nowrap">{assignedNames[lead.id]}</span>
                         ) : (
-                          <span className="text-black/40 italic">Unassigned</span>
+                          <span className="text-[#1A1A1A]/40 italic">Unassigned</span>
                         )}
                         {isOwner && (
                           <Button
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-black hover:bg-gold/20 whitespace-nowrap"
+                            className="h-7 px-2 text-xs bg-gold/10 border-gold/30 text-[#1A1A1A] hover:bg-gold/20 whitespace-nowrap"
                             onClick={(e) => { e.stopPropagation(); setAssignLeadIds([lead.id]); setShowAssignModal(true); }}
                             title="Assign broker"
                           >

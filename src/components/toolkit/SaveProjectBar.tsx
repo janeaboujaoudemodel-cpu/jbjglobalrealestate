@@ -75,7 +75,7 @@ export function SaveProjectBar({
   return (
     <div className="relative">
       <div
-        className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 rounded-xl bg-white border border-stone-200 shadow-sm"
+        className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3 rounded-xl bg-[#FDFBF7] border border-stone-200 shadow-sm"
       >
         {/* Project name */}
         <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -138,7 +138,7 @@ export function SaveProjectBar({
 
       {/* Drafts dropdown */}
       {showDrafts && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-white rounded-xl border border-stone-200 shadow-xl max-h-64 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-[#FDFBF7] rounded-xl border border-stone-200 shadow-xl max-h-64 overflow-y-auto">
           <div className="p-3 border-b border-stone-100">
             <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Recent Drafts</p>
           </div>
@@ -175,7 +175,7 @@ export function ToolContentWrapper({
   accentColor?: string;
 }) {
   return (
-    <div className="rounded-2xl p-5 sm:p-7 bg-white border border-stone-200 shadow-sm">
+    <div className="rounded-2xl p-5 sm:p-7 bg-[#FDFBF7] border border-stone-200 shadow-sm">
       {children}
     </div>
   );

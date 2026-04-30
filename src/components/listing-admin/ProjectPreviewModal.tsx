@@ -69,10 +69,10 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
           </div>
           {/* Media counts */}
           <div className="absolute bottom-3 right-3 flex gap-2">
-            <span className="text-xs px-2 py-1 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+            <span className="text-xs px-2 py-1 rounded-full bg-[#1A1A1A]/60 text-white backdrop-blur-sm flex items-center gap-1">
               <ImageIcon className="w-3 h-3" />{imageCount}
             </span>
-            <span className="text-xs px-2 py-1 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+            <span className="text-xs px-2 py-1 rounded-full bg-[#1A1A1A]/60 text-white backdrop-blur-sm flex items-center gap-1">
               <FileText className="w-3 h-3" />{docCount}
             </span>
           </div>

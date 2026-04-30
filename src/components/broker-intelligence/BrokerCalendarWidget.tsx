@@ -92,7 +92,7 @@ export function BrokerCalendarWidget() {
   return (
     <div className="space-y-6">
       {/* Today's Header */}
-      <Card className="bg-zinc-900/50 border-gray-800">
+      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-white text-lg flex items-center gap-2">
@@ -121,7 +121,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Meeting title"
                     value={quickEvent.title}
                     onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
                   />
                 </div>
                 <div className="space-y-1">
@@ -130,7 +130,7 @@ export function BrokerCalendarWidget() {
                     type="time"
                     value={quickEvent.time}
                     onChange={(e) => setQuickEvent({ ...quickEvent, time: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white h-9"
                   />
                 </div>
               </div>
@@ -155,7 +155,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Client name"
                     value={quickEvent.client}
                     onChange={(e) => setQuickEvent({ ...quickEvent, client: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export function BrokerCalendarWidget() {
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="bg-zinc-800/50 rounded-lg p-3 border border-gray-700/50 hover:border-gold/20 transition-colors"
+                  className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -217,7 +217,7 @@ export function BrokerCalendarWidget() {
 
       {/* Link to Full Calendar */}
       <Link to="/crm/calendar">
-        <Card className="bg-zinc-800/30 border-gray-800 hover:border-gold/30 transition-colors cursor-pointer">
+        <Card className="bg-zinc-800/30 border-[#1A1A1A] hover:border-gold/30 transition-colors cursor-pointer">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Calendar className="w-5 h-5 text-gold" />
@@ -226,7 +226,7 @@ export function BrokerCalendarWidget() {
                 <p className="text-white/90 text-xs">Manage all events, sync with Google Calendar</p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+            <ChevronRight className="w-5 h-5 text-[#5A4A2E]" />
           </CardContent>
         </Card>
       </Link>

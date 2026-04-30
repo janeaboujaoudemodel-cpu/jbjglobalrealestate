@@ -336,7 +336,7 @@ Today, JBJ Global Real Estate serves local and international clients seeking rel
 const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
   return (
     <div className="relative group cursor-pointer" onClick={onClick} style={{ perspective: '1200px' }}>
-      <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/20 blur-xl rounded-full" />
+      <div className="absolute -bottom-4 left-4 right-4 h-8 bg-[#1A1A1A]/20 blur-xl rounded-full" />
       <div
         className="relative w-52 sm:w-60 md:w-64 mx-auto transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
         style={{ transformStyle: 'preserve-3d' }}
@@ -360,7 +360,7 @@ const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGe
           style={{ transform: 'rotateX(90deg) translateY(6px)', transformOrigin: 'bottom' }}
         />
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-20">
+      <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-20">
         <div className="text-center">
           {isGenerating ? (
             <div className="w-12 h-12 border-4 border-[#C8A766]/30 border-t-[#C8A766] rounded-full animate-spin mx-auto" />
@@ -427,7 +427,7 @@ const CompanyProfile = () => {
           aria-label="Download Company Profile (PDF)"
         >
           {isGenerating ? (
-            <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-black rounded-full animate-spin" />
           ) : (
             <Download className="w-5 h-5" />
           )}
@@ -466,7 +466,7 @@ const CompanyProfile = () => {
             <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
               {isGenerating ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-black rounded-full animate-spin" />
                   Downloading...
                 </div>
               ) : (
@@ -553,7 +553,7 @@ const CompanyProfile = () => {
             </h2>
           </div>
           <div className="jj-card-inner">
-            <div className="space-y-6 text-black/70 leading-relaxed">
+            <div className="space-y-6 text-[#1A1A1A]/70 leading-relaxed">
               {PROFILE_CONTENT.executiveSummary.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
@@ -590,8 +590,8 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-12 h-12 mx-auto mb-3">
                   <Users className="w-6 h-6" />
                 </div>
-                <h3 className="text-black text-sm font-bold mb-2">{player.title}</h3>
-                <p className="text-black/70 text-xs">{player.description}</p>
+                <h3 className="text-[#1A1A1A] text-sm font-bold mb-2">{player.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-xs">{player.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -642,7 +642,7 @@ const CompanyProfile = () => {
             </h2>
           </div>
           <div className="jj-card-inner">
-            <div className="space-y-6 text-black/70 leading-relaxed">
+            <div className="space-y-6 text-[#1A1A1A]/70 leading-relaxed">
               {PROFILE_CONTENT.brandStory.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
@@ -661,8 +661,8 @@ const CompanyProfile = () => {
                   <Eye className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-black text-xl font-bold mb-2">Vision</h3>
-                  <p className="text-black/70 leading-relaxed">{PROFILE_CONTENT.vision}</p>
+                  <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">Vision</h3>
+                  <p className="text-[#1A1A1A]/70 leading-relaxed">{PROFILE_CONTENT.vision}</p>
                 </div>
               </div>
             </motion.div>
@@ -672,8 +672,8 @@ const CompanyProfile = () => {
                   <Target className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-black text-xl font-bold mb-2">Mission</h3>
-                  <p className="text-black/70 leading-relaxed">{PROFILE_CONTENT.mission}</p>
+                  <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">Mission</h3>
+                  <p className="text-[#1A1A1A]/70 leading-relaxed">{PROFILE_CONTENT.mission}</p>
                 </div>
               </div>
             </motion.div>
@@ -698,8 +698,8 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-12 h-12 mx-auto mb-3">
                   <Heart className="w-6 h-6" />
                 </div>
-                <h3 className="text-black text-sm font-bold mb-2">{value.title}</h3>
-                <p className="text-black/70 text-xs">{value.description}</p>
+                <h3 className="text-[#1A1A1A] text-sm font-bold mb-2">{value.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-xs">{value.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -729,11 +729,11 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-12 h-12 mb-4">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-black text-lg font-bold mb-2">{service.title}</h3>
-                <p className="text-black/70 text-sm mb-3">{service.description}</p>
-                <div className="space-y-1 text-xs text-black/70">
-                  <p><span className="font-semibold text-black">Ideal for:</span> {service.idealFor}</p>
-                  <p><span className="font-semibold text-black">Deliverables:</span> {service.deliverables}</p>
+                <h3 className="text-[#1A1A1A] text-lg font-bold mb-2">{service.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-sm mb-3">{service.description}</p>
+                <div className="space-y-1 text-xs text-[#1A1A1A]/70">
+                  <p><span className="font-semibold text-[#1A1A1A]">Ideal for:</span> {service.idealFor}</p>
+                  <p><span className="font-semibold text-[#1A1A1A]">Deliverables:</span> {service.deliverables}</p>
                 </div>
               </motion.div>
             );
@@ -765,8 +765,8 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-10 h-10 mb-3">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <h3 className="text-black font-bold text-sm mb-2">{tool.title}</h3>
-                <p className="text-black/70 text-xs leading-relaxed">{tool.description}</p>
+                <h3 className="text-[#1A1A1A] font-bold text-sm mb-2">{tool.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">{tool.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -796,8 +796,8 @@ const CompanyProfile = () => {
                   <Store className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-black font-bold text-sm mb-1">{f.title}</h3>
-                  <p className="text-black/70 text-xs">{f.description}</p>
+                  <h3 className="text-[#1A1A1A] font-bold text-sm mb-1">{f.title}</h3>
+                  <p className="text-[#1A1A1A]/70 text-xs">{f.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -827,8 +827,8 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-10 h-10 mb-3">
                   <Globe className="w-5 h-5" />
                 </div>
-                <h3 className="text-black font-bold text-sm mb-2">{h.title}</h3>
-                <p className="text-black/70 text-xs leading-relaxed">{h.description}</p>
+                <h3 className="text-[#1A1A1A] font-bold text-sm mb-2">{h.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">{h.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -871,7 +871,7 @@ const CompanyProfile = () => {
                     />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                      <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1 }}>JBJ</span>
+                      <span className="text-6xl font-black text-[#1A1A1A] select-none" style={{ opacity: 0.1 }}>JBJ</span>
                     </div>
                   )}
 
@@ -879,7 +879,7 @@ const CompanyProfile = () => {
 
                   <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                     {area.is_trending && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
                         <TrendingUp className="w-2.5 h-2.5" />
                         Trending
                       </span>
@@ -894,7 +894,7 @@ const CompanyProfile = () => {
 
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     {area.property_count != null && area.property_count > 0 && (
-                      <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-[#C8A766] text-[9px] font-semibold tracking-wide border border-[#C8A766]/30">
+                      <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-[#C8A766] text-[9px] font-semibold tracking-wide border border-[#C8A766]/30">
                         {area.property_count} Projects
                       </span>
                     )}
@@ -917,8 +917,8 @@ const CompanyProfile = () => {
         >
           {PROFILE_CONTENT.primeAreas.map((area) => (
             <motion.div key={area.name} className="jj-card-inner text-center" variants={fadeInUp}>
-              <h3 className="text-black font-bold text-sm mb-1">{area.name}</h3>
-              <p className="text-black/60 text-xs leading-relaxed">{area.description}</p>
+              <h3 className="text-[#1A1A1A] font-bold text-sm mb-1">{area.name}</h3>
+              <p className="text-[#1A1A1A]/60 text-xs leading-relaxed">{area.description}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -926,7 +926,7 @@ const CompanyProfile = () => {
         <div className="text-center mt-8">
           <Link
             to="/areas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#C8A766] rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#C8A766] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
           >
             <span>View All Areas</span>
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -945,12 +945,12 @@ const CompanyProfile = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
-              <h3 className="text-black font-bold text-lg mb-4 flex items-center gap-2">
+              <h3 className="text-[#1A1A1A] font-bold text-lg mb-4 flex items-center gap-2">
                 <Briefcase className="w-5 h-5 text-gold" /> For Investors
               </h3>
               <ul className="space-y-3">
                 {PROFILE_CONTENT.platformBenefits.investors.map((b, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                  <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
                     <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                     {b}
                   </li>
@@ -958,12 +958,12 @@ const CompanyProfile = () => {
               </ul>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
-              <h3 className="text-black font-bold text-lg mb-4 flex items-center gap-2">
+              <h3 className="text-[#1A1A1A] font-bold text-lg mb-4 flex items-center gap-2">
                 <Handshake className="w-5 h-5 text-gold" /> For Brokers
               </h3>
               <ul className="space-y-3">
                 {PROFILE_CONTENT.platformBenefits.brokers.map((b, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                  <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
                     <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                     {b}
                   </li>
@@ -1006,11 +1006,11 @@ const CompanyProfile = () => {
             {PROFILE_CONTENT.investorJourney.map((step) => (
               <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
                 <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
-                  <span className="text-black font-bold text-sm">{step.step}</span>
+                  <span className="text-[#1A1A1A] font-bold text-sm">{step.step}</span>
                 </div>
                 <div className="jj-card-inner flex-1">
-                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
-                  <p className="text-black/70 text-sm">{step.description}</p>
+                  <h3 className="text-[#1A1A1A] text-lg font-bold mb-1">{step.title}</h3>
+                  <p className="text-[#1A1A1A]/70 text-sm">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -1040,8 +1040,8 @@ const CompanyProfile = () => {
                 <div className="jj-icon-box-active w-10 h-10 mb-3">
                   <Handshake className="w-5 h-5" />
                 </div>
-                <h3 className="text-black font-bold text-sm mb-2">{p.title}</h3>
-                <p className="text-black/70 text-xs leading-relaxed">{p.description}</p>
+                <h3 className="text-[#1A1A1A] font-bold text-sm mb-2">{p.title}</h3>
+                <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">{p.description}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -1062,11 +1062,11 @@ const CompanyProfile = () => {
             {PROFILE_CONTENT.process.map((step) => (
               <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
                 <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
-                  <span className="text-black font-bold">{step.step}</span>
+                  <span className="text-[#1A1A1A] font-bold">{step.step}</span>
                 </div>
                 <div className="jj-card-inner flex-1">
-                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
-                  <p className="text-black/70">{step.description}</p>
+                  <h3 className="text-[#1A1A1A] text-lg font-bold mb-1">{step.title}</h3>
+                  <p className="text-[#1A1A1A]/70">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -1135,8 +1135,8 @@ const CompanyProfile = () => {
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-black font-bold text-lg mb-3">Trust & Compliance</h3>
-                <p className="text-black/70 text-sm leading-relaxed">{PROFILE_CONTENT.trustCompliance}</p>
+                <h3 className="text-[#1A1A1A] font-bold text-lg mb-3">Trust & Compliance</h3>
+                <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{PROFILE_CONTENT.trustCompliance}</p>
               </div>
             </div>
           </div>
@@ -1169,15 +1169,15 @@ const CompanyProfile = () => {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-black text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
+                  <h3 className="text-[#1A1A1A] text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
                   <p className="text-gold mb-4">{PROFILE_CONTENT.founderProfile.title}</p>
-                  <p className="text-black/70 leading-relaxed mb-6">{PROFILE_CONTENT.founderProfile.bio}</p>
+                  <p className="text-[#1A1A1A]/70 leading-relaxed mb-6">{PROFILE_CONTENT.founderProfile.bio}</p>
 
                   <div className="mb-6">
-                    <h4 className="text-black font-bold text-sm mb-3">Founder Principles</h4>
+                    <h4 className="text-[#1A1A1A] font-bold text-sm mb-3">Founder Principles</h4>
                     <ul className="space-y-2">
                       {PROFILE_CONTENT.founderProfile.principles.map((p, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                        <li key={i} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
                           <span className="text-gold font-bold">{i + 1}.</span> {p}
                         </li>
                       ))}
@@ -1185,8 +1185,8 @@ const CompanyProfile = () => {
                   </div>
 
                   <blockquote className="border-l-4 border-gold pl-6 py-2">
-                    <p className="text-black text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
-                    <cite className="text-black/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
+                    <p className="text-[#1A1A1A] text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
+                    <cite className="text-[#1A1A1A]/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
                   </blockquote>
                 </div>
               </div>
@@ -1265,8 +1265,8 @@ const CompanyProfile = () => {
               className="jj-card-inner group cursor-pointer flex flex-col h-full"
               onClick={handleWhatsApp}
             >
-              <h3 className="text-black text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
-              <p className="text-black/70 text-sm mb-4 flex-1">{cta.description}</p>
+              <h3 className="text-[#1A1A1A] text-lg font-bold mb-2 group-hover:text-gold transition-colors">{cta.title}</h3>
+              <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">{cta.description}</p>
               <div className="flex items-center text-gold text-sm font-semibold mt-auto">
                 <span>Get Started</span>
                 <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
@@ -1306,7 +1306,7 @@ const CompanyProfile = () => {
                 <Button onClick={generatePDF} disabled={isGenerating} variant="primary" size="lg">
                   {isGenerating ? (
                     <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-black rounded-full animate-spin" />
                       Downloading...
                     </div>
                   ) : (
@@ -1316,7 +1316,7 @@ const CompanyProfile = () => {
                     </>
                   )}
                 </Button>
-                <Button onClick={handleWhatsApp} variant="outline" size="lg" className="border-gold text-gold hover:bg-gold hover:text-black">
+                <Button onClick={handleWhatsApp} variant="outline" size="lg" className="border-gold text-gold hover:bg-gold hover:text-[#1A1A1A]">
                   <BookOpen className="w-5 h-5" />
                   Request Print Copy
                 </Button>
@@ -1345,7 +1345,7 @@ const CompanyProfile = () => {
           aria-label="Download Company Profile (PDF)"
         >
           {isGenerating ? (
-            <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-black rounded-full animate-spin" />
           ) : (
             <Download className="w-5 h-5" />
           )}

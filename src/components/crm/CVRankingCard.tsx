@@ -60,7 +60,7 @@ const CVRankingCard = ({
       case 'analyzed': return 'bg-purple-600 text-white';
       case 'rejected': return 'bg-red-600 text-white';
       case 'on_hold': return 'bg-orange-600 text-white';
-      default: return 'bg-gray-600 text-white';
+      default: return 'bg-[#1A1A1A] text-white';
     }
   };
 
@@ -75,7 +75,7 @@ const CVRankingCard = ({
   const getRankBadge = () => {
     if (!rank) return null;
     if (rank === 1) return <Crown className="h-5 w-5 text-gold" />;
-    if (rank === 2) return <Star className="h-5 w-5 text-gray-600" />;
+    if (rank === 2) return <Star className="h-5 w-5 text-[#5A4A2E]" />;
     if (rank === 3) return <Star className="h-5 w-5 text-gold-dark" />;
     return <span className="text-sm font-bold text-muted-foreground">#{rank}</span>;
   };
@@ -185,7 +185,7 @@ const CVRankingCard = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onView(candidate.id)}
-                className="text-gray-900 bg-white border-gray-300 hover:bg-gray-100 font-medium shadow-sm"
+                className="text-[#1A1A1A] bg-[#FDFBF7] border-[#B89555]/30 hover:bg-[#F7F2EA] font-medium shadow-sm"
               >
                 <Eye className="h-4 w-4 mr-1" />
                 Review
@@ -194,7 +194,7 @@ const CVRankingCard = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onDownload(candidate.id)}
-                className="text-gray-900 bg-amber-100 border-amber-400 hover:bg-amber-200 font-medium shadow-sm"
+                className="text-[#1A1A1A] bg-amber-100 border-amber-400 hover:bg-amber-200 font-medium shadow-sm"
               >
                 <Download className="h-4 w-4 mr-1" />
                 CV

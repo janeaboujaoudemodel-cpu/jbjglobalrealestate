@@ -24,7 +24,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
               </FounderContent>
               Unauthorized reproduction is strictly prohibited.
             </p>
-            <Lock className="w-4 h-4 text-gray-600 flex-shrink-0 hidden md:block" />
+            <Lock className="w-4 h-4 text-[#5A4A2E] flex-shrink-0 hidden md:block" />
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
   if (variant === "floating") {
     return (
       <div className={`fixed bottom-4 left-4 z-40 max-w-xs ${className}`}>
-        <div className="bg-black/90 backdrop-blur-xl border border-gold/30 rounded-lg px-4 py-3 shadow-2xl shadow-black/50">
+        <div className="bg-[#1A1A1A]/90 backdrop-blur-xl border border-gold/30 rounded-lg px-4 py-3 shadow-2xl shadow-black/50">
           <div className="flex items-start gap-2">
             <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
             <div>

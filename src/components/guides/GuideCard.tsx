@@ -44,29 +44,29 @@ export const GuideCard = ({
     >
       <div className="flex items-start gap-4">
         {number !== undefined && (
-          <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
             <span className="text-gold text-xl font-semibold">{number}</span>
           </div>
         )}
         {Icon && !number && (
-          <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
             <Icon className="w-6 h-6 text-gold" />
           </div>
         )}
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             {Icon && number !== undefined && <Icon className="w-5 h-5 text-gold" />}
-            <h3 className="text-xl md:text-2xl font-medium text-black">{title}</h3>
+            <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A]">{title}</h3>
           </div>
           {description && (
-            <p className="text-gray-600 mb-4">{description}</p>
+            <p className="text-[#5A4A2E] mb-4">{description}</p>
           )}
           {items && items.length > 0 && (
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                  <span className="text-gray-700 text-sm">{item}</span>
+                  <span className="text-[#5A4A2E] text-sm">{item}</span>
                 </li>
               ))}
             </ul>

@@ -54,7 +54,7 @@ export const PremiumHeroButton = ({
     "font-semibold tracking-wide",
     "rounded-xl transition-all duration-300 cursor-pointer",
     isLight 
-      ? "bg-white border-2 border-gray-300 hover:border-gray-400 hover:-translate-y-1"
+      ? "bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/30 hover:-translate-y-1"
       : "bg-transparent border-2 border-white/70 hover:border-white hover:-translate-y-0.5",
     className
   );
@@ -81,19 +81,19 @@ export const PremiumHeroButton = ({
     <>
       {iconPosition === "left" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-[#5A4A2E]" : "text-white/80 group-hover:text-[#1A1A1A]")}
         />
       )}
-      <span className={cn("transition-colors", isLight ? "text-black" : "text-white group-hover:text-black")}>{children}</span>
+      <span className={cn("transition-colors", isLight ? "text-[#1A1A1A]" : "text-white group-hover:text-[#1A1A1A]")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-[#5A4A2E]" : "text-white/80 group-hover:text-[#1A1A1A]")}
         />
       )}
       {/* Hover fill effect (only for dark-bg variant) */}
       {!isLight && (
         <span 
-          className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gray-300" 
+          className="absolute inset-0 rounded-xl bg-[#FDFBF7] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-[#B89555]/30" 
         />
       )}
     </>

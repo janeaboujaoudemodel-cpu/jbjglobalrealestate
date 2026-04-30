@@ -73,23 +73,23 @@ const CRMEmployees = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white sticky top-0 lg:top-[48px] z-50">
+      <header className="border-b border-[#B89555]/30 bg-[#FDFBF7] sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
             </Link>
-            <div className="h-6 w-px bg-gray-200" />
+            <div className="h-6 w-px bg-[#EFE6D6]" />
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg bg-teal-500/20">
                 <Users className="h-5 w-5 text-teal-500" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gray-900">Employees Hub</h1>
-                <p className="text-xs text-gray-600">HR, Brokers & Team Management</p>
+                <h1 className="text-lg font-bold text-[#1A1A1A]">Employees Hub</h1>
+                <p className="text-xs text-[#5A4A2E]">HR, Brokers & Team Management</p>
               </div>
             </div>
           </div>
@@ -109,7 +109,7 @@ const CRMEmployees = () => {
         {/* Listing Admin Manager - Only for Owner */}
         {isCRMOwner && <ListingAdminManager />}
 
-        <Card className="border-gray-200 bg-white">
+        <Card className="border-[#B89555]/30 bg-[#FDFBF7]">
           <CardContent className="p-6">
             <EmployeesHub userId={user?.id || ""} />
           </CardContent>

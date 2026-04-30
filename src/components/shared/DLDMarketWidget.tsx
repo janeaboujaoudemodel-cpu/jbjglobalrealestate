@@ -124,7 +124,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
               <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border-2 rounded-xl p-5 relative overflow-hidden group hover:scale-[1.03] hover:shadow-lg transition-all duration-300 shadow-sm`}>
-                <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-black/[0.02] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-[#1A1A1A]/[0.02] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_8px] shadow-current animate-pulse`} />
                   <span className={`${stat.labelColor} text-[10px] uppercase tracking-[0.15em] font-bold`}>{stat.label}</span>
@@ -138,7 +138,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars — Premium */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Off-Plan vs Secondary */}
-            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-4 h-4 text-emerald-600" />
                 <h3 className="text-foreground font-semibold text-sm">Off-Plan vs Secondary</h3>
@@ -179,7 +179,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Cash vs Mortgage */}
-            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
                 <Banknote className="w-4 h-4 text-blue-600" />
                 <h3 className="text-foreground font-semibold text-sm">Cash vs Mortgage</h3>
@@ -221,7 +221,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Top 10 Areas */}
-            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <MapPin className="w-4 h-4 text-gold" />
                 <h3 className="text-foreground text-sm font-bold">Top 10 Areas by Transactions</h3>
@@ -261,7 +261,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 10 Nationalities */}
-            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
+            <div className="bg-[#FDFBF7] rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <Globe className="w-4 h-4 text-gold" />
                 <h3 className="text-foreground text-sm font-bold">Top 10 Buyer Nationalities</h3>

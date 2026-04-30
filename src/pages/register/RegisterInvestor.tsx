@@ -130,21 +130,21 @@ export default function RegisterInvestor() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-10 px-4">
+    <div className="min-h-screen bg-[#FDFBF7] py-10 px-4">
       <SEOHead title="Investor Registration | JBJ Global" description="Complete your investor profile to access tailored properties and intelligence." />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-black">Investor Registration</h1>
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Investor Registration</h1>
             <p className="text-neutral-600 text-sm">Tell us about your investment profile</p>
           </div>
         </div>
 
         <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-          <h2 className="text-lg font-semibold text-black">Basic Information</h2>
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">Basic Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name *"><Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="As on passport" /></Field>
             <Field label="Phone (with country code) *"><Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+971..." /></Field>
@@ -163,22 +163,22 @@ export default function RegisterInvestor() {
         </section>
 
         <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-          <h2 className="text-lg font-semibold text-black">Your Status</h2>
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">Your Status</h2>
           <RadioGroup value={intent} onValueChange={(v) => setIntent(v as Intent)} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "looking_to_buy" ? "border-black bg-white" : "border-neutral-200 bg-white"}`}>
+            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "looking_to_buy" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-neutral-200 bg-[#FDFBF7]"}`}>
               <div className="flex items-start gap-3">
                 <RadioGroupItem value="looking_to_buy" />
                 <div>
-                  <div className="font-semibold text-black">Looking to buy</div>
+                  <div className="font-semibold text-[#1A1A1A]">Looking to buy</div>
                   <div className="text-xs text-neutral-600">I'm searching for properties to invest in</div>
                 </div>
               </div>
             </label>
-            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "currently_invested" ? "border-black bg-white" : "border-neutral-200 bg-white"}`}>
+            <label className={`p-4 rounded-xl border-2 cursor-pointer ${intent === "currently_invested" ? "border-[#1A1A1A] bg-[#FDFBF7]" : "border-neutral-200 bg-[#FDFBF7]"}`}>
               <div className="flex items-start gap-3">
                 <RadioGroupItem value="currently_invested" />
                 <div>
-                  <div className="font-semibold text-black">Currently invested</div>
+                  <div className="font-semibold text-[#1A1A1A]">Currently invested</div>
                   <div className="text-xs text-neutral-600">I already own one or more properties</div>
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function RegisterInvestor() {
 
         {intent === "looking_to_buy" && (
           <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-            <h2 className="text-lg font-semibold text-black">What are you looking for?</h2>
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">What are you looking for?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Field label="Budget Min (AED)"><Input type="number" value={budgetMin} onChange={(e) => setBudgetMin(e.target.value)} placeholder="500000" /></Field>
               <Field label="Budget Max (AED)"><Input type="number" value={budgetMax} onChange={(e) => setBudgetMax(e.target.value)} placeholder="3000000" /></Field>
@@ -233,11 +233,11 @@ export default function RegisterInvestor() {
         {intent === "currently_invested" && (
           <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-black">Your properties</h2>
+              <h2 className="text-lg font-semibold text-[#1A1A1A]">Your properties</h2>
               <Button type="button" variant="outline" size="sm" onClick={addOwned}>+ Add property</Button>
             </div>
             {owned.map((p, i) => (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-xl border border-neutral-200 relative">
+              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[#FDFBF7] rounded-xl border border-neutral-200 relative">
                 <Field label="Project name *"><Input value={p.project_name} onChange={(e) => updateOwned(i, "project_name", e.target.value)} /></Field>
                 <Field label="Unit number"><Input value={p.unit_number} onChange={(e) => updateOwned(i, "unit_number", e.target.value)} /></Field>
                 <Field label="Purchase price (AED)"><Input type="number" value={p.purchase_price} onChange={(e) => updateOwned(i, "purchase_price", e.target.value)} /></Field>
@@ -256,7 +256,7 @@ export default function RegisterInvestor() {
           </Field>
         </section>
 
-        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-black text-white hover:bg-neutral-800">
+        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-neutral-800">
           {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (<>Submit & Continue <ArrowRight className="ml-2 w-5 h-5" /></>)}
         </Button>
         <p className="text-xs text-neutral-500 text-center mt-4 flex items-center justify-center gap-1.5">

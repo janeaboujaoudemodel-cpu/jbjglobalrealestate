@@ -357,9 +357,9 @@ const BulkEmailModal = ({ open, onClose, userId, preSelectedLeadIds }: BulkEmail
                 <span className="text-sm font-medium">Preview</span>
                 <Badge variant="outline">{recipientCount} recipients</Badge>
               </div>
-              <div className="bg-gray-100 p-4">
+              <div className="bg-[#F7F2EA] p-4">
                 <div 
-                  className="bg-white shadow-lg mx-auto max-w-[600px]"
+                  className="bg-[#FDFBF7] shadow-lg mx-auto max-w-[600px]"
                   dangerouslySetInnerHTML={{ __html: generateEmailHtml() }}
                 />
               </div>

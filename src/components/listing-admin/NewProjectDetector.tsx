@@ -159,10 +159,10 @@ export function NewProjectDetector() {
           {projects.map(project => (
             <div
               key={project.id}
-              className="flex flex-col rounded-xl bg-white border border-blue-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col rounded-xl bg-[#FDFBF7] border border-blue-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Cover Image */}
-              <div className="relative w-full h-36 bg-gray-100 flex-shrink-0">
+              <div className="relative w-full h-36 bg-[#F7F2EA] flex-shrink-0">
                 {project.cover_image_url ? (
                   <img
                     src={project.cover_image_url}
@@ -184,7 +184,7 @@ export function NewProjectDetector() {
                 )}
                 {project.reelly_id && (
                   <div className="absolute top-2 right-2">
-                    <Badge className="text-[10px] bg-black/50 text-white border-0 backdrop-blur-sm">
+                    <Badge className="text-[10px] bg-[#1A1A1A]/50 text-white border-0 backdrop-blur-sm">
                       #{project.reelly_id}
                     </Badge>
                   </div>
@@ -193,11 +193,11 @@ export function NewProjectDetector() {
 
               {/* Info */}
               <div className="p-3 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-gray-900 line-clamp-1">{project.name}</p>
+                <p className="text-sm font-semibold text-[#1A1A1A] line-clamp-1">{project.name}</p>
                 {project.developer_name && (
-                  <p className="text-xs text-gray-600">{project.developer_name}</p>
+                  <p className="text-xs text-[#5A4A2E]">{project.developer_name}</p>
                 )}
-                <div className="flex items-center gap-1 text-[11px] text-gray-600">
+                <div className="flex items-center gap-1 text-[11px] text-[#5A4A2E]">
                   {(project.area_name || project.location) && (
                     <>
                       <MapPin className="w-3 h-3 flex-shrink-0" />
@@ -232,7 +232,7 @@ export function NewProjectDetector() {
           ))}
         </div>
         {totalCount > projects.length && (
-          <p className="text-center text-xs text-gray-600 mt-3">
+          <p className="text-center text-xs text-[#5A4A2E] mt-3">
             Showing {projects.length} of {totalCount} new projects. Use "Publish All" to publish everything.
           </p>
         )}

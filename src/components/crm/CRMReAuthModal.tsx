@@ -90,7 +90,7 @@ export default function CRMReAuthModal({ open, onOpenChange, actionLabel, onSucc
           <AlertDialogCancel className="bg-background border-2 border-gold/30 text-foreground hover:bg-gold/10">
             Cancel
           </AlertDialogCancel>
-          <Button onClick={handleReAuth} disabled={loading || !password} className="bg-gold text-black hover:bg-gold/90">
+          <Button onClick={handleReAuth} disabled={loading || !password} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
             {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Confirm & Proceed
           </Button>

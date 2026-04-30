@@ -58,8 +58,8 @@ export default function DepartmentShortcuts() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-black mb-4">Departments & Admin</h3>
+    <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+      <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Departments & Admin</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {DEPARTMENTS.map((dept) => (
           <button
@@ -79,14 +79,14 @@ export default function DepartmentShortcuts() {
               <dept.icon className={cn("h-5 w-5", dept.color)} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-black group-hover:text-[#B89555] transition-colors">
+              <p className="text-sm font-medium text-[#1A1A1A] group-hover:text-[#B89555] transition-colors">
                 {dept.label}
               </p>
-              <p className="text-xs text-gray-600 leading-snug">
+              <p className="text-xs text-[#5A4A2E] leading-snug">
                 {dept.description}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-[#5A4A2E] group-hover:text-[#B89555] transition-colors flex-shrink-0" />
           </button>
         ))}
       </div>

@@ -90,8 +90,8 @@ const QuizResults = () => {
   };
 
   const badgeLabels = {
-    top1: { label: "Top 1", sublabel: "Gold", color: "bg-gradient-to-r from-[#B89555] via-[#E8D5A3] to-[#B89555] border-2 border-[#B89555] shadow-lg", textColor: "text-black", medalColor: "text-[#B89555]" },
-    top2: { label: "Top 2", sublabel: "Silver", color: "bg-gradient-to-r from-[#A0A0A0] via-[#E8E8E8] to-[#A0A0A0] border-2 border-[#B0B0B0] shadow-lg", textColor: "text-black", medalColor: "text-[#A0A0A0]" },
+    top1: { label: "Top 1", sublabel: "Gold", color: "bg-gradient-to-r from-[#B89555] via-[#E8D5A3] to-[#B89555] border-2 border-[#B89555] shadow-lg", textColor: "text-[#1A1A1A]", medalColor: "text-[#B89555]" },
+    top2: { label: "Top 2", sublabel: "Silver", color: "bg-gradient-to-r from-[#A0A0A0] via-[#E8E8E8] to-[#A0A0A0] border-2 border-[#B0B0B0] shadow-lg", textColor: "text-[#1A1A1A]", medalColor: "text-[#A0A0A0]" },
     top3: { label: "Top 3", sublabel: "Bronze", color: "bg-gradient-to-r from-[#CD7F32] via-[#E8A84C] to-[#CD7F32] border-2 border-[#CD7F32] shadow-lg", textColor: "text-white", medalColor: "text-[#CD7F32]" },
   };
 
@@ -272,7 +272,7 @@ Best regards`);
             </Button>
             <Button
               onClick={() => setShareModalOpen(true)}
-              className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-black hover:brightness-110 font-semibold"
+              className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
             >
               <Share2 className="w-4 h-4 mr-2" />
               Share with Consultant
@@ -283,9 +283,9 @@ Best regards`);
         {/* Top Recommendation */}
         {projects && projects.length > 0 && (
           <div className="mb-12">
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden border-2 border-[#B89555] shadow-[0_8px_32px_rgba(200,167,102,0.2)]">
+            <div className="relative bg-[#FDFBF7]/80 backdrop-blur-sm rounded-3xl overflow-hidden border-2 border-[#B89555] shadow-[0_8px_32px_rgba(200,167,102,0.2)]">
               <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                <div className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-black text-sm font-semibold px-4 py-1.5 rounded-full">
+                <div className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] text-sm font-semibold px-4 py-1.5 rounded-full">
                   #1 Best Match
                 </div>
                 {badges[projects[0].id] && (
@@ -343,7 +343,7 @@ Best regards`);
                           {badges[projects[0].id] ? 'Change Badge' : 'Add Badge'}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="bg-white border-[#B89555]/30">
+                      <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/30">
                         <DropdownMenuItem onClick={() => handleSetBadge(projects[0].id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
                           Top 1 — Gold
                         </DropdownMenuItem>
@@ -382,9 +382,9 @@ Best regards`);
               {projects.slice(1).map((project, index) => {
                 const badge = badges[project.id];
                 return (
-                  <div key={project.id} className="relative group flex flex-col h-full border-2 border-[#B89555]/40 rounded-2xl overflow-hidden min-h-[420px] bg-white/60 backdrop-blur-sm shadow-[0_4px_16px_rgba(200,167,102,0.15)]">
+                  <div key={project.id} className="relative group flex flex-col h-full border-2 border-[#B89555]/40 rounded-2xl overflow-hidden min-h-[420px] bg-[#FDFBF7]/60 backdrop-blur-sm shadow-[0_4px_16px_rgba(200,167,102,0.15)]">
                     <div className="absolute -top-2 -left-2 z-10 w-8 h-8 bg-[#B89555] rounded-full flex items-center justify-center border-2 border-white shadow-md">
-                      <span className="text-black text-sm font-bold">#{index + 2}</span>
+                      <span className="text-[#1A1A1A] text-sm font-bold">#{index + 2}</span>
                     </div>
                     {badge && (
                       <div className="absolute top-2 left-8 z-10">
@@ -408,7 +408,7 @@ Best regards`);
                             {badge ? 'Change Badge' : 'Add Badge'}
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-white border-[#B89555]/30">
+                        <DropdownMenuContent className="bg-[#FDFBF7] border-[#B89555]/30">
                           <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-[#B89555] hover:bg-[#B89555]/10">
                             Top 1 — Gold
                           </DropdownMenuItem>
@@ -434,14 +434,14 @@ Best regards`);
         )}
 
         {/* Action Cards */}
-        <div className="border-2 border-gold/30 rounded-2xl p-6 bg-white/60 backdrop-blur-sm mb-12">
+        <div className="border-2 border-gold/30 rounded-2xl p-6 bg-[#FDFBF7]/60 backdrop-blur-sm mb-12">
           <h3 className="text-stone-900 text-lg font-semibold mb-5 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-gold" />
             Want More AI Power?
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* AI Comparison Card */}
-            <div className="bg-white/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
                   <Sparkles className="w-6 h-6 text-gold" />
@@ -463,7 +463,7 @@ Best regards`);
             </div>
 
             {/* Professional Evaluation Card */}
-            <div className="bg-white/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
                   <Users className="w-6 h-6 text-gold" />
@@ -486,7 +486,7 @@ Best regards`);
             </div>
 
             {/* Regenerate / AI Finder Card */}
-            <div className="bg-white/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
+            <div className="bg-[#FDFBF7]/80 rounded-2xl p-6 border border-gold/30 backdrop-blur-sm flex flex-col">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] flex items-center justify-center shadow-md shadow-gold/20">
                   <Brain className="w-6 h-6 text-gold" />
@@ -530,7 +530,7 @@ Best regards`);
 
       {/* Share Modal */}
       <Dialog open={shareModalOpen} onOpenChange={setShareModalOpen}>
-        <DialogContent className="bg-white border-[#B89555]/30 text-stone-900 sm:max-w-md">
+        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-stone-900">
               <Share2 className="w-5 h-5 text-[#B89555]" />
@@ -562,7 +562,7 @@ Best regards`);
 
             <Button
               onClick={handleShareToCompany}
-              className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-black hover:brightness-110 font-semibold"
+              className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 font-semibold"
             >
               <Mail className="w-4 h-4 mr-2" />
               Send to CONTACT@JBJ.AE

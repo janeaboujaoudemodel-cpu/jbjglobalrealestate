@@ -58,7 +58,7 @@ const SingleTierSection = ({
           <span>{tierName}</span>
           <span>{nextTierName}</span>
         </div>
-        <Progress value={progressPercent} className="h-2 bg-white/10" />
+        <Progress value={progressPercent} className="h-2 bg-[#FDFBF7]/10" />
         <div className="text-center text-xs text-white/80">
           {pointsToNextTier.toLocaleString()} pts to next tier
         </div>
@@ -94,7 +94,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-black/40 border-white/10", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-white/10", className)}>
         <CardContent className="flex items-center justify-center py-8">
           <Loader2 className="w-6 h-6 text-gold animate-spin" />
         </CardContent>
@@ -115,7 +115,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
         <div className="flex-1 min-w-0">
           <Progress 
             value={progressPercent} 
-            className="h-2 bg-white/10"
+            className="h-2 bg-[#FDFBF7]/10"
             style={{ '--progress-color': getTierColor(currentTier?.tier_name || 'Starter') } as React.CSSProperties}
           />
         </div>
@@ -129,7 +129,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
   // Combined Mode: Show dual tier progress
   if (isCombinedMode && investorTierProgress && brokerTierProgress) {
     return (
-      <Card className={cn("bg-black/40 border-white/10 backdrop-blur-sm", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-white/10 backdrop-blur-sm", className)}>
         <CardHeader className="pb-2">
           <CardTitle className="text-lg text-white flex items-center justify-between">
             <span className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
 
   // Single Mode: Original layout
   return (
-    <Card className={cn("bg-black/40 border-white/10 backdrop-blur-sm", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-white/10 backdrop-blur-sm", className)}>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg text-white flex items-center justify-between">
           <span className="flex items-center gap-2">
@@ -223,12 +223,12 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
       <CardContent className="space-y-4">
         {/* Points Overview */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/5 rounded-lg p-3 text-center">
+          <div className="bg-[#FDFBF7]/5 rounded-lg p-3 text-center">
             <div className="text-2xl font-bold text-gold">{totalPoints.toLocaleString()}</div>
             <div className="text-xs text-white/90">Total Points</div>
           </div>
           {nextTier && (
-            <div className="bg-white/5 rounded-lg p-3 text-center">
+            <div className="bg-[#FDFBF7]/5 rounded-lg p-3 text-center">
               <div className="text-2xl font-bold text-white">{pointsToNextTier.toLocaleString()}</div>
               <div className="text-xs text-white/90">To {nextTier.tier_name}</div>
             </div>
@@ -244,7 +244,7 @@ export function TierProgressCard({ className, showHistory = false, compact = fal
             </div>
             <Progress 
               value={progressPercent} 
-              className="h-3 bg-white/10"
+              className="h-3 bg-[#FDFBF7]/10"
             />
             <div className="text-center text-sm text-white/80">
               {progressPercent}% to next tier

@@ -391,7 +391,7 @@ const VIPClientManager = () => {
                   </div>
                 </div>
 
-                <Button onClick={addVIPClient} className="w-full bg-gold hover:bg-gold-dark text-black">
+                <Button onClick={addVIPClient} className="w-full bg-gold hover:bg-gold-dark text-[#1A1A1A]">
                   <Crown className="h-4 w-4 mr-2" />
                   Add VIP Client
                 </Button>

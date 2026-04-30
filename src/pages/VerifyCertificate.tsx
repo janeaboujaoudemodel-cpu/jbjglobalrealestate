@@ -138,7 +138,7 @@ export default function VerifyCertificate() {
                   onKeyDown={(e) => e.key === "Enter" && verifyByNumber()}
                   className="border-gold/20"
                 />
-                <Button onClick={verifyByNumber} className="bg-gold text-black hover:bg-gold/90">
+                <Button onClick={verifyByNumber} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
                   Verify
                 </Button>
               </div>

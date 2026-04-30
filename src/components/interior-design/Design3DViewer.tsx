@@ -56,8 +56,8 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           variant={is3D ? 'default' : 'outline'}
           onClick={() => { setIs3D(!is3D); resetRotation(); }}
           className={is3D 
-            ? 'bg-gold hover:bg-amber-600 text-black border-0' 
-            : 'bg-black/60 border-gold/40 text-gold hover:bg-gold/15'
+            ? 'bg-gold hover:bg-amber-600 text-[#1A1A1A] border-0' 
+            : 'bg-[#1A1A1A]/60 border-gold/40 text-gold hover:bg-gold/15'
           }
         >
           <Move3D className="w-4 h-4 mr-1" />
@@ -68,7 +68,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
             size="sm"
             variant="outline"
             onClick={resetRotation}
-            className="bg-black/60 border-gray-600 text-white/85 hover:bg-gray-700"
+            className="bg-[#1A1A1A]/60 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
           >
             <RotateCcw className="w-4 h-4" />
           </Button>
@@ -77,7 +77,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           size="sm"
           variant="outline"
           onClick={handleDownload}
-          className="bg-black/60 border-gray-600 text-white/85 hover:bg-gray-700"
+          className="bg-[#1A1A1A]/60 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
         >
           <Download className="w-4 h-4" />
         </Button>
@@ -106,7 +106,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           }}
         />
         {is3D && (
-          <div className="absolute bottom-3 left-3 bg-black/70 text-gold text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
+          <div className="absolute bottom-3 left-3 bg-[#1A1A1A]/70 text-gold text-xs px-3 py-1.5 rounded-full backdrop-blur-sm">
             🎮 Drag to rotate • {rotateX.toFixed(0)}° × {rotateY.toFixed(0)}°
           </div>
         )}

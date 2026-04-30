@@ -641,7 +641,7 @@ const AIHub = () => {
                     </Badge>
                   )}
                 </div>
-                <p className="text-gray-600 text-sm line-clamp-2">{tool.description}</p>
+                <p className="text-[#5A4A2E] text-sm line-clamp-2">{tool.description}</p>
               </div>
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <ArrowUpRight className="w-5 h-5 text-gold opacity-60 group-hover:opacity-100 transition-all" />
@@ -752,7 +752,7 @@ const AIHub = () => {
                     }}
                   >
                     <LogIn className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    <span className="text-white group-hover:text-black transition-colors">Sign In / Create Account</span>
+                    <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Sign In / Create Account</span>
                     <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     {/* Hover fill overlay */}
                     <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -767,7 +767,7 @@ const AIHub = () => {
                     }}
                   >
                     <User className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    <span className="text-white group-hover:text-black transition-colors">Go to My Dashboard</span>
+                    <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Go to My Dashboard</span>
                     <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     {/* Hover fill overlay */}
                     <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -782,7 +782,7 @@ const AIHub = () => {
                     boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                   }}
                 >
-                  <span className="text-white group-hover:text-black transition-colors">Explore Free Tools</span>
+                  <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Explore Free Tools</span>
                   <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   {/* Hover fill overlay */}
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -798,7 +798,7 @@ const AIHub = () => {
                   }}
                 >
                   <Sparkles className="w-5 h-5 text-gold" />
-                  <span className="text-black font-bold">View Premium Plans</span>
+                  <span className="text-[#1A1A1A] font-bold">View Premium Plans</span>
                   <ArrowUpRight className="w-5 h-5 text-gold" />
                   {/* Hover glow overlay */}
                   <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 30px rgba(200,167,102,0.5), inset 0 0 15px rgba(200,167,102,0.1)' }} />
@@ -813,7 +813,7 @@ const AIHub = () => {
         <SectionDivider />
 
         {/* Quick Benefits Strip - Active Champagne Layer */}
-        <section className="py-8 bg-black">
+        <section className="py-8 bg-[#1A1A1A]">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -826,11 +826,11 @@ const AIHub = () => {
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mx-auto mb-3 shadow-lg">
+                    <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-3 shadow-lg">
                       <benefit.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <h3 className="text-black font-semibold text-sm mb-1">{benefit.title}</h3>
-                    <p className="text-gray-600 text-xs">{benefit.desc}</p>
+                    <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1">{benefit.title}</h3>
+                    <p className="text-[#5A4A2E] text-xs">{benefit.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -842,7 +842,7 @@ const AIHub = () => {
         <SectionDivider />
 
         {/* ALL TOOLS SECTION - Bulk view with Active Color Layer */}
-        <section className="py-8 md:py-10 bg-black">
+        <section className="py-8 md:py-10 bg-[#1A1A1A]">
           <div className="container mx-auto px-3 sm:px-4">
             {/* Active Slate/Blue Layer - matching Broker Hub */}
             <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg">
@@ -854,12 +854,12 @@ const AIHub = () => {
               >
                 <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
                   <Sparkles className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
+                  <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-medium">All Free Tools</span>
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Discover All <span className="text-sky-300">Free AI Tools</span>
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-[#5A4A2E] max-w-2xl mx-auto">
                   All tools in one place — each with its unique theme. Scroll down to see them organized by category.
                 </p>
               </motion.div>
@@ -872,13 +872,13 @@ const AIHub = () => {
                     value={toolSearch}
                     onChange={(e) => setToolSearch(e.target.value)}
                     placeholder="Search tools..."
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-gray-600 text-white placeholder:text-gray-600 focus:border-gold/50 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-[#1A1A1A]/60 border border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold/50 focus:outline-none transition-colors"
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(['all', 'property', 'corporate', 'productivity', 'design', 'marketing'] as const).map(cat => {
                     const pillColors: Record<string, { active: string; inactive: string }> = {
-                      all: { active: 'bg-white text-black border-white', inactive: 'text-white/70 border-white/20 hover:border-white/50 hover:text-white' },
+                      all: { active: 'bg-[#FDFBF7] text-[#1A1A1A] border-white', inactive: 'text-white/70 border-white/20 hover:border-white/50 hover:text-white' },
                       property: { active: 'bg-purple-500 text-white border-purple-400', inactive: 'text-purple-300 border-purple-500/30 hover:border-purple-400 hover:text-purple-200' },
                       corporate: { active: 'bg-teal-500 text-white border-teal-400', inactive: 'text-teal-300 border-teal-500/30 hover:border-teal-400 hover:text-teal-200' },
                       productivity: { active: 'bg-blue-500 text-white border-blue-400', inactive: 'text-blue-300 border-blue-500/30 hover:border-blue-400 hover:text-blue-200' },
@@ -911,7 +911,7 @@ const AIHub = () => {
                 ].map(suite => (
                   <Link key={suite.label} to={suite.href} className={`flex flex-col gap-2 p-5 rounded-2xl ${suite.bg} border-2 ${suite.border} ${suite.text} ${suite.glow} hover:border-white hover:shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-all duration-300 group`}>
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center`}>
+                      <div className={`w-10 h-10 rounded-xl bg-[#FDFBF7]/10 border border-white/20 flex items-center justify-center`}>
                         <suite.icon className="w-5 h-5" />
                       </div>
                       <div className="flex-1">
@@ -964,7 +964,7 @@ const AIHub = () => {
           };
 
           return (
-            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-8 md:py-10 bg-black">
+            <section key={category} id={category === 'property' ? 'investor-tools' : `${category}-tools`} className="py-8 md:py-10 bg-[#1A1A1A]">
               <div className="container mx-auto px-3 sm:px-4">
                 {/* Active Color Layer - Category-specific */}
                 <div className={`${categoryBgMap[category]} ${borderColorMap[category]} border rounded-2xl p-4 sm:p-6 shadow-lg`}>
@@ -1010,14 +1010,14 @@ const AIHub = () => {
         })}
 
         {/* CTA - Join Broker Hub or Investor Hub */}
-        <section className="py-8 md:py-10 bg-black">
+        <section className="py-8 md:py-10 bg-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {/* Broker Hub CTA */}
               <div className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
                 <GraduationCap className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
                 <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Hub</h3>
-                <p className="text-gray-600 text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
+                <p className="text-[#5A4A2E] text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
                 <button 
                   onClick={() => navigate('/broker-hub')}
                   className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:opacity-90 transition-all"
@@ -1030,7 +1030,7 @@ const AIHub = () => {
               <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-500/20 rounded-2xl p-8 text-center">
                 <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
                 <h3 className="text-xl font-bold text-white mb-2">JBJ Investor Hub</h3>
-                <p className="text-gray-600 text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
+                <p className="text-[#5A4A2E] text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
                 <button 
                   onClick={() => navigate('/investor-hub')}
                   className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:opacity-90 transition-all"
@@ -1047,24 +1047,24 @@ const AIHub = () => {
         <SectionDivider />
 
         {/* Simple Bottom CTA */}
-        <section className="py-8 md:py-10 bg-black">
+        <section className="py-8 md:py-10 bg-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <div className="max-w-[900px] mx-auto text-center">
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
                   {user ? (
                     <>Welcome back, <span className="text-gold">{user.email?.split('@')[0]}</span>!</>
                   ) : (
                     <>Start Using <span className="text-gold">All Free Tools</span></>
                   )}
                 </h2>
-                <p className="text-gray-600 mb-6 max-w-lg mx-auto">
+                <p className="text-[#5A4A2E] mb-6 max-w-lg mx-auto">
                   30+ free tools for property analysis, corporate documents, creative design, and productivity.
                 </p>
                 {user ? (
                   <button 
                     onClick={() => document.getElementById('investor-tools')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-black text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
                   >
                     <Sparkles className="w-5 h-5" />
                     Explore Tools Above
@@ -1073,7 +1073,7 @@ const AIHub = () => {
                 ) : (
                   <button 
                     onClick={() => navigate("/auth?redirect=/ai-hub")}
-                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-black text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
+                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-xl bg-[#1A1A1A] text-gold border-2 border-gold/50 hover:bg-gold/10 transition-all"
                   >
                     <Sparkles className="w-5 h-5" />
                     Sign In / Create Account

@@ -118,7 +118,7 @@ const EmployeeCard = ({
       exit={{ opacity: 0, y: -10 }}
       className="group"
     >
-      <Card className={`bg-white border-2 border-gold/30 hover:border-gold/60 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold shadow-[0_4px_20px_rgba(200,167,102,0.3)]' : ''}`}>
+      <Card className={`bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/60 hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)] transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold shadow-[0_4px_20px_rgba(200,167,102,0.3)]' : ''}`}>
         {/* New Joiner Badge */}
         {newJoinerLabel && (
           <div className="absolute top-0 left-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-br-xl z-10">
@@ -129,7 +129,7 @@ const EmployeeCard = ({
         
         {/* Top Performer Badge */}
         {isTopPerformer && (
-          <div className="absolute top-0 right-0 bg-gradient-to-bl from-gold to-amber-600 text-black px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-bl-xl">
+          <div className="absolute top-0 right-0 bg-gradient-to-bl from-gold to-amber-600 text-[#1A1A1A] px-3 py-1 text-xs font-bold flex items-center gap-1 rounded-bl-xl">
             <Trophy className="h-3 w-3" />
             Top Performer
           </div>
@@ -144,26 +144,26 @@ const EmployeeCard = ({
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <h3 className="text-black font-bold truncate">{member.name}</h3>
+              <h3 className="text-[#1A1A1A] font-bold truncate">{member.name}</h3>
               <p className="text-gold text-sm font-semibold">{member.role}</p>
-              <p className="text-gray-600 text-xs">{member.department}</p>
+              <p className="text-[#5A4A2E] text-xs">{member.department}</p>
             </div>
           </div>
           
           {performerData && (
             <div className="mt-3 p-2 bg-gradient-to-r from-gold/10 to-amber-500/5 rounded-lg border border-gold/30">
-              <p className="text-black text-xs font-semibold flex items-center gap-1">
+              <p className="text-[#1A1A1A] text-xs font-semibold flex items-center gap-1">
                 <Medal className="h-3 w-3 text-gold" />
                 <span className="text-gold">{performerData[0]}:</span> {performerData[1].metric}
               </p>
             </div>
           )}
           
-          <p className="text-gray-600 text-xs line-clamp-2 mt-3">{member.bio}</p>
+          <p className="text-[#5A4A2E] text-xs line-clamp-2 mt-3">{member.bio}</p>
           
           {/* Join Date */}
           {member.joinDate && (
-            <div className="flex items-center gap-1 mt-2 text-xs text-gray-600">
+            <div className="flex items-center gap-1 mt-2 text-xs text-[#5A4A2E]">
               <Calendar className="h-3 w-3" />
               <span>Joined: {joinDateFormatted}</span>
             </div>
@@ -171,7 +171,7 @@ const EmployeeCard = ({
           
           <div className="flex flex-wrap gap-1 mt-3">
             {member.languages?.slice(0, 3).map((lang) => (
-              <Badge key={lang} variant="outline" className="text-xs border-gold/30 text-gray-600 bg-gold/5">
+              <Badge key={lang} variant="outline" className="text-xs border-gold/30 text-[#5A4A2E] bg-gold/5">
                 {lang}
               </Badge>
             ))}
@@ -179,11 +179,11 @@ const EmployeeCard = ({
           
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gold/20">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-600 bg-white'}`}>
+              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#5A4A2E] bg-[#FDFBF7]'}`}>
                 {member.status === 'online' ? '● Online' : '○ Away'}
               </Badge>
               {member.nationality && (
-                <span className="text-gray-600 text-xs">{member.nationality}</span>
+                <span className="text-[#5A4A2E] text-xs">{member.nationality}</span>
               )}
             </div>
             
@@ -195,14 +195,14 @@ const EmployeeCard = ({
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="text-gold hover:text-black hover:bg-gold/20 h-7 px-1.5"
+                      className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 h-7 px-1.5"
                     >
                       <Phone className="h-3.5 w-3.5" />
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="text-gold hover:text-black hover:bg-gold/20 h-7 px-1.5"
+                      className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 h-7 px-1.5"
                     >
                       <Mail className="h-3.5 w-3.5" />
                     </Button>
@@ -212,7 +212,7 @@ const EmployeeCard = ({
                   size="sm"
                   variant="ghost"
                   onClick={() => onOpenChat(member)}
-                  className="text-gold hover:text-black hover:bg-gold/20 h-7 px-2"
+                  className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 h-7 px-2"
                 >
                   <MessageSquare className="h-4 w-4 mr-1" />
                   Chat
@@ -247,11 +247,11 @@ const DepartmentSection = ({
       <div className="flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-white p-4 rounded-xl border-2 border-gold/20">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center shadow-lg shadow-gold/20">
-            <Icon className="h-6 w-6 text-black" />
+            <Icon className="h-6 w-6 text-[#1A1A1A]" />
           </div>
           <div>
-            <h3 className="text-black font-bold text-lg">{displayName}</h3>
-            <p className="text-gray-600 text-sm">{members.length} team members</p>
+            <h3 className="text-[#1A1A1A] font-bold text-lg">{displayName}</h3>
+            <p className="text-[#5A4A2E] text-sm">{members.length} team members</p>
           </div>
         </div>
         {performer && (
@@ -357,31 +357,31 @@ const EmployeeHub = () => {
                 Employee Directory
               </Badge>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-4">
                 Our <span className="text-gold">Team</span> Hub
               </h1>
               
-              <p className="text-gray-600 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-[#5A4A2E] text-lg mb-8 max-w-2xl mx-auto">
                 Connect with colleagues, discover top performers, and explore the talented professionals driving JBJ Global Real Estate forward.
               </p>
               
               {/* Quick Stats */}
               <div className="flex flex-wrap justify-center gap-6 mb-8">
-                <div className="text-center bg-white/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <div className="text-center bg-[#FDFBF7]/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                   <p className="text-3xl font-bold text-gold">{totalEmployees}</p>
-                  <p className="text-gray-600 text-sm">Team Members</p>
+                  <p className="text-[#5A4A2E] text-sm">Team Members</p>
                 </div>
-                <div className="text-center bg-white/80 border-2 border-green-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
+                <div className="text-center bg-[#FDFBF7]/80 border-2 border-green-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
                   <p className="text-3xl font-bold text-green-600">{onlineCount}</p>
-                  <p className="text-gray-600 text-sm">Online Now</p>
+                  <p className="text-[#5A4A2E] text-sm">Online Now</p>
                 </div>
-                <div className="text-center bg-white/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+                <div className="text-center bg-[#FDFBF7]/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                   <p className="text-3xl font-bold text-gold">{departmentCount}</p>
-                  <p className="text-gray-600 text-sm">Departments</p>
+                  <p className="text-[#5A4A2E] text-sm">Departments</p>
                 </div>
-                <div className="text-center bg-white/80 border-2 border-amber-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
+                <div className="text-center bg-[#FDFBF7]/80 border-2 border-amber-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
                   <p className="text-3xl font-bold text-amber-600">{Object.keys(topPerformers).length}</p>
-                  <p className="text-gray-600 text-sm">Top Performers</p>
+                  <p className="text-[#5A4A2E] text-sm">Top Performers</p>
                 </div>
               </div>
               
@@ -420,7 +420,7 @@ const EmployeeHub = () => {
 
         {/* Search & Filter Section */}
         <section className="container mx-auto px-4 -mt-8 relative z-20 mb-8">
-          <Card className="bg-white/90 backdrop-blur-sm border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <Card className="bg-[#FDFBF7]/90 backdrop-blur-sm border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
@@ -429,7 +429,7 @@ const EmployeeHub = () => {
                     placeholder="Search by name, role, department, or language..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 h-12"
+                    className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-12"
                   />
                 </div>
                 <div className="flex gap-2 flex-wrap">

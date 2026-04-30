@@ -362,21 +362,21 @@ export default function VoiceStudioPro() {
       {/* ── Header ── */}
       <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Link to="/toolkit" className="text-black/60 hover:text-black transition-colors">
+          <Link to="/toolkit" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] transition-colors">
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div className="p-2 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/40">
             <Mic className="h-5 w-5 text-gold" />
           </div>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-black">Voice Studio Pro</h1>
-            <p className="text-black/50 text-xs">{VOICE_LIBRARY.length} voices · {LANGUAGES.length} languages · AI Script Writer</p>
+            <h1 className="text-xl font-bold text-[#1A1A1A]">Voice Studio Pro</h1>
+            <p className="text-[#1A1A1A]/50 text-xs">{VOICE_LIBRARY.length} voices · {LANGUAGES.length} languages · AI Script Writer</p>
           </div>
           <Button
             onClick={saveProject}
             disabled={savingProject}
             size="sm"
-            className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold rounded-xl border-2 border-gold"
+            className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-gold"
           >
             {savingProject ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Save className="h-4 w-4 mr-1.5" />}
             Save Project
@@ -397,8 +397,8 @@ export default function VoiceStudioPro() {
               onClick={() => setPageTab(t.key)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border-2 ${
                 pageTab === t.key
-                  ? "bg-gold/20 text-black border-gold"
-                  : "text-black/50 hover:text-black hover:bg-gold/10 border-gold/20"
+                  ? "bg-gold/20 text-[#1A1A1A] border-gold"
+                  : "text-[#1A1A1A]/50 hover:text-[#1A1A1A] hover:bg-gold/10 border-gold/20"
               }`}
             >
               <t.icon className="h-4 w-4" />
@@ -428,7 +428,7 @@ export default function VoiceStudioPro() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowVideo(!showVideo)}
-                className={`rounded-xl border-2 ${showVideo ? "border-gold bg-gold/15 text-black" : "border-gold/30 text-black/60 hover:border-gold/50"}`}
+                className={`rounded-xl border-2 ${showVideo ? "border-gold bg-gold/15 text-[#1A1A1A]" : "border-gold/30 text-[#1A1A1A]/60 hover:border-gold/50"}`}
               >
                 {showVideo ? <VideoOff className="h-4 w-4 mr-1.5" /> : <Video className="h-4 w-4 mr-1.5" />}
                 {showVideo ? "Hide Video Preview" : "Add Video Preview"}
@@ -439,7 +439,7 @@ export default function VoiceStudioPro() {
             {showVideo && (
               <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-black text-base flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                     <Video className="h-4 w-4 text-gold" />
                     Video Preview
                   </CardTitle>
@@ -449,9 +449,9 @@ export default function VoiceStudioPro() {
                     placeholder="Paste video URL or upload path…"
                     value={videoUrl}
                     onChange={e => setVideoUrl(e.target.value)}
-                    className="bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 rounded-xl"
+                    className="bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 rounded-xl"
                   />
-                  <div className="aspect-video bg-black/5 border-2 border-gold/20 rounded-xl flex items-center justify-center overflow-hidden">
+                  <div className="aspect-video bg-[#1A1A1A]/5 border-2 border-gold/20 rounded-xl flex items-center justify-center overflow-hidden">
                     {videoUrl ? (
                       <video
                         ref={videoRef}
@@ -460,7 +460,7 @@ export default function VoiceStudioPro() {
                         controls
                       />
                     ) : (
-                      <div className="text-center text-black/30">
+                      <div className="text-center text-[#1A1A1A]/30">
                         <Video className="h-12 w-12 mx-auto mb-2 opacity-30" />
                         <p className="text-sm">Paste a video URL above to preview</p>
                         <p className="text-xs mt-1">Your voiceover will sync with this video</p>
@@ -479,7 +479,7 @@ export default function VoiceStudioPro() {
                 {/* AI Script Writer */}
                 <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-black text-base flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                       <Bot className="h-4 w-4 text-gold" />
                       AI Script Writer
                     </CardTitle>
@@ -489,13 +489,13 @@ export default function VoiceStudioPro() {
                       placeholder="Describe what you need: e.g. 'Write a 30-second property tour voiceover for a luxury villa in Dubai Marina' or 'Create a podcast intro for 3 hosts discussing Dubai real estate'"
                       value={aiPrompt}
                       onChange={e => setAiPrompt(e.target.value)}
-                      className="min-h-[80px] bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 resize-none text-sm rounded-xl"
+                      className="min-h-[80px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 resize-none text-sm rounded-xl"
                     />
                     <div className="flex gap-2">
                       <Button
                         onClick={generateAIScript}
                         disabled={aiGenerating || !aiPrompt.trim()}
-                        className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold rounded-xl"
+                        className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl"
                       >
                         {aiGenerating ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
                         {aiGenerating ? "Generating…" : "Generate Script with AI"}
@@ -504,7 +504,7 @@ export default function VoiceStudioPro() {
                         <Button
                           onClick={() => { setAiPrompt(`Rewrite and improve this script professionally: ${script.slice(0, 200)}...`); }}
                           variant="outline"
-                          className="border-2 border-gold/40 text-black hover:bg-gold/10 rounded-xl"
+                          className="border-2 border-gold/40 text-[#1A1A1A] hover:bg-gold/10 rounded-xl"
                         >
                           <Wand2 className="h-4 w-4 mr-2" />
                           Rewrite Current
@@ -518,7 +518,7 @@ export default function VoiceStudioPro() {
                 <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-black text-base flex items-center gap-2">
+                      <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-gold" />
                         Script
                       </CardTitle>
@@ -526,7 +526,7 @@ export default function VoiceStudioPro() {
                         <button
                           onClick={() => setPageTab("library")}
                           disabled={!script.trim()}
-                          className="flex items-center gap-1.5 text-xs text-gold hover:text-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                          className="flex items-center gap-1.5 text-xs text-gold hover:text-[#1A1A1A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                           <BookOpen className="h-3.5 w-3.5" />
                           Save to Library
@@ -539,13 +539,13 @@ export default function VoiceStudioPro() {
                       placeholder="Enter your script here… up to 5,000 characters"
                       value={script}
                       onChange={e => setScript(e.target.value.slice(0, 5000))}
-                      className="min-h-[200px] bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 resize-none text-sm rounded-xl"
+                      className="min-h-[200px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 resize-none text-sm rounded-xl"
                     />
-                    <div className="flex justify-between text-xs text-black/50">
+                    <div className="flex justify-between text-xs text-[#1A1A1A]/50">
                       <span>{script.length.toLocaleString()} / 5,000 chars · ~{estimateDuration(script, speed)}s</span>
                       <button
                         onClick={() => navigator.clipboard.readText().then(t => setScript(t.slice(0, 5000))).catch(() => {})}
-                        className="text-black/50 hover:text-black transition-colors flex items-center gap-1"
+                        className="text-[#1A1A1A]/50 hover:text-[#1A1A1A] transition-colors flex items-center gap-1"
                       >
                         <Copy className="h-3 w-3" /> Paste
                       </button>
@@ -556,22 +556,22 @@ export default function VoiceStudioPro() {
                 {/* Voice Selection with Filters */}
                 <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-black text-base flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                       <Volume2 className="h-4 w-4 text-gold" />
                       Voice Library
-                      <Badge className="bg-gold/20 text-black border-2 border-gold/40 text-[10px]">{VOICE_LIBRARY.length} voices</Badge>
+                      <Badge className="bg-gold/20 text-[#1A1A1A] border-2 border-gold/40 text-[10px]">{VOICE_LIBRARY.length} voices</Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {/* Search + Filters */}
                     <div className="flex flex-wrap gap-2">
                       <div className="relative flex-1 min-w-[180px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/40" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#1A1A1A]/40" />
                         <Input
                           placeholder="Search voices..."
                           value={voiceSearch}
                           onChange={e => setVoiceSearch(e.target.value)}
-                          className="pl-9 h-9 text-sm bg-white/80 border-2 border-gold/30 text-black rounded-xl"
+                          className="pl-9 h-9 text-sm bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] rounded-xl"
                         />
                       </div>
                       {/* Gender filter */}
@@ -582,8 +582,8 @@ export default function VoiceStudioPro() {
                             onClick={() => setGenderFilter(g)}
                             className={`px-3 py-1.5 text-xs font-medium transition-all ${
                               genderFilter === g
-                                ? "bg-gold/30 text-black"
-                                : "bg-white/50 text-black/50 hover:bg-gold/10"
+                                ? "bg-gold/30 text-[#1A1A1A]"
+                                : "bg-[#FDFBF7]/50 text-[#1A1A1A]/50 hover:bg-gold/10"
                             }`}
                           >
                             {g === "all" ? "All" : g.charAt(0).toUpperCase() + g.slice(1)}
@@ -594,13 +594,13 @@ export default function VoiceStudioPro() {
 
                     {/* Age filter */}
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="text-[11px] text-black/40 mr-1 self-center">Age:</span>
+                      <span className="text-[11px] text-[#1A1A1A]/40 mr-1 self-center">Age:</span>
                       <button
                         onClick={() => setAgeFilter("all")}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border-2 ${
                           ageFilter === "all"
-                            ? "bg-gold/30 border-gold text-black"
-                            : "bg-white/50 border-gold/20 text-black/50 hover:bg-gold/10"
+                            ? "bg-gold/30 border-gold text-[#1A1A1A]"
+                            : "bg-[#FDFBF7]/50 border-gold/20 text-[#1A1A1A]/50 hover:bg-gold/10"
                         }`}
                       >
                         All Ages
@@ -611,8 +611,8 @@ export default function VoiceStudioPro() {
                           onClick={() => setAgeFilter(a === ageFilter ? "all" : a)}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border-2 ${
                             ageFilter === a
-                              ? "bg-gold/30 border-gold text-black"
-                              : "bg-white/50 border-gold/20 text-black/50 hover:bg-gold/10"
+                              ? "bg-gold/30 border-gold text-[#1A1A1A]"
+                              : "bg-[#FDFBF7]/50 border-gold/20 text-[#1A1A1A]/50 hover:bg-gold/10"
                           }`}
                         >
                           {a === "young" ? "Young" : a === "middle" ? "Adult" : "Senior"}
@@ -622,13 +622,13 @@ export default function VoiceStudioPro() {
 
                     {/* Accent filter chips */}
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="text-[11px] text-black/40 mr-1 self-center">Accent:</span>
+                      <span className="text-[11px] text-[#1A1A1A]/40 mr-1 self-center">Accent:</span>
                       <button
                         onClick={() => setAccentFilter("all")}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border-2 ${
                           accentFilter === "all"
-                            ? "bg-gold/30 border-gold text-black"
-                            : "bg-white/50 border-gold/20 text-black/50 hover:bg-gold/10"
+                            ? "bg-gold/30 border-gold text-[#1A1A1A]"
+                            : "bg-[#FDFBF7]/50 border-gold/20 text-[#1A1A1A]/50 hover:bg-gold/10"
                         }`}
                       >
                         All Accents
@@ -639,8 +639,8 @@ export default function VoiceStudioPro() {
                           onClick={() => setAccentFilter(a === accentFilter ? "all" : a)}
                           className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all border-2 ${
                             accentFilter === a
-                              ? "bg-gold/30 border-gold text-black"
-                              : "bg-white/50 border-gold/20 text-black/50 hover:bg-gold/10"
+                              ? "bg-gold/30 border-gold text-[#1A1A1A]"
+                              : "bg-[#FDFBF7]/50 border-gold/20 text-[#1A1A1A]/50 hover:bg-gold/10"
                           }`}
                         >
                           {a}
@@ -660,7 +660,7 @@ export default function VoiceStudioPro() {
                           className={`p-3 rounded-xl border-2 text-left transition-all relative ${
                             selectedVoice === v.id
                               ? "border-gold bg-gold/15"
-                              : "border-gold/20 bg-white/60 hover:border-gold/50 hover:bg-gold/5"
+                              : "border-gold/20 bg-[#FDFBF7]/60 hover:border-gold/50 hover:bg-gold/5"
                           }`}
                         >
                           {previewingVoice === v.id && (
@@ -683,27 +683,27 @@ export default function VoiceStudioPro() {
                             </div>
                           )}
                           <div className="flex items-center gap-1.5 mb-1">
-                            <Play className={`h-3 w-3 ${selectedVoice === v.id ? "text-gold" : "text-black/30"}`} />
-                            <span className="text-black text-xs font-semibold">{v.name}</span>
+                            <Play className={`h-3 w-3 ${selectedVoice === v.id ? "text-gold" : "text-[#1A1A1A]/30"}`} />
+                            <span className="text-[#1A1A1A] text-xs font-semibold">{v.name}</span>
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            <span className="text-[10px] text-black/60 bg-gold/10 border-2 border-gold/20 rounded-md px-1.5 py-0.5">{v.accent}</span>
-                            <span className="text-[10px] text-black/60 bg-gold/10 border-2 border-gold/20 rounded-md px-1.5 py-0.5">{v.tag}</span>
+                            <span className="text-[10px] text-[#1A1A1A]/60 bg-gold/10 border-2 border-gold/20 rounded-md px-1.5 py-0.5">{v.accent}</span>
+                            <span className="text-[10px] text-[#1A1A1A]/60 bg-gold/10 border-2 border-gold/20 rounded-md px-1.5 py-0.5">{v.tag}</span>
                           </div>
                           <div className="flex items-center gap-1 mt-1">
-                            <span className="text-[9px] text-black/40 capitalize">{v.gender}</span>
-                            <span className="text-[9px] text-black/30">·</span>
-                            <span className="text-[9px] text-black/40 capitalize">{v.ageGroup}</span>
+                            <span className="text-[9px] text-[#1A1A1A]/40 capitalize">{v.gender}</span>
+                            <span className="text-[9px] text-[#1A1A1A]/30">·</span>
+                            <span className="text-[9px] text-[#1A1A1A]/40 capitalize">{v.ageGroup}</span>
                           </div>
                         </button>
                       ))}
                       {filteredVoices.length === 0 && (
-                        <div className="col-span-full text-center py-8 text-black/40 text-sm">
+                        <div className="col-span-full text-center py-8 text-[#1A1A1A]/40 text-sm">
                           No voices match your filters
                         </div>
                       )}
                     </div>
-                    <p className="text-[11px] text-black/40">🔊 Click any voice to hear a preview · Click again to stop</p>
+                    <p className="text-[11px] text-[#1A1A1A]/40">🔊 Click any voice to hear a preview · Click again to stop</p>
                   </CardContent>
                 </Card>
               </div>
@@ -714,32 +714,32 @@ export default function VoiceStudioPro() {
                 {/* Language */}
                 <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-black text-base flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                       <Globe className="h-4 w-4 text-gold" />
                       Language & Format
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <Label className="text-black/60 text-xs mb-2 block">Output Language</Label>
+                      <Label className="text-[#1A1A1A]/60 text-xs mb-2 block">Output Language</Label>
                       <div className="relative mb-2">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/40" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#1A1A1A]/40" />
                         <Input
                           placeholder="Search languages..."
                           value={langSearch}
                           onChange={e => setLangSearch(e.target.value)}
-                          className="pl-9 h-9 text-sm bg-white/80 border-2 border-gold/30 text-black rounded-xl"
+                          className="pl-9 h-9 text-sm bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] rounded-xl"
                         />
                       </div>
-                      <div className="max-h-[200px] overflow-y-auto space-y-1 border-2 border-gold/20 rounded-xl p-2 bg-white/50">
+                      <div className="max-h-[200px] overflow-y-auto space-y-1 border-2 border-gold/20 rounded-xl p-2 bg-[#FDFBF7]/50">
                         {filteredLanguages.map(l => (
                           <button
                             key={l.code}
                             onClick={() => { setLanguage(l.code); setLangSearch(""); }}
                             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center gap-2 ${
                               language === l.code
-                                ? "bg-gold/20 text-black font-medium border-2 border-gold/40"
-                                : "text-black/70 hover:bg-gold/10 border-2 border-transparent"
+                                ? "bg-gold/20 text-[#1A1A1A] font-medium border-2 border-gold/40"
+                                : "text-[#1A1A1A]/70 hover:bg-gold/10 border-2 border-transparent"
                             }`}
                           >
                             <span>{l.flag}</span>
@@ -750,7 +750,7 @@ export default function VoiceStudioPro() {
                       </div>
                     </div>
                     <div>
-                      <Label className="text-black/60 text-xs mb-2 block">Audio Format</Label>
+                      <Label className="text-[#1A1A1A]/60 text-xs mb-2 block">Audio Format</Label>
                       <div className="flex gap-2">
                         {(["mp3", "wav"] as const).map(f => (
                           <button
@@ -758,12 +758,12 @@ export default function VoiceStudioPro() {
                             onClick={() => setFormat(f)}
                             className={`flex-1 py-2 rounded-xl border-2 text-sm font-medium transition-all ${
                               format === f
-                                ? "border-gold bg-gold/20 text-black"
-                                : "border-gold/20 text-black/50 hover:border-gold/40"
+                                ? "border-gold bg-gold/20 text-[#1A1A1A]"
+                                : "border-gold/20 text-[#1A1A1A]/50 hover:border-gold/40"
                             }`}
                           >
                             {f.toUpperCase()}
-                            <span className="text-xs block text-black/40 font-normal">
+                            <span className="text-xs block text-[#1A1A1A]/40 font-normal">
                               {f === "mp3" ? "Smaller" : "HQ"}
                             </span>
                           </button>
@@ -776,7 +776,7 @@ export default function VoiceStudioPro() {
                 {/* Voice Settings */}
                 <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-black text-base flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
                       <Wand2 className="h-4 w-4 text-gold" />
                       Voice Settings
                     </CardTitle>
@@ -789,7 +789,7 @@ export default function VoiceStudioPro() {
                     ].map(s => (
                       <div key={s.label}>
                         <div className="flex justify-between mb-2">
-                          <Label className="text-black/70 text-xs">{s.label}</Label>
+                          <Label className="text-[#1A1A1A]/70 text-xs">{s.label}</Label>
                           <span className="text-gold text-xs font-mono font-semibold">{s.value.toFixed(2)}</span>
                         </div>
                         <Slider
@@ -798,7 +798,7 @@ export default function VoiceStudioPro() {
                           onValueChange={([v]) => s.onChange(v)}
                           className="[&_[role=slider]]:bg-gold [&_[role=slider]]:border-gold"
                         />
-                        <p className="text-xs text-black/40 mt-1">{s.hint}</p>
+                        <p className="text-xs text-[#1A1A1A]/40 mt-1">{s.hint}</p>
                       </div>
                     ))}
                   </CardContent>
@@ -808,7 +808,7 @@ export default function VoiceStudioPro() {
                 <Button
                   onClick={generate}
                   disabled={generating || !script.trim()}
-                  className="w-full h-12 bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-bold rounded-2xl disabled:opacity-50 border-2 border-gold"
+                  className="w-full h-12 bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-bold rounded-2xl disabled:opacity-50 border-2 border-gold"
                 >
                   {generating ? (
                     <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{progressText}</>
@@ -823,7 +823,7 @@ export default function VoiceStudioPro() {
                 {result && !generating && (
                   <Card className="bg-gradient-to-br from-gold/10 to-[#F7F2EA] border-2 border-gold/50 rounded-2xl">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-black flex items-center gap-2 text-sm">
+                      <CardTitle className="text-[#1A1A1A] flex items-center gap-2 text-sm">
                         <Check className="h-4 w-4 text-gold" />
                         Ready — {result.voiceName} · {result.language}
                       </CardTitle>
@@ -834,7 +834,7 @@ export default function VoiceStudioPro() {
                           onClick={playResult}
                           variant="outline"
                           size="sm"
-                          className="flex-1 border-2 border-gold text-black hover:bg-gold/10 rounded-xl"
+                          className="flex-1 border-2 border-gold text-[#1A1A1A] hover:bg-gold/10 rounded-xl"
                         >
                           {isPlaying && !isPausedState ? <><Pause className="h-4 w-4 mr-2" />Pause</> : <><Play className="h-4 w-4 mr-2" />{isPausedState ? "Resume" : "Preview"}</>}
                         </Button>
@@ -843,7 +843,7 @@ export default function VoiceStudioPro() {
                             onClick={stopPlayback}
                             variant="outline"
                             size="sm"
-                            className="border-2 border-gold/40 text-black hover:bg-gold/10 rounded-xl"
+                            className="border-2 border-gold/40 text-[#1A1A1A] hover:bg-gold/10 rounded-xl"
                           >
                             <Square className="h-4 w-4" />
                           </Button>
@@ -851,7 +851,7 @@ export default function VoiceStudioPro() {
                       </div>
                       <Button
                         onClick={downloadResult}
-                        className="w-full bg-gradient-to-r from-gold to-amber-500 text-black font-semibold rounded-xl"
+                        className="w-full bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A] font-semibold rounded-xl"
                         size="sm"
                       >
                         <Download className="h-4 w-4 mr-2" />
@@ -862,8 +862,8 @@ export default function VoiceStudioPro() {
                 )}
 
                 {/* Info */}
-                <div className="p-3 rounded-2xl bg-gold/5 border-2 border-gold/20 text-xs text-black/50 space-y-1">
-                  <p className="text-black/70 font-semibold mb-1">🎙️ Browser-Native Voice Engine</p>
+                <div className="p-3 rounded-2xl bg-gold/5 border-2 border-gold/20 text-xs text-[#1A1A1A]/50 space-y-1">
+                  <p className="text-[#1A1A1A]/70 font-semibold mb-1">🎙️ Browser-Native Voice Engine</p>
                   <p>• {VOICE_LIBRARY.length} curated voice personas</p>
                   <p>• {LANGUAGES.length} supported languages</p>
                   <p>• Zero cost — powered by Web Speech API</p>

@@ -214,7 +214,7 @@ const BrokerResources = () => {
       </section>
 
       {/* Resource Sections */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -232,23 +232,23 @@ const BrokerResources = () => {
                     className="jj-card-inner rounded-2xl p-6 md:p-8"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 bg-black border border-gold rounded-xl flex items-center justify-center">
+                      <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-gold rounded-xl flex items-center justify-center">
                         <section.icon className="w-6 h-6 text-gold" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{section.title}</h3>
-                        <p className="text-gray-600 mb-4">{section.description}</p>
-                        <div className="bg-black/5 rounded-xl p-4 mb-4">
+                        <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{section.title}</h3>
+                        <p className="text-[#5A4A2E] mb-4">{section.description}</p>
+                        <div className="bg-[#1A1A1A]/5 rounded-xl p-4 mb-4">
                           <ul className="space-y-2">
                             {section.items.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-3">
                                 <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                <span className="text-gray-700 text-sm">{item}</span>
+                                <span className="text-[#5A4A2E] text-sm">{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <p className="text-sm text-gray-600 italic">{section.footer}</p>
+                        <p className="text-sm text-[#5A4A2E] italic">{section.footer}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -260,7 +260,7 @@ const BrokerResources = () => {
       </section>
 
       {/* Who This Page Is For */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -283,7 +283,7 @@ const BrokerResources = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-gray-800 rounded-xl hover:border-gold/50 transition-all"
+                  className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-[#1A1A1A] rounded-xl hover:border-gold/50 transition-all"
                 >
                   <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
@@ -297,7 +297,7 @@ const BrokerResources = () => {
       </section>
 
       {/* Why These Resources Matter */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -311,7 +311,7 @@ const BrokerResources = () => {
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-gray-700 max-w-2xl mx-auto mb-8"
+                className="text-center text-[#5A4A2E] max-w-2xl mx-auto mb-8"
               >
                 Professional brokerage performance depends on:
               </motion.p>
@@ -324,14 +324,14 @@ const BrokerResources = () => {
                     className="jj-card-inner rounded-xl p-6 text-center flex flex-col items-center justify-center"
                   >
                     <CheckCircle2 className="w-6 h-6 text-gold mb-3" />
-                    <span className="text-gray-800 font-medium">{reason}</span>
+                    <span className="text-[#1A1A1A] font-medium">{reason}</span>
                   </motion.div>
                 ))}
               </div>
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-gray-700 mt-8"
+                className="text-center text-[#5A4A2E] mt-8"
               >
                 These resources are built to support those standards consistently.
               </motion.p>
@@ -341,7 +341,7 @@ const BrokerResources = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-24 bg-black">
+      <section className="py-16 md:py-24 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -368,7 +368,7 @@ const BrokerResources = () => {
               <Link to="/broker-dashboard">
                 <Button 
                   size="lg"
-                  className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-6 text-base"
+                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-8 py-6 text-base"
                 >
                   Go to Broker Dashboard
                   <ArrowRight className="ml-2 w-5 h-5" />

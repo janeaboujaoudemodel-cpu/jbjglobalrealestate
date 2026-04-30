@@ -68,8 +68,8 @@ export function StampVersionSelector({
   }
 
   return (
-    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] w-[90vw] max-w-[700px] max-h-[80vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm">
+      <div className="bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[hsl(var(--border))] w-[90vw] max-w-[700px] max-h-[80vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
           <div className="flex items-center gap-2">

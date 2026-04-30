@@ -43,9 +43,9 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
           </div>
 
           {/* Right: Sections with dividers */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-2 border-t lg:border-t-0 border-gray-200 mt-6 lg:mt-0 pt-6 lg:pt-0">
+          <div className="lg:col-span-6 lg:border-l lg:border-[#B89555]/30 lg:pl-2 border-t lg:border-t-0 border-[#B89555]/30 mt-6 lg:mt-0 pt-6 lg:pt-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
-              <div className="sm:border-r sm:border-gray-200">
+              <div className="sm:border-r sm:border-[#B89555]/30">
                 <MegaMenuSection icon={Building2} title="Properties by Type">
                   {propertyTypes.map((item) => (
                     <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -53,7 +53,7 @@ const MegaMenuRent = React.forwardRef<HTMLDivElement, MegaMenuRentProps>(({ onCl
                 </MegaMenuSection>
               </div>
 
-              <div className="border-t sm:border-t-0 border-gray-200">
+              <div className="border-t sm:border-t-0 border-[#B89555]/30">
                 <MegaMenuSection icon={FileText} title="Rental Resources">
                   {rentalResources.map((item) => (
                     <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />

@@ -84,7 +84,7 @@ export default function PhotoSuite() {
                 {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
                   <TabsTrigger key={value} value={value}
                     className="relative flex items-center gap-1.5 px-3 sm:px-4 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
+                      data-[state=inactive]:text-[#1A1A1A]/40 data-[state=active]:text-[#B8943E]
                       after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
                       data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
                   >

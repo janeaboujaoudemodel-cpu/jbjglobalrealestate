@@ -64,11 +64,11 @@ export default function IntegrationWidgets() {
   return (
     <div className="grid md:grid-cols-2 gap-4">
       {/* Upcoming Events */}
-      <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-blue-600" />
-            <h3 className="text-sm font-semibold text-black">Upcoming Events</h3>
+            <h3 className="text-sm font-semibold text-[#1A1A1A]">Upcoming Events</h3>
           </div>
           <Button 
             variant="ghost" 
@@ -94,8 +94,8 @@ export default function IntegrationWidgets() {
                 className="flex items-center justify-between p-2 rounded-lg bg-[#FDFBF7] hover:bg-[#B89555]/5 transition-colors cursor-pointer border border-[#B89555]/10"
                 onClick={() => navigate('/crm/calendar')}
               >
-                <p className="text-sm text-black truncate flex-1">{event.title}</p>
-                <span className="text-xs text-gray-600 ml-2">
+                <p className="text-sm text-[#1A1A1A] truncate flex-1">{event.title}</p>
+                <span className="text-xs text-[#5A4A2E] ml-2">
                   {event.due_at ? formatEventDate(event.due_at) : 'No date'}
                 </span>
               </div>
@@ -104,24 +104,24 @@ export default function IntegrationWidgets() {
         ) : (
           <div className="text-center py-6">
             <Calendar className="h-8 w-8 text-[#B89555]/40 mx-auto mb-2" />
-            <p className="text-xs text-gray-600">No upcoming events</p>
+            <p className="text-xs text-[#5A4A2E]">No upcoming events</p>
           </div>
         )}
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+      <div className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 text-[#B89555]" />
-            <h3 className="text-sm font-semibold text-black">Quick Actions</h3>
+            <h3 className="text-sm font-semibold text-[#1A1A1A]">Quick Actions</h3>
           </div>
         </div>
         
         <div className="space-y-3">
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-black"
+            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
             onClick={() => navigate('/crm/tasks?action=new')}
           >
             <Plus className="h-4 w-4 text-emerald-600" />
@@ -130,7 +130,7 @@ export default function IntegrationWidgets() {
           
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-black"
+            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
             onClick={() => navigate('/crm/notes?action=new')}
           >
             <FileText className="h-4 w-4 text-purple-600" />
@@ -143,7 +143,7 @@ export default function IntegrationWidgets() {
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-sm text-gray-600">Active Automations</span>
+              <span className="text-sm text-[#5A4A2E]">Active Automations</span>
             </div>
             <span className="text-sm font-medium text-[#B89555]">
               {loadingAutomations ? '...' : automationsCount}

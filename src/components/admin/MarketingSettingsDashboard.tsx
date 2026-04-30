@@ -115,7 +115,7 @@ export const MarketingSettingsDashboard = () => {
   };
 
   const getStatus = (value: string) => {
-    if (!value) return <XCircle className="w-4 h-4 text-gray-600" />;
+    if (!value) return <XCircle className="w-4 h-4 text-[#5A4A2E]" />;
     return <CheckCircle className="w-4 h-4 text-emerald-500" />;
   };
 
@@ -132,7 +132,7 @@ export const MarketingSettingsDashboard = () => {
     fields: { key: keyof MarketingConfig; label: string; placeholder: string }[];
     docsUrl?: string;
   }) => (
-    <Card className="bg-white border-2 border-gold/30">
+    <Card className="bg-[#FDFBF7] border-2 border-gold/30">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -140,8 +140,8 @@ export const MarketingSettingsDashboard = () => {
               <Icon className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <CardTitle className="text-black text-base">{title}</CardTitle>
-              <CardDescription className="text-black/40 text-sm">{description}</CardDescription>
+              <CardTitle className="text-[#1A1A1A] text-base">{title}</CardTitle>
+              <CardDescription className="text-[#1A1A1A]/40 text-sm">{description}</CardDescription>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export const MarketingSettingsDashboard = () => {
       <CardContent className="space-y-4">
         {fields.map(field => (
           <div key={field.key} className="space-y-2">
-            <Label className="text-black/60 text-sm">{field.label}</Label>
+            <Label className="text-[#1A1A1A]/60 text-sm">{field.label}</Label>
             <Input
               value={config[field.key]}
               onChange={(e) => handleChange(field.key, e.target.value)}
@@ -178,8 +178,8 @@ export const MarketingSettingsDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-black text-2xl font-bold">Marketing Integrations</h2>
-          <p className="text-black/60 text-sm mt-1">
+          <h2 className="text-[#1A1A1A] text-2xl font-bold">Marketing Integrations</h2>
+          <p className="text-[#1A1A1A]/60 text-sm mt-1">
             Configure analytics, advertising, and automation tools
           </p>
         </div>
@@ -193,7 +193,7 @@ export const MarketingSettingsDashboard = () => {
           <Button
             onClick={handleSave}
             disabled={!hasChanges || isSaving}
-            className="bg-gold text-black hover:bg-gold/90"
+            className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
           >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Saving...' : 'Save Settings'}
@@ -202,24 +202,24 @@ export const MarketingSettingsDashboard = () => {
       </div>
 
       <Tabs defaultValue="analytics" className="space-y-6">
-        <TabsList className="bg-white/80 border-2 border-gold/30">
-          <TabsTrigger value="analytics" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <BarChart3 className="w-4 h-4 mr-2" />
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="advertising" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="advertising" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Target className="w-4 h-4 mr-2" />
             Advertising
           </TabsTrigger>
-          <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Mail className="w-4 h-4 mr-2" />
             Email & CRM
           </TabsTrigger>
-          <TabsTrigger value="automation" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="automation" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Webhook className="w-4 h-4 mr-2" />
             Automation
           </TabsTrigger>
-          <TabsTrigger value="local" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsTrigger value="local" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
             <Globe className="w-4 h-4 mr-2" />
             Local & Trust
           </TabsTrigger>
@@ -260,8 +260,8 @@ export const MarketingSettingsDashboard = () => {
             <IntegrationCard icon={Webhook} title="Zapier Webhook" description="Connect to Google Sheets, CRMs, and 5000+ apps" fields={[{ key: 'zapierWebhookUrl', label: 'Webhook URL', placeholder: 'https://hooks.zapier.com/hooks/catch/...' }]} docsUrl="https://zapier.com/help/create/code-webhooks/trigger-zaps-from-webhooks" />
           </div>
           <div className="bg-gold/5 border border-gold/20 rounded-xl p-6">
-            <h3 className="text-black font-semibold mb-2">How to set up Zapier:</h3>
-            <ol className="text-black/60 text-sm space-y-2 list-decimal list-inside">
+            <h3 className="text-[#1A1A1A] font-semibold mb-2">How to set up Zapier:</h3>
+            <ol className="text-[#1A1A1A]/60 text-sm space-y-2 list-decimal list-inside">
               <li>Create a Zap in Zapier with "Webhooks by Zapier" as the trigger</li>
               <li>Choose "Catch Hook" as the event</li>
               <li>Copy the webhook URL and paste it above</li>
@@ -280,9 +280,9 @@ export const MarketingSettingsDashboard = () => {
       </Tabs>
 
       {/* Integration Status Summary */}
-      <Card className="bg-white border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
         <CardHeader>
-          <CardTitle className="text-black text-lg">Integration Status</CardTitle>
+          <CardTitle className="text-[#1A1A1A] text-lg">Integration Status</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -302,10 +302,10 @@ export const MarketingSettingsDashboard = () => {
                   {item.value ? (
                     <CheckCircle className="w-6 h-6 text-emerald-500" />
                   ) : (
-                    <XCircle className="w-6 h-6 text-gray-600" />
+                    <XCircle className="w-6 h-6 text-[#5A4A2E]" />
                   )}
                 </div>
-                <span className="text-black/60 text-xs">{item.label}</span>
+                <span className="text-[#1A1A1A]/60 text-xs">{item.label}</span>
               </div>
             ))}
           </div>

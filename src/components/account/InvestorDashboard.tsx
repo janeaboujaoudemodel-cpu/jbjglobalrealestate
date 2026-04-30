@@ -193,7 +193,7 @@ const InvestorDashboard = () => {
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
       default:
-        return 'bg-gray-500/10 text-gray-600 border-gray-500/30';
+        return 'bg-[#B89555]/10 text-[#5A4A2E] border-[#B89555]/30/30';
     }
   };
 
@@ -218,15 +218,15 @@ const InvestorDashboard = () => {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-2xl font-bold text-black mb-1">
+              <h1 className="text-2xl font-bold text-[#1A1A1A] mb-1">
                 {profile?.full_name || 'Welcome, Investor'}
               </h1>
-              <p className="text-gray-600 text-sm flex items-center justify-center md:justify-start gap-2">
+              <p className="text-[#5A4A2E] text-sm flex items-center justify-center md:justify-start gap-2">
                 <Mail className="h-4 w-4" />
                 {user?.email}
               </p>
               {profile?.phone && (
-                <p className="text-gray-600 text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
+                <p className="text-[#5A4A2E] text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
                   <Phone className="h-4 w-4" />
                   {profile.phone}
                 </p>
@@ -236,7 +236,7 @@ const InvestorDashboard = () => {
                   <User className="h-3 w-3 mr-1" />
                   Investor Account
                 </Badge>
-                <Badge variant="outline" className="border-gold/30 text-black">
+                <Badge variant="outline" className="border-gold/30 text-[#1A1A1A]">
                   <Shield className="h-3 w-3 mr-1" />
                   Verified Member
                 </Badge>
@@ -265,8 +265,8 @@ const InvestorDashboard = () => {
                 <Home className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-black">{propertyBuy}</p>
-                <p className="text-xs text-gray-600">Properties Bought</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{propertyBuy}</p>
+                <p className="text-xs text-[#5A4A2E]">Properties Bought</p>
               </div>
             </div>
           </CardContent>
@@ -279,8 +279,8 @@ const InvestorDashboard = () => {
                 <Building2 className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-black">{propertySell}</p>
-                <p className="text-xs text-gray-600">Properties Listed</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{propertySell}</p>
+                <p className="text-xs text-[#5A4A2E]">Properties Listed</p>
               </div>
             </div>
           </CardContent>
@@ -293,8 +293,8 @@ const InvestorDashboard = () => {
                 <Briefcase className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-black">{careerSubmitted ? '1' : '0'}</p>
-                <p className="text-xs text-gray-600">CV Submitted</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{careerSubmitted ? '1' : '0'}</p>
+                <p className="text-xs text-[#5A4A2E]">CV Submitted</p>
               </div>
             </div>
           </CardContent>
@@ -307,8 +307,8 @@ const InvestorDashboard = () => {
                 <MessageCircle className="h-5 w-5 text-gold" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-black">{tickets.length}</p>
-                <p className="text-xs text-gray-600">Support Tickets</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{tickets.length}</p>
+                <p className="text-xs text-[#5A4A2E]">Support Tickets</p>
               </div>
             </div>
           </CardContent>
@@ -317,17 +317,17 @@ const InvestorDashboard = () => {
 
       {/* Tabs Section */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-white border-2 border-gold/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+        <TabsList className="bg-[#FDFBF7] border-2 border-gold/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
             Support Tickets
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
             My Ideas
           </TabsTrigger>
-          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
             Settings
           </TabsTrigger>
         </TabsList>
@@ -338,7 +338,7 @@ const InvestorDashboard = () => {
             {/* Quick Actions */}
             <Card className="border-2 border-gold/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-black">
+                <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                   <ChevronRight className="h-5 w-5 text-gold" />
                   Quick Actions
                 </CardTitle>
@@ -382,14 +382,14 @@ const InvestorDashboard = () => {
             {/* Recent Activity */}
             <Card className="border-2 border-gold/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-black">
+                <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                   <Clock className="h-5 w-5 text-gold" />
                   Recent Activity
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {tickets.length === 0 && ideas.length === 0 ? (
-                  <div className="text-center py-6 text-gray-600">
+                  <div className="text-center py-6 text-[#5A4A2E]">
                     <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
                     <p>No recent activity</p>
                     <p className="text-sm mt-1">Start exploring our tools and services</p>
@@ -397,24 +397,24 @@ const InvestorDashboard = () => {
                 ) : (
                   <div className="space-y-3">
                     {tickets.slice(0, 3).map((ticket) => (
-                      <div key={ticket.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
+                      <div key={ticket.id} className="flex items-center justify-between p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                         <div className="flex items-center gap-3">
                           <MessageCircle className="h-4 w-4 text-gold" />
                           <div>
-                            <p className="text-sm font-medium text-black">{ticket.subject}</p>
-                            <p className="text-xs text-gray-600">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-sm font-medium text-[#1A1A1A]">{ticket.subject}</p>
+                            <p className="text-xs text-[#5A4A2E]">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(ticket.status)}>{ticket.status}</Badge>
                       </div>
                     ))}
                     {ideas.slice(0, 2).map((idea) => (
-                      <div key={idea.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
+                      <div key={idea.id} className="flex items-center justify-between p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
                         <div className="flex items-center gap-3">
                           <Lightbulb className="h-4 w-4 text-gold" />
                           <div>
-                            <p className="text-sm font-medium text-black">Idea Submission</p>
-                            <p className="text-xs text-gray-600">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-sm font-medium text-[#1A1A1A]">Idea Submission</p>
+                            <p className="text-xs text-[#5A4A2E]">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(idea.status)}>{idea.status}</Badge>
@@ -431,19 +431,19 @@ const InvestorDashboard = () => {
         <TabsContent value="tickets">
           <Card className="border-2 border-gold/30">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-black">
+              <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                 <MessageCircle className="h-5 w-5 text-gold" />
                 My Support Tickets
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-[#5A4A2E]">
                 Track all your support requests and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {tickets.length === 0 ? (
-                <div className="text-center py-12 text-gray-600">
+                <div className="text-center py-12 text-[#5A4A2E]">
                   <MessageCircle className="h-12 w-12 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium text-black mb-2">No Support Tickets</p>
+                  <p className="text-lg font-medium text-[#1A1A1A] mb-2">No Support Tickets</p>
                   <p className="text-sm mb-4">You haven't created any support tickets yet</p>
                   <Button onClick={() => navigate('/contact')} variant="primary">
                     Create New Ticket
@@ -452,14 +452,14 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {tickets.map((ticket) => (
-                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-gray-200 hover:border-gold/30 transition-colors">
+                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-gold/30 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-gold/10">
                           <MessageCircle className="h-5 w-5 text-gold" />
                         </div>
                         <div>
-                          <p className="font-medium text-black">{ticket.subject}</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-[#1A1A1A]">{ticket.subject}</p>
+                          <p className="text-sm text-[#5A4A2E]">
                             {ticket.ticket_number} • {format(new Date(ticket.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -477,19 +477,19 @@ const InvestorDashboard = () => {
         <TabsContent value="ideas">
           <Card className="border-2 border-gold/30">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-black">
+              <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                 <Lightbulb className="h-5 w-5 text-gold" />
                 My Ideas & Suggestions
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-[#5A4A2E]">
                 Track your submitted ideas and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {ideas.length === 0 ? (
-                <div className="text-center py-12 text-gray-600">
+                <div className="text-center py-12 text-[#5A4A2E]">
                   <Lightbulb className="h-12 w-12 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium text-black mb-2">No Ideas Submitted</p>
+                  <p className="text-lg font-medium text-[#1A1A1A] mb-2">No Ideas Submitted</p>
                   <p className="text-sm mb-4">Share your ideas to help us improve</p>
                   <Button onClick={() => navigate('/faq')} variant="primary">
                     Submit an Idea
@@ -498,14 +498,14 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {ideas.map((idea) => (
-                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-gray-200 hover:border-gold/30 transition-colors">
+                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-gold/30 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-gold/10">
                           <Lightbulb className="h-5 w-5 text-gold" />
                         </div>
                         <div>
-                          <p className="font-medium text-black">Idea Submission</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-medium text-[#1A1A1A]">Idea Submission</p>
+                          <p className="text-sm text-[#5A4A2E]">
                             {idea.draw_ticket_number || 'Processing'} • {format(new Date(idea.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -526,7 +526,7 @@ const InvestorDashboard = () => {
             <Card className="border-2 border-gold/30">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-black">
+                  <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                     <User className="h-5 w-5 text-gold" />
                     Profile Information
                   </CardTitle>
@@ -544,7 +544,7 @@ const InvestorDashboard = () => {
                 {editingProfile ? (
                   <>
                     <div className="space-y-2">
-                      <Label htmlFor="full_name" className="text-black">Full Name</Label>
+                      <Label htmlFor="full_name" className="text-[#1A1A1A]">Full Name</Label>
                       <Input
                         id="full_name"
                         value={formData.full_name}
@@ -553,7 +553,7 @@ const InvestorDashboard = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-black">Phone Number</Label>
+                      <Label htmlFor="phone" className="text-[#1A1A1A]">Phone Number</Label>
                       <Input
                         id="phone"
                         value={formData.phone}
@@ -562,7 +562,7 @@ const InvestorDashboard = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="dob" className="text-black">Date of Birth</Label>
+                      <Label htmlFor="dob" className="text-[#1A1A1A]">Date of Birth</Label>
                       <Input
                         id="dob"
                         type="date"
@@ -577,21 +577,21 @@ const InvestorDashboard = () => {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Full Name</span>
-                      <span className="font-medium text-black">{profile?.full_name || 'Not set'}</span>
+                    <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
+                      <span className="text-[#5A4A2E]">Full Name</span>
+                      <span className="font-medium text-[#1A1A1A]">{profile?.full_name || 'Not set'}</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Email</span>
-                      <span className="font-medium text-black">{user?.email}</span>
+                    <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
+                      <span className="text-[#5A4A2E]">Email</span>
+                      <span className="font-medium text-[#1A1A1A]">{user?.email}</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                      <span className="text-gray-600">Phone</span>
-                      <span className="font-medium text-black">{profile?.phone || 'Not set'}</span>
+                    <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
+                      <span className="text-[#5A4A2E]">Phone</span>
+                      <span className="font-medium text-[#1A1A1A]">{profile?.phone || 'Not set'}</span>
                     </div>
                     <div className="flex items-center justify-between py-2">
-                      <span className="text-gray-600">Date of Birth</span>
-                      <span className="font-medium text-black">{profile?.date_of_birth || 'Not set'}</span>
+                      <span className="text-[#5A4A2E]">Date of Birth</span>
+                      <span className="font-medium text-[#1A1A1A]">{profile?.date_of_birth || 'Not set'}</span>
                     </div>
                   </>
                 )}
@@ -601,7 +601,7 @@ const InvestorDashboard = () => {
             {/* Security Settings */}
             <Card className="border-2 border-gold/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-black">
+                <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
                   <Lock className="h-5 w-5 text-gold" />
                   Security
                 </CardTitle>

@@ -56,7 +56,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
   if (variant === "full") {
     return (
-      <div className={`bg-zinc-900/80 backdrop-blur-md border border-gray-800 rounded-xl p-6 ${className}`}>
+      <div className={`bg-zinc-900/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center">
             <Shield className="w-5 h-5 text-gold" />
@@ -83,8 +83,8 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
           ))}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-gray-800">
-          <p className="text-gray-600 text-xs text-center">
+        <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
+          <p className="text-[#5A4A2E] text-xs text-center">
             © {currentYear} JBJ Global Real Estate Brokerage | 
             <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
             <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
@@ -109,7 +109,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
   if (variant === "brokerage-cta") {
     return (
-      <div className={`bg-zinc-900/50 border border-gray-800 rounded-lg p-4 ${className}`}>
+      <div className={`bg-zinc-900/50 border border-[#1A1A1A] rounded-lg p-4 ${className}`}>
         <div className="flex items-start gap-3">
           <Building2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
           <div>
@@ -157,7 +157,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
   // Default compact variant
   return (
     <div className={`text-center ${className}`}>
-      <p className="text-gray-600 text-xs leading-relaxed">
+      <p className="text-[#5A4A2E] text-xs leading-relaxed">
         © {currentYear} JBJ Global Real Estate Brokerage. All Rights Reserved.
         <span className="block mt-1">
           Licensed brokerage services. Partner services via independent professionals.

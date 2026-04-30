@@ -185,7 +185,7 @@ export function AICreativeDirector({
             <Button
               onClick={handleGenerate}
               disabled={!prompt.trim() || isGenerating}
-              className="w-full bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold"
+              className="w-full bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold"
             >
               {isGenerating ? (
                 <>

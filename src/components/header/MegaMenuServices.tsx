@@ -50,9 +50,9 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
           </div>
 
           {/* Right: Sections with dividers */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-2 border-t lg:border-t-0 border-gray-200 mt-6 lg:mt-0 pt-6 lg:pt-0">
+          <div className="lg:col-span-6 lg:border-l lg:border-[#B89555]/30 lg:pl-2 border-t lg:border-t-0 border-[#B89555]/30 mt-6 lg:mt-0 pt-6 lg:pt-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
-              <div className="sm:border-r sm:border-gray-200">
+              <div className="sm:border-r sm:border-[#B89555]/30">
                 <MegaMenuSection icon={Wrench} title="Core Services">
                   {coreServices.map((service) => (
                     <MegaMenuIconLink key={service.name} to={service.href} onClick={onClose} icon={service.icon} title={service.name} compact />
@@ -60,7 +60,7 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
                 </MegaMenuSection>
               </div>
 
-              <div className="border-t sm:border-t-0 border-gray-200">
+              <div className="border-t sm:border-t-0 border-[#B89555]/30">
                 <MegaMenuSection icon={Globe} title="More Services">
                   {additionalServices.map((service) => (
                     <MegaMenuIconLink key={service.name} to={service.href} onClick={onClose} icon={service.icon} title={service.name} compact />

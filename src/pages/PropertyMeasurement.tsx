@@ -314,7 +314,7 @@ jbj.ae
   const currentRoom = roomUploads[currentRoomIndex];
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-[#1A1A1A]">
       {/* Hero Section */}
       <div className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-900/30 via-black to-emerald-900/20" />
@@ -413,7 +413,7 @@ jbj.ae
                         className={`p-4 rounded-xl border transition-all ${
                           propertyType === type.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-gray-700 bg-zinc-800/50 text-white/70 hover:border-gray-600"
+                            : "border-[#1A1A1A] bg-zinc-800/50 text-white/70 hover:border-[#1A1A1A]"
                         }`}
                       >
                         <type.icon className="w-6 h-6 mx-auto mb-2" />
@@ -430,7 +430,7 @@ jbj.ae
                     value={propertyName}
                     onChange={(e) => setPropertyName(e.target.value)}
                     placeholder="e.g., My Dubai Marina Apartment"
-                    className="bg-zinc-800/50 border-gray-700 text-white mt-2"
+                    className="bg-zinc-800/50 border-[#1A1A1A] text-white mt-2"
                   />
                 </div>
 
@@ -448,7 +448,7 @@ jbj.ae
                         className={`px-4 py-2 rounded-lg border transition-all ${
                           unitPreference === unit.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-gray-700 bg-zinc-800/50 text-white/70 hover:border-gray-600"
+                            : "border-[#1A1A1A] bg-zinc-800/50 text-white/70 hover:border-[#1A1A1A]"
                         }`}
                       >
                         {unit.label}
@@ -529,7 +529,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(1)}
                     variant="outline"
-                    className="border-gray-700 text-white/85"
+                    className="border-[#1A1A1A] text-white/85"
                   >
                     Back
                   </Button>
@@ -569,7 +569,7 @@ jbj.ae
                       className={`relative p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500 bg-teal-500/10" 
-                          : "border-gray-700 bg-zinc-800/50"
+                          : "border-[#1A1A1A] bg-zinc-800/50"
                       }`}
                     >
                       <button
@@ -598,7 +598,7 @@ jbj.ae
                       const name = prompt("Enter room/area name:");
                       if (name) addCustomRoom(name);
                     }}
-                    className="p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-gray-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
+                    className="p-4 rounded-xl border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 bg-zinc-800/30 hover:bg-[#1A1A1A]/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
                   >
                     <Plus className="w-6 h-6 text-white/90" />
                     <span className="text-white/70 text-sm">Add Custom Room</span>
@@ -609,7 +609,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(2)}
                     variant="outline"
-                    className="border-gray-700 text-white/85"
+                    className="border-[#1A1A1A] text-white/85"
                   >
                     Back
                   </Button>
@@ -655,7 +655,7 @@ jbj.ae
                       className={`p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500/50 bg-teal-500/5" 
-                          : "border-gray-700 bg-zinc-800/30"
+                          : "border-[#1A1A1A] bg-zinc-800/30"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -675,7 +675,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "photo"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-gray-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-[#1A1A1A]"
                             }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
@@ -686,7 +686,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "video"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-gray-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-[#1A1A1A]"
                             }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
@@ -709,7 +709,7 @@ jbj.ae
                         {room.files.length === 0 ? (
                           <label 
                             htmlFor={`upload-${room.id}`}
-                            className="block w-full border-2 border-dashed border-gray-700 hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-gray-800/30"
+                            className="block w-full border-2 border-dashed border-[#1A1A1A] hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-[#1A1A1A]/30"
                           >
                             {room.mediaType === "photo" ? (
                               <>
@@ -772,7 +772,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(3)}
                     variant="outline"
-                    className="border-gray-700 text-white/85"
+                    className="border-[#1A1A1A] text-white/85"
                     disabled={isProcessing}
                   >
                     Back
@@ -799,7 +799,7 @@ jbj.ae
             animate={{ opacity: 1, y: 0 }}
           >
             <Card className="!border-teal-500/30 !border bg-zinc-900/50">
-              <CardHeader className="border-b border-gray-800">
+              <CardHeader className="border-b border-[#1A1A1A]">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
                     <CheckCircle2 className="w-6 h-6 text-teal-400" />
@@ -835,7 +835,7 @@ jbj.ae
 
                 {/* AI Notes */}
                 {result.notes && (
-                  <div className="bg-zinc-800/50 border border-gray-700 rounded-xl p-4">
+                  <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
                       <div>
@@ -877,7 +877,7 @@ jbj.ae
                     <p className="text-yellow-300 font-medium">Want to save this measurement?</p>
                     <p className="text-white/70 text-sm mt-1">Log in to save your projects and access them anytime.</p>
                     <Link to="/auth">
-                      <Button className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black">
+                      <Button className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-[#1A1A1A]">
                         Log In to Save
                       </Button>
                     </Link>
@@ -896,7 +896,7 @@ jbj.ae
                   </Button>
                   <Button 
                     onClick={proceedToInteriorDesign}
-                    className="flex-1 bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-black font-semibold"
+                    className="flex-1 bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] font-semibold"
                   >
                     Continue to Interior Design AI
                     <ArrowRight className="w-4 h-4 ml-2" />

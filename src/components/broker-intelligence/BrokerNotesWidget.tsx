@@ -98,7 +98,7 @@ export function BrokerNotesWidget() {
       case "meeting":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"><Clock className="w-3 h-3 mr-1" />Meeting</Badge>;
       case "general":
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
     }
   };
 
@@ -113,7 +113,7 @@ export function BrokerNotesWidget() {
   return (
     <div className="space-y-6">
       {/* Quick Notes Header */}
-      <Card className="bg-zinc-900/50 border-gray-800">
+      <Card className="bg-zinc-900/50 border-[#1A1A1A]">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-white text-lg flex items-center gap-2">
@@ -138,7 +138,7 @@ export function BrokerNotesWidget() {
                 placeholder="Write your note here..."
                 value={newNote.content}
                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[80px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[80px]"
               />
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -164,7 +164,7 @@ export function BrokerNotesWidget() {
                     placeholder="Lead or property name"
                     value={newNote.linkedTo}
                     onChange={(e) => setNewNote({ ...newNote, linkedTo: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export function BrokerNotesWidget() {
               placeholder="Search notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600 pl-10"
+              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] pl-10"
             />
           </div>
 
@@ -202,12 +202,12 @@ export function BrokerNotesWidget() {
               {filteredNotes.map((note) => (
                 <div
                   key={note.id}
-                  className="bg-zinc-800/50 rounded-lg p-3 border border-gray-700/50 hover:border-gold/20 transition-colors group"
+                  className="bg-zinc-800/50 rounded-lg p-3 border border-[#1A1A1A]/50 hover:border-gold/20 transition-colors group"
                 >
                   <div className="flex items-start justify-between mb-2">
                     {getCategoryBadge(note.category)}
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-600 text-xs">{getTimeAgo(note.createdAt)}</span>
+                      <span className="text-[#5A4A2E] text-xs">{getTimeAgo(note.createdAt)}</span>
                       <Button
                         variant="dark-ghost"
                         size="icon"
@@ -234,7 +234,7 @@ export function BrokerNotesWidget() {
 
       {/* Link to Full Notes */}
       <Link to="/crm/notes">
-        <Card className="bg-zinc-800/30 border-gray-800 hover:border-gold/30 transition-colors cursor-pointer">
+        <Card className="bg-zinc-800/30 border-[#1A1A1A] hover:border-gold/30 transition-colors cursor-pointer">
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <FileText className="w-5 h-5 text-gold" />
@@ -243,7 +243,7 @@ export function BrokerNotesWidget() {
                 <p className="text-white/90 text-xs">Access all notes, AI summaries, and linked items</p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+            <ChevronRight className="w-5 h-5 text-[#5A4A2E]" />
           </CardContent>
         </Card>
       </Link>

@@ -132,7 +132,7 @@ export default function ContentTermsAcceptance({
                   understand that this is a legally binding agreement enforceable under UAE law.
                 </p>
 
-                <div className="pt-3 border-t border-gray-700">
+                <div className="pt-3 border-t border-[#1A1A1A]">
                   <p className="text-white/90">
                     © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                     <br />
@@ -145,7 +145,7 @@ export default function ContentTermsAcceptance({
         </div>
       </div>
 
-      <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-zinc-900/50 border-gray-700 hover:border-gray-600">
+      <label className="flex items-start gap-3 cursor-pointer p-4 rounded-xl border-2 transition-all bg-zinc-900/50 border-[#1A1A1A] hover:border-[#1A1A1A]">
         <Checkbox
           checked={isAccepted}
           onCheckedChange={async (checked) => {

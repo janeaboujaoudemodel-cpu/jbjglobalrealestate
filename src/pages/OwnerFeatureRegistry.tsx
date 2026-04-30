@@ -413,14 +413,14 @@ export default function OwnerFeatureRegistry() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <BookOpen className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Feature Registry & Audit</h1>
-                  <p className="text-gray-600 text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
+                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Feature Registry & Audit</h1>
+                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
                 </div>
               </div>
               
@@ -446,7 +446,7 @@ export default function OwnerFeatureRegistry() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-3 mb-6 bg-white/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-3 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
               <TabsTrigger value="registry">Feature Registry</TabsTrigger>
               <TabsTrigger value="audit">Audit Summary</TabsTrigger>
               <TabsTrigger value="navigation">Navigation Map</TabsTrigger>
@@ -457,7 +457,7 @@ export default function OwnerFeatureRegistry() {
               {/* Search & Filter */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
                   <Input
                     placeholder="Search features, descriptions, paths..."
                     value={searchQuery}
@@ -471,7 +471,7 @@ export default function OwnerFeatureRegistry() {
                     <Badge
                       key={cat.name}
                       variant={selectedCategory === cat.name ? 'default' : 'outline'}
-                      className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-gold text-black' : 'border-gold/30 hover:bg-gold/10'}`}
+                      className={`cursor-pointer ${selectedCategory === cat.name ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 hover:bg-gold/10'}`}
                       onClick={() => setSelectedCategory(cat.name)}
                     >
                       {cat.name} ({cat.count})
@@ -481,7 +481,7 @@ export default function OwnerFeatureRegistry() {
               </div>
 
               {/* Features List */}
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     {selectedCategory === 'All' ? 'All Features' : selectedCategory} ({filteredFeatures.length})
@@ -499,7 +499,7 @@ export default function OwnerFeatureRegistry() {
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.02 }}
-                          className="p-4 rounded-xl border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-all group"
+                          className="p-4 rounded-xl border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-all group"
                           onClick={() => {
                             if (!feature.path.includes(':')) {
                               navigate(feature.path);
@@ -513,7 +513,7 @@ export default function OwnerFeatureRegistry() {
                             
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <p className="font-semibold text-black">{feature.name}</p>
+                                <p className="font-semibold text-[#1A1A1A]">{feature.name}</p>
                                 {feature.isAIPowered && (
                                   <Badge className="bg-purple-100 text-purple-700 text-[10px] px-1.5">AI</Badge>
                                 )}
@@ -524,22 +524,22 @@ export default function OwnerFeatureRegistry() {
                                   <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
                                 )}
                                 {feature.isManual && (
-                                  <Badge className="bg-gray-100 text-gray-700 text-[10px] px-1.5">Manual</Badge>
+                                  <Badge className="bg-[#F7F2EA] text-[#5A4A2E] text-[10px] px-1.5">Manual</Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-gray-600 mt-0.5">{feature.description}</p>
+                              <p className="text-sm text-[#5A4A2E] mt-0.5">{feature.description}</p>
                               <div className="flex items-center gap-2 mt-2 text-xs">
                                 <Badge variant="outline" className="border-gold/30 font-normal">
                                   {feature.category}
                                 </Badge>
-                                <span className="text-gray-600">→</span>
+                                <span className="text-[#5A4A2E]">→</span>
                                 <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
                                   {feature.navigationPath}
                                 </code>
                               </div>
                             </div>
                             
-                            <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-gold transition-colors flex-shrink-0" />
+                            <ChevronRight className="h-4 w-4 text-[#5A4A2E] group-hover:text-gold transition-colors flex-shrink-0" />
                           </div>
                         </motion.div>
                       ))}
@@ -571,7 +571,7 @@ export default function OwnerFeatureRegistry() {
                 </Card>
 
                 {/* By Category */}
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg">Features by Category</CardTitle>
                   </CardHeader>
@@ -579,8 +579,8 @@ export default function OwnerFeatureRegistry() {
                     <div className="space-y-3">
                       {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
                         <div key={cat.name} className="flex items-center justify-between p-3 rounded-lg bg-gold/5 border border-gold/20">
-                          <span className="font-medium text-black">{cat.name}</span>
-                          <Badge className="bg-gold text-black">{cat.count}</Badge>
+                          <span className="font-medium text-[#1A1A1A]">{cat.name}</span>
+                          <Badge className="bg-gold text-[#1A1A1A]">{cat.count}</Badge>
                         </div>
                       ))}
                     </div>
@@ -588,7 +588,7 @@ export default function OwnerFeatureRegistry() {
                 </Card>
 
                 {/* Behavior Summary */}
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg">Feature Behavior Summary</CardTitle>
                     <CardDescription>How features operate</CardDescription>
@@ -616,12 +616,12 @@ export default function OwnerFeatureRegistry() {
                         </div>
                         <p className="text-sm text-green-600">Runs automatically in the background (e.g., AI learning, CRM logging). Owner can configure via settings.</p>
                       </div>
-                      <div className="p-4 rounded-lg border border-gray-200 bg-gray-50">
+                      <div className="p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
                         <div className="flex items-center gap-2 mb-2">
-                          <Wrench className="h-4 w-4 text-gray-600" />
-                          <span className="font-medium text-gray-700">Manual ({manualCount})</span>
+                          <Wrench className="h-4 w-4 text-[#5A4A2E]" />
+                          <span className="font-medium text-[#5A4A2E]">Manual ({manualCount})</span>
                         </div>
-                        <p className="text-sm text-gray-600">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
+                        <p className="text-sm text-[#5A4A2E]">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -631,7 +631,7 @@ export default function OwnerFeatureRegistry() {
 
             {/* Navigation Map Tab */}
             <TabsContent value="navigation">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg">Complete Navigation Map</CardTitle>
                   <CardDescription>Every page and how to reach it</CardDescription>
@@ -641,7 +641,7 @@ export default function OwnerFeatureRegistry() {
                     <div className="space-y-6">
                       {CATEGORIES.filter(c => c.name !== 'All').map(cat => (
                         <div key={cat.name}>
-                          <h3 className="font-semibold text-black mb-3 flex items-center gap-2">
+                          <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-gold" />
                             {cat.name}
                           </h3>
@@ -649,7 +649,7 @@ export default function OwnerFeatureRegistry() {
                             {FEATURES.filter(f => f.category === cat.name).map((feature, idx) => (
                               <div 
                                 key={`${feature.name}-nav-${idx}`}
-                                className="flex items-center justify-between p-3 rounded-lg border border-gold/10 bg-white hover:bg-gold/5 cursor-pointer"
+                                className="flex items-center justify-between p-3 rounded-lg border border-gold/10 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer"
                                 onClick={() => {
                                   if (!feature.path.includes(':')) {
                                     navigate(feature.path);
@@ -659,15 +659,15 @@ export default function OwnerFeatureRegistry() {
                                 <div className="flex items-center gap-3">
                                   <div className="text-gold">{feature.icon}</div>
                                   <div>
-                                    <p className="font-medium text-black text-sm">{feature.name}</p>
-                                    <code className="text-[11px] text-gray-600">{feature.path}</code>
+                                    <p className="font-medium text-[#1A1A1A] text-sm">{feature.name}</p>
+                                    <code className="text-[11px] text-[#5A4A2E]">{feature.path}</code>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded max-w-[300px] truncate">
                                     {feature.navigationPath}
                                   </code>
-                                  <ExternalLink className="h-3 w-3 text-gray-600" />
+                                  <ExternalLink className="h-3 w-3 text-[#5A4A2E]" />
                                 </div>
                               </div>
                             ))}
@@ -682,24 +682,24 @@ export default function OwnerFeatureRegistry() {
           </Tabs>
 
           {/* Legend */}
-          <div className="mt-6 p-4 bg-white/80 border-2 border-gold/20 rounded-xl">
-            <h3 className="font-semibold text-black mb-3">Legend</h3>
+          <div className="mt-6 p-4 bg-[#FDFBF7]/80 border-2 border-gold/20 rounded-xl">
+            <h3 className="font-semibold text-[#1A1A1A] mb-3">Legend</h3>
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-purple-100 text-purple-700 text-xs">AI</Badge>
-                <span className="text-gray-600">AI-powered feature (drafts/suggestions)</span>
+                <span className="text-[#5A4A2E]">AI-powered feature (drafts/suggestions)</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-blue-100 text-blue-700 text-xs">Approval</Badge>
-                <span className="text-gray-600">Requires Owner approval before action</span>
+                <span className="text-[#5A4A2E]">Requires Owner approval before action</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 text-xs">Auto</Badge>
-                <span className="text-gray-600">Runs automatically (configurable)</span>
+                <span className="text-[#5A4A2E]">Runs automatically (configurable)</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-gray-100 text-gray-700 text-xs">Manual</Badge>
-                <span className="text-gray-600">Owner-initiated only</span>
+                <Badge className="bg-[#F7F2EA] text-[#5A4A2E] text-xs">Manual</Badge>
+                <span className="text-[#5A4A2E]">Owner-initiated only</span>
               </div>
             </div>
           </div>
@@ -721,7 +721,7 @@ function StatsCard({
   variant?: 'default' | 'purple' | 'blue' | 'green';
 }) {
   const variants = {
-    default: "border-gold/30 bg-white",
+    default: "border-gold/30 bg-[#FDFBF7]",
     purple: "border-purple-200 bg-purple-50",
     blue: "border-blue-200 bg-blue-50",
     green: "border-green-200 bg-green-50",
@@ -739,10 +739,10 @@ function StatsCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-600">{label}</p>
-            <p className="text-xl font-bold text-black">{value}</p>
+            <p className="text-xs text-[#5A4A2E]">{label}</p>
+            <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
           </div>
-          <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
+          <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
             {icon}
           </div>
         </div>
@@ -768,10 +768,10 @@ function AuditItem({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-green-200">
-      <span className="text-sm text-gray-600">{label}</span>
+    <div className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] border border-green-200">
+      <span className="text-sm text-[#5A4A2E]">{label}</span>
       <div className="flex items-center gap-2">
-        <span className="font-semibold text-black">{value}</span>
+        <span className="font-semibold text-[#1A1A1A]">{value}</span>
         {icons[status]}
       </div>
     </div>

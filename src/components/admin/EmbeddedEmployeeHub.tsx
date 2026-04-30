@@ -83,12 +83,12 @@ export function EmbeddedEmployeeHub() {
 
   return (
     <Tabs defaultValue="team" className="space-y-6">
-      <TabsList className="bg-white border-2 border-gold/30">
-        <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+      <TabsList className="bg-[#FDFBF7] border-2 border-gold/30">
+        <TabsTrigger value="team" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
           <Users className="w-4 h-4 mr-2" />
           Team Members
         </TabsTrigger>
-        <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+        <TabsTrigger value="email" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
           <AtSign className="w-4 h-4 mr-2" />
           Email Accounts
         </TabsTrigger>
@@ -97,11 +97,11 @@ export function EmbeddedEmployeeHub() {
       <TabsContent value="team" className="space-y-6">
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="bg-white border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-xs">Team Members</p>
+                  <p className="text-[#5A4A2E] text-xs">Team Members</p>
                   <p className="text-2xl font-bold text-gold">{totalEmployees}</p>
                 </div>
                 <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -110,11 +110,11 @@ export function EmbeddedEmployeeHub() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-2 border-green-500/30">
+          <Card className="bg-[#FDFBF7] border-2 border-green-500/30">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-xs">Online Now</p>
+                  <p className="text-[#5A4A2E] text-xs">Online Now</p>
                   <p className="text-2xl font-bold text-green-600">{onlineCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -123,11 +123,11 @@ export function EmbeddedEmployeeHub() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-2 border-blue-500/30">
+          <Card className="bg-[#FDFBF7] border-2 border-blue-500/30">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-xs">Departments</p>
+                  <p className="text-[#5A4A2E] text-xs">Departments</p>
                   <p className="text-2xl font-bold text-blue-600">{departmentCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -136,11 +136,11 @@ export function EmbeddedEmployeeHub() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-white border-2 border-amber-500/30">
+          <Card className="bg-[#FDFBF7] border-2 border-amber-500/30">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-xs">Top Performers</p>
+                  <p className="text-[#5A4A2E] text-xs">Top Performers</p>
                   <p className="text-2xl font-bold text-amber-600">{Object.keys(topPerformers).length}</p>
                 </div>
                 <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
@@ -152,7 +152,7 @@ export function EmbeddedEmployeeHub() {
         </div>
 
         {/* Search & Filter */}
-        <Card className="bg-white/90 border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7]/90 border-2 border-gold/30">
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1">
@@ -161,7 +161,7 @@ export function EmbeddedEmployeeHub() {
                   placeholder="Search by name, role, department, or language..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 h-10"
+                  className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-10"
                 />
               </div>
               <div className="flex gap-2 flex-wrap">
@@ -169,7 +169,7 @@ export function EmbeddedEmployeeHub() {
                   size="sm"
                   variant={selectedDepartment === 'all' ? 'default' : 'secondary'}
                   onClick={() => setSelectedDepartment('all')}
-                  className={selectedDepartment === 'all' ? 'bg-gold text-black' : ''}
+                  className={selectedDepartment === 'all' ? 'bg-gold text-[#1A1A1A]' : ''}
                 >
                   All
                 </Button>
@@ -179,7 +179,7 @@ export function EmbeddedEmployeeHub() {
                     size="sm"
                     variant={selectedDepartment === dept ? 'default' : 'secondary'}
                     onClick={() => setSelectedDepartment(dept)}
-                    className={selectedDepartment === dept ? 'bg-gold text-black' : ''}
+                    className={selectedDepartment === dept ? 'bg-gold text-[#1A1A1A]' : ''}
                   >
                     {dept}
                   </Button>
@@ -200,7 +200,7 @@ export function EmbeddedEmployeeHub() {
             return (
               <Card 
                 key={member.id} 
-                className={`bg-white border-2 border-gold/30 hover:border-gold/60 hover:shadow-lg transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold' : ''}`}
+                className={`bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/60 hover:shadow-lg transition-all duration-300 h-full relative overflow-hidden ${isTopPerformer ? 'ring-2 ring-gold' : ''}`}
               >
                 {newJoinerLabel && (
                   <div className="absolute top-0 left-0 bg-gradient-to-br from-emerald-500 to-green-600 text-white px-2 py-0.5 text-[10px] font-bold flex items-center gap-1 rounded-br-lg z-10">
@@ -210,7 +210,7 @@ export function EmbeddedEmployeeHub() {
                 )}
                 
                 {isTopPerformer && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-bl from-gold to-amber-600 text-black px-2 py-0.5 text-[10px] font-bold flex items-center gap-1 rounded-bl-lg">
+                  <div className="absolute top-0 right-0 bg-gradient-to-bl from-gold to-amber-600 text-[#1A1A1A] px-2 py-0.5 text-[10px] font-bold flex items-center gap-1 rounded-bl-lg">
                     <Trophy className="h-2.5 w-2.5" />
                     Top
                   </div>
@@ -225,25 +225,25 @@ export function EmbeddedEmployeeHub() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-black font-bold text-sm truncate">{member.name}</h3>
+                      <h3 className="text-[#1A1A1A] font-bold text-sm truncate">{member.name}</h3>
                       <p className="text-gold text-xs font-semibold truncate">{member.role}</p>
-                      <p className="text-gray-600 text-[10px] truncate">{member.department}</p>
+                      <p className="text-[#5A4A2E] text-[10px] truncate">{member.department}</p>
                     </div>
                   </div>
                   
                   {performerData && (
                     <div className="mt-2 p-1.5 bg-gradient-to-r from-gold/10 to-amber-500/5 rounded-md border border-gold/30">
-                      <p className="text-black text-[10px] font-semibold flex items-center gap-1">
+                      <p className="text-[#1A1A1A] text-[10px] font-semibold flex items-center gap-1">
                         <Medal className="h-2.5 w-2.5 text-gold" />
                         <span className="text-gold">{performerData[0]}:</span> {performerData[1].metric}
                       </p>
                     </div>
                   )}
                   
-                  <p className="text-gray-600 text-[10px] line-clamp-2 mt-2">{member.bio}</p>
+                  <p className="text-[#5A4A2E] text-[10px] line-clamp-2 mt-2">{member.bio}</p>
                   
                   {member.joinDate && (
-                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-gray-600">
+                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-[#5A4A2E]">
                       <Calendar className="h-2.5 w-2.5" />
                       <span>Joined: {joinDateFormatted}</span>
                     </div>
@@ -251,14 +251,14 @@ export function EmbeddedEmployeeHub() {
                   
                   <div className="flex flex-wrap gap-1 mt-2">
                     {member.languages?.slice(0, 2).map((lang) => (
-                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-gray-600 bg-gold/5 px-1.5 py-0">
+                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-[#5A4A2E] bg-gold/5 px-1.5 py-0">
                         {lang}
                       </Badge>
                     ))}
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gold/20">
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-600 bg-white'}`}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#5A4A2E] bg-[#FDFBF7]'}`}>
                       {member.status === 'online' ? '● Online' : '○ Away'}
                     </Badge>
                     
@@ -266,7 +266,7 @@ export function EmbeddedEmployeeHub() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-gold hover:text-black hover:bg-gold/20 h-6 w-6 p-0"
+                        className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 h-6 w-6 p-0"
                       >
                         <Mail className="h-3 w-3" />
                       </Button>
@@ -274,7 +274,7 @@ export function EmbeddedEmployeeHub() {
                         size="sm"
                         variant="ghost"
                         onClick={() => setChatEmployee(member)}
-                        className="text-gold hover:text-black hover:bg-gold/20 h-6 px-1.5"
+                        className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 h-6 px-1.5"
                       >
                         <MessageSquare className="h-3 w-3 mr-0.5" />
                         <span className="text-[10px]">Chat</span>
@@ -289,8 +289,8 @@ export function EmbeddedEmployeeHub() {
 
         {filteredMembers.length === 0 && (
           <div className="text-center py-12">
-            <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-600">No employees found matching your search.</p>
+            <Users className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+            <p className="text-[#5A4A2E]">No employees found matching your search.</p>
           </div>
         )}
       </TabsContent>

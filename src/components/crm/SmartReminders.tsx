@@ -184,9 +184,9 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
   return (
     <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2 text-black">
+        <CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-            <Bell className="h-4 w-4 text-black" />
+            <Bell className="h-4 w-4 text-[#1A1A1A]" />
           </div>
           Smart Reminders
           {reminders.filter(r => r.priority === 'high').length > 0 && (
@@ -198,12 +198,12 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-sm text-black text-center py-4">Loading reminders...</p>
+          <p className="text-sm text-[#1A1A1A] text-center py-4">Loading reminders...</p>
         ) : reminders.length === 0 ? (
           <div className="text-center py-6">
             <CheckCircle className="h-10 w-10 text-emerald-500 mx-auto mb-2" />
-            <p className="text-sm font-medium text-black">All caught up!</p>
-            <p className="text-xs text-gray-600 mt-1">No pending reminders or overdue tasks</p>
+            <p className="text-sm font-medium text-[#1A1A1A]">All caught up!</p>
+            <p className="text-xs text-[#5A4A2E] mt-1">No pending reminders or overdue tasks</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -225,19 +225,19 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-black truncate">
+                    <span className="font-medium text-[#1A1A1A] truncate">
                       {reminder.leadName}
                     </span>
                     {getPriorityBadge(reminder.priority)}
                   </div>
-                  <p className="text-sm text-gray-700 truncate">
+                  <p className="text-sm text-[#5A4A2E] truncate">
                     {reminder.message}
                   </p>
                   <p className={cn(
                     "text-xs mt-1",
                     isPast(reminder.dueAt) && !isToday(reminder.dueAt)
                       ? "text-red-600 font-medium"
-                      : "text-gray-600"
+                      : "text-[#5A4A2E]"
                   )}>
                     {formatDueDate(reminder.dueAt)}
                   </p>
@@ -246,7 +246,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                   size="sm"
                   variant="ghost"
                   onClick={() => completeReminder(reminder)}
-                  className="shrink-0 text-black hover:text-emerald-600 hover:bg-emerald-50"
+                  className="shrink-0 text-[#1A1A1A] hover:text-emerald-600 hover:bg-emerald-50"
                 >
                   <CheckCircle className="h-4 w-4" />
                 </Button>

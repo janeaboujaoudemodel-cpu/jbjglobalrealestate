@@ -33,10 +33,10 @@ export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
         return 'text-gold hover:text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] hover:scale-110 transition-all duration-300';
       case 'premium':
         // Gold-tile chip: crisp, legible, never faded.
-        // contrast-ok — hover bg is gold (treated as light) but glyph swaps to text-black.
-        return 'inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/[0.04] border border-[hsl(var(--gold))]/45 text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))] hover:text-black hover:border-[hsl(var(--gold))] hover:scale-[1.06] hover:shadow-[0_0_18px_rgba(200,167,102,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0908] transition-all duration-200';
+        // contrast-ok — hover bg is gold (treated as light) but glyph swaps to text-[#1A1A1A].
+        return 'inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#FDFBF7]/[0.04] border border-[hsl(var(--gold))]/45 text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))] hover:text-[#1A1A1A] hover:border-[hsl(var(--gold))] hover:scale-[1.06] hover:shadow-[0_0_18px_rgba(200,167,102,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0908] transition-all duration-200';
       default:
-        return 'text-gray-600 hover:text-gold';
+        return 'text-[#5A4A2E] hover:text-gold';
     }
   };
 

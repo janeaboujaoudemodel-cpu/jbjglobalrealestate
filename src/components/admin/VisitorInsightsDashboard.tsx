@@ -241,7 +241,7 @@ const VisitorInsightsDashboard = () => {
       case 'download': return <Download className="h-3 w-3 text-purple-600" />;
       case 'upload': return <Upload className="h-3 w-3 text-orange-600" />;
       case 'form_submit': return <FileText className="h-3 w-3 text-gold" />;
-      default: return <Activity className="h-3 w-3 text-black/50" />;
+      default: return <Activity className="h-3 w-3 text-[#1A1A1A]/50" />;
     }
   };
 
@@ -250,15 +250,15 @@ const VisitorInsightsDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
             <Eye className="h-7 w-7 text-gold" />
             Visitor Insights
           </h2>
-          <p className="text-black/60 mt-1">
+          <p className="text-[#1A1A1A]/60 mt-1">
             {stats.totalVisitors} unique visitors across {stats.totalSessions} sessions
           </p>
         </div>
-        <Button onClick={fetchData} variant="outline" className="border-gold/30 text-black hover:bg-gold/10">
+        <Button onClick={fetchData} variant="outline" className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
           <RefreshCw className="h-4 w-4 mr-2" />
           Refresh
         </Button>
@@ -281,8 +281,8 @@ const VisitorInsightsDashboard = () => {
                   <stat.icon className={`h-5 w-5 text-${stat.color}-600`} />
                 </div>
                 <div>
-                  <p className="text-xl font-bold text-black">{stat.value}</p>
-                  <p className="text-xs text-black/60">{stat.label}</p>
+                  <p className="text-xl font-bold text-[#1A1A1A]">{stat.value}</p>
+                  <p className="text-xs text-[#1A1A1A]/60">{stat.label}</p>
                 </div>
               </div>
             </CardContent>
@@ -292,12 +292,12 @@ const VisitorInsightsDashboard = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-        <TabsList className="bg-white/50 border border-gold/20">
-          <TabsTrigger value="visitors" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+        <TabsList className="bg-[#FDFBF7]/50 border border-gold/20">
+          <TabsTrigger value="visitors" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
             <Users className="h-4 w-4 mr-2" />
             Visitors ({groupedVisitors.length})
           </TabsTrigger>
-          <TabsTrigger value="contacts" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="contacts" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
             <Mail className="h-4 w-4 mr-2" />
             Contacts ({contacts.length})
           </TabsTrigger>
@@ -306,12 +306,12 @@ const VisitorInsightsDashboard = () => {
         {/* Filters */}
         <div className="flex items-center gap-4 mt-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/40" />
             <Input
               placeholder="Search by name, email, phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white border-gold/20 text-black"
+              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
             />
           </div>
           {activeTab === 'visitors' && (
@@ -319,7 +319,7 @@ const VisitorInsightsDashboard = () => {
               {['all', 'desktop', 'mobile', 'tablet'].map((device) => (
                 <Button key={device} variant={filterDevice === device ? 'default' : 'outline'} size="sm"
                   onClick={() => setFilterDevice(device)}
-                  className={filterDevice === device ? 'bg-gold text-black' : 'border-gold/30 text-black/70'}>
+                  className={filterDevice === device ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 text-[#1A1A1A]/70'}>
                   {device === 'all' ? 'All' : device.charAt(0).toUpperCase() + device.slice(1)}
                 </Button>
               ))}
@@ -330,7 +330,7 @@ const VisitorInsightsDashboard = () => {
         <TabsContent value="visitors">
           <Card className="jj-card-inner mt-4">
             <CardHeader className="border-b border-gold/20">
-              <CardTitle className="text-black">Visitors ({filteredVisitors.length})</CardTitle>
+              <CardTitle className="text-[#1A1A1A]">Visitors ({filteredVisitors.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
@@ -339,11 +339,11 @@ const VisitorInsightsDashboard = () => {
                     <RefreshCw className="h-6 w-6 animate-spin text-gold" />
                   </div>
                 ) : filteredVisitors.length === 0 ? (
-                  <div className="text-center text-black/50 py-8">No visitors found</div>
+                  <div className="text-center text-[#1A1A1A]/50 py-8">No visitors found</div>
                 ) : (
                   <table className="w-full">
                     <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
-                      <tr className="text-left text-black/60 text-sm">
+                      <tr className="text-left text-[#1A1A1A]/60 text-sm">
                         <th className="p-4">Visitor</th>
                         <th className="p-4">Contact</th>
                         <th className="p-4">Sessions</th>
@@ -365,10 +365,10 @@ const VisitorInsightsDashboard = () => {
                                 <Users className={`h-4 w-4 ${visitor.isConverted ? 'text-green-600' : 'text-gold'}`} />
                               </div>
                               <div>
-                                <p className="text-black font-medium text-sm">{visitor.displayName}</p>
+                                <p className="text-[#1A1A1A] font-medium text-sm">{visitor.displayName}</p>
                                 <div className="flex gap-1">
                                   {visitor.deviceTypes.map(d => (
-                                    <span key={d} className="text-black/40">{getDeviceIcon(d)}</span>
+                                    <span key={d} className="text-[#1A1A1A]/40">{getDeviceIcon(d)}</span>
                                   ))}
                                 </div>
                               </div>
@@ -376,9 +376,9 @@ const VisitorInsightsDashboard = () => {
                           </td>
                           <td className="p-4">
                             <div className="space-y-0.5 text-sm">
-                              {visitor.email && <p className="text-black/70 truncate max-w-[180px]">{visitor.email}</p>}
-                              {visitor.phone && <p className="text-black/50">{visitor.phone}</p>}
-                              {!visitor.email && !visitor.phone && <p className="text-black/30 italic">No contact</p>}
+                              {visitor.email && <p className="text-[#1A1A1A]/70 truncate max-w-[180px]">{visitor.email}</p>}
+                              {visitor.phone && <p className="text-[#1A1A1A]/50">{visitor.phone}</p>}
+                              {!visitor.email && !visitor.phone && <p className="text-[#1A1A1A]/30 italic">No contact</p>}
                             </div>
                           </td>
                           <td className="p-4">
@@ -387,26 +387,26 @@ const VisitorInsightsDashboard = () => {
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <span className="text-black font-medium">{formatTimeSpent(visitor.totalTimeSpent)}</span>
+                            <span className="text-[#1A1A1A] font-medium">{formatTimeSpent(visitor.totalTimeSpent)}</span>
                           </td>
                           <td className="p-4">
-                            <Badge variant="secondary" className="bg-gold/10 text-black/70">
+                            <Badge variant="secondary" className="bg-gold/10 text-[#1A1A1A]/70">
                               {visitor.totalPages} pages
                             </Badge>
                           </td>
                           <td className="p-4">
-                            <div className="flex items-center gap-1 text-black/60 text-sm">
+                            <div className="flex items-center gap-1 text-[#1A1A1A]/60 text-sm">
                               <MapPin className="h-3 w-3" />
                               {visitor.city || visitor.country || 'Unknown'}
                             </div>
                           </td>
                           <td className="p-4">
-                            <div className="text-sm text-black/60">
+                            <div className="text-sm text-[#1A1A1A]/60">
                               {formatDistanceToNow(new Date(visitor.lastActivity), { addSuffix: true })}
                             </div>
                           </td>
                           <td className="p-4">
-                            <Button size="sm" variant="ghost" className="text-gold hover:text-gray-800">
+                            <Button size="sm" variant="ghost" className="text-gold hover:text-[#1A1A1A]">
                               <ChevronRight className="h-4 w-4" />
                             </Button>
                           </td>
@@ -423,7 +423,7 @@ const VisitorInsightsDashboard = () => {
         <TabsContent value="contacts">
           <Card className="jj-card-inner mt-4">
             <CardHeader className="border-b border-gold/20">
-              <CardTitle className="text-black">Contact Submissions</CardTitle>
+              <CardTitle className="text-[#1A1A1A]">Contact Submissions</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[500px]">
@@ -432,11 +432,11 @@ const VisitorInsightsDashboard = () => {
                     <RefreshCw className="h-6 w-6 animate-spin text-gold" />
                   </div>
                 ) : filteredContacts.length === 0 ? (
-                  <div className="text-center text-black/50 py-8">No contact submissions found</div>
+                  <div className="text-center text-[#1A1A1A]/50 py-8">No contact submissions found</div>
                 ) : (
                   <table className="w-full">
                     <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
-                      <tr className="text-left text-black/60 text-sm">
+                      <tr className="text-left text-[#1A1A1A]/60 text-sm">
                         <th className="p-4">Name</th>
                         <th className="p-4">Email</th>
                         <th className="p-4">Phone</th>
@@ -448,12 +448,12 @@ const VisitorInsightsDashboard = () => {
                     <tbody>
                       {filteredContacts.map((contact) => (
                         <tr key={contact.id} className="border-t border-gold/10 hover:bg-gold/5">
-                          <td className="p-4"><p className="text-black font-medium">{contact.full_name}</p></td>
+                          <td className="p-4"><p className="text-[#1A1A1A] font-medium">{contact.full_name}</p></td>
                           <td className="p-4"><a href={`mailto:${contact.email}`} className="text-gold hover:underline text-sm">{contact.email}</a></td>
-                          <td className="p-4"><a href={`tel:${contact.phone}`} className="text-black/70 hover:text-gold text-sm">{contact.phone}</a></td>
-                          <td className="p-4"><span className="text-black/60 text-sm">{contact.nationality || 'N/A'}</span></td>
-                          <td className="p-4"><Badge className="bg-gold/20 text-black/80 border-gold/30">{contact.service_interest || 'General'}</Badge></td>
-                          <td className="p-4"><div className="text-sm text-black/60">{format(new Date(contact.created_at), 'MMM d, yyyy')}</div></td>
+                          <td className="p-4"><a href={`tel:${contact.phone}`} className="text-[#1A1A1A]/70 hover:text-gold text-sm">{contact.phone}</a></td>
+                          <td className="p-4"><span className="text-[#1A1A1A]/60 text-sm">{contact.nationality || 'N/A'}</span></td>
+                          <td className="p-4"><Badge className="bg-gold/20 text-[#1A1A1A]/80 border-gold/30">{contact.service_interest || 'General'}</Badge></td>
+                          <td className="p-4"><div className="text-sm text-[#1A1A1A]/60">{format(new Date(contact.created_at), 'MMM d, yyyy')}</div></td>
                         </tr>
                       ))}
                     </tbody>
@@ -469,7 +469,7 @@ const VisitorInsightsDashboard = () => {
       <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
         <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30 max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader className="flex-shrink-0">
-            <DialogTitle className="text-black flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Users className="h-5 w-5 text-gold" />
               {selectedVisitor?.displayName}
               {selectedVisitor?.isConverted && (
@@ -482,28 +482,28 @@ const VisitorInsightsDashboard = () => {
             <div className="flex-1 min-h-0 overflow-y-auto space-y-4">
               {/* Visitor summary */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div className="p-3 bg-white/60 rounded-lg">
-                  <p className="text-black/50 text-xs">Email</p>
-                  <p className="text-black font-medium text-sm truncate">{selectedVisitor.email || 'Unknown'}</p>
+                <div className="p-3 bg-[#FDFBF7]/60 rounded-lg">
+                  <p className="text-[#1A1A1A]/50 text-xs">Email</p>
+                  <p className="text-[#1A1A1A] font-medium text-sm truncate">{selectedVisitor.email || 'Unknown'}</p>
                 </div>
-                <div className="p-3 bg-white/60 rounded-lg">
-                  <p className="text-black/50 text-xs">Phone</p>
-                  <p className="text-black font-medium text-sm">{selectedVisitor.phone || 'Unknown'}</p>
+                <div className="p-3 bg-[#FDFBF7]/60 rounded-lg">
+                  <p className="text-[#1A1A1A]/50 text-xs">Phone</p>
+                  <p className="text-[#1A1A1A] font-medium text-sm">{selectedVisitor.phone || 'Unknown'}</p>
                 </div>
-                <div className="p-3 bg-white/60 rounded-lg">
-                  <p className="text-black/50 text-xs">Total Time</p>
-                  <p className="text-black font-medium text-sm">{formatTimeSpent(selectedVisitor.totalTimeSpent)}</p>
+                <div className="p-3 bg-[#FDFBF7]/60 rounded-lg">
+                  <p className="text-[#1A1A1A]/50 text-xs">Total Time</p>
+                  <p className="text-[#1A1A1A] font-medium text-sm">{formatTimeSpent(selectedVisitor.totalTimeSpent)}</p>
                 </div>
-                <div className="p-3 bg-white/60 rounded-lg">
-                  <p className="text-black/50 text-xs">Location</p>
-                  <p className="text-black font-medium text-sm">{selectedVisitor.city || selectedVisitor.country || 'Unknown'}</p>
+                <div className="p-3 bg-[#FDFBF7]/60 rounded-lg">
+                  <p className="text-[#1A1A1A]/50 text-xs">Location</p>
+                  <p className="text-[#1A1A1A] font-medium text-sm">{selectedVisitor.city || selectedVisitor.country || 'Unknown'}</p>
                 </div>
               </div>
 
               {/* Sessions list */}
-              <Card className="bg-white/50 border-gold/20">
+              <Card className="bg-[#FDFBF7]/50 border-gold/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-black/60">
+                  <CardTitle className="text-sm text-[#1A1A1A]/60">
                     Sessions ({selectedVisitor.sessions.length})
                   </CardTitle>
                 </CardHeader>
@@ -514,16 +514,16 @@ const VisitorInsightsDashboard = () => {
                       className={`p-3 rounded-lg border cursor-pointer transition-all ${
                         selectedSessionId === session.session_id
                           ? 'bg-gold/10 border-gold/40'
-                          : 'bg-white/30 border-gold/10 hover:border-gold/30'
+                          : 'bg-[#FDFBF7]/30 border-gold/10 hover:border-gold/30'
                       }`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {getDeviceIcon(session.device_type || 'desktop')}
                           <div>
-                            <p className="text-black font-medium text-sm">
+                            <p className="text-[#1A1A1A] font-medium text-sm">
                               {format(new Date(session.created_at), 'MMM d, yyyy HH:mm')}
                             </p>
-                            <p className="text-black/50 text-xs">
+                            <p className="text-[#1A1A1A]/50 text-xs">
                               {session.pages_visited || 0} pages · {formatTimeSpent(session.total_time_spent)} · {session.browser || 'Unknown browser'}
                             </p>
                           </div>
@@ -532,11 +532,11 @@ const VisitorInsightsDashboard = () => {
                           {session.is_converted && (
                             <Badge variant="outline" className="text-xs border-green-500 text-green-600 bg-green-50">Converted</Badge>
                           )}
-                          <ChevronRight className="h-4 w-4 text-black/30" />
+                          <ChevronRight className="h-4 w-4 text-[#1A1A1A]/30" />
                         </div>
                       </div>
                       {session.landing_page && (
-                        <p className="text-black/40 text-xs mt-1 truncate">Landing: {session.landing_page}</p>
+                        <p className="text-[#1A1A1A]/40 text-xs mt-1 truncate">Landing: {session.landing_page}</p>
                       )}
                     </div>
                   ))}
@@ -546,23 +546,23 @@ const VisitorInsightsDashboard = () => {
               {/* Session detail: events + documents */}
               {selectedSessionId && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="bg-white/50 border-gold/20">
+                  <Card className="bg-[#FDFBF7]/50 border-gold/20">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm text-black/60">Event Timeline</CardTitle>
+                      <CardTitle className="text-sm text-[#1A1A1A]/60">Event Timeline</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ScrollArea className="h-[300px]">
                         {selectedSessionEvents.length === 0 ? (
-                          <p className="text-black/50 text-sm">No events recorded</p>
+                          <p className="text-[#1A1A1A]/50 text-sm">No events recorded</p>
                         ) : (
                           <div className="space-y-3">
                             {selectedSessionEvents.map((event) => (
                               <div key={event.id} className="flex items-start gap-3 text-sm">
                                 <div className="mt-1">{getEventIcon(event.event_type)}</div>
                                 <div className="flex-1">
-                                  <p className="text-black font-medium">{event.event_name}</p>
-                                  {event.page_path && <p className="text-black/50 text-xs">{event.page_path}</p>}
-                                  <p className="text-black/40 text-xs">{format(new Date(event.created_at), 'HH:mm:ss')}</p>
+                                  <p className="text-[#1A1A1A] font-medium">{event.event_name}</p>
+                                  {event.page_path && <p className="text-[#1A1A1A]/50 text-xs">{event.page_path}</p>}
+                                  <p className="text-[#1A1A1A]/40 text-xs">{format(new Date(event.created_at), 'HH:mm:ss')}</p>
                                 </div>
                               </div>
                             ))}
@@ -571,19 +571,19 @@ const VisitorInsightsDashboard = () => {
                       </ScrollArea>
                     </CardContent>
                   </Card>
-                  <Card className="bg-white/50 border-gold/20">
+                  <Card className="bg-[#FDFBF7]/50 border-gold/20">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm text-black/60">Documents Accessed</CardTitle>
+                      <CardTitle className="text-sm text-[#1A1A1A]/60">Documents Accessed</CardTitle>
                     </CardHeader>
                     <CardContent>
                       {selectedSessionDocs.length === 0 ? (
-                        <p className="text-black/50 text-sm">No documents accessed</p>
+                        <p className="text-[#1A1A1A]/50 text-sm">No documents accessed</p>
                       ) : (
                         <div className="space-y-2">
                           {selectedSessionDocs.map((doc) => (
                             <div key={doc.id} className="flex items-center gap-2 text-sm">
                               <FileText className="h-4 w-4 text-gold" />
-                              <span className="text-black">{doc.document_name}</span>
+                              <span className="text-[#1A1A1A]">{doc.document_name}</span>
                               <Badge variant="outline" className="text-xs">{doc.action}</Badge>
                             </div>
                           ))}

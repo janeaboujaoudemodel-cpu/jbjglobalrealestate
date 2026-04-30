@@ -172,7 +172,7 @@ export default function FadedGoldAllowlist() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-[88px] text-zinc-900">
+    <div className="min-h-screen bg-[#FDFBF7] pt-[88px] text-zinc-900">
       <div className="mx-auto max-w-6xl px-6 py-10 space-y-10">
         {/* Header */}
         <header className="flex flex-wrap items-start justify-between gap-4">
@@ -283,7 +283,7 @@ export default function FadedGoldAllowlist() {
             />
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]">
             {loading ? (
               <div className="p-10 text-center text-sm text-zinc-500">Loading…</div>
             ) : filtered.length === 0 ? (
@@ -341,14 +341,14 @@ export default function FadedGoldAllowlist() {
               <Button
                 size="sm"
                 onClick={downloadJson}
-                className="gap-2 bg-white text-zinc-900 hover:bg-zinc-200"
+                className="gap-2 bg-[#FDFBF7] text-zinc-900 hover:bg-zinc-200"
               >
                 <Download className="h-3.5 w-3.5" />
                 Download
               </Button>
             </div>
           </div>
-          <pre className="max-h-72 overflow-auto rounded-lg bg-black/40 p-4 font-mono text-[11px] leading-relaxed text-zinc-200">
+          <pre className="max-h-72 overflow-auto rounded-lg bg-[#1A1A1A]/40 p-4 font-mono text-[11px] leading-relaxed text-zinc-200">
             {jsonExport}
           </pre>
         </section>

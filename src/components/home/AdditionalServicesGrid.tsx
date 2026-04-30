@@ -104,10 +104,10 @@ const AdditionalServicesGrid = () => {
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg`}>
                   <service.icon className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-black mb-2 group-hover:text-gold transition-colors">
+                <h4 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-gold transition-colors">
                   {service.title}
                 </h4>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-[#5A4A2E] mb-3">
                   {service.description}
                 </p>
                 <div className="flex items-center gap-1 text-gold text-sm font-medium">
@@ -117,17 +117,17 @@ const AdditionalServicesGrid = () => {
               </div>
             </Link>
           ) : (
-            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gray-300/50 p-5 opacity-75">
+            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-[#B89555]/30/50 p-5 opacity-75">
               <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg opacity-50`}>
                 <service.icon className="w-6 h-6 text-white" />
               </div>
-              <h4 className="text-lg font-bold text-black mb-2">
+              <h4 className="text-lg font-bold text-[#1A1A1A] mb-2">
                 {service.title}
               </h4>
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-sm text-[#5A4A2E] mb-3">
                 {service.description}
               </p>
-              <span className="text-xs text-gray-600 font-medium uppercase tracking-wide">
+              <span className="text-xs text-[#5A4A2E] font-medium uppercase tracking-wide">
                 Coming Soon
               </span>
             </div>

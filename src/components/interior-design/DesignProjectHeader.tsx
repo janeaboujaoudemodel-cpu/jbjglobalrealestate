@@ -143,7 +143,7 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 focus:border-gray-400"
+              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-[#B89555]/30"
             />
           </div>
 
@@ -180,7 +180,7 @@ const DesignProjectHeader = ({
                       flex items-center gap-2 p-3 rounded-xl border transition-all
                       ${isSelected
                         ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
-                        : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
+                        : 'bg-zinc-800/50 border-[#1A1A1A] text-white/70 hover:border-[#1A1A1A] hover:text-white/85'
                       }
                     `}
                   >
@@ -204,7 +204,7 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 focus:border-gray-400 flex-1"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-[#B89555]/30 flex-1"
               />
               <Button
                 type="button"

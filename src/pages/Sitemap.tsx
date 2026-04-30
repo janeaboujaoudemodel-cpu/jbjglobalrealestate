@@ -331,10 +331,10 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
     >
       {/* Hub Header */}
       <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gold/30">
-        <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+        <div className="w-10 h-10 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
           <Icon className="w-5 h-5 text-gold" />
         </div>
-        <h3 className="text-black text-lg font-bold">
+        <h3 className="text-[#1A1A1A] text-lg font-bold">
           {hub.title}
         </h3>
       </div>
@@ -347,7 +347,7 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
               to={link.href}
               className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
             >
-              <span className="text-gray-700 group-hover:text-black text-sm transition-colors">
+              <span className="text-[#5A4A2E] group-hover:text-[#1A1A1A] text-sm transition-colors">
                 {link.label}
               </span>
               <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -478,7 +478,7 @@ const Sitemap = () => {
         </section>
 
         {/* QUICK LINKS STRIP */}
-        <section className="py-6 bg-black border-y border-gold/20">
+        <section className="py-6 bg-[#1A1A1A] border-y border-gold/20">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
               {quickLinks.map((link) => {
@@ -489,8 +489,8 @@ const Sitemap = () => {
                     to={link.href}
                     className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
-                    <Icon className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
-                    <span className="text-black text-xs sm:text-sm font-medium group-hover:text-gold transition-colors whitespace-nowrap">
+                    <Icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-gold transition-colors" />
+                    <span className="text-[#1A1A1A] text-xs sm:text-sm font-medium group-hover:text-gold transition-colors whitespace-nowrap">
                       {link.label}
                     </span>
                   </Link>
@@ -501,7 +501,7 @@ const Sitemap = () => {
         </section>
 
         {/* MAIN SITEMAP DIRECTORY - Following 3-Layer System */}
-        <section className="py-12 sm:py-16 md:py-20 bg-black">
+        <section className="py-12 sm:py-16 md:py-20 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             {/* Section Header */}
             <motion.div 
@@ -510,10 +510,10 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3">
+              <h2 className="text-[#1A1A1A] text-2xl sm:text-3xl font-bold mb-3">
                 Complete <span className="text-gold">Directory</span>
               </h2>
-              <p className="text-gray-600 text-sm sm:text-base max-w-xl mx-auto">
+              <p className="text-[#5A4A2E] text-sm sm:text-base max-w-xl mx-auto">
                 All pages organized by category for easy navigation
               </p>
             </motion.div>
@@ -538,7 +538,7 @@ const Sitemap = () => {
         </section>
 
         {/* LEGAL & SUPPORT SECTION - Following 3-Layer System */}
-        <section className="py-10 sm:py-12 bg-black">
+        <section className="py-10 sm:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -546,7 +546,7 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
+              <h2 className="text-[#1A1A1A] text-xl sm:text-2xl font-bold mb-2">
                 Support & <span className="text-gold">Legal</span>
               </h2>
             </motion.div>
@@ -561,7 +561,7 @@ const Sitemap = () => {
                     className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-4 h-4 text-gold" />
-                    <span className="text-gray-700 group-hover:text-black text-sm transition-colors">
+                    <span className="text-[#5A4A2E] group-hover:text-[#1A1A1A] text-sm transition-colors">
                       {link.label}
                     </span>
                   </Link>
@@ -572,7 +572,7 @@ const Sitemap = () => {
         </section>
 
         {/* SUPPORT & CONTACT CARDS */}
-        <section className="py-10 sm:py-12 bg-black">
+        <section className="py-10 sm:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -580,10 +580,10 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
+              <h2 className="text-[#1A1A1A] text-xl sm:text-2xl font-bold mb-2">
                 Get <span className="text-gold">In Touch</span>
               </h2>
-              <p className="text-gray-600 text-sm">Choose your preferred way to connect with us</p>
+              <p className="text-[#5A4A2E] text-sm">Choose your preferred way to connect with us</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
@@ -596,11 +596,11 @@ const Sitemap = () => {
                   transition={{ delay: 0 }}
                   className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Headphones className="w-7 h-7 text-gold" />
                   </div>
-                  <h3 className="text-black font-bold text-lg mb-2">Support Ticket</h3>
-                  <p className="text-gray-600 text-sm mb-4">Get help with any questions or issues</p>
+                  <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Support Ticket</h3>
+                  <p className="text-[#5A4A2E] text-sm mb-4">Get help with any questions or issues</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Submit Ticket <ArrowRight className="w-4 h-4" />
                   </span>
@@ -616,11 +616,11 @@ const Sitemap = () => {
                   transition={{ delay: 0.1 }}
                   className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Calendar className="w-7 h-7 text-gold" />
                   </div>
-                  <h3 className="text-black font-bold text-lg mb-2">Free Consultation</h3>
-                  <p className="text-gray-600 text-sm mb-4">Book a call with our expert advisors</p>
+                  <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Free Consultation</h3>
+                  <p className="text-[#5A4A2E] text-sm mb-4">Book a call with our expert advisors</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Book Now <ArrowRight className="w-4 h-4" />
                   </span>
@@ -636,11 +636,11 @@ const Sitemap = () => {
                   transition={{ delay: 0.2 }}
                   className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Phone className="w-7 h-7 text-gold" />
                   </div>
-                  <h3 className="text-black font-bold text-lg mb-2">Contact Us</h3>
-                  <p className="text-gray-600 text-sm mb-4">Reach our team directly via phone or email</p>
+                  <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Contact Us</h3>
+                  <p className="text-[#5A4A2E] text-sm mb-4">Reach our team directly via phone or email</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Get in Touch <ArrowRight className="w-4 h-4" />
                   </span>
@@ -654,11 +654,11 @@ const Sitemap = () => {
         <CTABand />
 
         {/* BACK TO TOP SECTION */}
-        <section className="py-8 bg-black border-t border-gray-800">
+        <section className="py-8 bg-[#1A1A1A] border-t border-[#1A1A1A]">
           <div className="container mx-auto px-4 text-center">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl hover:border-gold hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-xl hover:border-gold hover:shadow-lg transition-all"
             >
               <ChevronUp className="w-5 h-5 text-gold" />
               <span className="font-medium">Back to Top</span>
@@ -673,7 +673,7 @@ const Sitemap = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-gold text-black rounded-full shadow-lg hover:bg-gold-dark transition-all flex items-center justify-center"
+            className="fixed bottom-24 right-6 z-40 w-12 h-12 bg-gold text-[#1A1A1A] rounded-full shadow-lg hover:bg-gold-dark transition-all flex items-center justify-center"
             aria-label="Back to top"
           >
             <ChevronUp className="w-6 h-6" />

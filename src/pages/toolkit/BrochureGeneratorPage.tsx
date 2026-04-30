@@ -127,7 +127,7 @@ const DEFAULT_PROFILE: ProfileData = {
 const accent = '#2563EB';
 
 const Panel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`rounded-2xl p-4 bg-white border border-stone-200 shadow-sm ${className}`}>
+  <div className={`rounded-2xl p-4 bg-[#FDFBF7] border border-stone-200 shadow-sm ${className}`}>
     {children}
   </div>
 );
@@ -528,7 +528,7 @@ export default function BrochureGeneratorPage() {
   // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
       <div className="border-b border-blue-100 bg-gradient-to-b from-blue-50/60 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
@@ -578,7 +578,7 @@ export default function BrochureGeneratorPage() {
               className={`flex items-center gap-2.5 p-3 rounded-xl text-left transition-all border-2 ${
                 documentType === dt.id
                   ? 'border-blue-500 bg-blue-50/50 shadow-sm'
-                  : 'border-stone-200 hover:border-blue-300 bg-white'
+                  : 'border-stone-200 hover:border-blue-300 bg-[#FDFBF7]'
               }`}
             >
               <dt.icon className={`w-5 h-5 shrink-0 ${documentType === dt.id ? 'text-blue-600' : 'text-stone-400'}`} />
@@ -632,7 +632,7 @@ export default function BrochureGeneratorPage() {
                 <ChevronDown className="h-4 w-4 text-stone-400" />
               </button>
               {projectsOpen && (
-                <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl overflow-hidden bg-white border border-stone-200 shadow-xl">
+                <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl overflow-hidden bg-[#FDFBF7] border border-stone-200 shadow-xl">
                   <div className="p-2 border-b border-stone-100">
                     <div className="flex items-center gap-2 px-2">
                       <Search className="h-4 w-4 text-stone-400" />
@@ -706,7 +706,7 @@ export default function BrochureGeneratorPage() {
               <div className="mt-3 p-3 rounded-lg bg-blue-50/50 border border-blue-100">
                 <div className="flex items-center gap-3">
                   {developerInfo.logo_url && (
-                    <img src={developerInfo.logo_url} alt={developerInfo.name} className="w-8 h-8 object-contain rounded bg-white p-0.5 border border-blue-200" />
+                    <img src={developerInfo.logo_url} alt={developerInfo.name} className="w-8 h-8 object-contain rounded bg-[#FDFBF7] p-0.5 border border-blue-200" />
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-stone-800">{developerInfo.name}</p>

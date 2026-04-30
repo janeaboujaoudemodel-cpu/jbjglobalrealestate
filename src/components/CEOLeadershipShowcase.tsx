@@ -23,7 +23,7 @@ const CEOLeadershipShowcase = () => {
   const metrics = useTeamMetrics();
 
   return (
-    <section id="ceo-showcase" className="py-20 border-t border-gold/30 relative overflow-hidden bg-black">
+    <section id="ceo-showcase" className="py-20 border-t border-gold/30 relative overflow-hidden bg-[#1A1A1A]">
       {/* Background effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/4 w-[600px] h-[600px] bg-gold/10 rounded-full blur-[150px]" />
@@ -46,7 +46,7 @@ const CEOLeadershipShowcase = () => {
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                 Our Vision
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
                 <span
                   style={{
                     background:
@@ -58,7 +58,7 @@ const CEOLeadershipShowcase = () => {
                   Excellence in Every Detail
                 </span>
               </h2>
-              <p className="text-gray-700 max-w-2xl mx-auto">
+              <p className="text-[#5A4A2E] max-w-2xl mx-auto">
                 At JBJ GLOBAL REAL ESTATE, we're committed to delivering exceptional
                 service through a world-class team of professionals.
               </p>
@@ -104,45 +104,45 @@ const CEOLeadershipShowcase = () => {
               {/* Card 1: Team Members */}
               <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
-                  <Users className="w-6 h-6 text-black" />
+                  <Users className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalMembers} suffix="+" duration={2500} />
                 </p>
-                <p className="text-gray-700 text-sm font-medium">Team Members</p>
+                <p className="text-[#5A4A2E] text-sm font-medium">Team Members</p>
               </div>
 
               {/* Card 2: Departments */}
               <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
-                  <Building2 className="w-6 h-6 text-black" />
+                  <Building2 className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalDepartments} duration={2000} />
                 </p>
-                <p className="text-gray-700 text-sm font-medium">Departments</p>
+                <p className="text-[#5A4A2E] text-sm font-medium">Departments</p>
               </div>
 
               {/* Card 3: Languages Spoken */}
               <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
-                  <Languages className="w-6 h-6 text-black" />
+                  <Languages className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalLanguages} suffix="+" duration={2200} />
                 </p>
-                <p className="text-gray-700 text-sm font-medium">Languages Spoken</p>
+                <p className="text-[#5A4A2E] text-sm font-medium">Languages Spoken</p>
               </div>
 
               {/* Card 4: Nationalities */}
               <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
-                  <Globe className="w-6 h-6 text-black" />
+                  <Globe className="w-6 h-6 text-[#1A1A1A]" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalNationalities} suffix="+" duration={2300} />
                 </p>
-                <p className="text-gray-700 text-sm font-medium">Nationalities</p>
+                <p className="text-[#5A4A2E] text-sm font-medium">Nationalities</p>
               </div>
             </motion.div>
 
@@ -152,13 +152,13 @@ const CEOLeadershipShowcase = () => {
               className="text-center max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-6 md:p-8 border border-gold/30"
             >
               <div className="relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gray-500">"</div>
-                <p className="text-xl md:text-2xl text-gray-700 italic leading-relaxed pt-8">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-[#8A7556]">"</div>
+                <p className="text-xl md:text-2xl text-[#5A4A2E] italic leading-relaxed pt-8">
                   Innovation and excellence are not just goals—they are the foundation
                   of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.
                 </p>
                 <p className="mt-6 text-gold font-semibold">— Jane Bou Jaoude</p>
-                <p className="text-gray-600 text-sm">Founder & CEO</p>
+                <p className="text-[#5A4A2E] text-sm">Founder & CEO</p>
               </div>
             </motion.div>
           </motion.div>

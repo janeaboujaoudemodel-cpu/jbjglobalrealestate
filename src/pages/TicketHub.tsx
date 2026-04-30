@@ -566,7 +566,7 @@ const TicketHub = () => {
                             className="hidden"
                             onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = ''; }}
                           />
-                          <Upload className="w-8 h-8 mx-auto mb-2 text-gray-600" />
+                          <Upload className="w-8 h-8 mx-auto mb-2 text-[#5A4A2E]" />
                           <p className="text-sm text-muted-foreground">
                             Drag & drop files here or <span className="text-gold font-medium underline">browse</span>
                           </p>
@@ -611,9 +611,9 @@ const TicketHub = () => {
                                 ) : (
                                   <div className="w-full h-20 flex items-center justify-center bg-gold/5">
                                     {att.file.type.startsWith('video/') ? (
-                                      <Video className="w-8 h-8 text-gray-500" />
+                                      <Video className="w-8 h-8 text-[#8A7556]" />
                                     ) : (
-                                      <FileImage className="w-8 h-8 text-gray-500" />
+                                      <FileImage className="w-8 h-8 text-[#8A7556]" />
                                     )}
                                   </div>
                                 )}
@@ -632,7 +632,7 @@ const TicketHub = () => {
                                 <button
                                   type="button"
                                   onClick={() => removeAttachment(att.id)}
-                                  className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[#1A1A1A]/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
                                   <X className="w-3 h-3" />
                                 </button>

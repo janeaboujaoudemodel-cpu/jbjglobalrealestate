@@ -171,7 +171,7 @@ export default function JBJBrokerAdmin() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
@@ -188,10 +188,10 @@ export default function JBJBrokerAdmin() {
                 <Bot className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-black tracking-wide">
+                <h1 className="text-xl font-bold text-[#1A1A1A] tracking-wide">
                   JBJ Global Real Estate
                 </h1>
-                <p className="text-black/70 text-sm">Broker Admin Dashboard</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Broker Admin Dashboard</p>
               </div>
             </div>
 
@@ -201,7 +201,7 @@ export default function JBJBrokerAdmin() {
                 size="sm"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="text-black hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-gold/20"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
                 Refresh
@@ -217,7 +217,7 @@ export default function JBJBrokerAdmin() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate("/")}
-                className="text-black hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-gold/20"
               >
                 <Home className="h-4 w-4 mr-2" />
                 Back to Site
@@ -226,7 +226,7 @@ export default function JBJBrokerAdmin() {
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                className="text-black hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-gold/20"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
@@ -247,8 +247,8 @@ export default function JBJBrokerAdmin() {
                   <Users className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Total Leads</p>
-                  <p className="text-black text-xl font-bold">{metrics.totalLeads}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Total Leads</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.totalLeads}</p>
                 </div>
               </div>
             </div>
@@ -259,8 +259,8 @@ export default function JBJBrokerAdmin() {
                   <Bot className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Active Brokers</p>
-                  <p className="text-black text-xl font-bold">{metrics.activeBrokers}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Active Brokers</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.activeBrokers}</p>
                 </div>
               </div>
             </div>
@@ -271,8 +271,8 @@ export default function JBJBrokerAdmin() {
                   <TrendingUp className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Conversion</p>
-                  <p className="text-black text-xl font-bold">{metrics.conversionRate}%</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Conversion</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.conversionRate}%</p>
                 </div>
               </div>
             </div>
@@ -283,8 +283,8 @@ export default function JBJBrokerAdmin() {
                   <MessageSquare className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Messages Today</p>
-                  <p className="text-black text-xl font-bold">{metrics.messagestoday}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Messages Today</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.messagestoday}</p>
                 </div>
               </div>
             </div>
@@ -295,8 +295,8 @@ export default function JBJBrokerAdmin() {
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Calls Today</p>
-                  <p className="text-black text-xl font-bold">{metrics.callsToday}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Calls Today</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.callsToday}</p>
                 </div>
               </div>
             </div>
@@ -307,8 +307,8 @@ export default function JBJBrokerAdmin() {
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs">Emails Today</p>
-                  <p className="text-black text-xl font-bold">{metrics.emailsToday}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs">Emails Today</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{metrics.emailsToday}</p>
                 </div>
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function JBJBrokerAdmin() {
               {/* Search */}
               <div className="flex items-center gap-3">
                 <div className="relative flex-1 max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
                   <Input
                     placeholder="Search brokers..."
                     value={searchQuery}
@@ -369,9 +369,9 @@ export default function JBJBrokerAdmin() {
 
                 {filteredBrokers.length === 0 && (
                   <div className="col-span-full jj-card-inner flex flex-col items-center justify-center py-16 text-center">
-                    <Bot className="h-16 w-16 text-black/30 mb-4" />
-                    <h3 className="text-black text-lg font-medium mb-2">No Brokers Found</h3>
-                    <p className="text-black/60">
+                    <Bot className="h-16 w-16 text-[#1A1A1A]/30 mb-4" />
+                    <h3 className="text-[#1A1A1A] text-lg font-medium mb-2">No Brokers Found</h3>
+                    <p className="text-[#1A1A1A]/60">
                       {searchQuery
                         ? "Try adjusting your search query"
                         : "No brokers configured yet"}

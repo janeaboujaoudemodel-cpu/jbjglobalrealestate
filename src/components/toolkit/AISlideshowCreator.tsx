@@ -158,13 +158,13 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
         <div className="grid lg:grid-cols-[300px_1fr] gap-6">
           {/* ── Left: Controls ── */}
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold">Project Title</Label>
               <Input value={projectTitle} onChange={e => setProjectTitle(e.target.value)} className="h-8 text-sm" />
             </div>
 
             {/* Upload */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4">
               <Label className="text-xs font-bold mb-2 block">Slides ({slides.length})</Label>
               <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={e => e.target.files && addSlides(e.target.files)} />
               <Button variant="outline" className="w-full h-16 border-dashed border-2 border-[hsl(var(--gold)/0.4)]"
@@ -188,7 +188,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
             </div>
 
             {/* Transition */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold">Transition</Label>
               <div className="grid grid-cols-3 gap-2">
                 {TRANSITIONS.map(t => (
@@ -202,7 +202,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
 
             {/* Slide Settings */}
             {currentSlide && (
-              <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
                 <Label className="text-xs font-bold">Slide {currentIndex + 1} Settings</Label>
                 <div>
                   <Label className="text-[10px] text-[hsl(var(--muted-foreground))]">Caption</Label>
@@ -217,7 +217,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
             )}
 
             {/* Overlay */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold">Global Overlay</Label>
               <Input value={overlayText} onChange={e => setOverlayText(e.target.value)} className="h-7 text-xs" placeholder="e.g. JBJ GLOBAL REAL ESTATE" />
               <div className="flex gap-3">
@@ -234,7 +234,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
           </div>
 
           {/* ── Right: Preview ── */}
-          <div className="bg-black rounded-xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
+          <div className="bg-[#1A1A1A] rounded-xl overflow-hidden relative" style={{ aspectRatio: "16/9" }}>
             {slides.length === 0 ? (
               <div className="absolute inset-0 flex items-center justify-center text-white/85">
                 <div className="text-center">
@@ -254,7 +254,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
                   </div>
                 )}
                 {/* Slide counter */}
-                <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+                <div className="absolute top-3 right-3 bg-[#1A1A1A]/60 text-white text-xs px-2 py-1 rounded-full">
                   {currentIndex + 1} / {slides.length}
                 </div>
               </>
@@ -266,7 +266,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
                 <button onClick={() => setCurrentIndex(prev => (prev - 1 + slides.length) % slides.length)} className="text-white/80 hover:text-white">
                   <SkipBack className="w-5 h-5" />
                 </button>
-                <button onClick={togglePlay} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                <button onClick={togglePlay} className="w-10 h-10 rounded-full bg-[#FDFBF7]/20 backdrop-blur flex items-center justify-center text-white hover:bg-[#FDFBF7]/30 transition-colors">
                   {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
                 </button>
                 <button onClick={() => setCurrentIndex(prev => (prev + 1) % slides.length)} className="text-white/80 hover:text-white">

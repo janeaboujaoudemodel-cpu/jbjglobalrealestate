@@ -246,10 +246,10 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-zinc-950 border-l border-gray-800 z-50 flex flex-col"
+      className="fixed inset-y-0 right-0 w-full sm:w-[400px] bg-zinc-950 border-l border-[#1A1A1A] z-50 flex flex-col"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-800 bg-zinc-900">
+      <div className="flex items-center justify-between p-4 border-b border-[#1A1A1A] bg-zinc-900">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 border-2 border-gold/30">
             <AvatarImage src={employee.avatar} alt={employee.name} />
@@ -280,13 +280,13 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       </div>
 
       {/* Employee Info Banner */}
-      <div className="p-3 bg-zinc-900/50 border-b border-gray-800">
+      <div className="p-3 bg-zinc-900/50 border-b border-[#1A1A1A]">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gold text-xs font-medium">{employee.role}</p>
             <p className="text-white/90 text-xs">{employee.department}</p>
           </div>
-          <Badge variant="outline" className="text-xs border-gray-700 text-white/70">
+          <Badge variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
             {employee.languages?.slice(0, 2).join(', ')}
           </Badge>
         </div>
@@ -307,7 +307,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
                 <div 
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     message.role === 'user' 
-                      ? 'bg-gold text-black rounded-br-sm' 
+                      ? 'bg-gold text-[#1A1A1A] rounded-br-sm' 
                       : 'bg-zinc-800 text-white rounded-bl-sm'
                   }`}
                 >
@@ -316,13 +316,13 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}>
                     <span className={`text-xs ${
-                      message.role === 'user' ? 'text-black/60' : 'text-white/90'
+                      message.role === 'user' ? 'text-[#1A1A1A]/60' : 'text-white/90'
                     }`}>
                       {formatTime(message.timestamp)}
                     </span>
                     {message.role === 'user' && (
                       <CheckCheck className={`h-3 w-3 ${
-                        message.status === 'read' ? 'text-blue-500' : 'text-black/40'
+                        message.status === 'read' ? 'text-blue-500' : 'text-[#1A1A1A]/40'
                       }`} />
                     )}
                   </div>
@@ -340,9 +340,9 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             >
               <div className="bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3">
                 <div className="flex gap-1">
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <span className="w-2 h-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </motion.div>
@@ -353,7 +353,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-800 bg-zinc-900">
+      <div className="p-4 border-t border-[#1A1A1A] bg-zinc-900">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="text-white/70 hover:text-white shrink-0">
             <Paperclip className="h-4 w-4" />
@@ -366,7 +366,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="bg-zinc-800 border-gray-700 pr-10"
+              className="bg-zinc-800 border-[#1A1A1A] pr-10"
               disabled={isLoading}
             />
             <Button 
@@ -390,7 +390,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             onClick={sendMessage}
             disabled={!inputValue.trim() || isLoading}
             size="icon"
-            className="bg-gold hover:bg-gold/90 text-black shrink-0"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A] shrink-0"
           >
             <Send className="h-4 w-4" />
           </Button>

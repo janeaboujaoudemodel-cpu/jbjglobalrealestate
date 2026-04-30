@@ -30,14 +30,14 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
     <Link to={tool.href} className="group block h-full">
       <div className="h-full flex flex-col bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
         <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
-          <Icon className="w-6 h-6 text-black" />
+          <Icon className="w-6 h-6 text-[#1A1A1A]" />
         </div>
         <h4 
-          className="text-base font-bold text-black mb-2 group-hover:text-gold transition-colors flex-shrink-0"
+          className="text-base font-bold text-[#1A1A1A] mb-2 group-hover:text-gold transition-colors flex-shrink-0"
         >
           {tool.name}
         </h4>
-        <p className="text-sm text-gray-600 mb-4 leading-relaxed flex-grow">
+        <p className="text-sm text-[#5A4A2E] mb-4 leading-relaxed flex-grow">
           {tool.description}
         </p>
         <Button variant="primary" size="sm" className="mt-auto w-full justify-center">
@@ -96,25 +96,25 @@ export default function RoyalToolsHub() {
             </div>
             
             <h1 
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-2"
             >
               JBJ Royal Tools Hub
             </h1>
             
-            <p className="text-gray-600 text-sm md:text-base max-w-2xl mb-6">
+            <p className="text-[#5A4A2E] text-sm md:text-base max-w-2xl mb-6">
               Professional-grade tools for images, videos, documents, and AI-powered analytics — all designed for real estate professionals.
             </p>
             
             <div className="flex flex-wrap gap-4 md:gap-6">
-              <div className="flex items-center gap-2 text-gray-700">
+              <div className="flex items-center gap-2 text-[#5A4A2E]">
                 <CheckCircle2 className="h-4 w-4 text-gold" />
                 <span className="text-sm">Free Media Tools</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-700">
+              <div className="flex items-center gap-2 text-[#5A4A2E]">
                 <Shield className="h-4 w-4 text-gold" />
                 <span className="text-sm">Privacy First</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-700">
+              <div className="flex items-center gap-2 text-[#5A4A2E]">
                 <Clock className="h-4 w-4 text-gold" />
                 <span className="text-sm">No Login Required</span>
               </div>
@@ -126,12 +126,12 @@ export default function RoyalToolsHub() {
         <div className="max-w-7xl mx-auto px-4 py-6 border-b border-gold/20">
           <div className="flex flex-wrap gap-2 items-center justify-center">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="pl-9 pr-3 py-2 h-9 w-40 md:w-48 rounded-full bg-white/50 border-gold/30 text-black text-sm placeholder:text-gray-600"
+                className="pl-9 pr-3 py-2 h-9 w-40 md:w-48 rounded-full bg-[#FDFBF7]/50 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -139,8 +139,8 @@ export default function RoyalToolsHub() {
               onClick={() => setSelectedCategory('all')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 selectedCategory === 'all' 
-                  ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
-                  : 'bg-white/30 border border-gold/30 text-gray-600 hover:border-gold/60'
+                  ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-[#1A1A1A] shadow-md' 
+                  : 'bg-[#FDFBF7]/30 border border-gold/30 text-[#5A4A2E] hover:border-gold/60'
               }`}
             >
               All Tools
@@ -151,8 +151,8 @@ export default function RoyalToolsHub() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   selectedCategory === cat 
-                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
-                    : 'bg-white/30 border border-gold/30 text-gray-600 hover:border-gold/60'
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-[#1A1A1A] shadow-md' 
+                    : 'bg-[#FDFBF7]/30 border border-gold/30 text-[#5A4A2E] hover:border-gold/60'
                 }`}
               >
                 {categoryLabels[cat]}
@@ -165,7 +165,7 @@ export default function RoyalToolsHub() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           {filteredTools.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-gray-600 text-lg">No tools found matching your criteria.</p>
+              <p className="text-[#5A4A2E] text-lg">No tools found matching your criteria.</p>
               <Button
                 variant="outline"
                 className="mt-4 border-gold/50 text-gold hover:bg-gold/10"
@@ -185,7 +185,7 @@ export default function RoyalToolsHub() {
                     <div className="flex items-center gap-3 mb-6">
                       <Sparkles className="w-5 h-5 text-[#B89555]" />
                       <h2 
-                        className="text-xl md:text-2xl font-bold text-black"
+                        className="text-xl md:text-2xl font-bold text-[#1A1A1A]"
                       >
                         {categoryLabels[category]}
                       </h2>
@@ -215,14 +215,14 @@ export default function RoyalToolsHub() {
         {/* Fair Usage Notice */}
         <div className="max-w-7xl mx-auto px-4 pb-8">
           <div className="rounded-xl border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-6 md:p-8">
-            <h3 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
               <Shield className="h-5 w-5 text-gold" />
               Fair Usage & Privacy
             </h3>
             
-            <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+            <div className="grid md:grid-cols-2 gap-6 text-sm text-[#5A4A2E]">
               <div>
-                <h4 className="text-black font-medium mb-2">Media Tool Limits</h4>
+                <h4 className="text-[#1A1A1A] font-medium mb-2">Media Tool Limits</h4>
                 <ul className="space-y-1">
                   <li>• Max 5 minutes per video job</li>
                   <li>• Max 3 jobs per hour</li>
@@ -232,7 +232,7 @@ export default function RoyalToolsHub() {
               </div>
               
               <div>
-                <h4 className="text-black font-medium mb-2">Your Privacy</h4>
+                <h4 className="text-[#1A1A1A] font-medium mb-2">Your Privacy</h4>
                 <ul className="space-y-1">
                   <li>• Files processed securely</li>
                   <li>• Secure auto-save storage</li>
@@ -243,7 +243,7 @@ export default function RoyalToolsHub() {
             </div>
             
             <div className="mt-6 pt-6 border-t border-gold/30">
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-[#5A4A2E]">
                 By using these tools, you confirm you own the content or have permission to edit it. 
                 The platform operator is not responsible for misuse of these tools.
               </p>

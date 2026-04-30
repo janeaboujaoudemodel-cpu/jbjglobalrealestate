@@ -32,7 +32,7 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-black font-bold mb-3"
+              className="text-[#1A1A1A] font-bold mb-3"
               style={{
                 fontSize: "clamp(28px, 4vw, 52px)",
                 lineHeight: "1.1",
@@ -44,7 +44,7 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
-              className="text-gray-600 text-base md:text-lg max-w-2xl"
+              className="text-[#5A4A2E] text-base md:text-lg max-w-2xl"
             >
               Explore the UAE's most prestigious communities and find your perfect home
             </motion.p>

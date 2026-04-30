@@ -172,7 +172,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleGenerateCaptions} className="bg-gold hover:bg-gold/90 text-black">
+              <Button onClick={handleGenerateCaptions} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 Generate All
               </Button>
@@ -251,7 +251,7 @@ export function PublishPanel({ isOpen, onClose, projectId, property, exportedUrl
           <Button
             onClick={handleSchedule}
             disabled={isScheduling || selectedPlatforms.length === 0}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             {isScheduling ? (
               <>

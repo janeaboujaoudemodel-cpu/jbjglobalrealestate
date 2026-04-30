@@ -447,7 +447,7 @@ const UserProfile = () => {
         <div className="mx-0 mb-0 mt-0 rounded-none border-0">
           <div className="container mx-auto px-4 py-6 max-w-4xl">
           {/* Page Title */}
-          <h1 className="text-2xl md:text-3xl font-bold text-black mb-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
             My <span className="text-gold">Profile</span>
           </h1>
           {/* Subtitle */}
@@ -814,12 +814,12 @@ const UserProfile = () => {
                     disabled={verifyingEmail}
                   >
                     <InputOTPGroup className="gap-1.5 sm:gap-2 flex-wrap justify-center">
-                      <InputOTPSlot index={0} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={1} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={2} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={3} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={4} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
-                      <InputOTPSlot index={5} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-white rounded-lg" />
+                      <InputOTPSlot index={0} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={1} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={2} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={3} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={4} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
+                      <InputOTPSlot index={5} className="w-10 h-12 sm:w-12 sm:h-14 border-2 border-gold/50 text-foreground text-lg sm:text-xl font-bold bg-[#FDFBF7] rounded-lg" />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
@@ -919,7 +919,7 @@ const UserProfile = () => {
                 <p>
                   Deactivating your account will immediately hide all your personal information and remove your visibility from the platform.
                 </p>
-                <div className="bg-white/60 rounded-lg p-4 border border-gold/20 text-left space-y-2">
+                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-gold/20 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">What happens when you deactivate:</p>
                   <ul className="space-y-1.5 text-xs sm:text-sm">
                     <li className="flex items-start gap-2 leading-relaxed">
@@ -979,7 +979,7 @@ const UserProfile = () => {
                 <p>
                   Are you sure you want to permanently delete your account? Your data will be permanently erased after the recovery period.
                 </p>
-                <div className="bg-white/60 rounded-lg p-4 border border-red-200 text-left space-y-2">
+                <div className="bg-[#FDFBF7]/60 rounded-lg p-4 border border-red-200 text-left space-y-2">
                   <p className="font-semibold text-foreground text-sm">Before you proceed:</p>
                   <ul className="space-y-2 text-xs sm:text-sm">
                     <li className="flex items-start gap-2 leading-relaxed">

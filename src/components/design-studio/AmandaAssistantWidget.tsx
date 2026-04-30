@@ -120,13 +120,13 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
     return (
       <motion.button
         onClick={() => setIsMinimized(false)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-gold to-gold-dark text-black rounded-full shadow-xl shadow-gold/30 hover:shadow-2xl hover:shadow-gold/40 transition-all"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] rounded-full shadow-xl shadow-gold/30 hover:shadow-2xl hover:shadow-gold/40 transition-all"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         <Avatar className="h-10 w-10 border-2 border-white">
           <AvatarImage src={amandaClarkePhoto} alt="Amanda Clarke" className="object-cover object-top" />
-          <AvatarFallback className="bg-white text-gold font-bold">AC</AvatarFallback>
+          <AvatarFallback className="bg-[#FDFBF7] text-gold font-bold">AC</AvatarFallback>
         </Avatar>
         <div className="text-left">
           <p className="font-semibold text-sm">Amanda is here</p>
@@ -150,11 +150,11 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12 border-2 border-white shadow-lg">
               <AvatarImage src={amandaClarkePhoto} alt="Amanda Clarke" className="object-cover object-top" />
-              <AvatarFallback className="bg-white text-gold font-bold">AC</AvatarFallback>
+              <AvatarFallback className="bg-[#FDFBF7] text-gold font-bold">AC</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-bold text-black text-sm">Amanda Clarke</h3>
-              <p className="text-xs text-black/70">Executive Assistant</p>
+              <h3 className="font-bold text-[#1A1A1A] text-sm">Amanda Clarke</h3>
+              <p className="text-xs text-[#1A1A1A]/70">Executive Assistant</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -162,7 +162,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               size="icon"
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="h-8 w-8 text-black/70 hover:text-black hover:bg-black/10"
+              className="h-8 w-8 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/10"
             >
               {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
             </Button>
@@ -170,7 +170,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               size="icon"
               variant="ghost"
               onClick={() => setIsMinimized(true)}
-              className="h-8 w-8 text-black/70 hover:text-black hover:bg-black/10"
+              className="h-8 w-8 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/10"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -187,9 +187,9 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               className="overflow-hidden"
             >
               <div className="p-4 border-b border-gold/10">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-[#5A4A2E]">
                   <Sparkles className="w-4 h-4 text-gold" />
-                  <span>Currently monitoring: <strong className="text-black">{toolName}</strong></span>
+                  <span>Currently monitoring: <strong className="text-[#1A1A1A]">{toolName}</strong></span>
                 </div>
                 {projectContext?.name && (
                   <Badge className="mt-2 bg-gold/10 text-gold border-gold/30">
@@ -207,7 +207,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                       className={`p-3 rounded-lg text-sm ${
                         note.type === 'task' 
                           ? 'bg-blue-50 border border-blue-100 text-blue-800' 
-                          : 'bg-gray-50 border border-gray-100 text-gray-700'
+                          : 'bg-[#F7F2EA] border border-[#B89555]/30 text-[#5A4A2E]'
                       }`}
                     >
                       <p>{note.content}</p>
@@ -220,13 +220,13 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               </ScrollArea>
 
               {/* Input */}
-              <div className="p-4 bg-gray-50/50 border-t border-gold/10">
+              <div className="p-4 bg-[#F7F2EA]/50 border-t border-gold/10">
                 <div className="flex gap-2">
                   <Textarea
                     placeholder="Leave a note for Amanda..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="min-h-[60px] bg-white border-gray-200 text-black text-sm resize-none"
+                    className="min-h-[60px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] text-sm resize-none"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -237,7 +237,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                   <Button
                     onClick={handleSendMessage}
                     disabled={isSending || !message.trim()}
-                    className="bg-gold hover:bg-gold-dark text-black self-end"
+                    className="bg-gold hover:bg-gold-dark text-[#1A1A1A] self-end"
                   >
                     {isSending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -254,7 +254,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
         {/* Quick status bar when collapsed */}
         {!isExpanded && (
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A4A2E]">
               <NotebookPen className="w-4 h-4 text-gold" />
               <span>Notes: {notes.length}</span>
             </div>

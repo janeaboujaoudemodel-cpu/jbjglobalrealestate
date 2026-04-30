@@ -316,7 +316,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
               size="sm"
               onClick={handleAnalyzeClips}
               disabled={isAnalyzing || clips.length === 0}
-              className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold mb-2"
+              className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold mb-2"
             >
               {isAnalyzing ? (
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Scanning Clips with AI...</>
@@ -446,7 +446,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                       className={`ml-2 h-7 px-2.5 text-xs font-bold shrink-0 ${
                         appliedTemplate === t.id
                           ? 'bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/40'
-                          : 'bg-amber-500 hover:bg-amber-400 text-black'
+                          : 'bg-amber-500 hover:bg-amber-400 text-[#1A1A1A]'
                       }`}
                     >
                       {isAssembling === t.id ? (
@@ -507,7 +507,7 @@ export function AIEditorPanel({ clips = [], onApplyTemplate }: AIEditorPanelProp
                     size="sm"
                     onClick={handleSaveTemplate}
                     disabled={isSavingTemplate}
-                    className="h-7 px-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs"
+                    className="h-7 px-2 bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold text-xs"
                   >
                     {isSavingTemplate ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
                   </Button>

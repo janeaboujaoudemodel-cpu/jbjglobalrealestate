@@ -15,7 +15,7 @@ const fadeInUp = {
 
 export function BrokerToolkitReferral() {
   return (
-    <section className="py-8 md:py-10 bg-black">
+    <section className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 md:p-10">
           <motion.div
@@ -24,14 +24,14 @@ export function BrokerToolkitReferral() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="inline-flex items-center gap-2 px-5 py-2 bg-black border-2 border-gold/50 rounded-full shadow-lg mb-4">
+            <span className="inline-flex items-center gap-2 px-5 py-2 bg-[#1A1A1A] border-2 border-gold/50 rounded-full shadow-lg mb-4">
               <DollarSign className="w-3.5 h-3.5 text-gold" />
               <span className="text-white text-xs uppercase tracking-wider font-medium">Earn With Us</span>
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
               Make Money by Joining <span className="text-gold">JBJ Global Real Estate Circle</span>
             </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
+            <p className="text-[#5A4A2E] max-w-3xl mx-auto">
               From anywhere in the world, you can become a broker with us, or you can become a referral partner and start earning commission on every successful deal.
             </p>
           </motion.div>
@@ -44,8 +44,8 @@ export function BrokerToolkitReferral() {
                     <GraduationCap className="w-7 h-7 text-gold" />
                   </div>
                   <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3 w-fit">For JBJ Employees</Badge>
-                  <h3 className="text-black text-xl font-bold mb-2">JBJ Academy</h3>
-                  <p className="text-gray-600 mb-4 flex-1">Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.</p>
+                  <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">JBJ Academy</h3>
+                  <p className="text-[#5A4A2E] mb-4 flex-1">Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.</p>
                   <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Access Academy <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -60,8 +60,8 @@ export function BrokerToolkitReferral() {
                     <Briefcase className="w-7 h-7 text-gold" />
                   </div>
                   <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3 w-fit">For Job Seekers</Badge>
-                  <h3 className="text-black text-xl font-bold mb-2">JBJ Employment Hub</h3>
-                  <p className="text-gray-600 mb-4 flex-1">Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.</p>
+                  <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">JBJ Employment Hub</h3>
+                  <p className="text-[#5A4A2E] mb-4 flex-1">Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.</p>
                   <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Apply Now <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -78,8 +78,8 @@ export function BrokerToolkitReferral() {
                   <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3 w-fit">
                     <Globe className="w-3 h-3 mr-1" /> Open to Everyone Worldwide
                   </Badge>
-                  <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
-                  <p className="text-gray-600 mb-4 flex-1">Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!</p>
+                  <h3 className="text-[#1A1A1A] text-xl font-bold mb-2">JBJ Referral Program</h3>
+                  <p className="text-[#5A4A2E] mb-4 flex-1">Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!</p>
                   <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Start Earning <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -100,8 +100,8 @@ export function BrokerToolkitReferral() {
                     </span>
                   </div>
                   <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
-                    <Handshake className="w-3.5 h-3.5 text-black" />
-                    <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
+                    <Handshake className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                    <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-medium">How Referral Works</span>
                   </span>
                   <h3 className="text-2xl md:text-3xl font-bold mb-2">
                     <span className="text-gold">Join the Referral Circle</span>
@@ -118,10 +118,10 @@ export function BrokerToolkitReferral() {
                   ].map((item, idx) => (
                     <div key={item.step} className="text-center">
                       <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)', border: '2px solid rgba(200,167,102,0.6)' }}>
-                        <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
+                        <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-[#1A1A1A]' : 'text-gold'}`}>{item.step}</span>
                       </div>
                       <h4 className="text-white font-semibold mb-1">{item.title}</h4>
-                      <p className="text-gray-600 text-sm">{item.desc}</p>
+                      <p className="text-[#5A4A2E] text-sm">{item.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -129,13 +129,13 @@ export function BrokerToolkitReferral() {
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">Passive Referral — 2.5%</Badge>
-                    <h4 className="text-black font-bold text-lg mb-2">Share Contact Details Only</h4>
-                    <p className="text-gray-600 text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
+                    <h4 className="text-[#1A1A1A] font-bold text-lg mb-2">Share Contact Details Only</h4>
+                    <p className="text-[#5A4A2E] text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">Active Referral — 5%</Badge>
-                    <h4 className="text-black font-bold text-lg mb-2">Facilitate the Introduction</h4>
-                    <p className="text-gray-600 text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
+                    <h4 className="text-[#1A1A1A] font-bold text-lg mb-2">Facilitate the Introduction</h4>
+                    <p className="text-[#5A4A2E] text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
                   </div>
                 </div>
 
@@ -145,12 +145,12 @@ export function BrokerToolkitReferral() {
                       <span className="relative flex items-center justify-center gap-2">
                         <DollarSign className="w-5 h-5 text-gold" />
                         <span className="text-gold">Become</span>
-                        <span className="text-black">a Referral Partner Now</span>
-                        <ArrowUpRight className="w-5 h-5 text-black" />
+                        <span className="text-[#1A1A1A]">a Referral Partner Now</span>
+                        <ArrowUpRight className="w-5 h-5 text-[#1A1A1A]" />
                       </span>
                     </button>
                   </Link>
-                  <p className="text-gray-600 text-sm mt-4">Available worldwide — No license required</p>
+                  <p className="text-[#5A4A2E] text-sm mt-4">Available worldwide — No license required</p>
                 </div>
               </CardContent>
             </Card>

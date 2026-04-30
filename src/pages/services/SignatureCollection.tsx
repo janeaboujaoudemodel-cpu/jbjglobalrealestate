@@ -142,7 +142,7 @@ const SignatureCollection = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder - Controlled Approvals in One Workflow */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
@@ -158,7 +158,7 @@ const SignatureCollection = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <PenTool className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -190,13 +190,13 @@ const SignatureCollection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* WHAT THIS PAGE IS FOR */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -207,13 +207,13 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What This Page Is For
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-[#5A4A2E] text-lg leading-relaxed">
                 This page is for signature requests tied to JBJ workflows where authorization, traceability, and document control matter.
               </p>
             </motion.div>
@@ -222,7 +222,7 @@ const SignatureCollection = () => {
       </section>
 
       {/* SIGNATURE REQUEST FORM */}
-      <section id="submit-request" className="bg-black py-20">
+      <section id="submit-request" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -233,21 +233,21 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Submit Signature Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
               Submit your request with the document attached. You will receive a request ID and status timeline.
             </motion.p>
             
             {/* Form Helper Text */}
             <motion.div variants={fadeInUp} className="mb-8">
-              <div className="jj-card-inner !bg-black/5 border border-gold/20">
+              <div className="jj-card-inner !bg-[#1A1A1A]/5 border border-gold/20">
                 <div className="flex flex-col gap-3">
                   {formHelperItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-sm text-gray-700">
+                    <div key={idx} className="flex items-center gap-3 text-sm text-[#5A4A2E]">
                       <item.icon className="w-4 h-4 text-gold shrink-0" />
                       <span>{item.text}</span>
                     </div>
@@ -262,7 +262,7 @@ const SignatureCollection = () => {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-black">Requester Name *</Label>
+                        <Label htmlFor="name" className="text-[#1A1A1A]">Requester Name *</Label>
                         <Input
                           id="name"
                           value={formData.name}
@@ -272,7 +272,7 @@ const SignatureCollection = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email" className="text-black">Email *</Label>
+                        <Label htmlFor="email" className="text-[#1A1A1A]">Email *</Label>
                         <Input
                           id="email"
                           type="email"
@@ -286,7 +286,7 @@ const SignatureCollection = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-black">Phone</Label>
+                        <Label htmlFor="phone" className="text-[#1A1A1A]">Phone</Label>
                         <Input
                           id="phone"
                           value={formData.phone}
@@ -295,7 +295,7 @@ const SignatureCollection = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="requestType" className="text-black">Request Type *</Label>
+                        <Label htmlFor="requestType" className="text-[#1A1A1A]">Request Type *</Label>
                         <Select
                           value={formData.requestType}
                           onValueChange={(value) => setFormData({ ...formData, requestType: value })}
@@ -314,7 +314,7 @@ const SignatureCollection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="priority" className="text-black">Priority</Label>
+                      <Label htmlFor="priority" className="text-[#1A1A1A]">Priority</Label>
                       <Select
                         value={formData.priority}
                         onValueChange={(value) => setFormData({ ...formData, priority: value })}
@@ -330,7 +330,7 @@ const SignatureCollection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="document" className="text-black">Document Upload (PDF Only) *</Label>
+                      <Label htmlFor="document" className="text-[#1A1A1A]">Document Upload (PDF Only) *</Label>
                       <Input
                         id="document"
                         type="file"
@@ -341,7 +341,7 @@ const SignatureCollection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="notes" className="text-black">Notes (What requires signature) *</Label>
+                      <Label htmlFor="notes" className="text-[#1A1A1A]">Notes (What requires signature) *</Label>
                       <Textarea
                         id="notes"
                         value={formData.notes}
@@ -365,7 +365,7 @@ const SignatureCollection = () => {
       </section>
 
       {/* STATUS TIMELINE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -375,7 +375,7 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Status Timeline
@@ -385,11 +385,11 @@ const SignatureCollection = () => {
                 {statusTimeline.map((step, index) => (
                   <motion.div key={index} variants={fadeInUp}>
                     <div className="jj-card-inner text-center h-full">
-                      <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-black flex items-center justify-center border-2 border-gold">
+                      <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center border-2 border-gold">
                         <step.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <h3 className="font-semibold text-black mb-2">{step.label}</h3>
-                      <p className="text-sm text-gray-600">{step.description}</p>
+                      <h3 className="font-semibold text-[#1A1A1A] mb-2">{step.label}</h3>
+                      <p className="text-sm text-[#5A4A2E]">{step.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -400,7 +400,7 @@ const SignatureCollection = () => {
       </section>
 
       {/* TRACK REQUEST */}
-      <section id="track-request" className="bg-black py-20">
+      <section id="track-request" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -411,12 +411,12 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Track a Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
               Enter your request ID and email to view the current status and any required actions.
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -424,7 +424,7 @@ const SignatureCollection = () => {
                 <CardContent className="p-6">
                   <form onSubmit={handleTrack} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="trackingId" className="text-black">Request ID *</Label>
+                      <Label htmlFor="trackingId" className="text-[#1A1A1A]">Request ID *</Label>
                       <Input
                         id="trackingId"
                         value={trackingId}
@@ -434,7 +434,7 @@ const SignatureCollection = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="trackingEmail" className="text-black">Email *</Label>
+                      <Label htmlFor="trackingEmail" className="text-[#1A1A1A]">Email *</Label>
                       <Input
                         id="trackingEmail"
                         type="email"
@@ -457,7 +457,7 @@ const SignatureCollection = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -468,7 +468,7 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -481,13 +481,13 @@ const SignatureCollection = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
                       <div className="flex items-center gap-3">
                         <HelpCircle className="w-5 h-5 text-gold shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 pl-8">
+                    <AccordionContent className="text-[#5A4A2E] pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -499,7 +499,7 @@ const SignatureCollection = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -510,12 +510,12 @@ const SignatureCollection = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Submit a signature request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
               Upload your document and track status end-to-end.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

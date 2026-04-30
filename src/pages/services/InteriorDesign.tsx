@@ -152,7 +152,7 @@ const InteriorDesign = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-black">Book a</span><span className="text-gold"> Consultation</span>
+                <span className="text-[#1A1A1A]">Book a</span><span className="text-gold"> Consultation</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -161,7 +161,7 @@ const InteriorDesign = () => {
       </section>
 
       {/* Services - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -176,7 +176,7 @@ const InteriorDesign = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Design Services" />
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Comprehensive interior design services for residential and commercial spaces.
               </p>
             </motion.div>
@@ -187,19 +187,19 @@ const InteriorDesign = () => {
                   <Card className="jj-card-inner hover:border-white transition-all group h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <service.icon className="w-7 h-7 text-gold" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
                             {service.title}
                           </h3>
-                          <p className="text-black/70 text-sm mb-4">
+                          <p className="text-[#1A1A1A]/70 text-sm mb-4">
                             {service.description}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {service.features.map((feature) => (
-                              <div key={feature} className="flex items-center gap-2 text-xs text-black/60">
+                              <div key={feature} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
                                 <CheckCircle className="w-3 h-3 text-gold" />
                                 {feature}
                               </div>
@@ -217,7 +217,7 @@ const InteriorDesign = () => {
       </section>
 
       {/* Portfolio - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -247,7 +247,7 @@ const InteriorDesign = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-4">
-                      <h3 className="text-black font-semibold text-lg mb-1">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">
                         {project.title}
                       </h3>
                       <p className="text-gold text-sm">
@@ -263,7 +263,7 @@ const InteriorDesign = () => {
       </section>
 
       {/* Process - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -288,10 +288,10 @@ const InteriorDesign = () => {
                       <div className="text-4xl font-bold text-gold mb-4">
                         {item.step}
                       </div>
-                      <h3 className="text-black font-semibold text-lg mb-2">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-black/70 text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         {item.description}
                       </p>
                     </CardContent>
@@ -304,7 +304,7 @@ const InteriorDesign = () => {
       </section>
 
       {/* CTA Section - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -321,7 +321,7 @@ const InteriorDesign = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Visualize Your Space" />
               </h2>
-              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Try our AI Interior Designer to visualize concepts, 
                 then connect with our partner designers for full implementation.
               </p>
@@ -329,7 +329,7 @@ const InteriorDesign = () => {
                 <Button variant="primary" size="lg" asChild>
                   <Link to="/tools/interior-ai">
                     <Sparkles className="w-5 h-5 mr-2" />
-                    <span className="text-black">Try AI</span><span className="text-gold"> Designer</span>
+                    <span className="text-[#1A1A1A]">Try AI</span><span className="text-gold"> Designer</span>
                   </Link>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>

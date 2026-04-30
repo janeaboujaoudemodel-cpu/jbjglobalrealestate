@@ -296,7 +296,7 @@ export default function StudioEditor() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center">
         <h2 className="text-xl font-semibold text-foreground mb-4">Project not found</h2>
-        <Button className="bg-gold hover:bg-gold/90 text-black" onClick={() => navigate("/studio")}>
+        <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]" onClick={() => navigate("/studio")}>
           Back to Projects
         </Button>
       </div>
@@ -434,7 +434,7 @@ export default function StudioEditor() {
                   </button>
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-black hover:bg-gold/90 transition-colors"
+                    className="w-10 h-10 rounded-full bg-gold flex items-center justify-center text-[#1A1A1A] hover:bg-gold/90 transition-colors"
                   >
                     {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                   </button>
@@ -511,7 +511,7 @@ export default function StudioEditor() {
                   )}
 
                   <Button
-                    className="w-full bg-gold hover:bg-gold/90 text-black"
+                    className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                     onClick={handleAIGenerate}
                     disabled={!aiPrompt.trim() || isGenerating || !selectedProperty}
                   >
@@ -613,7 +613,7 @@ export default function StudioEditor() {
                       </button>
                     ))}
                   </div>
-                  <Button className="w-full bg-gold hover:bg-gold/90 text-black">
+                  <Button className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                     <Download className="w-4 h-4 mr-2" />
                     Export All (ZIP)
                   </Button>

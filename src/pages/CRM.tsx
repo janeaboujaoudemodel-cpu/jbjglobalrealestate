@@ -547,10 +547,10 @@ const CRM = () => {
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-6">
         <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
-            <CardTitle className="text-black">CRM access unavailable</CardTitle>
+            <CardTitle className="text-[#1A1A1A]">CRM access unavailable</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#5A4A2E]">
               We couldn't load your CRM profile for this session. Please refresh the page. If it keeps happening, sign out and sign in again.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
@@ -644,11 +644,11 @@ const CRM = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowToolsSidebar(!showToolsSidebar)}
-                className="text-black hover:text-gold hover:bg-gold/10 shrink-0"
+                className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 shrink-0"
               >
                 {showToolsSidebar ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
               </Button>
-              <p className="text-base font-bold text-black">
+              <p className="text-base font-bold text-[#1A1A1A]">
                 {getRoleTitle()} — {getFounderDisplayName()}
               </p>
             </div>
@@ -659,7 +659,7 @@ const CRM = () => {
                   Owner Command Center
                 </Button>
               )}
-              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-black hover:text-gold hover:bg-gold/10">
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10">
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
               </Button>
@@ -671,7 +671,7 @@ const CRM = () => {
             {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-gray-600 hover:border-gold/50 transition-all max-w-xs"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#5A4A2E] hover:border-gold/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-gold" />
               <span className="text-sm">Search leads…</span>
@@ -684,7 +684,7 @@ const CRM = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowAIInsights(!showAIInsights)}
-                className={`text-gold hover:text-black hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
+                className={`text-gold hover:text-[#1A1A1A] hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
               >
                 <Brain className="h-4 w-4" />
               </Button>
@@ -698,24 +698,24 @@ const CRM = () => {
               </Suspense>
               
               <div className="hidden md:flex items-center gap-1 ml-2">
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
                   <CheckSquare className="h-4 w-4 mr-1" />
                   Tasks
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
                   <Calendar className="h-4 w-4 mr-1" />
                   Calendar
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-black hover:text-gold hover:bg-gold/10 text-xs">
+                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
                   <Users className="h-4 w-4 mr-1" />
                   Team
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-black hover:text-gold hover:bg-gold/10 text-xs font-semibold">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs font-semibold">
                   <Briefcase className="h-4 w-4 mr-1" />
                   Relationships
                 </Button>
                 {isCRMOwner && (
-                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold">
+                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 text-xs font-semibold">
                     <Zap className="h-4 w-4 mr-1" />
                     Automations
                   </Button>
@@ -766,12 +766,12 @@ const CRM = () => {
                 {/* Smart Automations */}
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-black font-bold text-base flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center gap-2">
                       <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-                        <Zap className="h-4 w-4 text-black" />
+                        <Zap className="h-4 w-4 text-[#1A1A1A]" />
                       </div>
                       Smart Automations
-                      <Badge className="ml-auto text-xs bg-gold/10 text-black border-gold/30">
+                      <Badge className="ml-auto text-xs bg-gold/10 text-[#1A1A1A] border-gold/30">
                         Active
                       </Badge>
                     </CardTitle>
@@ -801,12 +801,12 @@ const CRM = () => {
               {/* Leads Update Section with shortcuts */}
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-black font-bold text-base flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center gap-2">
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-                      <Users className="h-4 w-4 text-black" />
+                      <Users className="h-4 w-4 text-[#1A1A1A]" />
                     </div>
                     Leads Update
-                    <span className="ml-auto text-sm font-normal text-gray-600">Quick Actions</span>
+                    <span className="ml-auto text-sm font-normal text-[#5A4A2E]">Quick Actions</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -891,13 +891,13 @@ const CRM = () => {
               <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("table")}
-                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10"}`}
                 >
                   <List className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("kanban")}
-                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10"}`}
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </button>
@@ -909,14 +909,14 @@ const CRM = () => {
               <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
                 <TabsTrigger 
                   value="all" 
-                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                  className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"
                 >
                   <Users className="h-4 w-4 mr-2" />
                   All Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="flagged"
-                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                  className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"
                 >
                   <Flag className="h-4 w-4 mr-2" />
                   Flagged
@@ -926,21 +926,21 @@ const CRM = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="vip"
-                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                  className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"
                 >
                   <Crown className="h-4 w-4 mr-2" />
                   VIP Leads
                 </TabsTrigger>
                 <TabsTrigger 
                   value="management"
-                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                  className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"
                 >
                   <FileText className="h-4 w-4 mr-2" />
                   Leads Management
                 </TabsTrigger>
                 <TabsTrigger 
                   value="employees"
-                  className="tab-trigger-champagne text-black px-5 py-2.5"
+                  className="tab-trigger-champagne text-[#1A1A1A] px-5 py-2.5"
                 >
                   <Briefcase className="h-4 w-4 mr-2" />
                   Employees Hub

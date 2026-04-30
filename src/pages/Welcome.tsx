@@ -86,7 +86,7 @@ export default function Welcome() {
       toast.success(
         <div className="flex flex-col gap-1">
           <span className="font-semibold">Welcome to JBJ Global!</span>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-[#5A4A2E]">
             Your {CATEGORIES.find(c => c.id === selected)?.label} experience is ready.
           </span>
         </div>,
@@ -125,12 +125,12 @@ export default function Welcome() {
           <div className="flex justify-center mb-6">
             <JJLogoImage variant="light" size="md" />
           </div>
-          <h1 className="text-3xl font-bold text-black mb-2">
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
             Welcome to <span className="text-gold">JBJ Global</span>
           </h1>
-          <p className="text-gray-600 text-sm">
+          <p className="text-[#5A4A2E] text-sm">
             {user.email && (
-              <span>Signed in as <span className="font-medium text-black">{user.email}</span> · </span>
+              <span>Signed in as <span className="font-medium text-[#1A1A1A]">{user.email}</span> · </span>
             )}
             Select your category to personalize your experience
           </p>
@@ -150,7 +150,7 @@ export default function Welcome() {
                   "hover:shadow-lg hover:scale-[1.01]",
                   isSelected
                     ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] border-gold shadow-md"
-                    : "bg-white/90 backdrop-blur-sm border-gold/15 hover:border-gold/40"
+                    : "bg-[#FDFBF7]/90 backdrop-blur-sm border-gold/15 hover:border-gold/40"
                 )}
               >
                 <div className="flex items-start gap-3 mb-3">
@@ -160,23 +160,23 @@ export default function Welcome() {
                       ? "bg-gold/20 border-gold"
                       : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-gray-600")} />
+                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-[#5A4A2E]")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className={cn("font-bold text-base", isSelected ? "text-black" : "text-black/80")}>
+                      <h3 className={cn("font-bold text-base", isSelected ? "text-[#1A1A1A]" : "text-[#1A1A1A]/80")}>
                         {cat.label}
                       </h3>
                       {isSelected && <CheckCircle2 className="w-4 h-4 text-gold" />}
                     </div>
-                    <p className="text-xs text-gray-600 mt-0.5">{cat.description}</p>
+                    <p className="text-xs text-[#5A4A2E] mt-0.5">{cat.description}</p>
                   </div>
                 </div>
                 {/* Features */}
                 <div className="space-y-1">
                   {cat.features.map((f) => (
-                    <div key={f} className="flex items-center gap-2 text-xs text-gray-600">
-                      <Sparkles className="w-3 h-3 text-gray-500 flex-shrink-0" />
+                    <div key={f} className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+                      <Sparkles className="w-3 h-3 text-[#8A7556] flex-shrink-0" />
                       <span>{f}</span>
                     </div>
                   ))}
@@ -190,7 +190,7 @@ export default function Welcome() {
         <Button
           onClick={handleContinue}
           disabled={!selected || isSubmitting}
-          className="w-full h-14 bg-gradient-to-r from-[#D8C7A6] via-gold to-[#D8C7A6] hover:from-gold hover:to-gold text-black font-bold rounded-2xl shadow-xl disabled:opacity-50 text-base"
+          className="w-full h-14 bg-gradient-to-r from-[#D8C7A6] via-gold to-[#D8C7A6] hover:from-gold hover:to-gold text-[#1A1A1A] font-bold rounded-2xl shadow-xl disabled:opacity-50 text-base"
         >
           {isSubmitting ? (
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -202,10 +202,10 @@ export default function Welcome() {
           )}
         </Button>
 
-        <p className="text-center text-gray-600 text-xs mt-6">
+        <p className="text-center text-[#5A4A2E] text-xs mt-6">
           You can change your category anytime from your profile settings.
         </p>
-        <p className="text-center text-gray-600 text-xs mt-2">
+        <p className="text-center text-[#5A4A2E] text-xs mt-2">
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

@@ -86,7 +86,7 @@ const QUICK_ACCESS = [
 
 const VisitorDashboard = () => {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       <div className="container mx-auto px-4 py-12">
         <motion.div
           initial="initial"
@@ -110,7 +110,7 @@ const VisitorDashboard = () => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
-                  <Card className="bg-zinc-900/50 border-gray-800 hover:border-gold/50 transition-all duration-300 h-full group cursor-pointer">
+                  <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-gold/50 transition-all duration-300 h-full group cursor-pointer">
                     <CardHeader>
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.bgGradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                         <Icon className={`w-7 h-7 ${action.color}`} />
@@ -141,9 +141,9 @@ const VisitorDashboard = () => {
                 const Icon = item.icon;
                 return (
                   <Link key={item.title} to={item.href}>
-                    <Card className="bg-zinc-900/30 border-gray-800 hover:border-gray-700 transition-all group cursor-pointer">
+                    <Card className="bg-zinc-900/30 border-[#1A1A1A] hover:border-[#1A1A1A] transition-all group cursor-pointer">
                       <CardContent className="flex items-center gap-4 p-5">
-                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
+                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">
                           <Icon className="w-6 h-6 text-white/70 group-hover:text-gold transition-colors" />
                         </div>
                         <div>
@@ -174,13 +174,13 @@ const VisitorDashboard = () => {
                 </div>
                 <div className="flex gap-4">
                   <Link to="/auth?mode=signup">
-                    <Button className="bg-gold hover:bg-gold/90 text-black font-semibold px-6">
+                    <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-6">
                       <UserPlus className="w-4 h-4 mr-2" />
                       Create Account
                     </Button>
                   </Link>
                   <Link to="/auth">
-                    <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
+                    <Button variant="outline" className="border-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
                       <LogIn className="w-4 h-4 mr-2" />
                       Log In
                     </Button>

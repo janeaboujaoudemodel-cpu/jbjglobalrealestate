@@ -117,7 +117,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   if ((authLoading || ownerLoading) && showLoading) {
     if (!loadingTimedOut) {
       return (
-        <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Verifying access…</p>
@@ -128,7 +128,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
 
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
             <AlertTriangle className="w-10 h-10 text-amber-500" />
@@ -141,14 +141,14 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
                 setLoadingTimedOut(false);
                 refreshOwnerVerification();
               }}
-              className="bg-gold hover:bg-gold/90 text-black font-semibold"
+              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
+              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -176,7 +176,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         }, 2000);
       }
       return (
-        <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Verifying access…</p>
@@ -187,7 +187,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     }
 
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
             <AlertTriangle className="w-10 h-10 text-amber-500" />
@@ -201,14 +201,14 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
                 autoRetryCount.current = 0;
                 refreshOwnerVerification();
               }}
-              className="bg-gold hover:bg-gold/90 text-black font-semibold"
+              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Verification
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
+              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -228,7 +228,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   if (isAuditor && !isOwner) {
     if (!suspendChecked || pwLoading) {
       return (
-        <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
             <p className="text-gray-200 font-medium">Checking access status…</p>
@@ -239,7 +239,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
 
     if (isSuspended) {
       return (
-        <div className="min-h-screen bg-black flex items-center justify-center p-6">
+        <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
           <div className="max-w-md text-center">
             <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
               <Ban className="w-10 h-10 text-red-500" />
@@ -250,7 +250,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             </p>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
+              className="bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out

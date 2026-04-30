@@ -249,21 +249,21 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-lg bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
+          className="relative w-full max-w-lg bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
         >
           {/* Close button */}
           <button
             onClick={handleComplete}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
             aria-label="Close tour"
           >
-            <X className="w-4 h-4 text-gray-600" />
+            <X className="w-4 h-4 text-[#5A4A2E]" />
           </button>
 
           {/* Premium top accent */}
@@ -295,10 +295,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <span className="text-gold text-xs font-medium">Welcome Guide</span>
                 </div>
 
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-3">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-3">
                   Welcome to JBJ Global Real Estate
                 </h2>
-                <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto">
+                <p className="text-[#5A4A2E] text-sm mb-8 max-w-sm mx-auto">
                   Take a quick guided tour to learn how to navigate our platform, or explore on your own
                 </p>
 
@@ -310,7 +310,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       handleTakeTour();
                     }}
                     type="button"
-                    className="w-full py-5 sm:py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
+                    className="w-full py-5 sm:py-6 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <Compass className="w-5 h-5 mr-3 relative z-10" />
@@ -326,15 +326,15 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     }}
                     type="button"
                     variant="outline"
-                    className="w-full py-5 sm:py-6 border-gray-300 bg-transparent text-black hover:bg-gray-100 hover:border-gold/50 group rounded-xl transition-all"
+                    className="w-full py-5 sm:py-6 border-[#B89555]/30 bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-gold/50 group rounded-xl transition-all"
                   >
                     <span className="flex-1 text-left font-medium">View Quick Shortcuts</span>
-                    <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className="w-4 h-4 text-[#5A4A2E] group-hover:text-gold group-hover:translate-x-1 transition-all" />
                   </Button>
 
                   <button
                     onClick={handleComplete}
-                    className="w-full py-3 text-gray-600 hover:text-gray-700 text-sm transition-colors"
+                    className="w-full py-3 text-[#5A4A2E] hover:text-[#5A4A2E] text-sm transition-colors"
                   >
                     Skip for now
                   </button>
@@ -353,7 +353,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
               >
                 {/* Progress bar */}
                 <div className="mb-6">
-                  <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-[#EFE6D6] rounded-full overflow-hidden">
                     <motion.div 
                       className="h-full bg-gradient-to-r from-gold to-gold/70 rounded-full"
                       initial={{ width: 0 }}
@@ -362,7 +362,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     />
                   </div>
                   <div className="flex justify-between items-center mt-2">
-                    <span className="text-xs text-gray-600">Step {currentStep + 1} of {tourSteps.length}</span>
+                    <span className="text-xs text-[#5A4A2E]">Step {currentStep + 1} of {tourSteps.length}</span>
                     <div className="flex gap-1">
                       {tourSteps.map((_, idx) => (
                         <button
@@ -373,7 +373,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                               ? 'bg-gold scale-125' 
                               : idx < currentStep 
                                 ? 'bg-gold/50 hover:bg-gold/70' 
-                                : 'bg-gray-300 hover:bg-gray-400'
+                                : 'bg-[#EFE6D6] hover:bg-[#B89555]'
                           }`}
                           aria-label={`Go to step ${idx + 1}`}
                         />
@@ -400,10 +400,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   </motion.div>
                 </div>
 
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-3">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-3">
                   {tourSteps[currentStep].title}
                 </h3>
-                <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto leading-relaxed">
+                <p className="text-[#5A4A2E] text-sm mb-6 max-w-sm mx-auto leading-relaxed">
                   {tourSteps[currentStep].description}
                 </p>
 
@@ -425,7 +425,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     <Button
                       onClick={() => setCurrentStep(currentStep - 1)}
                       variant="outline"
-                      className="flex-1 py-4 sm:py-5 border-gray-300 bg-transparent text-black hover:bg-gray-100 rounded-xl group"
+                      className="flex-1 py-4 sm:py-5 border-[#B89555]/30 bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-xl group"
                     >
                       <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-0.5 transition-transform" />
                       Back
@@ -439,7 +439,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         handleComplete();
                       }
                     }}
-                    className="flex-1 py-4 sm:py-5 bg-black hover:bg-gray-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="flex-1 py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold rounded-xl group border border-gold/20"
                   >
                     {currentStep < tourSteps.length - 1 ? (
                       <>
@@ -468,10 +468,10 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     <Sparkles className="w-3.5 h-3.5 text-gold" />
                     <span className="text-gold text-xs font-medium">Quick Reference</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-2">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-2">
                     Key Shortcuts
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-[#5A4A2E] text-sm">
                     Here are the main features you'll use
                   </p>
                 </div>
@@ -488,25 +488,25 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         <Link
                           to={item.link}
                           onClick={handleComplete}
-                          className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-xl hover:border-gold/50 hover:bg-gold/5 transition-all group"
+                          className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl hover:border-gold/50 hover:bg-gold/5 transition-all group"
                         >
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:border-gold/30 transition-colors">
+                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0 group-hover:border-gold/30 transition-colors">
                             <item.icon className={`w-5 h-5 ${item.iconColor}`} />
                           </div>
                           <div className="text-left min-w-0 flex-1">
-                            <p className="text-black text-sm font-medium group-hover:text-gold transition-colors">{item.title}</p>
-                            <p className="text-gray-600 text-xs truncate">{item.description}</p>
+                            <p className="text-[#1A1A1A] text-sm font-medium group-hover:text-gold transition-colors">{item.title}</p>
+                            <p className="text-[#5A4A2E] text-xs truncate">{item.description}</p>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gold group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+                          <ChevronRight className="w-4 h-4 text-[#5A4A2E] group-hover:text-gold group-hover:translate-x-0.5 transition-all flex-shrink-0" />
                         </Link>
                       ) : (
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-xl">
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center flex-shrink-0">
+                        <div className="flex items-center gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
+                          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-[#FDFBF7] border border-[#B89555]/30 shadow-sm flex items-center justify-center flex-shrink-0">
                             <item.icon className={`w-5 h-5 ${item.iconColor}`} />
                           </div>
                           <div className="text-left min-w-0 flex-1">
-                            <p className="text-black text-sm font-medium">{item.title}</p>
-                            <p className="text-gray-600 text-xs truncate">{item.description}</p>
+                            <p className="text-[#1A1A1A] text-sm font-medium">{item.title}</p>
+                            <p className="text-[#5A4A2E] text-xs truncate">{item.description}</p>
                           </div>
                         </div>
                       )}
@@ -517,7 +517,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 <div className="space-y-2">
                   <Button
                     onClick={handleComplete}
-                    className="w-full py-4 sm:py-5 bg-black hover:bg-gray-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="w-full py-4 sm:py-5 bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold font-semibold rounded-xl group border border-gold/20"
                   >
                     Start Exploring
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -527,7 +527,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       setShowTour('tour');
                       setCurrentStep(0);
                     }}
-                    className="w-full py-2.5 text-gray-600 hover:text-gold text-sm transition-colors"
+                    className="w-full py-2.5 text-[#5A4A2E] hover:text-gold text-sm transition-colors"
                   >
                     Take the full tour instead
                   </button>

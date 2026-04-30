@@ -30,8 +30,8 @@ export const GuideSection = ({
   children
 }: GuideSectionProps) => {
   const backgrounds = {
-    light: "bg-gray-100 text-gray-900",
-    dark: "bg-black text-white",
+    light: "bg-[#F7F2EA] text-[#1A1A1A]",
+    dark: "bg-[#1A1A1A] text-white",
     gradient: "bg-gradient-to-b from-zinc-900/30 to-black text-white"
   };
 
@@ -66,14 +66,14 @@ export const GuideSection = ({
             )}
             <h2 className={cn(
               "text-3xl md:text-4xl font-light mb-4",
-              variant === "light" ? "text-gray-900" : "text-white"
+              variant === "light" ? "text-[#1A1A1A]" : "text-white"
             )}>
               {title}
             </h2>
             {subtitle && (
               <p className={cn(
                 "text-lg max-w-2xl mx-auto",
-                variant === "light" ? "text-gray-600" : "text-white/70"
+                variant === "light" ? "text-[#5A4A2E]" : "text-white/70"
               )}>
                 {subtitle}
               </p>

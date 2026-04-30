@@ -116,26 +116,26 @@ const EmailHubStatusPanel = () => {
           <StatusBadge active={status?.company.api_key_exists ?? false} label={status?.company.api_key_exists ? "Connected" : "Missing Key"} />
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Domain</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <Zap className="w-3 h-3 text-emerald-500" /> {status?.company.domain ?? "jbj.ae"}
             </p>
           </div>
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Outbound</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <ArrowUpRight className="w-3 h-3 text-emerald-500" />
               {status?.company.outbound_active ? "Active via Resend API" : "Inactive"}
             </p>
           </div>
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Inbound</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <ArrowDownLeft className="w-3 h-3 text-emerald-500" /> Webhook Active
             </p>
           </div>
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">API Key</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <Shield className="w-3 h-3 text-emerald-500" />
@@ -156,7 +156,7 @@ const EmailHubStatusPanel = () => {
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">API Key</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               {status?.personal.is_active ? (
@@ -166,14 +166,14 @@ const EmailHubStatusPanel = () => {
               )}
             </p>
           </div>
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Outbound</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <ArrowUpRight className={`w-3 h-3 ${status?.personal.outbound_active ? "text-emerald-500" : "text-amber-500"}`} />
               {status?.personal.outbound_active ? "Active via Resend API" : "Normal / Fallback Mode"}
             </p>
           </div>
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2 col-span-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2 col-span-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Last Verified</p>
             <p className="text-xs font-medium text-foreground flex items-center gap-1">
               <Clock className="w-3 h-3 text-muted-foreground" />
@@ -190,7 +190,7 @@ const EmailHubStatusPanel = () => {
           <span className="text-sm font-semibold text-foreground">Last Email Sent</span>
         </div>
         {status?.last_sent ? (
-          <div className="bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+          <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <div className="flex items-center justify-between">
               <span className="text-xs text-foreground">{formatTime(status.last_sent.at)}</span>
               <div className="flex gap-2">

@@ -67,7 +67,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -96,7 +96,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
       </div>
 
       {filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500">
+        <Card><CardContent className="p-8 text-center text-[#8A7556]">
           No sent history yet. Send your first registration email from the Outreach Queue tab.
         </CardContent></Card>
       ) : (
@@ -106,37 +106,37 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
             const sentDays = sentDate ? Math.floor((Date.now() - sentDate.getTime()) / 86400000) : null;
             const dStatus = d._deliveryStatus || (d.last_outreach_at ? "sent" : "—");
             return (
-              <Card key={d.id} className="bg-white text-black border border-black/10 rounded-2xl hover:shadow-md transition">
+              <Card key={d.id} className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 rounded-2xl hover:shadow-md transition">
                 <CardContent className="p-3">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="flex-1 min-w-[260px]">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-black">{d.developer_name}</h3>
+                        <h3 className="font-semibold text-[#1A1A1A]">{d.developer_name}</h3>
                         {d.status === "registered" && (
                           <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3" />Confirmed
                           </span>
                         )}
-                        <Badge className={`${STATUS_STYLE[dStatus] || "bg-gray-200 text-black"} border font-semibold`}>
+                        <Badge className={`${STATUS_STYLE[dStatus] || "bg-[#EFE6D6] text-[#1A1A1A]"} border font-semibold`}>
                           {dStatus}
                         </Badge>
                         {d.outreach_count > 1 && (
                           <span className="text-xs text-emerald-700 font-semibold">×{d.outreach_count} sends</span>
                         )}
                       </div>
-                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-gray-700">
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#5A4A2E]">
                         {d.developer_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{d.developer_email}</span>}
                         {d.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{d.phone}</span>}
                         {d.emirate && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{d.emirate}</span>}
                       </div>
-                      <div className="mt-1.5 text-xs text-gray-600">
+                      <div className="mt-1.5 text-xs text-[#5A4A2E]">
                         {sentDate && (
                           <span title={sentDate.toLocaleString()}>
-                            Last sent: <strong className="text-black">{sentDays === 0 ? "today" : `${sentDays}d ago`}</strong>
+                            Last sent: <strong className="text-[#1A1A1A]">{sentDays === 0 ? "today" : `${sentDays}d ago`}</strong>
                           </span>
                         )}
                         {d._lastVariant && (
-                          <span> · Variant: <strong className="text-black">{VARIANT_SHORT[d._lastVariant] || d._lastVariant}</strong></span>
+                          <span> · Variant: <strong className="text-[#1A1A1A]">{VARIANT_SHORT[d._lastVariant] || d._lastVariant}</strong></span>
                         )}
                       </div>
                     </div>

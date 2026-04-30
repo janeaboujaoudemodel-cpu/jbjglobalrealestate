@@ -135,7 +135,7 @@ export default function YouTubeVideoPlayer({
       {ended && (
         <button
           onClick={handleReplay}
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black cursor-pointer transition-opacity duration-500 group"
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#1A1A1A] cursor-pointer transition-opacity duration-500 group"
           aria-label="Replay video"
         >
           <img
@@ -143,7 +143,7 @@ export default function YouTubeVideoPlayer({
             alt="JBJ Global Real Estate"
             className="w-40 h-40 md:w-52 md:h-52 object-contain mb-12 opacity-90"
           />
-          <div className="flex items-center gap-2 text-gray-800 group-hover:text-gold transition-colors">
+          <div className="flex items-center gap-2 text-[#1A1A1A] group-hover:text-gold transition-colors">
             <Play className="w-5 h-5" fill="currentColor" />
             <span className="text-sm font-medium tracking-wider uppercase">Replay</span>
           </div>

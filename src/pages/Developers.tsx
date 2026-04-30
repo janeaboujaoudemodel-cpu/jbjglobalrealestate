@@ -230,7 +230,7 @@ const Developers = () => {
         {/* Hero Section - Full-width Video */}
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
-          <div className="absolute inset-0 bg-black">
+          <div className="absolute inset-0 bg-[#1A1A1A]">
             <VideoBackground 
               src={developersHeroVideo}
               poster="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
@@ -250,7 +250,7 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
@@ -261,7 +261,7 @@ const Developers = () => {
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>
@@ -275,7 +275,7 @@ const Developers = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+            <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
           </motion.div>
         </section>
@@ -306,7 +306,7 @@ const Developers = () => {
               <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                 {/* Tier Filter */}
                 <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
                     <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                     <span className="truncate text-left flex-1">
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
@@ -322,7 +322,7 @@ const Developers = () => {
                 </Select>
 
                 {/* Results Count */}
-                <div className="flex-1 text-black/70 text-sm">
+                <div className="flex-1 text-[#1A1A1A]/70 text-sm">
                   {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
@@ -333,7 +333,7 @@ const Developers = () => {
                     variant="outline"
                     size="sm"
                     onClick={clearFilters}
-                    className="h-9 px-3 bg-white/80 border-gold/30 text-black hover:bg-white rounded-lg flex items-center gap-1.5"
+                    className="h-9 px-3 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
                   >
                     <X className="w-3.5 h-3.5" />
                     Clear ({activeFilterCount})
@@ -375,7 +375,7 @@ const Developers = () => {
                 {/* Tier filter row */}
                 <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
                       <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                       <span className="truncate text-left flex-1">
                         {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
@@ -390,7 +390,7 @@ const Developers = () => {
                     </SelectContent>
                   </Select>
 
-                  <div className="flex-1 text-black/70 text-sm">
+                  <div className="flex-1 text-[#1A1A1A]/70 text-sm">
                     {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   </div>
 
@@ -399,7 +399,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       onClick={clearFilters}
-                      className="h-9 px-3 bg-white/80 border-gold/30 text-black hover:bg-white rounded-lg flex items-center gap-1.5"
+                      className="h-9 px-3 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
                     >
                       <X className="w-3.5 h-3.5" />
                       Clear ({activeFilterCount})
@@ -427,7 +427,7 @@ const Developers = () => {
               </div>
             ) : filteredDevelopers.length === 0 ? (
               <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
-                <Building2 className="w-20 h-20 text-gray-500 mx-auto mb-6" />
+                <Building2 className="w-20 h-20 text-[#8A7556] mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
                   {activeFilterCount > 0 
@@ -486,7 +486,7 @@ const Developers = () => {
                             variant={p === currentPage ? "default" : "outline"}
                             size="sm"
                             onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                            className={p === currentPage ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30 text-foreground"}
+                            className={p === currentPage ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-foreground"}
                           >
                             {p}
                           </Button>

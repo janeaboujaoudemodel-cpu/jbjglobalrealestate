@@ -151,7 +151,7 @@ export default function HorizontalUtilityBar() {
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2 rounded-md group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
   const cellHover = "hover:bg-[hsl(var(--gold)/0.08)]";
   const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-105 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  const labelClass = "text-[11px] font-semibold text-[#1A1A1A]/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
 
   // ── Filter bar state (merged from GlobalFilterBar) ──
   const location = useLocation();
@@ -456,11 +456,11 @@ export default function HorizontalUtilityBar() {
                     className="w-full h-8 flex items-center transition-all border border-[hsl(var(--gold)/0.3)] rounded-lg overflow-hidden"
                     aria-label="Toggle area unit"
                   >
-                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
+                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50'}`}>
                       ft²
                     </span>
                     <span className="w-px h-full bg-[hsl(var(--gold)/0.3)]" />
-                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
+                    <span className={`flex-1 text-[11px] font-bold py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/30 hover:text-[#1A1A1A]/50'}`}>
                       m²
                     </span>
                   </button>

@@ -198,8 +198,8 @@ const CVViewer = ({
                 <span className="text-xl font-bold text-gold">{candidateName.charAt(0)}</span>
               </div>
               <div>
-                <DialogTitle className="text-xl text-black">{candidateName}</DialogTitle>
-                <p className="text-sm text-gray-600">{candidateData?.position || 'Candidate'}</p>
+                <DialogTitle className="text-xl text-[#1A1A1A]">{candidateName}</DialogTitle>
+                <p className="text-sm text-[#5A4A2E]">{candidateData?.position || 'Candidate'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -233,32 +233,32 @@ const CVViewer = ({
               {/* Contact Info */}
               <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-black flex items-center gap-2">
+                  <CardTitle className="text-sm text-[#1A1A1A] flex items-center gap-2">
                     <User className="h-4 w-4 text-gold" />
                     Contact Information
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   {candidateData?.email && (
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-[#5A4A2E]">
                       <Mail className="h-3 w-3" />
                       <span className="truncate">{candidateData.email}</span>
                     </div>
                   )}
                   {candidateData?.phone && (
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-[#5A4A2E]">
                       <Phone className="h-3 w-3" />
                       <span>{candidateData.phone}</span>
                     </div>
                   )}
                   {candidateData?.nationality && (
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-[#5A4A2E]">
                       <MapPin className="h-3 w-3" />
                       <span>{candidateData.nationality}</span>
                     </div>
                   )}
                   {candidateData?.uploadDate && (
-                    <div className="flex items-center gap-2 text-gray-600">
+                    <div className="flex items-center gap-2 text-[#5A4A2E]">
                       <Calendar className="h-3 w-3" />
                       <span>Applied: {format(candidateData.uploadDate, 'MMM d, yyyy')}</span>
                     </div>
@@ -269,7 +269,7 @@ const CVViewer = ({
               {/* Quick Actions */}
               <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-black">Quick Actions</CardTitle>
+                  <CardTitle className="text-sm text-[#1A1A1A]">Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Button
@@ -304,7 +304,7 @@ const CVViewer = ({
                   </Button>
                   <Button
                     size="sm"
-                    className="w-full justify-start gap-2 bg-gold text-black hover:bg-gold/90"
+                    className="w-full justify-start gap-2 bg-gold text-[#1A1A1A] hover:bg-gold/90"
                     onClick={() => window.open('/video-meeting', '_blank')}
                   >
                     <Video className="h-4 w-4" />
@@ -324,7 +324,7 @@ const CVViewer = ({
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600">Relevance Score</span>
+                      <span className="text-[#5A4A2E]">Relevance Score</span>
                       <Badge className="bg-purple-600">
                         <Star className="h-3 w-3 mr-1" />
                         {candidateData.aiAnalysis.relevanceScore}%
@@ -332,22 +332,22 @@ const CVViewer = ({
                     </div>
                     
                     <div>
-                      <span className="text-gray-600 flex items-center gap-1 mb-1">
+                      <span className="text-[#5A4A2E] flex items-center gap-1 mb-1">
                         <Briefcase className="h-3 w-3" /> Experience
                       </span>
-                      <p className="text-black text-xs">{candidateData.aiAnalysis.experience}</p>
+                      <p className="text-[#1A1A1A] text-xs">{candidateData.aiAnalysis.experience}</p>
                     </div>
 
                     <div>
-                      <span className="text-gray-600 flex items-center gap-1 mb-1">
+                      <span className="text-[#5A4A2E] flex items-center gap-1 mb-1">
                         <GraduationCap className="h-3 w-3" /> Education
                       </span>
-                      <p className="text-black text-xs">{candidateData.aiAnalysis.education}</p>
+                      <p className="text-[#1A1A1A] text-xs">{candidateData.aiAnalysis.education}</p>
                     </div>
 
                     {candidateData.aiAnalysis.skills.length > 0 && (
                       <div>
-                        <span className="text-gray-600 mb-1 block">Skills</span>
+                        <span className="text-[#5A4A2E] mb-1 block">Skills</span>
                         <div className="flex flex-wrap gap-1">
                           {candidateData.aiAnalysis.skills.slice(0, 5).map((skill, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs border-gold/30 text-gold">
@@ -360,7 +360,7 @@ const CVViewer = ({
 
                     {candidateData.aiAnalysis.certifications.length > 0 && (
                       <div>
-                        <span className="text-gray-600 flex items-center gap-1 mb-1">
+                        <span className="text-[#5A4A2E] flex items-center gap-1 mb-1">
                           <Award className="h-3 w-3" /> Certifications
                         </span>
                         <div className="flex flex-wrap gap-1">
@@ -374,7 +374,7 @@ const CVViewer = ({
                     )}
 
                     <div className="pt-2 border-t border-purple-300/50">
-                      <span className="text-gray-600 mb-1 block text-xs">AI Recommendation</span>
+                      <span className="text-[#5A4A2E] mb-1 block text-xs">AI Recommendation</span>
                       <p className="text-purple-700 text-xs italic">"{candidateData.aiAnalysis.recommendation}"</p>
                     </div>
                   </CardContent>
@@ -387,10 +387,10 @@ const CVViewer = ({
           <div className="flex-1 p-4 overflow-hidden">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
               <TabsList className="mb-4 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
-                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
                   Document Preview
                 </TabsTrigger>
-                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
                   Application Details
                 </TabsTrigger>
               </TabsList>
@@ -399,7 +399,7 @@ const CVViewer = ({
                 {loading ? (
                   <div className="h-full flex items-center justify-center">
                     <Loader2 className="h-8 w-8 animate-spin text-gold" />
-                    <span className="ml-2 text-gray-600">Loading document...</span>
+                    <span className="ml-2 text-[#5A4A2E]">Loading document...</span>
                   </div>
                 ) : signedUrl ? (
                   <iframe
@@ -409,13 +409,13 @@ const CVViewer = ({
                   />
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-center">
-                    <FileText className="h-16 w-16 text-gray-600 mb-4" />
-                    <h3 className="text-lg font-semibold text-black mb-2">CV Not Available</h3>
-                    <p className="text-gray-600 mb-4">
+                    <FileText className="h-16 w-16 text-[#5A4A2E] mb-4" />
+                    <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">CV Not Available</h3>
+                    <p className="text-[#5A4A2E] mb-4">
                       {cvUrl ? 'Unable to load CV preview. Try downloading instead.' : 'No CV file has been uploaded.'}
                     </p>
                     {cvUrl && (
-                      <Button onClick={handleDownload} className="bg-gold text-black hover:bg-gold/90">
+                      <Button onClick={handleDownload} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
                         <Download className="h-4 w-4 mr-2" />
                         Download CV
                       </Button>
@@ -429,34 +429,34 @@ const CVViewer = ({
                   <CardContent className="pt-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-600">Full Name</Label>
-                        <p className="text-black">{candidateName}</p>
+                        <Label className="text-[#5A4A2E]">Full Name</Label>
+                        <p className="text-[#1A1A1A]">{candidateName}</p>
                       </div>
                       <div>
-                        <Label className="text-gray-600">Position Applied</Label>
-                        <p className="text-black">{candidateData?.position || 'Not specified'}</p>
+                        <Label className="text-[#5A4A2E]">Position Applied</Label>
+                        <p className="text-[#1A1A1A]">{candidateData?.position || 'Not specified'}</p>
                       </div>
                       <div>
-                        <Label className="text-gray-600">Email</Label>
-                        <p className="text-black">{candidateData?.email || 'N/A'}</p>
+                        <Label className="text-[#5A4A2E]">Email</Label>
+                        <p className="text-[#1A1A1A]">{candidateData?.email || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-gray-600">Phone</Label>
-                        <p className="text-black">{candidateData?.phone || 'N/A'}</p>
+                        <Label className="text-[#5A4A2E]">Phone</Label>
+                        <p className="text-[#1A1A1A]">{candidateData?.phone || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-gray-600">Nationality</Label>
-                        <p className="text-black">{candidateData?.nationality || 'N/A'}</p>
+                        <Label className="text-[#5A4A2E]">Nationality</Label>
+                        <p className="text-[#1A1A1A]">{candidateData?.nationality || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-gray-600">Application Date</Label>
-                        <p className="text-black">
+                        <Label className="text-[#5A4A2E]">Application Date</Label>
+                        <p className="text-[#1A1A1A]">
                           {candidateData?.uploadDate ? format(candidateData.uploadDate, 'MMMM d, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="col-span-2">
-                        <Label className="text-gray-600">CV File</Label>
-                        <p className="text-black flex items-center gap-2">
+                        <Label className="text-[#5A4A2E]">CV File</Label>
+                        <p className="text-[#1A1A1A] flex items-center gap-2">
                           <FileText className="h-4 w-4 text-gold" />
                           {cvFileName || 'No file uploaded'}
                         </p>

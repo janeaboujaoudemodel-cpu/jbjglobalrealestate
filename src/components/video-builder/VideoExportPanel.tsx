@@ -38,10 +38,10 @@ const SHARE_OPTIONS = [
   { id: "instagram", label: "Instagram", icon: Instagram, color: "bg-pink-500" },
   { id: "youtube", label: "YouTube", icon: Youtube, color: "bg-red-500" },
   { id: "facebook", label: "Facebook", icon: ExternalLink, color: "bg-blue-600" },
-  { id: "tiktok", label: "TikTok", icon: ExternalLink, color: "bg-black" },
+  { id: "tiktok", label: "TikTok", icon: ExternalLink, color: "bg-[#1A1A1A]" },
   { id: "linkedin", label: "LinkedIn", icon: ExternalLink, color: "bg-blue-700" },
   { id: "twitter", label: "X", icon: ExternalLink, color: "bg-zinc-800" },
-  { id: "copy", label: "Copy Link", icon: Copy, color: "bg-gray-500" },
+  { id: "copy", label: "Copy Link", icon: Copy, color: "bg-[#B89555]" },
 ];
 
 const VideoExportPanel = ({ project, isGenerating, progress, onGenerate }: VideoExportPanelProps) => {

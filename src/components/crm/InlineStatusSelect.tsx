@@ -75,7 +75,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
+            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
@@ -85,7 +85,7 @@ export default function InlineStatusSelect({
         ))}
         
         {/* NEUTRAL */}
-        <div className="px-2 py-1.5 text-xs font-bold text-gray-600 uppercase tracking-wide mt-1 flex items-center gap-2">
+        <div className="px-2 py-1.5 text-xs font-bold text-[#5A4A2E] uppercase tracking-wide mt-1 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-zinc-400" />
           Neutral
         </div>
@@ -93,7 +93,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
+            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-zinc-400 flex-shrink-0" />
@@ -111,7 +111,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
+            className="text-[#1A1A1A] hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-[#1A1A1A]"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />

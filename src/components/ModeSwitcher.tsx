@@ -194,7 +194,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           data-surface="light"
           data-mode-switcher-panel="true"
           style={{ backgroundColor: '#FFFFFF', color: '#0A0A0A' }}
-          className="mode-switcher-panel w-[360px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
+          className="mode-switcher-panel w-[360px] mr-3 bg-[#FDFBF7] border border-[#B89555]/30 shadow-2xl rounded-2xl p-3 z-[10001]"
           sideOffset={10}
           collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
           avoidCollisions

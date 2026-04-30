@@ -43,8 +43,8 @@ function LandingPreview({ data }: { data: LPData }) {
       {/* Hero */}
       <div className="px-6 py-10 text-center" style={{ background: `${data.primaryColor}18` }}>
         <h1 className="text-2xl font-black" style={{ color: data.primaryColor }}>{data.businessName || "Your Business Name"}</h1>
-        <p className="text-base text-gray-600 mt-2 max-w-sm mx-auto">{data.tagline || "Your compelling tagline goes here"}</p>
-        <p className="text-xs text-gray-600 mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
+        <p className="text-base text-[#5A4A2E] mt-2 max-w-sm mx-auto">{data.tagline || "Your compelling tagline goes here"}</p>
+        <p className="text-xs text-[#5A4A2E] mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
         <button className="mt-4 px-5 py-2 rounded-full text-white text-xs font-semibold" style={{ background: data.primaryColor }}>
           Get In Touch →
         </button>
@@ -56,15 +56,15 @@ function LandingPreview({ data }: { data: LPData }) {
           <h2 className="text-xs font-bold uppercase tracking-wider text-center mb-4" style={{ color: data.primaryColor }}>Our Services</h2>
           <div className="grid grid-cols-2 gap-2">
             {services.slice(0, 4).map((s, i) => (
-              <div key={i} className="bg-white rounded-lg p-3 border text-xs text-gray-700 font-medium shadow-sm">{s}</div>
+              <div key={i} className="bg-[#FDFBF7] rounded-lg p-3 border text-xs text-[#5A4A2E] font-medium shadow-sm">{s}</div>
             ))}
           </div>
         </div>
       )}
 
       {/* Contact */}
-      <div className="px-6 py-5 border-t border-gray-100">
-        <div className="flex flex-wrap gap-3 text-xs text-gray-600 justify-center">
+      <div className="px-6 py-5 border-t border-[#B89555]/30">
+        <div className="flex flex-wrap gap-3 text-xs text-[#5A4A2E] justify-center">
           {data.phone && <span>Phone: {data.phone}</span>}
           {data.email && <span>Email: {data.email}</span>}
           {data.address && <span>Address: {data.address}</span>}
@@ -152,7 +152,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")} className="gap-1.5">
@@ -189,7 +189,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
           </div>
 
           {/* Business Info */}
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
             <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Business Information</p>
             <div><Label className="text-xs mb-1 block">Business Name</Label><Input value={data.businessName} onChange={set("businessName")} placeholder="e.g. Acme Corporation" className="h-8 text-xs" /></div>
             <div><Label className="text-xs mb-1 block">Tagline</Label><Input value={data.tagline} onChange={set("tagline")} placeholder="Your Premier Real Estate Partner in Dubai" className="h-8 text-xs" /></div>
@@ -197,7 +197,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
             <div><Label className="text-xs mb-1 block">Services (comma-separated)</Label><Input value={data.services} onChange={set("services")} placeholder="Buying, Selling, Rentals, Property Management, Investment" className="h-8 text-xs" /></div>
           </div>
 
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
             <p className="text-xs font-semibold text-[hsl(var(--foreground))]">Contact Details</p>
             <div className="grid grid-cols-2 gap-2">
               <div><Label className="text-xs mb-1 block">Phone</Label><Input value={data.phone} onChange={set("phone")} placeholder="+971 4 000 0000" className="h-8 text-xs" /></div>
@@ -219,7 +219,7 @@ ${services.length ? `<div class="services"><h2>Our Services</h2><div class="serv
                 <li>Get your host's <strong className="text-[hsl(var(--foreground))]">IP address</strong> or <strong className="text-[hsl(var(--foreground))]">CNAME</strong></li>
                 <li>Log in to your domain registrar (GoDaddy, Namecheap, etc.)</li>
                 <li>Go to <strong className="text-[hsl(var(--foreground))]">DNS Settings</strong> → Add Record:
-                  <div className="mt-1 bg-white/60 rounded-lg p-2 font-mono text-[10px] space-y-1">
+                  <div className="mt-1 bg-[#FDFBF7]/60 rounded-lg p-2 font-mono text-[10px] space-y-1">
                     <p><span className="text-blue-600">A Record</span>: @ → your-host-IP-address</p>
                     <p><span className="text-emerald-600">CNAME</span>: www → your-subdomain.host.com</p>
                   </div>

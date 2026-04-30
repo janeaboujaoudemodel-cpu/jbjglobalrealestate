@@ -162,7 +162,7 @@ const LandlordListForm = () => {
               
               <motion.p
                 variants={fadeInUp}
-                className="text-lg text-gray-600"
+                className="text-lg text-[#5A4A2E]"
               >
                 Submit your rental details for review. Our team will contact you with next steps for tenant screening, 
                 contract coordination, and listing activation.
@@ -172,7 +172,7 @@ const LandlordListForm = () => {
         </section>
 
         {/* What Happens Next */}
-        <section className="py-12 border-t border-gray-800">
+        <section className="py-12 border-t border-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
@@ -198,7 +198,7 @@ const LandlordListForm = () => {
                     <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-gold font-bold text-sm">{index + 1}</span>
                     </div>
-                    <p className="text-gray-600 pt-1">{step}</p>
+                    <p className="text-[#5A4A2E] pt-1">{step}</p>
                   </motion.div>
                 ))}
               </div>
@@ -207,7 +207,7 @@ const LandlordListForm = () => {
         </section>
 
         {/* Form Section */}
-        <section className="py-16 border-t border-gray-800">
+        <section className="py-16 border-t border-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
@@ -234,7 +234,7 @@ const LandlordListForm = () => {
                   <h3 className="text-lg font-semibold text-white">Contact Details</h3>
                   
                   <div>
-                    <Label htmlFor="fullName" className="text-gray-600">Full Name *</Label>
+                    <Label htmlFor="fullName" className="text-[#5A4A2E]">Full Name *</Label>
                     <Input
                       id="fullName"
                       value={formData.fullName}
@@ -245,7 +245,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="phone" className="text-gray-600">Mobile Number (WhatsApp) *</Label>
+                    <Label htmlFor="phone" className="text-[#5A4A2E]">Mobile Number (WhatsApp) *</Label>
                     <Input
                       id="phone"
                       type="tel"
@@ -257,7 +257,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="email" className="text-gray-600">Email</Label>
+                    <Label htmlFor="email" className="text-[#5A4A2E]">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -269,11 +269,11 @@ const LandlordListForm = () => {
                 </div>
 
                 {/* Property Details */}
-                <div className="space-y-4 pt-4 border-t border-gray-700">
+                <div className="space-y-4 pt-4 border-t border-[#1A1A1A]">
                   <h3 className="text-lg font-semibold text-white">Property Details</h3>
                   
                   <div>
-                    <Label htmlFor="propertyType" className="text-gray-600">Property Type *</Label>
+                    <Label htmlFor="propertyType" className="text-[#5A4A2E]">Property Type *</Label>
                     <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select property type" />
@@ -289,7 +289,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="area" className="text-gray-600">Community / Area *</Label>
+                    <Label htmlFor="area" className="text-[#5A4A2E]">Community / Area *</Label>
                     <Input
                       id="area"
                       value={formData.area}
@@ -300,7 +300,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="buildingName" className="text-gray-600">Building / Project Name</Label>
+                    <Label htmlFor="buildingName" className="text-[#5A4A2E]">Building / Project Name</Label>
                     <Input
                       id="buildingName"
                       value={formData.buildingName}
@@ -311,7 +311,7 @@ const LandlordListForm = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="bedrooms" className="text-gray-600">Bedrooms</Label>
+                      <Label htmlFor="bedrooms" className="text-[#5A4A2E]">Bedrooms</Label>
                       <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select" />
@@ -328,7 +328,7 @@ const LandlordListForm = () => {
                     </div>
                     
                     <div>
-                      <Label htmlFor="size" className="text-gray-600">Size (sq ft)</Label>
+                      <Label htmlFor="size" className="text-[#5A4A2E]">Size (sq ft)</Label>
                       <Input
                         id="size"
                         value={formData.size}
@@ -339,7 +339,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="furnishing" className="text-gray-600">Furnishing</Label>
+                    <Label htmlFor="furnishing" className="text-[#5A4A2E]">Furnishing</Label>
                     <Select value={formData.furnishing} onValueChange={(v) => handleChange("furnishing", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select furnishing" />
@@ -354,11 +354,11 @@ const LandlordListForm = () => {
                 </div>
 
                 {/* Rental Details */}
-                <div className="space-y-4 pt-4 border-t border-gray-700">
+                <div className="space-y-4 pt-4 border-t border-[#1A1A1A]">
                   <h3 className="text-lg font-semibold text-white">Rental Details</h3>
                   
                   <div>
-                    <Label htmlFor="desiredRent" className="text-gray-600">Desired Annual Rent (AED)</Label>
+                    <Label htmlFor="desiredRent" className="text-[#5A4A2E]">Desired Annual Rent (AED)</Label>
                     <Input
                       id="desiredRent"
                       value={formData.desiredRent}
@@ -368,7 +368,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="chequePreference" className="text-gray-600">Cheque Preference</Label>
+                    <Label htmlFor="chequePreference" className="text-[#5A4A2E]">Cheque Preference</Label>
                     <Select value={formData.chequePreference} onValueChange={(v) => handleChange("chequePreference", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select cheques" />
@@ -384,7 +384,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="availabilityDate" className="text-gray-600">Availability Date</Label>
+                    <Label htmlFor="availabilityDate" className="text-[#5A4A2E]">Availability Date</Label>
                     <Input
                       id="availabilityDate"
                       type="date"
@@ -394,7 +394,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="notes" className="text-gray-600">Notes (Optional)</Label>
+                    <Label htmlFor="notes" className="text-[#5A4A2E]">Notes (Optional)</Label>
                     <Textarea
                       id="notes"
                       value={formData.notes}
@@ -412,7 +412,7 @@ const LandlordListForm = () => {
                     checked={formData.consentToPrivacy}
                     onCheckedChange={(checked) => handleChange("consentToPrivacy", checked as boolean)}
                   />
-                  <Label htmlFor="consent" className="text-sm text-gray-600 cursor-pointer">
+                  <Label htmlFor="consent" className="text-sm text-[#5A4A2E] cursor-pointer">
                     I agree to the <a href="/privacy" className="text-gold hover:underline">Privacy Policy</a> and 
                     consent to being contacted regarding this rental listing.
                   </Label>
@@ -421,7 +421,7 @@ const LandlordListForm = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-semibold h-12"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold h-12"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Rental Listing"}
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -432,9 +432,9 @@ const LandlordListForm = () => {
         </section>
 
         {/* Footer Notice */}
-        <section className="py-8 border-t border-gray-800">
+        <section className="py-8 border-t border-[#1A1A1A]">
           <div className="container mx-auto px-4">
-            <p className="text-center text-sm text-gray-600 max-w-2xl mx-auto">
+            <p className="text-center text-sm text-[#5A4A2E] max-w-2xl mx-auto">
               All listings are subject to internal review and compliance checks prior to publication.
             </p>
           </div>

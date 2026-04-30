@@ -65,7 +65,7 @@ export function SaleStatusFilter({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -91,7 +91,7 @@ export function SaleStatusFilter({
       <PopoverContent 
         className={cn(
           "w-[240px] p-2",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
         )}
         align="start"
         side="bottom"
@@ -117,17 +117,17 @@ export function SaleStatusFilter({
               >
                 <div className={cn(
                   "w-4 h-4 rounded border flex items-center justify-center",
-                  isDark ? "border-gray-600" : "border-gold/40",
+                  isDark ? "border-[#1A1A1A]" : "border-gold/40",
                   isSelected && "bg-gold border-gold"
                 )}>
-                  {isSelected && <Check className="w-3 h-3 text-black" />}
+                  {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
                 </div>
                 
                 {config && (
                   <div className={cn("w-2.5 h-2.5 rounded-full", config.dotClass)} />
                 )}
                 
-                <span className={isDark ? "text-white" : "text-black"}>
+                <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
                   {option.label}
                 </span>
               </button>
@@ -138,15 +138,15 @@ export function SaleStatusFilter({
         {selectedCount > 0 && (
           <div className={cn(
             "mt-2 pt-2 border-t",
-            isDark ? "border-gray-700" : "border-gold/20"
+            isDark ? "border-[#1A1A1A]" : "border-gold/20"
           )}>
             <button
               onClick={clearAll}
               className={cn(
                 "w-full text-center text-sm py-1.5 rounded transition-colors",
                 isDark 
-                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-black/60 hover:text-black hover:bg-champagne-light"
+                  ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
               )}
             >
               Clear Selection
@@ -187,7 +187,7 @@ export function SaleStatusSelect({
             "justify-between min-w-[140px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -203,7 +203,7 @@ export function SaleStatusSelect({
       <PopoverContent 
         className={cn(
           "w-[200px] p-2",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
         )}
         align="start"
         side="bottom"
@@ -235,7 +235,7 @@ export function SaleStatusSelect({
                 )}
                 {!optConfig && <div className="w-2.5" />}
                 
-                <span className={isDark ? "text-white" : "text-black"}>
+                <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
                   {option.label}
                 </span>
                 

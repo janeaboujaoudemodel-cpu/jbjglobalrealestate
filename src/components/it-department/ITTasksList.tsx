@@ -43,7 +43,7 @@ const TASK_TYPE_CONFIG = {
   equipment_setup: { label: 'Equipment Setup', color: 'bg-green-500' },
   system_update: { label: 'System Update', color: 'bg-cyan-500' },
   security_audit: { label: 'Security Audit', color: 'bg-red-500' },
-  other: { label: 'Other', color: 'bg-gray-500' }
+  other: { label: 'Other', color: 'bg-[#B89555]' }
 };
 
 const STATUS_CONFIG = {
@@ -51,11 +51,11 @@ const STATUS_CONFIG = {
   in_progress: { label: 'In Progress', color: 'bg-blue-500', icon: Play },
   pending_review: { label: 'Pending Review', color: 'bg-purple-500', icon: Clock },
   completed: { label: 'Completed', color: 'bg-green-500', icon: CheckCircle },
-  cancelled: { label: 'Cancelled', color: 'bg-gray-500', icon: X }
+  cancelled: { label: 'Cancelled', color: 'bg-[#B89555]', icon: X }
 };
 
 const PRIORITY_CONFIG = {
-  low: { label: 'Low', color: 'text-gray-600' },
+  low: { label: 'Low', color: 'text-[#5A4A2E]' },
   medium: { label: 'Medium', color: 'text-yellow-600' },
   high: { label: 'High', color: 'text-orange-500' },
   critical: { label: 'Critical', color: 'text-red-500' }
@@ -140,8 +140,8 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-black/60" />
-          <span className="text-black/60 text-sm">Filters:</span>
+          <Filter className="w-4 h-4 text-[#1A1A1A]/60" />
+          <span className="text-[#1A1A1A]/60 text-sm">Filters:</span>
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-40">
@@ -169,10 +169,10 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
 
       {/* Tasks List */}
       {filteredTasks.length === 0 ? (
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="py-12 text-center">
             <FileText className="w-12 h-12 text-gold mx-auto mb-4" />
-            <p className="text-black/60">No tasks found</p>
+            <p className="text-[#1A1A1A]/60">No tasks found</p>
           </CardContent>
         </Card>
       ) : (
@@ -192,7 +192,7 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ delay: index * 0.03 }}
                 >
-                  <Card className="bg-white border-2 border-gold/30 hover:border-gold/50 transition-all">
+                  <Card className="bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold/50 transition-all">
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -201,13 +201,13 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-black">{task.title}</h3>
+                              <h3 className="font-semibold text-[#1A1A1A]">{task.title}</h3>
                               <Badge variant="outline" className={`${priorityConfig?.color} border-current text-xs`}>
                                 {priorityConfig?.label}
                               </Badge>
                             </div>
-                            <p className="text-sm text-black/60 line-clamp-1">{task.description}</p>
-                            <div className="flex items-center gap-4 mt-1 text-xs text-black/40">
+                            <p className="text-sm text-[#1A1A1A]/60 line-clamp-1">{task.description}</p>
+                            <div className="flex items-center gap-4 mt-1 text-xs text-[#1A1A1A]/40">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
                                 {format(new Date(task.created_at), 'MMM d, yyyy')}
@@ -227,11 +227,11 @@ const ITTasksList: React.FC<ITTasksListProps> = ({ searchQuery, onRefresh }) => 
                           
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="text-black/60 hover:text-black">
+                              <Button variant="ghost" size="icon" className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]">
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-white border-2 border-gold/30">
+                            <DropdownMenuContent className="bg-[#FDFBF7] border-2 border-gold/30">
                               {task.status === 'open' && (
                                 <DropdownMenuItem 
                                   className="text-blue-600 hover:bg-gold/10"

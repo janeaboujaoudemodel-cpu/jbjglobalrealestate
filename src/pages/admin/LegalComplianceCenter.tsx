@@ -158,7 +158,7 @@ export default function LegalComplianceCenter() {
           <Button onClick={fetchRecords} variant="outline" size="sm" className="border-gold/30">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          <Button onClick={exportCSV} size="sm" className="bg-gold hover:bg-gold/90 text-black">
+          <Button onClick={exportCSV} size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
             <Download className="w-4 h-4 mr-1" /> Export CSV
           </Button>
         </div>

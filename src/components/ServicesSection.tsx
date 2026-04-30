@@ -146,8 +146,8 @@ const Premium3DIcon = ({ title, gradient }: { title: string; gradient: string })
 
   return (
     <div className="relative w-16 h-16 md:w-20 md:h-20">
-      <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-2xl bg-black/40 blur-sm" />
-      <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-2xl bg-black/20" />
+      <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-2xl bg-[#1A1A1A]/40 blur-sm" />
+      <div className="absolute inset-0 translate-x-0.5 translate-y-0.5 rounded-2xl bg-[#1A1A1A]/20" />
       <div className={`relative w-full h-full rounded-2xl bg-gradient-to-br ${gradient} border border-white/10 flex items-center justify-center overflow-hidden backdrop-blur-sm`}>
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
         <svg viewBox="0 0 40 40" className="w-10 h-10 md:w-12 md:h-12 relative z-10">
@@ -207,7 +207,7 @@ const HelpIcon = ({ title, gradient }: { title: string; gradient: string }) => {
 
   return (
     <div className="relative w-14 h-14 md:w-16 md:h-16">
-      <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-xl bg-black/40 blur-sm" />
+      <div className="absolute inset-0 translate-x-1 translate-y-1 rounded-xl bg-[#1A1A1A]/40 blur-sm" />
       <div className={`relative w-full h-full rounded-xl bg-gradient-to-br ${gradient} border border-white/10 flex items-center justify-center overflow-hidden`}>
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
         <svg viewBox="0 0 40 40" className="w-8 h-8 md:w-10 md:h-10 relative z-10">
@@ -262,7 +262,7 @@ const ServicesSection = () => {
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/80" />
+        <div className="absolute inset-0 bg-[#1A1A1A]/80" />
         {/* Gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       </div>
@@ -271,13 +271,13 @@ const ServicesSection = () => {
       <div className="absolute top-6 right-6 flex gap-2 z-20">
         <button
           onClick={togglePlay}
-          className="w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
+          className="w-10 h-10 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
           aria-label={isVideoPlaying ? "Pause video" : "Play video"}
         >
           {isVideoPlaying ? (
             <div className="flex gap-1">
-              <div className="w-1 h-4 bg-white rounded-full" />
-              <div className="w-1 h-4 bg-white rounded-full" />
+              <div className="w-1 h-4 bg-[#FDFBF7] rounded-full" />
+              <div className="w-1 h-4 bg-[#FDFBF7] rounded-full" />
             </div>
           ) : (
             <Play className="w-4 h-4 text-white ml-0.5" />
@@ -285,7 +285,7 @@ const ServicesSection = () => {
         </button>
         <button
           onClick={toggleMute}
-          className="w-10 h-10 bg-black/50 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
+          className="w-10 h-10 bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-colors"
           aria-label={isMuted ? "Unmute video" : "Mute video"}
         >
           {isMuted ? (
@@ -329,7 +329,7 @@ const ServicesSection = () => {
               to={item.href}
               className="group relative"
             >
-              <div className="relative bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
+              <div className="relative bg-[#1A1A1A]/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
                 
                 <div className="relative z-10">
@@ -382,7 +382,7 @@ const ServicesSection = () => {
               rel="noopener noreferrer"
               className="group relative"
             >
-              <div className="relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
+              <div className="relative bg-[#1A1A1A]/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 h-full transition-all duration-500 group-hover:border-gold/40 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-gold/10 overflow-hidden">
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 

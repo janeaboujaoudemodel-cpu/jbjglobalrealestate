@@ -108,7 +108,7 @@ const LeadStatusBadge = ({
         sizeClasses[size],
         isNew 
           ? "bg-blue-500/15 text-blue-700 border border-blue-400/20" 
-          : cn(statusInfo.bgColor, "text-black/80", "border border-current/10"),
+          : cn(statusInfo.bgColor, "text-[#1A1A1A]/80", "border border-current/10"),
         onClick && "hover:scale-105 hover:shadow-md cursor-pointer group",
         !onClick && "cursor-default",
         className

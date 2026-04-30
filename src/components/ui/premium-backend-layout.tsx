@@ -12,7 +12,7 @@ import { LucideIcon, Sparkles, TrendingUp, TrendingDown, Minus, Command, Search 
 type SectionVariant = 'white' | 'champagne' | 'cream' | 'ivory' | 'pearl';
 
 const sectionVariants: Record<SectionVariant, string> = {
-  white: 'bg-white',
+  white: 'bg-[#FDFBF7]',
   champagne: 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
   cream: 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]',
   ivory: 'bg-gradient-to-r from-[#FFFEF9] to-[#FBF9F3]',
@@ -87,10 +87,10 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
   onClick
 }) => {
   const variants = {
-    default: 'bg-white border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.08)]',
-    elevated: 'bg-white border-2 border-gold/20 shadow-lg shadow-gold/10',
+    default: 'bg-[#FDFBF7] border-2 border-gold/20 shadow-[0_4px_20px_rgba(200,167,102,0.08)]',
+    elevated: 'bg-[#FDFBF7] border-2 border-gold/20 shadow-lg shadow-gold/10',
     outlined: 'bg-transparent border-2 border-gold/30',
-    glass: 'bg-white/90 backdrop-blur-xl border border-gold/20',
+    glass: 'bg-[#FDFBF7]/90 backdrop-blur-xl border border-gold/20',
     stat: 'bg-gradient-to-br from-white to-[#FDFBF7] border-2 border-gold/25 shadow-[0_4px_20px_rgba(200,167,102,0.1)]',
   };
 
@@ -197,15 +197,15 @@ export const PremiumStatCard: React.FC<PremiumStatCardProps> = ({
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+          <p className="text-sm font-medium text-[#5A4A2E] mb-1">{title}</p>
           <p className={cn('text-3xl font-bold', colors.text)}>{value}</p>
           {subtitle && (
-            <p className="text-xs text-gray-600 mt-1">{subtitle}</p>
+            <p className="text-xs text-[#5A4A2E] mt-1">{subtitle}</p>
           )}
           {trend && trendValue && (
             <div className={cn(
               'flex items-center gap-1 mt-2 text-xs font-medium',
-              trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-500' : 'text-gray-600'
+              trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-500' : 'text-[#5A4A2E]'
             )}>
               <TrendIcon className="w-3 h-3" />
               <span>{trendValue}</span>
@@ -252,7 +252,7 @@ export const PremiumHeading: React.FC<PremiumHeadingProps> = ({
     <Tag className={cn(
       sizes[level],
       'tracking-tight',
-      accent ? 'text-gold' : 'text-black',
+      accent ? 'text-gold' : 'text-[#1A1A1A]',
       className
     )}>
       {children}
@@ -273,8 +273,8 @@ export const PremiumText: React.FC<PremiumTextProps> = ({
   variant = 'default'
 }) => {
   const variants = {
-    default: 'text-black',
-    muted: 'text-gray-600',
+    default: 'text-[#1A1A1A]',
+    muted: 'text-[#5A4A2E]',
     gold: 'text-gold font-medium',
     label: 'text-xs uppercase tracking-wider text-gold font-semibold',
   };
@@ -307,7 +307,7 @@ export const PremiumStat: React.FC<PremiumStatProps> = ({
   const changeColors = {
     positive: 'text-emerald-600',
     negative: 'text-red-500',
-    neutral: 'text-gray-600',
+    neutral: 'text-[#5A4A2E]',
   };
 
   return (
@@ -315,7 +315,7 @@ export const PremiumStat: React.FC<PremiumStatProps> = ({
       <div className="flex items-start justify-between">
         <div>
           <PremiumText variant="label">{label}</PremiumText>
-          <p className="text-3xl font-bold text-black mt-2">{value}</p>
+          <p className="text-3xl font-bold text-[#1A1A1A] mt-2">{value}</p>
           {change && (
             <p className={cn('text-sm mt-1', changeColors[changeType])}>
               {change}
@@ -350,7 +350,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
   className
 }) => {
   const variants = {
-    default: 'bg-gray-100 text-gray-700 border-gray-200',
+    default: 'bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30',
     gold: 'bg-gradient-to-r from-gold/20 to-gold/10 text-gold border-gold/30',
     success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -392,9 +392,9 @@ export const PremiumDivider: React.FC<PremiumDividerProps> = ({
   if (label) {
     return (
       <div className={cn('flex items-center gap-4', className)}>
-        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200')} />
+        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-[#EFE6D6]')} />
         <span className="text-xs uppercase tracking-wider text-gold font-medium">{label}</span>
-        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200')} />
+        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-[#EFE6D6]')} />
       </div>
     );
   }
@@ -402,7 +402,7 @@ export const PremiumDivider: React.FC<PremiumDividerProps> = ({
   return (
     <div className={cn(
       'h-px',
-      gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200',
+      gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-[#EFE6D6]',
       className
     )} />
   );
@@ -516,9 +516,9 @@ export const QuickActionButton: React.FC<QuickActionButtonProps> = ({
   className
 }) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-gold to-gold/80 text-black hover:brightness-110 shadow-lg shadow-gold/20 border-0',
-    secondary: 'bg-white border-2 border-gold/30 text-black hover:border-gold/50 hover:bg-gold/5',
-    ghost: 'bg-transparent text-gray-600 hover:text-gold hover:bg-gold/10 border-0',
+    primary: 'bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] hover:brightness-110 shadow-lg shadow-gold/20 border-0',
+    secondary: 'bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] hover:border-gold/50 hover:bg-gold/5',
+    ghost: 'bg-transparent text-[#5A4A2E] hover:text-gold hover:bg-gold/10 border-0',
   };
 
   const sizes = {
@@ -569,7 +569,7 @@ export const PremiumPageHeader: React.FC<PremiumPageHeaderProps> = ({
 }) => {
   return (
     <header className={cn(
-      'sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gold/15',
+      'sticky top-0 z-40 bg-[#FDFBF7]/95 backdrop-blur-xl border-b border-gold/15',
       className
     )}>
       <div className="px-6 py-4">
@@ -582,13 +582,13 @@ export const PremiumPageHeader: React.FC<PremiumPageHeaderProps> = ({
             )}
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-black">{title}</h1>
+                <h1 className="text-2xl font-bold text-[#1A1A1A]">{title}</h1>
                 {badge && (
                   <PremiumBadge variant="gold" glow>{badge}</PremiumBadge>
                 )}
               </div>
               {subtitle && (
-                <p className="text-sm text-gray-600 mt-0.5">{subtitle}</p>
+                <p className="text-sm text-[#5A4A2E] mt-0.5">{subtitle}</p>
               )}
             </div>
           </div>
@@ -628,9 +628,9 @@ export const PremiumSectionHeader: React.FC<PremiumSectionHeaderProps> = ({
           </div>
         )}
         <div>
-          <h2 className="text-xl font-bold text-black">{title}</h2>
+          <h2 className="text-xl font-bold text-[#1A1A1A]">{title}</h2>
           {subtitle && (
-            <p className="text-sm text-gray-600">{subtitle}</p>
+            <p className="text-sm text-[#5A4A2E]">{subtitle}</p>
           )}
         </div>
       </div>
@@ -657,7 +657,7 @@ export const PremiumSearchBox: React.FC<PremiumSearchBoxProps> = ({
 }) => {
   return (
     <div className={cn('relative', className)}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
       <input
         type="text"
         value={value}
@@ -665,14 +665,14 @@ export const PremiumSearchBox: React.FC<PremiumSearchBoxProps> = ({
         placeholder={placeholder}
         className={cn(
           'w-full pl-10 pr-12 py-2.5 rounded-xl',
-          'bg-white border-2 border-gold/20',
-          'text-black placeholder:text-gray-600',
+          'bg-[#FDFBF7] border-2 border-gold/20',
+          'text-[#1A1A1A] placeholder:text-[#5A4A2E]',
           'focus:outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/10',
           'transition-all duration-200'
         )}
       />
       {showCommand && (
-        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-gray-100 rounded text-xs font-medium text-gray-600">
+        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-[#F7F2EA] rounded text-xs font-medium text-[#5A4A2E]">
           <Command className="w-3 h-3" />K
         </kbd>
       )}

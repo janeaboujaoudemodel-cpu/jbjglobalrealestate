@@ -140,15 +140,15 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
   return (
     <div className="space-y-6">
       {/* Test Header */}
-      <Card className="bg-gray-50 border-gray-200">
+      <Card className="bg-[#F7F2EA] border-[#B89555]/30">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-gray-800">
+          <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <FlaskConical className="w-5 h-5" />
             Sarah Extraction Test
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-[#5A4A2E] mb-4">
             Paste a project URL. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
           </p>
           
@@ -157,13 +157,13 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
               value={testUrl}
               onChange={(e) => setTestUrl(e.target.value)}
               placeholder="Enter project URL to test..."
-              className="flex-1 bg-white"
+              className="flex-1 bg-[#FDFBF7]"
             />
             <div className="flex gap-2">
               <Button
                 onClick={() => runTest()}
                 disabled={isLoading}
-                className="bg-zinc-900 hover:bg-gray-800 text-white"
+                className="bg-zinc-900 hover:bg-[#1A1A1A] text-white"
               >
                 {isLoading ? (
                   <>
@@ -195,14 +195,14 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
           
           {/* Suggested URLs */}
           <div className="flex flex-wrap gap-1.5">
-            <span className="text-xs text-gray-600">Quick test:</span>
+            <span className="text-xs text-[#5A4A2E]">Quick test:</span>
             {suggestedUrls.map((url, i) => {
               const name = url.split('/').filter(Boolean).pop()?.replace(/-/g, ' ');
               return (
                 <button
                   key={i}
                   onClick={() => setTestUrl(url)}
-                  className="text-xs px-2 py-0.5 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 capitalize"
+                  className="text-xs px-2 py-0.5 rounded bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#5A4A2E] capitalize"
                 >
                   {name}
                 </button>
@@ -239,10 +239,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                 
                 <div className="flex items-center gap-4">
                   <div className="text-right text-sm">
-                    <div className="text-gray-600">API Calls: {testResult.apiCallsMade}</div>
-                    <div className="text-gray-600">Cost: {testResult.totalApiCost}</div>
+                    <div className="text-[#5A4A2E]">API Calls: {testResult.apiCallsMade}</div>
+                    <div className="text-[#5A4A2E]">Cost: {testResult.totalApiCost}</div>
                     {testResult.duration_ms && (
-                      <div className="text-gray-600">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
+                      <div className="text-[#5A4A2E]">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
                     )}
                   </div>
                   
@@ -289,21 +289,21 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Extracted Project Data */}
           {testResult.project && (
-            <Card className="border-gray-200">
+            <Card className="border-[#B89555]/30">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
-                  <Sparkles className="w-5 h-5 text-gray-600" />
+                <CardTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
+                  <Sparkles className="w-5 h-5 text-[#5A4A2E]" />
                   Extracted Project Data
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between text-sm mb-4">
-                  <span className="text-gray-600">Provenance (source)</span>
+                  <span className="text-[#5A4A2E]">Provenance (source)</span>
                   <a
                     href={testUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-gray-700 hover:underline"
+                    className="inline-flex items-center gap-1 text-[#5A4A2E] hover:underline"
                   >
                     Open source page
                     <ExternalLink className="w-4 h-4" />
@@ -312,23 +312,23 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Name</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Name</div>
                     <div className="font-medium">{testResult.project.name}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Developer</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Developer</div>
                     <div className="font-medium">{testResult.project.developer}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Location</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Location</div>
                     <div className="font-medium">{testResult.project.location}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Price From</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Price From</div>
                     <div className="font-medium text-emerald-600">{formatPrice(testResult.project.price_from)}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Bedrooms</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Bedrooms</div>
                     <div className="font-medium">
                       {testResult.project.bedrooms_min 
                         ? `${testResult.project.bedrooms_min}${testResult.project.bedrooms_max && testResult.project.bedrooms_max !== testResult.project.bedrooms_min ? `-${testResult.project.bedrooms_max}` : ''} BR`
@@ -336,31 +336,31 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Handover</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Handover</div>
                     <div className="font-medium">{testResult.project.handover_date || 'N/A'}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Status</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Status</div>
                     <Badge variant="outline" className="bg-blue-50 text-blue-700">
                       {testResult.project.status}
                     </Badge>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Label</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Label</div>
                     <Badge variant="outline" className="bg-purple-50 text-purple-700">
                       {testResult.project.status_label || 'None'}
                     </Badge>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-600 uppercase">Property Type</div>
+                    <div className="text-xs text-[#5A4A2E] uppercase">Property Type</div>
                     <div className="font-medium">{testResult.project.property_type || 'N/A'}</div>
                   </div>
                 </div>
                 
                 {testResult.project.description && (
                   <div className="mt-4 pt-4 border-t">
-                    <div className="text-xs text-gray-600 uppercase mb-1">Description</div>
-                    <p className="text-sm text-gray-700 line-clamp-3">
+                    <div className="text-xs text-[#5A4A2E] uppercase mb-1">Description</div>
+                    <p className="text-sm text-[#5A4A2E] line-clamp-3">
                       {testResult.project.description}
                     </p>
                   </div>
@@ -371,10 +371,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Extracted Images */}
           {testResult.images.length > 0 && (
-            <Card className="border-gray-200">
+            <Card className="border-[#B89555]/30">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
-                  <Image className="w-5 h-5 text-gray-600" />
+                <CardTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
+                  <Image className="w-5 h-5 text-[#5A4A2E]" />
                   Extracted Images ({testResult.images.length})
                 </CardTitle>
               </CardHeader>
@@ -392,19 +392,19 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                         <img
                           src={url}
                           alt={`Project image ${i + 1}`}
-                          className="w-32 h-24 object-cover rounded-lg border border-gray-200 hover:border-gray-400 transition-colors"
+                          className="w-32 h-24 object-cover rounded-lg border border-[#B89555]/30 hover:border-[#B89555]/30 transition-colors"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
                           }}
                         />
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <div className="absolute inset-0 bg-[#1A1A1A]/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                           <ExternalLink className="w-5 h-5 text-white" />
                         </div>
                       </a>
                     ))}
                     {testResult.images.length > 10 && (
-                      <div className="flex-shrink-0 w-32 h-24 rounded-lg border border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
-                        <span className="text-sm text-gray-600">+{testResult.images.length - 10} more</span>
+                      <div className="flex-shrink-0 w-32 h-24 rounded-lg border border-dashed border-[#B89555]/30 flex items-center justify-center bg-[#F7F2EA]">
+                        <span className="text-sm text-[#5A4A2E]">+{testResult.images.length - 10} more</span>
                       </div>
                     )}
                   </div>
@@ -414,21 +414,21 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
           )}
 
           {/* Extracted Documents */}
-          <Card className="border-gray-200">
+          <Card className="border-[#B89555]/30">
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
-                <FileText className="w-5 h-5 text-gray-600" />
+              <CardTitle className="flex items-center gap-2 text-[#1A1A1A] text-base">
+                <FileText className="w-5 h-5 text-[#5A4A2E]" />
                 Extracted Documents
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.brochure ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-gray-600" />
+                      <XCircle className="w-5 h-5 text-[#5A4A2E]" />
                     )}
                     <span className="font-medium">Brochure</span>
                   </div>
@@ -445,12 +445,12 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.paymentPlan ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-gray-600" />
+                      <XCircle className="w-5 h-5 text-[#5A4A2E]" />
                     )}
                     <span className="font-medium">Payment Plan</span>
                   </div>
@@ -467,12 +467,12 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-[#F7F2EA] border-[#B89555]/30'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.floorPlans.length > 0 ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-gray-600" />
+                      <XCircle className="w-5 h-5 text-[#5A4A2E]" />
                     )}
                     <span className="font-medium">Floor Plans ({testResult.documents.floorPlans.length})</span>
                   </div>
@@ -499,9 +499,9 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Next step helper */}
           {(onRunPageOneTest || onGoToFullSync) && (
-            <Card className="border-gray-200 bg-white">
+            <Card className="border-[#B89555]/30 bg-[#FDFBF7]">
               <CardContent className="py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <div className="text-sm text-gray-700">
+                <div className="text-sm text-[#5A4A2E]">
                   Next step: run <strong>Test Page 1 Only</strong> to write real extracted projects into the approval queue.
                 </div>
                 <div className="flex gap-2">

@@ -74,23 +74,23 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-white py-10 md:py-14">
+    <section className="bg-[#FDFBF7] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white">
+        <div className="rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7]">
           {/* Header Section */}
-          <div className="bg-gray-50 p-6 md:p-8 border-b border-gray-200">
+          <div className="bg-[#F7F2EA] p-6 md:p-8 border-b border-[#B89555]/30">
             <div className="flex items-center gap-3 mb-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-300 text-black text-xs uppercase tracking-[0.2em]">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A] text-xs uppercase tracking-[0.2em]">
                 <Sparkles className="w-3 h-3" />
                 Free Professional Tools
               </div>
             </div>
             
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-2">
               JBJ Royal Tools Hub
             </h2>
             
-            <p className="text-sm text-gray-500 text-sm md:text-base max-w-2xl">
+            <p className="text-sm text-[#8A7556] text-sm md:text-base max-w-2xl">
               Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
             </p>
           </div>
@@ -105,24 +105,24 @@ export function ToolkitShowcaseCard() {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <Link to={tool.href} className="group block h-full">
-                    <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 hover:border-gray-400 p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                    <div className="h-full flex flex-col bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                       {/* Icon */}
-                      <div className="w-12 h-12 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <tool.icon className="w-6 h-6 text-gray-800" />
+                      <div className="w-12 h-12 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <tool.icon className="w-6 h-6 text-[#1A1A1A]" />
                       </div>
 
                       {/* Title */}
-                      <h4 className="text-base font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">
+                      <h4 className="text-base font-bold text-[#1A1A1A] mb-2 group-hover:text-[#5A4A2E] transition-colors">
                         {tool.name}
                       </h4>
 
                       {/* Description */}
-                      <p className="text-sm text-gray-500 mb-4 leading-relaxed flex-grow">
+                      <p className="text-sm text-[#8A7556] mb-4 leading-relaxed flex-grow">
                         {tool.description}
                       </p>
 
                       {/* CTA */}
-                      <Button size="sm" className="mt-auto w-full justify-center bg-black hover:bg-gray-800 text-white font-semibold border-0 text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden">
+                      <Button size="sm" className="mt-auto w-full justify-center bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white font-semibold border-0 text-[10px] sm:text-sm px-1.5 sm:px-3 whitespace-nowrap overflow-hidden">
                         <span className="truncate">{tool.cta}</span>
                         <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-2 flex-shrink-0" />
                       </Button>
@@ -137,7 +137,7 @@ export function ToolkitShowcaseCard() {
               <Link to="/ai-hub">
                 <Button 
                   size="lg" 
-                  className="gap-3 px-10 py-6 text-base font-bold bg-black hover:bg-gray-800 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="gap-3 px-10 py-6 text-base font-bold bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <Crown className="w-5 h-5" />
                   Explore All Our Tools Now

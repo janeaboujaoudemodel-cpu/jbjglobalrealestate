@@ -251,7 +251,7 @@ export function MediaLibraryPanel({
                   }}
                   className={
                     stockCategory === cat.id
-                      ? 'bg-amber-500 text-black hover:bg-amber-400 h-7 text-xs font-semibold border border-amber-500'
+                      ? 'bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 h-7 text-xs font-semibold border border-amber-500'
                       : 'bg-slate-700 text-slate-200 hover:text-white hover:bg-slate-600 h-7 text-xs border border-slate-600'
                   }
                 >
@@ -305,7 +305,7 @@ export function MediaLibraryPanel({
                 />
                 <Button 
                   size="sm" 
-                  className="w-full bg-amber-500 text-black hover:bg-amber-400 font-semibold"
+                  className="w-full bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 font-semibold"
                   onClick={handleGenerateScene}
                   disabled={isGeneratingScene}
                 >
@@ -326,7 +326,7 @@ export function MediaLibraryPanel({
                 </p>
                 <Button 
                   size="sm" 
-                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
+                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 border border-gold"
                   onClick={() => toast.info('Open the Voice Suite from the Toolkit to create professional voiceovers with AI!')}
                 >
                   <Plus className="w-4 h-4 mr-2" />
@@ -348,7 +348,7 @@ export function MediaLibraryPanel({
                 />
                 <Button 
                   size="sm" 
-                  className="w-full bg-gold text-black hover:bg-gold/90 border border-gold"
+                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 border border-gold"
                   onClick={() => toast.info('AI SFX command coming soon! Browse the Stock tab for available sound effects.')}
                 >
                   <Wand2 className="w-4 h-4 mr-2" />
@@ -380,7 +380,7 @@ export function MediaLibraryPanel({
 
       {/* Preview Modal */}
       {previewAsset && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewAsset(null)}>
+        <div className="fixed inset-0 bg-[#1A1A1A]/80 z-50 flex items-center justify-center p-4" onClick={() => setPreviewAsset(null)}>
           <div className="bg-slate-900 rounded-lg max-w-2xl w-full p-4" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">{previewAsset.name}</h3>
@@ -402,7 +402,7 @@ export function MediaLibraryPanel({
                 Cancel
               </Button>
               <Button 
-                className="bg-gold text-black hover:bg-gold/90"
+                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
                 onClick={() => {
                   onAddToTimeline(previewAsset);
                   setPreviewAsset(null);
@@ -463,7 +463,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
         
         {/* Duration Badge */}
         {asset.duration && (
-          <span className="absolute bottom-8 right-1 bg-black/70 text-white text-xs px-1 rounded">
+          <span className="absolute bottom-8 right-1 bg-[#1A1A1A]/70 text-white text-xs px-1 rounded">
             {formatDuration(asset.duration)}
           </span>
         )}
@@ -475,10 +475,10 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
       </div>
 
       {/* Actions Overlay */}
-      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+      <div className="absolute inset-0 bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
         <Button
           size="sm"
-          className="bg-gold text-black hover:bg-gold/90 h-7 text-xs"
+          className="bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs"
           onClick={onAdd}
         >
           <Plus className="w-3 h-3 mr-1" />

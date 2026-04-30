@@ -72,12 +72,12 @@ const DesignFavoriteButton = ({
           >
             <Heart
               className={`${iconSizes[size]} transition-all duration-200 ${
-                isFavorite ? "fill-red-500 text-red-500" : "text-black hover:text-red-500"
+                isFavorite ? "fill-red-500 text-red-500" : "text-[#1A1A1A] hover:text-red-500"
               }`}
             />
           </button>
         </TooltipTrigger>
-        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
+        <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-gold/30 text-xs">
           <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p>
         </TooltipContent>
       </Tooltip>
@@ -95,13 +95,13 @@ const DesignFavoriteButton = ({
               }`}
             >
               {isShortlisted ? (
-                <Check className={`${iconSizes[size]} text-black`} />
+                <Check className={`${iconSizes[size]} text-[#1A1A1A]`} />
               ) : (
-                <ListPlus className={`${iconSizes[size]} text-black`} />
+                <ListPlus className={`${iconSizes[size]} text-[#1A1A1A]`} />
               )}
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-black/90 text-white border-gold/30 text-xs">
+          <TooltipContent side="bottom" sideOffset={8} className="z-[10100] bg-[#1A1A1A]/90 text-white border-gold/30 text-xs">
             <p>{isShortlisted ? "Remove from shortlist" : "Add to shortlist"}</p>
           </TooltipContent>
         </Tooltip>

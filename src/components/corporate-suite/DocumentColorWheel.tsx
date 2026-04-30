@@ -90,7 +90,7 @@ export default function DocumentColorWheel({ colors, onChange, isOwner }: Props)
   const presets = isOwner ? [...OWNER_PALETTE, ...PRESETS] : PRESETS;
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+    <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Palette size={12} className="text-[hsl(var(--gold))]" />
@@ -119,7 +119,7 @@ export default function DocumentColorWheel({ colors, onChange, isOwner }: Props)
               }`}
             >
               <div
-                className="w-6 h-6 rounded-full border border-black/10"
+                className="w-6 h-6 rounded-full border border-[#1A1A1A]/10"
                 style={{ background: p.accent }}
               />
               <span className="text-[8px] text-[hsl(var(--muted-foreground))] leading-none">{p.label}</span>
@@ -173,7 +173,7 @@ export default function DocumentColorWheel({ colors, onChange, isOwner }: Props)
               }}
               className={`w-8 h-4 rounded-full transition-colors ${ombreEnabled ? "bg-[hsl(var(--gold))]" : "bg-[hsl(var(--muted))]"}`}
             >
-              <div className={`w-3 h-3 rounded-full bg-white shadow transition-transform ${ombreEnabled ? "translate-x-4" : "translate-x-0.5"}`} />
+              <div className={`w-3 h-3 rounded-full bg-[#FDFBF7] shadow transition-transform ${ombreEnabled ? "translate-x-4" : "translate-x-0.5"}`} />
             </button>
           </div>
           {ombreEnabled && (
@@ -189,7 +189,7 @@ export default function DocumentColorWheel({ colors, onChange, isOwner }: Props)
           {/* Preview swatch */}
           <div className="flex items-center gap-2">
             <div
-              className="w-8 h-8 rounded-lg border border-black/10"
+              className="w-8 h-8 rounded-lg border border-[#1A1A1A]/10"
               style={{
                 background: ombreEnabled
                   ? `linear-gradient(135deg, ${hslToHex(hue, sat, lit)}, ${hslToHex(ombreHue, sat, Math.min(lit + 15, 95))})`

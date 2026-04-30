@@ -197,7 +197,7 @@ export default function JBJBrokerReports() {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate("/jbj-broker-admin")}
-                className="text-black hover:bg-gold/20"
+                className="text-[#1A1A1A] hover:bg-gold/20"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
@@ -207,10 +207,10 @@ export default function JBJBrokerReports() {
                   <BarChart3 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-black tracking-wide">
+                  <h1 className="text-xl font-bold text-[#1A1A1A] tracking-wide">
                     Performance Reports
                   </h1>
-                  <p className="text-black/70 text-sm">
+                  <p className="text-[#1A1A1A]/70 text-sm">
                     Analytics and insights for broker activities
                   </p>
                 </div>
@@ -227,8 +227,8 @@ export default function JBJBrokerReports() {
                     onClick={() => setDateRange(range as any)}
                     className={
                       dateRange === range
-                        ? "bg-gold text-black hover:bg-gold/90"
-                        : "text-black hover:bg-gold/20"
+                        ? "bg-gold text-[#1A1A1A] hover:bg-gold/90"
+                        : "text-[#1A1A1A] hover:bg-gold/20"
                     }
                   >
                     {range.charAt(0).toUpperCase() + range.slice(1)}
@@ -256,11 +256,11 @@ export default function JBJBrokerReports() {
                   <Users className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-sm">Total Leads</p>
-                  <p className="text-3xl font-bold text-black">
+                  <p className="text-[#1A1A1A]/60 text-sm">Total Leads</p>
+                  <p className="text-3xl font-bold text-[#1A1A1A]">
                     {metrics.totalLeads}
                   </p>
-                  <p className="text-xs text-black/50">
+                  <p className="text-xs text-[#1A1A1A]/50">
                     {metrics.contactedLeads} contacted
                   </p>
                 </div>
@@ -273,8 +273,8 @@ export default function JBJBrokerReports() {
                   <Target className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-sm">Conversion Rate</p>
-                  <p className="text-3xl font-bold text-black">
+                  <p className="text-[#1A1A1A]/60 text-sm">Conversion Rate</p>
+                  <p className="text-3xl font-bold text-[#1A1A1A]">
                     {metrics.conversionRate}%
                   </p>
                   <p className="text-xs text-gold flex items-center">
@@ -291,11 +291,11 @@ export default function JBJBrokerReports() {
                   <Clock className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-sm">Avg Response Time</p>
-                  <p className="text-3xl font-bold text-black">
+                  <p className="text-[#1A1A1A]/60 text-sm">Avg Response Time</p>
+                  <p className="text-3xl font-bold text-[#1A1A1A]">
                     {metrics.avgResponseTime}m
                   </p>
-                  <p className="text-xs text-black/50">Minutes to first reply</p>
+                  <p className="text-xs text-[#1A1A1A]/50">Minutes to first reply</p>
                 </div>
               </div>
             </div>
@@ -306,11 +306,11 @@ export default function JBJBrokerReports() {
                   <Activity className="h-6 w-6" />
                 </div>
                 <div>
-                  <p className="text-black/60 text-sm">Total Activities</p>
-                  <p className="text-3xl font-bold text-black">
+                  <p className="text-[#1A1A1A]/60 text-sm">Total Activities</p>
+                  <p className="text-3xl font-bold text-[#1A1A1A]">
                     {metrics.messagesSent + metrics.callsMade + metrics.emailsSent}
                   </p>
-                  <p className="text-xs text-black/50">
+                  <p className="text-xs text-[#1A1A1A]/50">
                     This {dateRange}
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export default function JBJBrokerReports() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Daily Activity Chart */}
             <div className="lg:col-span-2 jj-card-inner">
-              <h3 className="text-lg font-semibold text-black mb-4">Daily Activity</h3>
+              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Daily Activity</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={dailyActivity}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#D8C7A6" />
@@ -344,7 +344,7 @@ export default function JBJBrokerReports() {
 
             {/* Lead Status Pie Chart */}
             <div className="jj-card-inner">
-              <h3 className="text-lg font-semibold text-black mb-4">Lead Distribution</h3>
+              <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4">Lead Distribution</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -377,12 +377,12 @@ export default function JBJBrokerReports() {
                   <div className="p-2 rounded-lg bg-emerald-500/20">
                     <MessageSquare className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <span className="font-medium text-black">WhatsApp Messages</span>
+                  <span className="font-medium text-[#1A1A1A]">WhatsApp Messages</span>
                 </div>
                 <Badge className="bg-emerald-500/20 text-emerald-700 border-emerald-500/30">Active</Badge>
               </div>
-              <p className="text-4xl font-bold text-black">{metrics.messagesSent}</p>
-              <p className="text-sm text-black/60 mt-1">
+              <p className="text-4xl font-bold text-[#1A1A1A]">{metrics.messagesSent}</p>
+              <p className="text-sm text-[#1A1A1A]/60 mt-1">
                 Sent this {dateRange}
               </p>
             </div>
@@ -393,12 +393,12 @@ export default function JBJBrokerReports() {
                   <div className="p-2 rounded-lg bg-purple-500/20">
                     <Phone className="h-5 w-5 text-purple-600" />
                   </div>
-                  <span className="font-medium text-black">Phone Calls</span>
+                  <span className="font-medium text-[#1A1A1A]">Phone Calls</span>
                 </div>
                 <Badge className="bg-purple-500/20 text-purple-700 border-purple-500/30">Active</Badge>
               </div>
-              <p className="text-4xl font-bold text-black">{metrics.callsMade}</p>
-              <p className="text-sm text-black/60 mt-1">
+              <p className="text-4xl font-bold text-[#1A1A1A]">{metrics.callsMade}</p>
+              <p className="text-sm text-[#1A1A1A]/60 mt-1">
                 Made this {dateRange}
               </p>
             </div>
@@ -409,12 +409,12 @@ export default function JBJBrokerReports() {
                   <div className="p-2 rounded-lg bg-blue-500/20">
                     <Mail className="h-5 w-5 text-blue-600" />
                   </div>
-                  <span className="font-medium text-black">Emails</span>
+                  <span className="font-medium text-[#1A1A1A]">Emails</span>
                 </div>
                 <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Active</Badge>
               </div>
-              <p className="text-4xl font-bold text-black">{metrics.emailsSent}</p>
-              <p className="text-sm text-black/60 mt-1">
+              <p className="text-4xl font-bold text-[#1A1A1A]">{metrics.emailsSent}</p>
+              <p className="text-sm text-[#1A1A1A]/60 mt-1">
                 Sent this {dateRange}
               </p>
             </div>

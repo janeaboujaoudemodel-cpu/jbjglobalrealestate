@@ -829,7 +829,7 @@ export default function CVResumeBuilder() {
     <div className="min-h-screen" style={{ background: "hsl(var(--pearl-1,48 30% 97%))" }}>
 
       {/* ── Sticky Header ──────────────────────────────────────── */}
-      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
+      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={() => navigate("/toolkit/corporate-suite")}
@@ -864,7 +864,7 @@ export default function CVResumeBuilder() {
                 <ChevronDown size={11} />
               </Button>
               {exportMenuOpen && (
-                <div className="absolute right-0 top-full mt-1 bg-white border border-[hsl(var(--border))] rounded-xl shadow-lg p-1 min-w-[140px] z-50">
+                <div className="absolute right-0 top-full mt-1 bg-[#FDFBF7] border border-[hsl(var(--border))] rounded-xl shadow-lg p-1 min-w-[140px] z-50">
                   {[
                     { label: "Export PDF",  format: "pdf"  as const, Icon: FileText },
                     { label: "Export PNG",  format: "png"  as const, Icon: FileImage },
@@ -888,7 +888,7 @@ export default function CVResumeBuilder() {
         <div className="space-y-4">
 
           {/* Quick Photo Upload — prominent position */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm p-4">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm p-4">
             <div className="flex items-center gap-2 mb-3">
               <Camera size={13} className="text-[hsl(var(--gold))]" />
               <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Profile Photo</span>
@@ -910,7 +910,7 @@ export default function CVResumeBuilder() {
 
           {/* Brand Assets */}
           <Collapsible open={brandAssetOpen} onOpenChange={setBrandAssetOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -946,7 +946,7 @@ export default function CVResumeBuilder() {
 
           {/* Typography */}
           <Collapsible open={typoOpen} onOpenChange={setTypoOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -1035,7 +1035,7 @@ export default function CVResumeBuilder() {
 
           {/* QR Code */}
           <Collapsible open={cvQrOpen} onOpenChange={setCvQrOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -1080,7 +1080,7 @@ export default function CVResumeBuilder() {
 
           {/* Accent Color */}
           <Collapsible open={accentOpen} onOpenChange={setAccentOpen}>
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
               <CollapsibleTrigger asChild>
                 <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
                   <div className="flex items-center gap-2">
@@ -1150,7 +1150,7 @@ export default function CVResumeBuilder() {
           </Collapsible>
 
           {/* Template picker */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-2 block">
               Template — {TEMPLATES.length} styles
             </Label>
@@ -1191,7 +1191,7 @@ export default function CVResumeBuilder() {
           </div>
 
           {/* Section tabs */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
             <div className="border-b border-[hsl(var(--border))] flex overflow-x-auto">
               {SECTIONS.map(s => {
                 const Icon = s.icon;
@@ -1390,7 +1390,7 @@ export default function CVResumeBuilder() {
 
           {/* A4 aspect ratio container for full-page preview */}
           <div className="relative w-full" style={{ aspectRatio: '210 / 297' }}>
-            <div ref={previewContainerRef} className="absolute inset-0 overflow-hidden rounded-xl border border-[hsl(var(--border))] shadow-lg bg-white">
+            <div ref={previewContainerRef} className="absolute inset-0 overflow-hidden rounded-xl border border-[hsl(var(--border))] shadow-lg bg-[#FDFBF7]">
               <div className="origin-top-left w-[595px] h-[842px]" style={{ transform: `scale(${previewScale})` }}>
                 <AnimatePresence mode="wait">
                   <motion.div key={template + accentColor} id="cv-preview-target"
@@ -1417,7 +1417,7 @@ export default function CVResumeBuilder() {
           </div>
 
           {/* All templates mini grid */}
-          <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
+          <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 shadow-sm">
             <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-3 block">
               All Templates ({TEMPLATES.length})
             </Label>
@@ -1441,7 +1441,7 @@ export default function CVResumeBuilder() {
                       <Check size={8} className="text-white" />
                     </div>
                   )}
-                  <p className="absolute bottom-0 left-0 right-0 text-center text-[8px] font-semibold py-1 bg-black/50 text-white">{t.label}</p>
+                  <p className="absolute bottom-0 left-0 right-0 text-center text-[8px] font-semibold py-1 bg-[#1A1A1A]/50 text-white">{t.label}</p>
                 </button>
               ))}
             </div>

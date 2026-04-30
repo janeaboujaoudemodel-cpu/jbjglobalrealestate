@@ -188,10 +188,10 @@ function DetailDrawer({ ad, isPlaying, onPlay, onClose, onRestore, onLoadAndExpo
           )}
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #111118, transparent)' }} />
           <div className="absolute bottom-2 left-3 flex gap-1.5 flex-wrap">
-            <span className="bg-black/70 text-white text-[10px] px-2 py-0.5 rounded-full font-mono">{formatDuration(dur)}</span>
+            <span className="bg-[#1A1A1A]/70 text-white text-[10px] px-2 py-0.5 rounded-full font-mono">{formatDuration(dur)}</span>
             {s.format && <span className="text-[10px] px-2 py-0.5 rounded-full font-bold" style={{ background: 'rgba(200,168,122,0.8)', color: '#0A0A0F' }}>{getFormatLabel(s.format)}</span>}
-            <span className="bg-black/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getLangName(s.language ?? 'en')}</span>
-            <span className="bg-black/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getVoiceName(s.voiceId ?? '')}</span>
+            <span className="bg-[#1A1A1A]/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getLangName(s.language ?? 'en')}</span>
+            <span className="bg-[#1A1A1A]/70 text-[10px] px-2 py-0.5 rounded-full" style={{ color: '#F1F0EE' }}>{getVoiceName(s.voiceId ?? '')}</span>
           </div>
           <button
             onClick={onPlay}

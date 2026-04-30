@@ -216,7 +216,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
       <div className="relative">
         <div className="w-[600px] h-[300px] bg-gradient-to-b from-[#2a2018] to-[#1a1410] rounded-[100px] border-4 border-gold/30 shadow-2xl">
           <div className="absolute inset-4 bg-gradient-to-b from-[#3a3020] to-[#2a2018] rounded-[80px] flex items-center justify-center">
-            <span className="text-gray-400 text-2xl font-bold tracking-widest">JBJ GLOBAL</span>
+            <span className="text-[#8A7556] text-2xl font-bold tracking-widest">JBJ GLOBAL</span>
           </div>
         </div>
 
@@ -271,7 +271,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   )}
                   {participant.isHost && (
                     <div className="absolute -top-1 left-1/2 -translate-x-1/2 bg-gold rounded-full px-2 py-0.5">
-                      <span className="text-[8px] text-black font-bold">HOST</span>
+                      <span className="text-[8px] text-[#1A1A1A] font-bold">HOST</span>
                     </div>
                   )}
                 </div>
@@ -300,7 +300,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           className={`relative rounded-xl overflow-hidden bg-zinc-900 border ${
             participant.isSpeaking 
               ? 'border-green-400 shadow-lg shadow-green-400/30' 
-              : 'border-gray-700'
+              : 'border-[#1A1A1A]'
           }`}
         >
           {!participant.isVideoOff ? (
@@ -331,7 +331,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
 
           {/* Name tag */}
           <div className="absolute bottom-2 left-2 flex items-center gap-2">
-            <Badge className="bg-black/60 text-white">
+            <Badge className="bg-[#1A1A1A]/60 text-white">
               {participant.name}
               {participant.isHost && <span className="ml-1 text-gold">• Host</span>}
             </Badge>
@@ -355,9 +355,9 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
   );
 
   return (
-    <div className="fixed inset-0 bg-black flex flex-col z-50">
+    <div className="fixed inset-0 bg-[#1A1A1A] flex flex-col z-50">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900 border-b border-gray-800">
+      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900 border-b border-[#1A1A1A]">
         <div className="flex items-center gap-4">
           <Badge className="bg-red-500/20 text-red-400 border border-red-500/30">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse mr-2" />
@@ -367,7 +367,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <Clock className="w-4 h-4 text-white/70" />
             <span className="text-white font-mono">{formatDuration(meetingDuration)}</span>
           </div>
-          <Badge variant="outline" className="border-gray-600 text-white/70">
+          <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
             <Lock className="w-3 h-3 mr-1" />
             {roomCode}
           </Badge>
@@ -377,13 +377,13 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           {is4KEnabled && (
             <Badge className="bg-gold/20 text-gold border border-gold/30">4K</Badge>
           )}
-          <Badge variant="outline" className="border-gray-600 text-white/70">
+          <Badge variant="outline" className="border-[#1A1A1A] text-white/70">
             <Users className="w-3 h-3 mr-1" />
             {participants.length}
           </Badge>
           
           {/* View toggle */}
-          <div className="flex rounded-lg overflow-hidden border border-gray-700">
+          <div className="flex rounded-lg overflow-hidden border border-[#1A1A1A]">
             <Button
               size="sm"
               variant="ghost"
@@ -448,7 +448,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
               exit={{ opacity: 0, x: 20 }}
               className="absolute right-4 top-4"
             >
-              <Card className="bg-zinc-900 border-gray-800 w-96">
+              <Card className="bg-zinc-900 border-[#1A1A1A] w-96">
                 <CardContent className="p-4 space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-white flex items-center gap-2">
@@ -473,7 +473,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                       value={outfitPrompt}
                       onChange={(e) => setOutfitPrompt(e.target.value)}
                       placeholder="e.g., Navy blue business suit with gold tie and pocket square..."
-                      className="w-full h-24 bg-zinc-800 border-gray-700 text-white rounded-lg p-3 text-sm resize-none"
+                      className="w-full h-24 bg-zinc-800 border-[#1A1A1A] text-white rounded-lg p-3 text-sm resize-none"
                     />
                   </div>
 
@@ -489,7 +489,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   <Button
                     onClick={handleGenerateOutfit}
                     disabled={!outfitPrompt.trim()}
-                    className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-semibold hover:from-gold/90 hover:to-gold/70"
+                    className="w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-gold/70"
                   >
                     <Wand2 className="w-4 h-4 mr-2" />
                     Generate Outfit
@@ -502,7 +502,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                         setCurrentOutfit(null);
                         toast.info('Outfit removed');
                       }}
-                      className="w-full border-gray-700 text-white/70"
+                      className="w-full border-[#1A1A1A] text-white/70"
                     >
                       Remove Current Outfit
                     </Button>
@@ -515,13 +515,13 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
       </div>
 
       {/* Controls bar */}
-      <div className="flex items-center justify-center gap-4 px-4 py-4 bg-zinc-900 border-t border-gray-800">
+      <div className="flex items-center justify-center gap-4 px-4 py-4 bg-zinc-900 border-t border-[#1A1A1A]">
         {/* Mic */}
         <Button
           size="lg"
           variant={isMuted ? 'destructive' : 'outline'}
           onClick={toggleMute}
-          className={`rounded-full w-14 h-14 ${!isMuted ? 'bg-zinc-700 hover:bg-gray-600 border-none' : ''}`}
+          className={`rounded-full w-14 h-14 ${!isMuted ? 'bg-zinc-700 hover:bg-[#1A1A1A] border-none' : ''}`}
         >
           {isMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
         </Button>
@@ -531,7 +531,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant={!isVideoOn ? 'destructive' : 'outline'}
           onClick={toggleVideo}
-          className={`rounded-full w-14 h-14 ${isVideoOn ? 'bg-zinc-700 hover:bg-gray-600 border-none' : ''}`}
+          className={`rounded-full w-14 h-14 ${isVideoOn ? 'bg-zinc-700 hover:bg-[#1A1A1A] border-none' : ''}`}
         >
           {!isVideoOn ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
         </Button>
@@ -541,7 +541,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={handleShareScreen}
-          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'bg-green-500 hover:bg-green-600 border-none' : 'bg-zinc-700 hover:bg-gray-600 border-none'}`}
+          className={`rounded-full w-14 h-14 ${isScreenSharing ? 'bg-green-500 hover:bg-green-600 border-none' : 'bg-zinc-700 hover:bg-[#1A1A1A] border-none'}`}
         >
           <Monitor className="w-6 h-6" />
         </Button>
@@ -551,7 +551,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={() => setIsCameraFlipped(!isCameraFlipped)}
-          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-gray-600 border-none"
+          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-[#1A1A1A] border-none"
         >
           <FlipHorizontal className="w-6 h-6" />
         </Button>
@@ -564,9 +564,9 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             setIsCameraTracking(!isCameraTracking);
             toast.success(isCameraTracking ? 'Camera tracking off' : 'Camera tracking on');
           }}
-          className={`rounded-full w-14 h-14 ${isCameraTracking ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-gray-600'} border-none`}
+          className={`rounded-full w-14 h-14 ${isCameraTracking ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-[#1A1A1A]'} border-none`}
         >
-          <Eye className={`w-6 h-6 ${isCameraTracking ? 'text-black' : ''}`} />
+          <Eye className={`w-6 h-6 ${isCameraTracking ? 'text-[#1A1A1A]' : ''}`} />
         </Button>
 
         <div className="w-px h-10 bg-zinc-700 mx-2" />
@@ -580,9 +580,9 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             setShowBeautyFilters(false);
             setShowOutfitChanger(false);
           }}
-          className={`rounded-full w-14 h-14 ${showBackgroundPanel ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-gray-600'} border-none`}
+          className={`rounded-full w-14 h-14 ${showBackgroundPanel ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-[#1A1A1A]'} border-none`}
         >
-          <Image className={`w-6 h-6 ${showBackgroundPanel ? 'text-black' : ''}`} />
+          <Image className={`w-6 h-6 ${showBackgroundPanel ? 'text-[#1A1A1A]' : ''}`} />
         </Button>
 
         {/* Beauty filters */}
@@ -594,9 +594,9 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             setShowBackgroundPanel(false);
             setShowOutfitChanger(false);
           }}
-          className={`rounded-full w-14 h-14 ${showBeautyFilters ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-gray-600'} border-none`}
+          className={`rounded-full w-14 h-14 ${showBeautyFilters ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-[#1A1A1A]'} border-none`}
         >
-          <Sparkles className={`w-6 h-6 ${showBeautyFilters ? 'text-black' : ''}`} />
+          <Sparkles className={`w-6 h-6 ${showBeautyFilters ? 'text-[#1A1A1A]' : ''}`} />
         </Button>
 
         {/* Outfit changer */}
@@ -608,9 +608,9 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             setShowBackgroundPanel(false);
             setShowBeautyFilters(false);
           }}
-          className={`rounded-full w-14 h-14 ${showOutfitChanger ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-gray-600'} border-none`}
+          className={`rounded-full w-14 h-14 ${showOutfitChanger ? 'bg-gold hover:bg-gold/90' : 'bg-zinc-700 hover:bg-[#1A1A1A]'} border-none`}
         >
-          <Shirt className={`w-6 h-6 ${showOutfitChanger ? 'text-black' : ''}`} />
+          <Shirt className={`w-6 h-6 ${showOutfitChanger ? 'text-[#1A1A1A]' : ''}`} />
         </Button>
 
         <div className="w-px h-10 bg-zinc-700 mx-2" />
@@ -620,7 +620,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={() => setShowParticipants(!showParticipants)}
-          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-gray-600 border-none"
+          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-[#1A1A1A] border-none"
         >
           <Users className="w-6 h-6" />
         </Button>
@@ -630,7 +630,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={() => setShowChat(!showChat)}
-          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-gray-600 border-none"
+          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-[#1A1A1A] border-none"
         >
           <MessageSquare className="w-6 h-6" />
         </Button>
@@ -640,7 +640,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           size="lg"
           variant="outline"
           onClick={() => setShowSettings(true)}
-          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-gray-600 border-none"
+          className="rounded-full w-14 h-14 bg-zinc-700 hover:bg-[#1A1A1A] border-none"
         >
           <Settings className="w-6 h-6" />
         </Button>
@@ -661,7 +661,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
 
       {/* Settings Dialog */}
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="bg-zinc-900 border-gray-800 text-white max-w-md">
+        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Settings className="w-5 h-5 text-gold" />

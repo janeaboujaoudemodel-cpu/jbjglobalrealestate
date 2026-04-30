@@ -19,7 +19,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          "fixed z-[10050] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15),0_10px_25px_-10px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden border border-gray-200",
+          "fixed z-[10050] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15),0_10px_25px_-10px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden border border-[#B89555]/30",
           className
         )}
         style={{
@@ -120,7 +120,7 @@ export function MegaMenuFeaturedCard({
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-[2]" />
-      <div className="absolute inset-0 border border-gray-200 rounded-xl group-hover:border-gray-300 transition-colors z-[3]" />
+      <div className="absolute inset-0 border border-[#B89555]/30 rounded-xl group-hover:border-[#B89555]/30 transition-colors z-[3]" />
       <div className="absolute bottom-0 left-0 right-0 p-5 z-[4]">
         {kicker ? (
           <p className="text-white/70 text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
@@ -131,7 +131,7 @@ export function MegaMenuFeaturedCard({
         {description ? (
           <p className="text-white/80 text-xs mb-3 max-w-[48ch] line-clamp-2">{description}</p>
         ) : null}
-        <span className="inline-flex items-center gap-1.5 text-white font-semibold text-xs group-hover:gap-2.5 transition-all px-3 py-1.5 border border-white/40 rounded-lg bg-black/30 hover:bg-white hover:text-black">
+        <span className="inline-flex items-center gap-1.5 text-white font-semibold text-xs group-hover:gap-2.5 transition-all px-3 py-1.5 border border-white/40 rounded-lg bg-[#1A1A1A]/30 hover:bg-[#FDFBF7] hover:text-[#1A1A1A]">
           {cta}
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
@@ -155,15 +155,15 @@ export function MegaMenuCTAButton({
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-300 group"
+      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/30 hover:border-[#B89555]/30 hover:-translate-y-0.5 transition-all duration-300 group"
     >
-      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center group-hover:shadow-md transition-all">
+      <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center group-hover:shadow-md transition-all">
         <Icon className="w-5 h-5 text-white" />
       </div>
-      <span className="text-black font-bold text-base group-hover:text-black transition-colors">
+      <span className="text-[#1A1A1A] font-bold text-base group-hover:text-[#1A1A1A] transition-colors">
         {title}
       </span>
-      <ArrowRight className="w-5 h-5 text-gray-600 ml-auto" />
+      <ArrowRight className="w-5 h-5 text-[#5A4A2E] ml-auto" />
     </Link>
   );
 }
@@ -179,13 +179,13 @@ export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSec
     return (
       <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
-          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
-            <Icon className="w-4 h-4 text-gray-600 shrink-0" />
+          <h4 className="text-[#1A1A1A] font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
+            <Icon className="w-4 h-4 text-[#5A4A2E] shrink-0" />
             {title}
           </h4>
           {rightSlot}
         </div>
-        <div className="h-[1px] w-full bg-gray-200" />
+        <div className="h-[1px] w-full bg-[#EFE6D6]" />
       </div>
     );
   }
@@ -218,8 +218,8 @@ export function MegaMenuIconLink({
       className={cn(
         "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
         emphasis
-          ? "bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5"
-          : "bg-transparent hover:bg-gray-50",
+          ? "bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/30 hover:border-[#B89555]/30 hover:-translate-y-0.5"
+          : "bg-transparent hover:bg-[#F7F2EA]",
         emphasis ? "py-3 px-4" : compact ? "py-1.5 px-2" : "py-3 px-3"
       )}
     >
@@ -227,8 +227,8 @@ export function MegaMenuIconLink({
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
           emphasis
-            ? "bg-black border-black group-hover:shadow-md w-10 h-10"
-            : "bg-transparent border-gray-300 group-hover:border-gray-400",
+            ? "bg-[#1A1A1A] border-[#1A1A1A] group-hover:shadow-md w-10 h-10"
+            : "bg-transparent border-[#B89555]/30 group-hover:border-[#B89555]/30",
           !emphasis && compact ? "w-7 h-7" : !emphasis ? "w-10 h-10" : ""
         )}
       >
@@ -236,7 +236,7 @@ export function MegaMenuIconLink({
           "transition-colors duration-300",
           emphasis
             ? "text-white w-5 h-5"
-            : "text-gray-600 group-hover:text-black",
+            : "text-[#5A4A2E] group-hover:text-[#1A1A1A]",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
@@ -244,14 +244,14 @@ export function MegaMenuIconLink({
         <span className={cn(
           "block font-bold transition-colors duration-300",
           emphasis
-            ? "text-black group-hover:text-black text-base"
-            : "text-gray-700 group-hover:text-black",
+            ? "text-[#1A1A1A] group-hover:text-[#1A1A1A] text-base"
+            : "text-[#5A4A2E] group-hover:text-[#1A1A1A]",
           !emphasis && compact ? "text-[13px]" : !emphasis ? "text-sm" : ""
         )}>
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-gray-600 group-hover:text-gray-600 truncate transition-colors">
+          <span className="block text-xs text-[#5A4A2E] group-hover:text-[#5A4A2E] truncate transition-colors">
             {description}
           </span>
         ) : null}
@@ -283,8 +283,8 @@ export function MegaMenuCard({
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
-      "bg-gray-50",
-      "rounded-xl border border-gray-200 shadow-sm",
+      "bg-[#F7F2EA]",
+      "rounded-xl border border-[#B89555]/30 shadow-sm",
       "transition-all",
       compact ? "p-2.5" : "p-4",
       className

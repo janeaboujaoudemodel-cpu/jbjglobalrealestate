@@ -149,7 +149,7 @@ const BrokerOnboardingBanner = () => {
             </div>
             <button
               onClick={handleDismiss}
-              className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#1A1A1A] transition-colors"
             >
               <X className="w-5 h-5 text-white/90" />
             </button>
@@ -182,7 +182,7 @@ const BrokerOnboardingBanner = () => {
                   className={`relative p-3 rounded-xl border transition-all ${
                     step.completed 
                       ? 'bg-emerald-500/10 border-emerald-500/30' 
-                      : 'bg-zinc-800/50 border-gray-700 hover:border-gold/50 hover:bg-gray-800'
+                      : 'bg-zinc-800/50 border-[#1A1A1A] hover:border-gold/50 hover:bg-[#1A1A1A]'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">

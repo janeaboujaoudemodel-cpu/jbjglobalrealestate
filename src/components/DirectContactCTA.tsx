@@ -102,7 +102,7 @@ const DirectContactCTA = ({
   const resolvedTitle = title || t('cta.connectWithTeam', 'Connect With Our Team');
   const resolvedSubtitle = subtitle || t('cta.connectSubtitle', 'Get in touch for inquiries, consultations, or personalized guidance.');
   return (
-    <section className={`py-12 bg-black ${className}`}>
+    <section className={`py-12 bg-[#1A1A1A] ${className}`}>
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-8">
         
         {showTitle && (
@@ -114,10 +114,10 @@ const DirectContactCTA = ({
                   : 'text-2xl md:text-3xl'
               }`}
             >
-              <span className="text-black">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
+              <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
               <span className="text-gold">{resolvedTitle.split(' ').slice(-1)[0]}</span>
             </h2>
-            <p className="text-center text-gray-600 text-sm md:text-base mb-8 max-w-2xl mx-auto">
+            <p className="text-center text-[#5A4A2E] text-sm md:text-base mb-8 max-w-2xl mx-auto">
               {resolvedSubtitle}
             </p>
           </>
@@ -134,7 +134,7 @@ const DirectContactCTA = ({
               <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5">
+              <h3 className="text-[#1A1A1A] font-semibold text-sm mb-0.5">
                 {t('cta.whatsapp', 'WhatsApp')}
               </h3>
               <p className="text-emerald-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
@@ -150,7 +150,7 @@ const DirectContactCTA = ({
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5">
+              <h3 className="text-[#1A1A1A] font-semibold text-sm mb-0.5">
                 {t('cta.callUs', 'Call Us')}
               </h3>
               <p className="text-blue-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
@@ -166,7 +166,7 @@ const DirectContactCTA = ({
               <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5">
+              <h3 className="text-[#1A1A1A] font-semibold text-sm mb-0.5">
                 {t('cta.emailUs', 'Email Us')}
               </h3>
               <p className="text-gold text-xs sm:text-sm font-semibold">{CONTACT_INFO.email}</p>
@@ -183,7 +183,7 @@ const DirectContactCTA = ({
             viewport={{ once: true }}
             transition={{ duration: 0.3 }}
             onClick={downloadVCard}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[220px] bg-transparent border-2 border-gold/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
           >
             <Download className="w-5 h-5 text-gold" />
             <span>{t('cta.saveContact', 'Save Contact')}</span>
@@ -195,7 +195,7 @@ const DirectContactCTA = ({
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: 0.1 }}
             onClick={shareContact}
-            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/50 hover:border-black hover:bg-black/5 text-black"
+            className="flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 shadow-lg min-w-[180px] bg-transparent border-2 border-gold/50 hover:border-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-[#1A1A1A]"
           >
             <Share2 className="w-5 h-5 text-gold" />
             <span>{t('cta.share', 'Share')}</span>
@@ -210,7 +210,7 @@ const DirectContactCTA = ({
             href={SOCIAL_LINKS.linkedin} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-black/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
           >
             <FaLinkedinIn className="w-4 h-4 text-gold" />
           </a>
@@ -218,7 +218,7 @@ const DirectContactCTA = ({
             href={SOCIAL_LINKS.instagram} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-black/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
           >
             <FaInstagram className="w-4 h-4 text-gold" />
           </a>
@@ -226,7 +226,7 @@ const DirectContactCTA = ({
             href={SOCIAL_LINKS.tiktok} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-black/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
           >
             <FaTiktok className="w-4 h-4 text-gold" />
           </a>
@@ -234,7 +234,7 @@ const DirectContactCTA = ({
             href={SOCIAL_LINKS.website} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-full bg-black/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
+            className="w-9 h-9 rounded-full bg-[#1A1A1A]/5 border border-gold/30 flex items-center justify-center hover:bg-gold/10 hover:border-gold transition-all"
           >
             <FaGlobe className="w-4 h-4 text-gold" />
           </a>

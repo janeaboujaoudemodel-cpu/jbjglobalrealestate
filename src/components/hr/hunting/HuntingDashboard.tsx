@@ -140,7 +140,7 @@ function HuntingContent({ targetType }: { targetType: HuntTargetType }) {
 
   const btnBase = "border-2 border-gold/20 font-medium";
   const btnActive = "bg-gradient-to-r from-[hsl(40,50%,92%)] to-[hsl(36,35%,82%)] text-foreground border-gold/40";
-  const btnInactive = "bg-white/60 text-muted-foreground hover:bg-white/80";
+  const btnInactive = "bg-[#FDFBF7]/60 text-muted-foreground hover:bg-[#FDFBF7]/80";
 
   return (
     <div className="space-y-4">

@@ -38,7 +38,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
           >
             <div className="relative group" style={{ perspective: '1200px' }}>
               {/* Book shadow */}
-              <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/20 blur-xl rounded-full" />
+              <div className="absolute -bottom-4 left-4 right-4 h-8 bg-[#1A1A1A]/20 blur-xl rounded-full" />
 
               {/* 3D Book */}
               <div
@@ -79,7 +79,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
             <div className="flex items-center gap-3 mb-2">
               <BookOpen className="w-5 h-5 text-[#C8A766]" />
               <h2
-                className="text-2xl md:text-3xl font-bold text-black"
+                className="text-2xl md:text-3xl font-bold text-[#1A1A1A]"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {book.title}
@@ -114,7 +114,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                     </span>
 
                     {/* Title */}
-                    <span className="flex-1 text-sm text-left text-black font-medium group-hover:text-[#C8A766] transition-colors">
+                    <span className="flex-1 text-sm text-left text-[#1A1A1A] font-medium group-hover:text-[#C8A766] transition-colors">
                       {chapter.title}
                     </span>
 

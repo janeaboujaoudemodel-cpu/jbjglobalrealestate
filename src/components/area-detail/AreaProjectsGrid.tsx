@@ -65,7 +65,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="h-8 w-64 bg-zinc-800 animate-pulse rounded mb-8" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -90,7 +90,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   return (
     <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div>
-        <h2 className="text-black text-2xl md:text-3xl font-bold mb-6">
+        <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-6">
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
         </h2>
 
@@ -115,8 +115,8 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
             </div>
           ) : (
             <div className="text-center py-16">
-              <Search className="w-10 h-10 text-black/20 mx-auto mb-3" />
-              <p className="text-black/50 text-sm font-medium">No projects match your filters</p>
+              <Search className="w-10 h-10 text-[#1A1A1A]/20 mx-auto mb-3" />
+              <p className="text-[#1A1A1A]/50 text-sm font-medium">No projects match your filters</p>
               <button onClick={onClearFilters} className="mt-3 text-gold text-sm font-semibold hover:underline">
                 Clear all filters
               </button>
@@ -126,7 +126,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
           {filteredProjects.length > 0 && (
             <div className="text-center mt-8">
               <Link to={`/properties?area=${areaSlug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all">
                   View All Projects in {areaName}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

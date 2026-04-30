@@ -35,7 +35,7 @@ const MegaMenuSell = React.forwardRef<HTMLDivElement, MegaMenuSellProps>(({ onCl
           </div>
 
           {/* Right: Section with divider */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-2 border-t lg:border-t-0 border-gray-200 mt-6 lg:mt-0 pt-6 lg:pt-0">
+          <div className="lg:col-span-6 lg:border-l lg:border-[#B89555]/30 lg:pl-2 border-t lg:border-t-0 border-[#B89555]/30 mt-6 lg:mt-0 pt-6 lg:pt-0">
             <MegaMenuSection icon={FileText} title="Seller Resources">
               {sellerResources.map((item) => (
                 <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />

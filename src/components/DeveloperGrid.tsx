@@ -83,7 +83,7 @@ const DeveloperGrid = () => {
       />
 
       {hasFiltersApplied && (
-        <p className="text-gray-600 mb-8">
+        <p className="text-[#5A4A2E] mb-8">
           Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
         </p>
       )}
@@ -117,7 +117,7 @@ const DeveloperGrid = () => {
 
               {/* Developer Description */}
               {developer.description && (
-                <p className="text-gray-600 text-lg max-w-4xl mb-6 leading-relaxed">
+                <p className="text-[#5A4A2E] text-lg max-w-4xl mb-6 leading-relaxed">
                   {developer.description}
                 </p>
               )}
@@ -125,31 +125,31 @@ const DeveloperGrid = () => {
               {/* Developer Stats */}
               <div className="flex flex-wrap gap-6 text-sm">
                 {developer.founded_year && (
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[#5A4A2E]">
                     <Calendar className="w-4 h-4 text-gold" />
                     <span>Est. {developer.founded_year}</span>
                   </div>
                 )}
                 {developer.completed_projects && (
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[#5A4A2E]">
                     <Building2 className="w-4 h-4 text-gold" />
                     <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
                   </div>
                 )}
                 {developer.offplan_projects && (
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[#5A4A2E]">
                     <Briefcase className="w-4 h-4 text-gold" />
                     <span>{developer.offplan_projects} Active Projects</span>
                   </div>
                 )}
                 {developer.portfolio_worth && (
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[#5A4A2E]">
                     <DollarSign className="w-4 h-4 text-gold" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
                 {developer.headquarters && (
-                  <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex items-center gap-2 text-[#5A4A2E]">
                     <span className="text-gold">📍</span>
                     <span>{(() => {
                       const parts = developer.headquarters.split(',').map((s: string) => s.trim());
@@ -186,8 +186,8 @@ const DeveloperGrid = () => {
                     {project.is_premium && (
                       <div className="absolute top-3 right-3 z-10">
                         <div className="bg-gradient-to-r from-gold via-[#E8D5A3] to-gold px-3 py-1.5 rounded-full shadow-lg shadow-gold/30 flex items-center gap-1.5">
-                          <Crown className="w-3.5 h-3.5 text-black" />
-                          <span className="text-black text-xs font-bold uppercase tracking-wide">Premium</span>
+                          <Crown className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                          <span className="text-[#1A1A1A] text-xs font-bold uppercase tracking-wide">Premium</span>
                         </div>
                       </div>
                     )}
@@ -197,7 +197,7 @@ const DeveloperGrid = () => {
                       <span className={`absolute top-3 left-3 px-2 py-1 rounded text-xs font-medium ${
                         project.handover_date.toLowerCase().includes("ready")
                           ? "bg-green-500/90 text-white"
-                          : "bg-gold text-black"
+                          : "bg-gold text-[#1A1A1A]"
                       }`}>
                         {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
                       </span>
@@ -205,12 +205,12 @@ const DeveloperGrid = () => {
                   </div>
                   <div className="p-5">
                     <h4
-                      className="text-black text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-gold transition-colors"
+                      className="text-[#1A1A1A] text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-gold transition-colors"
                     >
                       {project.name}
                     </h4>
                     {project.location && (
-                      <p className="text-gray-600 text-sm mb-3 flex items-center gap-1.5">
+                      <p className="text-[#5A4A2E] text-sm mb-3 flex items-center gap-1.5">
                         <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -219,7 +219,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.bedrooms_min && (
-                      <p className="text-gray-600 text-sm mb-3">
+                      <p className="text-[#5A4A2E] text-sm mb-3">
                         {project.bedrooms_min === project.bedrooms_max
                           ? `${project.bedrooms_min} Bedrooms`
                           : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
@@ -254,7 +254,7 @@ const DeveloperGrid = () => {
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
           <div className="text-center py-20 bg-zinc-900 rounded-lg">
-            <p className="text-gray-600 text-lg mb-2">
+            <p className="text-[#5A4A2E] text-lg mb-2">
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (

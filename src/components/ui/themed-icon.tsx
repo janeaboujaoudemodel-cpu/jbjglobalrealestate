@@ -1,51 +1,29 @@
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IconTile, type IconTileSize, type IconTileTone } from "@/components/ui/icon-tile";
 
 interface ThemedIconProps {
   icon: LucideIcon;
+  /** Legacy variant: "light" → champagne+gold tile, "dark" → ink tile (white icon). */
   variant?: "light" | "dark";
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: IconTileSize;
+  /** Optional explicit tone override (gold/emerald/red/blue/amber/purple/rose/ink). */
+  tone?: IconTileTone;
   className?: string;
 }
 
 /**
- * ThemedIcon — Monochrome design system
- * On dark backgrounds (variant="dark"): White circle with black icon
- * On light backgrounds (variant="light"): Black circle with white icon
+ * ThemedIcon — Champagne-Gold standard.
+ * Backward-compatible wrapper around <IconTile />.
+ * "light" → gold tile on champagne page; "dark" → ink tile on dark sections.
  */
-export function ThemedIcon({ 
-  icon: Icon, 
-  variant = "light", 
+export function ThemedIcon({
+  icon,
+  variant = "light",
   size = "md",
-  className 
+  tone,
+  className,
 }: ThemedIconProps) {
-  const sizeClasses = {
-    sm: "w-8 h-8",
-    md: "w-10 h-10",
-    lg: "w-12 h-12",
-    xl: "w-16 h-16",
-  };
-
-  const iconSizeClasses = {
-    sm: "w-4 h-4",
-    md: "w-5 h-5",
-    lg: "w-6 h-6",
-    xl: "w-8 h-8",
-  };
-
-  const bgClass = variant === "dark" ? "bg-black" : "bg-gray-100";
-  const iconColor = variant === "dark" ? "text-white" : "text-black";
-
-  return (
-    <div 
-      className={cn(
-        sizeClasses[size],
-        bgClass,
-        "rounded-full flex items-center justify-center flex-shrink-0",
-        className
-      )}
-    >
-      <Icon className={cn(iconSizeClasses[size], iconColor)} />
-    </div>
-  );
+  const resolvedTone: IconTileTone = tone ?? (variant === "dark" ? "ink" : "gold");
+  return <IconTile icon={icon} tone={resolvedTone} size={size} className={cn(className)} />;
 }

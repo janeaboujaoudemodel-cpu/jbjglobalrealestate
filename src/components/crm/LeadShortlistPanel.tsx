@@ -308,7 +308,7 @@ ${COMPANY_INFO.website}`;
               </Button>
             </div>
             <Button
-              className="w-full bg-gold text-black hover:bg-gold/90"
+              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90"
               onClick={generateReport}
             >
               <FileText className="h-4 w-4 mr-2" />

@@ -53,7 +53,7 @@ const AmlKycPolicy = () => {
           <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
           <div className="max-w-5xl mx-auto px-4 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-[#1A1A1A]/30 backdrop-blur-sm">
                 <Shield className="w-4 h-4 text-[#C8A766]" />
                 <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Compliance</span>
               </div>
@@ -63,7 +63,7 @@ const AmlKycPolicy = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Commitment to Financial Integrity, Transparency, and Regulatory Compliance
               </p>
-              <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-[#5A4A2E] text-base md:text-lg max-w-3xl leading-relaxed">
                 We are committed to preventing money laundering, terrorist financing, fraud, and illicit financial activity. Our AML and KYC framework aligns with applicable UAE regulatory standards.
               </p>
             </motion.div>
@@ -77,7 +77,7 @@ const AmlKycPolicy = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-600 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-[#5A4A2E] hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -86,23 +86,23 @@ const AmlKycPolicy = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-600 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-[#5A4A2E] hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
 
 
             <section id="regulatory-framework" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">1.</span>Regulatory Framework</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>Our compliance framework operates in alignment with:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>UAE Federal Anti-Money Laundering regulations</li><li>Real estate regulatory compliance requirements applicable within the UAE</li><li>Financial transparency and reporting standards as prescribed by competent UAE authorities</li></ul>
-                <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-gray-600 text-sm">We operate in accordance with applicable UAE laws and regulatory frameworks. We are not a regulatory authority.</p></div>
+                <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#5A4A2E] text-sm">We operate in accordance with applicable UAE laws and regulatory frameworks. We are not a regulatory authority.</p></div>
               </CCard>
             </section>
             <GoldDivider />
 
             <section id="client-verification" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">2.</span>Client Verification &amp; Due Diligence</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>As part of our commitment to regulatory compliance, we implement structured client verification and due diligence procedures:</p>
                 <div className="grid gap-3 mt-4">
                   {[
@@ -113,8 +113,8 @@ const AmlKycPolicy = () => {
                     { title: "Ongoing Monitoring", desc: "Periodic review and monitoring of client relationships where warranted." },
                   ].map((item) => (
                     <div key={item.title} className="bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4">
-                      <p className="font-semibold text-black text-sm mb-1">{item.title}</p>
-                      <p className="text-gray-600 text-sm">{item.desc}</p>
+                      <p className="font-semibold text-[#1A1A1A] text-sm mb-1">{item.title}</p>
+                      <p className="text-[#5A4A2E] text-sm">{item.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -124,13 +124,13 @@ const AmlKycPolicy = () => {
 
             <section id="enhanced-review" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">3.</span>Enhanced Due Diligence</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>For elevated-risk classifications, additional documentation and review measures may apply, including:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong className="text-black">Expanded Documentation</strong> — Additional supporting documents may be requested.</li>
-                  <li><strong className="text-black">Additional Verification</strong> — Enhanced verification procedures may be conducted.</li>
-                  <li><strong className="text-black">Senior Compliance Review</strong> — Higher-risk cases are escalated for senior review.</li>
-                  <li><strong className="text-black">Increased Transaction Monitoring</strong> — Monitoring frequency may be increased.</li>
+                  <li><strong className="text-[#1A1A1A]">Expanded Documentation</strong> — Additional supporting documents may be requested.</li>
+                  <li><strong className="text-[#1A1A1A]">Additional Verification</strong> — Enhanced verification procedures may be conducted.</li>
+                  <li><strong className="text-[#1A1A1A]">Senior Compliance Review</strong> — Higher-risk cases are escalated for senior review.</li>
+                  <li><strong className="text-[#1A1A1A]">Increased Transaction Monitoring</strong> — Monitoring frequency may be increased.</li>
                 </ul>
               </CCard>
             </section>
@@ -138,27 +138,27 @@ const AmlKycPolicy = () => {
 
             <section id="suspicious-activity" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">4.</span>Internal Escalation &amp; Reporting</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>In the event of suspicious activity indicators:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>An internal compliance review is initiated promptly</li><li>Relevant documentation and transaction records are evaluated</li><li>Reporting obligations are fulfilled where legally required under applicable UAE law</li></ul>
-                <p className="text-gray-600 text-sm mt-2">All internal reviews are conducted with discretion and in accordance with established procedures.</p>
+                <p className="text-[#5A4A2E] text-sm mt-2">All internal reviews are conducted with discretion and in accordance with established procedures.</p>
               </CCard>
             </section>
             <GoldDivider />
 
             <section id="record-management" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">5.</span>Secure Record Management</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>We maintain rigorous standards for the storage and protection of compliance-related records:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Secure digital storage with encryption protocols</li><li>Restricted access controls limiting data to authorised compliance personnel</li><li>Retention periods in accordance with applicable legal obligations</li><li>Protection of sensitive client documentation at all stages of processing</li></ul>
-                <p className="text-sm text-gray-600 mt-2">For further information on data handling, please refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
+                <p className="text-sm text-[#5A4A2E] mt-2">For further information on data handling, please refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
               </CCard>
             </section>
             <GoldDivider />
 
             <section id="client-obligations" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">6.</span>Client Obligations</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>Clients engaging with our services are required to:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Provide accurate and complete documentation as requested</li><li>Cooperate fully with verification and due diligence procedures</li><li>Notify us promptly of any material changes to previously provided information</li></ul>
                 <p className="mt-2">Failure to comply with verification requirements may result in the suspension or termination of services.</p>
@@ -166,13 +166,13 @@ const AmlKycPolicy = () => {
             </section>
 
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-gray-600 text-xs leading-relaxed mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
-              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-[#5A4A2E] text-xs leading-relaxed mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
+              <p className="text-[#5A4A2E] text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-gray-600">|</span>
+                <span className="text-[#5A4A2E]">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
-                <span className="text-gray-600">|</span>
+                <span className="text-[#5A4A2E]">|</span>
                 <Link to="/trust-compliance" className="text-[#C8A766] hover:underline">Trust & Compliance</Link>
               </div>
             </div>

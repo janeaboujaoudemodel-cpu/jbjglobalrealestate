@@ -48,12 +48,12 @@ export const CompanyProfileDownload = () => {
     <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
       <CardHeader>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
             <FileText className="w-5 h-5 text-gold" />
           </div>
           <div>
-            <CardTitle className="text-black text-lg">Company Profile PDF</CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardTitle className="text-[#1A1A1A] text-lg">Company Profile PDF</CardTitle>
+            <CardDescription className="text-[#5A4A2E]">
               Download the official 18-page company profile
             </CardDescription>
           </div>
@@ -61,7 +61,7 @@ export const CompanyProfileDownload = () => {
       </CardHeader>
       <CardContent className="space-y-2">
         <Button
-          className="w-full bg-black hover:bg-gray-800 text-white"
+          className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white"
           onClick={handleDownload}
           disabled={isGenerating}
         >
@@ -75,7 +75,7 @@ export const CompanyProfileDownload = () => {
 
         <Button
           variant="outline"
-          className="w-full border-black/20 text-black hover:bg-black hover:text-white"
+          className="w-full border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
           onClick={handleOpenCleanPdf}
         >
           <Eye className="w-4 h-4 mr-2" />
@@ -84,14 +84,14 @@ export const CompanyProfileDownload = () => {
 
         <Button
           variant="outline"
-          className="w-full border-black/20 text-black hover:bg-black hover:text-white"
+          className="w-full border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
           onClick={handleOpenPageBaseline}
         >
           <ExternalLink className="w-4 h-4 mr-2" />
           Open Page Baseline (no chrome)
         </Button>
 
-        <p className="text-xs text-gray-600 pt-1">
+        <p className="text-xs text-[#5A4A2E] pt-1">
           Baseline mode hides cookie banner, sidebar, header, and popups for clean visual comparison.
         </p>
       </CardContent>

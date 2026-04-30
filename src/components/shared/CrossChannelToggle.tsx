@@ -42,8 +42,8 @@ export function CrossChannelToggle({
     if (compact) {
       return (
         <div className="flex items-center gap-1.5">
-          <Mail className="w-3 h-3 text-black/25" />
-          <span className="text-[10px] text-black/30">Also email</span>
+          <Mail className="w-3 h-3 text-[#1A1A1A]/25" />
+          <span className="text-[10px] text-[#1A1A1A]/30">Also email</span>
           <Switch
             checked={checked}
             onCheckedChange={onToggle}
@@ -56,7 +56,7 @@ export function CrossChannelToggle({
       <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg px-3 py-2">
         <div className="flex items-center gap-2">
           <Mail className="w-4 h-4 text-[#B89555]" />
-          <span className="text-sm text-black">Also send by email</span>
+          <span className="text-sm text-[#1A1A1A]">Also send by email</span>
         </div>
         <Switch checked={checked} onCheckedChange={onToggle} />
       </div>
@@ -69,9 +69,9 @@ export function CrossChannelToggle({
   if (detection.isLoading) {
     return (
       <div className="flex items-center gap-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg px-3 py-2">
-        <MessageSquare className="w-4 h-4 text-black/30" />
-        <span className="text-sm text-black/40">Checking recipient...</span>
-        <RefreshCw className="w-3 h-3 text-black/30 animate-spin ml-auto" />
+        <MessageSquare className="w-4 h-4 text-[#1A1A1A]/30" />
+        <span className="text-sm text-[#1A1A1A]/40">Checking recipient...</span>
+        <RefreshCw className="w-3 h-3 text-[#1A1A1A]/30 animate-spin ml-auto" />
       </div>
     );
   }
@@ -81,7 +81,7 @@ export function CrossChannelToggle({
       <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg px-3 py-2">
         <div className="flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-[#B89555]" />
-          <span className="text-sm text-black">Also notify in Team Chat</span>
+          <span className="text-sm text-[#1A1A1A]">Also notify in Team Chat</span>
           <Badge className="bg-green-100 text-green-700 border-green-300 text-[10px] px-1.5 h-4">
             Internal User{detection.displayName ? ` · ${detection.displayName}` : ""}
           </Badge>
@@ -93,9 +93,9 @@ export function CrossChannelToggle({
 
   // External recipient
   return (
-    <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
-      <Mail className="w-4 h-4 text-gray-600" />
-      <span className="text-xs text-gray-600">External recipient — email only</span>
+    <div className="flex items-center gap-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg px-3 py-2">
+      <Mail className="w-4 h-4 text-[#5A4A2E]" />
+      <span className="text-xs text-[#5A4A2E]">External recipient — email only</span>
     </div>
   );
 }

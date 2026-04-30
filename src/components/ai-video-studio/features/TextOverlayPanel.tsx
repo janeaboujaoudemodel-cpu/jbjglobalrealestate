@@ -260,7 +260,7 @@ function TextPreviewThumbnail({ preset, isActive, onClick }: {
 
         {/* Animation label pill — shown on hover */}
         {isHovered && (
-          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold tracking-wider bg-amber-500/80 text-black animate-fade-in pointer-events-none select-none">
+          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-bold tracking-wider bg-amber-500/80 text-[#1A1A1A] animate-fade-in pointer-events-none select-none">
             {ANIM_LABEL[preset.hoverAnimation]}
           </div>
         )}
@@ -454,7 +454,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
         {/* ── LIVE MINI PREVIEW ───────────────────── */}
         <section>
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Preview</p>
-          <div className="relative bg-black rounded-lg overflow-hidden aspect-video flex items-center justify-center border border-slate-700">
+          <div className="relative bg-[#1A1A1A] rounded-lg overflow-hidden aspect-video flex items-center justify-center border border-slate-700">
             <div
               className={`
                 ${position === 'top'    ? 'absolute top-4 left-0 right-0 flex justify-center' : ''}
@@ -629,7 +629,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
                   }}
                   className={`rounded transition-all text-xs ${
                     position === mainPos && pos === mainPos
-                      ? 'bg-amber-500 text-black'
+                      ? 'bg-amber-500 text-[#1A1A1A]'
                       : 'bg-slate-700 hover:bg-slate-600 text-slate-400 hover:text-white'
                   }`}
                   title={pos}
@@ -694,7 +694,7 @@ export function TextOverlayPanel({ onAddTextClip, currentTime }: TextOverlayPane
         {/* ── ADD BUTTON ─────────────────────────── */}
         <Button
           onClick={handleAdd}
-          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold text-sm py-2.5 gap-2"
+          className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold text-sm py-2.5 gap-2"
         >
           <Plus className="w-4 h-4" />
           Add to Timeline at {currentTime.toFixed(1)}s

@@ -161,7 +161,7 @@ export default function ContractAnalyzer({
           {analysis && (
             <div className="flex items-center gap-2">
               <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                <SelectTrigger className="w-[160px] h-9 text-sm bg-white/80 border-[hsl(var(--gold)/.2)]">
+                <SelectTrigger className="w-[160px] h-9 text-sm bg-[#FDFBF7]/80 border-[hsl(var(--gold)/.2)]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

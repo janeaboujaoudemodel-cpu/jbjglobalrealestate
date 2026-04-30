@@ -22,52 +22,52 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="w-full flex flex-wrap h-auto gap-1 bg-transparent border-b border-gray-200 rounded-none p-0">
+      <TabsList className="w-full flex flex-wrap h-auto gap-1 bg-transparent border-b border-[#B89555]/30 rounded-none p-0">
         <TabsTrigger 
           value="details" 
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Details
         </TabsTrigger>
         <TabsTrigger 
           value="gallery"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <ImageIcon className="w-4 h-4" />
           Gallery
         </TabsTrigger>
         <TabsTrigger 
           value="floor-plans"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Layers className="w-4 h-4" />
           Floor Plans
         </TabsTrigger>
         <TabsTrigger 
           value="amenities"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Amenities
         </TabsTrigger>
         <TabsTrigger 
           value="location"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <MapPin className="w-4 h-4" />
           Location
         </TabsTrigger>
         <TabsTrigger 
           value="payment-plan"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <CreditCard className="w-4 h-4" />
           Payment Plan
         </TabsTrigger>
         <TabsTrigger 
           value="brochure"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <FileText className="w-4 h-4" />
           Brochure
@@ -78,11 +78,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       <TabsContent value="details" className="mt-6">
         <div className="space-y-6">
           <div>
-            <h3 className="text-xl font-semibold text-black mb-4">About {project.name}</h3>
+            <h3 className="text-xl font-semibold text-[#1A1A1A] mb-4">About {project.name}</h3>
             {project.description && (() => {
               const cleanDesc = sanitizeForDisplay(project.description);
               return cleanDesc ? (
-                <p className="text-black/90 leading-relaxed whitespace-pre-line">{cleanDesc}</p>
+                <p className="text-[#1A1A1A]/90 leading-relaxed whitespace-pre-line">{cleanDesc}</p>
               ) : null;
             })()}
           </div>
@@ -90,27 +90,27 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
           {/* Key Details Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {project.price_from && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-black/80 text-sm font-medium">Starting Price</p>
+              <div className="bg-[#FDFBF7] p-4 rounded-lg border border-[#B89555]/30">
+                <p className="text-[#1A1A1A]/80 text-sm font-medium">Starting Price</p>
                 <p className="text-lg font-semibold text-primary">{formatPrice(project.price_from)}</p>
               </div>
             )}
             {project.handover_date && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-black/80 text-sm font-medium">Handover</p>
-                <p className="text-lg font-semibold text-black">{project.handover_date}</p>
+              <div className="bg-[#FDFBF7] p-4 rounded-lg border border-[#B89555]/30">
+                <p className="text-[#1A1A1A]/80 text-sm font-medium">Handover</p>
+                <p className="text-lg font-semibold text-[#1A1A1A]">{project.handover_date}</p>
               </div>
             )}
             {project.payment_plan && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-black/80 text-sm font-medium">Payment Plan</p>
-                <p className="text-lg font-semibold text-black">{project.payment_plan}</p>
+              <div className="bg-[#FDFBF7] p-4 rounded-lg border border-[#B89555]/30">
+                <p className="text-[#1A1A1A]/80 text-sm font-medium">Payment Plan</p>
+                <p className="text-lg font-semibold text-[#1A1A1A]">{project.payment_plan}</p>
               </div>
             )}
             {project.bedrooms_min && (
-              <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-black/80 text-sm font-medium">Bedrooms</p>
-                <p className="text-lg font-semibold text-black">
+              <div className="bg-[#FDFBF7] p-4 rounded-lg border border-[#B89555]/30">
+                <p className="text-[#1A1A1A]/80 text-sm font-medium">Bedrooms</p>
+                <p className="text-lg font-semibold text-[#1A1A1A]">
                   {project.bedrooms_min === project.bedrooms_max 
                     ? `${project.bedrooms_min} BR` 
                     : `${project.bedrooms_min}-${project.bedrooms_max} BR`}
@@ -125,7 +125,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       <TabsContent value="gallery" className="mt-6">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-semibold text-black">All Images</h3>
+            <h3 className="text-xl font-semibold text-[#1A1A1A]">All Images</h3>
             <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-white">
               <Download className="w-4 h-4 mr-2" />
               Download 4K Images
@@ -148,13 +148,13 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Floor Plans Tab */}
       <TabsContent value="floor-plans" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">Floor Plans</h3>
+          <h3 className="text-xl font-semibold text-[#1A1A1A]">Floor Plans</h3>
           {floorPlans.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {floorPlans.map((doc, idx) => (
-                <div key={doc.id} className="bg-white p-4 rounded-lg border border-gray-200">
+                <div key={doc.id} className="bg-[#FDFBF7] p-4 rounded-lg border border-[#B89555]/30">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-medium text-black">{doc.file_name || `Floor Plan ${idx + 1}`}</span>
+                    <span className="font-medium text-[#1A1A1A]">{doc.file_name || `Floor Plan ${idx + 1}`}</span>
                     <a 
                       href={doc.file_url} 
                       target="_blank" 
@@ -166,14 +166,14 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                     </a>
                   </div>
                   {doc.file_url.endsWith('.pdf') ? (
-                    <div className="aspect-[4/3] bg-gray-100 rounded flex items-center justify-center">
-                      <FileText className="w-12 h-12 text-black/50" />
+                    <div className="aspect-[4/3] bg-[#F7F2EA] rounded flex items-center justify-center">
+                      <FileText className="w-12 h-12 text-[#1A1A1A]/50" />
                     </div>
                   ) : (
                     <img 
                       src={doc.file_url} 
                       alt={doc.file_name || 'Floor Plan'}
-                      className="w-full aspect-[4/3] object-contain bg-gray-50 rounded"
+                      className="w-full aspect-[4/3] object-contain bg-[#F7F2EA] rounded"
                     />
                   )}
                 </div>
@@ -188,15 +188,15 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Amenities Tab */}
       <TabsContent value="amenities" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">{project.name} Unique Selling Points</h3>
+          <h3 className="text-xl font-semibold text-[#1A1A1A]">{project.name} Unique Selling Points</h3>
           {project.amenities && project.amenities.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {project.amenities.map((amenity, idx) => (
-                <div key={idx} className="flex items-center gap-2 bg-white p-3 rounded-lg border border-gray-200">
+                <div key={idx} className="flex items-center gap-2 bg-[#FDFBF7] p-3 rounded-lg border border-[#B89555]/30">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                     <Home className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="text-black/90 text-sm">{amenity}</span>
+                  <span className="text-[#1A1A1A]/90 text-sm">{amenity}</span>
                 </div>
               ))}
             </div>
@@ -209,11 +209,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Location Tab */}
       <TabsContent value="location" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">Location</h3>
+          <h3 className="text-xl font-semibold text-[#1A1A1A]">Location</h3>
           {project.location && (
-            <p className="text-black/90">{project.location}, Dubai, UAE</p>
+            <p className="text-[#1A1A1A]/90">{project.location}, Dubai, UAE</p>
           )}
-          <div className="rounded-xl overflow-hidden border border-gray-200">
+          <div className="rounded-xl overflow-hidden border border-[#B89555]/30">
             <ProjectLocationMap
               projectName={project.name}
               location={project.location}
@@ -227,11 +227,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Payment Plan Tab */}
       <TabsContent value="payment-plan" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">Payment Plan</h3>
+          <h3 className="text-xl font-semibold text-[#1A1A1A]">Payment Plan</h3>
           {project.payment_plan && (
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
+            <div className="bg-[#FDFBF7] p-6 rounded-lg border border-[#B89555]/30">
               <p className="text-2xl font-bold text-primary mb-2">{project.payment_plan}</p>
-              <p className="text-black/80 font-medium">Flexible payment options available. Contact us for details.</p>
+              <p className="text-[#1A1A1A]/80 font-medium">Flexible payment options available. Contact us for details.</p>
             </div>
           )}
           {paymentPlans.length > 0 && (
@@ -242,13 +242,13 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   href={doc.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors"
+                  className="flex items-center justify-between p-4 bg-[#FDFBF7] rounded-lg border border-[#B89555]/30 hover:border-primary transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <FileText className="w-5 h-5 text-primary" />
-                    <span className="font-medium text-black">{doc.file_name || 'Payment Plan Document'}</span>
+                    <span className="font-medium text-[#1A1A1A]">{doc.file_name || 'Payment Plan Document'}</span>
                   </div>
-                  <Download className="w-5 h-5 text-black/70" />
+                  <Download className="w-5 h-5 text-[#1A1A1A]/70" />
                 </a>
               ))}
             </div>
@@ -259,7 +259,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       {/* Brochure Tab */}
       <TabsContent value="brochure" className="mt-6">
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-black">{brochures.length > 0 ? "Download Brochure" : "Request Brochure"}</h3>
+          <h3 className="text-xl font-semibold text-[#1A1A1A]">{brochures.length > 0 ? "Download Brochure" : "Request Brochure"}</h3>
           {brochures.length > 0 ? (
             <div className="space-y-3">
               {brochures.map((doc) => (
@@ -268,11 +268,11 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   href={doc.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 hover:border-primary transition-colors"
+                  className="flex items-center justify-between p-4 bg-[#FDFBF7] rounded-lg border border-[#B89555]/30 hover:border-primary transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <FileText className="w-5 h-5 text-primary" />
-                    <span className="font-medium text-black">{doc.file_name || `${project.name} Brochure`}</span>
+                    <span className="font-medium text-[#1A1A1A]">{doc.file_name || `${project.name} Brochure`}</span>
                   </div>
                   <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
                     <Download className="w-4 h-4 mr-2" />
@@ -282,8 +282,8 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
               ))}
             </div>
           ) : (
-            <div className="bg-white p-6 rounded-lg border border-gray-200 text-center">
-              <FileText className="w-12 h-12 text-black/50 mx-auto mb-3" />
+            <div className="bg-[#FDFBF7] p-6 rounded-lg border border-[#B89555]/30 text-center">
+              <FileText className="w-12 h-12 text-[#1A1A1A]/50 mx-auto mb-3" />
               <p className="text-red-600 font-medium">Issue: Brochure coming soon. Contact us for more information.</p>
             </div>
           )}

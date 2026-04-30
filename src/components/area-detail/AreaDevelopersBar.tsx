@@ -47,10 +47,10 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
       <div className="jj-layer-2">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-gold" />
-          <h2 className="text-xl md:text-2xl font-bold text-black">
+          <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A]">
             Developers in {areaName}
           </h2>
-          <span className="text-gray-600 text-sm">({developers.length})</span>
+          <span className="text-[#5A4A2E] text-sm">({developers.length})</span>
         </div>
 
         <div className="flex flex-wrap gap-3">
@@ -65,15 +65,15 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
               {dev.slug ? (
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="flex items-center gap-3 px-4 py-3 bg-white border-2 border-gold/30 rounded-xl hover:border-gold hover:shadow-lg transition-all"
+                  className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-2 border-gold/30 rounded-xl hover:border-gold hover:shadow-lg transition-all"
                 >
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-8 h-8" renderFallback />
-                  <span className="text-sm font-medium text-black">{dev.name}</span>
+                  <span className="text-sm font-medium text-[#1A1A1A]">{dev.name}</span>
                 </Link>
               ) : (
-                <div className="flex items-center gap-3 px-4 py-3 bg-white border border-gold/20 rounded-xl">
+                <div className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border border-gold/20 rounded-xl">
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-8 h-8" renderFallback />
-                  <span className="text-sm font-medium text-gray-700">{dev.name}</span>
+                  <span className="text-sm font-medium text-[#5A4A2E]">{dev.name}</span>
                 </div>
               )}
             </motion.div>

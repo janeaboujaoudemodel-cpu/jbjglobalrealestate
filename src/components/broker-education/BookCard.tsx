@@ -26,7 +26,7 @@ const LEARNING_PATH_COLORS: Record<string, string> = {
 };
 
 export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
-  const pathColor = LEARNING_PATH_COLORS[book.learning_path] || 'bg-black/10 text-black border-black/20';
+  const pathColor = LEARNING_PATH_COLORS[book.learning_path] || 'bg-[#1A1A1A]/10 text-[#1A1A1A] border-[#1A1A1A]/20';
   
   const getStatusBadge = () => {
     if (!progress) return null;
@@ -48,7 +48,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
         );
       default:
         return (
-          <Badge className="bg-black/10 text-black/60 border-black/20">
+          <Badge className="bg-[#1A1A1A]/10 text-[#1A1A1A]/60 border-[#1A1A1A]/20">
             Not Started
           </Badge>
         );
@@ -83,11 +83,11 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
               </div>
               
               {/* Icon */}
-              <BookOpen className="w-12 h-12 text-gray-600" />
+              <BookOpen className="w-12 h-12 text-[#5A4A2E]" />
               
               {/* Restricted overlay */}
               {book.is_restricted && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[#1A1A1A]/60 flex items-center justify-center">
                   <Lock className="w-8 h-8 text-red-400" />
                 </div>
               )}
@@ -100,12 +100,12 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
           </Badge>
 
           {/* Title */}
-          <h3 className="text-lg font-semibold text-black mb-2 line-clamp-2 group-hover:text-gold transition-colors">
+          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 line-clamp-2 group-hover:text-gold transition-colors">
             {book.title}
           </h3>
 
           {/* Description */}
-          <p className="text-black/60 text-sm mb-4 line-clamp-2">
+          <p className="text-[#1A1A1A]/60 text-sm mb-4 line-clamp-2">
             {book.description}
           </p>
 

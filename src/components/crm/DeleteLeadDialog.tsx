@@ -38,34 +38,34 @@ const DeleteLeadDialog: React.FC<DeleteLeadDialogProps> = ({
                 <Trash2 className="w-6 h-6 text-red-600" />
               )}
             </div>
-            <AlertDialogTitle className="text-black text-xl">
+            <AlertDialogTitle className="text-[#1A1A1A] text-xl">
               {isFinalDelete ? "Permanently Delete Lead?" : "Move to Deleted?"}
             </AlertDialogTitle>
           </div>
-          <AlertDialogDescription className="text-black/70 text-base">
+          <AlertDialogDescription className="text-[#1A1A1A]/70 text-base">
             {isFinalDelete ? (
               <>
                 This action <strong className="text-red-600">cannot be undone</strong>. 
-                The lead <strong className="text-black">"{leadName}"</strong> will be permanently 
+                The lead <strong className="text-[#1A1A1A]">"{leadName}"</strong> will be permanently 
                 erased from the database.
               </>
             ) : (
               <>
-                The lead <strong className="text-black">"{leadName}"</strong> will be moved to 
+                The lead <strong className="text-[#1A1A1A]">"{leadName}"</strong> will be moved to 
                 the Deleted Leads section. You can restore it later or permanently delete it.
               </>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-3 mt-4">
-          <AlertDialogCancel className="bg-white border-2 border-gold/30 text-black hover:bg-gold/10 hover:border-gold">
+          <AlertDialogCancel className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             className={isFinalDelete 
               ? "bg-red-600 text-white hover:bg-red-700 border-0" 
-              : "bg-gold text-black hover:bg-gold/90 border-0"
+              : "bg-gold text-[#1A1A1A] hover:bg-gold/90 border-0"
             }
           >
             {isFinalDelete ? "Delete Forever" : "Move to Deleted"}

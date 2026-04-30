@@ -32,18 +32,18 @@ const Premium3DButton = ({
   const variantStyles = {
     primary: {
       bg: "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
-      text: "text-black",
+      text: "text-[#1A1A1A]",
       border: "border-2 border-gold/50",
       shadow: `0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)`,
     },
     whatsapp: {
-      bg: "bg-white",
+      bg: "bg-[#FDFBF7]",
       text: "text-green-600",
       border: "border-2 border-green-500/50",
       shadow: `0 10px 25px rgba(34,197,94,0.3), 0 6px 15px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), 0 0 15px rgba(34,197,94,0.2)`,
     },
     call: {
-      bg: "bg-white",
+      bg: "bg-[#FDFBF7]",
       text: "text-gold",
       border: "border-2 border-gold/50",
       shadow: `0 10px 25px rgba(200,167,102,0.3), 0 6px 15px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9), 0 0 15px rgba(200,167,102,0.2)`,
@@ -74,7 +74,7 @@ export const GuideCTA = ({
   variant = "default"
 }: GuideCTAProps) => {
   return (
-    <section className="py-16 md:py-20 bg-black">
+    <section className="py-16 md:py-20 bg-[#1A1A1A]">
       <div className="container mx-auto px-4">
         <div className="max-w-[1100px] mx-auto">
           {/* OUTER CARD (Active Champagne) */}
@@ -88,18 +88,18 @@ export const GuideCTA = ({
               className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl ${variant === "compact" ? "p-6" : "p-8 md:p-12"} shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center`}
             >
               {Icon && (
-                <div className="w-16 h-16 bg-black border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-16 h-16 bg-[#1A1A1A] border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Icon className="w-8 h-8 text-gold" />
                 </div>
               )}
               
-              <h3 className={`font-bold text-black mb-4 ${
+              <h3 className={`font-bold text-[#1A1A1A] mb-4 ${
                 variant === "compact" ? "text-xl" : "text-2xl md:text-3xl"
               }`}>
                 {title}
               </h3>
               
-              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                 {description}
               </p>
               
@@ -122,10 +122,10 @@ export const GuideCTA = ({
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                     <span className="relative flex items-center gap-2">
-                      {primaryAction.icon && <primaryAction.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />}
-                      <span className="text-black group-hover:text-gold transition-colors">{primaryAction.label.split(' ')[0]}</span>
-                      <span className="text-gold group-hover:text-black transition-colors">{primaryAction.label.split(' ').slice(1).join(' ')}</span>
-                      <ArrowUpRight className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
+                      {primaryAction.icon && <primaryAction.icon className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />}
+                      <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{primaryAction.label.split(' ')[0]}</span>
+                      <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">{primaryAction.label.split(' ').slice(1).join(' ')}</span>
+                      <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-gold transition-colors" />
                     </span>
                   </a>
                 )}
@@ -135,7 +135,7 @@ export const GuideCTA = ({
                     {/* WhatsApp - Secondary Style */}
                     <a 
                       href={getWhatsAppUrl()}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
                     >
                       <MessageSquare className="w-5 h-5" />
                       <span>WhatsApp</span>
@@ -143,7 +143,7 @@ export const GuideCTA = ({
                     {/* Call - Secondary Style */}
                     <a 
                       href={getCallUrl()}
-                      className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
                     >
                       <Phone className="w-5 h-5" />
                       <span>{CONTACT_INFO.phone}</span>

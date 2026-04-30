@@ -7,8 +7,8 @@ export function SalaryBenchmarkPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Salary Benchmarks</h2>
-          <p className="text-gray-600 text-sm">Industry salary data and competitive analysis</p>
+          <h2 className="text-2xl font-bold text-[#1A1A1A]">Salary Benchmarks</h2>
+          <p className="text-[#5A4A2E] text-sm">Industry salary data and competitive analysis</p>
         </div>
       </div>
 
@@ -18,8 +18,8 @@ export function SalaryBenchmarkPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Avg. Market Salary</p>
-                <p className="text-2xl font-bold text-black">AED 18,500</p>
+                <p className="text-[#5A4A2E] text-xs">Avg. Market Salary</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">AED 18,500</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
                 <DollarSign className="h-5 w-5 text-gold" />
@@ -31,7 +31,7 @@ export function SalaryBenchmarkPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Our Position</p>
+                <p className="text-[#5A4A2E] text-xs">Our Position</p>
                 <p className="text-2xl font-bold text-emerald-600">+12%</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
@@ -44,8 +44,8 @@ export function SalaryBenchmarkPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Roles Analyzed</p>
-                <p className="text-2xl font-bold text-black">24</p>
+                <p className="text-[#5A4A2E] text-xs">Roles Analyzed</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">24</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
                 <BarChart3 className="h-5 w-5 text-gold" />
@@ -57,8 +57,8 @@ export function SalaryBenchmarkPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Competitors</p>
-                <p className="text-2xl font-bold text-black">8</p>
+                <p className="text-[#5A4A2E] text-xs">Competitors</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">8</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
                 <Users className="h-5 w-5 text-gold" />
@@ -71,7 +71,7 @@ export function SalaryBenchmarkPanel() {
       {/* Main Content - Premium Theme */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-black">
+          <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <DollarSign className="h-5 w-5 text-gold" />
             Salary Data Coming Soon
           </CardTitle>
@@ -81,8 +81,8 @@ export function SalaryBenchmarkPanel() {
             <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gold/10 flex items-center justify-center">
               <DollarSign className="h-10 w-10 text-gold" />
             </div>
-            <h3 className="text-lg font-semibold text-black mb-2">Salary Benchmark Database</h3>
-            <p className="text-gray-600 max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Salary Benchmark Database</h3>
+            <p className="text-[#5A4A2E] max-w-md mx-auto">
               This feature will provide real-time salary data from the UAE real estate market, 
               allowing you to benchmark your compensation packages against industry standards.
             </p>

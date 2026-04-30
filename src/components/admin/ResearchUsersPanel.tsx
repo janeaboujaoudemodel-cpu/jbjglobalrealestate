@@ -180,18 +180,18 @@ export default function ResearchUsersPanel() {
             <Users className="w-5 h-5 text-[#8A7356]" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-black">JBJ Global Research Users</h2>
-            <p className="text-sm text-gray-600">{filtered.length} users found</p>
+            <h2 className="text-xl font-bold text-[#1A1A1A]">JBJ Global Research Users</h2>
+            <p className="text-sm text-[#5A4A2E]">{filtered.length} users found</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 text-black hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10">
             <RefreshCw className="w-4 h-4 mr-1" /> Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={exportCSV} className="border-gold/40 text-black hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={exportCSV} className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10">
             <Download className="w-4 h-4 mr-1" /> CSV
           </Button>
-          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40 hover:shadow-md">
+          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 hover:shadow-md">
             <Download className="w-4 h-4 mr-1" /> Excel
           </Button>
         </div>
@@ -200,16 +200,16 @@ export default function ResearchUsersPanel() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
           <Input
             placeholder="Search by email, name, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-white/80 border-gold/40 text-black placeholder:text-gray-600"
+            className="pl-9 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           />
         </div>
         <Select value={segmentFilter} onValueChange={setSegmentFilter}>
-          <SelectTrigger className="w-[180px] bg-white/80 border-gold/40 text-black">
+          <SelectTrigger className="w-[180px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -219,7 +219,7 @@ export default function ResearchUsersPanel() {
           </SelectContent>
         </Select>
         <Select value={intentFilter} onValueChange={setIntentFilter}>
-          <SelectTrigger className="w-[140px] bg-white/80 border-gold/40 text-black">
+          <SelectTrigger className="w-[140px] bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -231,60 +231,60 @@ export default function ResearchUsersPanel() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border-2 border-gold/30 overflow-hidden bg-white/60">
+      <div className="rounded-xl border-2 border-gold/30 overflow-hidden bg-[#FDFBF7]/60">
         <ScrollArea className="h-[600px]">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#F7F2EA]">
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Email</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Name</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Subscribed</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Segment</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Intent</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Engagement</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Sessions</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Top Areas</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Budget</TableHead>
-                  <TableHead className="text-black font-semibold whitespace-nowrap">Last Active</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Email</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Name</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Subscribed</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Segment</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Intent</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Engagement</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Sessions</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Top Areas</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Budget</TableHead>
+                  <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Last Active</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-gray-600 py-12">Loading...</TableCell>
+                    <TableCell colSpan={10} className="text-center text-[#5A4A2E] py-12">Loading...</TableCell>
                   </TableRow>
                 ) : filtered.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-gray-600 py-12">
+                    <TableCell colSpan={10} className="text-center text-[#5A4A2E] py-12">
                       No user summaries yet. Run the profile summarization job to populate data.
                     </TableCell>
                   </TableRow>
                 ) : (
                   filtered.map((u) => (
                     <TableRow key={u.id} className="hover:bg-gold/5 border-b border-gold/10">
-                      <TableCell className="text-black text-sm">{u.email}</TableCell>
-                      <TableCell className="text-gray-700 text-sm">{u.full_name || "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A] text-sm">{u.email}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-sm">{u.full_name || "—"}</TableCell>
                       <TableCell>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-[#F7F2EA] text-[#5A4A2E]"}`}>
                           {u.subscribed ? "Yes" : "No"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-gray-700 text-sm">{u.segment_tag || "—"}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-sm">{u.segment_tag || "—"}</TableCell>
                       <TableCell>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
                           u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
                           u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
-                          "bg-gray-100 text-gray-600"
+                          "bg-[#F7F2EA] text-[#5A4A2E]"
                         }`}>
                           {u.intent_score || "—"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-gray-700 text-sm">{u.engagement_score ?? "—"}</TableCell>
-                      <TableCell className="text-gray-700 text-sm">{u.sessions_count ?? "—"}</TableCell>
-                      <TableCell className="text-gray-700 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
-                      <TableCell className="text-gray-700 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
-                      <TableCell className="text-gray-600 text-xs">
+                      <TableCell className="text-[#5A4A2E] text-sm">{u.engagement_score ?? "—"}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-sm">{u.sessions_count ?? "—"}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-sm">{u.avg_budget_estimate || "—"}</TableCell>
+                      <TableCell className="text-[#5A4A2E] text-xs">
                         {u.last_active_at ? new Date(u.last_active_at).toLocaleDateString() : "—"}
                       </TableCell>
                     </TableRow>

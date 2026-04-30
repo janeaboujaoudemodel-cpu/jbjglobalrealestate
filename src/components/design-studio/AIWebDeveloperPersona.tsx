@@ -190,13 +190,13 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             {/* Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h2 className="text-2xl font-bold text-black">Marcus Chen</h2>
+                <h2 className="text-2xl font-bold text-[#1A1A1A]">Marcus Chen</h2>
                 <Badge className="bg-gold/20 text-gold border border-gold/30">
                   <Code2 className="w-3 h-3 mr-1" />
                   AI Web Developer
                 </Badge>
               </div>
-              <p className="text-gray-600 mb-4">
+              <p className="text-[#5A4A2E] mb-4">
                 Full-stack web development specialist with expertise in modern frameworks, 
                 responsive design, and performance optimization. Works exclusively under 
                 Owner/Assistant approval with full version control.
@@ -205,7 +205,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
               {/* Capabilities */}
               <div className="flex flex-wrap gap-2 mb-3">
                 {CAPABILITIES.map((cap) => (
-                  <Badge key={cap.label} variant="outline" className="bg-white/80 border-gray-200">
+                  <Badge key={cap.label} variant="outline" className="bg-[#FDFBF7]/80 border-[#B89555]/30">
                     <cap.icon className={`w-3 h-3 mr-1 ${cap.color}`} />
                     {cap.label}
                   </Badge>
@@ -215,7 +215,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
               {/* Languages */}
               <div className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-gold" />
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-[#5A4A2E]">
                   {LANGUAGES.join(' • ')}
                 </span>
               </div>
@@ -227,7 +227,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-sm text-green-600 font-medium">Online</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-600">
+              <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
                 <Lock className="w-3 h-3" />
                 Approval-Only Mode
               </div>
@@ -240,10 +240,10 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
         {/* Task Queue */}
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
               <FileCode className="w-5 h-5 text-gold" />
               Development Tasks
-              <Badge className="ml-auto bg-gray-100 text-gray-600">
+              <Badge className="ml-auto bg-[#F7F2EA] text-[#5A4A2E]">
                 {tasks.filter(t => t.status !== 'completed').length} Active
               </Badge>
             </CardTitle>
@@ -258,15 +258,15 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm"
+                      className="p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 shadow-sm"
                     >
                       <div className="flex items-start justify-between gap-3 mb-2">
-                        <h4 className="font-medium text-black">{task.title}</h4>
+                        <h4 className="font-medium text-[#1A1A1A]">{task.title}</h4>
                         {getStatusBadge(task.status)}
                       </div>
-                      <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+                      <p className="text-sm text-[#5A4A2E] mb-3">{task.description}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-[#5A4A2E]">
                           Assigned by: {task.assignedBy === 'owner' ? 'Founder' : 'Assistant'}
                         </span>
                         
@@ -283,7 +283,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                             <Button 
                               size="sm"
                               onClick={() => handleApproveTask(task.id)}
-                              className="bg-gold hover:bg-gold/90 text-black"
+                              className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                             >
                               Approve
                             </Button>
@@ -308,19 +308,19 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
             {/* Assign New Task */}
             {canAssignTasks && (
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <Label className="text-sm text-gray-600 mb-2 block">Assign New Task</Label>
+              <div className="mt-4 pt-4 border-t border-[#B89555]/30">
+                <Label className="text-sm text-[#5A4A2E] mb-2 block">Assign New Task</Label>
                 <div className="flex gap-2">
                   <Textarea
                     value={newTaskDescription}
                     onChange={(e) => setNewTaskDescription(e.target.value)}
                     placeholder="Describe what you want to build or change..."
-                    className="min-h-[80px] bg-white border-gray-200"
+                    className="min-h-[80px] bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
                 <Button 
                   onClick={handleAssignTask}
-                  className="mt-2 w-full bg-gradient-to-r from-gold to-gold/80 text-black font-semibold hover:from-gold/90 hover:to-gold/70"
+                  className="mt-2 w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-gold/70"
                   disabled={!newTaskDescription.trim()}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
@@ -334,10 +334,10 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
         {/* Version History */}
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
+            <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
               <GitBranch className="w-5 h-5 text-gold" />
               Version History
-              <Badge className="ml-auto bg-gray-100 text-gray-600">
+              <Badge className="ml-auto bg-[#F7F2EA] text-[#5A4A2E]">
                 {versions.length} Versions
               </Badge>
             </CardTitle>
@@ -351,21 +351,21 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm"
+                    className="p-4 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex items-center gap-2">
                         <History className="w-4 h-4 text-gold" />
-                        <span className="font-mono font-medium text-black">{version.id}</span>
+                        <span className="font-mono font-medium text-[#1A1A1A]">{version.id}</span>
                         {index === 0 && (
                           <Badge className="bg-green-500/20 text-green-600">Current</Badge>
                         )}
                       </div>
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-[#5A4A2E]">
                         {version.date.toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{version.description}</p>
+                    <p className="text-sm text-[#5A4A2E] mb-3">{version.description}</p>
                     {index > 0 && isOwner && (
                       <Button 
                         size="sm" 
@@ -402,11 +402,11 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
       {/* Connected Tools */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
+          <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
             <Layers className="w-5 h-5 text-gold" />
             Connected AI Tools
           </CardTitle>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A4A2E]">
             Marcus works collaboratively with all creative and content tools
           </p>
         </CardHeader>
@@ -420,12 +420,12 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             ].map((tool) => (
               <div
                 key={tool.name}
-                className="p-3 bg-white rounded-xl border border-gray-200 flex items-center gap-3 hover:border-gold/50 hover:shadow-md transition-all cursor-pointer"
+                className="p-3 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 flex items-center gap-3 hover:border-gold/50 hover:shadow-md transition-all cursor-pointer"
               >
                 <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center`}>
                   <tool.icon className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-sm font-medium text-black">{tool.name}</span>
+                <span className="text-sm font-medium text-[#1A1A1A]">{tool.name}</span>
               </div>
             ))}
           </div>

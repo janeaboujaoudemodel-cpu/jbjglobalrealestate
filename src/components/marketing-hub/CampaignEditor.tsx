@@ -459,22 +459,22 @@ The content should be:
   const renderEmailPreview = () => {
     const isHTML = emailBody.includes('<') && emailBody.includes('>');
     return (
-      <div className="border-2 border-gold/30 rounded-lg overflow-hidden bg-white min-h-[400px]">
+      <div className="border-2 border-gold/30 rounded-lg overflow-hidden bg-[#FDFBF7] min-h-[400px]">
         {/* Email header simulation */}
         <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-gold/20 p-4 space-y-2">
           {subjectLine && (
             <div className="flex items-start gap-2">
-              <span className="text-xs text-black/50 shrink-0 pt-0.5">Subject:</span>
-              <span className="font-semibold text-black text-sm">{subjectLine}</span>
+              <span className="text-xs text-[#1A1A1A]/50 shrink-0 pt-0.5">Subject:</span>
+              <span className="font-semibold text-[#1A1A1A] text-sm">{subjectLine}</span>
             </div>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-black/50">From:</span>
-            <span className="text-xs text-black">JBJ Global Real Estate &lt;contact@jbj.ae&gt;</span>
+            <span className="text-xs text-[#1A1A1A]/50">From:</span>
+            <span className="text-xs text-[#1A1A1A]">JBJ Global Real Estate &lt;contact@jbj.ae&gt;</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-black/50">To:</span>
-            <span className="text-xs text-black">
+            <span className="text-xs text-[#1A1A1A]/50">To:</span>
+            <span className="text-xs text-[#1A1A1A]">
               {targetAudience === 'custom' 
                 ? `${selectedCount} selected recipients`
                 : targetAudience === 'all' ? 'All Contacts' : targetAudience
@@ -492,13 +492,13 @@ The content should be:
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(emailBody) }}
               />
             ) : (
-              <div className="text-black whitespace-pre-wrap text-sm leading-relaxed">{emailBody}</div>
+              <div className="text-[#1A1A1A] whitespace-pre-wrap text-sm leading-relaxed">{emailBody}</div>
             )
           ) : (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <Mail className="w-12 h-12 text-gray-500 mb-3" />
-              <p className="text-black/40 italic">Your email content will preview here...</p>
-              <p className="text-xs text-black/30 mt-1">Use the AI assistant or type content in the Content tab</p>
+              <Mail className="w-12 h-12 text-[#8A7556] mb-3" />
+              <p className="text-[#1A1A1A]/40 italic">Your email content will preview here...</p>
+              <p className="text-xs text-[#1A1A1A]/30 mt-1">Use the AI assistant or type content in the Content tab</p>
             </div>
           )}
         </div>
@@ -506,10 +506,10 @@ The content should be:
         {/* Attachments footer */}
         {attachments.length > 0 && (
           <div className="border-t border-gold/20 p-4 bg-[#FDFBF7]">
-            <p className="text-xs font-medium text-black/60 mb-2">📎 Attachments ({attachments.length})</p>
+            <p className="text-xs font-medium text-[#1A1A1A]/60 mb-2">📎 Attachments ({attachments.length})</p>
             <div className="flex flex-wrap gap-2">
               {attachments.map(att => (
-                <Badge key={att.id} variant="secondary" className="bg-gold/10 text-black border border-gold/20">
+                <Badge key={att.id} variant="secondary" className="bg-gold/10 text-[#1A1A1A] border border-gold/20">
                   {att.type === 'image' ? <Image className="w-3 h-3 mr-1" /> : <FileText className="w-3 h-3 mr-1" />}
                   {att.name}
                 </Badge>
@@ -533,32 +533,32 @@ The content should be:
       <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-black hover:bg-gold/10">
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-[#1A1A1A] hover:bg-gold/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="font-bold text-black">
+              <h1 className="font-bold text-[#1A1A1A]">
                 {campaign ? 'Edit Campaign' : 'New Campaign'}
               </h1>
-              <p className="text-xs text-black/60">
+              <p className="text-xs text-[#1A1A1A]/60">
                 {campaign ? campaign.name : 'Create a new marketing campaign'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-white/80 text-black hover:bg-gold/10">
+            <Button variant="outline" onClick={() => handleSave('draft')} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-gold/10">
               <Save className="h-4 w-4 mr-2" />
               Save Draft
             </Button>
-            <Button onClick={openScheduleDialog} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-white/80 text-black hover:bg-gold/10">
+            <Button onClick={openScheduleDialog} disabled={isSaving || isSending} className="border-2 border-gold/40 bg-[#FDFBF7]/80 text-[#1A1A1A] hover:bg-gold/10">
               <Calendar className="h-4 w-4 mr-2" />
               Schedule
             </Button>
             <Button 
               onClick={() => setShowSendConfirm(true)} 
               disabled={isSaving || isSending || !emailBody.trim()} 
-              className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold"
+              className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold"
             >
               {isSending ? (
                 <>
@@ -585,21 +585,21 @@ The content should be:
               animate={{ opacity: 1, x: 0 }}
               className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
-              <h2 className="font-semibold mb-4 text-black">Campaign Settings</h2>
+              <h2 className="font-semibold mb-4 text-[#1A1A1A]">Campaign Settings</h2>
               
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="name" className="text-black">Campaign Name *</Label>
-                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., January Newsletter" className="mt-1 bg-white border-gold/30" />
+                  <Label htmlFor="name" className="text-[#1A1A1A]">Campaign Name *</Label>
+                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g., January Newsletter" className="mt-1 bg-[#FDFBF7] border-gold/30" />
                 </div>
 
                 <div>
-                  <Label htmlFor="description" className="text-black">Description</Label>
-                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description..." className="mt-1 bg-white border-gold/30" rows={2} />
+                  <Label htmlFor="description" className="text-[#1A1A1A]">Description</Label>
+                  <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description..." className="mt-1 bg-[#FDFBF7] border-gold/30" rows={2} />
                 </div>
 
                 <div>
-                  <Label className="text-black">Campaign Type</Label>
+                  <Label className="text-[#1A1A1A]">Campaign Type</Label>
                   <div className="grid grid-cols-2 gap-2 mt-1">
                     {[
                       { value: 'email', icon: Mail, label: 'Email' },
@@ -612,8 +612,8 @@ The content should be:
                         onClick={() => setCampaignType(value as CampaignType)}
                         className={`flex items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                           campaignType === value
-                            ? 'border-gold bg-gold/20 text-black'
-                            : 'border-gold/30 bg-white hover:border-gold/50'
+                            ? 'border-gold bg-gold/20 text-[#1A1A1A]'
+                            : 'border-gold/30 bg-[#FDFBF7] hover:border-gold/50'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -624,9 +624,9 @@ The content should be:
                 </div>
 
                 <div>
-                  <Label htmlFor="audience" className="text-black">Target Audience</Label>
+                  <Label htmlFor="audience" className="text-[#1A1A1A]">Target Audience</Label>
                   <Select value={targetAudience} onValueChange={(v) => setTargetAudience(v as TargetAudience)}>
-                    <SelectTrigger className="mt-1 bg-white border-gold/30">
+                    <SelectTrigger className="mt-1 bg-[#FDFBF7] border-gold/30">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -652,10 +652,10 @@ The content should be:
                       <div className="space-y-3 pt-2 border-t border-gold/20">
                         <div className="flex items-center gap-2">
                           <Database className="w-4 h-4 text-gold" />
-                          <Label className="text-black text-sm font-semibold">Select Database</Label>
+                          <Label className="text-[#1A1A1A] text-sm font-semibold">Select Database</Label>
                         </div>
                         <Select value={audienceSource} onValueChange={setAudienceSource}>
-                          <SelectTrigger className="bg-white border-gold/30">
+                          <SelectTrigger className="bg-[#FDFBF7] border-gold/30">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -667,12 +667,12 @@ The content should be:
                         </Select>
 
                         <div className="relative">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/40" />
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#1A1A1A]/40" />
                           <Input
                             placeholder="Search recipients..."
                             value={recipientSearch}
                             onChange={(e) => setRecipientSearch(e.target.value)}
-                            className="pl-9 h-9 bg-white border-gold/30 text-sm"
+                            className="pl-9 h-9 bg-[#FDFBF7] border-gold/30 text-sm"
                           />
                         </div>
 
@@ -683,21 +683,21 @@ The content should be:
                               onCheckedChange={(c) => handleSelectAll(!!c)}
                               className="border-gold/50"
                             />
-                            <span className="text-black/60">Select All ({filteredRecipients.length})</span>
+                            <span className="text-[#1A1A1A]/60">Select All ({filteredRecipients.length})</span>
                           </div>
-                          <Badge className="bg-gold/20 text-black border-gold/30">
+                          <Badge className="bg-gold/20 text-[#1A1A1A] border-gold/30">
                             <UserCheck className="w-3 h-3 mr-1" />
                             {selectedCount} selected
                           </Badge>
                         </div>
 
-                        <ScrollArea className="h-[200px] border border-gold/20 rounded-lg bg-white">
+                        <ScrollArea className="h-[200px] border border-gold/20 rounded-lg bg-[#FDFBF7]">
                           {isLoadingRecipients ? (
                             <div className="flex items-center justify-center py-8">
                               <Loader2 className="w-5 h-5 animate-spin text-gold" />
                             </div>
                           ) : filteredRecipients.length === 0 ? (
-                            <div className="text-center py-8 text-xs text-black/40">
+                            <div className="text-center py-8 text-xs text-[#1A1A1A]/40">
                               No recipients found
                             </div>
                           ) : (
@@ -715,8 +715,8 @@ The content should be:
                                     className="border-gold/50"
                                   />
                                   <div className="min-w-0 flex-1">
-                                    <p className="font-medium text-black truncate">{r.name}</p>
-                                    <p className="text-black/50 truncate">{r.email}</p>
+                                    <p className="font-medium text-[#1A1A1A] truncate">{r.name}</p>
+                                    <p className="text-[#1A1A1A]/50 truncate">{r.email}</p>
                                   </div>
                                   <Badge variant="outline" className="text-[10px] border-gold/20 shrink-0">{r.source}</Badge>
                                 </label>
@@ -740,7 +740,7 @@ The content should be:
             >
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-gold" />
-                <h2 className="font-semibold text-black">AI Content Assistant</h2>
+                <h2 className="font-semibold text-[#1A1A1A]">AI Content Assistant</h2>
               </div>
               
               <Textarea
@@ -748,13 +748,13 @@ The content should be:
                 onChange={(e) => setAiPrompt(e.target.value)}
                 placeholder="Describe what you want to create... e.g., 'Create an email announcing our new Palm Jumeirah villa listings'"
                 rows={3}
-                className="mb-3 bg-white border-gold/30"
+                className="mb-3 bg-[#FDFBF7] border-gold/30"
               />
               
               <Button 
                 onClick={handleAIGenerate}
                 disabled={isGenerating || !aiPrompt.trim()}
-                className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold"
+                className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold"
               >
                 {isGenerating ? (
                   <>
@@ -781,19 +781,19 @@ The content should be:
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between mb-4">
                   <TabsList className="bg-gold/10 border-2 border-gold/30">
-                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">Content</TabsTrigger>
-                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">Content</TabsTrigger>
+                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                       <Eye className="w-3.5 h-3.5 mr-1" /> Preview
                     </TabsTrigger>
-                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                       Attachments
                       {attachments.length > 0 && (
-                        <Badge className="ml-2 bg-gold/30 text-black text-xs">{attachments.length}</Badge>
+                        <Badge className="ml-2 bg-gold/30 text-[#1A1A1A] text-xs">{attachments.length}</Badge>
                       )}
                     </TabsTrigger>
                   </TabsList>
 
-                  <Badge variant="outline" className="text-xs border-gold/30 text-black">
+                  <Badge variant="outline" className="text-xs border-gold/30 text-[#1A1A1A]">
                     <Users className="w-3 h-3 mr-1" />
                     {targetAudience === 'custom' 
                       ? `${selectedCount} recipients`
@@ -805,24 +805,24 @@ The content should be:
                 <TabsContent value="content" className="space-y-4 m-0">
                   {campaignType === 'email' && (
                     <div>
-                      <Label htmlFor="subject" className="text-black">Subject Line</Label>
+                      <Label htmlFor="subject" className="text-[#1A1A1A]">Subject Line</Label>
                       <Input
                         id="subject"
                         value={subjectLine}
                         onChange={(e) => setSubjectLine(e.target.value)}
                         placeholder="Enter email subject..."
-                        className="mt-1 bg-white border-gold/30"
+                        className="mt-1 bg-[#FDFBF7] border-gold/30"
                       />
                     </div>
                   )}
 
                   <div>
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="body" className="text-black">
+                      <Label htmlFor="body" className="text-[#1A1A1A]">
                         {campaignType === 'email' ? 'Email Body' : 'Message Content'}
                       </Label>
                       {campaignType === 'email' && (
-                        <span className="text-[10px] text-black/40">Supports HTML for rich formatting</span>
+                        <span className="text-[10px] text-[#1A1A1A]/40">Supports HTML for rich formatting</span>
                       )}
                     </div>
                     <Textarea
@@ -834,7 +834,7 @@ The content should be:
                           ? 'Write your email content here (plain text or HTML)...'
                           : 'Write your message here...'
                       }
-                      className="mt-1 min-h-[300px] font-mono text-sm bg-white border-gold/30"
+                      className="mt-1 min-h-[300px] font-mono text-sm bg-[#FDFBF7] border-gold/30"
                     />
                   </div>
                 </TabsContent>
@@ -846,13 +846,13 @@ The content should be:
                 <TabsContent value="attachments" className="m-0">
                   <div className="border-2 border-dashed border-gold/40 rounded-lg p-8 text-center bg-gold/5">
                     <Upload className="h-12 w-12 mx-auto text-gold mb-4" />
-                    <h3 className="font-semibold mb-2 text-black">Upload Attachments</h3>
-                    <p className="text-sm text-black/60 mb-4">Add images or documents to your campaign</p>
+                    <h3 className="font-semibold mb-2 text-[#1A1A1A]">Upload Attachments</h3>
+                    <p className="text-sm text-[#1A1A1A]/60 mb-4">Add images or documents to your campaign</p>
                     <div className="flex justify-center gap-3">
-                      <Button variant="outline" onClick={() => imageInputRef.current?.click()} className="border-2 border-gold/40 bg-white hover:bg-gold/10">
+                      <Button variant="outline" onClick={() => imageInputRef.current?.click()} className="border-2 border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
                         <Image className="h-4 w-4 mr-2" /> Add Images
                       </Button>
-                      <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-2 border-gold/40 bg-white hover:bg-gold/10">
+                      <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-2 border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
                         <FileText className="h-4 w-4 mr-2" /> Add Documents
                       </Button>
                     </div>
@@ -861,7 +861,7 @@ The content should be:
                   {attachments.length > 0 && (
                     <div className="mt-4 space-y-2">
                       {attachments.map(att => (
-                        <div key={att.id} className="flex items-center justify-between p-3 rounded-lg border-2 border-gold/20 bg-white">
+                        <div key={att.id} className="flex items-center justify-between p-3 rounded-lg border-2 border-gold/20 bg-[#FDFBF7]">
                           <div className="flex items-center gap-3">
                             {att.type === 'image' ? (
                               <div className="w-10 h-10 rounded bg-gold/10 flex items-center justify-center">
@@ -873,8 +873,8 @@ The content should be:
                               </div>
                             )}
                             <div>
-                              <p className="text-sm font-medium text-black">{att.name}</p>
-                              <p className="text-xs text-black/50">{(att.size / 1024).toFixed(1)} KB</p>
+                              <p className="text-sm font-medium text-[#1A1A1A]">{att.name}</p>
+                              <p className="text-xs text-[#1A1A1A]/50">{(att.size / 1024).toFixed(1)} KB</p>
                             </div>
                           </div>
                           <Button variant="ghost" size="icon" onClick={() => removeAttachment(att.id)} className="text-red-500 hover:bg-red-50">
@@ -895,7 +895,7 @@ The content should be:
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
         <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Clock className="w-5 h-5 text-gold" />
               Schedule Campaign
             </DialogTitle>
@@ -903,15 +903,15 @@ The content should be:
           
           <div className="space-y-4 py-4">
             <div>
-              <Label className="text-black">Date</Label>
-              <Input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="mt-1 bg-white border-gold/30" />
+              <Label className="text-[#1A1A1A]">Date</Label>
+              <Input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} min={new Date().toISOString().split('T')[0]} className="mt-1 bg-[#FDFBF7] border-gold/30" />
             </div>
             <div>
-              <Label className="text-black">Time</Label>
-              <Input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} className="mt-1 bg-white border-gold/30" />
+              <Label className="text-[#1A1A1A]">Time</Label>
+              <Input type="time" value={scheduleTime} onChange={(e) => setScheduleTime(e.target.value)} className="mt-1 bg-[#FDFBF7] border-gold/30" />
             </div>
             <div className="p-3 rounded-lg bg-gold/10 border border-gold/30">
-              <p className="text-sm text-black">
+              <p className="text-sm text-[#1A1A1A]">
                 <CheckCircle className="w-4 h-4 inline mr-2 text-green-600" />
                 Campaign will be sent on{' '}
                 <strong>{scheduleDate && new Date(`${scheduleDate}T${scheduleTime}`).toLocaleString()}</strong>
@@ -921,7 +921,7 @@ The content should be:
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowScheduleDialog(false)} className="border-gold/40">Cancel</Button>
-            <Button onClick={() => handleSave('scheduled')} disabled={isSaving || !scheduleDate} className="bg-gradient-to-r from-gold to-amber-600 text-black">
+            <Button onClick={() => handleSave('scheduled')} disabled={isSaving || !scheduleDate} className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A]">
               {isSaving ? 'Scheduling...' : 'Schedule Campaign'}
             </Button>
           </DialogFooter>
@@ -932,7 +932,7 @@ The content should be:
       <Dialog open={showSendConfirm} onOpenChange={setShowSendConfirm}>
         <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Send className="w-5 h-5 text-gold" />
               Send Campaign Now
             </DialogTitle>
@@ -940,20 +940,20 @@ The content should be:
           
           <div className="space-y-4 py-4">
             <div className="p-4 rounded-lg bg-gold/10 border border-gold/30 space-y-2">
-              <p className="text-sm font-semibold text-black">Campaign: {name}</p>
-              <p className="text-sm text-black/70">Channel: {campaignType === 'whatsapp' ? 'WhatsApp' : campaignType === 'email' ? 'Email' : campaignType}</p>
-              <p className="text-sm text-black/70">
+              <p className="text-sm font-semibold text-[#1A1A1A]">Campaign: {name}</p>
+              <p className="text-sm text-[#1A1A1A]/70">Channel: {campaignType === 'whatsapp' ? 'WhatsApp' : campaignType === 'email' ? 'Email' : campaignType}</p>
+              <p className="text-sm text-[#1A1A1A]/70">
                 Audience: {targetAudience === 'custom' ? `${selectedCount} selected recipients` : targetAudience === 'all' ? 'All Contacts' : targetAudience}
               </p>
             </div>
-            <p className="text-sm text-black/60">
+            <p className="text-sm text-[#1A1A1A]/60">
               ⚠️ This will immediately send the campaign to all selected recipients. This action cannot be undone.
             </p>
           </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowSendConfirm(false)} className="border-gold/40">Cancel</Button>
-            <Button onClick={handleSendNow} className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold">
+            <Button onClick={handleSendNow} className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold">
               <Send className="h-4 w-4 mr-2" />
               Confirm & Send
             </Button>

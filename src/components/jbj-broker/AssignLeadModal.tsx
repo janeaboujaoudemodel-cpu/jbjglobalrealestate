@@ -174,7 +174,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-black">
+          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <UserPlus className="h-5 w-5 text-gold" />
             Assign Lead to Broker
           </DialogTitle>
@@ -182,11 +182,11 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "existing" | "new")}>
           <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
               <Users className="h-4 w-4" />
               Existing Lead
             </TabsTrigger>
-            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsTrigger value="new" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
               <PlusCircle className="h-4 w-4" />
               New Lead
             </TabsTrigger>
@@ -194,13 +194,13 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
           {/* Existing Lead Tab */}
           <TabsContent value="existing" className="space-y-4 mt-4">
-            <p className="text-sm text-black/70">
+            <p className="text-sm text-[#1A1A1A]/70">
               Select an unassigned lead from your database to assign to a broker.
             </p>
             
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
               <Input
                 placeholder="Search by name, email, or phone..."
                 value={leadSearchQuery}
@@ -210,13 +210,13 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
             </div>
 
             {/* Leads List */}
-            <ScrollArea className="h-48 rounded-lg border border-gold/30 bg-white/50">
+            <ScrollArea className="h-48 rounded-lg border border-gold/30 bg-[#FDFBF7]/50">
               {loadingLeads ? (
                 <div className="flex items-center justify-center py-8">
                   <Loader2 className="h-6 w-6 animate-spin text-gold" />
                 </div>
               ) : filteredExistingLeads.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8 text-black/60">
+                <div className="flex flex-col items-center justify-center py-8 text-[#1A1A1A]/60">
                   <Users className="h-8 w-8 mb-2" />
                   <p className="text-sm">No unassigned leads found</p>
                 </div>
@@ -232,8 +232,8 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
                           : "hover:bg-gold/10 border border-transparent"
                       }`}
                     >
-                      <p className="font-medium text-black">{lead.name}</p>
-                      <p className="text-xs text-black/60">
+                      <p className="font-medium text-[#1A1A1A]">{lead.name}</p>
+                      <p className="text-xs text-[#1A1A1A]/60">
                         {lead.email || lead.phone || "No contact info"}
                       </p>
                     </button>
@@ -244,7 +244,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
             {/* Broker Selection */}
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Assign to Broker *</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Assign to Broker *</label>
               <Select value={selectedBroker} onValueChange={setSelectedBroker}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a broker" />
@@ -254,7 +254,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
                     <SelectItem key={broker.id} value={broker.id}>
                       <div className="flex items-center gap-2">
                         <span>{broker.name}</span>
-                        <span className="text-black/50 text-xs">
+                        <span className="text-[#1A1A1A]/50 text-xs">
                           ({broker.active_leads}/{broker.capacity})
                         </span>
                       </div>
@@ -285,12 +285,12 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
           {/* New Lead Tab */}
           <TabsContent value="new" className="space-y-4 mt-4">
-            <p className="text-sm text-black/70">
+            <p className="text-sm text-[#1A1A1A]/70">
               Create a new lead and assign them directly to a broker.
             </p>
 
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Lead Name *</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Lead Name *</label>
               <Input
                 value={leadName}
                 onChange={(e) => setLeadName(e.target.value)}
@@ -299,7 +299,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm text-black/70 mb-2 block">Email</label>
+                <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Email</label>
                 <Input
                   type="email"
                   value={leadEmail}
@@ -308,7 +308,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
                 />
               </div>
               <div>
-                <label className="text-sm text-black/70 mb-2 block">Phone</label>
+                <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Phone</label>
                 <Input
                   value={leadPhone}
                   onChange={(e) => setLeadPhone(e.target.value)}
@@ -317,7 +317,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
               </div>
             </div>
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Property Interest</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Property Interest</label>
               <Input
                 value={leadInterest}
                 onChange={(e) => setLeadInterest(e.target.value)}
@@ -325,7 +325,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
               />
             </div>
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Assign to Broker *</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Assign to Broker *</label>
               <Select value={selectedBroker} onValueChange={setSelectedBroker}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a broker" />
@@ -335,7 +335,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
                     <SelectItem key={broker.id} value={broker.id}>
                       <div className="flex items-center gap-2">
                         <span>{broker.name}</span>
-                        <span className="text-black/50 text-xs">
+                        <span className="text-[#1A1A1A]/50 text-xs">
                           ({broker.active_leads}/{broker.capacity})
                         </span>
                       </div>

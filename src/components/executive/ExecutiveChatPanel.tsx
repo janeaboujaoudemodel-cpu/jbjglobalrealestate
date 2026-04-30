@@ -225,13 +225,13 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-black" />
+                <Sparkles className="w-6 h-6 text-[#1A1A1A]" />
               </div>
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0A0A0A] rounded-full animate-pulse" />
             </div>
             <div>
               <h3 className="text-gold font-semibold">Amanda Clarke</h3>
-              <p className="text-gray-600 text-xs flex items-center gap-1">
+              <p className="text-[#5A4A2E] text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                 Available 24/7
               </p>
@@ -269,14 +269,14 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               >
                 {message.role === 'assistant' && (
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-4 h-4 text-black" />
+                    <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                   </div>
                 )}
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
                     message.role === 'user' 
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-sm' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-tr-sm' 
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-tl-sm'
                   }`}>
                     {message.isTyping ? (
                       <div className="flex gap-1 py-1">
@@ -295,7 +295,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -305,8 +305,8 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                   )}
                 </div>
                 {message.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-gray-600" />
+                  <div className="w-8 h-8 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
+                    <User className="w-4 h-4 text-[#5A4A2E]" />
                   </div>
                 )}
               </motion.div>
@@ -330,7 +330,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
-              className="flex-1 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-gray-600 focus:border-gold"
+              className="flex-1 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-[#5A4A2E] focus:border-gold"
               disabled={isLoading}
             />
             <Button
@@ -346,7 +346,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               )}
             </Button>
           </div>
-          <p className="text-gray-600 text-xs text-center mt-3">
+          <p className="text-[#5A4A2E] text-xs text-center mt-3">
             <Sparkles className="w-3 h-3 inline mr-1" />
             Powered by JBJ Executive AI
           </p>

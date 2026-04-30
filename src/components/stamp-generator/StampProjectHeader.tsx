@@ -59,7 +59,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
       : '';
 
   return (
-    <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-md z-10 shadow-sm">
+    <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-md z-10 shadow-sm">
       <div className="px-5 py-3 flex items-center justify-between gap-4">
         {/* Left: Back + project info */}
         <div className="flex items-center gap-3 min-w-0">
@@ -104,7 +104,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
         {/* Right: Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
           {/* Undo/Redo group */}
-          <div className="flex items-center gap-0.5 bg-white rounded-lg border border-[hsl(var(--border))] shadow-sm px-1 py-0.5">
+          <div className="flex items-center gap-0.5 bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] shadow-sm px-1 py-0.5">
             <button onClick={props.onUndo} disabled={!props.canUndo}
               className="w-7 h-7 rounded-md flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
               title="Undo"><Undo2 size={12} /></button>

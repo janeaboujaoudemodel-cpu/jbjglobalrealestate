@@ -128,12 +128,12 @@ const OwnerDashboard = () => {
       case 'sold':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sold</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">{status}</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30">{status}</Badge>;
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       <div className="container mx-auto px-4 py-8">
         <motion.div
           initial="initial"
@@ -163,7 +163,7 @@ const OwnerDashboard = () => {
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-gray-800">
+              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-[#1A1A1A]">
                 <DropdownMenuItem asChild>
                   <Link to="/my-account" className="flex items-center gap-2 cursor-pointer">
                     <User className="w-4 h-4" /> My Profile
@@ -184,7 +184,7 @@ const OwnerDashboard = () => {
 
           {/* Quick Stats */}
           <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -198,7 +198,7 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
@@ -212,7 +212,7 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
@@ -226,7 +226,7 @@ const OwnerDashboard = () => {
               </CardContent>
             </Card>
             
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
@@ -246,14 +246,14 @@ const OwnerDashboard = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* My Listings */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle className="text-xl">My Listings</CardTitle>
                       <CardDescription>Properties you've listed with JBJ</CardDescription>
                     </div>
                     <Link to="/seller-listing">
-                      <Button className="bg-gold hover:bg-gold/90 text-black">
+                      <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                         <Plus className="w-4 h-4 mr-2" /> List New Property
                       </Button>
                     </Link>
@@ -263,7 +263,7 @@ const OwnerDashboard = () => {
                       {MOCK_LISTINGS.map((listing) => (
                         <div 
                           key={listing.id}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-gray-800 transition-colors"
+                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-lg bg-zinc-700 flex items-center justify-center">
@@ -287,10 +287,10 @@ const OwnerDashboard = () => {
                       
                       {MOCK_LISTINGS.length === 0 && (
                         <div className="text-center py-8">
-                          <Home className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                          <Home className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
                           <p className="text-white/70">No listings yet</p>
                           <Link to="/seller-listing">
-                            <Button className="mt-4 bg-gold hover:bg-gold/90 text-black">
+                            <Button className="mt-4 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                               List Your First Property
                             </Button>
                           </Link>
@@ -303,7 +303,7 @@ const OwnerDashboard = () => {
 
               {/* Listing Status Timeline */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-xl">Listing Status Timeline</CardTitle>
                     <CardDescription>Track the progress of your listings</CardDescription>
@@ -360,7 +360,7 @@ const OwnerDashboard = () => {
             <div className="space-y-6">
               {/* Messages */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <MessageSquare className="w-5 h-5 text-gold" />
@@ -373,7 +373,7 @@ const OwnerDashboard = () => {
                         <div 
                           key={message.id}
                           className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                            message.unread ? 'bg-gold/10 border border-gold/20' : 'bg-zinc-800/50 hover:bg-gray-800'
+                            message.unread ? 'bg-gold/10 border border-gold/20' : 'bg-zinc-800/50 hover:bg-[#1A1A1A]'
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
@@ -391,7 +391,7 @@ const OwnerDashboard = () => {
 
               {/* Documents */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-lg flex items-center gap-2">
                       <FileText className="w-5 h-5 text-gold" />
@@ -406,7 +406,7 @@ const OwnerDashboard = () => {
                       {MOCK_DOCUMENTS.map((doc, idx) => (
                         <div 
                           key={idx}
-                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1A1A1A] transition-colors cursor-pointer"
                         >
                           <FileText className="w-8 h-8 text-red-400" />
                           <div className="flex-1 min-w-0">
@@ -430,7 +430,7 @@ const OwnerDashboard = () => {
                       Our team is here to assist with your listings
                     </p>
                     <Link to="/contact">
-                      <Button className="w-full bg-gold hover:bg-gold/90 text-black">
+                      <Button className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                         Contact Support
                       </Button>
                     </Link>

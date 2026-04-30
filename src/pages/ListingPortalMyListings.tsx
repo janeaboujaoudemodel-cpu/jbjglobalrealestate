@@ -180,8 +180,8 @@ const ListingPortalMyListings = () => {
     return (
       <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-black text-xl font-bold mb-4">Please sign in</h2>
-          <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-black">Sign In</Button>
+          <h2 className="text-[#1A1A1A] text-xl font-bold mb-4">Please sign in</h2>
+          <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Sign In</Button>
         </div>
       </section>
     );
@@ -192,47 +192,47 @@ const ListingPortalMyListings = () => {
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-gray-600 hover:text-gold mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#5A4A2E] hover:text-gold mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-2xl font-bold text-black">My Listings</h1>
-              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-black">
+              <h1 className="text-2xl font-bold text-[#1A1A1A]">My Listings</h1>
+              <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                 <Plus className="w-4 h-4 mr-2" /> New Listing
               </Button>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Star className="w-5 h-5 text-gold mx-auto mb-1" />
-                <p className="text-2xl font-bold text-black">{points?.points || 0}</p>
-                <p className="text-xs text-gray-600">Points</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.points || 0}</p>
+                <p className="text-xs text-[#5A4A2E]">Points</p>
               </div>
-              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Award className="w-5 h-5 text-gold mx-auto mb-1" />
-                <p className="text-sm font-bold text-black capitalize">{points?.tier || 'Starter'}</p>
-                <p className="text-xs text-gray-600">Tier</p>
+                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{points?.tier || 'Starter'}</p>
+                <p className="text-xs text-[#5A4A2E]">Tier</p>
               </div>
-              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
+              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                <p className="text-2xl font-bold text-black">{points?.free_listings_remaining ?? 3}</p>
-                <p className="text-xs text-gray-600">Free Left</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{points?.free_listings_remaining ?? 3}</p>
+                <p className="text-xs text-[#5A4A2E]">Free Left</p>
               </div>
-              <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
-                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-gray-600'}`} />
-                <p className="text-sm font-bold text-black capitalize">{verification?.status || 'Not Verified'}</p>
-                <p className="text-xs text-gray-600">Broker Status</p>
+              <div className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 text-center">
+                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-[#5A4A2E]'}`} />
+                <p className="text-sm font-bold text-[#1A1A1A] capitalize">{verification?.status || 'Not Verified'}</p>
+                <p className="text-xs text-[#5A4A2E]">Broker Status</p>
               </div>
             </div>
 
             {/* Verification */}
             {(!verification || verification.status === 'pending') && (
-              <div className="bg-white border-2 border-gold/30 rounded-xl p-4 mb-6">
+              <div className="bg-[#FDFBF7] border-2 border-gold/30 rounded-xl p-4 mb-6">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-black font-semibold text-sm">Broker Verification</h3>
-                    <p className="text-gray-600 text-xs">
+                    <h3 className="text-[#1A1A1A] font-semibold text-sm">Broker Verification</h3>
+                    <p className="text-[#5A4A2E] text-xs">
                       {verification?.status === 'pending' ? 'Your verification is under review' : 'Get verified to earn 2x points'}
                     </p>
                   </div>
@@ -244,9 +244,9 @@ const ListingPortalMyListings = () => {
                 </div>
                 {showVerForm && (
                   <div className="mt-4 space-y-3">
-                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-white border-gold/30 text-black" />
-                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-white border-gold/30 text-black" />
-                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-gold hover:bg-gold/90 text-black">Submit Verification</Button>
+                    <Input value={reraNumber} onChange={e => setReraNumber(e.target.value)} placeholder="RERA Number" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="Company Name" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
+                    <Button onClick={handleVerificationSubmit} size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Submit Verification</Button>
                   </div>
                 )}
               </div>
@@ -258,7 +258,7 @@ const ListingPortalMyListings = () => {
                 variant={activeTab === 'active' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setActiveTab('active')}
-                className={activeTab === 'active' ? 'bg-gold text-black hover:bg-gold/90' : 'border-gold/30 text-black/60 hover:bg-gold/10'}
+                className={activeTab === 'active' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90' : 'border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10'}
               >
                 Active ({listings.length})
               </Button>
@@ -266,7 +266,7 @@ const ListingPortalMyListings = () => {
                 variant={activeTab === 'deleted' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setActiveTab('deleted')}
-                className={activeTab === 'deleted' ? 'bg-gold text-black hover:bg-gold/90' : 'border-gold/30 text-black/60 hover:bg-gold/10'}
+                className={activeTab === 'deleted' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90' : 'border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10'}
               >
                 <Trash2 className="w-3.5 h-3.5 mr-1" />
                 Recently Deleted ({deletedListings.length})
@@ -280,21 +280,21 @@ const ListingPortalMyListings = () => {
               </div>
             ) : activeTab === 'active' ? (
               listings.length === 0 ? (
-                <div className="text-center py-12 bg-white/60 border-2 border-gold/20 rounded-2xl">
-                  <h3 className="text-black font-semibold mb-2">No listings yet</h3>
-                  <p className="text-gray-600 text-sm mb-4">Submit your first property listing!</p>
-                  <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-black">Submit Listing</Button>
+                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-gold/20 rounded-2xl">
+                  <h3 className="text-[#1A1A1A] font-semibold mb-2">No listings yet</h3>
+                  <p className="text-[#5A4A2E] text-sm mb-4">Submit your first property listing!</p>
+                  <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">Submit Listing</Button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {listings.map(listing => {
                     const daysLeft = getDaysUntilExpiry(listing.expires_at);
                     return (
-                      <div key={listing.id} className="bg-white border-2 border-gold/20 rounded-xl p-4 flex items-center justify-between hover:border-gold/50 transition-all">
+                      <div key={listing.id} className="bg-[#FDFBF7] border-2 border-gold/20 rounded-xl p-4 flex items-center justify-between hover:border-gold/50 transition-all">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             {statusIcon(listing.status)}
-                            <h3 className="text-black font-medium text-sm">{listing.title}</h3>
+                            <h3 className="text-[#1A1A1A] font-medium text-sm">{listing.title}</h3>
                             {listing.is_featured && <Badge className="bg-gold/15 text-gold border-gold/30 text-[10px]">Featured</Badge>}
                             {listing.listing_type === 'rent' && (
                               <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-[10px]">For Rent</Badge>
@@ -303,12 +303,12 @@ const ListingPortalMyListings = () => {
                               <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]">For Sale</Badge>
                             )}
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-gray-600">
+                          <div className="flex items-center gap-3 text-xs text-[#5A4A2E]">
                             <Badge className={`text-[10px] ${statusColor(listing.status)}`}>{listing.status}</Badge>
                             <span>{listing.currency} {listing.price.toLocaleString()}</span>
                             <span>{new Date(listing.created_at).toLocaleDateString()}</span>
                             {listing.edit_count > 0 && (
-                              <span className="text-black/40">Edited {listing.edit_count}x</span>
+                              <span className="text-[#1A1A1A]/40">Edited {listing.edit_count}x</span>
                             )}
                             {daysLeft !== null && daysLeft <= 7 && (
                               <Badge className="bg-amber-100 text-amber-700 border-amber-300 text-[10px]">
@@ -318,10 +318,10 @@ const ListingPortalMyListings = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="icon" variant="ghost" className="text-gray-600 hover:text-gold" onClick={() => handleEdit(listing.id)} title="Edit listing">
+                          <Button size="icon" variant="ghost" className="text-[#5A4A2E] hover:text-gold" onClick={() => handleEdit(listing.id)} title="Edit listing">
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" className="text-gray-600 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
+                          <Button size="icon" variant="ghost" className="text-[#5A4A2E] hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -332,21 +332,21 @@ const ListingPortalMyListings = () => {
               )
             ) : (
               deletedListings.length === 0 ? (
-                <div className="text-center py-12 bg-white/60 border-2 border-gold/20 rounded-2xl">
-                  <Trash2 className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                  <h3 className="text-black font-semibold mb-2">No deleted listings</h3>
-                  <p className="text-gray-600 text-sm">Deleted listings will appear here for restoration.</p>
+                <div className="text-center py-12 bg-[#FDFBF7]/60 border-2 border-gold/20 rounded-2xl">
+                  <Trash2 className="w-8 h-8 text-[#5A4A2E] mx-auto mb-3" />
+                  <h3 className="text-[#1A1A1A] font-semibold mb-2">No deleted listings</h3>
+                  <p className="text-[#5A4A2E] text-sm">Deleted listings will appear here for restoration.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {deletedListings.map(listing => (
-                    <div key={listing.id} className="bg-white/60 border-2 border-red-200/50 rounded-xl p-4 flex items-center justify-between">
+                    <div key={listing.id} className="bg-[#FDFBF7]/60 border-2 border-red-200/50 rounded-xl p-4 flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <Trash2 className="w-4 h-4 text-red-400" />
-                          <h3 className="text-black/50 font-medium text-sm line-through">{listing.title}</h3>
+                          <h3 className="text-[#1A1A1A]/50 font-medium text-sm line-through">{listing.title}</h3>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-gray-600">
+                        <div className="flex items-center gap-3 text-xs text-[#5A4A2E]">
                           <span>{listing.currency} {listing.price.toLocaleString()}</span>
                           <span>Deleted {listing.deleted_at ? new Date(listing.deleted_at).toLocaleDateString() : ''}</span>
                         </div>
@@ -371,18 +371,18 @@ const ListingPortalMyListings = () => {
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-white border-2 border-gold/30">
+        <AlertDialogContent className="bg-[#FDFBF7] border-2 border-gold/30">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-black">
+            <AlertDialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <AlertTriangle className="w-5 h-5 text-amber-500" />
               Delete Listing?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600">
+            <AlertDialogDescription className="text-[#5A4A2E]">
               Are you sure you want to delete this listing? You can restore it anytime from the "Recently Deleted" tab.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-gold/30 text-black hover:bg-gold/10">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-500 text-white hover:bg-red-600">
               Yes, Delete
             </AlertDialogAction>

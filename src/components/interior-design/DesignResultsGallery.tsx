@@ -221,10 +221,10 @@ const DesignResultsGallery = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-zinc-900/60 border border-gray-800 rounded-2xl overflow-hidden"
+        className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl overflow-hidden"
       >
         {/* Success Header */}
-        <div className="p-6 border-b border-gray-800 flex items-center justify-between">
+        <div className="p-6 border-b border-[#1A1A1A] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
@@ -256,7 +256,7 @@ const DesignResultsGallery = ({
             )}
             <button
               onClick={() => setSelectedImage(images[0])}
-              className="absolute bottom-4 right-4 p-2 bg-black/60 rounded-lg hover:bg-black/80 transition-colors"
+              className="absolute bottom-4 right-4 p-2 bg-[#1A1A1A]/60 rounded-lg hover:bg-[#1A1A1A]/80 transition-colors"
             >
               <ZoomIn className="w-5 h-5 text-white" />
             </button>
@@ -274,7 +274,7 @@ const DesignResultsGallery = ({
         )}
 
         {/* Actions */}
-        <div className="p-6 border-t border-gray-800 flex flex-wrap gap-3">
+        <div className="p-6 border-t border-[#1A1A1A] flex flex-wrap gap-3">
           <Button
             onClick={downloadImage}
             disabled={isDownloading}
@@ -326,7 +326,7 @@ const DesignResultsGallery = ({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#1A1A1A]/90 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
           <img

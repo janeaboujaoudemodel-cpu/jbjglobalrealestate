@@ -365,7 +365,7 @@ const AICalendar = () => {
     viewing: 'bg-emerald-500',
     call: 'bg-purple-500',
     reminder: 'bg-yellow-500',
-    other: 'bg-gray-500'
+    other: 'bg-[#B89555]'
   };
 
   return (
@@ -394,7 +394,7 @@ const AICalendar = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               AI Notes & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Calendar</span>
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-[#5A4A2E] max-w-2xl mx-auto">
               Manage your meetings, notes, and schedules. Automatic email and phone reminders for all your events.
             </p>
             <p className="text-xs text-gold mt-2">Powered by JBJ Global Real Estate</p>
@@ -423,19 +423,19 @@ const AICalendar = () => {
             </DialogTrigger>
              <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                <DialogHeader>
-                 <DialogTitle className="text-black font-bold">Create New Project</DialogTitle>
+                 <DialogTitle className="text-[#1A1A1A] font-bold">Create New Project</DialogTitle>
                </DialogHeader>
                <div className="space-y-4">
                  <div>
-                   <Label className="text-gray-700">Project Name</Label>
+                   <Label className="text-[#5A4A2E]">Project Name</Label>
                    <Input
                      value={newProjectName}
                      onChange={(e) => setNewProjectName(e.target.value)}
                      placeholder="My Calendar Project"
-                     className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                     className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                    />
                  </div>
-                 <Button onClick={createProject} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
+                 <Button onClick={createProject} className="w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70">
                    Create Project
                  </Button>
               </div>
@@ -447,12 +447,12 @@ const AICalendar = () => {
               const project = projects.find(p => p.id === id);
               if (project) loadProject(project);
             }}>
-              <SelectTrigger className="w-40 bg-white border-2 border-gold/30 text-sm text-black">
+              <SelectTrigger className="w-40 bg-[#FDFBF7] border-2 border-gold/30 text-sm text-[#1A1A1A]">
                 <SelectValue placeholder="Load Project" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-2 border-gold/30 z-[200]">
+              <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-[200]">
                 {projects.map(p => (
-                  <SelectItem key={p.id} value={p.id} className="text-black hover:bg-gold/10">
+                  <SelectItem key={p.id} value={p.id} className="text-[#1A1A1A] hover:bg-gold/10">
                     {p.name}
                   </SelectItem>
                 ))}
@@ -485,55 +485,55 @@ const AICalendar = () => {
                   </DialogTrigger>
                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-lg shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                      <DialogHeader>
-                       <DialogTitle className="text-black font-bold flex items-center gap-2">
+                       <DialogTitle className="text-[#1A1A1A] font-bold flex items-center gap-2">
                          <Calendar className="w-5 h-5 text-gold" />
                          {editingEvent ? 'Edit Event' : 'Create New Event'}
                        </DialogTitle>
                      </DialogHeader>
                      <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                        <div>
-                         <Label className="text-gray-700">Title *</Label>
+                         <Label className="text-[#5A4A2E]">Title *</Label>
                          <Input
                            value={eventForm.title}
                            onChange={(e) => setEventForm(prev => ({ ...prev, title: e.target.value }))}
                            placeholder="Meeting with client"
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                          />
                       </div>
                        <div className="grid grid-cols-2 gap-4">
                          <div>
-                           <Label className="text-gray-700">Date</Label>
+                           <Label className="text-[#5A4A2E]">Date</Label>
                            <Input
                              type="date"
                              value={eventForm.date}
                              onChange={(e) => setEventForm(prev => ({ ...prev, date: e.target.value }))}
-                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                             className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                            />
                          </div>
                          <div>
-                           <Label className="text-gray-700">Time</Label>
+                           <Label className="text-[#5A4A2E]">Time</Label>
                            <Input
                              type="time"
                              value={eventForm.time}
                              onChange={(e) => setEventForm(prev => ({ ...prev, time: e.target.value }))}
-                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                             className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                            />
                          </div>
                        </div>
                        <div className="grid grid-cols-2 gap-4">
                          <div>
-                           <Label className="text-gray-700">Duration (mins)</Label>
+                           <Label className="text-[#5A4A2E]">Duration (mins)</Label>
                            <Input
                              type="number"
                              value={eventForm.duration}
                              onChange={(e) => setEventForm(prev => ({ ...prev, duration: parseInt(e.target.value) || 60 }))}
-                             className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                             className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                            />
                          </div>
                          <div>
-                           <Label className="text-gray-700">Type</Label>
+                           <Label className="text-[#5A4A2E]">Type</Label>
                            <Select value={eventForm.type} onValueChange={(v: CalendarEvent['type']) => setEventForm(prev => ({ ...prev, type: v }))}>
-                             <SelectTrigger className="bg-white border-2 border-gold/40 focus:border-gold text-black">
+                             <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]">
                                <SelectValue />
                              </SelectTrigger>
                              <SelectContent>
@@ -547,38 +547,38 @@ const AICalendar = () => {
                          </div>
                        </div>
                        <div>
-                         <Label className="text-gray-700">Location</Label>
+                         <Label className="text-[#5A4A2E]">Location</Label>
                          <Input
                            value={eventForm.location}
                            onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
                            placeholder="Dubai Marina, Tower A"
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                          />
                       </div>
                        <div>
-                         <Label className="text-gray-700">Attendees (comma-separated emails)</Label>
+                         <Label className="text-[#5A4A2E]">Attendees (comma-separated emails)</Label>
                          <Input
                            value={eventForm.attendees}
                            onChange={(e) => setEventForm(prev => ({ ...prev, attendees: e.target.value }))}
                            placeholder="client@email.com, broker@email.com"
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                          />
                       </div>
                        <div>
-                         <Label className="text-gray-700">Description</Label>
+                         <Label className="text-[#5A4A2E]">Description</Label>
                          <Textarea
                            value={eventForm.description}
                            onChange={(e) => setEventForm(prev => ({ ...prev, description: e.target.value }))}
                            placeholder="Event details..."
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                          />
                        </div>
-                       <div className="space-y-3 p-4 bg-white/60 rounded-lg border border-gold/20">
-                         <p className="text-sm text-gray-600 font-medium">Reminders</p>
+                       <div className="space-y-3 p-4 bg-[#FDFBF7]/60 rounded-lg border border-gold/20">
+                         <p className="text-sm text-[#5A4A2E] font-medium">Reminders</p>
                          <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4 text-blue-400" />
-                            <span className="text-sm text-gray-700">Email Reminder</span>
+                            <span className="text-sm text-[#5A4A2E]">Email Reminder</span>
                           </div>
                           <Switch
                             checked={eventForm.emailReminder}
@@ -588,7 +588,7 @@ const AICalendar = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-green-400" />
-                            <span className="text-sm text-gray-700">Phone Notification</span>
+                            <span className="text-sm text-[#5A4A2E]">Phone Notification</span>
                           </div>
                           <Switch
                             checked={eventForm.phoneReminder}
@@ -596,9 +596,9 @@ const AICalendar = () => {
                           />
                         </div>
                          <div>
-                           <Label className="text-xs text-gray-600">Remind before (minutes)</Label>
+                           <Label className="text-xs text-[#5A4A2E]">Remind before (minutes)</Label>
                            <Select value={eventForm.reminderTime.toString()} onValueChange={(v) => setEventForm(prev => ({ ...prev, reminderTime: parseInt(v) }))}>
-                             <SelectTrigger className="bg-white border-2 border-gold/40 text-black">
+                             <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
                              <SelectContent>
@@ -610,7 +610,7 @@ const AICalendar = () => {
                           </Select>
                         </div>
                       </div>
-                      <Button onClick={handleCreateEvent} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
+                      <Button onClick={handleCreateEvent} className="w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70">
                         {editingEvent ? 'Update Event' : 'Create Event'}
                       </Button>
                     </div>
@@ -621,7 +621,7 @@ const AICalendar = () => {
                 {/* Calendar Grid */}
                 <div className="grid grid-cols-7 gap-1 mb-2">
                   {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                    <div key={day} className="text-center text-xs text-gray-600 py-2">{day}</div>
+                    <div key={day} className="text-center text-xs text-[#5A4A2E] py-2">{day}</div>
                   ))}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
@@ -637,11 +637,11 @@ const AICalendar = () => {
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square p-1 rounded-lg cursor-pointer transition-all ${
                           isSelected ? 'bg-blue-600/30 border border-blue-500' :
-                          isToday ? 'bg-zinc-800 border border-gray-600' :
-                          'hover:bg-gray-800/50'
+                          isToday ? 'bg-zinc-800 border border-[#1A1A1A]' :
+                          'hover:bg-[#1A1A1A]/50'
                         }`}
                       >
-                        <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-gray-600'}`}>
+                        <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-[#5A4A2E]'}`}>
                           {date.getDate()}
                         </p>
                         <div className="space-y-0.5 mt-1">
@@ -654,7 +654,7 @@ const AICalendar = () => {
                             </div>
                           ))}
                           {dayEvents.length > 2 && (
-                            <p className="text-[10px] text-gray-600">+{dayEvents.length - 2} more</p>
+                            <p className="text-[10px] text-[#5A4A2E]">+{dayEvents.length - 2} more</p>
                           )}
                         </div>
                       </div>
@@ -663,7 +663,7 @@ const AICalendar = () => {
                 </div>
 
                 {/* Selected Day Events */}
-                <div className="mt-6 pt-6 border-t border-gray-800">
+                <div className="mt-6 pt-6 border-t border-[#1A1A1A]">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-white font-medium">
                       Events for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
@@ -694,7 +694,7 @@ const AICalendar = () => {
                     </div>
                   </div>
                   {getEventsForDate(selectedDate).length === 0 ? (
-                    <p className="text-gray-600 text-sm">No events scheduled. Click "Add Event" to create one.</p>
+                    <p className="text-[#5A4A2E] text-sm">No events scheduled. Click "Add Event" to create one.</p>
                   ) : (
                     <div className="space-y-3">
                       {getEventsForDate(selectedDate).map(event => (
@@ -704,7 +704,7 @@ const AICalendar = () => {
                             <div className="flex items-start justify-between">
                               <div>
                                 <h4 className="text-white font-medium">{event.title}</h4>
-                                <div className="flex items-center gap-3 mt-1 text-xs text-gray-600">
+                                <div className="flex items-center gap-3 mt-1 text-xs text-[#5A4A2E]">
                                   <span className="flex items-center gap-1">
                                     <Clock className="w-3 h-3" /> {event.time}
                                   </span>
@@ -725,7 +725,7 @@ const AICalendar = () => {
                               </div>
                             </div>
                             {event.attendees.length > 0 && (
-                              <div className="flex items-center gap-1 mt-2 text-xs text-gray-600">
+                              <div className="flex items-center gap-1 mt-2 text-xs text-[#5A4A2E]">
                                 <Users className="w-3 h-3" />
                                 {event.attendees.join(', ')}
                               </div>
@@ -765,30 +765,30 @@ const AICalendar = () => {
                   </DialogTrigger>
                    <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                      <DialogHeader>
-                       <DialogTitle className="text-black font-bold">
+                       <DialogTitle className="text-[#1A1A1A] font-bold">
                          {editingNote ? 'Edit Note' : 'Create Note'}
                        </DialogTitle>
                      </DialogHeader>
                      <div className="space-y-4">
                        <div>
-                         <Label className="text-gray-700">Title</Label>
+                         <Label className="text-[#5A4A2E]">Title</Label>
                          <Input
                            value={noteForm.title}
                            onChange={(e) => setNoteForm(prev => ({ ...prev, title: e.target.value }))}
                            placeholder="Note title"
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A]"
                          />
                        </div>
                        <div>
-                         <Label className="text-gray-700">Content</Label>
+                         <Label className="text-[#5A4A2E]">Content</Label>
                          <Textarea
                            value={noteForm.content}
                            onChange={(e) => setNoteForm(prev => ({ ...prev, content: e.target.value }))}
                            placeholder="Write your note..."
-                           className="bg-white border-2 border-gold/40 focus:border-gold text-black min-h-[150px]"
+                           className="bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] min-h-[150px]"
                          />
                        </div>
-                       <Button onClick={handleCreateNote} className="w-full bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70">
+                       <Button onClick={handleCreateNote} className="w-full bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70">
                          {editingNote ? 'Update Note' : 'Save Note'}
                        </Button>
                     </div>
@@ -797,7 +797,7 @@ const AICalendar = () => {
               </CardHeader>
               <CardContent className="space-y-3 max-h-96 overflow-y-auto">
                 {notes.length === 0 ? (
-                  <p className="text-gray-600 text-sm">No notes yet</p>
+                  <p className="text-[#5A4A2E] text-sm">No notes yet</p>
                 ) : (
                   notes.map(note => (
                     <div key={note.id} className="p-3 bg-zinc-800/50 rounded-lg group">
@@ -812,8 +812,8 @@ const AICalendar = () => {
                           </Button>
                         </div>
                       </div>
-                      <p className="text-gray-600 text-xs mt-1 line-clamp-3">{note.content}</p>
-                      <p className="text-gray-600 text-[10px] mt-2">{note.updatedAt.toLocaleDateString()}</p>
+                      <p className="text-[#5A4A2E] text-xs mt-1 line-clamp-3">{note.content}</p>
+                      <p className="text-[#5A4A2E] text-[10px] mt-2">{note.updatedAt.toLocaleDateString()}</p>
                     </div>
                   ))
                 )}
@@ -835,12 +835,12 @@ const AICalendar = () => {
                       <div className={`w-2 h-2 rounded-full ${eventTypeColors[event.type]}`} />
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-sm truncate">{event.title}</p>
-                        <p className="text-gray-600 text-xs">{new Date(event.date).toLocaleDateString()} at {event.time}</p>
+                        <p className="text-[#5A4A2E] text-xs">{new Date(event.date).toLocaleDateString()} at {event.time}</p>
                       </div>
                     </div>
                   ))}
                 {events.filter(e => new Date(e.date) >= new Date()).length === 0 && (
-                  <p className="text-gray-600 text-sm">No upcoming events</p>
+                  <p className="text-[#5A4A2E] text-sm">No upcoming events</p>
                 )}
               </CardContent>
             </Card>

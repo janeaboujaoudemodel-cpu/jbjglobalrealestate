@@ -1,0 +1,16 @@
+{
+  "skipDirs": [
+    "src/components/ui",
+    "remotion",
+    "src/integrations/supabase",
+    "src/test"
+  ],
+  "skipFiles": [
+    "src/components/Footer.tsx",
+    "src/components/CompanyProfile.tsx",
+    "src/pages/CompanyProfile.tsx",
+    "src/components/ui/icon-tile.tsx",
+    "src/components/ui/themed-icon.tsx",
+    "src/components/ui/button.tsx"
+  ]
+}

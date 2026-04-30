@@ -209,11 +209,11 @@ export function MeetingAIAssistant({
           <Badge className="bg-green-500/20 text-green-400 text-[10px]">Live</Badge>
         </div>
         <div className="flex items-center gap-1">
-          {isMinimized ? <ChevronUp className="w-4 h-4 text-gray-600" /> : (
+          {isMinimized ? <ChevronUp className="w-4 h-4 text-[#5A4A2E]" /> : (
             <>
-              <ChevronDown className="w-4 h-4 text-gray-600" />
+              <ChevronDown className="w-4 h-4 text-[#5A4A2E]" />
               <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); onClose(); }}>
-                <X className="w-4 h-4 text-gray-600" />
+                <X className="w-4 h-4 text-[#5A4A2E]" />
               </Button>
             </>
           )}
@@ -223,8 +223,8 @@ export function MeetingAIAssistant({
       {!isMinimized && (
         <>
           {meetingContext && (
-            <div className="px-4 py-2 bg-zinc-800/50 border-b border-gray-700 text-xs">
-              <div className="flex items-center gap-2 text-gray-600">
+            <div className="px-4 py-2 bg-zinc-800/50 border-b border-[#1A1A1A] text-xs">
+              <div className="flex items-center gap-2 text-[#5A4A2E]">
                 <EyeOff className="w-3 h-3" />
                 <span>Private — only you see this</span>
               </div>
@@ -235,8 +235,8 @@ export function MeetingAIAssistant({
           <ScrollArea className="flex-1 h-[340px] p-4" ref={scrollRef}>
             {messages.length === 0 ? (
               <div className="text-center py-6">
-                <Sparkles className="w-8 h-8 text-gray-500 mx-auto mb-3" />
-                <p className="text-gray-600 text-sm mb-4">AI assistant + CRM</p>
+                <Sparkles className="w-8 h-8 text-[#8A7556] mx-auto mb-3" />
+                <p className="text-[#5A4A2E] text-sm mb-4">AI assistant + CRM</p>
                 <div className="space-y-2">
                   {[
                     { icon: Home, label: 'Find properties', prompt: 'Recommend properties for this client' },
@@ -245,7 +245,7 @@ export function MeetingAIAssistant({
                     { icon: FileText, label: 'Summarize meeting', prompt: 'Summarize our meeting' },
                   ].map(({ icon: Icon, label, prompt }) => (
                     <button key={label} onClick={() => setInput(prompt)}
-                      className="w-full p-2 text-left text-xs text-gray-600 bg-zinc-800 rounded-lg hover:bg-gray-700 flex items-center gap-2">
+                      className="w-full p-2 text-left text-xs text-[#5A4A2E] bg-zinc-800 rounded-lg hover:bg-[#1A1A1A] flex items-center gap-2">
                       <Icon className="w-3 h-3 text-gold" />
                       {label}
                     </button>
@@ -256,7 +256,7 @@ export function MeetingAIAssistant({
               <div className="space-y-4">
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[90%] rounded-lg p-3 ${msg.role === 'user' ? 'bg-gold text-black' : 'bg-zinc-800 text-gray-200'}`}>
+                    <div className={`max-w-[90%] rounded-lg p-3 ${msg.role === 'user' ? 'bg-gold text-[#1A1A1A]' : 'bg-zinc-800 text-gray-200'}`}>
                       <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
                       {msg.role === 'assistant' && (
                         <Button size="icon" variant="ghost" className="h-5 w-5 mt-2 opacity-50 hover:opacity-100"
@@ -271,7 +271,7 @@ export function MeetingAIAssistant({
                   <div className="flex justify-start">
                     <div className="bg-zinc-800 rounded-lg p-3 flex items-center gap-2">
                       <Loader2 className="w-4 h-4 text-gold animate-spin" />
-                      <span className="text-gray-600 text-sm">Thinking...</span>
+                      <span className="text-[#5A4A2E] text-sm">Thinking...</span>
                     </div>
                   </div>
                 )}
@@ -279,12 +279,12 @@ export function MeetingAIAssistant({
             )}
           </ScrollArea>
 
-          <div className="p-3 border-t border-gray-700">
+          <div className="p-3 border-t border-[#1A1A1A]">
             <div className="flex gap-2">
               <Input value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Ask AI privately..." className="bg-zinc-800 border-gray-700 text-white text-sm" />
-              <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-gold hover:bg-gold/90 text-black">
+                placeholder="Ask AI privately..." className="bg-zinc-800 border-[#1A1A1A] text-white text-sm" />
+              <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                 <Send className="w-4 h-4" />
               </Button>
             </div>

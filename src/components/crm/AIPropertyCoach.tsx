@@ -280,7 +280,7 @@ const AIPropertyCoach = ({ lead, activities = [], onSuggestionApply }: AIPropert
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground mb-2">{suggestion.content}</p>
-              <p className="text-[10px] text-gray-600">Source: {suggestion.source}</p>
+              <p className="text-[10px] text-[#5A4A2E]">Source: {suggestion.source}</p>
               {onSuggestionApply && (
                 <Button
                   variant="ghost"

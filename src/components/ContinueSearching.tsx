@@ -199,7 +199,7 @@ const ContinueSearching = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-[#1A1A1A] text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
               >
                 Register Your Interest
               </button>
@@ -217,13 +217,13 @@ const ContinueSearching = ({
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4">
-              <Home className="w-8 h-8 text-gray-500" />
+              <Home className="w-8 h-8 text-[#8A7556]" />
             </div>
             <p className="text-white/70 text-sm mb-1">You haven't viewed any properties yet.</p>
             <p className="text-white/85 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
-              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-light text-black text-sm font-semibold hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
+              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-light text-[#1A1A1A] text-sm font-semibold hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
             >
               Explore Now
             </Link>
@@ -419,7 +419,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex items-center justify-center">
-            <Icon className="w-12 h-12 text-gray-400" />
+            <Icon className="w-12 h-12 text-[#8A7556]" />
           </div>
         )}
 
@@ -452,7 +452,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               onError={() => setLogoError(true)}
             />
           ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
               <Icon className="w-2.5 h-2.5" />
               {item.type}
             </span>
@@ -469,7 +469,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         {/* Bottom content - elevated */}
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-block mb-1 text-[10px] text-gray-800 font-medium truncate w-full">
+            <span className="inline-block mb-1 text-[10px] text-[#1A1A1A] font-medium truncate w-full">
               {item.subtitle}
             </span>
           )}

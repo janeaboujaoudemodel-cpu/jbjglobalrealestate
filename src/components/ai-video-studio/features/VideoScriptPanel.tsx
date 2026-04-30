@@ -161,7 +161,7 @@ export function VideoScriptPanel() {
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold h-9 text-sm"
+            className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold h-9 text-sm"
           >
             {loading ? (
               <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> Generating...</>

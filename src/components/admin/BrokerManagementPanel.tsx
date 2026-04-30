@@ -343,7 +343,7 @@ export function BrokerManagementPanel() {
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setEditBroker(null)}>Cancel</Button>
-              <Button className="bg-gold text-black hover:bg-gold/90" onClick={saveEdit}>Save Changes</Button>
+              <Button className="bg-gold text-[#1A1A1A] hover:bg-gold/90" onClick={saveEdit}>Save Changes</Button>
             </div>
           </div>
         </DialogContent>

@@ -31,7 +31,7 @@ const CATEGORY_BADGES: Record<string, { label: string; className: string }> = {
   'training': { label: 'Training', className: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
   'check_in': { label: 'Check-in', className: 'bg-purple-500/20 text-purple-300 border-purple-500/30' },
   'referral': { label: 'Referral', className: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
-  'activity': { label: 'Activity', className: 'bg-gray-500/20 text-gray-600 border-gray-500/30' },
+  'activity': { label: 'Activity', className: 'bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30' },
 };
 
 export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
@@ -39,7 +39,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-black/40 border-white/10", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-white/10", className)}>
         <CardContent className="flex items-center justify-center py-8">
           <Loader2 className="w-6 h-6 text-gold animate-spin" />
         </CardContent>
@@ -61,7 +61,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
   };
 
   return (
-    <Card className={cn("bg-black/40 border-white/10 backdrop-blur-sm", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-white/10 backdrop-blur-sm", className)}>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg text-white flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-gold" />
@@ -87,7 +87,7 @@ export function PointsActivity({ className, limit = 10 }: PointsActivityProps) {
                 return (
                   <div
                     key={entry.id}
-                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors"
+                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#FDFBF7]/5 transition-colors"
                   >
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",

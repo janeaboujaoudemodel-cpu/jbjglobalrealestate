@@ -28,12 +28,12 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <Compass className="w-6 h-6 text-gold" />
-            <h2 className="text-2xl md:text-3xl font-bold text-black">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
               About {area.name.replace(/\s*\(.*?\)/g, '')}
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
+          <div className="flex items-center gap-2 text-sm text-[#5A4A2E] mb-6">
             <MapPin className="w-4 h-4 text-gold" />
             <span>{area.emirate}, UAE</span>
           </div>
@@ -52,7 +52,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                       .trim()
                   ))}
                   domain="area.description"
-                  className="text-gray-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
+                  className="text-[#5A4A2E] text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
                 />
                 {!isExpanded && isLongDescription && (
                   <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
@@ -72,7 +72,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               )}
             </div>
           ) : (
-            <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-8">
+            <p className="text-[#5A4A2E] text-base md:text-lg leading-relaxed mb-8">
               {area.name} is a premier residential and commercial district located in {area.emirate}. 
               Known for its world-class infrastructure and vibrant community, this area offers a diverse 
               range of properties from luxury apartments to exclusive villas. With excellent connectivity, 
@@ -84,35 +84,35 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           {/* Quick highlights */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {(area.property_count ?? 0) > 0 && (
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gold/20 shadow-sm">
+              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
                 <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
                 <div>
-                  <div className="text-lg font-bold text-black">{area.property_count}</div>
-                  <div className="text-xs text-gray-600">Active Projects</div>
+                  <div className="text-lg font-bold text-[#1A1A1A]">{area.property_count}</div>
+                  <div className="text-xs text-[#5A4A2E]">Active Projects</div>
                 </div>
               </div>
             )}
             {(area.developer_count ?? 0) > 0 && (
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gold/20 shadow-sm">
+              <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
                 <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
                 <div>
-                  <div className="text-lg font-bold text-black">{area.developer_count}</div>
-                  <div className="text-xs text-gray-600">Developers</div>
+                  <div className="text-lg font-bold text-[#1A1A1A]">{area.developer_count}</div>
+                  <div className="text-xs text-[#5A4A2E]">Developers</div>
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gold/20 shadow-sm">
+            <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-xl border border-gold/20 shadow-sm">
               <MapPin className="w-5 h-5 text-gold flex-shrink-0" />
               <div>
-                <div className="text-lg font-bold text-black">{area.emirate}</div>
-                <div className="text-xs text-gray-600">Emirate</div>
+                <div className="text-lg font-bold text-[#1A1A1A]">{area.emirate}</div>
+                <div className="text-xs text-[#5A4A2E]">Emirate</div>
               </div>
             </div>
           </div>
 
           <Button
             onClick={handleScrollToProjects}
-            className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all"
+            className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all"
           >
             Properties
             <ArrowDown className="w-5 h-5 ml-2" />

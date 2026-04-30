@@ -241,7 +241,7 @@ export function VideoResizePanel() {
             </div>
           )}
           <Button
-            className="w-full bg-amber-500 text-black hover:bg-amber-400 font-bold text-xs h-9 disabled:opacity-40"
+            className="w-full bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 font-bold text-xs h-9 disabled:opacity-40"
             onClick={handleResize}
             disabled={isLoading || selectedFormats.length === 0 || !uploadedVideo}
           >

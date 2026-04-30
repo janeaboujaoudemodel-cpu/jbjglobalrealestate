@@ -261,7 +261,7 @@ export function StampColorWheel({ color, onChange, label = 'Primary Color', size
             value={hexInput.replace('#', '')}
             onChange={handleHexInput}
             maxLength={7}
-            className="flex-1 py-1.5 pr-2 text-xs font-mono bg-transparent outline-none text-black"
+            className="flex-1 py-1.5 pr-2 text-xs font-mono bg-transparent outline-none text-[#1A1A1A]"
             placeholder="1a2744"
           />
         </div>

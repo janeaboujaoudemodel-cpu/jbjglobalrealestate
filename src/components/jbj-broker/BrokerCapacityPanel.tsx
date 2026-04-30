@@ -71,8 +71,8 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
           <Info className="h-5 w-5" />
         </div>
         <div>
-          <h4 className="font-semibold text-black mb-1">What are Capacity Settings?</h4>
-          <p className="text-sm text-black/70">
+          <h4 className="font-semibold text-[#1A1A1A] mb-1">What are Capacity Settings?</h4>
+          <p className="text-sm text-[#1A1A1A]/70">
             Each broker has a daily lead capacity limit. This controls how many leads can be assigned to them 
             before they are considered "at capacity." Adjust the slider or input a number to set the maximum 
             leads per day for each broker. When a broker reaches 80%+ capacity, they show a warning; at 100%, 
@@ -87,8 +87,8 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
           <Settings className="h-5 w-5" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-black">Broker Capacity Settings</h3>
-          <p className="text-sm text-black/60">{brokers.length} brokers configured</p>
+          <h3 className="text-lg font-semibold text-[#1A1A1A]">Broker Capacity Settings</h3>
+          <p className="text-sm text-[#1A1A1A]/60">{brokers.length} brokers configured</p>
         </div>
       </div>
 
@@ -116,8 +116,8 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                     )}
                   </Avatar>
                   <div>
-                    <h3 className="text-black font-medium">{broker.name}</h3>
-                    <p className="text-black/60 text-sm">{broker.email}</p>
+                    <h3 className="text-[#1A1A1A] font-medium">{broker.name}</h3>
+                    <p className="text-[#1A1A1A]/60 text-sm">{broker.email}</p>
                   </div>
                 </div>
                 <Badge
@@ -126,7 +126,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                       ? "bg-emerald-500/20 text-emerald-700 border-emerald-500/30"
                       : broker.status === "paused"
                       ? "bg-amber-500/20 text-amber-700 border-amber-500/30"
-                      : "bg-gray-500/20 text-gray-700 border-gray-500/30"
+                      : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30"
                   }
                 >
                   {broker.status}
@@ -136,15 +136,15 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
               {/* Current Usage */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-black/60 flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/60 flex items-center gap-2">
                     <Users className="h-4 w-4" />
                     Current Load
                   </span>
-                  <span className="text-black font-medium">
+                  <span className="text-[#1A1A1A] font-medium">
                     {broker.active_leads} / {currentCapacity} leads
                   </span>
                 </div>
-                <div className="h-2 bg-black/10 rounded-full overflow-hidden">
+                <div className="h-2 bg-[#1A1A1A]/10 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${
                       usagePercent > 90
@@ -161,7 +161,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
               {/* Capacity Slider */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-black/60 text-sm">Daily Capacity Limit</label>
+                  <label className="text-[#1A1A1A]/60 text-sm">Daily Capacity Limit</label>
                   <div className="flex items-center gap-2">
                     <Input
                       type="number"
@@ -176,7 +176,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                       min={1}
                       max={500}
                     />
-                    <span className="text-black/60 text-sm">leads/day</span>
+                    <span className="text-[#1A1A1A]/60 text-sm">leads/day</span>
                   </div>
                 </div>
                 <Slider
@@ -187,7 +187,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
                   step={10}
                   className="py-2"
                 />
-                <div className="flex justify-between text-xs text-black/40">
+                <div className="flex justify-between text-xs text-[#1A1A1A]/40">
                   <span>50</span>
                   <span>150</span>
                   <span>200</span>
@@ -212,7 +212,7 @@ export function BrokerCapacityPanel({ brokers, onUpdate }: BrokerCapacityPanelPr
         })}
 
         {brokers.length === 0 && (
-          <div className="jj-card-inner text-center py-8 text-black/60">
+          <div className="jj-card-inner text-center py-8 text-[#1A1A1A]/60">
             No brokers configured. Add brokers to manage their capacity.
           </div>
         )}

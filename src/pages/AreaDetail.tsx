@@ -159,7 +159,7 @@ const AreaDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-4" />
           <p className="text-white/70">Loading area...</p>
@@ -178,18 +178,18 @@ const AreaDetail = () => {
     <>
       {/* Search Input */}
       <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/40" />
         <input
           type="text"
           placeholder="Search projects or developers..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 pl-9 pr-8 rounded-xl bg-white/70 border-2 border-gold/30 text-black text-sm placeholder:text-black/30 focus:outline-none focus:border-gold/60 transition-colors"
+          className="w-full h-10 pl-9 pr-8 rounded-xl bg-[#FDFBF7]/70 border-2 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-gold/60 transition-colors"
           style={{ fontSize: '16px' }}
         />
         {searchQuery && (
           <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-            <X className="w-4 h-4 text-black/40 hover:text-black" />
+            <X className="w-4 h-4 text-[#1A1A1A]/40 hover:text-[#1A1A1A]" />
           </button>
         )}
       </div>
@@ -197,7 +197,7 @@ const AreaDetail = () => {
   );
 
   return (
-    <div className={`min-h-screen bg-black flex ${isFixed && !bottomReached ? '' : ''}`}>
+    <div className={`min-h-screen bg-[#1A1A1A] flex ${isFixed && !bottomReached ? '' : ''}`}>
       {/* Vertical nav handled globally by MainLayout */}
       <div className="flex-1 transition-all duration-200">
       <SEOHead 
@@ -266,7 +266,7 @@ const AreaDetail = () => {
       <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
-            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/30 relative overflow-hidden bg-white/70 backdrop-blur-sm"
+            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/30 relative overflow-hidden bg-[#FDFBF7]/70 backdrop-blur-sm"
             style={{
               boxShadow: '0 30px 80px -20px rgba(200,167,102,0.15), 0 0 60px rgba(200,167,102,0.05)',
             }}
@@ -279,21 +279,21 @@ const AreaDetail = () => {
             <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-6">
               <MapPin className="w-7 h-7 text-gold" />
             </div>
-            <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+            <h2 className="text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
             </h2>
-            <p className="text-black/50 text-lg mb-10 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/50 text-lg mb-10 max-w-2xl mx-auto">
               Browse our curated collection of verified properties in this premium neighborhood.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={`/properties?area=${area.slug}`}>
-                <Button className="px-8 py-6 text-base bg-black text-white font-bold border border-black hover:bg-black/80 hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-300 rounded-xl">
+                <Button className="px-8 py-6 text-base bg-[#1A1A1A] text-white font-bold border border-[#1A1A1A] hover:bg-[#1A1A1A]/80 hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-300 rounded-xl">
                   View Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button variant="secondary" className="border-2 border-black/20 text-black hover:bg-black hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-transparent">
+                <Button variant="secondary" className="border-2 border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-transparent">
                   <Phone className="w-5 h-5 mr-2" />
                   Contact Us
                 </Button>
@@ -305,14 +305,14 @@ const AreaDetail = () => {
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="ready-to-get-started" className="py-16 bg-black">
+        <section id="ready-to-get-started" className="py-16 bg-[#1A1A1A]">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
               <div className="text-center mb-8">
                 <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
                   <MapPin className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-black">Similar Areas</span>
+                  <span className="text-[#1A1A1A]">Similar Areas</span>
                 </span>
                 <h2 className="text-white text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
@@ -342,7 +342,7 @@ const AreaDetail = () => {
                         />
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                          <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1 }}>JBJ</span>
+                          <span className="text-6xl font-black text-[#1A1A1A] select-none" style={{ opacity: 0.1 }}>JBJ</span>
                         </div>
                       )}
 
@@ -352,7 +352,7 @@ const AreaDetail = () => {
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                         {relatedArea.is_trending && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
                             Trending
                           </span>
                         )}
@@ -366,7 +366,7 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
+                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
                             {relatedArea.property_count} Projects
                           </span>
                         )}
@@ -383,7 +383,7 @@ const AreaDetail = () => {
               <div className="text-center mt-8">
                 <Link
                   to="/areas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
                   style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
                 >
                   <span>View All Areas</span>

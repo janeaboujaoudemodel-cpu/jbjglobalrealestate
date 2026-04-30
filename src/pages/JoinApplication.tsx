@@ -317,7 +317,7 @@ export default function JoinApplication() {
   if (checkingExisting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-black" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#1A1A1A]" />
       </div>
     );
   }
@@ -329,34 +329,34 @@ export default function JoinApplication() {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <section className="flex-1 flex items-center justify-center px-4 py-16 min-h-screen">
           <div className="w-full max-w-3xl mx-auto">
-            <Card className="bg-white/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">
+            <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">
               <CardHeader className="text-center pb-6">
                 <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border-2 border-emerald-500/40 flex items-center justify-center shadow-lg shadow-emerald-500/10">
                   <CheckCircle className="h-12 w-12 text-emerald-600" />
                 </div>
-                <CardTitle className="text-3xl md:text-4xl text-black mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Welcome Back!</CardTitle>
-                <CardDescription className="text-lg text-black/70">
-                  Your application status: <span className="font-semibold text-black capitalize">{existingApplication.status}</span>
+                <CardTitle className="text-3xl md:text-4xl text-[#1A1A1A] mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Welcome Back!</CardTitle>
+                <CardDescription className="text-lg text-[#1A1A1A]/70">
+                  Your application status: <span className="font-semibold text-[#1A1A1A] capitalize">{existingApplication.status}</span>
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
                 {existingApplication.status === 'approved' ? (
                   <>
-                    <p className="text-black/60 text-lg leading-relaxed">
+                    <p className="text-[#1A1A1A]/60 text-lg leading-relaxed">
                       Congratulations! Your application has been approved. Our HR team will assign your training program and onboarding materials shortly. You'll receive a notification when your training is ready.
                     </p>
                     <div className="pt-4">
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
-                          <span className="text-black">Go to</span>
-                          <span className="text-black underline ml-1">Onboarding Dashboard</span>
+                          <span className="text-[#1A1A1A]">Go to</span>
+                          <span className="text-[#1A1A1A] underline ml-1">Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
                   </>
                 ) : existingApplication.status === 'pending' ? (
                   <>
-                    <p className="text-black/60 text-lg leading-relaxed">
+                    <p className="text-[#1A1A1A]/60 text-lg leading-relaxed">
                       Your application is currently under review. Our HR team will get back to you within 2-3 business days. In the meantime, feel free to explore our resources.
                     </p>
                     <div className="pt-4">
@@ -369,21 +369,21 @@ export default function JoinApplication() {
                   </>
                 ) : (
                   <>
-                    <p className="text-black/60 text-lg leading-relaxed">
+                    <p className="text-[#1A1A1A]/60 text-lg leading-relaxed">
                       Continue your journey with JBJ Global Real Estate. Access your onboarding dashboard to track progress and unlock broker tools.
                     </p>
                     <div className="pt-4">
                       <Button variant="primary" size="lg" asChild className="px-8 py-6 text-lg">
                         <Link to="/onboarding">
-                          <span className="text-black">Continue to</span>
-                          <span className="text-black underline ml-1">Onboarding Dashboard</span>
+                          <span className="text-[#1A1A1A]">Continue to</span>
+                          <span className="text-[#1A1A1A] underline ml-1">Onboarding Dashboard</span>
                         </Link>
                       </Button>
                     </div>
                   </>
                 )}
                 <div className="pt-2">
-                  <Link to="/hr-agent" className="text-black underline hover:opacity-80 text-sm font-medium">
+                  <Link to="/hr-agent" className="text-[#1A1A1A] underline hover:opacity-80 text-sm font-medium">
                     Need help? Chat with Jessica, our HR Assistant
                   </Link>
                 </div>
@@ -391,13 +391,13 @@ export default function JoinApplication() {
             </Card>
 
             {/* Contact Info */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-black/60">
-              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-black transition-colors">
-                <Phone className="w-4 h-4 text-black" />
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-[#1A1A1A]/60">
+              <a href={`tel:${CONTACT_INFO.phoneRaw}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+                <Phone className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.phone}
               </a>
-              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-black transition-colors">
-                <Mail className="w-4 h-4 text-black" />
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-2 hover:text-[#1A1A1A] transition-colors">
+                <Mail className="w-4 h-4 text-[#1A1A1A]" />
                 {CONTACT_INFO.email}
               </a>
             </div>
@@ -422,7 +422,7 @@ export default function JoinApplication() {
           </div>
 
           {/* HR Agent CTA - Meet Jessica */}
-          <Card className="bg-white border border-black/10 shadow-sm mb-8">
+          <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 shadow-sm mb-8">
             <CardContent className="pt-6">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#000000' }}>
@@ -449,10 +449,10 @@ export default function JoinApplication() {
           {!user && (
             <Card className="border-2 border-gold bg-gold/10 backdrop-blur-sm rounded-2xl shadow-md mb-6">
               <CardContent className="pt-6">
-                <p className="text-center text-black font-semibold mb-2 text-lg">
+                <p className="text-center text-[#1A1A1A] font-semibold mb-2 text-lg">
                   📝 Fill the form below — then sign in to submit!
                 </p>
-                <p className="text-center text-black/70 mb-4 text-sm">
+                <p className="text-center text-[#1A1A1A]/70 mb-4 text-sm">
                   You can complete the entire form first. Sign in or create an account when you're ready to submit.
                 </p>
                 <div className="flex justify-center">
@@ -582,10 +582,10 @@ export default function JoinApplication() {
                       <div
                         key={pos.id}
                         onClick={() => setFormData({ ...formData, positionApplied: pos.id })}
-                        className={`p-4 rounded-xl border cursor-pointer transition-all bg-white shadow-sm hover:shadow-md ${
+                        className={`p-4 rounded-xl border cursor-pointer transition-all bg-[#FDFBF7] shadow-sm hover:shadow-md ${
                           formData.positionApplied === pos.id
-                            ? "border-black ring-2 ring-black bg-gray-50"
-                            : "border-black/15 hover:border-black/40"
+                            ? "border-[#1A1A1A] ring-2 ring-black bg-[#F7F2EA]"
+                            : "border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2 gap-2">
@@ -597,12 +597,12 @@ export default function JoinApplication() {
                           )}
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs">
-                          <Badge variant="outline" className="border-black/20 bg-gray-100 text-[10px] px-2 py-0.5 font-medium whitespace-nowrap" style={{ color: '#000000' }}>{pos.department}</Badge>
+                          <Badge variant="outline" className="border-[#1A1A1A]/20 bg-[#F7F2EA] text-[10px] px-2 py-0.5 font-medium whitespace-nowrap" style={{ color: '#000000' }}>{pos.department}</Badge>
                           {pos.is_broker_role && <span className="font-semibold whitespace-nowrap" style={{ color: '#b45309' }}>Commission Basis</span>}
                           {pos.location && <span className="flex items-center gap-0.5 whitespace-nowrap" style={{ color: '#374151' }}><MapPin className="w-2.5 h-2.5" style={{ color: '#000000' }} />{pos.location}</span>}
                         </div>
                         {pos.description && (
-                          <p className="text-xs text-gray-700 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
+                          <p className="text-xs text-[#5A4A2E] mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
                         )}
                       </div>
                     ))}
@@ -666,8 +666,8 @@ export default function JoinApplication() {
               {/* Position-Based Qualification Questions */}
               {['property_consultant', 'senior_property_consultant', 'team_leader', 'sales_manager', 'sales_director', 'listing_agent', 'off_plan_specialist', 'secondary_market_agent', 'luxury_specialist', 'commercial_broker', 'leasing_consultant'].includes(formData.positionApplied) && (
                 <div className="space-y-4 p-4 rounded-xl border border-gold/30 bg-gold/5">
-                  <h3 className="text-lg font-semibold text-black flex items-center gap-2">
-                    <Briefcase className="h-5 w-5 text-black" />
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                    <Briefcase className="h-5 w-5 text-[#1A1A1A]" />
                     Sales Qualification
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -693,13 +693,13 @@ export default function JoinApplication() {
                     <Input value={formData.reasonForLeaving} onChange={(e) => setFormData({ ...formData, reasonForLeaving: e.target.value })} placeholder="Reason for seeking new opportunity" disabled={loading} className="bg-background" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-black mt-4 flex items-center gap-2">
-                    <User className="h-5 w-5 text-black" />
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] mt-4 flex items-center gap-2">
+                    <User className="h-5 w-5 text-[#1A1A1A]" />
                     Professional References (2 required)
                   </h3>
-                  <p className="text-sm text-black/60">Provide references from your previous employer so we can verify your experience.</p>
-                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
-                    <p className="text-sm font-semibold text-black">Reference 1</p>
+                  <p className="text-sm text-[#1A1A1A]/60">Provide references from your previous employer so we can verify your experience.</p>
+                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7]">
+                    <p className="text-sm font-semibold text-[#1A1A1A]">Reference 1</p>
                     <div className="grid grid-cols-2 gap-3">
                       <Input value={formData.reference1Name} onChange={(e) => setFormData({ ...formData, reference1Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={loading} className="bg-background" />
                       <Input value={formData.reference1Title} onChange={(e) => setFormData({ ...formData, reference1Title: e.target.value })} placeholder="Title & Company" disabled={loading} className="bg-background" />
@@ -707,8 +707,8 @@ export default function JoinApplication() {
                       <Input value={formData.reference1Phone} onChange={(e) => setFormData({ ...formData, reference1Phone: e.target.value })} placeholder="Phone number" disabled={loading} className="bg-background" />
                     </div>
                   </div>
-                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-white">
-                    <p className="text-sm font-semibold text-black">Reference 2</p>
+                  <div className="space-y-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7]">
+                    <p className="text-sm font-semibold text-[#1A1A1A]">Reference 2</p>
                     <div className="grid grid-cols-2 gap-3">
                       <Input value={formData.reference2Name} onChange={(e) => setFormData({ ...formData, reference2Name: e.target.value })} placeholder="Full name (e.g. Director / HR Manager)" disabled={loading} className="bg-background" />
                       <Input value={formData.reference2Title} onChange={(e) => setFormData({ ...formData, reference2Title: e.target.value })} placeholder="Title & Company" disabled={loading} className="bg-background" />
@@ -738,8 +738,8 @@ export default function JoinApplication() {
                   ) : (
                     <label className="cursor-pointer block w-full">
                       <div className="flex flex-col items-center gap-2 py-2">
-                        <Upload className="h-8 w-8 text-black/60" />
-                        <span className="text-sm text-black/70">
+                        <Upload className="h-8 w-8 text-[#1A1A1A]/60" />
+                        <span className="text-sm text-[#1A1A1A]/70">
                           Click to upload CV (PDF or Word, max 10MB)
                         </span>
                       </div>
@@ -781,9 +781,9 @@ export default function JoinApplication() {
                   />
                   <Label htmlFor="consentTerms" className="text-sm leading-relaxed cursor-pointer">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-black underline font-medium" target="_blank">Terms of Service</Link>
+                    <Link to="/terms" className="text-[#1A1A1A] underline font-medium" target="_blank">Terms of Service</Link>
                     {" "}and{" "}
-                    <Link to="/privacy" className="text-black underline font-medium" target="_blank">Privacy Policy</Link>.
+                    <Link to="/privacy" className="text-[#1A1A1A] underline font-medium" target="_blank">Privacy Policy</Link>.
                   </Label>
                 </div>
               </div>
@@ -801,7 +801,7 @@ export default function JoinApplication() {
               {!user ? (
                 <Button
                   type="button"
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold h-12 text-base"
                   onClick={() => navigate("/auth?redirect=/join")}
                 >
                   Sign In to Submit Application
@@ -809,7 +809,7 @@ export default function JoinApplication() {
               ) : (
                 <Button
                   type="submit"
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold h-12 text-base"
                   disabled={loading}
                 >
                   {loading ? (
@@ -826,9 +826,9 @@ export default function JoinApplication() {
           </CardContent>
         </Card>
 
-          <p className="text-center text-sm text-black/70 mt-6">
+          <p className="text-center text-sm text-[#1A1A1A]/70 mt-6">
             Questions? Contact us at{" "}
-            <a href="mailto:contact@JBJ.ae" className="text-black underline font-medium">
+            <a href="mailto:contact@JBJ.ae" className="text-[#1A1A1A] underline font-medium">
               contact@JBJ.ae
             </a>
           </p>

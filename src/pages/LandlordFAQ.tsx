@@ -115,8 +115,8 @@ const LandlordFAQ = () => {
       <SEOHead title="Landlord FAQ | Property Leasing Questions | JBJ Global Real Estate" description="Answers for landlords about leasing, tenant management, maintenance, and rental regulations in the UAE." canonicalPath="/landlord-faq" faqItems={allFaqItems} />
       <FAQHero badge="Landlord FAQ" badgeIcon={HelpCircle} title={<>Landlord Questions <span className="text-gold">Answered</span></>} description="Everything you need to know about leasing your property in the UAE." backgroundImage="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80"
         actions={<>
-          <Button className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]" onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}><Search className="w-4 h-4 mr-2 text-black" /><span className="text-gold font-semibold">Browse FAQs</span></Button>
-          <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]"><Link to="/contact"><Phone className="w-4 h-4 mr-2 text-black" /><span className="text-gold font-semibold">Ask Our Team</span></Link></Button>
+          <Button className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]" onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}><Search className="w-4 h-4 mr-2 text-[#1A1A1A]" /><span className="text-gold font-semibold">Browse FAQs</span></Button>
+          <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]"><Link to="/contact"><Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" /><span className="text-gold font-semibold">Ask Our Team</span></Link></Button>
         </>}
       />
       <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}><FAQFloatingSidebar categories={categories} title="Navigator" /></div>
@@ -127,15 +127,15 @@ const LandlordFAQ = () => {
             {categories.map((category, ci) => (
               <motion.div key={ci} id={`category-${ci}`} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={staggerContainer} className="scroll-mt-40">
                 <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center"><category.icon className="w-6 h-6 text-black" /></div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center"><category.icon className="w-6 h-6 text-[#1A1A1A]" /></div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{category.title}</h2>
                 </motion.div>
                 <motion.div variants={fadeInUp}><div className="space-y-4">
                   {category.questions.map((faq, fi) => (
                     <Accordion key={fi} type="single" collapsible className="w-full">
                       <AccordionItem value={`${ci}-${fi}`} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all">
-                        <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">{faq.question}</AccordionTrigger>
-                        <AccordionContent className="text-gray-600 pb-5 leading-relaxed whitespace-pre-line">{faq.answer}</AccordionContent>
+                        <AccordionTrigger className="text-[#1A1A1A] text-left hover:text-gold hover:no-underline py-5 text-base font-medium">{faq.question}</AccordionTrigger>
+                        <AccordionContent className="text-[#5A4A2E] pb-5 leading-relaxed whitespace-pre-line">{faq.answer}</AccordionContent>
                       </AccordionItem>
                     </Accordion>
                   ))}
@@ -148,8 +148,8 @@ const LandlordFAQ = () => {
       <section className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
         <div className="container mx-auto px-4"><motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Still Have Questions?</h2>
-            <p className="text-gray-600 mb-8">Our leasing team is here to help with any landlord questions.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">Still Have Questions?</h2>
+            <p className="text-[#5A4A2E] mb-8">Our leasing team is here to help with any landlord questions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button asChild variant="primary" className="px-6"><Link to="/contact"><Phone className="w-4 h-4 mr-2" />Contact Our Team</Link></Button>
               <Button asChild variant="primary" className="px-6"><Link to="/landlord-guide">Read Landlord Guide</Link></Button>
@@ -158,7 +158,7 @@ const LandlordFAQ = () => {
         </motion.div></div>
       </section>
       <section className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8"><div className="container mx-auto px-4"><GuideNavigation current="/landlord-faq" guides={GUIDE_LINKS} /></div></section>
-      <section className="py-8 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8"><div className="container mx-auto px-4"><div className="max-w-4xl mx-auto"><div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6"><p className="text-center text-gray-600 text-sm"><span className="text-black font-medium">Disclaimer:</span> All content is educational and informational.</p></div></div></div></section>
+      <section className="py-8 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8"><div className="container mx-auto px-4"><div className="max-w-4xl mx-auto"><div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6"><p className="text-center text-[#5A4A2E] text-sm"><span className="text-[#1A1A1A] font-medium">Disclaimer:</span> All content is educational and informational.</p></div></div></div></section>
     </div>
   );
 };

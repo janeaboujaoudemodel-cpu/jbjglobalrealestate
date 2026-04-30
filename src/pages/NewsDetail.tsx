@@ -95,7 +95,7 @@ function addContentBreathing(html: string): string {
       if ((i + 1) % 3 === 0) {
         // Insert pull quote if available, otherwise separator
         if (pullQuoteIndex < pullQuotes.length) {
-          result.push(`<blockquote class="my-10 py-6 px-8 border-l-4 border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold))]/5 to-transparent rounded-r-xl"><p class="text-lg md:text-xl font-medium text-gray-800 italic leading-relaxed">"${pullQuotes[pullQuoteIndex]}"</p></blockquote>`);
+          result.push(`<blockquote class="my-10 py-6 px-8 border-l-4 border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold))]/5 to-transparent rounded-r-xl"><p class="text-lg md:text-xl font-medium text-[#1A1A1A] italic leading-relaxed">"${pullQuotes[pullQuoteIndex]}"</p></blockquote>`);
           pullQuoteIndex++;
         } else {
           result.push(separator);
@@ -131,7 +131,7 @@ const NewsDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <BrandedLoader text="Loading article..." />
       </div>
     );
@@ -141,9 +141,9 @@ const NewsDetail = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <Newspaper className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+          <Newspaper className="w-16 h-16 text-[#5A4A2E] mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Article Not Found</h1>
-          <p className="text-gray-600 mb-6">This article may have been removed or doesn't exist.</p>
+          <p className="text-[#5A4A2E] mb-6">This article may have been removed or doesn't exist.</p>
           <Link to="/news">
             <Button variant="primary">Back to News</Button>
           </Link>
@@ -188,7 +188,7 @@ const NewsDetail = () => {
           <div className="absolute top-6 left-6 z-10">
             <Link
               to="/news"
-              className="inline-flex items-center gap-2.5 text-white/90 hover:text-gold transition-all duration-300 bg-black/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/15 hover:border-gold/40 hover:bg-black/50 font-medium text-sm shadow-lg"
+              className="inline-flex items-center gap-2.5 text-white/90 hover:text-gold transition-all duration-300 bg-[#1A1A1A]/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/15 hover:border-gold/40 hover:bg-[#1A1A1A]/50 font-medium text-sm shadow-lg"
             >
               <ArrowLeft className="w-4 h-4" />
               All News
@@ -198,7 +198,7 @@ const NewsDetail = () => {
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
             <div className="container mx-auto max-w-4xl">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <Badge className="bg-gold text-black px-3 py-1 text-xs font-medium">
+                <Badge className="bg-gold text-[#1A1A1A] px-3 py-1 text-xs font-medium">
                   {article.category}
                 </Badge>
                 <Badge variant="outline" className="text-white/80 border-white/30 px-3 py-1 text-xs backdrop-blur-sm">
@@ -215,18 +215,18 @@ const NewsDetail = () => {
           </div>
         </div>
 
-        <div className="h-8 md:h-12 bg-black" />
+        <div className="h-8 md:h-12 bg-[#1A1A1A]" />
 
         {/* Article Body */}
         <div className="jj-layer-2 !bg-transparent relative z-10">
           <div className="jj-layer-active rounded-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-8 pb-6 border-b border-gold/20 flex-wrap">
+            <div className="flex items-center gap-4 text-sm text-[#5A4A2E] mb-8 pb-6 border-b border-gold/20 flex-wrap">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {formattedDate}
               </span>
-              <span className="text-gray-600">•</span>
+              <span className="text-[#5A4A2E]">•</span>
               <span className="flex items-center gap-1.5">
                 <Landmark className="w-4 h-4 text-gold" />
                 {article.source}
@@ -238,13 +238,13 @@ const NewsDetail = () => {
               <div className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-gold/30">
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Statistics</span>
+                  <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Statistics</span>
                 </div>
                 <div className={`grid grid-cols-2 ${keyStats.length >= 3 ? 'md:grid-cols-' + Math.min(keyStats.length, 4) : 'md:grid-cols-2'} gap-4`}>
                   {keyStats.slice(0, 4).map((stat, i) => (
-                    <div key={i} className="text-center bg-white/50 rounded-lg p-3 border border-gold/10">
+                    <div key={i} className="text-center bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/10">
                       <p className="text-xl md:text-2xl font-bold text-gold">{stat.value}</p>
-                      <p className="text-xs text-gray-600 mt-1">{stat.label}</p>
+                      <p className="text-xs text-[#5A4A2E] mt-1">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -256,7 +256,7 @@ const NewsDetail = () => {
               <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-gold/20">
                 <div className="flex items-center gap-2 mb-4">
                   <Lightbulb className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Takeaways</span>
+                  <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Takeaways</span>
                 </div>
                 <div className="space-y-2.5">
                   {keyTakeaways.map((point, i) => (
@@ -264,7 +264,7 @@ const NewsDetail = () => {
                       <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-[10px] font-bold text-gold">{i + 1}</span>
                       </div>
-                      <p className="text-sm text-gray-700 leading-relaxed">{point}</p>
+                      <p className="text-sm text-[#5A4A2E] leading-relaxed">{point}</p>
                     </div>
                   ))}
                 </div>
@@ -272,7 +272,7 @@ const NewsDetail = () => {
             )}
 
             {/* Excerpt as highlighted quote */}
-            <blockquote className="text-lg md:text-xl text-gray-700 leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
+            <blockquote className="text-lg md:text-xl text-[#5A4A2E] leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
               {article.excerpt}
             </blockquote>
 
@@ -280,17 +280,17 @@ const NewsDetail = () => {
             <HtmlT
               html={contentHtml}
               domain="news.article"
-              className="prose prose-lg max-w-none text-gray-800 leading-relaxed
-                prose-headings:text-black prose-headings:font-bold
+              className="prose prose-lg max-w-none text-[#1A1A1A] leading-relaxed
+                prose-headings:text-[#1A1A1A] prose-headings:font-bold
                 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-5
-                prose-strong:text-black
+                prose-p:text-[#5A4A2E] prose-p:leading-relaxed prose-p:mb-5
+                prose-strong:text-[#1A1A1A]
                 prose-a:text-gold prose-a:no-underline hover:prose-a:underline
-                prose-li:text-gray-700
+                prose-li:text-[#5A4A2E]
                 prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg
                 prose-table:border-collapse prose-table:w-full
-                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-600 prose-th:border prose-th:border-gold/20
+                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-[#5A4A2E] prose-th:border prose-th:border-gold/20
                 prose-td:p-3 prose-td:border prose-td:border-gold/10 prose-td:text-sm"
             />
 
@@ -335,101 +335,101 @@ const NewsDetail = () => {
             <div className="mt-12 pt-8 border-t border-gold/20">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] border border-gold/30 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-black" />
+                  <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-black">
+                  <h3 className="text-lg font-bold text-[#1A1A1A]">
                     Dubai Market Intelligence
                   </h3>
-                  <p className="text-xs text-gray-600">Source: Dubai Land Department (DLD) · 2026 YTD</p>
+                  <p className="text-xs text-[#5A4A2E]">Source: Dubai Land Department (DLD) · 2026 YTD</p>
                 </div>
               </div>
 
               {/* KPIs */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.value}</p>
-                  <p className="text-xs text-gray-600">YTD Value</p>
+                  <p className="text-xs text-[#5A4A2E]">YTD Value</p>
                 </div>
-                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.transactions.toLocaleString()}+</p>
-                  <p className="text-xs text-gray-600">Transactions</p>
+                  <p className="text-xs text-[#5A4A2E]">Transactions</p>
                 </div>
-                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.growth}</p>
-                  <p className="text-xs text-gray-600">YoY Growth</p>
+                  <p className="text-xs text-[#5A4A2E]">YoY Growth</p>
                 </div>
-                <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="text-center bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.topArea}</p>
-                  <p className="text-xs text-gray-600">Top Area</p>
+                  <p className="text-xs text-[#5A4A2E]">Top Area</p>
                 </div>
               </div>
 
               {/* Transaction Breakdown */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <div className="flex items-center gap-2 mb-2">
                     <Building2 className="w-4 h-4 text-gold" />
-                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Transaction Type</span>
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Transaction Type</span>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-700">Off-plan</span>
-                      <span className="text-sm font-bold text-black">~{ytd2026Data.offPlan.toLocaleString()}</span>
+                      <span className="text-sm text-[#5A4A2E]">Off-plan</span>
+                      <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.offPlan.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-[#EFE6D6] rounded-full h-2">
                       <div className="bg-gold rounded-full h-2" style={{ width: `${(ytd2026Data.offPlan / (ytd2026Data.offPlan + ytd2026Data.secondary) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-700">Secondary</span>
-                      <span className="text-sm font-bold text-black">~{ytd2026Data.secondary.toLocaleString()}</span>
+                      <span className="text-sm text-[#5A4A2E]">Secondary</span>
+                      <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.secondary.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <div className="flex items-center gap-2 mb-2">
                     <Banknote className="w-4 h-4 text-gold" />
-                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Payment Method</span>
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Payment Method</span>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-700">Cash</span>
-                      <span className="text-sm font-bold text-black">~{ytd2026Data.cash.toLocaleString()}</span>
+                      <span className="text-sm text-[#5A4A2E]">Cash</span>
+                      <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.cash.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-[#EFE6D6] rounded-full h-2">
                       <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-700">Mortgage</span>
-                      <span className="text-sm font-bold text-black">~{ytd2026Data.mortgage.toLocaleString()}</span>
+                      <span className="text-sm text-[#5A4A2E]">Mortgage</span>
+                      <span className="text-sm font-bold text-[#1A1A1A]">~{ytd2026Data.mortgage.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+                <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                   <div className="flex items-center gap-2 mb-2">
                     <Gift className="w-4 h-4 text-gold" />
-                    <span className="text-xs font-semibold text-black uppercase tracking-wide">Gift Transactions</span>
+                    <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Gift Transactions</span>
                   </div>
                   <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
                     <p className="text-3xl font-bold text-gold">~{ytd2026Data.gifts.toLocaleString()}</p>
-                    <p className="text-xs text-gray-600 mt-1">Gift Transfers YTD</p>
+                    <p className="text-xs text-[#5A4A2E] mt-1">Gift Transfers YTD</p>
                   </div>
                 </div>
               </div>
 
               {/* Top Areas */}
-              <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
+                  <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Top 10 Areas by Transaction Volume</span>
                 </div>
                 <div className="space-y-2">
                   {topAreas2026Data.slice(0, 10).map((area, i) => (
                     <div key={area.area} className="flex items-center gap-3">
-                      <span className="text-gray-600 font-medium text-sm w-4 text-right">{i + 1}</span>
-                      <span className="text-sm font-medium text-black flex-1">{area.area}</span>
+                      <span className="text-[#5A4A2E] font-medium text-sm w-4 text-right">{i + 1}</span>
+                      <span className="text-sm font-medium text-[#1A1A1A] flex-1">{area.area}</span>
                       <span className="text-sm font-bold text-gold">{area.transactions.toLocaleString()}</span>
                       <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
                     </div>
@@ -438,18 +438,18 @@ const NewsDetail = () => {
               </div>
 
               {/* Top Nationalities */}
-              <div className="bg-white/60 rounded-xl p-4 border border-gold/10 mt-4">
+              <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10 mt-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Globe className="w-4 h-4 text-gold" />
-                  <span className="text-xs font-semibold text-black uppercase tracking-wide">Top Buyer Nationalities</span>
+                  <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Top Buyer Nationalities</span>
                 </div>
                 <div className="space-y-2">
                   {topNationalitiesData.slice(0, 10).map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
                       <span className="text-lg">{nat.flag}</span>
-                      <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
+                      <span className="text-sm font-medium text-[#1A1A1A] flex-1">{nat.country}</span>
                       <div className="w-20">
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div className="w-full bg-[#EFE6D6] rounded-full h-1.5">
                           <div className="bg-gold rounded-full h-1.5" style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
                       </div>
@@ -463,8 +463,8 @@ const NewsDetail = () => {
             {/* Source Attribution */}
             <div className="mt-12 pt-8 border-t border-gold/20">
               <div className="jj-card-inner rounded-xl p-6">
-                <p className="text-sm text-gray-600 mb-2">Source</p>
-                <p className="text-black font-medium text-lg">{article.source}</p>
+                <p className="text-sm text-[#5A4A2E] mb-2">Source</p>
+                <p className="text-[#1A1A1A] font-medium text-lg">{article.source}</p>
                 {article.source_url && (
                   <a
                     href={article.source_url}

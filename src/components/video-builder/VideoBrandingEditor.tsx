@@ -95,7 +95,7 @@ const VideoBrandingEditor = ({ project, onUpdate, onNext }: VideoBrandingEditorP
         {/* Logo Preview */}
         <div className="bg-muted/30 rounded-lg p-4">
           <div className="flex items-center gap-4">
-            <div className="w-24 h-16 rounded-lg overflow-hidden bg-black flex items-center justify-center p-2">
+            <div className="w-24 h-16 rounded-lg overflow-hidden bg-[#1A1A1A] flex items-center justify-center p-2">
               <img
                 src={jbjLogo}
                 alt="JBJ Global Real Estate"
@@ -194,7 +194,7 @@ const VideoBrandingEditor = ({ project, onUpdate, onNext }: VideoBrandingEditorP
         {project.branding.priceOverlay && project.property && (
           <div className="space-y-3">
             <Label>Property Overlay Preview</Label>
-            <div className="bg-black rounded-lg p-4 relative aspect-video max-w-sm">
+            <div className="bg-[#1A1A1A] rounded-lg p-4 relative aspect-video max-w-sm">
               <div className="absolute bottom-3 left-3 right-3">
                 <div className="bg-background/90 backdrop-blur-sm rounded-lg p-3">
                   <p className="font-semibold text-sm">{project.property.name}</p>

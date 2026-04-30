@@ -48,7 +48,7 @@ const DesignModeSelector = ({ selectedMode, onSelectMode }: DesignModeSelectorPr
   return (
     <div className="w-full">
       <Tabs value={selectedMode} onValueChange={(value) => onSelectMode(value as DesignMode)} className="w-full">
-        <TabsList className="w-full bg-zinc-900/80 border border-gray-800 rounded-xl p-1.5 h-auto flex gap-2">
+        <TabsList className="w-full bg-zinc-900/80 border border-[#1A1A1A] rounded-xl p-1.5 h-auto flex gap-2">
           {modes.map((mode) => {
             const Icon = mode.icon;
             return (
@@ -58,7 +58,7 @@ const DesignModeSelector = ({ selectedMode, onSelectMode }: DesignModeSelectorPr
                 className={`
                   flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg
                   text-white/70 border border-transparent
-                  hover:text-white hover:bg-gray-800/50
+                  hover:text-white hover:bg-[#1A1A1A]/50
                   transition-all duration-200
                   ${mode.activeClasses}
                 `}

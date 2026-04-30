@@ -193,14 +193,14 @@ const BrokerEducation = () => {
             >
               <Card className="jj-card-inner border-2 border-gold/40 overflow-hidden">
                 <CardContent className="p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6">
-                  <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
                     <Lock className="w-8 h-8 text-gold" />
                   </div>
                   <div className="text-center sm:text-left flex-1">
-                    <h2 className="text-xl md:text-2xl font-bold text-black mb-2">
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-2">
                       Training is <span className="text-gold">Locked</span>
                     </h2>
-                    <p className="text-black/60 text-sm mb-0">
+                    <p className="text-[#1A1A1A]/60 text-sm mb-0">
                       You can preview all content below, but access is locked until you join the JBJ Broker Circle.
                     </p>
                   </div>
@@ -237,8 +237,8 @@ const BrokerEducation = () => {
                     <Info className="w-6 h-6" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-black mb-3">Step 1: About This Program</h2>
-                    <ul className="space-y-2 text-black/70">
+                    <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Step 1: About This Program</h2>
+                    <ul className="space-y-2 text-[#1A1A1A]/70">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>Internal training program by JBJ Global Real Estate</span>
@@ -287,10 +287,10 @@ const BrokerEducation = () => {
                 <BookOpen className="w-3 h-3 mr-1" />
                   {loading ? "Loading…" : `${books.length} Books • ${groupedBooks.length} Learning Paths`}
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
                 Step 2: Education <span className="text-gold">Library</span>
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto mb-6">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto mb-6">
                 Structured learning paths covering every aspect of professional real estate brokerage in the UAE.
               </p>
               {/* Book Language Filter */}
@@ -318,11 +318,11 @@ const BrokerEducation = () => {
                     <div className="flex items-center gap-3 mb-6">
                       <div className="w-2.5 h-10 bg-gold/60 rounded-full" />
                       <div>
-                        <h3 className="text-xl font-semibold text-black flex items-center gap-2">
+                        <h3 className="text-xl font-semibold text-[#1A1A1A] flex items-center gap-2">
                           {path.name}
                           {path.isRestricted && <Lock className="w-4 h-4 text-gold" />}
                         </h3>
-                        <p className="text-black/50 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
+                        <p className="text-[#1A1A1A]/50 text-sm">{path.bookData.length} Book{path.bookData.length > 1 ? 's' : ''}</p>
                       </div>
                     </div>
 
@@ -344,7 +344,7 @@ const BrokerEducation = () => {
 
                 {!loading && books.length === 0 && (
                   <div className="text-center py-10">
-                    <p className="text-black/70">No books are available yet.</p>
+                    <p className="text-[#1A1A1A]/70">No books are available yet.</p>
                   </div>
                 )}
               </div>
@@ -370,9 +370,9 @@ const BrokerEducation = () => {
                       <div className="jj-icon-box-active w-10 h-10 rounded-xl">
                         <GraduationCap className="w-5 h-5" />
                       </div>
-                      <h3 className="text-xl font-semibold text-black">Progress & Recognition</h3>
+                      <h3 className="text-xl font-semibold text-[#1A1A1A]">Progress & Recognition</h3>
                     </div>
-                    <ul className="space-y-2 text-black/70 text-sm">
+                    <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>Progress tracked internally within the platform</span>
@@ -397,9 +397,9 @@ const BrokerEducation = () => {
                       <div className="jj-icon-box-active w-10 h-10 rounded-xl">
                         <Shield className="w-5 h-5" />
                       </div>
-                      <h3 className="text-xl font-semibold text-black">Access Rules</h3>
+                      <h3 className="text-xl font-semibold text-[#1A1A1A]">Access Rules</h3>
                     </div>
-                    <ul className="space-y-2 text-black/70 text-sm">
+                    <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mt-2 flex-shrink-0" />
                         <span>This program is proprietary to JBJ Global Real Estate</span>
@@ -439,10 +439,10 @@ const BrokerEducation = () => {
                 <Shield className="w-3 h-3 mr-1" />
                 JBJ Employee Benefits
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
                 What JBJ Brokers <span className="text-gold">Receive</span>
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Registered JBJ employees get full access to training, tools, and dedicated support.
               </p>
             </div>
@@ -464,8 +464,8 @@ const BrokerEducation = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl mb-4">
                         <benefit.icon className="w-6 h-6" />
                       </div>
-                      <h3 className="text-black font-semibold text-lg mb-2">{benefit.title}</h3>
-                      <p className="text-black/60 text-sm">{benefit.desc}</p>
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">{benefit.title}</h3>
+                      <p className="text-[#1A1A1A]/60 text-sm">{benefit.desc}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -492,10 +492,10 @@ const BrokerEducation = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6">
               Join the JBJ <span className="text-gold">Broker Network</span>
             </h2>
-            <p className="text-lg text-black/70 mb-10">
+            <p className="text-lg text-[#1A1A1A]/70 mb-10">
               Registered JBJ employees get full access to all books, AI tools, and 24/7 support. Start your journey today.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

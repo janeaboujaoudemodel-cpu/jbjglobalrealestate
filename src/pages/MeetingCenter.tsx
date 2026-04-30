@@ -29,7 +29,7 @@ const MeetingCenter = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Back Button */}
       <div className="max-w-6xl mx-auto px-4 pt-6">
-        <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-gold/30 text-black hover:bg-gold/10">
+        <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10">
           <Calendar className="w-4 h-4 mr-2" />
           Back
         </Button>
@@ -43,18 +43,18 @@ const MeetingCenter = () => {
             <span className="text-gold-dark font-medium text-sm">Communication Hub</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
             Meeting <span className="text-gold">Center</span>
           </h1>
           
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-[#5A4A2E] max-w-2xl mx-auto mb-8">
             Central hub for all your meeting summaries, call notes, and voice AI interactions. 
             Track action items and client communications in one place.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link to="/ai-meeting-summarizer">
-              <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40 hover:brightness-105">
+              <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 hover:brightness-105">
                 <Video className="w-4 h-4 mr-2" />
                 New Meeting Summary
               </Button>
@@ -73,32 +73,32 @@ const MeetingCenter = () => {
         {/* Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5A4A2E]" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by client name or content..."
-              className="pl-10 bg-white border-gold/20 text-black placeholder:text-gray-600"
+              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
             />
           </div>
         </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="bg-white/80 border-2 border-gold/30 mb-6 flex-wrap h-auto p-1">
-            <TabsTrigger value="all" className="tab-trigger-champagne text-black">
+          <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 mb-6 flex-wrap h-auto p-1">
+            <TabsTrigger value="all" className="tab-trigger-champagne text-[#1A1A1A]">
               <Calendar className="w-4 h-4 mr-2" />
               All
             </TabsTrigger>
-            <TabsTrigger value="meeting" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="meeting" className="tab-trigger-champagne text-[#1A1A1A]">
               <Video className="w-4 h-4 mr-2" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="call" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="call" className="tab-trigger-champagne text-[#1A1A1A]">
               <Phone className="w-4 h-4 mr-2" />
               Phone Calls
             </TabsTrigger>
-            <TabsTrigger value="voice" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="voice" className="tab-trigger-champagne text-[#1A1A1A]">
               <Mic className="w-4 h-4 mr-2" />
               Voice AI
             </TabsTrigger>
@@ -106,15 +106,15 @@ const MeetingCenter = () => {
 
           <TabsContent value={activeTab}>
             {isLoading ? (
-              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
-                <p className="text-gray-600">Loading summaries...</p>
+                <p className="text-[#5A4A2E]">Loading summaries...</p>
               </div>
             ) : filteredSummaries.length === 0 ? (
-              <div className="text-center py-16 bg-white/60 rounded-2xl border border-gold/20">
-                <Calendar className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-black mb-2">No summaries yet</h3>
-                <p className="text-gray-600 mb-6">
+              <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
+                <Calendar className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No summaries yet</h3>
+                <p className="text-[#5A4A2E] mb-6">
                   {activeTab === "all" 
                     ? "Start by summarizing a meeting or call"
                     : `No ${activeTab === "voice" ? "voice AI calls" : activeTab + "s"} recorded yet`
@@ -122,7 +122,7 @@ const MeetingCenter = () => {
                 </p>
                 <div className="flex justify-center gap-4">
                   <Link to="/ai-meeting-summarizer">
-                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40">
+                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Meeting
                     </Button>

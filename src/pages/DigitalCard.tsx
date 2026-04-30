@@ -252,7 +252,7 @@ const DigitalCard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16">
+    <div className="min-h-screen bg-[#1A1A1A] flex flex-col items-center justify-start px-4 py-8 sm:py-12 lg:py-16">
       
       {/* Main Card Container - RESPONSIVE: phone = narrow card, tablet/desktop = wider layout */}
       <motion.div
@@ -312,7 +312,7 @@ const DigitalCard = () => {
                   className="absolute -bottom-1 -right-1 w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
                   style={{ background: GOLD.gradient }}
                 >
-                  <Star className="w-4 h-4 text-black fill-black" />
+                  <Star className="w-4 h-4 text-[#1A1A1A] fill-black" />
                 </div>
               </div>
             </motion.div>
@@ -326,7 +326,7 @@ const DigitalCard = () => {
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
               <Link to="/founder" className="group inline-block">
-                <h1 className="text-2xl sm:text-3xl font-bold text-black group-hover:text-[#C8A766] transition-colors">
+                <h1 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] group-hover:text-[#C8A766] transition-colors">
                   {CONTACT_INFO.name}
                 </h1>
                 <p 
@@ -351,7 +351,7 @@ const DigitalCard = () => {
                 }}
               >
                 <Briefcase className="w-4 h-4" style={{ color: GOLD.primary }} />
-                <span className="text-sm font-semibold text-black">{CONTACT_INFO.title}</span>
+                <span className="text-sm font-semibold text-[#1A1A1A]">{CONTACT_INFO.title}</span>
               </div>
               <Link 
                 to="/about"
@@ -361,7 +361,7 @@ const DigitalCard = () => {
                 <Building2 className="w-4 h-4" />
                 <span className="font-medium group-hover:underline">{CONTACT_INFO.company}</span>
               </Link>
-              <div className="flex items-center justify-center gap-2 mt-2 text-black/60">
+              <div className="flex items-center justify-center gap-2 mt-2 text-[#1A1A1A]/60">
                 <MapPin className="w-3 h-3" />
                 <span className="text-xs">{CONTACT_INFO.location}</span>
               </div>
@@ -372,8 +372,8 @@ const DigitalCard = () => {
               className="text-center mb-6 pb-6"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
-              <p className="text-sm sm:text-base text-black/80 leading-relaxed">
-                A <span className="font-semibold text-black">RERA-licensed Dubai brokerage</span> powering smarter real estate decisions through <span className="font-semibold text-black">AI-driven market intelligence</span>, predictive analytics, and a full suite of <span className="font-semibold text-black">50+ professional tools</span>. We deliver end-to-end advisory across Buy, Sell, and Rent — from property sourcing and valuation to negotiation and closing — backed by data, not guesswork.
+              <p className="text-sm sm:text-base text-[#1A1A1A]/80 leading-relaxed">
+                A <span className="font-semibold text-[#1A1A1A]">RERA-licensed Dubai brokerage</span> powering smarter real estate decisions through <span className="font-semibold text-[#1A1A1A]">AI-driven market intelligence</span>, predictive analytics, and a full suite of <span className="font-semibold text-[#1A1A1A]">50+ professional tools</span>. We deliver end-to-end advisory across Buy, Sell, and Rent — from property sourcing and valuation to negotiation and closing — backed by data, not guesswork.
               </p>
             </div>
 
@@ -382,12 +382,12 @@ const DigitalCard = () => {
               className="mb-6 pb-6"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
-              <h3 className="text-sm font-semibold text-black mb-3 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
                 <Video className="w-4 h-4" style={{ color: GOLD.primary }} />
                 Company Introduction
               </h3>
               <div 
-                className="relative rounded-2xl overflow-hidden bg-black aspect-video"
+                className="relative rounded-2xl overflow-hidden bg-[#1A1A1A] aspect-video"
                 style={{ border: `2px solid ${GOLD.primary}40` }}
               >
                 <YouTubeVideoPlayer
@@ -402,13 +402,13 @@ const DigitalCard = () => {
               className="mb-6 pb-6 flex flex-col items-center"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
-              <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
+              <h3 className="text-xs font-semibold text-[#1A1A1A]/50 mb-3 uppercase tracking-wider text-center">
                 Company Line
               </h3>
               
               {/* Company Phone Display */}
               <div className="text-center mb-4">
-                <p className="text-lg font-bold text-black">{CONTACT_INFO.phoneCompany}</p>
+                <p className="text-lg font-bold text-[#1A1A1A]">{CONTACT_INFO.phoneCompany}</p>
               </div>
 
               {/* Company Action Buttons - All 3 on one line on desktop */}
@@ -416,7 +416,7 @@ const DigitalCard = () => {
                 {/* Call Company */}
                 <a
                   href={`tel:${CONTACT_INFO.phoneCompanyClean}`}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <Phone className="w-4 h-4" style={{ color: GOLD.primary }} />
@@ -426,7 +426,7 @@ const DigitalCard = () => {
                 {/* WhatsApp Company */}
                 <button
                   onClick={() => openWhatsApp(CONTACT_INFO.whatsappCompany)}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ border: `2px solid #25D36650` }}
                 >
                   <MessageCircle className="w-4 h-4 text-[#25D366]" />
@@ -436,7 +436,7 @@ const DigitalCard = () => {
                 {/* Save Company Contact */}
                 <button
                   onClick={downloadCompanyVCard}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-[#1A1A1A] font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ 
                     background: 'linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)',
                     border: `2px solid ${GOLD.primary}50`,
@@ -453,13 +453,13 @@ const DigitalCard = () => {
               className="mb-6 pb-6 flex flex-col items-center"
               style={{ borderBottom: `1px solid ${GOLD.primary}33` }}
             >
-              <h3 className="text-xs font-semibold text-black/50 mb-3 uppercase tracking-wider text-center">
+              <h3 className="text-xs font-semibold text-[#1A1A1A]/50 mb-3 uppercase tracking-wider text-center">
                 Personal Line
               </h3>
               
               {/* Personal Phone Display */}
               <div className="text-center mb-4">
-                <p className="text-lg font-bold text-black">{CONTACT_INFO.phonePersonal}</p>
+                <p className="text-lg font-bold text-[#1A1A1A]">{CONTACT_INFO.phonePersonal}</p>
               </div>
 
               {/* Personal Action Buttons - All 3 on one line on desktop */}
@@ -467,7 +467,7 @@ const DigitalCard = () => {
                 {/* Call Personal */}
                 <a
                   href={`tel:${CONTACT_INFO.phonePersonalClean}`}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <Phone className="w-4 h-4" style={{ color: GOLD.primary }} />
@@ -477,7 +477,7 @@ const DigitalCard = () => {
                 {/* WhatsApp Personal */}
                 <button
                   onClick={() => openWhatsApp(CONTACT_INFO.whatsappPersonal)}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-white text-black font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl bg-[#FDFBF7] text-[#1A1A1A] font-medium shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ border: `2px solid #25D36650` }}
                 >
                   <MessageCircle className="w-4 h-4 text-[#25D366]" />
@@ -487,7 +487,7 @@ const DigitalCard = () => {
                 {/* Save Personal Contact */}
                 <button
                   onClick={downloadPersonalVCard}
-                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                  className="flex items-center gap-2 py-3 px-5 rounded-xl text-[#1A1A1A] font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ 
                     background: 'linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)',
                     border: `2px solid ${GOLD.primary}50`,
@@ -504,7 +504,7 @@ const DigitalCard = () => {
               {/* Send Email */}
               <a
                 href={`mailto:${CONTACT_INFO.email}?subject=${encodeURIComponent("Inquiry via Digital Business Card")}`}
-                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                 style={{ border: `2px solid ${GOLD.primary}50` }}
               >
                 <div 
@@ -516,13 +516,13 @@ const DigitalCard = () => {
                 >
                   <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
                 </div>
-                <span className="text-sm font-semibold text-center text-black">Send Email</span>
+                <span className="text-sm font-semibold text-center text-[#1A1A1A]">Send Email</span>
               </a>
 
               {/* Share This Card */}
               <button
                 onClick={() => setShowShareOptions(true)}
-                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                 style={{ border: `2px solid ${GOLD.primary}50` }}
               >
                 <div 
@@ -534,7 +534,7 @@ const DigitalCard = () => {
                 >
                   <Share2 className="w-5 h-5" style={{ color: GOLD.primary }} />
                 </div>
-                <span className="text-sm font-semibold text-center text-black">Share Card</span>
+                <span className="text-sm font-semibold text-center text-[#1A1A1A]">Share Card</span>
               </button>
 
               {/* Website */}
@@ -542,7 +542,7 @@ const DigitalCard = () => {
                 href={CONTACT_INFO.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-white shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+                className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                 style={{ border: `2px solid ${GOLD.primary}50` }}
               >
                 <div 
@@ -554,7 +554,7 @@ const DigitalCard = () => {
                 >
                   <Globe className="w-5 h-5" style={{ color: GOLD.primary }} />
                 </div>
-                <span className="text-sm font-semibold text-center text-black">Website</span>
+                <span className="text-sm font-semibold text-center text-[#1A1A1A]">Website</span>
               </a>
             </div>
 
@@ -563,7 +563,7 @@ const DigitalCard = () => {
               className="pt-6 mt-4"
               style={{ borderTop: `1px solid ${GOLD.primary}33` }}
             >
-              <h3 className="text-lg font-bold text-black text-center mb-5 uppercase tracking-wide">
+              <h3 className="text-lg font-bold text-[#1A1A1A] text-center mb-5 uppercase tracking-wide">
                 Connect With Us
               </h3>
               
@@ -571,13 +571,13 @@ const DigitalCard = () => {
               <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-4 sm:gap-0 items-start">
                 {/* Left: Company */}
                 <div className="flex flex-col items-center">
-                  <p className="text-xs font-semibold text-black/60 mb-3 uppercase tracking-wider">JBJ Global Real Estate</p>
+                  <p className="text-xs font-semibold text-[#1A1A1A]/60 mb-3 uppercase tracking-wider">JBJ Global Real Estate</p>
                   <div className="flex justify-center gap-3">
                     <a
                       href={CONTACT_INFO.linkedinCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -586,7 +586,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.instagramCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -595,7 +595,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.tiktokCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -604,7 +604,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.facebookCompany}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -620,13 +620,13 @@ const DigitalCard = () => {
 
                 {/* Right: Founder */}
                 <div className="flex flex-col items-center">
-                  <p className="text-xs font-semibold text-black/60 mb-3 uppercase tracking-wider">Connect with the Founder</p>
+                  <p className="text-xs font-semibold text-[#1A1A1A]/60 mb-3 uppercase tracking-wider">Connect with the Founder</p>
                   <div className="flex justify-center gap-3">
                     <a
                       href={CONTACT_INFO.linkedinPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaLinkedinIn className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -635,7 +635,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.instagramPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaInstagram className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -644,7 +644,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.facebookPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaFacebookF className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -653,7 +653,7 @@ const DigitalCard = () => {
                       href={CONTACT_INFO.tiktokPersonal}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-white hover:bg-black"
+                      className="group w-11 h-11 rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-lg bg-[#FDFBF7] hover:bg-[#1A1A1A]"
                       style={{ border: `2px solid ${GOLD.primary}50` }}
                     >
                       <FaTiktok className="w-5 h-5 group-hover:text-white transition-colors" style={{ color: GOLD.primary }} />
@@ -674,7 +674,7 @@ const DigitalCard = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4"
             onClick={() => setShowShareOptions(false)}
           >
             <motion.div
@@ -686,12 +686,12 @@ const DigitalCard = () => {
               style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-black">Share This Card</h3>
+                <h3 className="text-lg font-bold text-[#1A1A1A]">Share This Card</h3>
                 <button
                   onClick={() => setShowShareOptions(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1A1A1A]/10 hover:bg-[#1A1A1A]/20 transition-colors"
                 >
-                  <X className="w-4 h-4 text-black" />
+                  <X className="w-4 h-4 text-[#1A1A1A]" />
                 </button>
               </div>
 
@@ -699,51 +699,51 @@ const DigitalCard = () => {
                 {/* Copy Link */}
                 <button
                   onClick={handleCopyLink}
-                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   {copied ? <Check className="w-5 h-5 text-green-500" /> : <Copy className="w-5 h-5" style={{ color: GOLD.primary }} />}
-                  <span className="font-medium text-black">{copied ? "Copied!" : "Copy Link"}</span>
+                  <span className="font-medium text-[#1A1A1A]">{copied ? "Copied!" : "Copy Link"}</span>
                 </button>
 
                 {/* Share via WhatsApp */}
                 <button
                   onClick={shareViaWhatsApp}
-                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <MessageCircle className="w-5 h-5 text-[#25D366]" />
-                  <span className="font-medium text-black">Share via WhatsApp</span>
+                  <span className="font-medium text-[#1A1A1A]">Share via WhatsApp</span>
                 </button>
 
                 {/* Share via Email */}
                 <button
                   onClick={shareViaEmail}
-                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <Mail className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  <span className="font-medium text-black">Share via Email</span>
+                  <span className="font-medium text-[#1A1A1A]">Share via Email</span>
                 </button>
 
                 {/* Share via Instagram */}
                 <button
                   onClick={shareViaInstagram}
-                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <FaInstagram className="w-5 h-5" style={{ color: GOLD.primary }} />
-                  <span className="font-medium text-black">Share via Instagram</span>
+                  <span className="font-medium text-[#1A1A1A]">Share via Instagram</span>
                 </button>
 
                 {/* Share via Snapchat */}
                 <button
                   onClick={shareViaSnapchat}
-                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-3 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <FaSnapchatGhost className="w-5 h-5" style={{ color: "#FFFC00" }} />
-                  <span className="font-medium text-black">Share via Snapchat</span>
+                  <span className="font-medium text-[#1A1A1A]">Share via Snapchat</span>
                 </button>
               </div>
             </motion.div>
@@ -758,7 +758,7 @@ const DigitalCard = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4"
             onClick={() => setShowCallOptions(false)}
           >
             <motion.div
@@ -770,12 +770,12 @@ const DigitalCard = () => {
               style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-black">Choose a Line</h3>
+                <h3 className="text-lg font-bold text-[#1A1A1A]">Choose a Line</h3>
                 <button
                   onClick={() => setShowCallOptions(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-black/10 hover:bg-black/20 transition-colors"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1A1A1A]/10 hover:bg-[#1A1A1A]/20 transition-colors"
                 >
-                  <X className="w-4 h-4 text-black" />
+                  <X className="w-4 h-4 text-[#1A1A1A]" />
                 </button>
               </div>
 
@@ -784,7 +784,7 @@ const DigitalCard = () => {
                 <a
                   href={`tel:${CONTACT_INFO.phoneCompanyClean}`}
                   onClick={() => setShowCallOptions(false)}
-                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <div 
@@ -794,8 +794,8 @@ const DigitalCard = () => {
                     <Building2 className="w-6 h-6" style={{ color: GOLD.primary }} />
                   </div>
                   <div>
-                    <span className="block font-semibold text-black">Company Line</span>
-                    <span className="text-sm text-black/60">{CONTACT_INFO.phoneCompany}</span>
+                    <span className="block font-semibold text-[#1A1A1A]">Company Line</span>
+                    <span className="text-sm text-[#1A1A1A]/60">{CONTACT_INFO.phoneCompany}</span>
                   </div>
                 </a>
 
@@ -803,7 +803,7 @@ const DigitalCard = () => {
                 <a
                   href={`tel:${CONTACT_INFO.phonePersonalClean}`}
                   onClick={() => setShowCallOptions(false)}
-                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-white shadow-md hover:shadow-lg transition-all"
+                  className="w-full flex items-center gap-3 py-4 px-4 rounded-xl bg-[#FDFBF7] shadow-md hover:shadow-lg transition-all"
                   style={{ border: `2px solid ${GOLD.primary}50` }}
                 >
                   <div 
@@ -813,8 +813,8 @@ const DigitalCard = () => {
                     <PhoneCall className="w-6 h-6" style={{ color: GOLD.primary }} />
                   </div>
                   <div>
-                    <span className="block font-semibold text-black">Personal Line</span>
-                    <span className="text-sm text-black/60">{CONTACT_INFO.phonePersonal}</span>
+                    <span className="block font-semibold text-[#1A1A1A]">Personal Line</span>
+                    <span className="text-sm text-[#1A1A1A]/60">{CONTACT_INFO.phonePersonal}</span>
                   </div>
                 </a>
               </div>

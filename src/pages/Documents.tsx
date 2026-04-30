@@ -453,7 +453,7 @@ const Documents = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Input value={title} onChange={e => setTitle(e.target.value)} className="text-sm font-medium border-[hsl(var(--gold)/0.3)] bg-white/60 focus-visible:ring-[hsl(var(--gold)/0.5)] max-w-[240px] h-8" placeholder="Document title" />
+                <Input value={title} onChange={e => setTitle(e.target.value)} className="text-sm font-medium border-[hsl(var(--gold)/0.3)] bg-[#FDFBF7]/60 focus-visible:ring-[hsl(var(--gold)/0.5)] max-w-[240px] h-8" placeholder="Document title" />
                 <Button variant="outline" size="sm" className="border-[hsl(var(--gold)/0.3)] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] h-8" onClick={handlePrint}><Printer className="h-4 w-4" /></Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild><Button variant="outline" size="sm" className="border-[hsl(var(--gold)/0.3)] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] h-8"><Download className="h-4 w-4 mr-1" /> Export</Button></DropdownMenuTrigger>
@@ -567,7 +567,7 @@ const Documents = () => {
                   <div className="space-y-3">
                     <div><Label>URL or Text</Label><Input value={qrText} onChange={e => setQrText(e.target.value)} /></div>
                     <div className="flex gap-3"><div className="flex-1"><Label>Size</Label><Input type="number" value={qrSize} onChange={e => setQrSize(Number(e.target.value))} min={50} max={500} /></div><div><Label>Color</Label><input type="color" value={qrColor} onChange={e => setQrColor(e.target.value)} className="w-8 h-8 rounded border cursor-pointer" /></div></div>
-                    {qrText && <div className="flex justify-center p-3 bg-white rounded border"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrText)}&color=${qrColor.replace('#','')}&bgcolor=ffffff&margin=2`} alt="QR" className="max-w-[150px]" /></div>}
+                    {qrText && <div className="flex justify-center p-3 bg-[#FDFBF7] rounded border"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrText)}&color=${qrColor.replace('#','')}&bgcolor=ffffff&margin=2`} alt="QR" className="max-w-[150px]" /></div>}
                   </div>
                   <DialogFooter><Button onClick={insertQrCode} disabled={!qrText}>Insert</Button></DialogFooter>
                 </DialogContent>
@@ -625,19 +625,19 @@ const Documents = () => {
           {/* ── CENTER: Floating Toolbar + Preview ── */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Floating Toolbar */}
-            <div className="bg-white/90 backdrop-blur border-b border-[hsl(var(--gold)/0.2)] px-3 py-1.5 flex flex-wrap items-center gap-1 sticky top-0 z-10">
+            <div className="bg-[#FDFBF7]/90 backdrop-blur border-b border-[hsl(var(--gold)/0.2)] px-3 py-1.5 flex flex-wrap items-center gap-1 sticky top-0 z-10">
               <Button variant="ghost" size="sm" className="h-7 w-7 p-0 hover:bg-[hsl(var(--gold)/0.1)]" onClick={() => execCommand('undo')}><Undo className="h-3.5 w-3.5" /></Button>
               <Button variant="ghost" size="sm" className="h-7 w-7 p-0 hover:bg-[hsl(var(--gold)/0.1)]" onClick={() => execCommand('redo')}><Redo className="h-3.5 w-3.5" /></Button>
               <div className="w-px h-5 bg-[hsl(var(--gold)/0.2)] mx-0.5" />
 
               <Select value={fontFamily} onValueChange={handleFontFamily}>
-                <SelectTrigger className="w-[130px] h-7 text-xs bg-white/80 border-[hsl(var(--gold)/0.3)]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[130px] h-7 text-xs bg-[#FDFBF7]/80 border-[hsl(var(--gold)/0.3)]"><SelectValue /></SelectTrigger>
                 <SelectContent className="max-h-[300px] bg-[hsl(var(--popover))] border-[hsl(var(--border))]">
                   {FONT_FAMILIES.map(f => <SelectItem key={f} value={f} className="text-[hsl(var(--popover-foreground))]"><span style={{ fontFamily: f }}>{f}</span></SelectItem>)}
                 </SelectContent>
               </Select>
               <Select value={fontSize} onValueChange={handleFontSize}>
-                <SelectTrigger className="w-[60px] h-7 text-xs bg-white/80 border-[hsl(var(--gold)/0.3)]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[60px] h-7 text-xs bg-[#FDFBF7]/80 border-[hsl(var(--gold)/0.3)]"><SelectValue /></SelectTrigger>
                 <SelectContent className="bg-[hsl(var(--popover))] border-[hsl(var(--border))]">{FONT_SIZES.map(s => <SelectItem key={s} value={s} className="text-[hsl(var(--popover-foreground))]">{s}</SelectItem>)}</SelectContent>
               </Select>
               <div className="w-px h-5 bg-[hsl(var(--gold)/0.2)] mx-0.5" />
@@ -671,7 +671,7 @@ const Documents = () => {
 
             {/* Centered Document Preview */}
             <div className="flex-1 overflow-y-auto flex justify-center p-6" style={{ background: "linear-gradient(180deg, #F0EAD8 0%, #E8DFC8 100%)" }}>
-              <div className="bg-white shadow-xl w-full max-w-[816px] min-h-[1056px] border border-[hsl(var(--gold)/0.2)] rounded-lg overflow-hidden">
+              <div className="bg-[#FDFBF7] shadow-xl w-full max-w-[816px] min-h-[1056px] border border-[hsl(var(--gold)/0.2)] rounded-lg overflow-hidden">
                 {showHeaderBand && <div className="h-3 w-full" style={{ background: gradientStyle }} />}
                 <div className="p-12 sm:p-16">
                   <div ref={editorRef} contentEditable className="outline-none min-h-full text-[hsl(var(--foreground))]" style={{ fontFamily, fontSize: `${fontSize}px` }} suppressContentEditableWarning>
@@ -689,7 +689,7 @@ const Documents = () => {
               <p className="text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">Color Palette</p>
 
               {/* Header/Footer Bands */}
-              <div className="bg-white rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
+              <div className="bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <Label className="text-[10px]">Header Band</Label>
                   <Switch checked={showHeaderBand} onCheckedChange={setShowHeaderBand} />
@@ -701,7 +701,7 @@ const Documents = () => {
               </div>
 
               {/* HSL Color 1 */}
-              <div className="bg-white rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
+              <div className="bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
                 <Label className="text-[10px] font-bold text-[hsl(var(--foreground))]">Color 1</Label>
                 <div>
                   <Label className="text-[9px] text-[hsl(var(--muted-foreground))]">Hue {hue1}°</Label>
@@ -723,7 +723,7 @@ const Documents = () => {
               </div>
 
               {/* HSL Color 2 */}
-              <div className="bg-white rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
+              <div className="bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
                 <Label className="text-[10px] font-bold text-[hsl(var(--foreground))]">Color 2</Label>
                 <div>
                   <Label className="text-[9px] text-[hsl(var(--muted-foreground))]">Hue {hue2}°</Label>
@@ -745,7 +745,7 @@ const Documents = () => {
               </div>
 
               {/* Gradient Direction */}
-              <div className="bg-white rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
+              <div className="bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] p-3 space-y-2">
                 <Label className="text-[10px] font-bold text-[hsl(var(--foreground))]">Gradient Direction</Label>
                 <div className="grid grid-cols-2 gap-1">
                   {(["horizontal","vertical","diagonal","radial"] as const).map(dir => (

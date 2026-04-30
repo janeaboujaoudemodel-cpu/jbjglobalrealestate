@@ -266,7 +266,7 @@ export default function StampProjectsDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-4">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/80 backdrop-blur-sm">
+      <div className="border-b border-[hsl(var(--border))] bg-[#FDFBF7]/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
@@ -345,7 +345,7 @@ export default function StampProjectsDashboard() {
                       if (target.closest('button') || target.closest('[role="checkbox"]') || target.closest('input')) return;
                       navigate(`/toolkit/stamp-generator/${project.id}/generate`);
                     }}
-                    className={`bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all group relative cursor-pointer ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
+                    className={`bg-[#FDFBF7] rounded-2xl border shadow-sm hover:shadow-md transition-all group relative cursor-pointer ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
                     <div className="absolute top-2 left-2 z-10">
                       <Checkbox checked={selectedIds.has(project.id)} onCheckedChange={() => toggleSelect(project.id)}
                         className="border-[hsl(var(--gold)/0.5)] data-[state=checked]:bg-[hsl(var(--gold))] data-[state=checked]:border-[hsl(var(--gold))]"/>
@@ -426,7 +426,7 @@ export default function StampProjectsDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {deletedProjects.map(project => (
                   <div key={project.id}
-                    className={`bg-white/60 rounded-2xl border shadow-sm transition-all relative opacity-80 ${selectedDeletedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
+                    className={`bg-[#FDFBF7]/60 rounded-2xl border shadow-sm transition-all relative opacity-80 ${selectedDeletedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
                     <div className="absolute top-2 left-2 z-10">
                       <Checkbox checked={selectedDeletedIds.has(project.id)} onCheckedChange={() => toggleDeletedSelect(project.id)}
                         className="border-[hsl(var(--gold)/0.5)] data-[state=checked]:bg-[hsl(var(--gold))] data-[state=checked]:border-[hsl(var(--gold))]"/>
@@ -437,8 +437,8 @@ export default function StampProjectsDashboard() {
                       </Badge>
                     </div>
                     <div className="h-32 rounded-t-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border-b border-[hsl(var(--border))]">
-                      <div className="w-20 h-20 rounded-full border-2 border-gray-300 flex items-center justify-center opacity-50">
-                        <p className="text-gray-600 font-bold text-lg">{project.company_name.slice(0,2).toUpperCase()}</p>
+                      <div className="w-20 h-20 rounded-full border-2 border-[#B89555]/30 flex items-center justify-center opacity-50">
+                        <p className="text-[#5A4A2E] font-bold text-lg">{project.company_name.slice(0,2).toUpperCase()}</p>
                       </div>
                     </div>
                     <div className="p-4 space-y-3">
@@ -477,7 +477,7 @@ export default function StampProjectsDashboard() {
 
       {/* Floating bulk action bar — active tab */}
       {activeTab === 'active' && selectedIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#FDFBF7] rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
           <span className="text-sm font-semibold text-[hsl(var(--foreground))]">{selectedIds.size} selected</span>
           <div className="w-px h-5 bg-[hsl(var(--border))]"/>
           <Button size="sm" variant="outline" className="gap-1.5 text-xs" onClick={bulkDuplicate}>
@@ -495,7 +495,7 @@ export default function StampProjectsDashboard() {
 
       {/* Floating bulk action bar — deleted tab */}
       {activeTab === 'deleted' && selectedDeletedIds.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#FDFBF7] rounded-2xl border-2 border-[hsl(var(--gold)/0.4)] shadow-2xl px-5 py-3 flex items-center gap-3">
           <span className="text-sm font-semibold text-[hsl(var(--foreground))]">{selectedDeletedIds.size} selected</span>
           <div className="w-px h-5 bg-[hsl(var(--border))]"/>
           <Button size="sm" variant="outline" className="gap-1.5 text-xs border-emerald-300 text-emerald-700 hover:bg-emerald-50"

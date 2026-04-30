@@ -251,7 +251,7 @@ const AIFinancialAdvisor = () => {
 
       <div className="container mx-auto px-4 py-8">
         {/* Project Bar */}
-        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-zinc-900/50 border border-gray-800 rounded-xl">
+        <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-zinc-900/50 border border-[#1A1A1A] rounded-xl">
           <div className="flex items-center gap-2">
             <FolderOpen className="w-5 h-5 text-emerald-400" />
             <span className="text-white font-medium">
@@ -268,7 +268,7 @@ const AIFinancialAdvisor = () => {
                 <Plus className="w-3 h-3 mr-1" /> New Project
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-gray-700">
+            <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
               <DialogHeader>
                 <DialogTitle className="text-white">Create New Project</DialogTitle>
               </DialogHeader>
@@ -279,7 +279,7 @@ const AIFinancialAdvisor = () => {
                     value={newProjectName}
                     onChange={(e) => setNewProjectName(e.target.value)}
                     placeholder="My Investment Plan"
-                    className="bg-zinc-800 border-gray-700"
+                    className="bg-zinc-800 border-[#1A1A1A]"
                   />
                 </div>
                 <Button onClick={createProject} className="w-full bg-emerald-600">
@@ -294,10 +294,10 @@ const AIFinancialAdvisor = () => {
               const project = projects.find(p => p.id === id);
               if (project) loadProject(project);
             }}>
-              <SelectTrigger className="w-40 bg-zinc-800 border-gray-700 text-sm">
+              <SelectTrigger className="w-40 bg-zinc-800 border-[#1A1A1A] text-sm">
                 <SelectValue placeholder="Load Project" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-gray-700">
+              <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
                 {projects.map(p => (
                   <SelectItem key={p.id} value={p.id} className="text-white">
                     {p.name}
@@ -311,7 +311,7 @@ const AIFinancialAdvisor = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Input Section */}
           <div className="space-y-6">
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-emerald-400" />
@@ -326,13 +326,13 @@ const AIFinancialAdvisor = () => {
                     value={financialData.monthlyIncome || ''}
                     onChange={(e) => setFinancialData(prev => ({ ...prev, monthlyIncome: parseFloat(e.target.value) || 0 }))}
                     placeholder="25,000"
-                    className="bg-zinc-800 border-gray-700"
+                    className="bg-zinc-800 border-[#1A1A1A]"
                   />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-red-400" />
@@ -358,7 +358,7 @@ const AIFinancialAdvisor = () => {
                       value={(financialData as any)[key] || ''}
                       onChange={(e) => setFinancialData(prev => ({ ...prev, [key]: parseFloat(e.target.value) || 0 }))}
                       placeholder={placeholder}
-                      className="h-9 bg-zinc-800 border-gray-700 text-sm"
+                      className="h-9 bg-zinc-800 border-[#1A1A1A] text-sm"
                     />
                   </div>
                 ))}
@@ -366,7 +366,7 @@ const AIFinancialAdvisor = () => {
             </Card>
 
             {/* Summary */}
-            <Card className="bg-zinc-900/50 border-gray-800">
+            <Card className="bg-zinc-900/50 border-[#1A1A1A]">
               <CardContent className="p-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
@@ -435,7 +435,7 @@ const AIFinancialAdvisor = () => {
                 </div>
 
                 {/* Investment Strategy */}
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                       <Lightbulb className="w-5 h-5 text-gold" />
@@ -448,7 +448,7 @@ const AIFinancialAdvisor = () => {
                 </Card>
 
                 {/* Property Recommendations */}
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                       <Building2 className="w-5 h-5 text-emerald-400" />
@@ -487,7 +487,7 @@ const AIFinancialAdvisor = () => {
                 </Card>
 
                 {/* Recommendations */}
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-white text-sm">AI Recommendations</CardTitle>
                   </CardHeader>
@@ -525,21 +525,21 @@ const AIFinancialAdvisor = () => {
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
                         <span className="text-gold">Speak with</span>
-                        <span className="text-black">Mortgage Advisor</span>
+                        <span className="text-[#1A1A1A]">Mortgage Advisor</span>
                       </span>
                     </button>
                   </Link>
                   <Link to="/properties" className="flex-1">
-                    <button className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                    <button className="w-full relative inline-flex items-center justify-center gap-2 px-6 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white">
                       Browse Properties
                     </button>
                   </Link>
                 </div>
               </>
             ) : (
-              <Card className="bg-zinc-900/50 border-gray-800 h-full min-h-[500px] flex items-center justify-center">
+              <Card className="bg-zinc-900/50 border-[#1A1A1A] h-full min-h-[500px] flex items-center justify-center">
                 <CardContent className="text-center">
-                  <Calculator className="w-16 h-16 text-gray-700 mx-auto mb-4" />
+                  <Calculator className="w-16 h-16 text-[#5A4A2E] mx-auto mb-4" />
                   <h3 className="text-white text-lg font-medium mb-2">Enter Your Financial Details</h3>
                   <p className="text-white/90 text-sm max-w-md">
                     Fill in your income and expenses on the left, then click "Generate AI Analysis" 

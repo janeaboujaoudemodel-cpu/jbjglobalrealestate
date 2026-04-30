@@ -148,7 +148,7 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Brand mark with real monogram */}
             <div className="absolute top-4 left-10 flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-black backdrop-blur-sm overflow-hidden">
+              <div className="w-14 h-14 rounded-full border-2 border-gold/70 flex items-center justify-center bg-[#1A1A1A] backdrop-blur-sm overflow-hidden">
                 <img 
                   src={jbjFullLogoDarkBg} 
                   alt="JBJ" 
@@ -187,7 +187,7 @@ const PremiumBrochureCard = ({
 
             {/* Lock indicator for locked state */}
             {isLocked && (
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 border-2 border-gold/60 flex items-center justify-center backdrop-blur-sm">
+              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#1A1A1A]/50 border-2 border-gold/60 flex items-center justify-center backdrop-blur-sm">
                 <Lock className="w-5 h-5 text-gold" />
               </div>
             )}

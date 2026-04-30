@@ -49,7 +49,7 @@ const ReferralPartner = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="bg-gradient-to-br from-zinc-900 to-black border border-gray-800 rounded-2xl p-8 md:p-12">
+            <div className="bg-gradient-to-br from-zinc-900 to-black border border-[#1A1A1A] rounded-2xl p-8 md:p-12">
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-14 h-14 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center border border-gold/30">
                   <Users className="w-7 h-7 text-gold" />
@@ -91,7 +91,7 @@ const ReferralPartner = () => {
               </div>
 
               {/* Compliance Notice */}
-              <div className="bg-zinc-800/50 border border-gray-700 rounded-xl p-6 mb-8">
+              <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-xl p-6 mb-8">
                 <h4 className="text-gold font-semibold text-sm uppercase tracking-wider mb-3">Important Notice</h4>
                 <p className="text-white/70 text-sm leading-relaxed">
                   Partners are independent and responsible for compliance with regulations in their own jurisdictions. 
@@ -102,7 +102,7 @@ const ReferralPartner = () => {
 
               <div className="text-center">
                 <a href={`mailto:${CONTACT_INFO.email}?subject=Referral Partner Inquiry`}>
-                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold px-8 py-6 text-base">
+                  <Button className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold px-8 py-6 text-base">
                     Inquire About Partnership
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>

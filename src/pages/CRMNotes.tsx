@@ -202,8 +202,8 @@ const CRMNotes = () => {
                     <StickyNote className="h-5 w-5 text-gold" />
                   </div>
                   <div>
-                    <h1 className="text-lg font-bold text-black">Notes</h1>
-                    <p className="text-xs text-gray-600">{notes.length} notes</p>
+                    <h1 className="text-lg font-bold text-[#1A1A1A]">Notes</h1>
+                    <p className="text-xs text-[#5A4A2E]">{notes.length} notes</p>
                   </div>
                 </div>
               </div>
@@ -211,7 +211,7 @@ const CRMNotes = () => {
                 <Button 
                   onClick={() => setShowVoiceRecorder(!showVoiceRecorder)} 
                   variant="secondary"
-                  className={showVoiceRecorder ? 'bg-gold text-black' : ''}
+                  className={showVoiceRecorder ? 'bg-gold text-[#1A1A1A]' : ''}
                 >
                   <Mic className="h-4 w-4 mr-2" />
                   Voice Note
@@ -230,13 +230,13 @@ const CRMNotes = () => {
             {showVoiceRecorder && (
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Mic className="h-5 w-5 text-gold" />
                     Voice Assistant
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-[#5A4A2E] mb-4">
                     Click the microphone to record a voice note. Your speech will be transcribed and saved as a note.
                   </p>
                   <VoiceNoteRecorder onTranscript={handleVoiceTranscript} />
@@ -259,9 +259,9 @@ const CRMNotes = () => {
             {filteredNotes.length === 0 ? (
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardContent className="py-12 text-center">
-                  <StickyNote className="h-12 w-12 mx-auto mb-4 text-gray-500" />
-                  <p className="text-black font-medium">No notes yet</p>
-                  <p className="text-sm text-gray-600 mt-1">Create your first note to get started</p>
+                  <StickyNote className="h-12 w-12 mx-auto mb-4 text-[#8A7556]" />
+                  <p className="text-[#1A1A1A] font-medium">No notes yet</p>
+                  <p className="text-sm text-[#5A4A2E] mt-1">Create your first note to get started</p>
                   <Button onClick={() => addNote()} variant="primary" className="mt-4">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Note
@@ -281,13 +281,13 @@ const CRMNotes = () => {
                           <Input
                             value={editTitle}
                             onChange={(e) => setEditTitle(e.target.value)}
-                            className="font-semibold bg-white/70 border-gold/30"
+                            className="font-semibold bg-[#FDFBF7]/70 border-gold/30"
                             placeholder="Note title"
                           />
                           <Textarea
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
-                            className="min-h-[120px] bg-white/70 border-gold/30 resize-none"
+                            className="min-h-[120px] bg-[#FDFBF7]/70 border-gold/30 resize-none"
                             placeholder="Write your note..."
                           />
                           <div className="flex gap-2">
@@ -304,13 +304,13 @@ const CRMNotes = () => {
                       ) : (
                         <>
                           <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-semibold text-black">{note.title}</h3>
+                            <h3 className="font-semibold text-[#1A1A1A]">{note.title}</h3>
                             <div className="flex gap-1">
                               <Button 
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => extractTasks(note.id)}
-                                className="h-7 w-7 p-0 text-gray-600 hover:text-[#B89555]"
+                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-[#B89555]"
                                 title="Extract tasks from note"
                               >
                                 <ListChecks className="h-3 w-3" />
@@ -319,7 +319,7 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => startEditing(note)}
-                                className="h-7 w-7 p-0 text-gray-600 hover:text-gold"
+                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-gold"
                               >
                                 <Edit2 className="h-3 w-3" />
                               </Button>
@@ -327,16 +327,16 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => deleteNote(note.id)}
-                                className="h-7 w-7 p-0 text-gray-600 hover:text-red-600"
+                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-red-600"
                               >
                                 <Trash2 className="h-3 w-3" />
                               </Button>
                             </div>
                           </div>
-                          <p className="text-sm text-gray-700 whitespace-pre-wrap line-clamp-6">
+                          <p className="text-sm text-[#5A4A2E] whitespace-pre-wrap line-clamp-6">
                             {note.content || 'Empty note...'}
                           </p>
-                          <p className="text-xs text-gray-600 mt-3">
+                          <p className="text-xs text-[#5A4A2E] mt-3">
                             Updated {format(note.updatedAt, 'MMM d, yyyy')}
                           </p>
                         </>

@@ -64,7 +64,7 @@ export function BrokerToolkitHero() {
           </h1>
           
           {/* Sub-headline - What they get */}
-          <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-[#5A4A2E] mb-10 max-w-2xl mx-auto">
             AI Tools, Training, CRM, Leads & Rewards — All Free
           </p>
 
@@ -80,7 +80,7 @@ export function BrokerToolkitHero() {
                 }}
               >
                 <Star className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="text-white group-hover:text-black transition-colors">Join Free Now</span>
+                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Join Free Now</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -95,7 +95,7 @@ export function BrokerToolkitHero() {
                 }}
               >
                 <Sparkles className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="text-white group-hover:text-black transition-colors">Open My Dashboard</span>
+                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Open My Dashboard</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -109,7 +109,7 @@ export function BrokerToolkitHero() {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <span className="text-white group-hover:text-black transition-colors">See What's Included</span>
+              <span className="text-white group-hover:text-[#1A1A1A] transition-colors">See What's Included</span>
               <ChevronDown className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               {/* Hover fill overlay */}
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />

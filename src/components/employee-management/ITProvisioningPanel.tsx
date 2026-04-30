@@ -181,7 +181,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">Awaiting Setup</p>
+                <p className="text-xs text-[#5A4A2E]">Awaiting Setup</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {applications.filter(a => a.status === 'hr_approved').length}
                 </p>
@@ -194,7 +194,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">In Progress</p>
+                <p className="text-xs text-[#5A4A2E]">In Progress</p>
                 <p className="text-2xl font-bold text-purple-600">
                   {applications.filter(a => a.status === 'it_processing').length}
                 </p>
@@ -207,7 +207,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">Completed Today</p>
+                <p className="text-xs text-[#5A4A2E]">Completed Today</p>
                 <p className="text-2xl font-bold text-green-600">0</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500/50" />
@@ -220,11 +220,11 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="text-black flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Key className="w-5 h-5 text-gold" />
               IT Provisioning Queue
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-[#5A4A2E]">
               HR-approved joiners ready for email, credentials, and CRM access
             </CardDescription>
           </div>
@@ -240,7 +240,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           ) : filteredApps.length === 0 ? (
             <div className="text-center py-12">
               <CheckCircle className="w-12 h-12 text-green-500/30 mx-auto mb-4" />
-              <p className="text-gray-600">All caught up! No pending provisioning tasks.</p>
+              <p className="text-[#5A4A2E]">All caught up! No pending provisioning tasks.</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -248,22 +248,22 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                 {filteredApps.map((app) => (
                   <div 
                     key={app.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-white/50 border border-gold/20 hover:border-gold/40 transition-all"
+                    className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7]/50 border border-gold/20 hover:border-gold/40 transition-all"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
                         <User className="w-6 h-6 text-gold" />
                       </div>
                       <div>
-                        <p className="font-medium text-black">{app.full_name}</p>
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <p className="font-medium text-[#1A1A1A]">{app.full_name}</p>
+                        <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
                           <Briefcase className="w-3 h-3" />
                           <span>{app.job_title}</span>
                           <span>•</span>
                           <Building2 className="w-3 h-3" />
                           <span>{app.department}</span>
                         </div>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className="text-xs text-[#5A4A2E] mt-1">
                           HR approved: {app.hr_approved_at ? format(new Date(app.hr_approved_at), 'MMM d, yyyy') : 'Pending'}
                         </p>
                       </div>
@@ -297,11 +297,11 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
       <Dialog open={showProvisionDialog} onOpenChange={setShowProvisionDialog}>
         <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <DialogHeader>
-            <DialogTitle className="text-black flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Key className="w-5 h-5 text-gold" />
               Provision Employee: {selectedApp?.full_name}
             </DialogTitle>
-            <DialogDescription className="text-gray-600">
+            <DialogDescription className="text-[#5A4A2E]">
               Generate email, password, signature, and grant system access
             </DialogDescription>
           </DialogHeader>
@@ -309,12 +309,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <div className="space-y-4 py-4">
             {/* Email Generation */}
             <div className="space-y-2">
-              <Label className="text-black">Company Email</Label>
+              <Label className="text-[#1A1A1A]">Company Email</Label>
               <div className="flex gap-2">
                 <Input 
                   value={generatedEmail}
                   onChange={(e) => setGeneratedEmail(e.target.value)}
-                  className="bg-white border-gold/30 text-black"
+                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]"
                 />
                 <Button variant="ghost" size="icon" onClick={() => copyToClipboard(generatedEmail, 'Email')}>
                   <Copy className="w-4 h-4" />
@@ -324,12 +324,12 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
 
             {/* Password Generation */}
             <div className="space-y-2">
-              <Label className="text-black">Temporary Password</Label>
+              <Label className="text-[#1A1A1A]">Temporary Password</Label>
               <div className="flex gap-2">
                 <Input 
                   value={tempPassword}
                   onChange={(e) => setTempPassword(e.target.value)}
-                  className="bg-white border-gold/30 text-black font-mono"
+                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] font-mono"
                 />
                 <Button variant="ghost" size="icon" onClick={() => setTempPassword(generatePassword())}>
                   <RefreshCw className="w-4 h-4" />
@@ -338,27 +338,27 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-gray-600">Employee must change on first login</p>
+              <p className="text-xs text-[#5A4A2E]">Employee must change on first login</p>
             </div>
 
             {/* Email Signature Preview */}
             <div className="space-y-2">
-              <Label className="text-black">Email Signature</Label>
-              <div className="bg-white border border-gold/30 rounded-lg p-4">
+              <Label className="text-[#1A1A1A]">Email Signature</Label>
+              <div className="bg-[#FDFBF7] border border-gold/30 rounded-lg p-4">
                 <div dangerouslySetInnerHTML={{ __html: emailSignature }} />
               </div>
             </div>
 
             {/* Access Options */}
-            <div className="space-y-3 p-4 bg-white/50 rounded-lg border border-gold/20">
-              <Label className="text-black font-medium">Access & Notifications</Label>
+            <div className="space-y-3 p-4 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
+              <Label className="text-[#1A1A1A] font-medium">Access & Notifications</Label>
               <div className="flex items-center gap-2">
                 <Checkbox 
                   id="grantCRM" 
                   checked={grantCRM} 
                   onCheckedChange={(v) => setGrantCRM(v as boolean)} 
                 />
-                <label htmlFor="grantCRM" className="text-sm text-gray-700">
+                <label htmlFor="grantCRM" className="text-sm text-[#5A4A2E]">
                   Grant CRM access based on role ({selectedApp?.crm_role})
                 </label>
               </div>
@@ -368,7 +368,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   checked={sendWelcomeEmail} 
                   onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)} 
                 />
-                <label htmlFor="sendWelcome" className="text-sm text-gray-700">
+                <label htmlFor="sendWelcome" className="text-sm text-[#5A4A2E]">
                   Send welcome email with credentials
                 </label>
               </div>

@@ -172,7 +172,7 @@ function StepIndicator({ activeStep, maxStep, onStep }: { activeStep: number; ma
               {/* Circle */}
               <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 transition-all ${
                 current
-                  ? 'bg-amber-500 text-black ring-2 ring-amber-400/40'
+                  ? 'bg-amber-500 text-[#1A1A1A] ring-2 ring-amber-400/40'
                   : done
                   ? 'bg-emerald-500/30 text-emerald-400 border border-emerald-500/50'
                   : 'bg-slate-700 text-slate-500 border border-slate-600'
@@ -680,7 +680,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
               {uploadedFile && (
                 <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700 space-y-2">
-                  {isVideoFile && <video src={URL.createObjectURL(uploadedFile)} className="w-full rounded-lg aspect-video object-cover bg-black" controls muted />}
+                  {isVideoFile && <video src={URL.createObjectURL(uploadedFile)} className="w-full rounded-lg aspect-video object-cover bg-[#1A1A1A]" controls muted />}
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-amber-400 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -719,7 +719,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               <Button
                 onClick={() => goStep(2)}
                 disabled={!uploadedFile}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold"
               >
                 Start Transcription <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -754,7 +754,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               <Button
                 onClick={handleTranscribe}
                 disabled={isTranscribing}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold"
               >
                 {isTranscribing
                   ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{transcribeStage}</>
@@ -767,7 +767,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <p className="text-xs text-slate-400 font-medium">{subtitles.length} segments — click to edit</p>
-                    <Button size="sm" onClick={() => goStep(3)} className="h-7 text-xs bg-amber-500 text-black hover:bg-amber-400 px-3">
+                    <Button size="sm" onClick={() => goStep(3)} className="h-7 text-xs bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 px-3">
                       Translate <ArrowRight className="w-3 h-3 ml-1" />
                     </Button>
                   </div>
@@ -781,7 +781,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                         <div className="space-y-1">
                           <textarea value={editingText} onChange={e => setEditingText(e.target.value)} className="w-full bg-slate-700 text-white text-xs rounded p-2 resize-none border border-amber-400/50 focus:outline-none" rows={2} autoFocus />
                           <div className="flex gap-1">
-                            <Button size="sm" onClick={saveEditSegment} className="h-6 text-xs bg-amber-500 text-black hover:bg-amber-400 px-2"><Check className="w-3 h-3 mr-1" />Save</Button>
+                            <Button size="sm" onClick={saveEditSegment} className="h-6 text-xs bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 px-2"><Check className="w-3 h-3 mr-1" />Save</Button>
                             <Button size="sm" variant="ghost" onClick={() => setEditingId(null)} className="h-6 text-xs text-slate-400 px-2">Cancel</Button>
                           </div>
                         </div>
@@ -831,7 +831,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               <Button
                 onClick={handleTranslate}
                 disabled={isTranslating || !selectedLang}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold"
               >
                 {isTranslating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Translating…</> : <><Languages className="w-4 h-4 mr-2" />Translate All Segments</>}
               </Button>
@@ -898,7 +898,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                                 <div className="space-y-1">
                                   <textarea value={editingTranslationText} onChange={e => setEditingTranslationText(e.target.value)} dir={isRTL ? 'rtl' : 'ltr'} className={`w-full bg-slate-600 text-white text-xs rounded p-1.5 resize-none border border-amber-400/50 focus:outline-none ${isRTL ? 'text-right' : ''}`} rows={2} autoFocus />
                                   <div className="flex gap-1">
-                                    <Button size="sm" onClick={() => saveEditTranslation(sub.id, lc)} className="h-5 text-[10px] bg-amber-500 text-black px-2">Save</Button>
+                                    <Button size="sm" onClick={() => saveEditTranslation(sub.id, lc)} className="h-5 text-[10px] bg-amber-500 text-[#1A1A1A] px-2">Save</Button>
                                     <Button size="sm" variant="ghost" onClick={() => setEditingTranslationId(null)} className="h-5 text-[10px] text-slate-400 px-2">Cancel</Button>
                                   </div>
                                 </div>
@@ -916,7 +916,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
               )}
 
               {translatedLangs.length > 0 && (
-                <Button onClick={() => goStep(4)} className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold">
+                <Button onClick={() => goStep(4)} className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold">
                   Style &amp; Preview <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               )}
@@ -927,7 +927,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
           {activeStep === 4 && (
             <div className="space-y-3">
               {/* Live CSS preview box */}
-              <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+              <div className="relative w-full rounded-xl overflow-hidden bg-[#1A1A1A]" style={{ aspectRatio: '16/9' }}>
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900 flex items-center justify-center">
                   <Film className="w-8 h-8 text-slate-700" />
                 </div>
@@ -1070,7 +1070,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
                 {previewSource && (
                   <div className="space-y-2">
-                    <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ aspectRatio: '16/9' }}>
+                    <div className="relative w-full rounded-xl overflow-hidden bg-[#1A1A1A]" style={{ aspectRatio: '16/9' }}>
                       <video
                         ref={previewVideoRef}
                         src={URL.createObjectURL(previewSource)}
@@ -1094,7 +1094,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       </div>
                       <div className="flex items-center justify-center gap-2">
                         <button onClick={() => seekPreview(-5)} className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors" title="-5s"><SkipBack className="w-3.5 h-3.5" /></button>
-                        <button onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
+                        <button onClick={togglePreviewPlay} className="p-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] transition-colors">{previewPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}</button>
                         <button onClick={() => seekPreview(5)} className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors" title="+5s"><SkipForward className="w-3.5 h-3.5" /></button>
                       </div>
                     </div>
@@ -1116,7 +1116,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
 
               <input ref={burnFileInputRef} type="file" accept="video/*" className="hidden" onChange={e => e.target.files?.[0] && setBurnVideoFile(e.target.files[0])} />
 
-              <Button onClick={() => goStep(5)} className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold">
+              <Button onClick={() => goStep(5)} className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold">
                 Export Subtitles <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -1199,7 +1199,7 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
                       </div>
                     )}
 
-                    <Button onClick={burnCaptionsOnVideo} disabled={isBurning || !burnVideoFile} className="w-full bg-amber-500 hover:bg-amber-400 text-black font-semibold h-9 text-xs">
+                    <Button onClick={burnCaptionsOnVideo} disabled={isBurning || !burnVideoFile} className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-semibold h-9 text-xs">
                       {isBurning ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Burning… {burnProgress}%</> : <><Zap className="w-4 h-4 mr-2" />Burn Captions → Download WebM</>}
                     </Button>
                     <p className="text-[10px] text-slate-600 text-center">Client-side rendering — audio included — no upload needed</p>

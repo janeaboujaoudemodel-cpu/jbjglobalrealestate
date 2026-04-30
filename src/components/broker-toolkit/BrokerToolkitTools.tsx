@@ -409,7 +409,7 @@ export function BrokerToolkitTools() {
       >
         <Link to={tool.link}>
           <Card
-            className={`bg-black/40 backdrop-blur-sm border-2 ${glowClass} transition-all duration-300 h-full group cursor-pointer`}
+            className={`bg-[#1A1A1A]/40 backdrop-blur-sm border-2 ${glowClass} transition-all duration-300 h-full group cursor-pointer`}
           >
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
@@ -502,7 +502,7 @@ export function BrokerToolkitTools() {
   };
 
   return (
-    <section id="section-tools" className="py-8 md:py-10 bg-black">
+    <section id="section-tools" className="py-8 md:py-10 bg-[#1A1A1A]">
       <div className="container mx-auto px-4">
         {/* Discover All Free Tools - Light Cyan/Slate Layer */}
         <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 border border-slate-600/30 rounded-2xl p-6 md:p-8 shadow-lg mb-12">
@@ -533,7 +533,7 @@ export function BrokerToolkitTools() {
                 placeholder="Search tools (e.g. stamp, calculator, CRM...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-gray-600 focus:border-gold focus:ring-gold/30 rounded-xl"
+                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/30 rounded-xl"
               />
               {searchQuery && (
                 <button

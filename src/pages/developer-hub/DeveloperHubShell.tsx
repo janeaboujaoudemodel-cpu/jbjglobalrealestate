@@ -33,17 +33,17 @@ const DeveloperHubShell = () => {
       {/* Sidebar Header — champagne gradient */}
       <div className="h-16 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] border-b border-gold/30">
         {!collapsed && (
-          <span className="text-black/80 font-bold text-lg tracking-wide">
+          <span className="text-[#1A1A1A]/80 font-bold text-lg tracking-wide">
             Developer Hub
           </span>
         )}
-        {collapsed && <Building2 className="w-5 h-5 text-black/70 mx-auto" />}
+        {collapsed && <Building2 className="w-5 h-5 text-[#1A1A1A]/70 mx-auto" />}
         {!isMobile && (
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="text-black/60 hover:text-black/80 hover:bg-black/10"
+            className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]/80 hover:bg-[#1A1A1A]/10"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -107,19 +107,19 @@ const DeveloperHubShell = () => {
         <header className="h-14 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
             {isMobile && (
-              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-black/60 hover:text-black/80">
+              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]/80">
                 <Menu className="w-5 h-5" />
               </Button>
             )}
             <div className="min-w-0">
-              <h1 className="text-black/80 font-semibold text-sm md:text-base tracking-wide truncate">Developer Hub</h1>
-              <p className="text-black/50 text-xs hidden md:block truncate">{user?.email || "Developer Portal"}</p>
+              <h1 className="text-[#1A1A1A]/80 font-semibold text-sm md:text-base tracking-wide truncate">Developer Hub</h1>
+              <p className="text-[#1A1A1A]/50 text-xs hidden md:block truncate">{user?.email || "Developer Portal"}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="flex items-center gap-1.5 bg-black/10 border border-black/20 rounded-lg px-3 py-1.5">
-              <Building2 className="w-4 h-4 text-black/70" />
-              <span className="text-black/70 text-xs font-semibold hidden sm:inline">Developer</span>
+            <div className="flex items-center gap-1.5 bg-[#1A1A1A]/10 border border-[#1A1A1A]/20 rounded-lg px-3 py-1.5">
+              <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
+              <span className="text-[#1A1A1A]/70 text-xs font-semibold hidden sm:inline">Developer</span>
             </div>
           </div>
         </header>

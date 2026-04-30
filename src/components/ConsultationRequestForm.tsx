@@ -166,9 +166,9 @@ export const ConsultationRequestForm = ({
     }
   };
 
-  const selectTriggerClass = "h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold rounded-lg";
+  const selectTriggerClass = "h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold rounded-lg";
   const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
-  const inputClass = "h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black rounded-lg";
+  const inputClass = "h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg";
 
   if (isSuccess) {
     return (
@@ -180,10 +180,10 @@ export const ConsultationRequestForm = ({
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2">
+        <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#5A4A2E]">
           Our team will reach out within 24 hours to schedule your consultation.
         </p>
       </motion.div>
@@ -204,14 +204,14 @@ export const ConsultationRequestForm = ({
           <Calendar className="w-3 h-3" />
           Expert Consultation
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-black">
+        <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
           {projectName ? (
             <>Register Interest in <span className="text-gold">{projectName}</span></>
           ) : (
             title
           )}
         </h3>
-        <p className="text-gray-600 text-sm mt-2">{subtitle}</p>
+        <p className="text-[#5A4A2E] text-sm mt-2">{subtitle}</p>
       </div>
 
       <Form {...form}>
@@ -423,7 +423,7 @@ export const ConsultationRequestForm = ({
                   <Textarea
                     placeholder="Additional details (optional)"
                     {...field}
-                    className="min-h-[80px] bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black resize-none rounded-lg"
+                    className="min-h-[80px] bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold focus:border-gold text-[#1A1A1A] resize-none rounded-lg"
                   />
                 </FormControl>
                 <FormMessage />
@@ -443,7 +443,7 @@ export const ConsultationRequestForm = ({
                     className="border-gold/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                   />
                 </FormControl>
-                <p className="text-black text-sm leading-tight font-normal">
+                <p className="text-[#1A1A1A] text-sm leading-tight font-normal">
                   I agree to the <a href="/terms" className="text-gold underline">Terms</a> and <a href="/privacy" className="text-gold underline">Privacy Policy</a> *
                 </p>
                 <FormMessage />
@@ -454,7 +454,7 @@ export const ConsultationRequestForm = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-14 text-base font-bold relative overflow-hidden group bg-black hover:bg-gray-800 text-white border-2 border-black"
+            className="w-full h-14 text-base font-bold relative overflow-hidden group bg-[#1A1A1A] hover:bg-[#1A1A1A] text-white border-2 border-[#1A1A1A]"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2 text-white">

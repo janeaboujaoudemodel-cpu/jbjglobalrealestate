@@ -718,9 +718,9 @@ const ListingGenerator = () => {
         {(["input", "processing", "preview"] as const).map((s, i) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-              step === s ? "bg-gold text-black" :
+              step === s ? "bg-gold text-[#1A1A1A]" :
               (["input", "processing", "preview"].indexOf(step) > i) ? "bg-gold/30 text-gold" :
-              "bg-gray-200 text-gray-600"
+              "bg-[#EFE6D6] text-[#5A4A2E]"
             }`}>
               {i + 1}
             </div>
@@ -872,7 +872,7 @@ const ListingGenerator = () => {
               <Loader2 className="w-10 h-10 text-gold animate-spin" />
             </div>
             <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gold flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-black" />
+              <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
             </div>
           </div>
           <div className="text-center space-y-2">
@@ -885,7 +885,7 @@ const ListingGenerator = () => {
             </p>
             <p className="text-sm font-medium text-gold">{elapsedSeconds}s elapsed</p>
           </div>
-          <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-64 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
             <div
               className="h-full bg-gold rounded-full transition-all duration-1000"
               style={{ width: `${Math.min(95, (elapsedSeconds / 60) * 100)}%` }}

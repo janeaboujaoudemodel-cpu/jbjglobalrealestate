@@ -33,7 +33,7 @@ const DataOperations = () => {
       case 'error':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Error</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">Unknown</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30">Unknown</Badge>;
     }
   };
 
@@ -82,7 +82,7 @@ const DataOperations = () => {
           
           <div className="grid md:grid-cols-3 gap-4">
             {OPEN_DATA_SOURCES.map((source) => (
-              <Card key={source.id} className="bg-zinc-900/50 border-gray-800">
+              <Card key={source.id} className="bg-zinc-900/50 border-[#1A1A1A]">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-white text-lg">{source.name}</CardTitle>
@@ -103,8 +103,8 @@ const DataOperations = () => {
                       <span className="text-white/90">Last Updated</span>
                       <span className="text-emerald-400">{source.lastUpdated}</span>
                     </div>
-                    <div className="pt-2 border-t border-gray-800">
-                      <p className="text-gray-600 text-xs">Data Types</p>
+                    <div className="pt-2 border-t border-[#1A1A1A]">
+                      <p className="text-[#5A4A2E] text-xs">Data Types</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {source.dataTypes.map((type) => (
                           <span key={type} className="text-xs bg-zinc-800 text-white/70 px-2 py-0.5 rounded">
@@ -129,7 +129,7 @@ const DataOperations = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-800">
+                <tr className="border-b border-[#1A1A1A]">
                   <th className="text-left text-white/90 text-sm py-3 px-4">Timestamp</th>
                   <th className="text-left text-white/90 text-sm py-3 px-4">Action</th>
                   <th className="text-left text-white/90 text-sm py-3 px-4">Source</th>
@@ -139,10 +139,10 @@ const DataOperations = () => {
               </thead>
               <tbody>
                 {auditLogs.map((log, index) => (
-                  <tr key={index} className="border-b border-zinc-900 hover:bg-gray-900/50">
+                  <tr key={index} className="border-b border-zinc-900 hover:bg-[#1A1A1A]/50">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-gray-600" />
+                        <Clock className="w-4 h-4 text-[#5A4A2E]" />
                         <span className="text-white/70 text-sm font-mono">{log.timestamp}</span>
                       </div>
                     </td>
@@ -169,7 +169,7 @@ const DataOperations = () => {
       {/* Compliance Notes */}
       <section className="py-12 border-t border-zinc-900">
         <div className="container mx-auto px-4">
-          <Card className="bg-zinc-900/50 border-gray-800 max-w-3xl mx-auto">
+          <Card className="bg-zinc-900/50 border-[#1A1A1A] max-w-3xl mx-auto">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-3">
                 <FileText className="w-5 h-5 text-gold" />

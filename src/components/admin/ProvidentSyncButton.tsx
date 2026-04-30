@@ -227,7 +227,7 @@ export const ProvidentSyncButton = () => {
   const progress = totalPages > 0 ? (currentPage / totalPages) * 100 : 0;
 
   return (
-    <Card className="bg-zinc-900 border-gray-800">
+    <Card className="bg-zinc-900 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <RefreshCw className="w-5 h-5 text-gold" />
@@ -252,7 +252,7 @@ export const ProvidentSyncButton = () => {
           <Button
             onClick={startFullSync}
             disabled={isSyncing}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             {isSyncing ? (
               <>
@@ -271,7 +271,7 @@ export const ProvidentSyncButton = () => {
             <Button
               onClick={() => syncSinglePage(1)}
               variant="outline"
-              className="border-gray-700 text-white/85 hover:text-white"
+              className="border-[#1A1A1A] text-white/85 hover:text-white"
             >
               Test Page 1 Only
             </Button>
@@ -303,7 +303,7 @@ export const ProvidentSyncButton = () => {
             onClick={repairImages}
             disabled={isRepairing || isSyncing}
             variant="outline"
-            className="border-gray-700 text-white/85 hover:text-white"
+            className="border-[#1A1A1A] text-white/85 hover:text-white"
           >
             {isRepairing ? (
               <>
@@ -350,7 +350,7 @@ export const ProvidentSyncButton = () => {
 
         {/* Total stats during sync */}
         {isSyncing && currentPage > 1 && (
-          <div className="border-t border-gray-800 pt-3">
+          <div className="border-t border-[#1A1A1A] pt-3">
             <p className="text-xs text-white/90 mb-2">Total Progress:</p>
             <div className="flex gap-4 text-sm">
               <span className="text-emerald-400">+{totalStats.created} new</span>

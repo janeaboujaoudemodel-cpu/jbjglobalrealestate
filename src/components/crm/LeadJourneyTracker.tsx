@@ -65,7 +65,7 @@ const LeadJourneyTracker = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-gray-800">
+    <Card className="bg-zinc-900 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
           <MapPin className="w-4 h-4 text-gold" />
@@ -123,7 +123,7 @@ const LeadJourneyTracker = ({
         {/* Last Interaction */}
         {lastInteraction && (
           <div className="p-3 bg-gold/10 border border-gold/20 rounded-lg">
-            <p className="text-xs text-gray-700 mb-1">Last Interaction</p>
+            <p className="text-xs text-[#5A4A2E] mb-1">Last Interaction</p>
             <p className="text-white text-sm">
               {format(new Date(lastInteraction), "MMM d, yyyy 'at' h:mm a")}
             </p>
@@ -139,13 +139,13 @@ const LeadJourneyTracker = ({
                 <Badge 
                   key={i} 
                   variant="outline" 
-                  className="text-xs border-gray-700 text-white/70"
+                  className="text-xs border-[#1A1A1A] text-white/70"
                 >
                   {page === "/" ? "Home" : page.replace("/", "")}
                 </Badge>
               ))}
               {pagesVisited.length > 6 && (
-                <Badge variant="outline" className="text-xs border-gray-700 text-white/70">
+                <Badge variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
                   +{pagesVisited.length - 6} more
                 </Badge>
               )}
@@ -169,7 +169,7 @@ const LeadJourneyTracker = ({
                   <span className="text-white/70 flex-1 truncate">
                     {event.event_type.replace(/_/g, ' ')} - {event.page_path}
                   </span>
-                  <span className="text-gray-600">
+                  <span className="text-[#5A4A2E]">
                     {format(new Date(event.created_at), "h:mm a")}
                   </span>
                 </div>

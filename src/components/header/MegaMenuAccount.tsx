@@ -301,23 +301,23 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
         {user ? (
           <>
             {/* Premium User Header - Horizontal Layout */}
-            <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gray-300">
+            <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-[#B89555]/30">
               {/* Fixed-size avatar container - clickable to profile */}
               <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
-                <Avatar className="h-16 w-16 border border-gray-300 bg-transparent group-hover:border-gray-400/80 transition-all group-hover:ring-2 group-hover:ring-gray-200">
+                <Avatar className="h-16 w-16 border border-[#B89555]/30 bg-transparent group-hover:border-[#B89555]/30/80 transition-all group-hover:ring-2 group-hover:ring-[#B89555]/30">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 border border-gray-300 text-black text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 border border-[#B89555]/30 text-[#1A1A1A] text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
               </Link>
               <div className="min-w-0 flex-1">
-                <Link to="/profile" onClick={onClose} className="block hover:text-black transition-colors">
-                  <p className="text-black font-bold text-lg truncate">
+                <Link to="/profile" onClick={onClose} className="block hover:text-[#1A1A1A] transition-colors">
+                  <p className="text-[#1A1A1A] font-bold text-lg truncate">
                     {accountDisplayName}
                   </p>
                 </Link>
-                <p className="text-black/60 text-sm truncate">{getModeLabel()}</p>
+                <p className="text-[#1A1A1A]/60 text-sm truncate">{getModeLabel()}</p>
                 {/* Show mode + tier badges + points */}
                 {isCombinedMode && investorTierProgress && brokerTierProgress ? (
                   <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
@@ -327,13 +327,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     <Badge className="text-xs font-semibold bg-blue-500/20 text-blue-600 border-blue-500/40">
                       {brokerTierProgress.currentTier?.tier_name || 'Starter'}
                     </Badge>
-                    <span className="text-xs text-black/60">
+                    <span className="text-xs text-[#1A1A1A]/60">
                       • {tierProgress?.totalPoints?.toLocaleString() || 0} pts
                     </span>
                   </div>
                 ) : (
                   <Badge 
-                    className="mt-1.5 text-xs font-semibold border-gray-300 bg-gray-100 text-black"
+                    className="mt-1.5 text-xs font-semibold border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]"
                   >
                     {getModeLabel()} • {tierProgress?.totalPoints?.toLocaleString() || 0} pts earned
                   </Badge>
@@ -342,12 +342,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {/* Mode selector card */}
                 <div 
-                  className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-gradient-to-br from-gray-50 via-gray-50 to-gray-50"
+                  className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-[#B89555]/30 bg-gradient-to-br from-gray-50 via-gray-50 to-gray-50"
                   onClick={(e) => e.stopPropagation()} 
                   onPointerDown={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
                 >
-                  <p className="text-[10px] text-black font-semibold uppercase tracking-wider">
+                  <p className="text-[10px] text-[#1A1A1A] font-semibold uppercase tracking-wider">
                     {t('account.selectYourMode', 'Select your mode')}
                   </p>
                   <ModeSwitcher variant="header" />
@@ -356,7 +356,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 <Link 
                   to="/profile" 
                   onClick={onClose} 
-                  className="flex items-center gap-1.5 text-black text-sm font-semibold hover:underline transition-colors mt-4"
+                  className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-semibold hover:underline transition-colors mt-4"
                 >
                   {t('account.editProfile', 'Edit Profile')}
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -366,12 +366,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
             {/* Section Headers Row - Full Width */}
             <div className="grid grid-cols-2 gap-6 mb-2">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-black font-bold px-2 py-1.5">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold px-2 py-1.5">
                 {t('account.yourAccount', 'Your Account')}
               </p>
               {/* LOCK: Owner shortcuts header - Always reserve space for Owner Shortcuts column when verifying or when owner has access */}
               {(ownerLoading || isOwner || hasCRMAccess || hasListingAdminAccess) && (
-                <p className="text-[10px] uppercase tracking-[0.2em] text-black font-bold px-2 py-1.5">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold px-2 py-1.5">
                   {t('account.ownerShortcuts', 'Owner Shortcuts')}
                 </p>
               )}
@@ -392,8 +392,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       onClick={onClose}
                       className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-gray-300 flex items-center justify-center group-hover:border-gray-400 group-hover:bg-gray-100 transition-colors relative">
-                        <link.icon className="w-4 h-4 text-black group-hover:text-black transition-colors" />
+                      <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-[#B89555]/30 flex items-center justify-center group-hover:border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors relative">
+                        <link.icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                         {link.badge > 0 && (
                           <span className="absolute -top-1.5 -right-1.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
                             {link.badge > 9 ? '9+' : link.badge}
@@ -401,11 +401,11 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className="text-black font-semibold text-sm group-hover:text-black transition-colors block">
+                        <span className="text-[#1A1A1A] font-semibold text-sm group-hover:text-[#1A1A1A] transition-colors block">
                           {link.label}
                         </span>
                         {link.description && (
-                          <span className="text-black/50 text-xs truncate block">
+                          <span className="text-[#1A1A1A]/50 text-xs truncate block">
                             {link.description}
                           </span>
                         )}
@@ -438,18 +438,18 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         <Link 
                           to="/owner" 
                           onClick={onClose} 
-                          className="flex items-center gap-2.5 py-2.5 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/20 to-gray-300/10 border border-gray-300 hover:border-gray-400 group"
+                          className="flex items-center gap-2.5 py-2.5 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/20 to-gray-300/10 border border-[#B89555]/30 hover:border-[#B89555]/30 group"
                         >
-                          <div className="w-9 h-9 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                            <LayoutDashboard className="w-5 h-5 text-black" />
+                          <div className="w-9 h-9 rounded-lg bg-[#F7F2EA] border-2 border-[#B89555]/30 flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
+                            <LayoutDashboard className="w-5 h-5 text-[#1A1A1A]" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <span className="text-black font-bold text-sm group-hover:text-black transition-colors block">
+                            <span className="text-[#1A1A1A] font-bold text-sm group-hover:text-[#1A1A1A] transition-colors block">
                               {t('account.ownerDashboard', 'Owner Dashboard')}
                             </span>
-                            <span className="text-black/50 text-[10px]">{t('account.commandCenter', 'Command Center')}</span>
+                            <span className="text-[#1A1A1A]/50 text-[10px]">{t('account.commandCenter', 'Command Center')}</span>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-black" />
+                          <ChevronRight className="w-4 h-4 text-[#1A1A1A]" />
                         </Link>
                       )}
                       {/* Admin Panel */}
@@ -457,18 +457,18 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                         <Link 
                           to="/admin" 
                           onClick={onClose} 
-                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/10 to-gray-300/5 border border-gray-200 hover:border-gray-400 group"
+                          className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/10 to-gray-300/5 border border-[#B89555]/30 hover:border-[#B89555]/30 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-gray-100 border-2 border-gray-300 flex items-center justify-center group-hover:bg-gray-100 transition-colors">
-                            <Shield className="w-4 h-4 text-black" />
+                          <div className="w-8 h-8 rounded-lg bg-[#F7F2EA] border-2 border-[#B89555]/30 flex items-center justify-center group-hover:bg-[#F7F2EA] transition-colors">
+                            <Shield className="w-4 h-4 text-[#1A1A1A]" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <span className="text-black font-semibold text-xs group-hover:text-black transition-colors block">
+                            <span className="text-[#1A1A1A] font-semibold text-xs group-hover:text-[#1A1A1A] transition-colors block">
                               {t('account.adminPanel', 'Admin Panel')}
                             </span>
-                            <span className="text-black/50 text-[10px]">{t('account.adminPanelDesc', 'HR, IT, Support, All')}</span>
+                            <span className="text-[#1A1A1A]/50 text-[10px]">{t('account.adminPanelDesc', 'HR, IT, Support, All')}</span>
                           </div>
-                          <ChevronRight className="w-3.5 h-3.5 text-black" />
+                          <ChevronRight className="w-3.5 h-3.5 text-[#1A1A1A]" />
                         </Link>
                       )}
                       {/* Customer Happiness Hub */}
@@ -482,10 +482,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                             <Headphones className="w-4 h-4 text-emerald-600" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <span className="text-black font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
+                            <span className="text-[#1A1A1A] font-semibold text-xs group-hover:text-emerald-600 transition-colors block">
                               {t('account.customerHappiness', 'Customer Happiness Hub')}
                             </span>
-                            <span className="text-black/50 text-[10px]">{t('account.customerHappinessDesc', 'Reviews, Tickets & Ideas')}</span>
+                            <span className="text-[#1A1A1A]/50 text-[10px]">{t('account.customerHappinessDesc', 'Reviews, Tickets & Ideas')}</span>
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
                         </Link>
@@ -498,10 +498,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={onClose}
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gray-200 flex items-center justify-center group-hover:border-gray-400 group-hover:bg-gray-100 transition-colors">
-                            <link.icon className="w-4 h-4 text-black group-hover:text-black transition-colors" />
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-[#B89555]/30 flex items-center justify-center group-hover:border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                           </div>
-                          <span className="text-black font-medium text-xs group-hover:text-black transition-colors truncate">
+                          <span className="text-[#1A1A1A] font-medium text-xs group-hover:text-[#1A1A1A] transition-colors truncate">
                             {link.label}
                           </span>
                         </Link>
@@ -512,10 +512,10 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={onClose} 
                           className="flex items-center gap-2.5 py-2 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-gray-300/15 hover:to-gray-300/5 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-gray-200 flex items-center justify-center group-hover:border-gray-400 group-hover:bg-gray-100 transition-colors">
-                            <Users className="w-4 h-4 text-black group-hover:text-black transition-colors" />
+                          <div className="w-8 h-8 rounded-lg bg-transparent border-2 border-[#B89555]/30 flex items-center justify-center group-hover:border-[#B89555]/30 group-hover:bg-[#F7F2EA] transition-colors">
+                            <Users className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                           </div>
-                          <span className="text-black font-medium text-xs group-hover:text-black transition-colors truncate">
+                          <span className="text-[#1A1A1A] font-medium text-xs group-hover:text-[#1A1A1A] transition-colors truncate">
                             {t('nav.crm') || 'CRM Dashboard'}
                           </span>
                         </Link>
@@ -541,7 +541,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
             {/* ═══ FULL-WIDTH: Preferences row with Search icon ═══ */}
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-black font-bold">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">
                 {t('account.preferences', 'Preferences')}
               </p>
               <div className="flex items-center gap-2">
@@ -550,25 +550,25 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   <button
                     onClick={(e) => { e.stopPropagation(); setShowSearchDropdown(!showSearchDropdown); setShowLangDropdown(false); }}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 hover:border-gray-400 transition-colors group"
+                    className="w-8 h-8 rounded-lg border border-[#B89555]/30 flex items-center justify-center hover:bg-[#F7F2EA] hover:border-[#B89555]/30 transition-colors group"
                     title="Quick Search & Recent Activity"
                   >
-                    <Search className="w-4 h-4 text-black group-hover:text-black transition-colors" />
+                    <Search className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
                   </button>
                   {showSearchDropdown && (
                     <div
-                      className="absolute right-0 top-10 w-72 rounded-xl border-2 border-gray-200 shadow-2xl z-[10001] overflow-hidden"
+                      className="absolute right-0 top-10 w-72 rounded-xl border-2 border-[#B89555]/30 shadow-2xl z-[10001] overflow-hidden"
                       style={{ background: '#FFFFFF' }}
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
                       {/* Tabs: Quick Search | Recent Activity */}
-                      <div className="flex border-b border-gray-200">
+                      <div className="flex border-b border-[#B89555]/30">
                         <button
                           onClick={() => setSearchTab('search')}
                           className={cn(
                             "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
-                            searchTab === 'search' ? "text-black border-b-2 border-gray-300 bg-gray-50" : "text-black/50 hover:text-black"
+                            searchTab === 'search' ? "text-[#1A1A1A] border-b-2 border-[#B89555]/30 bg-[#F7F2EA]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
                           )}
                         >
                           <Search className="w-3 h-3" /> Quick Search
@@ -577,7 +577,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                           onClick={() => setSearchTab('recent')}
                           className={cn(
                             "flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1",
-                            searchTab === 'recent' ? "text-black border-b-2 border-gray-300 bg-gray-50" : "text-black/50 hover:text-black"
+                            searchTab === 'recent' ? "text-[#1A1A1A] border-b-2 border-[#B89555]/30 bg-[#F7F2EA]" : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
                           )}
                         >
                           <Clock className="w-3 h-3" /> Recent Activity
@@ -591,7 +591,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
                               placeholder="Search pages, tools, settings..."
-                              className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white text-xs text-black placeholder:text-black/40 focus:outline-none focus:border-gray-300 mb-2"
+                              className="w-full px-3 py-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] text-xs text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#B89555]/30 mb-2"
                               autoFocus
                             />
                             <div className="space-y-0.5">
@@ -599,13 +599,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                                 <button
                                   key={shortcut.path}
                                   onClick={() => { navigate(shortcut.path); onClose(); }}
-                                  className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-black hover:bg-gray-100 hover:text-black transition-colors flex items-center gap-2"
+                                  className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
                                 >
-                                  <shortcut.icon className="w-3.5 h-3.5 text-black/60 shrink-0" />
+                                  <shortcut.icon className="w-3.5 h-3.5 text-[#1A1A1A]/60 shrink-0" />
                                   <span className="truncate">{shortcut.label}</span>
                                 </button>
                               )) : (
-                                <p className="text-xs text-black/50 py-2 text-center">No matching shortcut found</p>
+                                <p className="text-xs text-[#1A1A1A]/50 py-2 text-center">No matching shortcut found</p>
                               )}
                             </div>
                           </>
@@ -617,21 +617,21 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                                   <button
                                     key={i}
                                     onClick={() => { navigate(item.path); onClose(); }}
-                                    className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-black hover:bg-gray-100 hover:text-black transition-colors flex items-center gap-2"
+                                    className="w-full text-left px-2.5 py-2 rounded-lg text-xs text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
                                   >
-                                    <Clock className="w-3 h-3 text-black/40 shrink-0" />
+                                    <Clock className="w-3 h-3 text-[#1A1A1A]/40 shrink-0" />
                                     <span className="truncate">{item.title || item.path}</span>
                                   </button>
                                 ))}
                               </div>
                             ) : (
-                              <p className="text-xs text-black/40 text-center py-4">No recent activity yet</p>
+                              <p className="text-xs text-[#1A1A1A]/40 text-center py-4">No recent activity yet</p>
                             )}
-                            <div className="h-[1px] bg-gray-100 my-2" />
+                            <div className="h-[1px] bg-[#F7F2EA] my-2" />
                             <Link
                               to="/my-dashboard#activity"
                               onClick={onClose}
-                              className="block text-center text-[10px] font-semibold text-black hover:underline"
+                              className="block text-center text-[10px] font-semibold text-[#1A1A1A] hover:underline"
                             >
                               See all recent activity →
                             </Link>
@@ -648,7 +648,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-start gap-0 mb-3">
               {/* Currency */}
               <div className="flex-1">
-                <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
+                <p className="text-xs font-semibold text-[#1A1A1A]/50 mb-1.5 flex items-center gap-1"><DollarSign className="w-3 h-3" /> Currency</p>
                 <div className="grid grid-cols-5 gap-1.5">
                   {SUPPORTED_CURRENCIES.map((cur) => (
                     <button
@@ -658,8 +658,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide flex flex-col items-center gap-0.5",
                         activeCurrency === cur.code
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-gray-300 shadow-sm"
-                          : "bg-gray-50 text-black hover:bg-gray-100"
+                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-[#1A1A1A] border border-[#B89555]/30 shadow-sm"
+                          : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#F7F2EA]"
                       )}
                     >
                       <span className="text-sm leading-none">{cur.flag}</span>
@@ -676,7 +676,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
               {/* Area Unit */}
               <div className="flex-1">
-                <p className="text-xs font-semibold text-black/50 mb-1.5 flex items-center gap-1.5"><Ruler className="w-3 h-3" /> Area Unit</p>
+                <p className="text-xs font-semibold text-[#1A1A1A]/50 mb-1.5 flex items-center gap-1.5"><Ruler className="w-3 h-3" /> Area Unit</p>
                 <div className="flex gap-3">
                   {(['sqft', 'sqm'] as const).map((unit) => (
                     <button
@@ -686,8 +686,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors tracking-wider",
                         areaUnit === unit
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-gray-300 shadow-sm"
-                          : "bg-gray-50 text-black hover:bg-gray-100"
+                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-[#1A1A1A] border border-[#B89555]/30 shadow-sm"
+                          : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#F7F2EA]"
                       )}
                     >
                       {unit}
@@ -702,20 +702,20 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <button
                 onClick={(e) => { e.stopPropagation(); setShowLangDropdown(!showLangDropdown); setShowSearchDropdown(false); }}
                 onPointerDown={(e) => e.stopPropagation()}
-                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition-all group"
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA] transition-all group"
               >
-                <Globe className="w-4 h-4 text-black group-hover:text-black transition-colors" />
-                <span className="text-xs font-semibold text-black group-hover:text-black transition-colors">
+                <Globe className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
+                <span className="text-xs font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">
                   {t('account.selectLanguage', 'Select Your Language')}
                 </span>
-                <span className="ml-auto text-xs text-black/70">
+                <span className="ml-auto text-xs text-[#1A1A1A]/70">
                   {SUPPORTED_LANGUAGES.find(l => l.code === language)?.flag} {SUPPORTED_LANGUAGES.find(l => l.code === language)?.nativeName}
                 </span>
-                <ChevronRight className={cn("w-3.5 h-3.5 text-black transition-transform", showLangDropdown && "rotate-90")} />
+                <ChevronRight className={cn("w-3.5 h-3.5 text-[#1A1A1A] transition-transform", showLangDropdown && "rotate-90")} />
               </button>
               {showLangDropdown && (
                 <div
-                  className="absolute left-0 right-0 bottom-full mb-1 rounded-xl border-2 border-gray-200 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
+                  className="absolute left-0 right-0 bottom-full mb-1 rounded-xl border-2 border-[#B89555]/30 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
                   style={{ background: '#FFFFFF' }}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
@@ -727,13 +727,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
                         language === lang.code
-                          ? "bg-gray-100 text-black font-semibold border border-gray-200"
-                          : "text-black hover:bg-gray-100 hover:text-black"
+                          ? "bg-[#F7F2EA] text-[#1A1A1A] font-semibold border border-[#B89555]/30"
+                          : "text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
                       )}
                     >
                       <span className="text-base">{lang.flag}</span>
                       <span>{lang.nativeName}</span>
-                      {language === lang.code && <Check className="w-3.5 h-3.5 ml-auto text-black" />}
+                      {language === lang.code && <Check className="w-3.5 h-3.5 ml-auto text-[#1A1A1A]" />}
                     </button>
                   ))}
                 </div>
@@ -741,7 +741,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             </div>
 
             {/* Sign Out Button */}
-            <div className="pt-3 border-t border-gray-200">
+            <div className="pt-3 border-t border-[#B89555]/30">
               <button 
                 onClick={handleSignOut} 
                 className="flex items-center gap-3 py-2.5 px-2 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-500/5 group w-full"
@@ -749,7 +749,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 <div className="w-9 h-9 rounded-lg bg-transparent border-2 border-red-500/30 flex items-center justify-center group-hover:border-red-500 group-hover:bg-red-500/10 transition-colors">
                   <LogOut className="w-4 h-4 text-red-600 group-hover:text-red-500" />
                 </div>
-                <span className="text-black font-semibold text-sm group-hover:text-red-600 transition-colors">
+                <span className="text-[#1A1A1A] font-semibold text-sm group-hover:text-red-600 transition-colors">
                   {t('nav.signOut')}
                 </span>
               </button>
@@ -758,27 +758,27 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
         ) : (
           /* Logged Out State */
           <>
-            <div className="pb-5 mb-5 border-b-2 border-gray-300">
-              <p className="text-black font-bold text-xl tracking-wide">
+            <div className="pb-5 mb-5 border-b-2 border-[#B89555]/30">
+              <p className="text-[#1A1A1A] font-bold text-xl tracking-wide">
                 {t('nav.myAccount')}
               </p>
-              <p className="text-black/60 text-sm mt-2">
+              <p className="text-[#1A1A1A]/60 text-sm mt-2">
                 {t('account.signInPrompt', 'Sign in to access your account and saved properties')}
               </p>
             </div>
             <Link
               to={authHref}
               onClick={onClose}
-              className="flex items-center gap-4 py-4 px-5 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/20 via-gray-300/15 to-gray-300/20 hover:from-gray-300/30 hover:via-gray-300/25 hover:to-gray-300/30 shadow-[0_6px_20px_rgba(200,167,102,0.3)] border-2 border-gray-300 hover:border-gray-400 group"
+              className="flex items-center gap-4 py-4 px-5 rounded-xl transition-all duration-300 bg-gradient-to-r from-gray-300/20 via-gray-300/15 to-gray-300/20 hover:from-gray-300/30 hover:via-gray-300/25 hover:to-gray-300/30 shadow-[0_6px_20px_rgba(200,167,102,0.3)] border-2 border-[#B89555]/30 hover:border-[#B89555]/30 group"
             >
-              <div className="w-14 h-14 rounded-xl bg-black border-2 border-gray-300 flex items-center justify-center shadow-lg">
-                <User className="w-7 h-7 text-black" />
+              <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] border-2 border-[#B89555]/30 flex items-center justify-center shadow-lg">
+                <User className="w-7 h-7 text-[#1A1A1A]" />
               </div>
               <div className="flex-1">
-                <span className="text-black font-bold text-base block">{t('account.signInCreate', 'Sign In / Create Account')}</span>
-                <span className="text-black/60 text-xs">{t('account.accessExclusive', 'Access exclusive features')}</span>
+                <span className="text-[#1A1A1A] font-bold text-base block">{t('account.signInCreate', 'Sign In / Create Account')}</span>
+                <span className="text-[#1A1A1A]/60 text-xs">{t('account.accessExclusive', 'Access exclusive features')}</span>
               </div>
-              <ChevronRight className="w-5 h-5 text-black" />
+              <ChevronRight className="w-5 h-5 text-[#1A1A1A]" />
             </Link>
           </>
         )}

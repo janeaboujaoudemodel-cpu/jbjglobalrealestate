@@ -74,7 +74,7 @@ export default function VoiceStudio() {
                   <Button
                     onClick={vs.isRecording ? vs.stopRecording : vs.startRecording}
                     variant={vs.isRecording ? "destructive" : "default"}
-                    className={vs.isRecording ? "" : "bg-[#D4AF37] hover:bg-[#B8860B] text-black"}
+                    className={vs.isRecording ? "" : "bg-[#D4AF37] hover:bg-[#B8860B] text-[#1A1A1A]"}
                   >
                     {vs.isRecording ? (
                       <><Square className="h-4 w-4 mr-2" />Stop ({vs.formatTime(vs.recordingTime)})</>
@@ -177,9 +177,9 @@ export default function VoiceStudio() {
               <CardContent>
                 <Tabs value={vs.voiceMode} onValueChange={(v) => vs.setVoiceMode(v as "library" | "enhance" | "clone")}>
                   <TabsList className="grid w-full grid-cols-3 bg-slate-800/50">
-                    <TabsTrigger value="library" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-black">Voice Library</TabsTrigger>
-                    <TabsTrigger value="enhance" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-black">Enhance</TabsTrigger>
-                    <TabsTrigger value="clone" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-black">My Voice</TabsTrigger>
+                    <TabsTrigger value="library" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Voice Library</TabsTrigger>
+                    <TabsTrigger value="enhance" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">Enhance</TabsTrigger>
+                    <TabsTrigger value="clone" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#1A1A1A]">My Voice</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="library" className="mt-4">
@@ -345,7 +345,7 @@ export default function VoiceStudio() {
             <Button
               onClick={vs.generateNarration}
               disabled={vs.processing || !vs.script.trim() || (vs.voiceMode === "clone" && !vs.cloneConsent)}
-              className="w-full h-14 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] hover:from-[#B8860B] hover:to-[#8B6914] text-black font-semibold text-lg disabled:opacity-50"
+              className="w-full h-14 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] hover:from-[#B8860B] hover:to-[#8B6914] text-[#1A1A1A] font-semibold text-lg disabled:opacity-50"
             >
               {vs.processing ? (
                 <><Loader2 className="h-5 w-5 mr-2 animate-spin" />{vs.progressText}</>
@@ -372,7 +372,7 @@ export default function VoiceStudio() {
                   </div>
 
                   <div className="grid grid-cols-1 gap-3">
-                    <Button onClick={vs.downloadAudio} className="bg-[#D4AF37] hover:bg-[#B8860B] text-black">
+                    <Button onClick={vs.downloadAudio} className="bg-[#D4AF37] hover:bg-[#B8860B] text-[#1A1A1A]">
                       <Download className="h-4 w-4 mr-2" />Download Script
                     </Button>
                   </div>

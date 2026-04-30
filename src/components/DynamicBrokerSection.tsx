@@ -198,10 +198,10 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           variants={fadeInUp}
         >
           {/* Badge */}
-          <Badge className="bg-white text-black border-gold/30 mb-6 py-2 px-4 shadow-sm">
+          <Badge className="bg-[#FDFBF7] text-[#1A1A1A] border-gold/30 mb-6 py-2 px-4 shadow-sm">
             <content.badgeIcon className="w-4 h-4 mr-2 text-gold" />
             <span className="text-gold">{content.badge.split(' ')[0]}</span>
-            <span className="text-black ml-1">{content.badge.split(' ').slice(1).join(' ')}</span>
+            <span className="text-[#1A1A1A] ml-1">{content.badge.split(' ').slice(1).join(' ')}</span>
           </Badge>
 
           {/* Title */}
@@ -212,7 +212,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           </h2>
 
           {/* Subtitle */}
-          <p className="text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+          <p className="text-[#5A4A2E] text-lg md:text-xl mb-10 max-w-2xl mx-auto">
             {content.subtitle}
           </p>
 
@@ -235,7 +235,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
 
           {/* User type selector (small pills) */}
           <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
-            <span className="text-gray-600 text-sm mr-2">I am a:</span>
+            <span className="text-[#5A4A2E] text-sm mr-2">I am a:</span>
             {(Object.keys(CONTENT_BY_USER_TYPE) as UserType[]).map((type) => (
               <button
                 key={type}
@@ -245,8 +245,8 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
                 }}
                 className={`px-3 py-1.5 text-xs rounded-full transition-all ${
                   userType === type
-                    ? 'bg-gold text-black font-semibold'
-                    : 'bg-[hsl(38,35%,18%)] text-gray-600 hover:bg-[hsl(38,35%,22%)] hover:text-white'
+                    ? 'bg-gold text-[#1A1A1A] font-semibold'
+                    : 'bg-[hsl(38,35%,18%)] text-[#5A4A2E] hover:bg-[hsl(38,35%,22%)] hover:text-white'
                 }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}

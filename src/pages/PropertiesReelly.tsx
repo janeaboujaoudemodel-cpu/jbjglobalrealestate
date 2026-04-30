@@ -286,9 +286,9 @@ const PropertiesReelly = () => {
           <div className="w-full md:w-1/2 h-[420px] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
             <div className="p-4 pt-3 pb-6">
               <div className="mb-4 flex items-center justify-between">
-                <p className="text-black/70 text-sm">
+                <p className="text-[#1A1A1A]/70 text-sm">
                   {isDbLoading ? (
-                    <span className="text-black/40 animate-pulse">Loading properties…</span>
+                    <span className="text-[#1A1A1A]/40 animate-pulse">Loading properties…</span>
                   ) : (
                     <>Showing <span className="text-gold font-medium">{sortedProjects.length}</span> of{' '}
                     <span className="text-gold font-medium">{totalCount.toLocaleString()}</span> properties</>
@@ -313,7 +313,7 @@ const PropertiesReelly = () => {
               ) : (
                 <div className="text-center py-12">
                   <Search className="w-10 h-10 text-gold mx-auto mb-3" />
-                  <p className="text-black/60">No properties found</p>
+                  <p className="text-[#1A1A1A]/60">No properties found</p>
                 </div>
               )}
             </div>
@@ -347,13 +347,13 @@ const PropertiesReelly = () => {
             {/* Results Count + Sort */}
             <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
               {isDbLoading ? (
-                <p className="text-black/40 animate-pulse">Loading curated developments…</p>
+                <p className="text-[#1A1A1A]/40 animate-pulse">Loading curated developments…</p>
               ) : (
-                <p className="text-black/70">
+                <p className="text-[#1A1A1A]/70">
                   Showing <span className="text-gold font-medium">{paginatedProjects.length}</span> of{' '}
                   <span className="text-gold font-medium">{sortedProjects.length.toLocaleString()}</span> properties
                   {totalPages > 1 && (
-                    <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
+                    <span className="text-[#1A1A1A]/40 ml-2">· Page {currentPage} of {totalPages}</span>
                   )}
                 </p>
               )}
@@ -361,7 +361,7 @@ const PropertiesReelly = () => {
               <select
                 value={shortcutFilters.sortBy || ''}
                 onChange={(e) => setShortcutFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
-                className="px-3 py-2 rounded-lg border border-gold/30 bg-white/70 text-black/80 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+                className="px-3 py-2 rounded-lg border border-gold/30 bg-[#FDFBF7]/70 text-[#1A1A1A]/80 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
               >
                 <option value="">Sort by</option>
                 <option value="newest">Newest First</option>
@@ -411,7 +411,7 @@ const PropertiesReelly = () => {
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                     >
                       <ChevronLeft className="w-4 h-4" />
                       Previous
@@ -419,15 +419,15 @@ const PropertiesReelly = () => {
 
                     {getPageNumbers(currentPage, totalPages).map((page, idx) =>
                       page === 'ellipsis' ? (
-                        <span key={`e-${idx}`} className="px-2 text-black/40">…</span>
+                        <span key={`e-${idx}`} className="px-2 text-[#1A1A1A]/40">…</span>
                       ) : (
                         <button
                           key={page}
                           onClick={() => handlePageChange(page)}
                           className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                             page === currentPage
-                              ? 'bg-gold text-black shadow-md'
-                              : 'bg-white/60 border border-gold/30 text-black/70 hover:bg-gold/20'
+                              ? 'bg-gold text-[#1A1A1A] shadow-md'
+                              : 'bg-[#FDFBF7]/60 border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/20'
                           }`}
                         >
                           {page}
@@ -438,7 +438,7 @@ const PropertiesReelly = () => {
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                     >
                       Next
                       <ChevronRight className="w-4 h-4" />
@@ -451,8 +451,8 @@ const PropertiesReelly = () => {
                 <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
                   <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                 </div>
-                <h3 className="text-xl font-semibold text-black mb-2">No Properties Found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your search filters or browse all properties.</p>
+                <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No Properties Found</h3>
+                <p className="text-[#5A4A2E] mb-4">Try adjusting your search filters or browse all properties.</p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button onClick={() => setShortcutFilters(defaultShortcutFilters)} variant="primary" className="h-12 px-8">
                     Browse All Properties
@@ -460,7 +460,7 @@ const PropertiesReelly = () => {
                   <Button onClick={() => refetchProjects()} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 h-12 px-6">
                     Retry Loading
                   </Button>
-                  <Button asChild variant="outline" className="border-gray-300 text-black hover:bg-gray-100 h-12 px-6">
+                  <Button asChild variant="outline" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] h-12 px-6">
                     <a 
                       href={getWhatsAppUrl("Hi, I'm looking for properties but couldn't find what I need. Can you help?")}
                       target="_blank" 

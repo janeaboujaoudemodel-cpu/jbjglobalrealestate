@@ -221,7 +221,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-gold via-gold-dark to-gold text-black font-bold px-12 py-7 text-lg shadow-xl hover:brightness-110 transition-all animate-gold-glow"
+                className="bg-gradient-to-r from-gold via-gold-dark to-gold text-[#1A1A1A] font-bold px-12 py-7 text-lg shadow-xl hover:brightness-110 transition-all animate-gold-glow"
                 onClick={() => navigate("/auth?redirect=" + encodeURIComponent(window.location.pathname))}
                 style={{
                   boxShadow: "0 0 40px rgba(203, 166, 75, 0.5)",
@@ -243,7 +243,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           </div>
 
           {/* Footer note */}
-          <p className="text-gray-600 text-xs mt-8">
+          <p className="text-[#5A4A2E] text-xs mt-8">
             By signing in, you agree to our Terms of Service and Privacy Policy.
           </p>
         </motion.div>

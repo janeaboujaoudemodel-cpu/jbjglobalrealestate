@@ -211,11 +211,11 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
 
       {/* Fullscreen Dialog */}
       <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 backdrop-blur-xl border-none top-[50%]" aria-describedby={undefined}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-[#1A1A1A]/95 backdrop-blur-xl border-none top-[50%]" aria-describedby={undefined}>
           <VisuallyHidden.Root>
             <DialogTitle>Image Gallery - {projectName}</DialogTitle>
           </VisuallyHidden.Root>
-          <div className="relative w-full h-[90vh] flex items-center justify-center bg-black/95">
+          <div className="relative w-full h-[90vh] flex items-center justify-center bg-[#1A1A1A]/95">
             <img
               src={getHighResImageUrl(images[currentIndex].image_url)}
               alt={images[currentIndex].alt_text || "Project image"}

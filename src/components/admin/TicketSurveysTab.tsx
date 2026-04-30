@@ -22,7 +22,7 @@ const StarDisplay = ({ rating }: { rating: number }) => (
     {[1, 2, 3, 4, 5].map((s) => (
       <Star
         key={s}
-        className={`w-4 h-4 ${s <= rating ? 'fill-yellow-500 text-yellow-500' : 'text-gray-600'}`}
+        className={`w-4 h-4 ${s <= rating ? 'fill-yellow-500 text-yellow-500' : 'text-[#5A4A2E]'}`}
       />
     ))}
   </div>
@@ -73,24 +73,24 @@ const TicketSurveysTab: React.FC = () => {
     <div className="space-y-6">
       {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="pt-6 text-center">
             <TrendingUp className="w-8 h-8 text-gold mx-auto mb-2" />
-            <p className="text-3xl font-bold text-black">{surveys.length}</p>
+            <p className="text-3xl font-bold text-[#1A1A1A]">{surveys.length}</p>
             <p className="text-sm text-muted-foreground">Total Surveys</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="pt-6 text-center">
             <Star className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-            <p className="text-3xl font-bold text-black">{avgRating}</p>
+            <p className="text-3xl font-bold text-[#1A1A1A]">{avgRating}</p>
             <p className="text-sm text-muted-foreground">Average Rating</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="pt-6 text-center">
             <MessageSquare className="w-8 h-8 text-gold mx-auto mb-2" />
-            <p className="text-3xl font-bold text-black">{totalPoints}</p>
+            <p className="text-3xl font-bold text-[#1A1A1A]">{totalPoints}</p>
             <p className="text-sm text-muted-foreground">Points Awarded</p>
           </CardContent>
         </Card>
@@ -99,9 +99,9 @@ const TicketSurveysTab: React.FC = () => {
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(ratingLabels).map(([key, label]) => (
-          <Card key={key} className="bg-white border border-gold/20">
+          <Card key={key} className="bg-[#FDFBF7] border border-gold/20">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-black">{label}</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#1A1A1A]">{label}</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={140}>
@@ -123,10 +123,10 @@ const TicketSurveysTab: React.FC = () => {
       </div>
 
       {/* Search + Table */}
-      <Card className="bg-white border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-black">Survey Responses</CardTitle>
+            <CardTitle className="text-[#1A1A1A]">Survey Responses</CardTitle>
             <div className="relative w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -148,23 +148,23 @@ const TicketSurveysTab: React.FC = () => {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gold/20">
-                    <th className="text-left py-3 px-2 font-semibold text-black">Name</th>
-                    <th className="text-left py-3 px-2 font-semibold text-black">Email</th>
-                    <th className="text-left py-3 px-2 font-semibold text-black">Ticket</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Overall</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Ease</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Speed</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Quality</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Smart</th>
-                    <th className="text-left py-3 px-2 font-semibold text-black">Suggestions</th>
-                    <th className="text-center py-3 px-2 font-semibold text-black">Points</th>
-                    <th className="text-left py-3 px-2 font-semibold text-black">Date</th>
+                    <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Name</th>
+                    <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Email</th>
+                    <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Ticket</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Overall</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Ease</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Speed</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Quality</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Smart</th>
+                    <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Suggestions</th>
+                    <th className="text-center py-3 px-2 font-semibold text-[#1A1A1A]">Points</th>
+                    <th className="text-left py-3 px-2 font-semibold text-[#1A1A1A]">Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((s: any) => (
                     <tr key={s.id} className="border-b border-gold/10 hover:bg-gold/5">
-                      <td className="py-2 px-2 text-black">{s.full_name || '—'}</td>
+                      <td className="py-2 px-2 text-[#1A1A1A]">{s.full_name || '—'}</td>
                       <td className="py-2 px-2 text-muted-foreground">{s.email || '—'}</td>
                       <td className="py-2 px-2">
                         <span className="font-mono text-gold font-semibold cursor-pointer hover:underline">

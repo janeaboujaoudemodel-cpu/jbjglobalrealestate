@@ -159,7 +159,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               className={cn(
                 'flex items-center gap-2 px-4 py-2 rounded-full transition-all',
                 currentStep === step.number
-                  ? 'bg-gradient-to-r from-gold to-champagne text-black font-semibold'
+                  ? 'bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] font-semibold'
                   : currentStep > step.number
                   ? 'bg-green-100 text-green-700'
                   : 'bg-muted text-muted-foreground'
@@ -719,7 +719,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               <Button
                 type="button"
                 onClick={nextStep}
-                className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90"
+                className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90"
               >
                 Next Step
               </Button>
@@ -727,7 +727,7 @@ export function RentalListingForm({ onSuccess, className }: RentalListingFormPro
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90"
+                className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90"
               >
                 {isLoading ? (
                   <>

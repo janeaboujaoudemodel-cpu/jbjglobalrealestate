@@ -73,7 +73,7 @@ const WelcomeModal = () => {
         }}
       >
         <DialogContent 
-          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+          className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
           dir={isRTL ? 'rtl' : 'ltr'}
           aria-describedby={undefined}
         >
@@ -150,7 +150,7 @@ const WelcomeModal = () => {
                   handleLogin();
                 }}
                 type="button"
-                className="w-full py-6 bg-gold hover:bg-gold/90 text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
+                className="w-full py-6 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                 <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
@@ -181,7 +181,7 @@ const WelcomeModal = () => {
             </p>
 
             {/* Footer text with copyright */}
-            <p className="text-center text-gray-600 text-[10px] mt-4">
+            <p className="text-center text-[#5A4A2E] text-[10px] mt-4">
               © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
             </p>
           </div>

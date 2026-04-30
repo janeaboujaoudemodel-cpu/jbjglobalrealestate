@@ -47,7 +47,7 @@ const TeamMemberDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
         <DialogHeader>
           <DialogTitle className="sr-only">{member.name}</DialogTitle>
         </DialogHeader>
@@ -69,7 +69,7 @@ const TeamMemberDetailDialog = ({
           {/* Details */}
           <div className="flex-1 space-y-4">
             <div>
-              <h2 className="text-2xl font-bold text-black">{member.name}</h2>
+              <h2 className="text-2xl font-bold text-[#1A1A1A]">{member.name}</h2>
               <p
                 className="text-lg font-semibold mt-1"
                 style={{
@@ -82,19 +82,19 @@ const TeamMemberDetailDialog = ({
               >
                 {member.role}
               </p>
-              <p className="text-gray-600 text-sm mt-1">{member.department}</p>
+              <p className="text-[#5A4A2E] text-sm mt-1">{member.department}</p>
             </div>
 
             {/* Experience and Nationality */}
             <div className="flex flex-wrap items-center gap-4">
               {typeof member.yearsExperience === "number" && (
-                <div className="flex items-center gap-1.5 text-gray-600 text-sm">
+                <div className="flex items-center gap-1.5 text-[#5A4A2E] text-sm">
                   <Clock className="w-4 h-4 text-gold" />
                   <span>{member.yearsExperience} years experience</span>
                 </div>
               )}
               {member.nationality && (
-                <div className="flex items-center gap-1.5 text-gray-600 text-sm">
+                <div className="flex items-center gap-1.5 text-[#5A4A2E] text-sm">
                   <MapPin className="w-4 h-4 text-gold" />
                   <span>{member.nationality}</span>
                 </div>
@@ -103,7 +103,7 @@ const TeamMemberDetailDialog = ({
 
             {/* Contact Actions - For Everyone (changed from Chat to Contact Us) */}
             <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg p-4 border border-gold/30 shadow-md">
-              <h4 className="text-sm font-medium text-black mb-3">Contact Options</h4>
+              <h4 className="text-sm font-medium text-[#1A1A1A] mb-3">Contact Options</h4>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={handleContactClick}
@@ -120,9 +120,9 @@ const TeamMemberDetailDialog = ({
                 >
                   <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-lg bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                   <span className="relative flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
-                    <span className="text-black group-hover:text-gold transition-colors">Contact</span>
-                    <span className="text-gold group-hover:text-black transition-colors">Us</span>
+                    <MessageSquare className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+                    <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Contact</span>
+                    <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Us</span>
                   </span>
                 </button>
                 {member.email && (
@@ -130,7 +130,7 @@ const TeamMemberDetailDialog = ({
                     size="sm"
                     variant="outline"
                     onClick={handleEmailClick}
-                    className="border-2 border-black text-black hover:bg-black hover:text-white transition-all duration-300"
+                    className="border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all duration-300"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Email
@@ -138,14 +138,14 @@ const TeamMemberDetailDialog = ({
                 )}
               </div>
               {member.email && (
-                <p className="text-gray-600 text-xs mt-2">{member.email}</p>
+                <p className="text-[#5A4A2E] text-xs mt-2">{member.email}</p>
               )}
             </div>
 
             {/* Reporting Structure */}
             {reportsToMember && (
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
-                <h4 className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
                   <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
                   Reports To
                 </h4>
@@ -159,7 +159,7 @@ const TeamMemberDetailDialog = ({
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
                   />
                   <div>
-                    <p className="text-black font-medium text-sm">{reportsToMember.name}</p>
+                    <p className="text-[#1A1A1A] font-medium text-sm">{reportsToMember.name}</p>
                     <p className="text-gold text-xs">{reportsToMember.role}</p>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ const TeamMemberDetailDialog = ({
             {/* Direct Reports */}
             {directReportsMembers.length > 0 && (
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
-                <h4 className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-gold" />
                   Direct Reports ({directReportsMembers.length})
                 </h4>
@@ -184,12 +184,12 @@ const TeamMemberDetailDialog = ({
                         className="w-6 h-6 rounded-full border border-gold/30"
                         style={{ objectFit: "cover", objectPosition: "center 15%" }}
                       />
-                      <span className="text-black text-xs">{report.name.split(' ')[0]}</span>
+                      <span className="text-[#1A1A1A] text-xs">{report.name.split(' ')[0]}</span>
                     </div>
                   ))}
                   {directReportsMembers.length > 6 && (
                     <div className="flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] rounded-lg px-2 py-1.5 border border-gold/20">
-                      <span className="text-gray-600 text-xs">+{directReportsMembers.length - 6} more</span>
+                      <span className="text-[#5A4A2E] text-xs">+{directReportsMembers.length - 6} more</span>
                     </div>
                   )}
                 </div>
@@ -197,12 +197,12 @@ const TeamMemberDetailDialog = ({
             )}
 
             {member.bio && (
-              <p className="text-gray-700 leading-relaxed">{member.bio}</p>
+              <p className="text-[#5A4A2E] leading-relaxed">{member.bio}</p>
             )}
 
             {member.specializations && member.specializations.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-gold" />
                   Specializations
                 </h4>
@@ -221,7 +221,7 @@ const TeamMemberDetailDialog = ({
 
             {member.languages && member.languages.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
                   <Globe className="w-3.5 h-3.5 text-gold" />
                   Languages
                 </h4>
@@ -230,7 +230,7 @@ const TeamMemberDetailDialog = ({
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="border-gold/30 text-black bg-gold/10"
+                      className="border-gold/30 text-[#1A1A1A] bg-gold/10"
                     >
                       {lang}
                     </Badge>

@@ -866,7 +866,7 @@ const DeveloperPortal = () => {
           }
         }}
       >
-        <Upload className="w-8 h-8 mx-auto text-gray-600 mb-2" />
+        <Upload className="w-8 h-8 mx-auto text-[#5A4A2E] mb-2" />
         <p className="text-sm font-medium text-foreground">{isDragging ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
         <p className="text-xs text-muted-foreground mt-1">Photos, videos, PDFs, brochures — any format</p>
         <input ref={inputRef} type="file" className="hidden" multiple
@@ -933,7 +933,7 @@ const DeveloperPortal = () => {
                   size="sm"
                   variant={ownerSkipMode ? "outline" : "default"}
                   onClick={() => setOwnerSkipMode(false)}
-                  className={!ownerSkipMode ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30"}
+                  className={!ownerSkipMode ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30"}
                 >
                   <Eye className="w-3.5 h-3.5 mr-1.5" /> Developer View
                 </Button>
@@ -941,7 +941,7 @@ const DeveloperPortal = () => {
                   size="sm"
                   variant={ownerSkipMode ? "default" : "outline"}
                   onClick={() => setOwnerSkipMode(true)}
-                  className={ownerSkipMode ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30"}
+                  className={ownerSkipMode ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30"}
                 >
                   <SkipForward className="w-3.5 h-3.5 mr-1.5" /> Quick Upload
                 </Button>
@@ -1185,7 +1185,7 @@ const DeveloperPortal = () => {
                         }
                       }}
                     >
-                      <Upload className="w-10 h-10 mx-auto text-gray-600 mb-3" />
+                      <Upload className="w-10 h-10 mx-auto text-[#5A4A2E] mb-3" />
                       <p className="text-sm font-medium text-foreground">
                         {mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop files'}
                       </p>
@@ -1378,7 +1378,7 @@ const DeveloperPortal = () => {
                                 }}
                                 className={registered
                                   ? "bg-emerald-500/20 text-emerald-700 border-emerald-300"
-                                  : "bg-gold text-black hover:bg-gold/90"
+                                  : "bg-gold text-[#1A1A1A] hover:bg-gold/90"
                                 }
                               >
                                 {registered ? <><CheckCircle className="w-3.5 h-3.5 mr-1" /> Done</> : <><Star className="w-3.5 h-3.5 mr-1" /> Register Interest</>}
@@ -2116,7 +2116,7 @@ const DeveloperPortal = () => {
                   setEndingSession(false);
                 }
               }}
-              className="bg-gold text-black hover:bg-gold/90"
+              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
             >
               {endingSession ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Ending...</> : "Confirm End Session"}
             </AlertDialogAction>
@@ -2171,7 +2171,7 @@ const DeveloperPortal = () => {
               <Textarea value={interestNotes} onChange={(e) => setInterestNotes(e.target.value)} placeholder="Any additional details..." rows={3} />
             </div>
             <Button onClick={handleRegisterInterest} disabled={submittingInterest}
-              className="w-full bg-gold text-black hover:bg-gold/90 font-bold h-11">
+              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-bold h-11">
               {submittingInterest ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Star className="w-4 h-4 mr-2" /> Confirm Interest</>}
             </Button>
           </div>

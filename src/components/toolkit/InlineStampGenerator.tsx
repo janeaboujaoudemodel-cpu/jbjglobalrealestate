@@ -183,7 +183,7 @@ export function InlineStampGenerator({ open, onClose, onStampReady, accentColor 
           <button
             onClick={() => { setTab('create'); setPreviewSvg(null); }}
             className={`flex-1 py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1 transition-all ${
-              tab === 'create' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'
+              tab === 'create' ? 'bg-[#FDFBF7] shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'
             }`}
           >
             <Sparkles size={12} /> Create New
@@ -191,7 +191,7 @@ export function InlineStampGenerator({ open, onClose, onStampReady, accentColor 
           <button
             onClick={() => setTab('library')}
             className={`flex-1 py-1.5 rounded-md text-xs font-semibold flex items-center justify-center gap-1 transition-all ${
-              tab === 'library' ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'
+              tab === 'library' ? 'bg-[#FDFBF7] shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'
             }`}
           >
             <Library size={12} /> From Library
@@ -289,7 +289,7 @@ export function InlineStampGenerator({ open, onClose, onStampReady, accentColor 
             </>
           ) : (
             <>
-              <div className="flex items-center justify-center p-6 bg-white rounded-xl border border-[hsl(var(--border))]">
+              <div className="flex items-center justify-center p-6 bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))]">
                 <div
                   className="w-48 h-48"
                   dangerouslySetInnerHTML={{ __html: previewSvg }}

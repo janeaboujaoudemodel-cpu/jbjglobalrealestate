@@ -47,7 +47,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-gray-500/20 text-gray-600 border-gray-500/30",
+  general: "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -194,7 +194,7 @@ export function AdminTasksPanel() {
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <AlertTriangle className="w-5 h-5 text-red-500" />
-          <h3 className="font-semibold text-black">My Tasks</h3>
+          <h3 className="font-semibold text-[#1A1A1A]">My Tasks</h3>
         </div>
         <div className="rounded-lg border border-red-300 bg-red-50 p-3">
           <p className="text-sm text-red-700 font-semibold">Failed to load tasks</p>
@@ -213,42 +213,42 @@ export function AdminTasksPanel() {
             <ListTodo className="w-5 h-5 text-gold" />
           </div>
           <div>
-            <h3 className="font-semibold text-black">My Tasks</h3>
+            <h3 className="font-semibold text-[#1A1A1A]">My Tasks</h3>
             {pendingTasks.length > 0 && (
-              <p className="text-xs text-gray-600">{pendingTasks.length} pending</p>
+              <p className="text-xs text-[#5A4A2E]">{pendingTasks.length} pending</p>
             )}
           </div>
         </div>
         
         <Dialog open={isAddingTask} onOpenChange={setIsAddingTask}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 shadow-md shadow-gold/20">
+            <Button size="sm" className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110 shadow-md shadow-gold/20">
               <Plus className="w-4 h-4 mr-1" />
               Add
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-white border-gold/30">
+          <DialogContent className="bg-[#FDFBF7] border-gold/30">
             <DialogHeader>
-              <DialogTitle className="text-black">Add New Task</DialogTitle>
+              <DialogTitle className="text-[#1A1A1A]">Add New Task</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <Input
                 placeholder="Task title..."
                 value={newTask.title}
                 onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                className="border-gray-300 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-gold"
               />
               <Textarea
                 placeholder="Description (optional)..."
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="border-gray-300 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-gold"
               />
               <div className="grid grid-cols-2 gap-4">
                 <select
                   value={newTask.category}
                   onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="h-10 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
                   <option value="general">General</option>
                   <option value="integration">Integration</option>
@@ -260,7 +260,7 @@ export function AdminTasksPanel() {
                 <select
                   value={newTask.priority}
                   onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="h-10 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -272,9 +272,9 @@ export function AdminTasksPanel() {
                 type="date"
                 value={newTask.due_date}
                 onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                className="border-gray-300 focus:border-gold"
+                className="border-[#B89555]/30 focus:border-gold"
               />
-              <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
+              <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110">
                 Add Task
               </Button>
             </div>
@@ -289,7 +289,7 @@ export function AdminTasksPanel() {
             <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <CheckCircle2 className="w-6 h-6 text-gold" />
             </div>
-            <p className="text-gray-600 text-sm">No pending tasks</p>
+            <p className="text-[#5A4A2E] text-sm">No pending tasks</p>
           </div>
         ) : (
           pendingTasks.map((task) => (
@@ -297,7 +297,7 @@ export function AdminTasksPanel() {
               key={task.id}
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white border border-gray-200 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
+              className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-3">
                 <button
@@ -305,9 +305,9 @@ export function AdminTasksPanel() {
                   className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 border-gold/50 hover:border-gold hover:bg-gold/10 transition-all"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-black text-sm">{task.title}</p>
+                  <p className="font-medium text-[#1A1A1A] text-sm">{task.title}</p>
                   {task.description && (
-                    <p className="text-xs text-gray-600 mt-0.5 line-clamp-1">{task.description}</p>
+                    <p className="text-xs text-[#5A4A2E] mt-0.5 line-clamp-1">{task.description}</p>
                   )}
                   <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                     <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${CATEGORY_COLORS[task.category] || CATEGORY_COLORS.general}`}>
@@ -317,7 +317,7 @@ export function AdminTasksPanel() {
                       {task.priority}
                     </Badge>
                     {task.due_date && (
-                      <span className="text-[10px] text-gray-600 flex items-center gap-0.5">
+                      <span className="text-[10px] text-[#5A4A2E] flex items-center gap-0.5">
                         <Calendar className="w-2.5 h-2.5" />
                         {format(new Date(task.due_date), "MMM d")}
                       </span>
@@ -326,7 +326,7 @@ export function AdminTasksPanel() {
                 </div>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-gray-600 hover:text-red-500 transition-colors p-1"
+                  className="text-[#5A4A2E] hover:text-red-500 transition-colors p-1"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -338,25 +338,25 @@ export function AdminTasksPanel() {
         {/* Completed Tasks */}
         {completedTasks.length > 0 && (
           <div className="pt-3 border-t border-gold/20">
-            <p className="text-xs text-gray-600 mb-2 flex items-center gap-1">
+            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-green-500" />
               Completed ({completedTasks.length})
             </p>
             {completedTasks.slice(0, 3).map((task) => (
               <div
                 key={task.id}
-                className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 opacity-60 mb-2"
+                className="flex items-center gap-3 p-2 rounded-lg bg-[#F7F2EA] opacity-60 mb-2"
               >
                 <button
                   onClick={() => toggleTaskStatus(task)}
                   className="w-4 h-4 rounded-full bg-gold flex items-center justify-center"
                 >
-                  <CheckCircle2 className="w-3 h-3 text-black" />
+                  <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />
                 </button>
-                <span className="line-through text-gray-600 text-xs flex-1">{task.title}</span>
+                <span className="line-through text-[#5A4A2E] text-xs flex-1">{task.title}</span>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-gray-600 hover:text-red-500 transition-colors"
+                  className="text-[#5A4A2E] hover:text-red-500 transition-colors"
                 >
                   <Trash2 className="w-3 h-3" />
                 </button>

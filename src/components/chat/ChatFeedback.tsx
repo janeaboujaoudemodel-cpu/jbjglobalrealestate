@@ -48,15 +48,15 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
           <CheckCircle className="w-8 h-8 text-green-500" />
         </div>
-        <h4 className="text-black text-lg font-semibold mb-2">
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>Thank You!</T>
         </h4>
-        <p className="text-gray-600 text-sm mb-4">
+        <p className="text-[#5A4A2E] text-sm mb-4">
           <T>Your feedback helps us improve our service</T>
         </p>
         <Button
           onClick={onSkip}
-          className="bg-gold hover:bg-gold-light text-black"
+          className="bg-gold hover:bg-gold-light text-[#1A1A1A]"
         >
           <T>Close</T>
         </Button>
@@ -71,10 +71,10 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
           <Star className="w-7 h-7 text-gold" />
         </div>
         
-        <h4 className="text-black text-lg font-semibold mb-2 text-center">
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2 text-center">
           <T>How was your chat experience?</T>
         </h4>
-        <p className="text-gray-600 text-sm text-center mb-6">
+        <p className="text-[#5A4A2E] text-sm text-center mb-6">
           <T>Your feedback helps us serve you better</T>
         </p>
 
@@ -91,12 +91,12 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
 
           <button
             onClick={() => handleSelectType('neutral')}
-            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition-all"
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA] transition-all"
           >
-            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-              <Minus className="w-6 h-6 text-gray-600" />
+            <div className="w-12 h-12 rounded-full bg-[#F7F2EA] flex items-center justify-center">
+              <Minus className="w-6 h-6 text-[#5A4A2E]" />
             </div>
-            <span className="text-sm font-medium text-gray-700"><T>Neutral</T></span>
+            <span className="text-sm font-medium text-[#5A4A2E]"><T>Neutral</T></span>
           </button>
 
           <button
@@ -112,7 +112,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
 
         <button
           onClick={onSkip}
-          className="text-gray-600 text-sm hover:text-gold transition-colors"
+          className="text-[#5A4A2E] text-sm hover:text-gold transition-colors"
         >
           <T>Skip feedback</T>
         </button>
@@ -124,10 +124,10 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
   return (
     <div className="flex-1 p-4 flex flex-col">
       <div className="text-center mb-4">
-        <h4 className="text-black text-lg font-semibold mb-2">
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>Tell us more</T>
         </h4>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#5A4A2E] text-sm">
           <T>Rate your experience</T>
         </p>
       </div>
@@ -146,7 +146,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
               className={`w-8 h-8 ${
                 star <= (hoveredRating || rating)
                   ? 'text-gold fill-gold'
-                  : 'text-gray-600'
+                  : 'text-[#5A4A2E]'
               }`}
             />
           </button>
@@ -159,7 +159,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your thoughts with us... (optional)"
-          className="bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 resize-none h-24"
+          className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] resize-none h-24"
         />
       </div>
 
@@ -167,13 +167,13 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <Button
           variant="outline"
           onClick={() => setStep('type')}
-          className="flex-1 border-gold/50 text-black"
+          className="flex-1 border-gold/50 text-[#1A1A1A]"
         >
           <T>Back</T>
         </Button>
         <Button
           onClick={handleSubmit}
-          className="flex-1 bg-gold hover:bg-gold-light text-black"
+          className="flex-1 bg-gold hover:bg-gold-light text-[#1A1A1A]"
         >
           <T>Submit</T>
         </Button>

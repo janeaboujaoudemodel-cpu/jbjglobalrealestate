@@ -292,25 +292,25 @@ const AdminCRM = () => {
       {/* Premium Header */}
       <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-black hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-black">Admin Dashboard</h1>
+            <h1 className="text-xl font-bold text-[#1A1A1A]">Admin Dashboard</h1>
             <p className="text-sm text-gold">JBJ Global Real Estate CRM</p>
           </div>
           
           {/* Search */}
           <button
             onClick={() => setShowCommandPalette(true)}
-            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-gray-600 hover:border-gold/50 transition-all"
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#5A4A2E] hover:border-gold/50 transition-all"
           >
             <Search className="h-4 w-4 text-gold" />
             <span className="text-sm">Search...</span>
             <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
           </button>
           
-          <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10 relative">
+          <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 relative">
             <Bell className="h-4 w-4" />
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center">2</span>
           </Button>
@@ -332,20 +332,20 @@ const AdminCRM = () => {
         </div>
 
         <Tabs defaultValue="broker-profiles">
-          <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-            <TabsTrigger value="broker-profiles" className="tab-trigger-champagne text-black">
+          <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+            <TabsTrigger value="broker-profiles" className="tab-trigger-champagne text-[#1A1A1A]">
               <Shield className="h-4 w-4 mr-2" />
               Broker Profiles
             </TabsTrigger>
-            <TabsTrigger value="brokers" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="brokers" className="tab-trigger-champagne text-[#1A1A1A]">
               <Users className="h-4 w-4 mr-2" />
               CRM Users
             </TabsTrigger>
-            <TabsTrigger value="leads" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="leads" className="tab-trigger-champagne text-[#1A1A1A]">
               <TrendingUp className="h-4 w-4 mr-2" />
               All Leads
             </TabsTrigger>
-            <TabsTrigger value="audit" className="tab-trigger-champagne text-black">
+            <TabsTrigger value="audit" className="tab-trigger-champagne text-[#1A1A1A]">
               <Activity className="h-4 w-4 mr-2" />
               Audit Logs
             </TabsTrigger>
@@ -353,7 +353,7 @@ const AdminCRM = () => {
 
           {/* Broker Profiles Management Tab */}
           <TabsContent value="broker-profiles">
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardContent className="p-6">
                 <BrokerManagementPanel />
               </CardContent>
@@ -362,21 +362,21 @@ const AdminCRM = () => {
 
           {/* Brokers Tab */}
           <TabsContent value="brokers">
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardHeader>
-                <CardTitle className="text-black">Broker Management</CardTitle>
+                <CardTitle className="text-[#1A1A1A]">Broker Management</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow className="border-gold/20">
-                      <TableHead className="text-black">Name</TableHead>
-                      <TableHead className="text-black">Role</TableHead>
-                      <TableHead className="text-black">Status</TableHead>
-                      <TableHead className="text-black">Leads</TableHead>
-                      <TableHead className="text-black">Calls (7d)</TableHead>
-                      <TableHead className="text-black">WhatsApp (7d)</TableHead>
-                      <TableHead className="text-black">Actions</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Name</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Role</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Status</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Leads</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Calls (7d)</TableHead>
+                      <TableHead className="text-[#1A1A1A]">WhatsApp (7d)</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -384,12 +384,12 @@ const AdminCRM = () => {
                       <TableRow key={broker.id} className="border-gold/10 hover:bg-gold/5">
                         <TableCell>
                           <div>
-                            <p className="font-medium text-black">{broker.display_name || "No name"}</p>
-                            <p className="text-xs text-gray-600">{broker.user_id.slice(0, 8)}...</p>
+                            <p className="font-medium text-[#1A1A1A]">{broker.display_name || "No name"}</p>
+                            <p className="text-xs text-[#5A4A2E]">{broker.user_id.slice(0, 8)}...</p>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-gray-100 text-gray-600"}>
+                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-[#F7F2EA] text-[#5A4A2E]"}>
                             {broker.crm_role}
                           </Badge>
                         </TableCell>
@@ -398,9 +398,9 @@ const AdminCRM = () => {
                             {broker.is_active ? "Active" : "Inactive"}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-black">{broker.stats?.totalLeads || 0}</TableCell>
-                        <TableCell className="text-black">{broker.stats?.callsThisWeek || 0}</TableCell>
-                        <TableCell className="text-black">{broker.stats?.whatsappThisWeek || 0}</TableCell>
+                        <TableCell className="text-[#1A1A1A]">{broker.stats?.totalLeads || 0}</TableCell>
+                        <TableCell className="text-[#1A1A1A]">{broker.stats?.callsThisWeek || 0}</TableCell>
+                        <TableCell className="text-[#1A1A1A]">{broker.stats?.whatsappThisWeek || 0}</TableCell>
                         <TableCell>
                           {broker.crm_role !== "owner_admin" && (
                             <Button
@@ -422,20 +422,20 @@ const AdminCRM = () => {
 
           {/* All Leads Tab */}
           <TabsContent value="leads">
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardHeader>
-                <CardTitle className="text-black">All Leads ({allLeads.length})</CardTitle>
+                <CardTitle className="text-[#1A1A1A]">All Leads ({allLeads.length})</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow className="border-gold/20">
-                      <TableHead className="text-black">Name</TableHead>
-                      <TableHead className="text-black">Contact</TableHead>
-                      <TableHead className="text-black">Location</TableHead>
-                      <TableHead className="text-black">Owner Type</TableHead>
-                      <TableHead className="text-black">Source</TableHead>
-                      <TableHead className="text-black">Created</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Name</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Contact</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Location</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Owner Type</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Source</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Created</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -443,28 +443,28 @@ const AdminCRM = () => {
                       <TableRow key={lead.id} className="border-gold/10 hover:bg-gold/5">
                         <TableCell>
                           <div>
-                            <p className="font-medium text-black">{lead.full_name}</p>
-                            <p className="text-xs text-gray-600">
+                            <p className="font-medium text-[#1A1A1A]">{lead.full_name}</p>
+                            <p className="text-xs text-[#5A4A2E]">
                               {lead.nationality}
                             </p>
                           </div>
                         </TableCell>
                         <TableCell>
                           <div className="text-sm">
-                            {lead.email_lower && <p className="text-black">{lead.email_lower}</p>}
+                            {lead.email_lower && <p className="text-[#1A1A1A]">{lead.email_lower}</p>}
                             {lead.phone_e164 && (
-                              <p className="text-gray-600">{lead.phone_e164}</p>
+                              <p className="text-[#5A4A2E]">{lead.phone_e164}</p>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="text-black">
+                        <TableCell className="text-[#1A1A1A]">
                           {lead.current_location_country || "-"}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="border-gold/30 text-black">{lead.owner_type}</Badge>
+                          <Badge variant="outline" className="border-gold/30 text-[#1A1A1A]">{lead.owner_type}</Badge>
                         </TableCell>
-                        <TableCell className="text-black">{lead.source || "-"}</TableCell>
-                        <TableCell className="text-sm text-gray-600">
+                        <TableCell className="text-[#1A1A1A]">{lead.source || "-"}</TableCell>
+                        <TableCell className="text-sm text-[#5A4A2E]">
                           {new Date(lead.created_at).toLocaleDateString()}
                         </TableCell>
                       </TableRow>
@@ -472,7 +472,7 @@ const AdminCRM = () => {
                   </TableBody>
                 </Table>
                 {allLeads.length > 50 && (
-                  <p className="text-center text-sm text-gray-600 mt-4">
+                  <p className="text-center text-sm text-[#5A4A2E] mt-4">
                     Showing 50 of {allLeads.length} leads. Export for full list.
                   </p>
                 )}
@@ -482,37 +482,37 @@ const AdminCRM = () => {
 
           {/* Audit Logs Tab */}
           <TabsContent value="audit">
-            <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <CardHeader>
-                <CardTitle className="text-black">Audit Logs</CardTitle>
+                <CardTitle className="text-[#1A1A1A]">Audit Logs</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow className="border-gold/20">
-                      <TableHead className="text-black">Time</TableHead>
-                      <TableHead className="text-black">Actor</TableHead>
-                      <TableHead className="text-black">Action</TableHead>
-                      <TableHead className="text-black">Entity</TableHead>
-                      <TableHead className="text-black">Details</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Time</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Actor</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Action</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Entity</TableHead>
+                      <TableHead className="text-[#1A1A1A]">Details</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {auditLogs.map((log) => (
                       <TableRow key={log.id} className="border-gold/10 hover:bg-gold/5">
-                        <TableCell className="text-sm text-black">
+                        <TableCell className="text-sm text-[#1A1A1A]">
                           {new Date(log.created_at).toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-sm font-mono text-gray-600">
+                        <TableCell className="text-sm font-mono text-[#5A4A2E]">
                           {log.actor_user_id?.slice(0, 8)}...
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="border-gold/30 text-black">{log.action}</Badge>
+                          <Badge variant="outline" className="border-gold/30 text-[#1A1A1A]">{log.action}</Badge>
                         </TableCell>
-                        <TableCell className="text-sm text-black">
+                        <TableCell className="text-sm text-[#1A1A1A]">
                           {log.entity_type}
                         </TableCell>
-                        <TableCell className="text-xs text-gray-600 max-w-xs truncate">
+                        <TableCell className="text-xs text-[#5A4A2E] max-w-xs truncate">
                           {JSON.stringify(log.details)}
                         </TableCell>
                       </TableRow>

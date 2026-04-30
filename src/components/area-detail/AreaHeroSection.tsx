@@ -50,7 +50,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       {/* DLD Live Badge — top right */}
       {dldAreaData && (
         <motion.div
-          className="absolute top-6 right-6 z-20 hidden md:flex items-center gap-2 bg-black/60 backdrop-blur-md border border-gold/40 rounded-2xl px-4 py-2.5"
+          className="absolute top-6 right-6 z-20 hidden md:flex items-center gap-2 bg-[#1A1A1A]/60 backdrop-blur-md border border-gold/40 rounded-2xl px-4 py-2.5"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}
@@ -97,10 +97,10 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-gray-600 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
-          <Link to="/areas" className="text-gray-600 hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-gray-600" />
+          <Link to="/" className="text-[#5A4A2E] hover:text-white transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4 text-[#5A4A2E]" />
+          <Link to="/areas" className="text-[#5A4A2E] hover:text-white transition-colors">Areas</Link>
+          <ChevronRight className="w-4 h-4 text-[#5A4A2E]" />
           <span className="text-gold">{area.name}</span>
         </motion.nav>
 
@@ -110,12 +110,12 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {(liveProjectCount ?? area.project_count_sale ?? area.property_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('projects-section')}
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 hover:border-gold/40 transition-all duration-200"
+              className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-[#FDFBF7]/20 hover:border-gold/40 transition-all duration-200"
             >
               <Building2 className="w-5 h-5 text-gold" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div className="text-gray-600 text-xs">Projects</div>
+                <div className="text-[#5A4A2E] text-xs">Projects</div>
               </div>
             </button>
           )}
@@ -124,23 +124,23 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {(area.developer_count ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('developers-section')}
-              className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-white/20 hover:border-gold/40 transition-all duration-200"
+              className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3 cursor-pointer hover:bg-[#FDFBF7]/20 hover:border-gold/40 transition-all duration-200"
             >
               <Users className="w-5 h-5 text-gold" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{area.developer_count}</div>
-                <div className="text-gray-600 text-xs">Developers</div>
+                <div className="text-[#5A4A2E] text-xs">Developers</div>
               </div>
             </button>
           )}
 
           {/* Avg Price/sqft */}
           {(area.avg_price_sqft ?? 0) > 0 && (
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
+            <div className="flex items-center gap-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-xl px-5 py-3">
               <BarChart3 className="w-5 h-5 text-gold" />
               <div>
                 <div className="text-xl font-bold text-white">AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
-                <div className="text-gray-600 text-xs">Avg. Price/sqft</div>
+                <div className="text-[#5A4A2E] text-xs">Avg. Price/sqft</div>
               </div>
             </div>
           )}
@@ -152,7 +152,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
                 <Activity className="w-5 h-5 text-gold" />
                 <div>
                   <div className="text-xl font-bold text-white">{dldAreaData.transactions.toLocaleString()}</div>
-                  <div className="text-gray-600 text-xs">DLD Transactions (YTD)</div>
+                  <div className="text-[#5A4A2E] text-xs">DLD Transactions (YTD)</div>
                 </div>
               </div>
 
@@ -166,7 +166,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
                   <div className={`text-xl font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
                     {dldAreaData.change}
                   </div>
-                  <div className="text-gray-600 text-xs">YoY Growth</div>
+                  <div className="text-[#5A4A2E] text-xs">YoY Growth</div>
                 </div>
               </div>
             </>
@@ -175,7 +175,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* DLD source note */}
         {dldAreaData && (
-          <motion.p className="mt-3 text-gray-600 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+          <motion.p className="mt-3 text-[#5A4A2E] text-[10px] uppercase tracking-widest" variants={fadeInUp}>
             ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
           </motion.p>
         )}

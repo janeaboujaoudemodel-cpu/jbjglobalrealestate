@@ -51,7 +51,7 @@ export function AIBrokerCard({
   };
 
   return (
-    <Card className="bg-white border-2 border-gold/30 overflow-hidden">
+    <Card className="bg-[#FDFBF7] border-2 border-gold/30 overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
@@ -76,14 +76,14 @@ export function AIBrokerCard({
               />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-lg">{broker.name}</h3>
-              <p className="text-black/60 text-sm">{broker.email}</p>
+              <h3 className="text-[#1A1A1A] font-semibold text-lg">{broker.name}</h3>
+              <p className="text-[#1A1A1A]/60 text-sm">{broker.email}</p>
               <div className="flex gap-2 mt-1">
                 {broker.specialization?.slice(0, 2).map((spec) => (
                   <Badge
                     key={spec}
                     variant="outline"
-                    className="border-gold/30 text-black/60 text-xs"
+                    className="border-gold/30 text-[#1A1A1A]/60 text-xs"
                   >
                     {spec}
                   </Badge>
@@ -93,7 +93,7 @@ export function AIBrokerCard({
           </div>
 
           <div className="flex flex-row items-center gap-2 flex-shrink-0">
-            <span className="text-sm text-black/60 whitespace-nowrap">
+            <span className="text-sm text-[#1A1A1A]/60 whitespace-nowrap">
               {isActive ? "Active" : "Paused"}
             </span>
             <Switch
@@ -106,24 +106,24 @@ export function AIBrokerCard({
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-black/60">
+                <Button variant="ghost" size="icon" className="text-[#1A1A1A]/60">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="bg-white border-2 border-gold/30 z-50"
+                className="bg-[#FDFBF7] border-2 border-gold/30 z-50"
               >
                 <DropdownMenuItem
                   onClick={() => onEdit(broker)}
-                  className="text-black hover:bg-gold/10"
+                  className="text-[#1A1A1A] hover:bg-gold/10"
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Edit Settings
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => onViewStats(broker.id)}
-                  className="text-black hover:bg-gold/10"
+                  className="text-[#1A1A1A] hover:bg-gold/10"
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   View Analytics
@@ -138,8 +138,8 @@ export function AIBrokerCard({
         {/* Capacity Bar */}
         <div>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-black/60">Daily Capacity</span>
-            <span className="text-black">
+            <span className="text-[#1A1A1A]/60">Daily Capacity</span>
+            <span className="text-[#1A1A1A]">
               {capacityUsed} / {capacityLimit}
             </span>
           </div>
@@ -161,42 +161,42 @@ export function AIBrokerCard({
         <div className="grid grid-cols-4 gap-3">
           <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <Users className="h-4 w-4 text-gold mx-auto mb-1" />
-            <p className="text-black font-semibold">
+            <p className="text-[#1A1A1A] font-semibold">
               {broker.total_leads_handled || 0}
             </p>
-            <p className="text-black/50 text-xs">Leads</p>
+            <p className="text-[#1A1A1A]/50 text-xs">Leads</p>
           </div>
           <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <TrendingUp className="h-4 w-4 text-emerald-500 mx-auto mb-1" />
-            <p className="text-black font-semibold">{conversionRate}%</p>
-            <p className="text-black/50 text-xs">Conversion</p>
+            <p className="text-[#1A1A1A] font-semibold">{conversionRate}%</p>
+            <p className="text-[#1A1A1A]/50 text-xs">Conversion</p>
           </div>
           <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <Clock className="h-4 w-4 text-blue-500 mx-auto mb-1" />
-            <p className="text-black font-semibold">
+            <p className="text-[#1A1A1A] font-semibold">
               {formatResponseTime(broker.average_response_time_seconds)}
             </p>
-            <p className="text-black/50 text-xs">Avg Response</p>
+            <p className="text-[#1A1A1A]/50 text-xs">Avg Response</p>
           </div>
           <div className="bg-gold/5 border border-gold/20 rounded-lg p-3 text-center">
             <MessageSquare className="h-4 w-4 text-purple-500 mx-auto mb-1" />
-            <p className="text-black font-semibold">
+            <p className="text-[#1A1A1A] font-semibold">
               {broker.working_hours_start?.slice(0, 5) || "09:00"} -{" "}
               {broker.working_hours_end?.slice(0, 5) || "18:00"}
             </p>
-            <p className="text-black/50 text-xs">Hours</p>
+            <p className="text-[#1A1A1A]/50 text-xs">Hours</p>
           </div>
         </div>
 
         {/* Languages */}
         {broker.languages && broker.languages.length > 0 && (
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-black/60">Languages:</span>
+            <span className="text-[#1A1A1A]/60">Languages:</span>
             <div className="flex gap-1">
               {broker.languages.map((lang) => (
                 <Badge
                   key={lang}
-                  className="bg-gold/10 text-black/70 text-xs border border-gold/20"
+                  className="bg-gold/10 text-[#1A1A1A]/70 text-xs border border-gold/20"
                 >
                   {lang}
                 </Badge>
@@ -210,7 +210,7 @@ export function AIBrokerCard({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-gold/30 text-black hover:bg-gold/10"
+            className="flex-1 border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             <Mail className="h-4 w-4 mr-2" />
             Test Email
@@ -218,7 +218,7 @@ export function AIBrokerCard({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 border-gold/30 text-black hover:bg-gold/10"
+            className="flex-1 border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             <MessageSquare className="h-4 w-4 mr-2" />
             Test Chat

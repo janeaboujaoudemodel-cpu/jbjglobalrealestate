@@ -37,7 +37,7 @@ export function BusinessCardHeader({
   isExporting, onExportPdf,
 }: BusinessCardHeaderProps) {
   return (
-    <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-sm shadow-sm">
+    <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/95 backdrop-blur-sm shadow-sm">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-3.5 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <div className="hidden sm:flex items-center gap-2">

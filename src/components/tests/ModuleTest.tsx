@@ -67,7 +67,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-black/40 border-gold/20", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-gold/20", className)}>
         <CardContent className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-gold animate-spin" />
         </CardContent>
@@ -93,7 +93,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
   // Show test start view if no active test
   if (currentTest.length === 0) {
     return (
-      <Card className={cn("bg-black/40 border-gold/20", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-gold/20", className)}>
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-3">
             <BookOpen className="w-6 h-6 text-gold" />
@@ -101,7 +101,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="bg-white/5 rounded-xl p-6 text-center">
+          <div className="bg-[#FDFBF7]/5 rounded-xl p-6 text-center">
             {status.hasPassed ? (
               <>
                 <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
@@ -125,7 +125,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                 )}
                 <Button 
                   onClick={handleStart}
-                  className="bg-gold hover:bg-gold/90 text-black"
+                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                 >
                   Start Test
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -140,7 +140,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
 
   // Show active test
   return (
-    <Card className={cn("bg-black/40 border-gold/20", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20", className)}>
       <CardHeader className="border-b border-white/10">
         <div className="flex items-center justify-between">
           <CardTitle className="text-white text-lg">
@@ -152,12 +152,12 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
         </div>
         <Progress 
           value={(currentQuestionIndex + 1) / currentTest.length * 100} 
-          className="h-2 bg-white/10 mt-3"
+          className="h-2 bg-[#FDFBF7]/10 mt-3"
         />
       </CardHeader>
       <CardContent className="py-6 space-y-6">
         {/* Question */}
-        <div className="bg-white/5 rounded-xl p-6">
+        <div className="bg-[#FDFBF7]/5 rounded-xl p-6">
           <h3 className="text-white text-lg font-medium mb-6">
             {currentQuestion.question_text}
           </h3>
@@ -174,7 +174,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                     "flex items-center space-x-3 p-4 rounded-lg border transition-all cursor-pointer",
                     userAnswers[currentQuestion.id] === index
                       ? "border-gold bg-gold/10"
-                      : "border-white/10 hover:border-white/30 bg-white/5"
+                      : "border-white/10 hover:border-white/30 bg-[#FDFBF7]/5"
                   )}
                   onClick={() => setAnswer(currentQuestion.id, index)}
                 >
@@ -201,7 +201,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
             variant="outline"
             onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
             disabled={currentQuestionIndex === 0}
-            className="border-white/20 text-white hover:bg-white/10"
+            className="border-white/20 text-white hover:bg-[#FDFBF7]/10"
           >
             Previous
           </Button>
@@ -214,10 +214,10 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
                 className={cn(
                   "w-8 h-8 rounded-full text-sm font-medium transition-all",
                   idx === currentQuestionIndex
-                    ? "bg-gold text-black"
+                    ? "bg-gold text-[#1A1A1A]"
                     : userAnswers[currentTest[idx].id] !== undefined
                       ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-white/10 text-white/90 hover:bg-white/20"
+                      : "bg-[#FDFBF7]/10 text-white/90 hover:bg-[#FDFBF7]/20"
                 )}
               >
                 {idx + 1}
@@ -237,7 +237,7 @@ export function ModuleTest({ moduleId, moduleName, onComplete, className }: Modu
             <Button
               onClick={handleSubmit}
               disabled={!allAnswered || isSubmitting}
-              className="bg-gold hover:bg-gold/90 text-black"
+              className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />

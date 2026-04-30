@@ -86,7 +86,7 @@ export default function FreeToolsBanner() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/30 z-40"
+            className="fixed inset-0 bg-[#1A1A1A]/30 z-40"
             onClick={canClose ? handleDismiss : undefined}
           />
 
@@ -133,8 +133,8 @@ export default function FreeToolsBanner() {
                 disabled={!canClose}
                 className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
                   canClose 
-                    ? "text-gray-600 hover:text-white hover:bg-white/10 cursor-pointer" 
-                    : "text-gray-600 cursor-not-allowed opacity-50"
+                    ? "text-[#5A4A2E] hover:text-white hover:bg-[#FDFBF7]/10 cursor-pointer" 
+                    : "text-[#5A4A2E] cursor-not-allowed opacity-50"
                 }`}
                 aria-label="Close"
               >
@@ -146,7 +146,7 @@ export default function FreeToolsBanner() {
                 {/* Icon row */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg shadow-gold/30">
-                    <Gift className="w-6 h-6 text-black" />
+                    <Gift className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                   <div className="flex gap-2">
                     <span className="px-3 py-1.5 bg-gold/20 text-gold text-xs font-bold rounded-full flex items-center gap-1.5 border border-gold/40 shadow-sm shadow-gold/20">
@@ -204,7 +204,7 @@ export default function FreeToolsBanner() {
                 >
                   <Button
                     onClick={handleGetAccess}
-                    className="w-full bg-gradient-to-r from-gold via-gold-dark to-gold text-black font-bold text-base py-6 hover:brightness-110 transition-all duration-300 shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50"
+                    className="w-full bg-gradient-to-r from-gold via-gold-dark to-gold text-[#1A1A1A] font-bold text-base py-6 hover:brightness-110 transition-all duration-300 shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50"
                     size="lg"
                   >
                     <Rocket className="w-5 h-5 mr-2" />

@@ -189,8 +189,8 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
               <Users className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-black">{count}</p>
-              <p className="text-xs text-black/60">Total Subscribers</p>
+              <p className="text-2xl font-bold text-[#1A1A1A]">{count}</p>
+              <p className="text-xs text-[#1A1A1A]/60">Total Subscribers</p>
             </div>
           </div>
         </motion.div>
@@ -206,8 +206,8 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-black">{activeCount}</p>
-              <p className="text-xs text-black/60">Active</p>
+              <p className="text-2xl font-bold text-[#1A1A1A]">{activeCount}</p>
+              <p className="text-xs text-[#1A1A1A]/60">Active</p>
             </div>
           </div>
         </motion.div>
@@ -223,8 +223,8 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
               <XCircle className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-black">{(subscribers?.length || 0) - activeCount}</p>
-              <p className="text-xs text-black/60">Inactive</p>
+              <p className="text-2xl font-bold text-[#1A1A1A]">{(subscribers?.length || 0) - activeCount}</p>
+              <p className="text-xs text-[#1A1A1A]/60">Inactive</p>
             </div>
           </div>
         </motion.div>
@@ -233,20 +233,20 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
       {/* Actions */}
       <div className="flex items-center justify-between">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
           <Input
             placeholder="Search by email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 w-64 bg-white border-gold/30"
+            className="pl-9 w-64 bg-[#FDFBF7] border-gold/30"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 bg-white hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={() => refetch()} className="border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button variant="outline" size="sm" onClick={handleExport} className="border-gold/40 bg-white hover:bg-gold/10">
+          <Button variant="outline" size="sm" onClick={handleExport} className="border-gold/40 bg-[#FDFBF7] hover:bg-gold/10">
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>
@@ -263,21 +263,21 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-purple-100 flex items-center justify-center">
             <UserPlus className="h-8 w-8 text-purple-600" />
           </div>
-          <h3 className="font-semibold mb-2 text-black">No subscribers yet</h3>
-          <p className="text-sm text-black/60">
+          <h3 className="font-semibold mb-2 text-[#1A1A1A]">No subscribers yet</h3>
+          <p className="text-sm text-[#1A1A1A]/60">
             Subscribers will appear here when users sign up for your newsletter.
           </p>
         </div>
       ) : (
-        <div className="border-2 border-gold/30 rounded-xl overflow-hidden bg-white">
+        <div className="border-2 border-gold/30 rounded-xl overflow-hidden bg-[#FDFBF7]">
           <Table>
             <TableHeader>
               <TableRow className="border-b-2 border-gold/20 bg-gold/5">
-                <TableHead className="text-black font-semibold">Email</TableHead>
-                <TableHead className="text-black font-semibold">Source</TableHead>
-                <TableHead className="text-black font-semibold">Status</TableHead>
-                <TableHead className="text-black font-semibold">Subscribed</TableHead>
-                <TableHead className="text-right text-black font-semibold">Actions</TableHead>
+                <TableHead className="text-[#1A1A1A] font-semibold">Email</TableHead>
+                <TableHead className="text-[#1A1A1A] font-semibold">Source</TableHead>
+                <TableHead className="text-[#1A1A1A] font-semibold">Status</TableHead>
+                <TableHead className="text-[#1A1A1A] font-semibold">Subscribed</TableHead>
+                <TableHead className="text-right text-[#1A1A1A] font-semibold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -285,17 +285,17 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
                 <TableRow key={subscriber.id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-black/50" />
-                      <span className="text-black">{subscriber.email}</span>
+                      <Mail className="w-4 h-4 text-[#1A1A1A]/50" />
+                      <span className="text-[#1A1A1A]">{subscriber.email}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-black/70">{subscriber.source || 'Direct'}</TableCell>
+                  <TableCell className="text-[#1A1A1A]/70">{subscriber.source || 'Direct'}</TableCell>
                   <TableCell>
-                    <Badge className={subscriber.is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}>
+                    <Badge className={subscriber.is_active ? 'bg-green-100 text-green-700' : 'bg-[#F7F2EA] text-[#5A4A2E]'}>
                       {subscriber.is_active ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-black/70">
+                  <TableCell className="text-[#1A1A1A]/70">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       {format(new Date(subscriber.created_at), 'MMM d, yyyy')}
@@ -305,13 +305,13 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="hover:bg-gold/10">
-                          <MoreHorizontal className="h-4 w-4 text-black" />
+                          <MoreHorizontal className="h-4 w-4 text-[#1A1A1A]" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-white border-2 border-gold/30">
+                      <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-2 border-gold/30">
                         <DropdownMenuItem 
                           onClick={() => handleToggleStatus(subscriber.id, subscriber.is_active)}
-                          className="text-black hover:bg-gold/10"
+                          className="text-[#1A1A1A] hover:bg-gold/10"
                         >
                           {subscriber.is_active ? (
                             <>

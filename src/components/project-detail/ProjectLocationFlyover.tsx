@@ -355,12 +355,12 @@ export default function ProjectLocationFlyover({
         <div className="absolute inset-0 flex items-center justify-center z-[999]">
           <Button
             onClick={animationDone ? handleReplay : handlePlay}
-            className="bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 rounded-full h-16 w-16 p-0"
+            className="bg-[#1A1A1A]/60 backdrop-blur-sm text-white hover:bg-[#1A1A1A]/80 rounded-full h-16 w-16 p-0"
           >
             {animationDone ? <RotateCcw className="w-7 h-7" /> : <Play className="w-7 h-7 ml-1" />}
           </Button>
           {!animationDone && (
-            <p className="absolute bottom-6 text-white/90 text-sm font-medium bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full">
+            <p className="absolute bottom-6 text-white/90 text-sm font-medium bg-[#1A1A1A]/40 backdrop-blur-sm px-4 py-1.5 rounded-full">
               Play Location Flyover
             </p>
           )}

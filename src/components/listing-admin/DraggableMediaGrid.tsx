@@ -72,13 +72,13 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
+      <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-[#B89555]/30 rounded-xl bg-[#F7F2EA]">
         {type === "images" ? (
-          <ImageIcon className="w-8 h-8 text-gray-600 mb-2" />
+          <ImageIcon className="w-8 h-8 text-[#5A4A2E] mb-2" />
         ) : (
-          <FileText className="w-8 h-8 text-gray-600 mb-2" />
+          <FileText className="w-8 h-8 text-[#5A4A2E] mb-2" />
         )}
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[#5A4A2E]">
           No {type} uploaded yet
         </p>
       </div>
@@ -111,14 +111,14 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
         >
           {/* Drag Handle */}
           <div className="absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-black/70 text-white p-1 rounded">
+            <div className="bg-[#1A1A1A]/70 text-white p-1 rounded">
               <GripVertical className="w-4 h-4" />
             </div>
           </div>
 
           {/* Order Badge */}
           <div className="absolute top-2 right-8 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-gold text-black text-xs font-bold px-2 py-0.5 rounded">
+            <div className="bg-gold text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded">
               #{index + 1}
             </div>
           </div>
@@ -154,10 +154,10 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
                 <FileText className="w-5 h-5 text-gold" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-black truncate">
+                <p className="text-sm font-medium text-[#1A1A1A] truncate">
                   {item.name || `Document ${index + 1}`}
                 </p>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-[#5A4A2E]">
                   Drag to reorder
                 </p>
               </div>

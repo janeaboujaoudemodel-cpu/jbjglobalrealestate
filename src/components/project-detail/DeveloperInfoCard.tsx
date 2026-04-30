@@ -77,7 +77,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <Building2 className="w-12 h-12 text-gray-600" />
+                <Building2 className="w-12 h-12 text-[#5A4A2E]" />
               )}
             </div>
 
@@ -85,14 +85,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             <div className="flex-1">
               {/* Header */}
               <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl md:text-3xl font-bold text-black">{developer.name}</h3>
+                <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{developer.name}</h3>
                 <Award className="w-6 h-6 text-gold" />
               </div>
 
               {/* Quick meta line */}
-              <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-gray-600">
+              <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-[#5A4A2E]">
                 {developer.specialization && (
-                  <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-semibold text-black">
+                  <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-semibold text-[#1A1A1A]">
                     {developer.specialization}
                   </span>
                 )}
@@ -103,7 +103,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   </span>
                 )}
                 {developer.parent_company && (
-                  <span className="text-gray-600">Part of {developer.parent_company}</span>
+                  <span className="text-[#5A4A2E]">Part of {developer.parent_company}</span>
                 )}
                 {developer.website_url && (
                   <a
@@ -134,8 +134,8 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                         <stat.icon className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <span className="text-xl font-bold text-black">{stat.value}</span>
-                        <span className="text-xs text-gray-600 ml-2 uppercase tracking-wide">{stat.label}</span>
+                        <span className="text-xl font-bold text-[#1A1A1A]">{stat.value}</span>
+                        <span className="text-xs text-[#5A4A2E] ml-2 uppercase tracking-wide">{stat.label}</span>
                       </div>
                     </div>
                   ))}
@@ -146,7 +146,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {developer.notable_projects && (
                 <div className="mb-5">
                   <span className="text-xs font-semibold text-gold uppercase tracking-wider">Notable Projects: </span>
-                  <span className="text-sm text-gray-700">{developer.notable_projects}</span>
+                  <span className="text-sm text-[#5A4A2E]">{developer.notable_projects}</span>
                 </div>
               )}
 
@@ -164,7 +164,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     }}
                   >
                     <div 
-                      className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-ul:my-1 prose-li:my-0"
+                      className="text-[#5A4A2E] text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-ul:my-1 prose-li:my-0"
                       dangerouslySetInnerHTML={{ 
                         __html: renderMarkdownToHtml(formatReellyDescription(displayDescription || '')) 
                       }}
@@ -197,7 +197,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     <Sparkles className="w-4 h-4 text-gold" />
                     <span className="text-xs font-semibold text-gold uppercase tracking-wider">About the Developer</span>
                   </div>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-[#5A4A2E] text-sm">
                     {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
                   </p>
                 </div>

@@ -46,7 +46,7 @@ const Unsubscribe = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-4">
       <div className="max-w-md w-full rounded-2xl border border-border bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))] p-8 text-center space-y-6">
         {/* Logo */}
         <div>

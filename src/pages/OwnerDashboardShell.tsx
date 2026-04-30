@@ -68,7 +68,7 @@ const OwnerDashboardShell = () => {
       <div className="p-3 border-t border-[#B89555]/30 flex-shrink-0 space-y-1 bg-[#FDFBF7]">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#5A4A2E] hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
           aria-label="Return to main site"
         >
           <Home className="w-5 h-5 flex-shrink-0" />
@@ -76,7 +76,7 @@ const OwnerDashboardShell = () => {
         </button>
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#5A4A2E] hover:text-red-600 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
           aria-label="Sign out"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
@@ -124,22 +124,22 @@ const OwnerDashboardShell = () => {
         role="main"
       >
         {/* Top Bar - always horizontal, never vertical stacking */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
+        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileOpen(true)}
-                className="text-gray-600 hover:text-[#B89555] hover:bg-[#B89555]/10 focus:ring-2 focus:ring-[#B89555]/40 flex-shrink-0"
+                className="text-[#5A4A2E] hover:text-[#B89555] hover:bg-[#B89555]/10 focus:ring-2 focus:ring-[#B89555]/40 flex-shrink-0"
                 aria-label="Open navigation menu"
               >
                 <Menu className="w-5 h-5" />
               </Button>
             )}
             <div className="min-w-0">
-              <h1 className="text-black font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Founder & CEO</h1>
-              <p className="text-gray-600 text-xs hidden md:block whitespace-nowrap">Jane Bou Jaoude — Executive Command Center</p>
+              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Founder & CEO</h1>
+              <p className="text-[#5A4A2E] text-xs hidden md:block whitespace-nowrap">Jane Bou Jaoude — Executive Command Center</p>
             </div>
           </div>
           
@@ -152,7 +152,7 @@ const OwnerDashboardShell = () => {
             
             {/* User Email */}
             <div className="text-right hidden md:block whitespace-nowrap">
-              <p className="text-black text-sm font-medium truncate max-w-[120px]">
+              <p className="text-[#1A1A1A] text-sm font-medium truncate max-w-[120px]">
                 {user?.email?.split("@")[0] || "Jane"}
               </p>
               <p className="text-[#B89555]/70 text-xs">Verified Owner</p>

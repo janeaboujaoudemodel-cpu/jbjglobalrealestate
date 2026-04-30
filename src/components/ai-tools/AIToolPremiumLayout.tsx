@@ -240,7 +240,7 @@ const AIToolPremiumLayout = ({
             </h1>
             
             {/* Subtitle/Description */}
-            <p className="text-gray-600 text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto">
+            <p className="text-[#5A4A2E] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto">
               {subtitle}
             </p>
             
@@ -266,8 +266,8 @@ const AIToolPremiumLayout = ({
 
             {showFinancialDisclaimer && (
               <div className="mt-8 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.04)", border: "1px solid rgba(184,148,62,0.15)" }}>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  <strong className="text-gray-600">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+                <p className="text-[#5A4A2E] text-sm leading-relaxed">
+                  <strong className="text-[#5A4A2E]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
                   <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
                   Past performance does not guarantee future results.
                 </p>

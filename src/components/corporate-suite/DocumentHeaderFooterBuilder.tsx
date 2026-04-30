@@ -35,13 +35,13 @@ export default function DocumentHeaderFooterBuilder({ settings, onChange }: Prop
         onClick={() => set({ [field]: !value })}
         className={`w-8 h-4 rounded-full transition-colors ${value ? "bg-[hsl(var(--gold))]" : "bg-[hsl(var(--muted))]"}`}
       >
-        <div className={`w-3 h-3 rounded-full bg-white shadow transition-transform ${value ? "translate-x-4" : "translate-x-0.5"}`} />
+        <div className={`w-3 h-3 rounded-full bg-[#FDFBF7] shadow transition-transform ${value ? "translate-x-4" : "translate-x-0.5"}`} />
       </button>
     </div>
   );
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+    <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
       <div className="flex items-center gap-2">
         <LayoutTemplate size={12} className="text-[hsl(var(--gold))]" />
         <span className="text-xs font-bold text-[hsl(var(--foreground))]">Header & Footer</span>

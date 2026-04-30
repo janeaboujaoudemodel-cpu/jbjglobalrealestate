@@ -108,14 +108,14 @@ const MyDashboardActivity = () => {
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}
-            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-gray-800 hover:bg-gold/10">
+            <Button variant="ghost" onClick={() => navigate('/my-dashboard')} className="mb-6 text-gold hover:text-[#1A1A1A] hover:bg-gold/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Dashboard
             </Button>
 
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-black">
+              <h1 className="text-3xl font-bold text-[#1A1A1A]">
                 My Activity Intelligence
               </h1>
               <p className="text-stone-500 mt-2">Real-time behavioral analytics and engagement tracking.</p>
@@ -133,7 +133,7 @@ const MyDashboardActivity = () => {
                   <Card className={`border-2 border-gold/30 bg-gradient-to-br ${stat.color} backdrop-blur-sm shadow-sm`}>
                     <CardContent className="p-4 text-center">
                       <stat.icon className="w-6 h-6 text-gold mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-black"><AnimatedCounter value={stat.value} /></p>
+                      <p className="text-2xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stat.value} /></p>
                       <p className="text-xs text-stone-500">{stat.label}</p>
                     </CardContent>
                   </Card>
@@ -143,24 +143,24 @@ const MyDashboardActivity = () => {
 
             {/* Secondary stats row */}
             <div className="grid grid-cols-3 gap-4 mb-8">
-              <Card className="border-2 border-gold/30 bg-white/60">
+              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
                   <Zap className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-black"><AnimatedCounter value={stats.totalPoints} /></p>
+                  <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalPoints} /></p>
                   <p className="text-xs text-stone-500">Total Points</p>
                 </CardContent>
               </Card>
-              <Card className="border-2 border-gold/30 bg-white/60">
+              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
                   <BarChart3 className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-black"><AnimatedCounter value={stats.totalSessions} /></p>
+                  <p className="text-xl font-bold text-[#1A1A1A]"><AnimatedCounter value={stats.totalSessions} /></p>
                   <p className="text-xs text-stone-500">Total Sessions</p>
                 </CardContent>
               </Card>
-              <Card className="border-2 border-gold/30 bg-white/60">
+              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/60">
                 <CardContent className="p-4 text-center">
                   <Clock className="w-5 h-5 text-gold mx-auto mb-1" />
-                  <p className="text-xl font-bold text-black">{formatDuration(stats.avgSessionDuration)}</p>
+                  <p className="text-xl font-bold text-[#1A1A1A]">{formatDuration(stats.avgSessionDuration)}</p>
                   <p className="text-xs text-stone-500">Avg Session</p>
                 </CardContent>
               </Card>
@@ -194,7 +194,7 @@ const MyDashboardActivity = () => {
                             <score.icon className="w-3.5 h-3.5 text-stone-500" />
                             <span className="text-xs text-stone-500">{score.label}</span>
                           </div>
-                          <p className="text-lg font-bold text-black">{score.value}<span className="text-xs text-stone-400">/100</span></p>
+                          <p className="text-lg font-bold text-[#1A1A1A]">{score.value}<span className="text-xs text-stone-400">/100</span></p>
                           <div className="h-1.5 bg-gold/10 rounded-full overflow-hidden mt-1">
                             <div className={`h-full bg-gradient-to-r ${score.color} rounded-full transition-all duration-1000`} style={{ width: `${score.value}%` }} />
                           </div>
@@ -206,19 +206,19 @@ const MyDashboardActivity = () => {
               </Card>
             </motion.div>
             {stats.dailyActivity.length > 0 && (
-              <Card className="border-2 border-gold/30 bg-white/70 mb-8">
+              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70 mb-8">
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-black flex items-center gap-2">
+                    <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                       <BarChart3 className="w-5 h-5 text-gold" />
                       Daily Activity
                     </CardTitle>
                     <div className="flex gap-1">
                       <Button size="sm" variant={chartMode === 'events' ? 'default' : 'ghost'}
-                        className={chartMode === 'events' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-black hover:bg-gold/10 h-7 text-xs'}
+                        className={chartMode === 'events' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-gold/10 h-7 text-xs'}
                         onClick={() => setChartMode('events')}>Events</Button>
                       <Button size="sm" variant={chartMode === 'points' ? 'default' : 'ghost'}
-                        className={chartMode === 'points' ? 'bg-gold text-black hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-black hover:bg-gold/10 h-7 text-xs'}
+                        className={chartMode === 'points' ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90 h-7 text-xs font-semibold' : 'text-stone-500 hover:text-[#1A1A1A] hover:bg-gold/10 h-7 text-xs'}
                         onClick={() => setChartMode('points')}>Points</Button>
                     </div>
                   </div>
@@ -256,9 +256,9 @@ const MyDashboardActivity = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {/* Device Mix */}
               {stats.deviceMix.length > 0 && (
-                <Card className="border-2 border-gold/30 bg-white/70">
+                <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-black text-sm">Device Mix</CardTitle>
+                    <CardTitle className="text-[#1A1A1A] text-sm">Device Mix</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -286,9 +286,9 @@ const MyDashboardActivity = () => {
               )}
 
               {/* Recent Activity Timeline */}
-              <Card className="border-2 border-gold/30 bg-white/70 md:col-span-2">
+              <Card className="border-2 border-gold/30 bg-[#FDFBF7]/70 md:col-span-2">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Clock className="w-5 h-5 text-gold" />
                     Recent Activity
                   </CardTitle>
@@ -312,7 +312,7 @@ const MyDashboardActivity = () => {
                               <Activity className="w-3.5 h-3.5" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-black truncate">
+                              <p className="text-sm font-medium text-[#1A1A1A] truncate">
                                 {EVENT_LABELS[event.event_name] || event.event_name}
                               </p>
                               <p className="text-xs text-stone-500 truncate">
@@ -330,7 +330,7 @@ const MyDashboardActivity = () => {
                     </ScrollArea>
                   ) : (
                     <div className="text-center py-12">
-                      <Activity className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                      <Activity className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
                       <p className="text-stone-600">Activity is being recorded live.</p>
                       <p className="text-sm text-stone-400 mt-1">Browse the platform to see your activity appear here.</p>
                     </div>

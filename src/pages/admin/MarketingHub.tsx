@@ -133,13 +133,13 @@ const MarketingHub: React.FC = () => {
 
   const getStatusColor = (status: CampaignStatus) => {
     switch (status) {
-      case 'draft': return 'bg-gray-200 text-gray-700';
+      case 'draft': return 'bg-[#EFE6D6] text-[#5A4A2E]';
       case 'scheduled': return 'bg-blue-100 text-blue-700';
       case 'sending': return 'bg-amber-100 text-amber-700';
       case 'sent': return 'bg-green-100 text-green-700';
       case 'paused': return 'bg-orange-100 text-orange-700';
-      case 'archived': return 'bg-gray-200 text-gray-600';
-      default: return 'bg-gray-200 text-gray-700';
+      case 'archived': return 'bg-[#EFE6D6] text-[#5A4A2E]';
+      default: return 'bg-[#EFE6D6] text-[#5A4A2E]';
     }
   };
 
@@ -221,16 +221,16 @@ const MarketingHub: React.FC = () => {
         <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-black hover:bg-gold/10">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-[#1A1A1A] hover:bg-gold/10">
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div className="flex items-center gap-3">
                 <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center shadow-lg shadow-gold/20">
-                  <Megaphone className="h-6 w-6 text-black" />
+                  <Megaphone className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <h1 className="font-bold text-black text-xl">Marketing Hub</h1>
-                  <p className="text-xs text-black/60">AI-Powered Campaign Command Center</p>
+                  <h1 className="font-bold text-[#1A1A1A] text-xl">Marketing Hub</h1>
+                  <p className="text-xs text-[#1A1A1A]/60">AI-Powered Campaign Command Center</p>
                 </div>
               </div>
             </div>
@@ -238,13 +238,13 @@ const MarketingHub: React.FC = () => {
             <div className="flex items-center gap-3">
               {/* Quick AI Actions */}
               <Link to="/ai/email-generator">
-                <Button variant="outline" size="sm" className="border-gold/40 text-black hover:bg-gold/10 hidden md:flex">
+                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hidden md:flex">
                   <Sparkles className="h-3.5 w-3.5 mr-1.5 text-gold" />
                   AI Email
                 </Button>
               </Link>
               <Link to="/founders-assistant">
-                <Button variant="outline" size="sm" className="border-gold/40 text-black hover:bg-gold/10 hidden md:flex">
+                <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hidden md:flex">
                   <Bot className="h-3.5 w-3.5 mr-1.5 text-gold" />
                   AI Assistant
                 </Button>
@@ -252,7 +252,7 @@ const MarketingHub: React.FC = () => {
               {marketingGuide && <PageGuide guide={marketingGuide} />}
               <Button 
                 onClick={() => setIsCreating(true)}
-                className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-gold/20"
+                className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold shadow-lg shadow-gold/20"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 New Campaign
@@ -283,8 +283,8 @@ const MarketingHub: React.FC = () => {
                     <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-black">{stat.value}</p>
-                    <p className="text-xs text-black/60">{stat.label}</p>
+                    <p className="text-2xl font-bold text-[#1A1A1A]">{stat.value}</p>
+                    <p className="text-xs text-[#1A1A1A]/60">{stat.label}</p>
                   </div>
                 </div>
               </motion.div>
@@ -294,26 +294,26 @@ const MarketingHub: React.FC = () => {
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-              <TabsList className="bg-white/80 border-2 border-gold/30">
-                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+              <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
+                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                   <Megaphone className="w-3.5 h-3.5 mr-1.5" />
                   Campaigns
                 </TabsTrigger>
-                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                   <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                   AI Tools
                 </TabsTrigger>
-                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                   Templates
                 </TabsTrigger>
-                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
+                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
                   Subscribers
                 </TabsTrigger>
               </TabsList>
 
               <div className="flex items-center gap-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
                   <Input
                     placeholder="Search..."
                     value={searchQuery}
@@ -357,11 +357,11 @@ const MarketingHub: React.FC = () => {
                     >
           <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg shrink-0`}>
-                          <tool.icon className="w-5 h-5 text-black" />
+                          <tool.icon className="w-5 h-5 text-[#1A1A1A]" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-semibold text-black text-sm group-hover:text-gold transition-colors">{tool.label}</p>
-                          <p className="text-xs text-black/60 mt-0.5">{tool.desc}</p>
+                          <p className="font-semibold text-[#1A1A1A] text-sm group-hover:text-gold transition-colors">{tool.label}</p>
+                          <p className="text-xs text-[#1A1A1A]/60 mt-0.5">{tool.desc}</p>
                         </div>
                       </div>
                     </Link>
@@ -381,25 +381,25 @@ const MarketingHub: React.FC = () => {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center">
                     <Send className="h-8 w-8 text-gold" />
                   </div>
-                  <h3 className="font-semibold mb-2 text-black">No campaigns yet</h3>
-                  <p className="text-sm text-black/60 mb-4">Create your first marketing campaign.</p>
-                  <Button onClick={() => setIsCreating(true)} className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold">
+                  <h3 className="font-semibold mb-2 text-[#1A1A1A]">No campaigns yet</h3>
+                  <p className="text-sm text-[#1A1A1A]/60 mb-4">Create your first marketing campaign.</p>
+                  <Button onClick={() => setIsCreating(true)} className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Campaign
                   </Button>
                 </div>
               ) : (
-                <div className="border-2 border-gold/30 rounded-xl overflow-hidden bg-white/80">
+                <div className="border-2 border-gold/30 rounded-xl overflow-hidden bg-[#FDFBF7]/80">
                   <Table>
                     <TableHeader>
                       <TableRow className="border-b-2 border-gold/20 bg-gold/5">
-                        <TableHead className="text-black font-semibold">Campaign</TableHead>
-                        <TableHead className="text-black font-semibold">Type</TableHead>
-                        <TableHead className="text-black font-semibold">Status</TableHead>
-                        <TableHead className="text-black font-semibold">Audience</TableHead>
-                        <TableHead className="text-right text-black font-semibold">Opens</TableHead>
-                        <TableHead className="text-right text-black font-semibold">Clicks</TableHead>
-                        <TableHead className="text-right text-black font-semibold">Actions</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold">Campaign</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold">Type</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold">Status</TableHead>
+                        <TableHead className="text-[#1A1A1A] font-semibold">Audience</TableHead>
+                        <TableHead className="text-right text-[#1A1A1A] font-semibold">Opens</TableHead>
+                        <TableHead className="text-right text-[#1A1A1A] font-semibold">Clicks</TableHead>
+                        <TableHead className="text-right text-[#1A1A1A] font-semibold">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -407,14 +407,14 @@ const MarketingHub: React.FC = () => {
                         <TableRow key={campaign.id} className="border-b border-gold/10 hover:bg-gold/5 transition-colors">
                           <TableCell>
                             <div>
-                              <p className="font-medium text-black">{campaign.name}</p>
+                              <p className="font-medium text-[#1A1A1A]">{campaign.name}</p>
                               {campaign.subject_line && (
-                                <p className="text-xs text-black/50 truncate max-w-[200px]">{campaign.subject_line}</p>
+                                <p className="text-xs text-[#1A1A1A]/50 truncate max-w-[200px]">{campaign.subject_line}</p>
                               )}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2 text-black">
+                            <div className="flex items-center gap-2 text-[#1A1A1A]">
                               {getTypeIcon(campaign.campaign_type)}
                               <span className="capitalize">{campaign.campaign_type}</span>
                             </div>
@@ -422,13 +422,13 @@ const MarketingHub: React.FC = () => {
                           <TableCell>
                             <Badge className={getStatusColor(campaign.status)}>{campaign.status}</Badge>
                           </TableCell>
-                          <TableCell className="capitalize text-black">{campaign.target_audience}</TableCell>
-                          <TableCell className="text-right text-black">
+                          <TableCell className="capitalize text-[#1A1A1A]">{campaign.target_audience}</TableCell>
+                          <TableCell className="text-right text-[#1A1A1A]">
                             {campaign.total_opened > 0 
                               ? `${((campaign.total_opened / campaign.total_sent) * 100).toFixed(1)}%`
                               : '-'}
                           </TableCell>
-                          <TableCell className="text-right text-black">
+                          <TableCell className="text-right text-[#1A1A1A]">
                             {campaign.total_clicked > 0 
                               ? `${((campaign.total_clicked / campaign.total_sent) * 100).toFixed(1)}%`
                               : '-'}
@@ -437,17 +437,17 @@ const MarketingHub: React.FC = () => {
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="hover:bg-gold/10">
-                                  <MoreHorizontal className="h-4 w-4 text-black" />
+                                  <MoreHorizontal className="h-4 w-4 text-[#1A1A1A]" />
                                 </Button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end" className="bg-white border-2 border-gold/30">
-                                <DropdownMenuItem onClick={() => setSelectedCampaign(campaign)} className="text-black hover:bg-gold/10">
+                              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-2 border-gold/30">
+                                <DropdownMenuItem onClick={() => setSelectedCampaign(campaign)} className="text-[#1A1A1A] hover:bg-gold/10">
                                   <Edit2 className="h-4 w-4 mr-2" /> Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-black hover:bg-gold/10">
+                                <DropdownMenuItem className="text-[#1A1A1A] hover:bg-gold/10">
                                   <Eye className="h-4 w-4 mr-2" /> Preview
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleDuplicateCampaign(campaign)} className="text-black hover:bg-gold/10">
+                                <DropdownMenuItem onClick={() => handleDuplicateCampaign(campaign)} className="text-[#1A1A1A] hover:bg-gold/10">
                                   <Copy className="h-4 w-4 mr-2" /> Duplicate
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="text-red-600 hover:bg-red-50" onClick={() => handleDeleteCampaign(campaign.id)}>
@@ -499,12 +499,12 @@ const MarketingHub: React.FC = () => {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30">
-                        <template.icon className="w-5 h-5 text-black" />
+                        <template.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
-                      <Badge className="text-[10px] bg-gray-100 text-gray-600 border-gray-200">{template.category}</Badge>
+                      <Badge className="text-[10px] bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30">{template.category}</Badge>
                     </div>
-                    <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{template.name}</h4>
-                    <p className="text-sm text-black/60 mt-1 line-clamp-2">{template.description}</p>
+                    <h4 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">{template.name}</h4>
+                    <p className="text-sm text-[#1A1A1A]/60 mt-1 line-clamp-2">{template.description}</p>
                     <Badge className="mt-3 bg-gold/10 text-gold border-gold/30">{template.type}</Badge>
                   </motion.div>
                 ))}
@@ -525,41 +525,41 @@ const MarketingHub: React.FC = () => {
           <div className="flex items-center gap-3">
             <Button
               onClick={() => setIsCreating(true)}
-              className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold text-xs shadow-lg shadow-gold/20"
+              className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold text-xs shadow-lg shadow-gold/20"
               size="sm"
             >
               <Plus className="w-3.5 h-3.5 mr-1.5" /> New Campaign
             </Button>
             <Link to="/ai/email-generator">
-              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
                 <Mail className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Email
               </Button>
             </Link>
             <Link to="/ai/social-media">
-              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
                 <Share2 className="w-3.5 h-3.5 mr-1.5 text-gold" /> Social Post
               </Button>
             </Link>
             <Link to="/founders-assistant">
-              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
                 <Bot className="w-3.5 h-3.5 mr-1.5 text-gold" /> AI Assistant
               </Button>
             </Link>
             <Link to="/toolkit">
-              <Button variant="outline" size="sm" className="border-gold/40 text-black text-xs hover:bg-gold/10">
+              <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A] text-xs hover:bg-gold/10">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5 text-gold" /> All Tools
               </Button>
             </Link>
           </div>
           <div className="flex items-center gap-4 text-xs">
             <div className="text-center">
-              <p className="font-bold text-black text-lg">{stats.sent}</p>
-              <p className="text-black/50">Sent</p>
+              <p className="font-bold text-[#1A1A1A] text-lg">{stats.sent}</p>
+              <p className="text-[#1A1A1A]/50">Sent</p>
             </div>
             <div className="w-px h-8 bg-gold/20" />
             <div className="text-center">
-              <p className="font-bold text-black text-lg">{subscriberCount || 0}</p>
-              <p className="text-black/50">Subscribers</p>
+              <p className="font-bold text-[#1A1A1A] text-lg">{subscriberCount || 0}</p>
+              <p className="text-[#1A1A1A]/50">Subscribers</p>
             </div>
           </div>
         </div>

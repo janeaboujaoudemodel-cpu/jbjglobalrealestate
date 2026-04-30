@@ -249,7 +249,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
   ];
 
   return (
-    <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
+    <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-[#FDFBF7]/80 flex flex-col overflow-hidden">
       <div className="flex-shrink-0 px-3 py-2 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
@@ -384,7 +384,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     <input type="text" maxLength={3} value={props.localMonogramText}
                       onChange={e => props.onSetLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
                       placeholder={props.companyName?.slice(0, 2) || 'AB'}
-                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]" />
+                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7] text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]" />
                     <MonogramColorEditor
                       monogramText={props.localMonogramText || props.companyName?.slice(0, 2) || ''}
                       colors={props.monogramLetterColors}
@@ -469,7 +469,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">AI Refine Stamp</p>
                 <textarea value={props.refinePrompt} onChange={e => props.onSetRefinePrompt(e.target.value)}
                   placeholder="e.g. Make the border thicker..."
-                  className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-[10px] text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] min-h-[50px] resize-none" />
+                  className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7] text-[10px] text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] min-h-[50px] resize-none" />
                 <Button size="sm" disabled={props.refiningImage || (!props.uploadedStampUrl && !props.hasSelectedSvg)}
                   className="w-full h-7 text-[10px] bg-gradient-to-r from-violet-600 to-purple-700 text-white gap-1"
                   onClick={props.onRefineWithAI}>

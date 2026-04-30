@@ -48,7 +48,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
   return (
     <div className="p-4 rounded-lg border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_0_15px_rgba(200,167,102,0.22)] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-start justify-between gap-3 mb-2">
-        <h4 className="text-black text-sm font-medium line-clamp-1">{highlight.title}</h4>
+        <h4 className="text-[#1A1A1A] text-sm font-medium line-clamp-1">{highlight.title}</h4>
         <Badge 
           variant="outline" 
           className={`text-[10px] ${config.textColor} ${config.borderColor} shrink-0`}
@@ -57,7 +57,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
           {highlight.status}
         </Badge>
       </div>
-      <p className="text-gray-600 text-xs line-clamp-2">{highlight.description}</p>
+      <p className="text-[#5A4A2E] text-xs line-clamp-2">{highlight.description}</p>
     </div>
   );
 };
@@ -84,7 +84,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
               <Sparkles className="w-4 h-4 text-gold" />
               <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
             </div>
-            <p className="text-gray-700 text-sm leading-relaxed">{metadata.summary}</p>
+            <p className="text-[#5A4A2E] text-sm leading-relaxed">{metadata.summary}</p>
           </div>
 
           {/* Tech Stack */}
@@ -98,7 +98,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
                 <Badge
                   key={tech}
                   variant="outline"
-                  className="text-xs border-gold/30 text-black bg-gold/10 px-3 py-1"
+                  className="text-xs border-gold/30 text-[#1A1A1A] bg-gold/10 px-3 py-1"
                 >
                   {tech}
                 </Badge>

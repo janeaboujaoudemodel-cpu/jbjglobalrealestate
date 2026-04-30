@@ -57,21 +57,21 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({
 
   // User message styles - Active Champagne gradient
   const userStyles = variant === 'dark'
-    ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md'
-    : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md';
+    ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md'
+    : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md';
 
   // Assistant message styles - Premium Champagne (lighter, more subtle)
   const getAssistantStyles = () => {
     if (messageType === 'processing') {
-      return 'bg-amber-50 text-black border border-amber-200';
+      return 'bg-amber-50 text-[#1A1A1A] border border-amber-200';
     }
     if (messageType === 'success') {
-      return 'bg-green-50 text-black border border-green-200';
+      return 'bg-green-50 text-[#1A1A1A] border border-green-200';
     }
     // Premium champagne for assistant - Locked Champagne Layer 3
     return variant === 'dark'
-      ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm'
-      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm';
+      ? 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm'
+      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm';
   };
 
   return (

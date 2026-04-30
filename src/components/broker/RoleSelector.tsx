@@ -104,7 +104,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
             className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
               isRoleActive(role.id)
                 ? "border-gold bg-gold/10"
-                : "border-gray-700 hover:border-gray-600 bg-zinc-900/50"
+                : "border-[#1A1A1A] hover:border-[#1A1A1A] bg-zinc-900/50"
             } ${(isSelecting || isLoading) ? "cursor-wait" : "cursor-pointer"}`}
           >
             <div className="flex items-start gap-4">
@@ -140,7 +140,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                       className={`text-xs ${
                         isRoleActive(role.id)
                           ? "border-gold/50 text-gold"
-                          : "border-gray-700 text-white/90"
+                          : "border-[#1A1A1A] text-white/90"
                       }`}
                     >
                       {benefit}
