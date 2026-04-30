@@ -168,6 +168,15 @@ function check() {
   const textHits = unique.filter((v) => !v.isIcon);
   const iconHits = unique.filter((v) => v.isIcon);
 
+  // --print-baseline: emit a JSON array of every text-class hit (icons
+  // excluded) so it can be pasted into allowlist.json. Used to seed or
+  // refresh the baseline after a deliberate sweep.
+  if (process.argv.includes('--print-baseline')) {
+    const all = [...new Set(violations.filter((v) => !v.isIcon).map((v) => `${v.file}:${v.line}:${v.kind}`))].sort();
+    process.stdout.write(JSON.stringify(all, null, 2) + '\n');
+    process.exit(0);
+  }
+
   // Stale baseline entries — fixed in code but still listed.
   const staleBaseline = [...BASELINE].filter((k) => !baselineHit.has(k));
   if (staleBaseline.length > 0) {
