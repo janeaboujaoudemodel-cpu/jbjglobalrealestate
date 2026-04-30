@@ -1,90 +1,196 @@
-# Owner Command Center — UX Fix Pack
+# Unified Communication Hub + Global Contrast Hardening
 
-Five concrete bugs reported on `/owner` (the Founder & CEO Command Center). Each is fixed at the source — no feature is removed.
+Two work streams in one ship: real one-click channel integrations with auto-reply, plus a site-wide guard that kills every black-on-black (or same-color-on-same-color) text/button/icon.
 
-## 1. Header gap above "Founder & CEO" — lift up to sidebar divider
+## Stream A — Communication Hub v2 (one-click connect, auto-reply, tone learning)
 
-**File:** `src/pages/OwnerDashboardShell.tsx` (line 127)
+The current `OwnerCommSettings.tsx` "Add Channel" dialog only writes a row to `owner_comm_channels` — it never authenticates with the providers, so no messages flow in or out. We replace it with a **status-first hub** that auto-discovers and auto-wires the channels you already have linked at the workspace level.
 
-The header is currently `sticky top-[48px]` which leaves a ~48px empty band above it. The sidebar's "JBJ Owner" logo bar sits at `top: 0` with `h-16`. The two should share the same horizontal divider line.
+### A1. Channel registry — what we wire
 
-**Change:**
-- Replace `sticky top-[48px] z-30` with `sticky top-0 z-30` on the `<header>`.
-- The sidebar logo bar (`h-16`) and main header (`h-16`) will then align on the same horizontal line, forming the "L-shaped frame" required by the Header Sidebar Alignment standard.
-- Remove any leftover top spacing in the page-content wrapper that compensated for the old offset.
+| Channel | How |
+|---|---|
+| Gmail (read + send) | Lovable connector `google_mail` — already linked. Gateway calls. |
+| WhatsApp / SMS (Twilio) | Lovable connector `twilio` — workspace has `Jane's Twilio` (not yet linked). Sandbox connect via tool. |
+| Outbound transactional email | Lovable connector `resend` — already linked. |
+| Hostinger Webmail (IMAP/SMTP) | Edge function with stored IMAP/SMTP creds (encrypted). One-click **"Connect Hostinger"** opens a credential dialog, then verifies. |
+| Outlook/Microsoft 365 | Lovable connector `microsoft_outlook` — link via `standard_connectors--connect`. |
+| Slack | Lovable connector `slack` — link via `standard_connectors--connect`. |
+| Telegram | Lovable connector `telegram` — link via `standard_connectors--connect`. |
+| Voice (ElevenLabs clone) | Already linked. Used for outbound voice replies in user's voice. |
+| Instagram DM, Facebook Messenger, Snapchat, LinkedIn DMs | Not supported by current Lovable connectors. We render the tile with a **"Coming soon — provider does not yet expose a Lovable-managed integration"** badge and a one-click **"Request access"** logger row, so it's visible but honest. |
 
-## 2. Quick Actions hover tooltip — unreadable black-on-black
+### A2. Auto-discovery UI
 
-**Files:**
-- `src/components/ui/tooltip.tsx` (line 19)
-- `src/components/owner-dashboard/QuickActionsGrid.tsx` (line 75)
+Replace the manual `Add Channel → pick type → fill identifier` dialog with a **Channels Grid** that:
 
-Root cause: `TooltipContent` has `data-surface="light"` hard-coded. The global rule in `src/index.css` (`[data-surface="light"] :is(...)`) forces dark text on every span/p/h inside, which clobbers the explicit `text-white` set by QuickActionsGrid — so the tooltip renders as solid black with invisible (dark) text.
+1. Fetches the workspace connection list at mount and merges with `owner_comm_channels` rows.
+2. For each provider, shows one of three states with a clear status pill:
+   - **Connected** (green dot) — connection exists in workspace AND linked to this project AND `owner_comm_channels` row present.
+   - **Available** (gold dot) — connection exists in workspace but not linked here. Single button: **"Connect"** → calls our edge function which links + creates the channel row + kicks off first sync.
+   - **Not yet linked** (gray dot) — no workspace connection. Single button: **"Connect"** → triggers `standard_connectors--connect` flow.
 
-**Change:**
-- Remove the `data-surface="light"` attribute from `TooltipContent`. Tooltips already use `bg-popover text-popover-foreground` from the theme, which is correct.
-- In `QuickActionsGrid.tsx`, replace the inline override `bg-[#1A1A1A] text-white border-none` with a champagne-friendly readable tooltip: `bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555]/30` and add `[&_*]:!text-[#FDFBF7]` to defeat any residual contrast guard, OR simply rely on the default `bg-popover text-popover-foreground`.
+No more separate "add channel type" step. No more identifier text fields the user must fill.
 
-## 3. Empty / data tables show gray (`bg-muted`) blocks on champagne page
+### A3. One-click "Connect" pipeline
 
-**Files:**
-- `src/components/crm/FlaggedLeadsView.tsx` (lines 338, 377, 537, 585, 594, 606)
+A new edge function `comm-channel-autowire` handles each channel end-to-end:
 
-The Founder & CEO overview embeds `<FlaggedLeadsView />` which still uses raw `bg-muted` / `bg-muted/30` / `bg-muted/50` tokens. On the champagne page these render as gray rectangles with white text on muted-gray inputs (also unreadable).
+1. Verifies the connector secret is present (e.g. `GOOGLE_MAIL_API_KEY`).
+2. Calls the gateway's `/api/v1/verify_credentials` — confirms the token actually works.
+3. Resolves the user's identifier (email address for Gmail, phone for Twilio, etc.) via a one-shot gateway call.
+4. Inserts/updates the `owner_comm_channels` row with `is_active = true` and `sync_status = 'synced'`.
+5. Schedules the first inbound sync immediately and registers it with the cron poller.
 
-**Change (per-line):**
-- `bg-muted/50` (table header) → `bg-[#EFE6D6]`
-- `bg-muted/30` (selected row hover, expanded notes) → `bg-[#B89555]/10`
-- `bg-muted border-border text-white` (3 inputs) → `bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40`
+Frontend Connect button becomes: click → loading spinner → "Connected" pill in <3 seconds.
 
-Sweep the rest of `src/components/owner-dashboard/*` and `src/components/crm/*` (used in the overview tabs) for any remaining `bg-muted|bg-gray-*|bg-zinc-*|bg-slate-*` and replace with the champagne palette per the Champagne-Gold Design Standard.
+### A4. Inbound sync + threading
 
-## 4. Page freezes when scrolling up/down
+New scheduled edge function `comm-inbound-sync` runs every 60 seconds (pg_cron):
 
-Likely caused by the same `sticky top-[48px]` header racing the `fixed` sidebar plus the `OwnerTasksPopupAlert` mounted at the root with no pointer-events guard.
+- For each active channel, pulls new messages since `last_sync_at`.
+- Deduplicates by `external_message_id`.
+- Upserts into `owner_comm_threads` (one thread per sender per channel) and `owner_comm_messages`.
+- Marks `sync_status` and `last_sync_at`.
+- On 401 / scope error, sets `sync_status = 'reauth_required'` and surfaces a "Reconnect" button on the channel tile.
 
-**File:** `src/pages/OwnerDashboardShell.tsx`
+### A5. Auto-reply with learned tone
 
-**Change:**
-- After fix #1 (`top-0`), the sticky header no longer fights the 48px ghost band — eliminates the most common stutter.
-- Wrap `OwnerTasksPopupAlert` in a `pointer-events-none` container with the inner alert keeping `pointer-events-auto`, so the alert never blocks scroll wheel events on the body.
-- Add `overscroll-behavior: contain` to the `<main>` element to prevent scroll-chaining lockups between sidebar and content.
+We already have `owner_comm_tone_profiles` and `owner_comm_settings.auto_send_enabled`. Wire the missing pieces:
 
-## 5. Before/After dev toggle does NOT show the real prior site
+- New edge function `comm-auto-reply` triggered by inbound webhook insert (Postgres trigger → pg_net → function).
+- Uses Lovable AI Gateway (`google/gemini-2.5-pro`) with a system prompt that includes:
+  - The active tone profile (formality, signature, common phrases).
+  - The last 30 messages on the same thread for context.
+  - **The last 200 messages Jane has SENT across all channels** (training corpus) — this is the "watch how I reply" piece. We extract them via `direction = 'outbound' AND is_ai_generated = false` ordered by date.
+- If `auto_send_enabled = true` AND confidence ≥ threshold (set in `owner_comm_settings`): sends via the appropriate gateway (Gmail send, Twilio Messages.json, Resend, etc.) and writes the outbound row with `is_ai_generated = true`.
+- Otherwise drops it as a **suggested draft** (`status = 'draft_suggested'`) the user can one-click approve in `OwnerInbox`.
 
-The current `<DevStyleToggle />` flips an `html[data-style-mode="before"]` attribute that swaps a CSS overlay (`src/styles/dev-before-overlay.css`). It approximates the pre-refactor look but does **not** load the actual previous version of the page — that's why "Before" doesn't match what you remember.
+### A6. Voice reply support
 
-Two options. We will implement Option B by default, with a small Option A enhancement.
+If the inbound message is voice (`content_type = 'audio'`) AND `voice_reply_enabled` is on, we call ElevenLabs (Jane Clone voice) to synthesize the AI draft and attach the audio URL. Sent via Twilio (WhatsApp voice note) or replied as audio attachment.
 
-**Option A (kept): Improve the CSS overlay accuracy.** Extend `dev-before-overlay.css` so `Before` mode also disables the new IconTile gold tones, the price-orange variable, the obsidian footer, and the AI purple gradients — bringing the simulation closer to the original neutral/white look.
+### A7. Multiple emails per provider
 
-**Option B (added): Real before-screenshot mode.** Add a third toggle state `Snapshot` to `<DevStyleToggle />`. When selected, the toggle overlays a stored PNG screenshot of the previous version of the current route on top of the live page (with a 50% opacity slider and an A/B wipe). Steps:
+The schema already supports many rows in `owner_comm_channels` per `channel_type`. We expose **"Add another Gmail"** under each connected tile — that re-runs the connector picker so a second `google_mail` connection can be linked (the connector framework already supports this via `GOOGLE_MAIL_API_KEY_2`).
 
-1. Add `public/before-snapshots/<route>.png` for the key Owner routes (`overview`, `crm`, `crm-leads`, `marketing-hub`, etc.). Snapshots are captured once from the last published build and committed.
-2. Extend `DevStyleToggle.tsx` with a third pill `Snapshot` and an opacity slider. When active, render a `<img>` fixed to the viewport at the current route, click-through (`pointer-events: none`), with a vertical wipe handle so you can drag the divider left/right to compare.
-3. Show a clear caption: "Snapshot · pre-refactor build · captured YYYY-MM-DD".
+### A8. Database changes
 
-This gives you a true before vs. after without rolling the codebase back.
+Migration adds:
 
-## Files touched
+- `owner_comm_settings.confidence_threshold` (numeric, default 0.75)
+- `owner_comm_settings.voice_reply_enabled` (boolean, default false)
+- `owner_comm_channels.last_error` (text, nullable) — surfaced on the tile when sync fails
+- `owner_comm_channels.connection_id` (text) — the `std_...` workspace connection it's bound to
+- `owner_comm_channels.training_sample_count` (int) — exposes how many sent messages have been ingested for tone learning
+- New `owner_comm_provider_status` view aggregating the status pill state per provider
+- pg_cron job `comm-inbound-sync` running every minute
+- Postgres trigger `on_inbound_message_auto_reply` calling the auto-reply function
 
-- `src/pages/OwnerDashboardShell.tsx` — header `top-0`, scroll guards
-- `src/components/ui/tooltip.tsx` — drop `data-surface="light"`
-- `src/components/owner-dashboard/QuickActionsGrid.tsx` — readable tooltip styling
-- `src/components/crm/FlaggedLeadsView.tsx` — replace `bg-muted` tokens with champagne
-- `src/styles/dev-before-overlay.css` — extend overlay to cover new tokens
-- `src/components/dev/DevStyleToggle.tsx` — add Snapshot mode + wipe slider
-- `public/before-snapshots/*.png` — checked-in screenshots of prior build for major Owner routes
-- Sweep: any remaining `bg-muted|bg-gray|bg-zinc|bg-slate` inside components rendered under `/owner/*`
+All channel `credentials` fields must be encrypted via the existing AES-256-GCM helper (per Multi-Target PII Encryption standard).
+
+## Stream B — Global black-on-black contrast guard (site-wide)
+
+The reported "Add Channel button is black on black" is a symptom of a wider problem: the existing guard in `index.css` only catches a few literal class combos. We replace it with a **defensive guard that catches every same-color-on-same-color combination**, including hex literals, theme tokens, and parent/descendant pairings.
+
+### B1. Strengthen `index.css` contrast rules
+
+A new section `PASS 5 — UNIVERSAL SAME-TONE GUARD` with:
+
+```css
+/* Any element whose background is the ink/foreground tone forces white descendants */
+[class*="bg-[#1A1A1A]"],
+[class*="bg-foreground"],
+[class*="bg-black"],
+[class*="bg-primary"]:not([class*="bg-primary/"]),
+.bg-\[\#1A1A1A\],
+.bg-foreground,
+.bg-black {
+  color: #FDFBF7;
+}
+[class*="bg-[#1A1A1A]"] *:not([class*="text-gold"]):not([class*="text-price"]):not([class*="text-amber"]):not([class*="text-emerald"]):not([class*="text-red"]):not([class*="text-blue"]):not(svg.lucide),
+[class*="bg-foreground"] *:not([class*="text-gold"]):not([class*="text-price"]):not(svg.lucide),
+[class*="bg-black"] *:not([class*="text-gold"]):not([class*="text-price"]):not(svg.lucide) {
+  color: #FDFBF7 !important;
+}
+
+/* Any element whose background is champagne forces ink descendants */
+[class*="bg-[#FDFBF7]"],
+[class*="bg-[#F7F2EA]"],
+[class*="bg-[#EFE6D6]"],
+[class*="bg-background"],
+[class*="bg-card"]:not([class*="bg-card/"]) {
+  color: #1A1A1A;
+}
+[class*="bg-[#FDFBF7]"] [class*="text-white"]:not(.allow-white),
+[class*="bg-[#F7F2EA]"] [class*="text-white"]:not(.allow-white),
+[class*="bg-[#EFE6D6]"] [class*="text-white"]:not(.allow-white),
+[class*="bg-background"] [class*="text-white"]:not(.allow-white) {
+  color: #1A1A1A !important;
+}
+
+/* Gold backgrounds force white text */
+[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]),
+[class*="bg-gold"]:not([class*="bg-gold/"]) {
+  color: #FDFBF7;
+}
+```
+
+### B2. Runtime guard hook
+
+A small `useContrastGuard` mounted once in `App.tsx` runs after every route change:
+
+- Walks every interactive element (`button, a[role=button], [role=button]`).
+- Reads computed `background-color` and the computed `color` of its `::first-line` text.
+- If the relative luminance delta < 0.2, force-applies a `.contrast-fix` class that overrides to inverse.
+- Logs offenders to `console.warn` in dev so we can fix the source.
+
+Implementation file: `src/utils/contrastGuard.ts` (already a similar utility exists per the White-on-Light memory — extend it bidirectionally, not just light-surface).
+
+### B3. Lint / CI script
+
+Add `scripts/contrast/check-same-tone.mjs` and run in CI:
+
+- Greps the codebase for the regex `bg-\[#1A1A1A\][^"]*text-\[#1A1A1A\]`, `bg-foreground[^"]*text-foreground`, `bg-black[^"]*text-black`, etc.
+- Fails the build with a list of offending files. Existing `check-faded-gold.mjs` is the template.
+
+### B4. Fix specific offenders found during audit
+
+While the global rules will catch most cases at runtime, we also patch the four worst-offender component patterns:
+
+- `OwnerCommSettings.tsx` "Add Channel" button — replace `variant="primary"` (which is technically white-on-ink but renders muddy with backdrop-blur stacking) with `variant="gold"` so it reads as solid gold + white at all times.
+- `Tooltip` and `Popover` already fixed in the previous pass — verify no regression.
+- The `DialogContent` channel-picker buttons inside the dialog use `variant="outline"` with hex border classes; ensure ink-on-champagne by setting `text-[#1A1A1A]` explicitly.
+- Audit pass: any component that uses `bg-foreground` or `bg-primary` and contains a child `text-foreground` / `text-primary` — replace inner with `text-primary-foreground`.
+
+## Files
+
+**Created**
+- `supabase/functions/comm-channel-autowire/index.ts` — one-click connect pipeline
+- `supabase/functions/comm-inbound-sync/index.ts` — scheduled inbound poller
+- `supabase/functions/comm-auto-reply/index.ts` — AI tone-matched reply engine
+- `supabase/migrations/<ts>_comm_hub_v2.sql` — schema additions, view, cron, trigger
+- `src/components/owner-comm/ChannelGrid.tsx` — auto-discovery grid
+- `src/components/owner-comm/ChannelTile.tsx` — single-channel status tile
+- `src/hooks/useCommChannels.ts` — fetches workspace + project channel state
+- `src/utils/contrastGuard.ts` — runtime guard
+- `scripts/contrast/check-same-tone.mjs` — CI lint
+
+**Edited**
+- `src/pages/OwnerCommSettings.tsx` — swap manual dialog for `<ChannelGrid />`, add tone-training preview, add "training samples ingested" counter
+- `src/pages/OwnerInbox.tsx` — add "Approve & send" button on AI-suggested drafts
+- `src/index.css` — Pass 5 universal same-tone guard
+- `src/App.tsx` — mount `useContrastGuard()`
 
 ## Out of scope
 
-- Rebuilding the prior site itself — only static snapshots are feasible. The live "After" stays the source of truth.
+- Native Instagram, Snapchat, LinkedIn, Facebook Messenger DMs — Lovable does not have managed connectors for these. They will appear in the grid as "coming soon" tiles with a request-access logger. We will not pretend they are connected.
+- IMAP via raw socket from edge functions — Hostinger requires SMTP-only outbound + IMAP polling; we ship outbound-first, then a follow-up to add IMAP polling.
 
 ## Acceptance
 
-- The "Founder & CEO" header sits flush with the "JBJ Owner" sidebar header (no gap above it).
-- Hovering any Quick Action shows a readable tooltip (light text on dark, or theme `popover`).
-- Empty states inside the overview render on champagne (`#EFE6D6` / `#B89555/10`), no gray boxes.
-- Scrolling the overview is smooth — no lock-ups on long scroll.
-- The `Before` toggle either matches the prior site visually (overlay improvements) or shows the real screenshot via the new `Snapshot` mode with an A/B wipe slider.
+- Open `/owner/settings/communication` → see all providers with live status pills, no empty states for already-linked connectors (Gmail, Resend, ElevenLabs show **Connected** out of the gate).
+- Click **Connect** on Twilio → connector picker → channel tile flips to **Connected** within 3 seconds, no further forms.
+- Send yourself a Gmail → within 60 seconds it appears in `OwnerInbox`, and an AI draft appears under it; if `auto_send_enabled` is on, the reply is sent in your tone with a `is_ai_generated = true` row.
+- The "Add Channel" button reads clearly on first paint, no hover required. So do all other buttons across the site.
+- CI fails any future PR that introduces `bg-foreground text-foreground` or equivalent same-tone combos.

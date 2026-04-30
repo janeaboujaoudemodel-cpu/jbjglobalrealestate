@@ -61,6 +61,8 @@ const App = () => {
       event.preventDefault();
     };
     window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    // Install runtime same-tone contrast guard (companion to PASS 5 CSS guard)
+    import("@/utils/contrastGuard").then((m) => m.installContrastGuard()).catch(() => {});
     return () => window.removeEventListener("unhandledrejection", handleUnhandledRejection);
   }, []);
 

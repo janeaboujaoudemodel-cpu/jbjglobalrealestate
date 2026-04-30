@@ -18327,45 +18327,57 @@ export type Database = {
         Row: {
           assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
           channel_type: string
+          connection_id: string | null
           created_at: string
           credentials: Json | null
           display_name: string
+          failure_count: number
           id: string
           identifier: string
           is_active: boolean | null
+          last_error: string | null
           last_sync_at: string | null
           settings: Json | null
           sync_status: string | null
+          training_sample_count: number
           updated_at: string
           user_id: string
         }
         Insert: {
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
           channel_type: string
+          connection_id?: string | null
           created_at?: string
           credentials?: Json | null
           display_name: string
+          failure_count?: number
           id?: string
           identifier: string
           is_active?: boolean | null
+          last_error?: string | null
           last_sync_at?: string | null
           settings?: Json | null
           sync_status?: string | null
+          training_sample_count?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
           channel_type?: string
+          connection_id?: string | null
           created_at?: string
           credentials?: Json | null
           display_name?: string
+          failure_count?: number
           id?: string
           identifier?: string
           is_active?: boolean | null
+          last_error?: string | null
           last_sync_at?: string | null
           settings?: Json | null
           sync_status?: string | null
+          training_sample_count?: number
           updated_at?: string
           user_id?: string
         }
@@ -18460,45 +18472,54 @@ export type Database = {
           auto_link_leads: boolean | null
           auto_log_to_crm: boolean | null
           auto_send_enabled: boolean | null
+          confidence_threshold: number
           created_at: string
           default_assistant_type:
             | Database["public"]["Enums"]["comm_assistant_type"]
             | null
           id: string
           notification_settings: Json | null
+          training_corpus_size: number
           updated_at: string
           user_id: string
           voice_enabled: boolean | null
+          voice_reply_enabled: boolean
         }
         Insert: {
           ai_draft_by_default?: boolean | null
           auto_link_leads?: boolean | null
           auto_log_to_crm?: boolean | null
           auto_send_enabled?: boolean | null
+          confidence_threshold?: number
           created_at?: string
           default_assistant_type?:
             | Database["public"]["Enums"]["comm_assistant_type"]
             | null
           id?: string
           notification_settings?: Json | null
+          training_corpus_size?: number
           updated_at?: string
           user_id: string
           voice_enabled?: boolean | null
+          voice_reply_enabled?: boolean
         }
         Update: {
           ai_draft_by_default?: boolean | null
           auto_link_leads?: boolean | null
           auto_log_to_crm?: boolean | null
           auto_send_enabled?: boolean | null
+          confidence_threshold?: number
           created_at?: string
           default_assistant_type?:
             | Database["public"]["Enums"]["comm_assistant_type"]
             | null
           id?: string
           notification_settings?: Json | null
+          training_corpus_size?: number
           updated_at?: string
           user_id?: string
           voice_enabled?: boolean | null
+          voice_reply_enabled?: boolean
         }
         Relationships: []
       }
@@ -28498,6 +28519,18 @@ export type Database = {
           source?: string | null
           status?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      owner_comm_provider_status: {
+        Row: {
+          any_active: boolean | null
+          channel_count: number | null
+          channel_type: string | null
+          last_sync_at: string | null
+          total_training_samples: number | null
+          updated_at: string | null
+          user_id: string | null
         }
         Relationships: []
       }

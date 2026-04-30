@@ -3589,3 +3589,59 @@ a[class*="hover:bg-[#FDFBF7]"]:hover :is(span, svg),
 a[class*="hover:bg-white"]:hover :is(span, svg) {
   color: #1A1A1A !important;
 }
+
+/* ============================================================
+   PASS 5 — UNIVERSAL SAME-TONE CONTRAST GUARD (2026-04-30)
+   Catches "black-on-black" and "white-on-white" readability bugs
+   regardless of whether they originate from tokens, hex literals,
+   or parent/descendant cascading. Companion to runtime
+   contrastGuard.ts mounted in App.tsx.
+   Opt-out per element with [data-no-contrast-guard].
+   ============================================================ */
+
+/* Ink / dark surfaces — children inherit white text by default */
+.bg-foreground,
+.bg-black,
+.bg-\[\#1A1A1A\],
+.bg-\[\#0F172A\],
+[class*="bg-foreground"]:not([data-no-contrast-guard]),
+[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) {
+  color: #FDFBF7;
+}
+
+/* Force any child currently using same-tone text on dark surface to white */
+.bg-foreground :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
+.bg-black :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
+.bg-\[\#1A1A1A\] :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]),
+[class*="bg-[#1A1A1A]"]:not([data-no-contrast-guard]) :is(.text-foreground, .text-black, .text-\[\#1A1A1A\]) {
+  color: #FDFBF7 !important;
+}
+
+/* Champagne / light surfaces — children inherit ink text by default */
+.bg-\[\#FDFBF7\],
+.bg-\[\#F7F2EA\],
+.bg-\[\#EFE6D6\],
+[class*="bg-[#FDFBF7]"]:not([data-no-contrast-guard]),
+[class*="bg-[#F7F2EA]"]:not([data-no-contrast-guard]),
+[class*="bg-[#EFE6D6]"]:not([data-no-contrast-guard]) {
+  color: #1A1A1A;
+}
+
+/* Force any child currently using white-on-light to ink */
+.bg-\[\#FDFBF7\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]),
+.bg-\[\#F7F2EA\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]),
+.bg-\[\#EFE6D6\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#EFE6D6\]):not(.allow-white) {
+  color: #1A1A1A !important;
+}
+
+/* Gold surfaces — children inherit white text by default */
+.bg-\[\#B89555\],
+.bg-\[\#A68444\],
+[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-contrast-guard]) {
+  color: #FDFBF7;
+}
+
+/* Runtime guard signal class */
+.jbj-contrast-fix {
+  /* Marker only — actual color is set inline by contrastGuard.ts */
+}
