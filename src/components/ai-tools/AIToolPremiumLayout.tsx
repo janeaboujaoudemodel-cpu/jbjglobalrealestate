@@ -198,7 +198,6 @@ const AIToolPremiumLayout = ({
             className="flex justify-start"
           >
             <Button
-              variant="dark-outline"
               size="sm"
               onClick={() => {
                 const referrer = document.referrer;
@@ -209,7 +208,8 @@ const AIToolPremiumLayout = ({
                   navigate('/toolkit');
                 }
               }}
-              className="mb-6 relative z-10"
+              data-no-contrast-guard
+              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] hover:text-[#FDFBF7] border-2 border-[#FDFBF7]/30 hover:border-[#FDFBF7]/60"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

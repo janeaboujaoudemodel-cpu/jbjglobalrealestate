@@ -30,6 +30,7 @@ import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { prefetchAITool } from "@/utils/aiToolPrefetch";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -778,43 +779,31 @@ export default function GlobalVerticalNav() {
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
-    // Careers — Rose (distinct from all others)
-    if (item.href === '/join') {
+    // Unified highlighted hubs (AI Home Finder, List Your Property, Careers, Resale Properties)
+    // — all on the champagne+gold palette. No per-item color tint; no border framing on rest.
+    if (
+      item.href === '/join' ||
+      item.href === '/quiz' ||
+      (item.href === '/listing-portal' && item.highlight) ||
+      item.href === '/resale-properties'
+    ) {
       return shouldHighlight
-        ? "bg-rose-500 text-white border border-rose-400 font-bold"
-        : "bg-rose-50/80 text-rose-500 font-semibold hover:bg-rose-100/60 border border-rose-300/25";
-    }
-    // AI Home Finder — Violet
-    if (item.href === '/quiz') {
-      return shouldHighlight
-        ? "bg-violet-500 text-white border border-violet-400 font-bold"
-        : "bg-violet-50/80 text-violet-500 font-semibold hover:bg-violet-100/60 border border-violet-300/25";
-    }
-    // List Your Property — Sky Blue
-    if (item.href === '/listing-portal' && item.highlight) {
-      return shouldHighlight
-        ? "bg-sky-500 text-white border border-sky-400 font-bold"
-        : "bg-sky-50/80 text-sky-500 font-semibold hover:bg-sky-100/60 border border-sky-300/25";
-    }
-    // Resale Properties — Emerald
-    if (item.href === '/resale-properties') {
-      return shouldHighlight
-        ? "bg-emerald-500 text-white border border-emerald-400 font-bold"
-        : "bg-emerald-50/80 text-emerald-600 font-semibold hover:bg-emerald-100/60 border border-emerald-300/25";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/85 font-semibold hover:bg-gold/10";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10 border border-[#1A1A1A]/10";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/50 font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10 border border-[#1A1A1A]/10";
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
     }
     return shouldHighlight
-      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 font-bold"
-      : "text-[#1A1A1A]/80 hover:bg-gold/[0.08] hover:text-[#1A1A1A] border border-[#1A1A1A]/10 hover:border-gold/30";
+      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
+      : "text-[#1A1A1A]/80 hover:bg-gold/[0.08] hover:text-[#1A1A1A]";
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
@@ -829,10 +818,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    // Saturated colored row → white icon for legibility on the colored fill.
-    if (isSaturatedColorRow(item)) {
-      return shouldHighlight ? 'text-white' : 'text-white';
-    }
+    // (Highlighted hubs were previously saturated; now unified to gold — no white-on-color override.)
     // Active on champagne row → deeper gold for stronger contrast.
     if (shouldHighlight) return 'text-[hsl(var(--gold-dark))]';
     // Resting state → premium gold.
@@ -844,10 +830,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (isSaturatedColorRow(item)) {
-      // White-on-color tile so it doesn't fight the saturated row background
-      return 'bg-[#FDFBF7]/15 border border-white/45 group-hover:bg-[#FDFBF7]/25 group-hover:border-white/70';
-    }
+    // (Saturated-row override removed — all rows now share the gold tile.)
     if (shouldHighlight) {
       return 'bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/80 shadow-[0_0_0_1px_rgba(217,194,146,0.35)]';
     }
@@ -1144,6 +1127,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <Link
                 key={item.href + item.label + i}
                 to={item.href}
+                onMouseEnter={() => prefetchAITool(item.href)}
+                onFocus={() => prefetchAITool(item.href)}
                 onClick={(e) => {
                   if (hasMega) handleNavClick(item.megaMenu, e);
                   else handleNavClick(undefined);
@@ -1211,7 +1196,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <div
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-0.5 pt-1 pb-1.5">
+                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-1 pt-1 pb-1.5">
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -1220,6 +1205,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           <Link
                             key={item.href + item.label + i}
                             to={item.href}
+                            onMouseEnter={() => prefetchAITool(item.href)}
+                            onFocus={() => prefetchAITool(item.href)}
                             onClick={(e) => {
                               if (hasMega) {
                                 handleNavClick(item.megaMenu, e);
