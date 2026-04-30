@@ -386,7 +386,7 @@ export const BulkSendDialog = ({
                     <SelectTrigger className="h-7 text-xs w-[200px]"><SelectValue placeholder="Preview as…" /></SelectTrigger>
                     <SelectContent>
                       {selected.map((d) => (
-                        <SelectItem key={d.id} value={d.id} className="text-xs">{d.developer_name}</SelectItem>
+                        <SelectItem key={d.id} value={d.id} className="text-xs">{getName(d, entityType)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
