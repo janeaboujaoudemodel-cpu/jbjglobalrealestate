@@ -461,16 +461,16 @@ export default function OwnerDashboardOverview() {
   };
 
   return (
-    <div className="space-y-8 min-w-0 overflow-hidden">
+    <div className="space-y-8 min-w-0 overflow-hidden pt-6 md:pt-8">
       {/* Command Center Header */}
-      <div className="mb-4">
+      <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-1 h-8 bg-gradient-to-b from-[#B89555] to-[#B89555]/40 rounded-full" />
-          <h1 className="text-2xl md:text-3xl font-bold text-black tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] tracking-tight">
             Owner Command Center
           </h1>
         </div>
-        <p className="text-gray-600 mt-1 ml-4 text-sm md:text-base">
+        <p className="text-[#5A4A2E] mt-1 ml-4 text-sm md:text-base">
           Welcome back, Jane Bou Jaoude — Your integrated CRM dashboard
         </p>
       </div>
