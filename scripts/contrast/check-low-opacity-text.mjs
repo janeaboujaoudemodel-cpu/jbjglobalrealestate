@@ -23,11 +23,22 @@ import url from 'node:url';
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..', '..');
 const SRC = path.join(root, 'src');
+const allowlistPath = path.join(__dirname, 'allowlist.json');
 
 // Anything strictly below this is treated as effectively invisible body text.
 // 40 is the practical floor: text-white/40 on black is ~3.7:1, below AA but
 // readable for accents. Below 40 the glyphs disappear into the background.
 const MIN_TEXT_ALPHA = 40;
+
+// Pre-existing hits captured the day this rule was introduced; new
+// regressions are blocked but historical ones are tolerated until cleaned up.
+let BASELINE = new Set();
+try {
+  const al = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
+  BASELINE = new Set(al.lowOpacityTextBaseline?.entries ?? []);
+} catch {
+  // allowlist optional
+}
 
 // Match: text-<color>/<NN>  → capture the slash number.
 //   - color must look like a Tailwind color/token (letters, digits, hyphens)
