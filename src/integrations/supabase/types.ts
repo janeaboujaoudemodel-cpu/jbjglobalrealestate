@@ -4983,79 +4983,133 @@ export type Database = {
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
+          assigned_to: string | null
+          attempt_count: number
           company_name: string
           created_at: string
           deal_count: number
+          dnc_reason: string | null
+          do_not_contact: boolean
           emirate: string | null
           first_contact_at: string | null
+          health_score: number | null
           id: string
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
           last_interaction_at: string | null
+          last_outreach_at: string | null
+          last_response_at: string | null
+          linkedin_url: string | null
+          nda_signed_at: string | null
+          nda_status: Database["public"]["Enums"]["nda_status"]
+          next_action_at: string | null
+          next_action_note: string | null
           next_followup_at: string | null
           notes: string | null
           office_location: string | null
+          outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
+          outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           primary_contact: Json | null
           rera_license: string | null
+          response_count: number
           secondary_contact: Json | null
+          source: Database["public"]["Enums"]["outreach_source"]
+          source_detail: string | null
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
           total_deal_value: number
           updated_at: string
           website: string | null
+          whatsapp_e164: string | null
         }
         Insert: {
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
+          assigned_to?: string | null
+          attempt_count?: number
           company_name: string
           created_at?: string
           deal_count?: number
+          dnc_reason?: string | null
+          do_not_contact?: boolean
           emirate?: string | null
           first_contact_at?: string | null
+          health_score?: number | null
           id?: string
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
+          last_outreach_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          nda_signed_at?: string | null
+          nda_status?: Database["public"]["Enums"]["nda_status"]
+          next_action_at?: string | null
+          next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
           office_location?: string | null
+          outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
+          outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           primary_contact?: Json | null
           rera_license?: string | null
+          response_count?: number
           secondary_contact?: Json | null
+          source?: Database["public"]["Enums"]["outreach_source"]
+          source_detail?: string | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
           updated_at?: string
           website?: string | null
+          whatsapp_e164?: string | null
         }
         Update: {
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
+          assigned_to?: string | null
+          attempt_count?: number
           company_name?: string
           created_at?: string
           deal_count?: number
+          dnc_reason?: string | null
+          do_not_contact?: boolean
           emirate?: string | null
           first_contact_at?: string | null
+          health_score?: number | null
           id?: string
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
+          last_outreach_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          nda_signed_at?: string | null
+          nda_status?: Database["public"]["Enums"]["nda_status"]
+          next_action_at?: string | null
+          next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
           office_location?: string | null
+          outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
+          outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
           primary_contact?: Json | null
           rera_license?: string | null
+          response_count?: number
           secondary_contact?: Json | null
+          source?: Database["public"]["Enums"]["outreach_source"]
+          source_detail?: string | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
           updated_at?: string
           website?: string | null
+          whatsapp_e164?: string | null
         }
         Relationships: []
       }
@@ -5379,17 +5433,22 @@ export type Database = {
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
+          assigned_to: string | null
+          attempt_count: number
           commission_tier: string | null
           created_at: string
           developer_contact: Json | null
           developer_email: string | null
           developer_name: string
           developer_slug: string
+          dnc_reason: string | null
+          do_not_contact: boolean
           documents: Json | null
           emirate: string | null
           expiry_date: string | null
           field_sources: Json
           first_contact_at: string | null
+          health_score: number | null
           id: string
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
@@ -5397,37 +5456,54 @@ export type Database = {
           last_inbound_subject: string | null
           last_interaction_at: string | null
           last_outreach_at: string | null
+          last_response_at: string | null
+          linkedin_url: string | null
+          nda_signed_at: string | null
+          nda_status: Database["public"]["Enums"]["nda_status"]
+          next_action_at: string | null
+          next_action_note: string | null
           next_followup_at: string | null
           notes: string | null
+          outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
           outreach_count: number
+          outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           phone: string | null
           priority: string | null
           registration_date: string | null
           registration_url: string | null
           required_docs_complete: boolean
+          response_count: number
+          source: Database["public"]["Enums"]["outreach_source"]
+          source_detail: string | null
           status: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags: string[] | null
           uae_developer_id: string | null
           updated_at: string
           website: string | null
+          whatsapp_e164: string | null
         }
         Insert: {
           agency_code?: string | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
+          assigned_to?: string | null
+          attempt_count?: number
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
           developer_email?: string | null
           developer_name: string
           developer_slug: string
+          dnc_reason?: string | null
+          do_not_contact?: boolean
           documents?: Json | null
           emirate?: string | null
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          health_score?: number | null
           id?: string
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
@@ -5435,37 +5511,54 @@ export type Database = {
           last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          nda_signed_at?: string | null
+          nda_status?: Database["public"]["Enums"]["nda_status"]
+          next_action_at?: string | null
+          next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
+          outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           phone?: string | null
           priority?: string | null
           registration_date?: string | null
           registration_url?: string | null
           required_docs_complete?: boolean
+          response_count?: number
+          source?: Database["public"]["Enums"]["outreach_source"]
+          source_detail?: string | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
           uae_developer_id?: string | null
           updated_at?: string
           website?: string | null
+          whatsapp_e164?: string | null
         }
         Update: {
           agency_code?: string | null
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
+          assigned_to?: string | null
+          attempt_count?: number
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
           developer_email?: string | null
           developer_name?: string
           developer_slug?: string
+          dnc_reason?: string | null
+          do_not_contact?: boolean
           documents?: Json | null
           emirate?: string | null
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
+          health_score?: number | null
           id?: string
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
@@ -5473,20 +5566,32 @@ export type Database = {
           last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
+          last_response_at?: string | null
+          linkedin_url?: string | null
+          nda_signed_at?: string | null
+          nda_status?: Database["public"]["Enums"]["nda_status"]
+          next_action_at?: string | null
+          next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
+          outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
           phone?: string | null
           priority?: string | null
           registration_date?: string | null
           registration_url?: string | null
           required_docs_complete?: boolean
+          response_count?: number
+          source?: Database["public"]["Enums"]["outreach_source"]
+          source_detail?: string | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
           uae_developer_id?: string | null
           updated_at?: string
           website?: string | null
+          whatsapp_e164?: string | null
         }
         Relationships: [
           {
@@ -6399,6 +6504,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_outreach_tags: {
+        Row: {
+          category: string | null
+          color: string | null
+          created_at: string
+          id: string
+          label: string
+          owner_id: string
+        }
+        Insert: {
+          category?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          label: string
+          owner_id: string
+        }
+        Update: {
+          category?: string | null
+          color?: string | null
+          created_at?: string
+          id?: string
+          label?: string
+          owner_id?: string
+        }
+        Relationships: []
+      }
+      crm_outreach_touchpoints: {
+        Row: {
+          body_excerpt: string | null
+          channel: Database["public"]["Enums"]["outreach_channel"]
+          created_at: string
+          created_by: string | null
+          direction: Database["public"]["Enums"]["outreach_direction"]
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["outreach_entity_type"]
+          id: string
+          metadata: Json
+          occurred_at: string
+          owner_id: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          body_excerpt?: string | null
+          channel?: Database["public"]["Enums"]["outreach_channel"]
+          created_at?: string
+          created_by?: string | null
+          direction?: Database["public"]["Enums"]["outreach_direction"]
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["outreach_entity_type"]
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          owner_id: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body_excerpt?: string | null
+          channel?: Database["public"]["Enums"]["outreach_channel"]
+          created_at?: string
+          created_by?: string | null
+          direction?: Database["public"]["Enums"]["outreach_direction"]
+          entity_id?: string
+          entity_type?: Database["public"]["Enums"]["outreach_entity_type"]
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          owner_id?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       crm_owner_settings: {
         Row: {
@@ -29779,6 +29959,7 @@ export type Database = {
         | "bereavement"
         | "public_holiday"
       market_trend: "rising" | "falling" | "stable" | "volatile"
+      nda_status: "none" | "requested" | "sent" | "signed" | "expired"
       notification_type:
         | "system"
         | "event"
@@ -29793,6 +29974,34 @@ export type Database = {
         | "approved"
         | "rejected"
         | "expired"
+      outreach_channel:
+        | "email"
+        | "phone"
+        | "whatsapp"
+        | "linkedin"
+        | "in_person"
+        | "unknown"
+      outreach_direction: "outbound" | "inbound"
+      outreach_entity_type: "developer" | "brokerage"
+      outreach_source:
+        | "manual"
+        | "import"
+        | "referral"
+        | "website"
+        | "event"
+        | "cold_research"
+        | "inbound"
+      outreach_stage:
+        | "not_contacted"
+        | "attempted"
+        | "engaged"
+        | "meeting_booked"
+        | "nda_pending"
+        | "nda_signed"
+        | "active_partner"
+        | "dormant"
+        | "declined"
+        | "blacklisted"
       partnership_stage:
         | "submitted"
         | "admin_review"
@@ -30309,6 +30518,7 @@ export const Constants = {
         "public_holiday",
       ],
       market_trend: ["rising", "falling", "stable", "volatile"],
+      nda_status: ["none", "requested", "sent", "signed", "expired"],
       notification_type: [
         "system",
         "event",
@@ -30324,6 +30534,37 @@ export const Constants = {
         "approved",
         "rejected",
         "expired",
+      ],
+      outreach_channel: [
+        "email",
+        "phone",
+        "whatsapp",
+        "linkedin",
+        "in_person",
+        "unknown",
+      ],
+      outreach_direction: ["outbound", "inbound"],
+      outreach_entity_type: ["developer", "brokerage"],
+      outreach_source: [
+        "manual",
+        "import",
+        "referral",
+        "website",
+        "event",
+        "cold_research",
+        "inbound",
+      ],
+      outreach_stage: [
+        "not_contacted",
+        "attempted",
+        "engaged",
+        "meeting_booked",
+        "nda_pending",
+        "nda_signed",
+        "active_partner",
+        "dormant",
+        "declined",
+        "blacklisted",
       ],
       partnership_stage: [
         "submitted",
