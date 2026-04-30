@@ -42,57 +42,62 @@ All colors MUST be HSL.
   :root {
     /* Responsive header height — used by mobile menu Sheet positioning */
     --responsive-header-height: 96px;
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    /* ============================================================
+     * CHAMPAGNE / GOLD GLOBAL THEME (replaces white-monochrome)
+     * Page #FDFBF7 · surface #F7F2EA · raised #EFE6D6 · gold #B89555
+     * ============================================================ */
+    --background: 36 50% 98%;       /* #FDFBF7 */
+    --foreground: 0 0% 10%;          /* #1A1A1A — body text on champagne */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --card: 36 50% 98%;
+    --card-foreground: 0 0% 10%;
 
-    /* PRIMARY: Black accent on white */
-    --primary: 0 0% 7%;
+    --popover: 36 50% 98%;
+    --popover-foreground: 0 0% 10%;
+
+    /* PRIMARY: solid black still wins for CTA contrast on champagne */
+    --primary: 0 0% 10%;
     --primary-foreground: 0 0% 100%;
 
-    /* Active gradient — light */
-    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 96%), hsl(0 0% 98%), hsl(0 0% 100%));
+    /* Active gradient — champagne */
+    --jj-gradient-active: linear-gradient(135deg, hsl(36 38% 88%), hsl(36 40% 94%), hsl(36 50% 98%));
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 7%;
+    --secondary: 36 40% 94%;         /* #F7F2EA */
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 36 40% 94%;
+    --muted-foreground: 33 35% 27%;  /* warm brown — replaces gray-500 */
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 7%;
+    --accent: 36 38% 88%;            /* #EFE6D6 */
+    --accent-foreground: 0 0% 10%;
 
-    --destructive: 0 0% 7%;
+    --destructive: 0 0% 10%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 0 0% 7%;
+    --border: 40 35% 65%;            /* gold border */
+    --input: 40 35% 65%;
+    --ring: 40 35% 53%;              /* gold ring */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 30%;
-    --sidebar-primary: 0 0% 7%;
+    --sidebar-background: 36 50% 98%;
+    --sidebar-foreground: 33 35% 27%;
+    --sidebar-primary: 40 35% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 7%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 7%;
+    --sidebar-accent: 36 40% 94%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 40 35% 65%;
+    --sidebar-ring: 40 35% 53%;
 
-    /* Monochrome accent — dark for contrast on white */
-    --gold: 0 0% 10%;
-    --gold-light: 0 0% 30%;
-    --gold-dark: 0 0% 7%;
-    --gold-muted: 0 0% 45%;
+    /* Gold accent — RESTORED to real champagne-gold */
+    --gold: 40 35% 53%;              /* #B89555 */
+    --gold-light: 40 38% 62%;
+    --gold-dark: 36 40% 40%;         /* #A68444 */
+    --gold-muted: 33 30% 55%;
     --gold-foreground: 0 0% 100%;
 
-    /* Premium Orange — property prices */
+    /* Premium Orange — property prices (unchanged) */
     --price-orange: 24 95% 53%;
     --price-orange-glow: 24 95% 58%;
 
@@ -100,32 +105,22 @@ All colors MUST be HSL.
     --handover-gold: 38 70% 45%;
     --handover-gold-glow: 42 85% 55%;
 
-    /* Champagne replaced with light surfaces */
-    --champagne-1: 0 0% 98%;
-    --champagne-2: 0 0% 96%;
-    --champagne-3: 0 0% 93%;
+    /* Champagne tiers (now true champagne) */
+    --champagne-1: 36 50% 98%;
+    --champagne-2: 36 40% 94%;
+    --champagne-3: 36 38% 88%;
 
-    /* ─── Hairline / divider tokens ─────────────────────────────
-     * Section-divider hairlines on dark surfaces:
-     *   - Always render via <AdaptiveHairline /> (src/components/ui/AdaptiveHairline.tsx)
-     *   - Tokens below are the SOURCE OF TRUTH; do not inline new
-     *     rgba(200,167,102,…) gradients in components.
-     * RGB triplets compose into rgba(...) inside gradient strings.
-     * Alphas are baseline values that useAdaptiveHairline scales
-     * per underlay luminance.
-     * Mirrored in TS at src/styles/hairlineTokens.ts.
-     */
-    --hairline-champagne-rgb: 200, 167, 102; /* #C8A766 — brand champagne */
+    /* ─── Hairline / divider tokens ───────────────────────────── */
+    --hairline-champagne-rgb: 184, 149, 85;  /* #B89555 — primary gold */
     --hairline-white-rgb: 255, 255, 255;
-    --hairline-ink-rgb: 10, 9, 8; /* obsidian footer surface */
+    --hairline-ink-rgb: 10, 9, 8;
 
     --hairline-alpha-white: 0.14;
     --hairline-alpha-white-soft: 0.10;
     --hairline-alpha-gold: 0.35;
     --hairline-alpha-gold-peak: 0.40;
 
-    /* Static fallbacks for SSR / non-adaptive contexts */
-    --hairline-static-gold: rgba(200, 167, 102, 0.35);
+    --hairline-static-gold: rgba(184, 149, 85, 0.35);
     --hairline-static-white: rgba(255, 255, 255, 0.14);
 
     /* ============================================================
@@ -134,29 +129,29 @@ All colors MUST be HSL.
     --jj-content-max: 1600px;
     --jj-gutter: 0.125rem;
 
-    /* Pearl — light surfaces */
-    --pearl-1: 0 0% 97%;
-    --pearl-2: 0 0% 95%;
-    --pearl-3: 0 0% 92%;
+    /* Pearl — champagne tiers */
+    --pearl-1: 36 50% 98%;
+    --pearl-2: 36 40% 94%;
+    --pearl-3: 36 38% 88%;
 
-    /* Premium surfaces — white dominant */
-    --premium-bg: 0 0% 98%;
-    --premium-card: 0 0% 100%;
-    --premium-card-border: 0 0% 85%;
+    /* Premium surfaces — champagne */
+    --premium-bg: 36 50% 98%;
+    --premium-card: 36 50% 98%;
+    --premium-card-border: 40 35% 65%;
 
-    /* CRM Theme — white dominant */
-    --crm-bg: 0 0% 98%;
-    --crm-card: 0 0% 100%;
-    --crm-card-border: 0 0% 85%;
-    --crm-text: 0 0% 7%;
-    --crm-text-muted: 0 0% 45%;
-    --crm-highlight: 0 0% 96%;
+    /* CRM Theme — champagne */
+    --crm-bg: 36 50% 98%;
+    --crm-card: 36 50% 98%;
+    --crm-card-border: 40 35% 65%;
+    --crm-text: 0 0% 10%;
+    --crm-text-muted: 33 35% 27%;
+    --crm-highlight: 36 40% 94%;
 
-    /* Suit accent — subtle gray */
-    --jj-suit: 0 0% 90%;
-    --jj-suit-dark: 0 0% 85%;
+    /* Suit accent — champagne raised */
+    --jj-suit: 36 38% 88%;
+    --jj-suit-dark: 40 35% 65%;
 
-    /* AI Theme — premium purple */
+    /* AI Theme — premium purple (unchanged) */
     --ai-purple: 262 83% 58%;
     --ai-purple-dark: 263 70% 50%;
     --ai-fuchsia: 292 84% 61%;
@@ -167,11 +162,11 @@ All colors MUST be HSL.
     --ai-glow: 0 0% 60%;
 
     /* Listing badges */
-    --handover: 0 0% 7%;
+    --handover: 0 0% 10%;
     --handover-foreground: 0 0% 100%;
 
     /* Image overlay controls */
-    --overlay: 0 0% 7%;
+    --overlay: 0 0% 10%;
     --overlay-foreground: 0 0% 100%;
   }
 
