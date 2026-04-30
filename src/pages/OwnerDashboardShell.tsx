@@ -124,7 +124,7 @@ const OwnerDashboardShell = () => {
         role="main"
       >
         {/* Top Bar - always horizontal, never vertical stacking */}
-        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
+        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
               <Button

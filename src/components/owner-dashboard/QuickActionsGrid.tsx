@@ -72,7 +72,10 @@ export default function QuickActionsGrid() {
                   </span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-[#1A1A1A] text-white text-xs border-none">
+              <TooltipContent
+                side="bottom"
+                className="bg-[#1A1A1A] text-xs border border-[#B89555]/40 [&_*]:!text-[#FDFBF7] !text-[#FDFBF7]"
+              >
                 {action.description}
               </TooltipContent>
             </Tooltip>
