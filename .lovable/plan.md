@@ -1,61 +1,157 @@
-# CRM Relationships – Button Contrast & Brokerage Auto-Fill
+# Expand Dev Before/After Toggle to Show Full Pre-Refactor State
 
-## Part 1 — Fix button + tab contrast (global)
+## Problem
 
-The "Add Brokerage" button currently uses `variant="primary"`, which renders as solid black on the champagne page. On hover it shifts to gold, but at rest the icon/text-on-black tile reads as a heavy "all-black slab." The active tab also turns into a solid black pill which reads as a hole on champagne. We will:
+The floating **DEV · Before / After** chip (bottom-right, owner-only, beneath the chat support button — `src/components/dev/DevStyleToggle.tsx`, hotkey Shift+B) flips `<html data-style-mode="before|after">`. The matching overlay (`src/styles/dev-before-overlay.css`) currently rewrites only ~8 rules:
 
-1. **Repaint the "Add Brokerage" CTA on this page** to `variant="gold"` (solid `#B89555` with white text + gold deep on hover). This matches Owner Command Center primary-action tiles and removes the all-black look.
-2. **Audit & repaint other "primary" CTAs sitting next to `outline`/champagne controls** in the same file (Add Brokerage, Add Developer, any "Save" / "Apply" inside this hub) to `variant="gold"` so the dominant action is gold, not pure ink.
-3. **Fix tab triggers** in `CRMRelationships.tsx` (Brokerages / Developer Registry):
-   - Active state: `bg-[#B89555] text-white` (gold) with subtle ring instead of solid `#1A1A1A`.
-   - Inactive state: `text-[#1A1A1A]` (was `#5A4A2E` faded).
-   - Hover state: `bg-[#EFE6D6] text-[#1A1A1A]` (was a 5% black wash that looked white-on-white).
-4. **Repeat audit globally** — search for the same TabsTrigger pattern (`data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white`) and the same contrast issue and replace with the new gold-active recipe everywhere it appears (Owner Dashboard tabs, CRM tabs, Marketing Hub tabs, etc.). This standardizes "active tab = gold" across the app.
-5. **Update memory** (`mem://ui-ux/visual-standards/segmented-control-tab-standard`) to record the new gold-active rule so future tabs follow it automatically.
+- Body/list opacity 0.8
+- Eyebrow tracking 0.05em
+- H2 sized down to 1.5rem
+- H3 weight 500
+- Faded gold on chips
+- White-on-image dimmed
+- Drop-shadow stripped
+- Hero composite reverted
 
-## Part 2 — Auto-fill UAE brokerage directory + owner-added separation
+But over the last several rollouts we changed *far* more: champagne surfaces, IconTile primitive, gold-active tabs/CTAs, price-orange, semantic data colors (emerald/red/blue/amber), adaptive hairlines, AI purple gradients, footer obsidian, header L-frame offsets, white→champagne backgrounds, gray→ink text, etc. None of that gets reverted when toggling Before, so reviewers only see a sliver of what actually changed.
 
-Currently the brokerage tab is empty unless the owner manually clicks "Add Brokerage". The user wants:
+## Goal
 
-- The brokerage list to **auto-populate with all UAE brokerages** (across all 7 emirates).
-- Brokerages the owner **personally adds** to live in a separate logical bucket.
-- If an owner-added brokerage matches one already in the seed directory, both rows are kept: the seeded one is **highlighted as "Already in Directory"** and the owner copy moves into an **"Existing" tab** (mirroring the developer registry pattern).
+When the owner toggles **Before**, the page must visually match the pre-refactor build as closely as a CSS-only overlay can. Side-by-side review (current build in another tab/window with overlay off) then reflects the *full* diff of every rollout.
 
-### Plan
+Scope: presentation only — no layout, structural, or routing changes. Owner-only; production gate (`import.meta.env.DEV` + owner check) stays.
 
-1. **Database**
-   - Add column `crm_brokerages.source text default 'owner'` with values `'owner' | 'directory'`.
-   - Add column `crm_brokerages.is_existing_match boolean default false` for highlighting.
-   - Add column `crm_brokerages.match_directory_id uuid` (self-FK) linking an owner row to its directory twin.
-   - Seed `source='directory'` rows for the UAE: expand the existing 47 to a comprehensive UAE-wide list (~150+ brokerages across Dubai, Abu Dhabi, Sharjah, Ajman, RAK, Fujairah, UAQ) using public RERA/ADREC names. Owner_id will be set to the project owner so RLS lets the owner read them; they are flagged `source='directory'` so they cannot be edited or deleted by the owner UI.
-   - Add a DB trigger `on insert/update of crm_brokerages` (when `source='owner'`) that fuzzy-matches `company_name` (lower/normalized) against existing `source='directory'` rows. If a match is found, set `is_existing_match=true` and `match_directory_id` on the owner row, and set `is_existing_match=true` on the directory row.
+## Plan
 
-2. **UI — `CRMRelationships.tsx` BrokeragesTab**
-   - Add a sub-tab strip inside the Brokerages tab: **All / Directory (UAE) / My Additions / Existing Matches**.
-     - **Directory (UAE)** — read-only cards (`source='directory'`), grouped by emirate, with the new emirate filter.
-     - **My Additions** — `source='owner'`, fully editable.
-     - **Existing Matches** — owner rows where `is_existing_match=true`, shown with a gold "Already in Directory" badge and a link to open the directory twin.
-     - **All** — combined view; directory rows that have a matching owner row get a gold "Owner-added" pill; owner rows that match a directory entry get the "Already in Directory" pill.
-   - Add the **Emirates filter** (Dubai / Abu Dhabi / Sharjah / Ajman / RAK / Fujairah / UAQ / All) above the search.
-   - Card visual: directory rows get a subtle gold left-border accent; owner rows keep the standard champagne card.
+### 1. Audit what "before" should look like
 
-3. **Mutation rules**
-   - `Add Brokerage` always inserts with `source='owner'`. The trigger handles match detection — no client-side dedupe required.
-   - Disable edit/delete on directory rows in the UI (action buttons hidden when `source='directory'`); owner can still attach notes/reminders.
+Cross-reference recent memory entries to enumerate every visual rollout that needs reverting:
 
-4. **Counts & badges**
-   - Tab labels show counts: `Directory (UAE) · 150`, `My Additions · N`, `Existing Matches · N`.
-   - This mirrors the Developer Registry "merge into Not Started + show as existing" pattern already shipped, so behavior is consistent across both registries.
+- Champagne surfaces: page #FDFBF7, surface #F7F2EA, raised #EFE6D6 → revert to plain white / `bg-background`
+- IconTile primitive (gold/emerald/red/blue/amber/purple/rose/ink tones) → bare lucide stroke in `text-muted-foreground`
+- Gold-active TabsTrigger (`bg-[#B89555] text-white`) → previous `bg-primary text-primary-foreground` look
+- Gold CTA buttons → previous black/primary buttons
+- `--price-orange` token on prices → previous `text-foreground`
+- Semantic data colors on KPIs → previous neutral
+- AI purple gradient surfaces → previous gold/teal cards
+- Adaptive hairlines (`<AdaptiveHairline />`) → flat `border-t border-border`
+- Footer obsidian + champagne hairline → previous mixed footer
+- Headings (Inter weights, ink #1A1A1A) → previous lighter tracking
+- Gray-to-ink swaps (`text-gray-*` removed, `text-[#1A1A1A]` applied) → revert to `text-zinc-500/600`
+- White-on-light contrast guard wins → re-allow faded white
+- Faded gold prohibition → re-allow `text-gold/60`
 
-## Technical notes
+### 2. Rewrite `src/styles/dev-before-overlay.css`
 
-- Files to edit:
-  - `src/pages/CRMRelationships.tsx` (tab triggers, BrokeragesTab subtabs, Add button variant, emirate filter, badge rendering).
-  - Optional sweep: `src/components/admin/*Tabs*`, `src/pages/Owner*` for the same `data-[state=active]:bg-[#1A1A1A]` pattern.
-  - `mem://ui-ux/visual-standards/segmented-control-tab-standard` (rule update).
-- New migration: adds `source`, `is_existing_match`, `match_directory_id`, the match trigger, then seeds the UAE directory rows.
-- `useCRMRelationships.ts` hook gains a `source` filter argument; existing query becomes parameterized.
+Group rules into clearly-labeled sections. All rules are `!important`-scoped under `html[data-style-mode="before"]`. Use attribute selectors that match the literal classnames/tokens we've shipped, so the overlay catches them without touching JSX:
 
-## Out of scope
+```text
+/* SURFACES */
+html[data-style-mode="before"] [class*="bg-[#FDFBF7]"],
+html[data-style-mode="before"] [class*="bg-[#F7F2EA]"],
+html[data-style-mode="before"] [class*="bg-[#EFE6D6]"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
 
-- Email-preview wrap fix, Send Test button, brokerage card refresh visuals, and the Export Center remain on the previously-approved roadmap and are not part of this turn.
+/* INK TEXT → muted gray */
+html[data-style-mode="before"] [class*="text-[#1A1A1A]"] {
+  color: #3f3f46 !important; /* zinc-700 */
+}
+
+/* GOLD ACTIVE TABS → pre-refactor primary */
+html[data-style-mode="before"] [data-state="active"][class*="bg-[#B89555]"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* GOLD CTAs → previous black */
+html[data-style-mode="before"] button[class*="bg-[#B89555]"],
+html[data-style-mode="before"] a[class*="bg-[#B89555]"] {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+/* ICON TILES → bare icons */
+html[data-style-mode="before"] [data-icon-tile] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+html[data-style-mode="before"] [data-icon-tile] svg {
+  color: #71717a !important; /* zinc-500 */
+}
+
+/* PRICE ORANGE → neutral */
+html[data-style-mode="before"] [style*="--price-orange"],
+html[data-style-mode="before"] [class*="text-[hsl(var(--price-orange))]"] {
+  color: #18181b !important; /* zinc-900 */
+}
+
+/* SEMANTIC DATA COLORS → neutral */
+html[data-style-mode="before"] [class*="text-emerald-"],
+html[data-style-mode="before"] [class*="text-amber-"],
+html[data-style-mode="before"] [class*="text-blue-"],
+html[data-style-mode="before"] [class*="text-red-"] {
+  color: #52525b !important;
+}
+
+/* AI PURPLE → previous gold/teal */
+html[data-style-mode="before"] [class*="from-violet-"],
+html[data-style-mode="before"] [class*="to-purple-"],
+html[data-style-mode="before"] [class*="bg-violet-"] {
+  background-image: none !important;
+  background-color: rgba(184, 149, 106, 0.08) !important;
+}
+
+/* ADAPTIVE HAIRLINES → flat */
+html[data-style-mode="before"] [data-adaptive-hairline] {
+  background: hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+/* FOOTER OBSIDIAN → previous footer */
+html[data-style-mode="before"] footer[data-footer="corporate"] {
+  background-color: #ffffff !important;
+  color: #3f3f46 !important;
+}
+```
+
+(Rules above are illustrative; the implementation file will list each rollout with a comment header.)
+
+### 3. Add a small data-attribute hook to `IconTile` and `AdaptiveHairline`
+
+These primitives are unique opt-ins to the new design language, so we add `data-icon-tile=""` and `data-adaptive-hairline=""` to their root elements. This is a one-line, non-visual change per file and gives the overlay a precise selector instead of brittle classname matching.
+
+Files:
+- `src/components/ui/icon-tile.tsx` (add `data-icon-tile=""` on root)
+- The component(s) implementing `<AdaptiveHairline />` (add `data-adaptive-hairline=""`)
+
+### 4. Footer marker
+
+Add `data-footer="corporate"` to the corporate footer root so the overlay can revert it without false positives. (One line in `src/components/Footer.tsx`.)
+
+### 5. Keep the existing rules
+
+Don't drop the current 8 rules — fold them into the new file under their own labeled section ("Typography (original v1)").
+
+### 6. Visual badge & hotkey unchanged
+
+Keep the floating "BEFORE" pill, Shift+B hotkey, collapse button, and localStorage persistence as-is.
+
+## Files Changed
+
+- `src/styles/dev-before-overlay.css` — rewritten with the full set of rollout-revert rules grouped by section
+- `src/components/ui/icon-tile.tsx` — add `data-icon-tile=""`
+- `src/components/Footer.tsx` — add `data-footer="corporate"`
+- `src/components/ui/AdaptiveHairline.tsx` (or wherever it lives) — add `data-adaptive-hairline=""`
+
+No JSX/structural changes elsewhere. No new components. No DB. Owner-only gate stays.
+
+## Out of Scope
+
+- Reproducing the *exact* pre-refactor pixel output (impossible from CSS alone)
+- Reverting layout-level changes (header L-frame offset, sidebar widths). These are structural and not safe to flip via CSS.
+- Adding the toggle to non-owner users.

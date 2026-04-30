@@ -43,6 +43,8 @@ export const AdaptiveHairline = ({
     <div
       ref={ref}
       aria-hidden="true"
+      data-adaptive-hairline=""
+      data-hairline-variant={variant}
       className={cn("h-px w-full", className)}
       style={{ background: bg }}
     />
