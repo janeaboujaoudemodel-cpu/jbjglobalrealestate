@@ -664,8 +664,12 @@ const DeveloperRegistryTab = () => {
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
 
-  // Split base data into pools: queue (never contacted) vs history (contacted or registered)
-  const queuePool = useMemo(() => data.filter((r: any) => !r.last_outreach_at && r.status !== "registered"), [data]);
+  // Outreach Queue = every non-registered developer (Not Started, Pending Application,
+  // Documents Required, Under Review, Rejected, Expired). The previous rule used
+  // `!last_outreach_at` which incorrectly hid the 24 Pending Application records as
+  // soon as a first email had been sent. Sent History keeps everything that has
+  // received an email plus all Registered developers.
+  const queuePool = useMemo(() => data.filter((r: any) => r.status !== "registered"), [data]);
   const historyPool = useMemo(() => data.filter((r: any) => !!r.last_outreach_at || r.status === "registered"), [data]);
 
   const filtered = useMemo(() => queuePool.filter((r: any) => {
