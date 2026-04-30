@@ -484,32 +484,59 @@ const BrokeragesTab = () => {
                     <div className="text-xs text-[#5A4A2E] space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
-                      {r.office_location && <div>{r.office_location}</div>}
+                      {(r.office_address || r.office_location) && <div>{r.office_address || r.office_location}</div>}
+                      {(r.email || r.primary_contact?.email) && <div>{r.email || r.primary_contact?.email}</div>}
+                      {(r.phone || r.primary_contact?.phone) && <div>{r.phone || r.primary_contact?.phone}</div>}
                       {r.primary_contact?.name && (
                         <div className="font-medium text-[#1A1A1A]">
-                          Contact: {r.primary_contact.name} {r.primary_contact.role && `· ${r.primary_contact.role}`}
-                          {r.primary_contact.phone && ` · ${r.primary_contact.phone}`}
+                          Primary: {r.primary_contact.name}{r.primary_contact.role ? ` · ${r.primary_contact.role}` : ""}
+                        </div>
+                      )}
+                      {r.secondary_contact?.name && (
+                        <div className="font-medium text-[#1A1A1A]">
+                          Secondary: {r.secondary_contact.name}{r.secondary_contact.role ? ` · ${r.secondary_contact.role}` : ""}
                         </div>
                       )}
                     </div>
+
+                    {/* KPI strip — readable champagne palette, never white-on-white */}
+                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+                      {[
+                        { label: "Brokers", value: r.active_broker_count || 0 },
+                        { label: "Inquiries", value: r.inquiry_count || 0 },
+                        { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
+                        { label: "Total (AED)", value: Number(r.total_deal_value_cached || 0).toLocaleString() },
+                        { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
+                      ].map((k) => (
+                        <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
+                          <div className="text-[9px] uppercase tracking-wider text-[#5A4A2E] font-semibold">{k.label}</div>
+                          <div className="text-sm font-bold text-[#1A1A1A]">{k.value}</div>
+                        </div>
+                      ))}
+                    </div>
+
                     {r.ai_next_action && (
-                      <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
-                        <Sparkles className="w-3 h-3 inline mr-1 text-purple-600" />
-                        <span className="font-medium text-purple-900">{r.ai_next_action}</span>
+                      <div className="mt-2 p-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded text-xs">
+                        <Sparkles className="w-3 h-3 inline mr-1 text-[#B89555]" />
+                        <span className="font-medium text-[#1A1A1A]">{r.ai_next_action}</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    <Button size="sm" variant="outline" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
+                  <div className="flex flex-wrap gap-1.5 items-start">
+                    <LeadAIStar entityType="brokerage" entityId={r.id} entityName={r.company_name} />
+                    <Button size="sm" variant="secondary" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
                       <Sparkles className="w-3 h-3 mr-1" />AI
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => quickReminder(r)}>
+                    <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
                     {!isDirectory && (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
-                        <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
+                        <Button size="sm" variant="gold" onClick={() => setDealOpen({ id: r.id, name: r.company_name })}>
+                          <Trophy className="w-3 h-3 mr-1" />Register Deal
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>Edit</Button>
+                        <Button size="sm" variant="secondary" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
                           <Trash2 className="w-3 h-3" />
                         </Button>
                       </>
