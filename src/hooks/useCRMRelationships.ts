@@ -128,44 +128,78 @@ export const useImportAllDevelopersToRegistry = () => {
   const qc = useQueryClient();
   const { user } = useAuth();
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (opts: { silent?: boolean } = {}) => {
       if (!user) throw new Error("Not signed in");
+      const silent = !!opts.silent;
 
       const slugify = (n: string) =>
         n.toLowerCase().replace(/[^a-z0-9 -]/g, "").replace(/\s+/g, "-");
+
+      // Fetch the existing registry so we can dedupe by NAME (not just slug),
+      // preventing aliases like "aldar" / "aldar-properties" / "developed-by-aldar-properties"
+      // from creating multiple cards for the same developer.
+      const existingNames = new Set<string>();
+      const existingSlugs = new Set<string>();
+      {
+        const PAGE = 1000;
+        let from = 0;
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { data, error } = await supabase
+            .from("crm_developer_registry")
+            .select("developer_name, developer_slug")
+            .eq("owner_id", user.id)
+            .range(from, from + PAGE - 1);
+          if (error) throw error;
+          (data || []).forEach((r: any) => {
+            if (r.developer_name) existingNames.add(String(r.developer_name).trim().toLowerCase());
+            if (r.developer_slug) existingSlugs.add(String(r.developer_slug).toLowerCase());
+          });
+          if (!data || data.length < PAGE) break;
+          from += PAGE;
+        }
+      }
 
       const PAGE = 1000;
       let from = 0;
       let imported = 0;
       let scanned = 0;
 
-      // Persistent loading toast — updates with progress, dismissed on completion.
-      const toastId = toast.loading("Starting import…", {
-        description: "Fetching the developer catalog.",
+      const toastId = silent ? undefined : toast.loading("Syncing developer catalog…", {
+        description: "Adding any missing developers to your registry.",
       });
 
       try {
-        // Page through the catalog (Supabase caps a single request at 1000 rows).
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const { data: devs, error } = await supabase
             .from("developers")
-            .select("name, slug, website_url")
+            .select("name, slug, website_url, headquarters, logo_url, logo_url_processed, logo_url_dark")
             .or("is_hidden.is.null,is_hidden.eq.false")
             .order("name", { ascending: true })
             .range(from, from + PAGE - 1);
           if (error) throw error;
           if (!devs || devs.length === 0) break;
-
           scanned += devs.length;
 
           const rows = devs
             .filter((d: any) => d.name && String(d.name).trim().length > 0)
+            .filter((d: any) => {
+              const nameKey = String(d.name).trim().toLowerCase();
+              const slugKey = (d.slug && d.slug.length > 0 ? d.slug : slugify(d.name)).toLowerCase();
+              if (existingNames.has(nameKey) || existingSlugs.has(slugKey)) return false;
+              // Mark as taken so two catalog rows with the same normalized name don't both insert.
+              existingNames.add(nameKey);
+              existingSlugs.add(slugKey);
+              return true;
+            })
             .map((d: any) => ({
               owner_id: user.id,
               developer_name: d.name,
               developer_slug: d.slug && d.slug.length > 0 ? d.slug : slugify(d.name),
               website: d.website_url ?? null,
+              office_address: d.headquarters ?? null,
+              logo_url: d.logo_url_processed ?? d.logo_url ?? d.logo_url_dark ?? null,
               developer_contact: {},
               status: "not_started",
               required_docs_complete: false,
@@ -183,33 +217,36 @@ export const useImportAllDevelopersToRegistry = () => {
             imported += rows.length;
           }
 
-          toast.loading(`Importing developers… ${imported.toLocaleString()} of ${scanned.toLocaleString()}`, {
+          if (toastId) toast.loading(`Syncing developers… ${imported.toLocaleString()} added`, {
             id: toastId,
-            description: "Adding missing entries to your registry.",
           });
 
           if (devs.length < PAGE) break;
           from += PAGE;
         }
 
-        return { imported, scanned, toastId };
+        return { imported, scanned, toastId, silent };
       } catch (e) {
-        // Surface error on the same toast slot so the user sees it inline.
-        toast.error("Import failed", {
+        if (toastId) toast.error("Sync failed", {
           id: toastId,
           description: (e as any)?.message || "Please try again in a moment.",
         });
         throw e;
       }
     },
-    onSuccess: ({ imported, scanned, toastId }) => {
+    onSuccess: ({ imported, scanned, toastId, silent }) => {
       qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
-      toast.success(`Import complete — ${imported.toLocaleString()} of ${scanned.toLocaleString()} developers ready`, {
-        id: toastId,
-        description: "Existing curated entries were preserved.",
-      });
+      if (toastId && !silent) {
+        if (imported > 0) {
+          toast.success(`Synced ${imported.toLocaleString()} new developer${imported === 1 ? "" : "s"}`, {
+            id: toastId,
+            description: `${scanned.toLocaleString()} catalog entries scanned. Duplicates skipped.`,
+          });
+        } else {
+          toast.success("Registry already up to date", { id: toastId });
+        }
+      }
     },
-    // Error toast is already shown inside mutationFn so we have a single, stable toast slot.
     onError: () => {},
   });
 };
