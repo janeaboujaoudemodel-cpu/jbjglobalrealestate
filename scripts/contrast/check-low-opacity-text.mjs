@@ -64,12 +64,21 @@ function check() {
       if (line.includes('contrast-ok')) return;
       const segments = line.split(/['"`]|\?|,|\$\{|\}/);
       for (const seg of segments) {
+        // Skip segments where the low alpha is part of a state-driven
+        // reveal pattern (hover/focus/peer/group/data-state) — these are
+        // intentionally invisible at rest and become visible via a paired
+        // *:opacity-100 / *:text-…/100 utility.
+        const hasRevealPair =
+          /(?:hover|focus|focus-visible|focus-within|active|peer-[a-z]+|group-[a-z]+|data-\[[^\]]+\]|aria-\w+|open|in|has-\[[^\]]+\]):(?:opacity-\d{2,3}|opacity-100|text-[a-z][a-z0-9-]*\/\d{2,3})/.test(
+            seg,
+          );
+
         // 1) text-foo/NN
         let m;
         TEXT_ALPHA_RE.lastIndex = 0;
         while ((m = TEXT_ALPHA_RE.exec(seg))) {
           const alpha = Number(m[1]);
-          if (alpha < MIN_TEXT_ALPHA) {
+          if (alpha < MIN_TEXT_ALPHA && !hasRevealPair) {
             violations.push({
               file: path.relative(root, file),
               line: idx + 1,
@@ -79,8 +88,8 @@ function check() {
           }
         }
 
-        // 2) opacity-[0.NN] applied to a text element
-        if (HAS_TEXT_UTIL_RE.test(seg)) {
+        // 2) opacity-[0.NN] / opacity-NN applied to a text element
+        if (HAS_TEXT_UTIL_RE.test(seg) && !hasRevealPair) {
           OPACITY_BRACKET_RE.lastIndex = 0;
           while ((m = OPACITY_BRACKET_RE.exec(seg))) {
             const alphaPct = m[1].length === 1 ? Number(m[1]) * 10 : Number(m[1]);
