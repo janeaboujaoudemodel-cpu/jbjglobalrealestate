@@ -279,20 +279,31 @@ const BrokeragesTab = () => {
   const upsertReminder = useUpsertReminder();
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [emirateFilter, setEmirateFilter] = useState("all");
+  const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+
+  const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
+  const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
+  const existingCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner" && r.is_existing_match).length, [data]);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.company_name?.toLowerCase().includes(q.toLowerCase()) || r.primary_contact?.name?.toLowerCase?.().includes(q.toLowerCase());
     const matchesS = statusFilter === "all" || r.status === statusFilter;
-    return matchesQ && matchesS;
-  }), [data, q, statusFilter]);
+    const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
+    let matchesSource = true;
+    if (sourceTab === "directory") matchesSource = r.entry_source === "directory";
+    else if (sourceTab === "owner") matchesSource = r.entry_source === "owner";
+    else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
+    return matchesQ && matchesS && matchesE && matchesSource;
+  }), [data, q, statusFilter, emirateFilter, sourceTab]);
 
-  const openNew = () => { setEditing({ status: "prospect", primary_contact: {}, secondary_contact: {} }); setOpen(true); };
+  const openNew = () => { setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {} }); setOpen(true); };
   const openEdit = (r: any) => { setEditing(r); setOpen(true); };
 
   const save = async () => {
-    await upsert.mutateAsync(editing);
+    await upsert.mutateAsync({ ...editing, entry_source: editing.entry_source || "owner" });
     setOpen(false);
   };
 
@@ -307,15 +318,46 @@ const BrokeragesTab = () => {
     });
   };
 
+  const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
+
   return (
     <div className="space-y-4">
+      {/* Source sub-tabs */}
+      <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+        {[
+          { v: "all", label: `All · ${data.length}` },
+          { v: "directory", label: `UAE Directory · ${directoryCount}` },
+          { v: "owner", label: `My Additions · ${ownerCount}` },
+          { v: "existing", label: `Existing Matches · ${existingCount}` },
+        ].map((t) => (
+          <button
+            key={t.v}
+            onClick={() => setSourceTab(t.v as any)}
+            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              sourceTab === t.v
+                ? "bg-[#B89555] text-white shadow-sm"
+                : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
         </div>
+        <Select value={emirateFilter} onValueChange={setEmirateFilter}>
+          <SelectTrigger className="w-[170px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All emirates</SelectItem>
+            {EMIRATES.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+          </SelectContent>
+        </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
@@ -323,27 +365,42 @@ const BrokeragesTab = () => {
         </Select>
         <Button variant="outline" onClick={() => exportCSV(filtered, `brokerages-${Date.now()}.csv`, [
           { key: "company_name", label: "Company" }, { key: "rera_license", label: "License" },
-          { key: "office_location", label: "Location" }, { key: "status", label: "Status" },
+          { key: "office_location", label: "Location" }, { key: "emirate", label: "Emirate" }, { key: "status", label: "Status" },
           { key: "deal_count", label: "Deals" }, { key: "primary_contact", label: "Primary Contact" },
-          { key: "notes", label: "Notes" },
+          { key: "entry_source", label: "Source" }, { key: "notes", label: "Notes" },
         ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
-        <Button variant="primary" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
+        <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#5A4A2E]">No brokerages yet. Click <b className="text-[#1A1A1A]">Add Brokerage</b> to start.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-[#5A4A2E]">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
-          {filtered.map((r: any) => (
-            <Card key={r.id} className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 hover:shadow-lg hover:border-[#1A1A1A]/20 transition rounded-2xl">
+          {filtered.map((r: any) => {
+            const isDirectory = r.entry_source === "directory";
+            const isExistingMatch = r.entry_source === "owner" && r.is_existing_match;
+            return (
+            <Card key={r.id} className={`bg-[#FDFBF7] text-[#1A1A1A] border hover:shadow-lg transition rounded-2xl ${
+              isDirectory ? "border-l-4 border-l-[#B89555] border-y-[#1A1A1A]/10 border-r-[#1A1A1A]/10" : "border-[#1A1A1A]/10 hover:border-[#1A1A1A]/20"
+            }`}>
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="font-semibold text-base">{r.company_name}</h3>
-                      <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
+                      {isDirectory && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#B89555] text-white">UAE Directory</span>
+                      )}
+                      {isExistingMatch && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already in Directory</span>
+                      )}
+                      {!isDirectory && !isExistingMatch && r.entry_source === "owner" && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
+                      )}
+                      {!isDirectory && <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />}
                     </div>
                     <div className="text-xs text-[#5A4A2E] space-y-0.5">
+                      {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
                       {r.office_location && <div>{r.office_location}</div>}
                       {r.primary_contact?.name && (
@@ -367,15 +424,19 @@ const BrokeragesTab = () => {
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
-                    <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
+                    {!isDirectory && (
+                      <>
+                        <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
+                        <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          );})}
         </div>
       )}
 
