@@ -63,7 +63,8 @@ Deno.serve(async (req) => {
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
       const list = await gmailListMessages(LOVABLE_API_KEY, GMAIL_KEY, sinceMs);
       for (const m of list) {
-        // Dedup: external_message_id
+        // 1) Hard dedup at DB level via unique index (user_id, external_message_id).
+        //    Cheap pre-check avoids a Gmail GET when we already have the message.
         const { data: dup } = await admin
           .from("owner_comm_messages")
           .select("id")
@@ -81,58 +82,69 @@ Deno.serve(async (req) => {
         const fromEmailMatch = fromHeader.match(/<([^>]+)>/) || [null, fromHeader];
         const fromEmail = (fromEmailMatch[1] || fromHeader).trim().toLowerCase();
         const fromName = fromHeader.replace(/<.*>/, "").trim().replace(/^"|"$/g, "") || fromEmail;
+        const lastMessageAt = dateHeader ? new Date(dateHeader).toISOString() : new Date().toISOString();
 
-        // Upsert thread
-        const { data: existingThread } = await admin
+        // 2) Idempotent thread upsert on (user_id, channel_type, contact_identifier).
+        //    Concurrent polls are safe because of owner_comm_threads_user_channel_contact_unique.
+        const { data: thread, error: threadErr } = await admin
           .from("owner_comm_threads")
-          .select("id")
-          .eq("user_id", ch.user_id)
-          .eq("channel_type", "email_gmail")
-          .eq("contact_identifier", fromEmail)
-          .maybeSingle();
-
-        let threadId = existingThread?.id;
-        if (!threadId) {
-          const { data: created } = await admin
-            .from("owner_comm_threads")
-            .insert({
+          .upsert(
+            {
               user_id: ch.user_id,
               channel_id: ch.id,
               channel_type: "email_gmail",
               contact_identifier: fromEmail,
               contact_name: fromName,
-              last_message_at: dateHeader ? new Date(dateHeader).toISOString() : new Date().toISOString(),
+              last_message_at: lastMessageAt,
               last_message_preview: subject,
-              unread_count: 1,
-            })
-            .select("id")
-            .single();
-          threadId = created?.id;
-        } else {
-          await admin
-            .from("owner_comm_threads")
-            .update({
-              last_message_at: dateHeader ? new Date(dateHeader).toISOString() : new Date().toISOString(),
-              last_message_preview: subject,
-              unread_count: 1,
-            })
-            .eq("id", threadId);
+            },
+            { onConflict: "user_id,channel_type,contact_identifier" }
+          )
+          .select("id, unread_count")
+          .single();
+
+        if (threadErr || !thread?.id) {
+          console.error("[comm-inbound-sync] thread upsert failed", threadErr);
+          continue;
+        }
+        const threadId = thread.id;
+
+        // 3) Idempotent message upsert on (user_id, external_message_id).
+        //    If a concurrent poll already inserted this message, the unique index causes
+        //    ignoreDuplicates: true to no-op instead of producing a duplicate.
+        const { data: insertedMsg, error: msgErr } = await admin
+          .from("owner_comm_messages")
+          .upsert(
+            {
+              user_id: ch.user_id,
+              thread_id: threadId,
+              direction: "inbound",
+              content: subject,
+              content_type: "text",
+              external_message_id: m.id,
+              sender_identifier: fromEmail,
+              sender_name: fromName,
+              status: "delivered",
+            },
+            { onConflict: "user_id,external_message_id", ignoreDuplicates: true }
+          )
+          .select("id");
+
+        if (msgErr) {
+          console.error("[comm-inbound-sync] message upsert failed", msgErr);
+          continue;
         }
 
-        if (!threadId) continue;
-
-        await admin.from("owner_comm_messages").insert({
-          user_id: ch.user_id,
-          thread_id: threadId,
-          direction: "inbound",
-          content: subject,
-          content_type: "text",
-          external_message_id: m.id,
-          sender_identifier: fromEmail,
-          sender_name: fromName,
-          status: "received",
-        });
-        imported++;
+        // Only count + bump unread when a NEW row was actually inserted.
+        // With ignoreDuplicates:true, conflicting upserts return an empty array.
+        const wasNew = Array.isArray(insertedMsg) && insertedMsg.length > 0;
+        if (wasNew) {
+          await admin
+            .from("owner_comm_threads")
+            .update({ unread_count: (thread.unread_count ?? 0) + 1 })
+            .eq("id", threadId);
+          imported++;
+        }
       }
 
       await admin
