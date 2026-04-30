@@ -57,6 +57,8 @@ export const IconTile = React.forwardRef<HTMLDivElement, IconTileProps>(
     return (
       <div
         ref={ref}
+        data-icon-tile=""
+        data-icon-tile-tone={tone}
         className={cn(
           "inline-flex items-center justify-center flex-shrink-0",
           s.box,
