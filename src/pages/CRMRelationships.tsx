@@ -32,7 +32,10 @@ import {
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
-import { ArrowLeftRight } from "lucide-react";
+import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
+import { LeadAIStar } from "@/components/crm/LeadAIStar";
+import { ArrowLeftRight, Trophy, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -289,11 +292,22 @@ const BrokeragesTab = () => {
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
   const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
   const existingCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner" && r.is_existing_match).length, [data]);
+
+  // Live counts per emirate so the filter shows agencies-per-emirate at a glance
+  const emirateCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const r of data as any[]) {
+      const e = r.emirate || "Unknown";
+      counts[e] = (counts[e] || 0) + 1;
+    }
+    return counts;
+  }, [data]);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.company_name?.toLowerCase().includes(q.toLowerCase()) || r.primary_contact?.name?.toLowerCase?.().includes(q.toLowerCase());
@@ -328,27 +342,54 @@ const BrokeragesTab = () => {
   const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
 
   return (
+    <TooltipProvider>
     <div className="space-y-4">
       {/* Source sub-tabs */}
-      <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
-        {[
-          { v: "all", label: `All · ${data.length}` },
-          { v: "directory", label: `UAE Directory · ${directoryCount}` },
-          { v: "owner", label: `My Additions · ${ownerCount}` },
-          { v: "existing", label: `Existing Matches · ${existingCount}` },
-        ].map((t) => (
-          <button
-            key={t.v}
-            onClick={() => setSourceTab(t.v as any)}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-              sourceTab === t.v
-                ? "bg-[#B89555] text-white shadow-sm"
-                : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+          {[
+            { v: "all", label: `All · ${data.length}` },
+            { v: "directory", label: `UAE Directory · ${directoryCount}` },
+            { v: "owner", label: `My Additions · ${ownerCount}` },
+            { v: "existing", label: `Existing Matches · ${existingCount}` },
+          ].map((t) => (
+            <button
+              key={t.v}
+              onClick={() => setSourceTab(t.v as any)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                sourceTab === t.v
+                  ? "bg-[#B89555] text-white shadow-sm"
+                  : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              aria-label="What is the UAE Directory?"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="max-w-xs bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40">
+            <p className="font-semibold mb-1">What's the difference?</p>
+            <p className="text-xs">
+              <strong>UAE Directory</strong> = pre-loaded RERA-licensed brokerages (currently {directoryCount}).
+              Reference data only — read-only until you contact them.
+            </p>
+            <p className="text-xs mt-1">
+              <strong>My Additions</strong> = brokerages you added yourself.
+            </p>
+            <p className="text-xs mt-1">
+              <strong>Existing Matches</strong> = your additions that match a directory entry.
+            </p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="flex flex-wrap gap-2 items-center">
@@ -357,10 +398,14 @@ const BrokeragesTab = () => {
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
         </div>
         <Select value={emirateFilter} onValueChange={setEmirateFilter}>
-          <SelectTrigger className="w-[170px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
+          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All emirates</SelectItem>
-            {EMIRATES.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+            <SelectItem value="all">All emirates · {data.length}</SelectItem>
+            {EMIRATES.map((e) => (
+              <SelectItem key={e} value={e}>
+                {e} · {emirateCounts[e] || 0}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -439,32 +484,59 @@ const BrokeragesTab = () => {
                     <div className="text-xs text-[#5A4A2E] space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
-                      {r.office_location && <div>{r.office_location}</div>}
+                      {(r.office_address || r.office_location) && <div>{r.office_address || r.office_location}</div>}
+                      {(r.email || r.primary_contact?.email) && <div>{r.email || r.primary_contact?.email}</div>}
+                      {(r.phone || r.primary_contact?.phone) && <div>{r.phone || r.primary_contact?.phone}</div>}
                       {r.primary_contact?.name && (
                         <div className="font-medium text-[#1A1A1A]">
-                          Contact: {r.primary_contact.name} {r.primary_contact.role && `· ${r.primary_contact.role}`}
-                          {r.primary_contact.phone && ` · ${r.primary_contact.phone}`}
+                          Primary: {r.primary_contact.name}{r.primary_contact.role ? ` · ${r.primary_contact.role}` : ""}
+                        </div>
+                      )}
+                      {r.secondary_contact?.name && (
+                        <div className="font-medium text-[#1A1A1A]">
+                          Secondary: {r.secondary_contact.name}{r.secondary_contact.role ? ` · ${r.secondary_contact.role}` : ""}
                         </div>
                       )}
                     </div>
+
+                    {/* KPI strip — readable champagne palette, never white-on-white */}
+                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+                      {[
+                        { label: "Brokers", value: r.active_broker_count || 0 },
+                        { label: "Inquiries", value: r.inquiry_count || 0 },
+                        { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
+                        { label: "Total (AED)", value: Number(r.total_deal_value_cached || 0).toLocaleString() },
+                        { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
+                      ].map((k) => (
+                        <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
+                          <div className="text-[9px] uppercase tracking-wider text-[#5A4A2E] font-semibold">{k.label}</div>
+                          <div className="text-sm font-bold text-[#1A1A1A]">{k.value}</div>
+                        </div>
+                      ))}
+                    </div>
+
                     {r.ai_next_action && (
-                      <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
-                        <Sparkles className="w-3 h-3 inline mr-1 text-purple-600" />
-                        <span className="font-medium text-purple-900">{r.ai_next_action}</span>
+                      <div className="mt-2 p-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded text-xs">
+                        <Sparkles className="w-3 h-3 inline mr-1 text-[#B89555]" />
+                        <span className="font-medium text-[#1A1A1A]">{r.ai_next_action}</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    <Button size="sm" variant="outline" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
+                  <div className="flex flex-wrap gap-1.5 items-start">
+                    <LeadAIStar entityType="brokerage" entityId={r.id} entityName={r.company_name} />
+                    <Button size="sm" variant="secondary" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
                       <Sparkles className="w-3 h-3 mr-1" />AI
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => quickReminder(r)}>
+                    <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
                     {!isDirectory && (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
-                        <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
+                        <Button size="sm" variant="gold" onClick={() => setDealOpen({ id: r.id, name: r.company_name })}>
+                          <Trophy className="w-3 h-3 mr-1" />Register Deal
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => openEdit(r)}>Edit</Button>
+                        <Button size="sm" variant="secondary" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}>
                           <Trash2 className="w-3 h-3" />
                         </Button>
                       </>
@@ -521,7 +593,18 @@ const BrokeragesTab = () => {
         defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
         entityType="brokerage"
       />
+
+      {dealOpen && (
+        <BrokerageDealModal
+          open={!!dealOpen}
+          onOpenChange={(v) => !v && setDealOpen(null)}
+          brokerageId={dealOpen.id}
+          brokerageName={dealOpen.name}
+          onSaved={() => refetch()}
+        />
+      )}
     </div>
+    </TooltipProvider>
   );
 };
 

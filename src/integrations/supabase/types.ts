@@ -4946,6 +4946,75 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_brokerage_deals: {
+        Row: {
+          brokerage_id: string
+          client_name: string | null
+          closed_on: string
+          commission_aed: number | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          deal_value_aed: number
+          developer_id: string | null
+          developer_name_snapshot: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          unit_label: string | null
+          updated_at: string
+        }
+        Insert: {
+          brokerage_id: string
+          client_name?: string | null
+          closed_on?: string
+          commission_aed?: number | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deal_value_aed?: number
+          developer_id?: string | null
+          developer_name_snapshot?: string | null
+          id?: string
+          notes?: string | null
+          owner_id: string
+          unit_label?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brokerage_id?: string
+          client_name?: string | null
+          closed_on?: string
+          commission_aed?: number | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deal_value_aed?: number
+          developer_id?: string | null
+          developer_name_snapshot?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          unit_label?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_deals_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_deals_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_brokerage_notes: {
         Row: {
           author_id: string
@@ -4978,8 +5047,48 @@ export type Database = {
           },
         ]
       }
+      crm_brokerage_sync_log: {
+        Row: {
+          added_count: number
+          created_at: string
+          emirate: string | null
+          error_message: string | null
+          id: string
+          skipped_count: number
+          source: string
+          status: string
+          triggered_by: string | null
+          updated_count: number
+        }
+        Insert: {
+          added_count?: number
+          created_at?: string
+          emirate?: string | null
+          error_message?: string | null
+          id?: string
+          skipped_count?: number
+          source: string
+          status?: string
+          triggered_by?: string | null
+          updated_count?: number
+        }
+        Update: {
+          added_count?: number
+          created_at?: string
+          emirate?: string | null
+          error_message?: string | null
+          id?: string
+          skipped_count?: number
+          source?: string
+          status?: string
+          triggered_by?: string | null
+          updated_count?: number
+        }
+        Relationships: []
+      }
       crm_brokerages: {
         Row: {
+          active_broker_count: number
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
@@ -4988,6 +5097,7 @@ export type Database = {
           company_name: string
           created_at: string
           deal_count: number
+          deal_count_cached: number
           dnc_reason: string | null
           do_not_contact: boolean
           email: string | null
@@ -4996,8 +5106,10 @@ export type Database = {
           first_contact_at: string | null
           health_score: number | null
           id: string
+          inquiry_count: number
           is_existing_match: boolean
           last_auto_reply_at: string | null
+          last_deal_at: string | null
           last_email_synced_at: string | null
           last_interaction_at: string | null
           last_outreach_at: string | null
@@ -5028,11 +5140,13 @@ export type Database = {
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
           total_deal_value: number
+          total_deal_value_cached: number
           updated_at: string
           website: string | null
           whatsapp_e164: string | null
         }
         Insert: {
+          active_broker_count?: number
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -5041,6 +5155,7 @@ export type Database = {
           company_name: string
           created_at?: string
           deal_count?: number
+          deal_count_cached?: number
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
@@ -5049,8 +5164,10 @@ export type Database = {
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          inquiry_count?: number
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
+          last_deal_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
@@ -5081,11 +5198,13 @@ export type Database = {
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
+          total_deal_value_cached?: number
           updated_at?: string
           website?: string | null
           whatsapp_e164?: string | null
         }
         Update: {
+          active_broker_count?: number
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -5094,6 +5213,7 @@ export type Database = {
           company_name?: string
           created_at?: string
           deal_count?: number
+          deal_count_cached?: number
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
@@ -5102,8 +5222,10 @@ export type Database = {
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          inquiry_count?: number
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
+          last_deal_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
@@ -5134,6 +5256,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
+          total_deal_value_cached?: number
           updated_at?: string
           website?: string | null
           whatsapp_e164?: string | null

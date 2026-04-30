@@ -1,82 +1,157 @@
-# Brokerage Outreach Automation — Mirror of Developer Flow
 
-Replicate the exact developer outreach automation for brokerages: bulk email with branded templates, test sends, recent-contact skip, status pills, send log, and a pre-written "Private Breakfast Briefing" message authored as Jane (Head of Sales).
+# Brokerage Hub v2 — Full Parity, Visibility Fix, Deal Intelligence & Per-Lead AI
 
-## What gets built
+This plan does five things in one pass. They're tightly related so we ship them together.
 
-### 1. Two locked, branded email templates (DB-stored, editable + lockable)
+---
 
-Same `crm_email_templates` table the developer flow uses, with two new variants:
+## 1. Fix the white-on-white readability bug (immediate)
 
-- `brokerage_partnership_intro` — primary outreach for brokerages not yet in our channel-partner network. Body authored as Jane, Head of Sales, JBJ GLOBAL REAL ESTATE. Asks whether the brokerage is already registered with us / has an active group, and proposes a **private breakfast briefing** at the JBJ office to discuss collaboration and partnership opportunities. Includes brokerage placeholder `{{brokerage_name}}` and a CTA button to confirm interest.
-- `brokerage_breakfast_invite` — direct breakfast-event invitation for brokerages we've already qualified (or are re-engaging). Slightly more event-focused tone with date-flexible language.
+**Problem:** On the Brokerages tab, several cards/badges/tabs render white text + white icons on a champagne/white background — directory rows, source sub-tabs, AI suggestion banner, and the contact line are unreadable on first paint and on hover.
 
-Both templates use the same champagne/gold institutional shell as the developer templates (logo, header, hairline, signature block). Each can be locked once finalized so the wording can't be changed accidentally.
+**Fix (no removal of any existing element):**
+- Audit `CRMRelationships.tsx` Brokerages tab + `BulkSendDialog.tsx` for any `text-white`, `bg-white`, `bg-purple-50`, low-alpha gold text, and unstated hover states. Replace with the locked tokens: ink `#1A1A1A` on champagne `#F7F2EA / #FDFBF7`, gold `#B89555` only as solid fill with white text, no faded gold, no white-on-light.
+- Replace the purple AI suggestion strip with the project's standard AI purple tile (`IconTile tone="purple"` + ink text) so it stays readable on champagne.
+- Wrap every brokerage status pill, source pill, and action button in the existing `<IconTile />` / `Button variant="gold|secondary"` primitives so they inherit the contrast guard.
+- Add a one-time visual sweep test: `scripts/contrast/check-rendered.mjs` run against `/crm/relationships` (Brokerages tab) so this regression can't ship again.
 
-### 2. Edge function: `crm-send-brokerage-outreach`
+This is the first thing we do so the rest of the work is reviewable.
 
-A 1:1 clone of `crm-send-developer-registration` with brokerage-specific fields:
+---
 
-- Validates `brokerageId` (or `testRecipient` for a test send), looks up the brokerage row in `crm_brokerage_registry`.
-- Renders `{{brokerage_name}}`, `{{contact_first_name}}` (from `primary_contact.name`), `{{owner_first_name}}` (Jane), `{{event_url}}` placeholders.
-- Sends via the existing email infrastructure (`send-transactional-email` queue) so retries, suppression, and rate-limit handling work for free.
-- On success: writes to `crm_outreach_touchpoints` (channel = "email", direction = "outbound", stage = "introduced"), updates `last_outreach_at` + increments `outreach_count` on the brokerage row, and creates a `developer_action_items`-equivalent row (we'll reuse the same table renamed semantically — see "Database" below).
-- Honors `silent` for bulk loops, `testRecipient` for test sends, and the "skip if contacted in last 7 days" guard.
+## 2. Brokerage record gets full developer-style profile
 
-### 3. UI: brokerage tab gets the same toolset
+Today `crm_brokerages` already has `office_location`, `office_address`, `phone`, `email`, `logo_url`, `primary_contact (jsonb)`, `secondary_contact (jsonb)`. We extend the **UI** (not the schema, mostly) to surface and capture all of it, plus add what's missing.
 
-In `CRMRelationships.tsx` (Brokerages section):
+**Schema additions (one migration):**
+- `crm_brokerages.active_broker_count int default 0`
+- `crm_brokerages.inquiry_count int default 0` (auto-incremented when an inbound message arrives)
+- `crm_brokerages.deal_count_cached int default 0` and `total_deal_value_cached numeric default 0` — refreshed by trigger on `crm_brokerage_deals` (table below).
+- `crm_brokerages.position_titles jsonb` — already covered by `primary_contact.role` / `secondary_contact.role`, no change needed.
 
-- **Bulk-select checkboxes** on each brokerage card (already present on developers).
-- **"Send Outreach" button** that opens a brokerage-flavored `BulkSendDialog`.
-- **"Send TEST" button** next to it — auto-fills the owner's registered email (matching the developer flow change from earlier).
-- **Sent-history sub-tabs** (Inbox, Contacted, Pending Actions, Under Review, Rejected, Expired, Recently Deleted) wired to `entity_type = "brokerage"` filter on the touchpoint table.
+**Brokerage card / edit dialog gets:**
+- Logo upload (uses the existing `<DeveloperLogo />` allow-list rules, mirrored as `<BrokerageLogo />`) — falls back to `Building2` icon, never a substitute photo.
+- Office address + map link (already in DB, just expose), website, phone, primary email.
+- **Primary contact** + **Secondary contact** rows: name, **position/role**, phone, email, WhatsApp.
+- KPI strip on every card: **Active Brokers · Inquiries · Deals Closed · Total Value · Last Deal Date**.
 
-### 4. `BulkSendDialog` becomes entity-aware
+---
 
-The component currently hard-codes `Developer` shape and developer variants. Refactor in place to accept an `entityType: "developer" | "brokerage"` prop. Internally it picks the right variants list, the right hook (`useSendDeveloperRegistration` vs new `useSendBrokerageOutreach`), the right template lookup, and the right placeholder substitution map. No visual changes — the dialog looks identical for both flows.
+## 3. UAE Brokerage Directory — explanation + expansion to full UAE
 
-### 5. The "Jane / Private Breakfast" copy
+**What "UAE Directory" means today:** The 73 rows tagged `entry_source = 'directory'` are pre-loaded reference companies (RERA-licensed brokerages we seeded). They're read-only reference data so you can find a company quickly, then either contact them or convert them into a "My Addition" (your own CRM record). The other two sub-tabs are:
+- **My Additions** — companies you added yourself.
+- **Existing Matches** — your additions that match a directory entry (so you can dedupe).
 
-Locked template body for `brokerage_partnership_intro` (paraphrased from the user's brief, written as Jane, Head of Sales — Channel Partners):
+**Expansion to ~30,000+ brokerages:**
+- Add an admin-only **"Sync UAE Directory"** edge function `crm-brokerage-directory-sync` that pulls from the **Dubai Land Department / RERA public broker registry** + Abu Dhabi DMT registry on demand and upserts into `crm_brokerages` with `entry_source = 'directory'`. The function is idempotent (matches on normalized RERA license + normalized name) and writes to `crm_brokerage_sync_log` so we can see what changed.
+- Source URLs are stored in `partner-governance.ts` so you control them. First sync is run once; after that there's a "Refresh Directory" button on the page (admin only, rate-limited to once/24h).
+- The bulk-select + bulk-outreach already built keeps working — directory entries with an email become eligible for outreach.
 
-> Subject: Private Breakfast Briefing — JBJ Global Real Estate × {{brokerage_name}}
->
-> Dear {{contact_first_name}},
->
-> I'm Jane, Head of Sales handling Channel Partners at JBJ Global Real Estate. I wanted to reach out personally to check whether {{brokerage_name}} is currently registered with us or has an active group on our channel-partner network — and if not, I'd like to fix that.
->
-> We're hosting a **private breakfast briefing** at our Dubai office for senior leadership at selected brokerages. The agenda is short and focused: a market read on Q[NN], a walk-through of our exclusive inventory and commission structure, and a private conversation about how we can collaborate as channel partners going forward.
->
-> If this is of interest, reply to this email and I'll have my office send three date options. I'd also be glad to bring a tailored partnership brief specific to {{brokerage_name}}.
->
-> Warm regards,
->
-> **Jane Williams**
-> Head of Sales — Channel Partners
-> JBJ GLOBAL REAL ESTATE
+**Filter UX you asked for:**
+- Emirate filter already exists. We add a live count next to each option ("Dubai · 1,842", "Abu Dhabi · 612", …) computed from the current dataset so when you pick an emirate you immediately see the agency count.
+- Add filters: status, has-email, has-phone, has-deals, last-contacted range, RERA active/expired.
+- Add `7 / 30 / 90 day` activity filter to find dormant agencies.
 
-The `{{owner_first_name}}` variable defaults to "Jane" but resolves to the logged-in owner's first name when present, so the same template works whether the founder or Jane is sending. The user can edit and lock the wording from the existing template editor UI.
+---
 
-## Database
+## 4. Brokerage outreach reply handling + AI suggestions
 
-One migration:
+The outbound flow we just built (Jane → Private Breakfast Briefing) already records sends in `crm_relationship_email_log`. We close the loop:
 
-1. **`crm_brokerage_registry`** — add the same outreach columns developers already have if missing: `last_outreach_at timestamptz`, `outreach_count int default 0`, `outreach_stage text default 'not_contacted'`, `deleted_at timestamptz`. Add an index on `(deleted_at, last_outreach_at)`.
-2. **`developer_action_items`** — generalize to **`crm_action_items`** with an added `entity_type text check (entity_type in ('developer','brokerage'))` column and a backfill (`update ... set entity_type = 'developer'`). Add a compatibility view named `developer_action_items` that filters to `entity_type = 'developer'` so existing developer code keeps working. RLS policies are recreated on the new table with the same `requireOwnerAuth` rules.
-3. **`crm_email_templates`** — insert two new rows for `brokerage_partnership_intro` and `brokerage_breakfast_invite` with the locked body above.
+- **Inbound capture:** the existing Gmail watcher writes replies into `crm_brokerage_notes` and increments `inquiry_count`. Each inbound message becomes a thread on the brokerage card.
+- **AI reply suggestions:** for every inbound message, an edge function `crm-brokerage-reply-suggest` runs through Lovable AI Gateway (`google/gemini-3-flash-preview`) and produces:
+  1. A 1-line summary of what they said.
+  2. 2–3 suggested replies (warm / direct / qualifying), each with the JBJ template tone.
+  3. Recommended next step ("Schedule breakfast", "Send commission sheet", "Mark do_not_contact", "Move to qualified").
+  4. The exact email template to send (pulled from `crm_email_templates` — same `brokerage_partnership_intro` / `brokerage_breakfast_invite` / a new `brokerage_followup` variant).
+  5. Auto-CCs you (founder email) and the assigned account owner.
+- **Suspend agency** action on each card: sets `do_not_contact = true` with a reason — already supported in the schema.
 
-## Files touched
+---
 
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — new edge function (clone of developer one).
-- `supabase/migrations/<timestamp>_brokerage_outreach.sql` — schema + seed templates.
-- `src/hooks/useCRMRelationships.ts` — add `useSendBrokerageOutreach`, extend `RegistrationVariant` union, generalize `useEmailTemplate` to accept any variant.
-- `src/components/crm/BulkSendDialog.tsx` — accept `entityType` prop, swap labels/hooks/variants accordingly.
-- `src/pages/CRMRelationships.tsx` — wire bulk-select + Send Outreach + Send TEST on the Brokerages tab; reuse `SentHistoryView` with `entityType="brokerage"`.
-- `src/components/crm/SentHistoryView.tsx` — already entity-aware after the recent rewrite; only need to pass `entity_type = "brokerage"` filter through.
+## 5. Deal tracking + leaderboard (the big one)
+
+**New table `crm_brokerage_deals`:**
+- `id`, `brokerage_id` (fk → `crm_brokerages`), `developer_id` (fk → `developers`, **defaults to City Developments / Citi Developers**), `developer_name_snapshot` (so a developer rename doesn't break history), `unit_label`, `client_name`, `deal_value_aed numeric`, `currency text default 'AED'`, `closed_on date`, `commission_aed numeric`, `notes`, `created_by`, `created_at`, `updated_at`.
+- RLS: only the founder + assigned account owner can see/edit; admins can see all.
+- Trigger: on insert/update/delete, recompute `deal_count_cached` and `total_deal_value_cached` on the parent brokerage.
+
+**Register a deal UI:**
+- "Register Deal" button on every brokerage card. Modal:
+  - Brokerage (locked to current row)
+  - Developer (`<DeveloperPicker />` — same component used in CRM, prefilled with **City Developments** but searchable across all developers)
+  - Unit label, client name, value (AED), commission, closing date, notes
+  - On save: insert into `crm_brokerage_deals`, update brokerage cache, log to `crm_action_log`.
+
+**Leaderboard / rankings page** at `/crm/relationships?view=rankings`:
+- Tabs: **This Month · This Quarter · This Year · All Time · Custom range**
+- Table: Rank · Brokerage · Logo · # Deals · Total Value (AED) · Avg Deal · Last Deal · vs Previous Period (delta arrow).
+- "Compare to my closing deals" panel: your personal totals (founder) for the same window pulled from `deals` table you already have, side-by-side.
+- **Downloadable**: PDF (jsPDF, branded letterhead per Institutional PDF Reporting standard) + CSV. Files written under `/mnt/documents/` for ad-hoc exports too.
+
+---
+
+## 6. Per-lead AI assistant (Brokerages, Clients, Brokers, Developers, Admins)
+
+You want one star button next to every record (across all five entity types) that opens the assistant scoped to *that lead*.
+
+- New component `<LeadAIStar entityType="brokerage|client|broker|developer|admin" entityId={...} />` rendered on every CRM card.
+- Click opens a slide-over assistant panel (reusing the existing `CRMAssistantPanel.tsx`) with the lead pre-loaded as context. Inside:
+  - **Voice note input** (existing `<VoiceNoteRecorder />`) — speak "remind me Tuesday 6pm to call them", AI parses intent and:
+    - Adds a note to the lead (`crm_brokerage_notes` / `crm_lead_notes` / etc.)
+    - Creates a calendar event in the founder's calendar (Google Calendar connector if linked, else internal `meeting_center` table)
+    - Creates a task in `web_developer_tasks` / `crm_action_log`
+    - Optionally moves the lead between CRM stages
+  - **Summarize this lead** — AI reads all notes, emails, deals, inquiries and produces a 5-line brief.
+  - **Suggest next step** — gives 2–3 options with one-click accept.
+  - Buttons: *Add to Calendar · Add Note · Move to CRM Stage · Send Email · Register Deal · Suspend*
+- The assistant has read access (via edge function `crm-lead-assistant`) to:
+  - the lead row
+  - all notes / messages / emails for that lead
+  - your calendar events
+  - your task list
+  - your closed deals (for "compare to my pipeline" answers)
+- All actions are logged to `crm_action_log` with `actor = founder`, source = "lead-ai-star".
+
+---
+
+## What gets built — files
+
+```
+supabase/migrations/<ts>_brokerage_v2.sql
+  - add active_broker_count, inquiry_count, deal_count_cached, total_deal_value_cached
+  - create crm_brokerage_deals + RLS + trigger
+  - create crm_brokerage_sync_log
+
+supabase/functions/crm-brokerage-directory-sync/index.ts   (new)
+supabase/functions/crm-brokerage-reply-suggest/index.ts    (new, Lovable AI)
+supabase/functions/crm-lead-assistant/index.ts             (new, Lovable AI + calendar + tasks)
+
+src/components/crm/BrokerageLogo.tsx                       (mirror of DeveloperLogo)
+src/components/crm/BrokerageDealModal.tsx                  (Register Deal)
+src/components/crm/BrokerageRankings.tsx                   (leaderboard + PDF/CSV export)
+src/components/crm/LeadAIStar.tsx                          (universal star button)
+src/components/crm/LeadAssistantSheet.tsx                  (slide-over assistant)
+
+src/pages/CRMRelationships.tsx
+  - contrast fixes
+  - new KPI strip on each card
+  - logo + secondary contact + position fields
+  - Register Deal + Rankings + Refresh Directory buttons
+  - LeadAIStar on every brokerage row
+  - Emirate filter shows live counts
+
+src/pages/CRMLeads.tsx, CRMClients.tsx, CRMEmployees.tsx,
+src/pages/admin/AdminUsers.tsx, src/pages/developers/Developers.tsx
+  - mount <LeadAIStar /> on every row
+
+scripts/contrast/check-rendered.mjs
+  - add /crm/relationships to the rendered-contrast sweep
+```
 
 ## Out of scope for this turn
 
-- Logo auto-fetch for brokerages (covered by the existing `<DeveloperLogo />` standardization — same component now renders brokerage logos identically).
-- Calendar booking for the breakfast event (use the existing meeting-booking orchestration once the brokerage replies; no changes needed).
-- WhatsApp / SMS variants (email-only for v1, matching the developer flow exactly).
+- Pulling all 30,000+ UAE brokerages on day one. The sync function is built; the first run pulls **Dubai (RERA)** which is ~7,500 active offices. Abu Dhabi + Sharjah follow once we confirm the Dubai sync is clean. We don't want to fill your CRM with 30k stale rows in one shot.
+- WhatsApp/SMS reply suggestions (email-only for v1, exactly like the developer flow).
+- A standalone mobile app for the assistant — it works inside the existing CRM today.
