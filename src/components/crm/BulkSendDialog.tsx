@@ -7,11 +7,24 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks } from "lucide-react";
 import { toast } from "sonner";
-import { useSendDeveloperRegistration, useEmailTemplate, type RegistrationVariant } from "@/hooks/useCRMRelationships";
+import {
+  useSendDeveloperRegistration,
+  useSendBrokerageOutreach,
+  useEmailTemplate,
+  type RegistrationVariant,
+  type BrokerageVariant,
+  type AnyEmailVariant,
+} from "@/hooks/useCRMRelationships";
 
-const VARIANT_LABELS: Record<RegistrationVariant, string> = {
+type EntityType = "developer" | "brokerage";
+
+const VARIANT_LABELS_DEV: Record<RegistrationVariant, string> = {
   developer_registration: "New registration request",
   developer_confirm_registered: "Confirm we are already registered",
+};
+const VARIANT_LABELS_BRK: Record<BrokerageVariant, string> = {
+  brokerage_partnership_intro: "Partnership intro · Private breakfast",
+  brokerage_breakfast_invite: "Breakfast invitation · RSVP",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -22,6 +35,11 @@ const STATUS_LABEL: Record<string, string> = {
   registered: "Registered",
   rejected: "Rejected",
   expired: "Expired",
+  // brokerage-side
+  prospect: "Prospect",
+  introduced: "Introduced",
+  active: "Active partner",
+  paused: "Paused",
 };
 
 const STATUS_PILL: Record<string, string> = {
@@ -32,28 +50,58 @@ const STATUS_PILL: Record<string, string> = {
   registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
   rejected: "bg-red-100 text-red-900 border-red-300",
   expired: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
+  prospect: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
+  introduced: "bg-blue-100 text-blue-900 border-blue-300",
+  active: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  paused: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
 };
 
-interface Developer {
+interface Recipient {
   id: string;
-  developer_name: string;
+  // developer fields
+  developer_name?: string;
   developer_email?: string;
+  // brokerage fields
+  company_name?: string;
+  email?: string;
+  primary_contact?: any;
+  // shared
   last_outreach_at?: string | null;
   status?: string;
 }
 
 type RowStatus = "queued" | "sending" | "ok" | "fail";
 
+const getName = (r: Recipient, entityType: EntityType) =>
+  entityType === "brokerage"
+    ? r.company_name || "Brokerage"
+    : r.developer_name || "Developer";
+
+const getEmail = (r: Recipient, entityType: EntityType) =>
+  entityType === "brokerage"
+    ? (r.primary_contact?.email || r.email || "")
+    : (r.developer_email || "");
+
 export const BulkSendDialog = ({
-  open, onOpenChange, selected, defaultTestEmail,
+  open, onOpenChange, selected, defaultTestEmail, entityType = "developer",
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  selected: Developer[];
+  selected: Recipient[];
   defaultTestEmail: string;
+  entityType?: EntityType;
 }) => {
-  const send = useSendDeveloperRegistration();
-  const [variant, setVariant] = useState<RegistrationVariant>("developer_registration");
+  const sendDev = useSendDeveloperRegistration();
+  const sendBrk = useSendBrokerageOutreach();
+  const send = entityType === "brokerage" ? sendBrk : sendDev;
+
+  const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
+  const defaultVariant: AnyEmailVariant =
+    entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration";
+
+  const [variant, setVariant] = useState<AnyEmailVariant>(defaultVariant);
+  // Reset variant when entityType changes
+  useEffect(() => { setVariant(defaultVariant); }, [entityType]); // eslint-disable-line react-hooks/exhaustive-deps
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
   const [useCustomTestEmail, setUseCustomTestEmail] = useState(false);
@@ -72,21 +120,21 @@ export const BulkSendDialog = ({
 
   const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const targets = useMemo(() => selected.filter((d) =>
-    d.developer_email && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
-  ), [selected, skipRecent]);
+    !!getEmail(d, entityType) && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
+  ), [selected, skipRecent, entityType]);
   const skipped = selected.length - targets.length;
 
   // Skip reason breakdown
   const skipBreakdown = useMemo(() => {
     let noEmail = 0, recent = 0;
     for (const d of selected) {
-      if (!d.developer_email) { noEmail++; continue; }
+      if (!getEmail(d, entityType)) { noEmail++; continue; }
       if (skipRecent && d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= sevenDaysAgo) {
         recent++;
       }
     }
     return { noEmail, recent };
-  }, [selected, skipRecent]);
+  }, [selected, skipRecent, entityType]);
 
   // Status breakdown for the eligible recipients
   const statusBreakdown = useMemo(() => {
@@ -108,17 +156,40 @@ export const BulkSendDialog = ({
   }, [targets, selected, previewDevId]);
 
   const previewDev = selected.find((d) => d.id === previewDevId) || selected[0];
+
+  // Substitution map used to render preview HTML/subject for the selected recipient.
+  const previewVars = useMemo<Record<string, string>>(() => {
+    const name = getName(previewDev || ({} as Recipient), entityType);
+    const contactName = previewDev?.primary_contact?.name || "Team";
+    const firstName = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
+    return entityType === "brokerage"
+      ? {
+          brokerage_name: name,
+          contact_first_name: firstName(contactName) || "Team",
+          owner_first_name: "Jane",
+          reply_to: "contact@jbj.ae",
+          cc_email: "infoo.jane@gmail.com",
+          from_name: "JBJ Global Real Estate",
+        }
+      : {
+          developer_name: name,
+        };
+  }, [previewDev, entityType]);
+
+  const renderPreview = (s: string) =>
+    s.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
-    const name = previewDev?.developer_name || "{{developer_name}}";
-    return String(template.html).replace(/\{\{developer_name\}\}/g, name);
-  }, [template, previewDev]);
+    return renderPreview(String(template.html));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template, previewVars]);
 
   const previewSubject = useMemo(() => {
     if (!template?.subject) return "";
-    const name = previewDev?.developer_name || "{{developer_name}}";
-    return String(template.subject).replace(/\{\{developer_name\}\}/g, name);
-  }, [template, previewDev]);
+    return renderPreview(String(template.subject));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template, previewVars]);
 
   const sendTest = async () => {
     const recipient = useCustomTestEmail ? testEmail : defaultTestEmail;
@@ -126,11 +197,19 @@ export const BulkSendDialog = ({
       toast.error("No valid registered email — set one in Owner Settings or use a custom address");
       return;
     }
-    await send.mutateAsync({
-      variant,
-      testRecipient: recipient,
-      testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
-    });
+    if (entityType === "brokerage") {
+      await sendBrk.mutateAsync({
+        variant: variant as BrokerageVariant,
+        testRecipient: recipient,
+        testBrokerageName: previewDev?.company_name || targets[0]?.company_name || selected[0]?.company_name,
+      });
+    } else {
+      await sendDev.mutateAsync({
+        variant: variant as RegistrationVariant,
+        testRecipient: recipient,
+        testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
+      });
+    }
   };
 
   const sendAll = async () => {
@@ -147,7 +226,11 @@ export const BulkSendDialog = ({
       const t = targets[i];
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
-        await send.mutateAsync({ developerId: t.id, variant, silent: true });
+        if (entityType === "brokerage") {
+          await sendBrk.mutateAsync({ brokerageId: t.id, variant: variant as BrokerageVariant, silent: true });
+        } else {
+          await sendDev.mutateAsync({ developerId: t.id, variant: variant as RegistrationVariant, silent: true });
+        }
         ok++;
         setStatuses((p) => ({ ...p, [t.id]: { status: "ok" } }));
       } catch (e: any) {
@@ -171,7 +254,7 @@ export const BulkSendDialog = ({
       <DialogContent className="max-w-[1500px] w-[97vw] bg-[#FDFBF7] max-h-[94vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            Send Registration Email
+            {entityType === "brokerage" ? "Send Brokerage Outreach" : "Send Registration Email"}
             {template?.locked_at ? (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
                 <Lock className="w-3 h-3" />Locked
@@ -190,7 +273,7 @@ export const BulkSendDialog = ({
           <div>
             <Label className="text-xs text-[#1A1A1A]">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
-              {(Object.keys(VARIANT_LABELS) as RegistrationVariant[]).map((v) => (
+              {(Object.keys(VARIANT_LABELS) as AnyEmailVariant[]).map((v) => (
                 <button
                   key={v}
                   type="button"
@@ -240,7 +323,7 @@ export const BulkSendDialog = ({
           <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
             <div className="text-xs text-[#1A1A1A]"><strong>Step 2 — Broadcast</strong></div>
             <div className="flex items-center justify-between text-sm text-[#1A1A1A]">
-              <span>Selected developers</span>
+              <span>Selected {entityType === "brokerage" ? "brokerages" : "developers"}</span>
               <span className="font-bold">{selected.length}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
@@ -303,7 +386,7 @@ export const BulkSendDialog = ({
                     <SelectTrigger className="h-7 text-xs w-[200px]"><SelectValue placeholder="Preview as…" /></SelectTrigger>
                     <SelectContent>
                       {selected.map((d) => (
-                        <SelectItem key={d.id} value={d.id} className="text-xs">{d.developer_name}</SelectItem>
+                        <SelectItem key={d.id} value={d.id} className="text-xs">{getName(d, entityType)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -318,7 +401,7 @@ export const BulkSendDialog = ({
                 <div className="px-3 py-2 text-xs border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
                   <div className="text-[#1A1A1A]"><strong>Subject:</strong> {previewSubject}</div>
                   <div className="text-[#5A4A2E] mt-0.5">
-                    <strong className="text-[#1A1A1A]">To:</strong> {previewDev?.developer_email || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
+                    <strong className="text-[#1A1A1A]">To:</strong> {(previewDev && getEmail(previewDev, entityType)) || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
                   </div>
                 </div>
                 <iframe
@@ -350,8 +433,8 @@ export const BulkSendDialog = ({
                     <div key={t.id} className="flex items-center justify-between px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         {icon}
-                        <span className="font-semibold text-[#1A1A1A] truncate">{t.developer_name}</span>
-                        <span className="text-[#8A7556] truncate">{t.developer_email}</span>
+                        <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
+                        <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
                       </div>
                       <span className={`uppercase tracking-wider font-bold ${
                         s === "ok" ? "text-emerald-700" :
@@ -376,7 +459,7 @@ export const BulkSendDialog = ({
               <div className="flex-1">
                 <div className="font-bold mb-1">Confirm bulk send</div>
                 <div className="text-xs leading-relaxed">
-                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> developer{targets.length === 1 ? "" : "s"}.
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{targets.length === 1 ? "" : "s"}.
                   {statusBreakdown.length > 0 && (
                     <span> Includes:{" "}
                       {statusBreakdown.map(([s, n], i) => (

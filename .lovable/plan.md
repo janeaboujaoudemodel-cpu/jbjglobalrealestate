@@ -1,90 +1,82 @@
-# Fix: Buttons & Text Rendering as Solid Black on Champagne/Gold Surfaces
+# Brokerage Outreach Automation — Mirror of Developer Flow
 
-## Root cause
+Replicate the exact developer outreach automation for brokerages: bulk email with branded templates, test sends, recent-contact skip, status pills, send log, and a pre-written "Private Breakfast Briefing" message authored as Jane (Head of Sales).
 
-`src/index.css` still contains a large legacy block (lines ~2380–2455) from the old **monochrome** era that aggressively kills the gold theme with `!important` rules. The current design system is **champagne + gold**, so these rules now actively break it.
+## What gets built
 
-Key offenders:
+### 1. Two locked, branded email templates (DB-stored, editable + lockable)
 
-```css
-/* line 2396–2405 */
-.text-gold        { color: #111111 !important; }
-.bg-gold          { background-color: #111111 !important; color: #fff !important; }
-.border-gold      { border-color: #d4d4d4 !important; }
-.fill-gold        { fill: #111111 !important; }
+Same `crm_email_templates` table the developer flow uses, with two new variants:
 
-[class*="bg-gold\/"]      { background-color: rgba(0,0,0,0.05) !important; }
-[class*="border-gold\/"]  { border-color: rgba(0,0,0,0.12) !important; }
-[class*="text-gold\/"]    { color: rgba(0,0,0,0.85) !important; }
-[class*="ring-gold"]      { --tw-ring-color: #d4d4d4 !important; }
+- `brokerage_partnership_intro` — primary outreach for brokerages not yet in our channel-partner network. Body authored as Jane, Head of Sales, JBJ GLOBAL REAL ESTATE. Asks whether the brokerage is already registered with us / has an active group, and proposes a **private breakfast briefing** at the JBJ office to discuss collaboration and partnership opportunities. Includes brokerage placeholder `{{brokerage_name}}` and a CTA button to confirm interest.
+- `brokerage_breakfast_invite` — direct breakfast-event invitation for brokerages we've already qualified (or are re-engaging). Slightly more event-focused tone with date-flexible language.
 
-/* line 2412–2424 */
-svg.text-gold, [class*="text-gold"] > svg { color: #111111 !important; }
+Both templates use the same champagne/gold institutional shell as the developer templates (logo, header, hairline, signature block). Each can be locked once finalized so the wording can't be changed accidentally.
 
-/* line 2438–2440 */
-[class*="via-gold"]  { --tw-gradient-via: #e5e5e5 !important; }
-[class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
-[class*="to-gold"]   { --tw-gradient-to: #d4d4d4 !important; }
+### 2. Edge function: `crm-send-brokerage-outreach`
 
-/* line 2443–2454 */
-[style*="#D4AF37"], [style*="#C8A766"], [style*="#B8860B"] { color: #111 !important; border-color: #d4d4d4 !important; }
-[class*="shadow-[0_..._rgba(200,167,102..."], [style*="rgba(200,167,102"] { box-shadow: ... !important; }
-```
+A 1:1 clone of `crm-send-developer-registration` with brokerage-specific fields:
 
-Every CRM and dashboard component built since the champagne migration uses `bg-gold`, `bg-gold/20`, `text-gold`, `from-gold`, etc. — these all get force-flattened to black/gray, producing the "filled with black" appearance the user sees on the Add Brokerage button hover/active state and similar gold pills, badges, gradient bars, and tab indicators across the site.
+- Validates `brokerageId` (or `testRecipient` for a test send), looks up the brokerage row in `crm_brokerage_registry`.
+- Renders `{{brokerage_name}}`, `{{contact_first_name}}` (from `primary_contact.name`), `{{owner_first_name}}` (Jane), `{{event_url}}` placeholders.
+- Sends via the existing email infrastructure (`send-transactional-email` queue) so retries, suppression, and rate-limit handling work for free.
+- On success: writes to `crm_outreach_touchpoints` (channel = "email", direction = "outbound", stage = "introduced"), updates `last_outreach_at` + increments `outreach_count` on the brokerage row, and creates a `developer_action_items`-equivalent row (we'll reuse the same table renamed semantically — see "Database" below).
+- Honors `silent` for bulk loops, `testRecipient` for test sends, and the "skip if contacted in last 7 days" guard.
 
-A second, narrower problem: `.bg-gold svg` (line 2430) forces icons inside *anything* with class `bg-gold` to white — fine for solid gold tiles, but the same selector now collides because `.bg-gold` itself was forced to `#111111` background (above), so any deliberate "champagne tile with dark icon" combination is corrupted.
+### 3. UI: brokerage tab gets the same toolset
 
-## Plan
+In `CRMRelationships.tsx` (Brokerages section):
 
-### 1. Delete the legacy "kill-gold" block
+- **Bulk-select checkboxes** on each brokerage card (already present on developers).
+- **"Send Outreach" button** that opens a brokerage-flavored `BulkSendDialog`.
+- **"Send TEST" button** next to it — auto-fills the owner's registered email (matching the developer flow change from earlier).
+- **Sent-history sub-tabs** (Inbox, Contacted, Pending Actions, Under Review, Rejected, Expired, Recently Deleted) wired to `entity_type = "brokerage"` filter on the touchpoint table.
 
-Remove lines ~2388–2455 in `src/index.css` (the entire "Tailwind gold utility class overrides", "Gold opacity variants", "Global icon contrast unification (gold)", "Gold gradient stops", "Inline style gold hex overrides", and "Gold shadow overrides" sections). These were written when the brand was monochrome and have no place in the current champagne/gold system.
+### 4. `BulkSendDialog` becomes entity-aware
 
-What replaces them: the Tailwind theme tokens already render `bg-gold = #B89555`, `text-gold = #B89555`, etc., correctly. No override is required.
+The component currently hard-codes `Developer` shape and developer variants. Refactor in place to accept an `entityType: "developer" | "brokerage"` prop. Internally it picks the right variants list, the right hook (`useSendDeveloperRegistration` vs new `useSendBrokerageOutreach`), the right template lookup, and the right placeholder substitution map. No visual changes — the dialog looks identical for both flows.
 
-### 2. Replace with a tight, modern contrast guard
+### 5. The "Jane / Private Breakfast" copy
 
-In the same location, add a small, surgical rule set that prevents the only legitimate failure modes:
+Locked template body for `brokerage_partnership_intro` (paraphrased from the user's brief, written as Jane, Head of Sales — Channel Partners):
 
-- Solid-gold tile (`.bg-gold`, `bg-[#B89555]`, `bg-[#A68444]`) → force white text on direct text children (existing memory rule already covers this).
-- Solid-ink tile (`.bg-[#1A1A1A]`, `bg-black`, `bg-zinc-900/950`) → force white text on direct text children.
-- Faded text classes that are banned by the "Faded Gold Prohibition" memory (`text-gold/10..50`) → upgrade to solid `#1A1A1A` on champagne, solid `#FDE68A` on dark.
+> Subject: Private Breakfast Briefing — JBJ Global Real Estate × {{brokerage_name}}
+>
+> Dear {{contact_first_name}},
+>
+> I'm Jane, Head of Sales handling Channel Partners at JBJ Global Real Estate. I wanted to reach out personally to check whether {{brokerage_name}} is currently registered with us or has an active group on our channel-partner network — and if not, I'd like to fix that.
+>
+> We're hosting a **private breakfast briefing** at our Dubai office for senior leadership at selected brokerages. The agenda is short and focused: a market read on Q[NN], a walk-through of our exclusive inventory and commission structure, and a private conversation about how we can collaborate as channel partners going forward.
+>
+> If this is of interest, reply to this email and I'll have my office send three date options. I'd also be glad to bring a tailored partnership brief specific to {{brokerage_name}}.
+>
+> Warm regards,
+>
+> **Jane Williams**
+> Head of Sales — Channel Partners
+> JBJ GLOBAL REAL ESTATE
 
-This keeps the protection the legacy block was originally trying to provide, but without nuking the entire gold theme.
+The `{{owner_first_name}}` variable defaults to "Jane" but resolves to the logged-in owner's first name when present, so the same template works whether the founder or Jane is sending. The user can edit and lock the wording from the existing template editor UI.
 
-### 3. Audit Button variants for the same trap
+## Database
 
-Verify in `src/components/ui/button.tsx`:
-- `variant="gold"` → `bg-[#B89555] text-white` (correct, but uses arbitrary value so the new guard above is the safety net).
-- `variant="primary"` → `bg-[#1A1A1A] text-white` (correct).
-- `variant="hero"` hover state → `hover:bg-[#FDFBF7] hover:text-[#1A1A1A]` (correct, fix any cases where hover lacked an explicit text color).
+One migration:
 
-No structural change — just confirm every variant pairs background + text + hover-text, so the global guard never has work to do.
+1. **`crm_brokerage_registry`** — add the same outreach columns developers already have if missing: `last_outreach_at timestamptz`, `outreach_count int default 0`, `outreach_stage text default 'not_contacted'`, `deleted_at timestamptz`. Add an index on `(deleted_at, last_outreach_at)`.
+2. **`developer_action_items`** — generalize to **`crm_action_items`** with an added `entity_type text check (entity_type in ('developer','brokerage'))` column and a backfill (`update ... set entity_type = 'developer'`). Add a compatibility view named `developer_action_items` that filters to `entity_type = 'developer'` so existing developer code keeps working. RLS policies are recreated on the new table with the same `requireOwnerAuth` rules.
+3. **`crm_email_templates`** — insert two new rows for `brokerage_partnership_intro` and `brokerage_breakfast_invite` with the locked body above.
 
-### 4. Run the white-on-light + faded-gold static checks
+## Files touched
 
-The repo already ships two CI scripts:
-- `scripts/contrast/check-white-on-light.mjs`
-- `scripts/check-faded-gold.mjs`
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — new edge function (clone of developer one).
+- `supabase/migrations/<timestamp>_brokerage_outreach.sql` — schema + seed templates.
+- `src/hooks/useCRMRelationships.ts` — add `useSendBrokerageOutreach`, extend `RegistrationVariant` union, generalize `useEmailTemplate` to accept any variant.
+- `src/components/crm/BulkSendDialog.tsx` — accept `entityType` prop, swap labels/hooks/variants accordingly.
+- `src/pages/CRMRelationships.tsx` — wire bulk-select + Send Outreach + Send TEST on the Brokerages tab; reuse `SentHistoryView` with `entityType="brokerage"`.
+- `src/components/crm/SentHistoryView.tsx` — already entity-aware after the recent rewrite; only need to pass `entity_type = "brokerage"` filter through.
 
-Run both after the CSS changes; fix any new violations they flag (most likely a handful of `text-gold/40` → `text-[#1A1A1A]` swaps).
+## Out of scope for this turn
 
-### 5. Smoke-test surfaces most likely affected
-
-Visually verify:
-- `/crm` Brokerages tab — Add Brokerage button (the reported case), tab pills, "UAE Directory" badges.
-- `/owner/inbox` and Sent History tabs — the new tab strip.
-- Property cards — price chip (orange), gold corner ribbon, developer logo container.
-- Footer — gold hairline divider.
-- Any hero with `data-surface="dark"` — buttons must stay white-on-dark.
-
-## Technical details
-
-Files touched:
-- `src/index.css` — remove ~70 lines (legacy block), add ~25 lines (modern guard).
-- `src/components/ui/button.tsx` — only if the variant audit finds a missing hover text color; otherwise untouched.
-
-No DB changes. No component rewrites. The fix is purely a CSS regression caused by stale global overrides.
-
-After this change, the "Add Brokerage" button (and every other `variant="gold"` CTA, gold badge, gold gradient, gold icon, and `text-gold` label) renders with the intended champagne-gold appearance and white text — no more black-fill artifacts on normal or hover states.
+- Logo auto-fetch for brokerages (covered by the existing `<DeveloperLogo />` standardization — same component now renders brokerage logos identically).
+- Calendar booking for the breakfast event (use the existing meeting-booking orchestration once the brokerage replies; no changes needed).
+- WhatsApp / SMS variants (email-only for v1, matching the developer flow exactly).

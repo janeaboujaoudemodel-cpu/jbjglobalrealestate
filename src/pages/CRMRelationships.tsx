@@ -280,12 +280,16 @@ const BrokeragesTab = () => {
   const upsert = useUpsertBrokerage();
   const del = useDeleteBrokerage();
   const upsertReminder = useUpsertReminder();
+  const { data: ownerSettings } = useOwnerSettings();
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [emirateFilter, setEmirateFilter] = useState("all");
   const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
   const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
@@ -372,6 +376,28 @@ const BrokeragesTab = () => {
           { key: "deal_count", label: "Deals" }, { key: "primary_contact", label: "Primary Contact" },
           { key: "entry_source", label: "Source" }, { key: "notes", label: "Notes" },
         ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            const eligible = filtered.filter((r: any) => r.entry_source !== "directory" && (r.primary_contact?.email || r.email));
+            const ids = new Set<string>(eligible.map((r: any) => r.id));
+            setBulkSel((cur) => (cur.size === ids.size ? new Set() : ids));
+          }}
+          title="Select all eligible brokerages on this view"
+        >
+          <CheckCircle2 className="w-4 h-4 mr-2" />
+          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all"}
+        </Button>
+        <Button
+          variant="gold"
+          onClick={() => {
+            if (bulkSel.size === 0) { toast.error("Select at least one brokerage first"); return; }
+            setBulkOpen(true);
+          }}
+          className="shadow-md"
+        >
+          <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
+        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
@@ -388,6 +414,14 @@ const BrokeragesTab = () => {
             }`}>
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
+                  {!isDirectory && (r.primary_contact?.email || r.email) && (
+                    <Checkbox
+                      checked={bulkSel.has(r.id)}
+                      onCheckedChange={() => toggleBulk(r.id)}
+                      className="mt-1"
+                      aria-label={`Select ${r.company_name} for bulk outreach`}
+                    />
+                  )}
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="font-semibold text-base">{r.company_name}</h3>
@@ -479,6 +513,14 @@ const BrokeragesTab = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <BulkSendDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        selected={data.filter((r: any) => bulkSel.has(r.id))}
+        defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+        entityType="brokerage"
+      />
     </div>
   );
 };
