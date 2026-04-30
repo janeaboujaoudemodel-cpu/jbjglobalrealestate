@@ -28,6 +28,7 @@ import PageLoader from "@/components/PageLoader";
 import { InlinePageLoader } from "@/components/PageLoader";
 import PrintModeBoundary from "@/components/PrintModeBoundary";
 import PrintBlockerGuard from "@/components/PrintBlockerGuard";
+import DevStyleToggle from "@/components/dev/DevStyleToggle";
 // BrandIntroSplash disabled until further notice
 // import BrandIntroSplash from "@/components/BrandIntroSplash";
 
@@ -72,6 +73,7 @@ const App = () => {
           <SEOServiceArea />
           <Toaster />
           <Sonner />
+          <DevStyleToggle />
           <BrowserRouter>
             <AuthProvider>
             <BrandPaletteProvider>
