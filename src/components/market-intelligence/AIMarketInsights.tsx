@@ -10,6 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_H4,
+  MI_BODY,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
