@@ -7787,6 +7787,78 @@ export type Database = {
           },
         ]
       }
+      developer_action_items: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          developer_email: string | null
+          developer_id: string | null
+          developer_name: string | null
+          extracted_summary: string | null
+          id: string
+          message_id: string | null
+          metadata: Json
+          request_type: Database["public"]["Enums"]["developer_request_type"]
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["developer_action_status"]
+          suggested_reply: string | null
+          thread_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          developer_email?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          extracted_summary?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json
+          request_type?: Database["public"]["Enums"]["developer_request_type"]
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["developer_action_status"]
+          suggested_reply?: string | null
+          thread_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          developer_email?: string | null
+          developer_id?: string | null
+          developer_name?: string | null
+          extracted_summary?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json
+          request_type?: Database["public"]["Enums"]["developer_request_type"]
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["developer_action_status"]
+          suggested_reply?: string | null
+          thread_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_action_items_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_developer_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_action_items_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_activity_log: {
         Row: {
           activity_type: string
@@ -9157,6 +9229,45 @@ export type Database = {
           user_email?: string | null
           user_id?: string | null
           watermark_id?: string | null
+        }
+        Relationships: []
+      }
+      document_library_links: {
+        Row: {
+          applicable_request_types: Database["public"]["Enums"]["developer_request_type"][]
+          created_at: string
+          description: string | null
+          id: string
+          is_default: boolean
+          label: string
+          position: number
+          updated_at: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          applicable_request_types?: Database["public"]["Enums"]["developer_request_type"][]
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          label: string
+          position?: number
+          updated_at?: string
+          url: string
+          user_id: string
+        }
+        Update: {
+          applicable_request_types?: Database["public"]["Enums"]["developer_request_type"][]
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          label?: string
+          position?: number
+          updated_at?: string
+          url?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -10561,6 +10672,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "esign_audit_log_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "signed_contracts_index"
+            referencedColumns: ["envelope_id"]
+          },
+          {
             foreignKeyName: "esign_audit_log_recipient_id_fkey"
             columns: ["recipient_id"]
             isOneToOne: false
@@ -10741,6 +10859,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "esign_fields_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "signed_contracts_index"
+            referencedColumns: ["envelope_id"]
+          },
+          {
             foreignKeyName: "esign_fields_recipient_id_fkey"
             columns: ["recipient_id"]
             isOneToOne: false
@@ -10824,6 +10949,13 @@ export type Database = {
             referencedRelation: "esign_envelopes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "esign_recipients_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "signed_contracts_index"
+            referencedColumns: ["envelope_id"]
+          },
         ]
       }
       esign_signed_documents: {
@@ -10867,6 +10999,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "esign_envelopes"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "esign_signed_documents_envelope_id_fkey"
+            columns: ["envelope_id"]
+            isOneToOne: false
+            referencedRelation: "signed_contracts_index"
+            referencedColumns: ["envelope_id"]
           },
         ]
       }
@@ -18573,6 +18712,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      owner_signature_assets: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          is_default: boolean
+          kind: Database["public"]["Enums"]["signature_asset_kind"]
+          label: string | null
+          metadata: Json
+          storage_path: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          is_default?: boolean
+          kind: Database["public"]["Enums"]["signature_asset_kind"]
+          label?: string | null
+          metadata?: Json
+          storage_path?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_default?: boolean
+          kind?: Database["public"]["Enums"]["signature_asset_kind"]
+          label?: string | null
+          metadata?: Json
+          storage_path?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       partner_vault_access_logs: {
         Row: {
@@ -28823,6 +29001,31 @@ export type Database = {
         }
         Relationships: []
       }
+      signed_contracts_index: {
+        Row: {
+          area: string | null
+          completed_at: string | null
+          developer_name: string | null
+          document_filename: string | null
+          document_size_bytes: number | null
+          document_url: string | null
+          emirate: string | null
+          envelope_id: string | null
+          envelope_metadata: Json | null
+          envelope_name: string | null
+          envelope_status:
+            | Database["public"]["Enums"]["esign_envelope_status"]
+            | null
+          primary_recipient_email: string | null
+          primary_recipient_name: string | null
+          sender_email: string | null
+          sender_id: string | null
+          sender_name: string | null
+          signed_at: string | null
+          signed_document_id: string | null
+        }
+        Relationships: []
+      }
       uae_developers_public: {
         Row: {
           description: string | null
@@ -29928,6 +30131,20 @@ export type Database = {
         | "verified"
         | "rejected"
         | "cancelled"
+      developer_action_status:
+        | "pending"
+        | "auto_replied"
+        | "awaiting_owner"
+        | "done"
+        | "dismissed"
+      developer_request_type:
+        | "docs_library"
+        | "vat_certificate"
+        | "mou"
+        | "license"
+        | "registration"
+        | "contract_signature"
+        | "other"
       esign_audit_action:
         | "created"
         | "sent"
@@ -30083,6 +30300,7 @@ export type Database = {
         | "policy_violation"
         | "lockdown_triggered"
       security_severity: "info" | "low" | "medium" | "high" | "critical"
+      signature_asset_kind: "signature" | "initial" | "stamp"
       uae_company_priority: "High" | "Medium" | "Low" | "Unknown"
       uae_developer_company_type:
         | "Private Developer"
@@ -30480,6 +30698,22 @@ export const Constants = {
         "rejected",
         "cancelled",
       ],
+      developer_action_status: [
+        "pending",
+        "auto_replied",
+        "awaiting_owner",
+        "done",
+        "dismissed",
+      ],
+      developer_request_type: [
+        "docs_library",
+        "vat_certificate",
+        "mou",
+        "license",
+        "registration",
+        "contract_signature",
+        "other",
+      ],
       esign_audit_action: [
         "created",
         "sent",
@@ -30651,6 +30885,7 @@ export const Constants = {
         "lockdown_triggered",
       ],
       security_severity: ["info", "low", "medium", "high", "critical"],
+      signature_asset_kind: ["signature", "initial", "stamp"],
       uae_company_priority: ["High", "Medium", "Low", "Unknown"],
       uae_developer_company_type: [
         "Private Developer",
