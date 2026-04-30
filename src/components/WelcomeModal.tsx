@@ -73,7 +73,7 @@ const WelcomeModal = () => {
         }}
       >
         <DialogContent 
-          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl"
+          className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-md p-0 overflow-hidden shadow-2xl rounded-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
           dir={isRTL ? 'rtl' : 'ltr'}
           aria-describedby={undefined}
         >
