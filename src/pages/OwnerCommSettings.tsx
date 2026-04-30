@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ChannelGrid from "@/components/owner-comm/ChannelGrid";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -220,96 +221,15 @@ export default function OwnerCommSettings() {
             {/* Channels Tab */}
             <TabsContent value="channels">
               <div className="grid gap-4">
-                {/* Connected Channels */}
                 <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">Connected Channels</CardTitle>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="primary" size="sm">
-                            <Plus className="h-4 w-4 mr-2" />
-                            Add Channel
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Connect a Channel</DialogTitle>
-                          </DialogHeader>
-                          <div className="grid grid-cols-2 gap-3 mt-4">
-                            {channelTypes.map(ch => {
-                              const Icon = ch.icon;
-                              return (
-                                <Button
-                                  key={ch.value}
-                                  variant="outline"
-                                  className="h-auto py-4 flex-col gap-2 border-gold/20"
-                                  onClick={() => setAddChannelType(ch.value)}
-                                >
-                                  <Icon className={`h-6 w-6 ${ch.color}`} />
-                                  <span className="text-sm">{ch.label}</span>
-                                </Button>
-                              );
-                            })}
-                          </div>
-                          <p className="text-xs text-[#5A4A2E] text-center mt-4">
-                            Note: OAuth integrations coming soon. Manual setup available.
-                          </p>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
+                    <CardTitle className="text-lg text-[#1A1A1A]">Connected Channels</CardTitle>
+                    <CardDescription className="text-[#5A4A2E]">
+                      One-click connect. We auto-detect what's already linked at the workspace level.
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {channelsLoading ? (
-                      <div className="flex items-center justify-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin text-gold" />
-                      </div>
-                    ) : channels.length === 0 ? (
-                      <div className="text-center py-8">
-                        <MessageSquare className="h-12 w-12 text-[#8A7556] mx-auto mb-3" />
-                        <p className="text-[#5A4A2E]">No channels connected</p>
-                        <p className="text-[#5A4A2E] text-sm">Add your first channel to start receiving messages</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {channels.map((channel) => {
-                          const chType = channelTypes.find(c => c.value === channel.channel_type);
-                          const Icon = chType?.icon || Globe;
-                          return (
-                            <div
-                              key={channel.id}
-                              className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-[#FDFBF7]"
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-lg bg-[#F7F2EA] ${chType?.color || 'text-[#5A4A2E]'}`}>
-                                  <Icon className="h-5 w-5" />
-                                </div>
-                                <div>
-                                  <p className="font-medium text-[#1A1A1A]">{channel.display_name}</p>
-                                  <p className="text-xs text-[#5A4A2E]">{channel.identifier}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Badge variant={channel.is_active ? 'default' : 'outline'} className={channel.is_active ? 'bg-green-500' : ''}>
-                                  {channel.is_active ? 'Active' : 'Inactive'}
-                                </Badge>
-                                <Badge variant="outline">
-                                  {channel.assistant_type === 'owner' ? 'Personal' : 'Company'}
-                                </Badge>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 text-red-500"
-                                  onClick={() => deleteChannel.mutate(channel.id)}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                    <ChannelGrid />
                   </CardContent>
                 </Card>
               </div>
