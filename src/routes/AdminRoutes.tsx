@@ -27,6 +27,7 @@ const BrokerIntelligence = lazy(() => import("@/pages/market-intelligence/intern
 const AIInsights = lazy(() => import("@/pages/market-intelligence/internal/AIInsights"));
 const DataOperations = lazy(() => import("@/pages/market-intelligence/internal/DataOperations"));
 const ContrastReview = lazy(() => import("@/pages/internal/ContrastReview"));
+const FadedGoldAllowlist = lazy(() => import("@/pages/admin/FadedGoldAllowlist"));
 const HRAgent = lazy(() => import("@/pages/HRAgent"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
@@ -94,6 +95,7 @@ export const AdminRoutes = () => (
     <Route path="/admin/legal-center" element={<OwnerGuard><LegalComplianceCenter /></OwnerGuard>} />
     <Route path="/admin/training-guide" element={<OwnerGuard><AdminTrainingGuide /></OwnerGuard>} />
     <Route path="/admin/translation-coverage" element={<OwnerGuard><Suspense fallback={<PageLoader />}><TranslationCoverage /></Suspense></OwnerGuard>} />
+    <Route path="/admin/faded-gold-allowlist" element={<OwnerGuard><Suspense fallback={<PageLoader />}><FadedGoldAllowlist /></Suspense></OwnerGuard>} />
     <Route path="/admin/hr" element={<Navigate to="/hr-dashboard?tab=cv-center" replace />} />
 
     {/* ── Internal Market Intelligence ── */}
