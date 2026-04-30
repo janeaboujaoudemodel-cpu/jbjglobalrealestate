@@ -2385,73 +2385,51 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   --tw-gradient-to: #F5F5F5 !important;
 }
 
-/* Gold border hex overrides → gray */
-[class*="border-[#D4AF37]"],
-[class*="border-[#C8A766]"],
-[class*="border-[#D4B896]"] {
-  border-color: #d4d4d4 !important;
-}
+/* ============================================================
+ * MODERN CHAMPAGNE/GOLD CONTRAST GUARD
+ * Replaces the legacy monochrome "kill-gold" block. The brand is
+ * now champagne + gold; the Tailwind tokens already render gold
+ * correctly, so we only enforce the few legitimate failure modes:
+ *
+ *   1. Icons inside SOLID-INK tiles  → white
+ *   2. Icons inside SOLID-GOLD tiles → white
+ *   3. Faded gold text (text-gold/05..50) on default surface
+ *      → upgrade to ink #1A1A1A so it stays readable
+ *      (matches the "Faded Gold Prohibition" memory rule)
+ * ============================================================ */
 
-/* ── Tailwind gold utility class overrides ── */
-.text-gold { color: #111111 !important; }
-.bg-gold { background-color: #111111 !important; color: #fff !important; }
-.border-gold { border-color: #d4d4d4 !important; }
-.fill-gold { fill: #111111 !important; }
-
-/* Gold opacity variants */
-[class*="bg-gold\/"] { background-color: rgba(0,0,0,0.05) !important; }
-[class*="border-gold\/"] { border-color: rgba(0,0,0,0.12) !important; }
-[class*="text-gold\/"] { color: rgba(0,0,0,0.85) !important; }
-[class*="ring-gold"] { --tw-ring-color: #d4d4d4 !important; }
-
-/* ── Global icon contrast unification ──
-   All icons get solid black unless inside a dark container.
-   Icons inside dark containers get white. */
-
-/* Force all faded/muted icon colors to solid black */
-svg.text-gold,
-.text-gold > svg,
-[class*="text-gold"] > svg,
-svg.text-gray-400,
-svg.text-gray-500,
-svg.text-gray-600,
-svg[class*="text-muted"],
-[class*="text-gray-400"] > svg,
-[class*="text-gray-500"] > svg,
-[class*="text-gray-600"] > svg,
-[class*="text-muted"] > svg {
-  color: #111111 !important;
-}
-
-/* Icons inside dark containers must be white */
+/* 1. Icons on solid-ink tiles → white */
 .bg-black svg,
-.bg-gray-900 svg,
-.bg-gray-950 svg,
-.bg-gold svg,
-[class*="bg-black"] > svg,
-[class*="bg-gray-900"] > svg,
-[class*="bg-gray-950"] > svg {
-  color: #FFFFFF !important;
+.bg-zinc-900 svg, .bg-zinc-950 svg,
+.bg-neutral-900 svg, .bg-neutral-950 svg,
+.bg-gray-900 svg, .bg-gray-950 svg,
+.bg-stone-900 svg, .bg-stone-950 svg,
+.bg-slate-900 svg, .bg-slate-950 svg,
+[class*="bg-[#1A1A1A]"] > svg,
+[class*="bg-[#0F0F0F]"] > svg,
+[class*="bg-[#111"] > svg {
+  color: #FFFFFF;
 }
 
-/* Gold gradient stops */
-[class*="via-gold"] { --tw-gradient-via: #e5e5e5 !important; }
-[class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
-[class*="to-gold"] { --tw-gradient-to: #d4d4d4 !important; }
+/* 2. Icons on solid-gold tiles → white (gold #B89555 / deep #A68444) */
+.bg-gold > svg,
+[class*="bg-[#B89555]"] > svg,
+[class*="bg-[#A68444]"] > svg,
+[class*="bg-[#C8A766]"] > svg {
+  color: #FFFFFF;
+}
 
-
-/* Inline style gold hex overrides */
-[style*="#D4AF37"] { color: #111 !important; border-color: #d4d4d4 !important; }
-[style*="#C8A766"] { color: #111 !important; border-color: #d4d4d4 !important; }
-[style*="#B8860B"] { color: #111 !important; border-color: #d4d4d4 !important; }
-
-/* Gold shadow overrides — remove gold-tinted shadows */
-[class*="shadow-[0_10px_40px_rgba(200,167,102"],
-[class*="shadow-[0_8px_25px_rgba(200,167,102"],
-[class*="shadow-[0_4px_20px_rgba(200,167,102"],
-[class*="shadow-[0_2px_8px_rgba(212,184,150"],
-[style*="rgba(200,167,102"] {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+/* 3. Faded gold text on default (champagne) surface → solid ink.
+   Dark surfaces are exempt; their own block (data-surface="dark") wins. */
+:root:not(.dark) :is(:not([data-surface="dark"])) :is(
+  [class*="text-gold\/0"],
+  [class*="text-gold\/1"],
+  [class*="text-gold\/2"],
+  [class*="text-gold\/3"],
+  [class*="text-gold\/4"],
+  [class*="text-gold\/5"]
+) {
+  color: #1A1A1A !important;
 }
 
 /* ============================================================
