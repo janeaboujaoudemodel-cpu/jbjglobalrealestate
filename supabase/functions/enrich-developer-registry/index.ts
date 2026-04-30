@@ -332,9 +332,8 @@ serve(async (req) => {
         } catch (e) {
           console.error("Perplexity step failed for", r.developer_name, e);
         }
-        // small delay between rows for rate limiting
-        await new Promise((res) => setTimeout(res, 1200));
       }
+
 
       // 3. Firecrawl fallback for phone/email
       const websiteForScrape = updates.website || r.website;
