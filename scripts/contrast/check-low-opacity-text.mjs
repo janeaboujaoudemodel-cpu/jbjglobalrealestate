@@ -62,14 +62,32 @@ function check() {
     const lines = text.split('\n');
     lines.forEach((line, idx) => {
       if (line.includes('contrast-ok')) return;
+
+      // Heuristic: lines that style an icon-shaped element are reported as
+      // warnings, not hard failures. Icons use `text-*` to drive currentColor
+      // but a faded icon is rarely the same regression as faded body copy.
+      const isIconLine =
+        /<svg\b/.test(line) ||
+        // Self-closing JSX of a PascalCase component carrying icon-shaped
+        // size utilities (w-N h-N or size-N) — covers Lucide-style icons.
+        (/<[A-Z][A-Za-z0-9]*\b[^>]*\/>/.test(line) &&
+          /\b(?:w-\d{1,2}|size-\d{1,2})\b/.test(line) &&
+          /\b(?:h-\d{1,2}|size-\d{1,2})\b/.test(line));
+
       const segments = line.split(/['"`]|\?|,|\$\{|\}/);
       for (const seg of segments) {
         // Skip segments where the low alpha is part of a state-driven
-        // reveal pattern (hover/focus/peer/group/data-state) — these are
-        // intentionally invisible at rest and become visible via a paired
-        // *:opacity-100 / *:text-…/100 utility.
+        // reveal pattern — intentionally invisible at rest, becomes visible
+        // via a paired *:opacity-100 / *:text-…/100 utility.
         const hasRevealPair =
-          /(?:hover|focus|focus-visible|focus-within|active|peer-[a-z]+|group-[a-z]+|data-\[[^\]]+\]|aria-\w+|open|in|has-\[[^\]]+\]):(?:opacity-\d{2,3}|opacity-100|text-[a-z][a-z0-9-]*\/\d{2,3})/.test(
+          /(?:hover|focus|focus-visible|focus-within|active|disabled|peer-[a-z-]+|group-[a-z-]+|data-\[[^\]]+\]|aria-\w+|open|in|has-\[[^\]]+\]):(?:opacity-\d{2,3}|opacity-100|text-[a-z][a-z0-9-]*\/\d{2,3})/.test(
+            seg,
+          );
+        // Also skip if the low value is itself prefixed with a state (e.g.
+        // `disabled:opacity-30`, `hover:text-white/20`) — that's the
+        // *target* state, not the resting one.
+        const isStatePrefixed =
+          /(?:hover|focus|focus-visible|focus-within|active|disabled|peer-[a-z-]+|group-[a-z-]+|data-\[[^\]]+\]|aria-\w+|open|in|has-\[[^\]]+\]):(?:opacity-(?:\[0?\.\d{1,2}\]|\d{1,3})|text-[a-z][a-z0-9-]*\/\d{1,3})/.test(
             seg,
           );
 
@@ -78,18 +96,19 @@ function check() {
         TEXT_ALPHA_RE.lastIndex = 0;
         while ((m = TEXT_ALPHA_RE.exec(seg))) {
           const alpha = Number(m[1]);
-          if (alpha < MIN_TEXT_ALPHA && !hasRevealPair) {
+          if (alpha < MIN_TEXT_ALPHA && !hasRevealPair && !isStatePrefixed) {
             violations.push({
               file: path.relative(root, file),
               line: idx + 1,
               kind: `text-*/${alpha}`,
+              isIcon: isIconLine,
               snippet: line.trim().slice(0, 200),
             });
           }
         }
 
         // 2) opacity-[0.NN] / opacity-NN applied to a text element
-        if (HAS_TEXT_UTIL_RE.test(seg) && !hasRevealPair) {
+        if (HAS_TEXT_UTIL_RE.test(seg) && !hasRevealPair && !isStatePrefixed) {
           OPACITY_BRACKET_RE.lastIndex = 0;
           while ((m = OPACITY_BRACKET_RE.exec(seg))) {
             const alphaPct = m[1].length === 1 ? Number(m[1]) * 10 : Number(m[1]);
@@ -98,6 +117,7 @@ function check() {
                 file: path.relative(root, file),
                 line: idx + 1,
                 kind: `opacity-[0.${m[1]}]`,
+                isIcon: isIconLine,
                 snippet: line.trim().slice(0, 200),
               });
             }
@@ -110,6 +130,7 @@ function check() {
                 file: path.relative(root, file),
                 line: idx + 1,
                 kind: `opacity-${v}`,
+                isIcon: isIconLine,
                 snippet: line.trim().slice(0, 200),
               });
             }
