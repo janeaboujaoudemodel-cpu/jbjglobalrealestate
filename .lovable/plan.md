@@ -1,102 +1,96 @@
-# Developer Documents & Auto-Sign Hub
+## Goal
 
-## What you're getting
+Four CRM Developer Registry improvements:
 
-Five linked pieces, all gated behind OwnerGuard:
+1. Collapse the Outreach Queue card so it doesn't dominate the page.
+2. Expand the Sent History side beyond Under Review / Rejected / Expired with new sub-tabs: Inbox, Contacted, Pending Actions, Recently Deleted.
+3. Make "Send TEST" always send to my registered email automatically.
+4. Show the real developer logo next to every developer everywhere (registry rows, history cards, dropdowns) and on every project related to that developer.
 
-1. **Inbox sync** — Pull every email arriving at `infoo.jane@gmail.com` (which receives the `contact@jbj.ae` forwarder) into Owner Inbox, classify it as "developer-request", and surface a **Required Actions** rail.
-2. **Smart auto-reply** — When a developer asks for registration, license, MOU, etc., AI matches the request to your shared documents library and replies with the link plus a personalized message — one click to send, or auto-send with a confidence threshold.
-3. **VAT Certificate template** — One-tap generator that builds a JBJ-branded VAT certificate (header + footer + your details), reserves placeholders for stamp + signature, and outputs PDF/PNG. Reusable for any document you want to issue.
-4. **Adopt Signature Studio** — Sign + Stamp once, click "Adopt", and the system fills every signature/initial/stamp field on the document, saves date, and re-uploads. Works on contracts the developer sends you.
-5. **Contract Vault** — Every signed contract lands here, filterable by emirate, area, developer name, status, and date.
+---
 
-## Architecture
+## 1. Collapsible Outreach Queue
+
+File: `src/pages/CRMRelationships.tsx` (DeveloperRegistryView, around lines 860-980).
+
+- Wrap the entire queue body (filter row + bulk-action bar + status chip row + cards grid) in a `<Collapsible>` from `@/components/ui/collapsible`.
+- Collapsed by default (persist state in `localStorage` key `crm.queue.collapsed`).
+- Header strip remains visible: "Outreach Queue (n)" + chevron toggle + the existing sub-tab pills.
+- Sent History tab keeps current behaviour (no collapse — that's the side the user actively works in).
+
+## 2. Expanded Sent History with new sub-tabs
+
+File: `src/components/crm/SentHistoryView.tsx`.
+
+Add a top-level segmented control inside Sent History with 7 chips (counts shown):
 
 ```text
-Gmail (infoo.jane@gmail.com ⇐ contact@jbj.ae forwarder)
-           │
-           ▼
-[edge fn: gmail-inbox-sync] ──► owner_comm_threads / owner_comm_messages
-           │                       │
-           ▼                       ▼
-[edge fn: classify-developer-request]      Inbox UI (existing)
-           │                                 │
-           ▼                                 ▼
-   developer_action_items ─────► Required Actions rail
-                                   │
-                                   ├─► "Send documents library link" → reply via Gmail API
-                                   ├─► "Generate VAT certificate" → /owner/templates/vat
-                                   └─► "Sign contract" → /owner/sign/:id (Adopt flow)
-                                                          │
-                                                          ▼
-                                                 esign_envelopes
-                                                  + signed_documents
-                                                          │
-                                                          ▼
-                                                  Contract Vault UI
+[All] [Inbox] [Contacted] [Pending Actions] [Under Review] [Rejected] [Expired] [Recently Deleted]
 ```
 
-## Step-by-step plan
+Filter logic per chip (computed from existing fields + a couple of new joins):
 
-### 1. Database (migration)
-- `developer_action_items` — one row per detected request. Columns: `id`, `user_id`, `thread_id` (FK `owner_comm_threads`), `developer_id` (FK `crm_developer_registry`, nullable), `request_type` ENUM (`docs_library`, `vat_certificate`, `mou`, `license`, `registration`, `contract_signature`, `other`), `status` (`pending`, `auto_replied`, `awaiting_owner`, `done`, `dismissed`), `extracted_summary` (text), `suggested_reply` (text), `confidence` (numeric), `metadata` (jsonb), timestamps. RLS: `user_id = auth.uid()`.
-- `owner_signature_assets` — stores adopted signature/stamp PNGs as base64 or storage paths. Columns: `id`, `user_id`, `kind` ENUM (`signature`, `initial`, `stamp`), `image_url`, `is_default`, `created_at`. RLS: owner-only.
-- `signed_contracts_index` — denormalized view backed by `esign_signed_documents` + envelope metadata for fast filter (developer_name, emirate, area, signed_at). Materialized via DB view, no extra writes.
-- `document_library_links` — owner-curated registry of canonical documents (label, url, applicable request_types[]). Seeded with the JBJ documents library URL you previously shared. RLS: owner-only.
+- **Inbox** — developers with at least one *incoming* row in `developer_action_items` (existing table from Auto-Sign Hub) where `direction = 'inbound'` and not yet resolved.
+- **Contacted** — `last_outreach_at` set in last 30d AND no inbound reply yet.
+- **Pending Actions** — joined `developer_action_items` rows still `status = 'open'` or `awaiting_owner`.
+- **Under Review / Rejected / Expired** — existing registry `status` field (kept).
+- **Recently Deleted** — registry rows with `deleted_at IS NOT NULL` in last 30 days (soft delete).
 
-### 2. Edge functions
-- `gmail-inbox-sync` (POST, scheduled every 2 min via pg_cron) — reads `infoo.jane@gmail.com` via `google_mail` connector, upserts threads/messages into `owner_comm_*`. Uses `historyId` checkpoint stored in `owner_comm_settings`.
-- `classify-developer-request` (called per new inbound message) — Lovable AI (`google/gemini-2.5-flash`) extracts `request_type`, suggested reply text, confidence. Inserts into `developer_action_items`.
-- `send-developer-reply` (POST) — Owner-only. Sends a Gmail reply via the connector, optionally with attached document library link, and marks the action item resolved.
-- `generate-vat-certificate` (POST) — Renders branded HTML→PDF (jsPDF), returns base64 + uploads to `signed-contracts` storage bucket. Reserves stamp/signature anchors.
-- `apply-adopt-signature` (POST) — Takes envelope id + adopted signature/stamp asset ids. Walks `esign_fields`, fills each one with the saved PNG + today's date, regenerates the signed PDF, marks envelope `signed`, writes to `esign_signed_documents`.
+Each card keeps the existing layout but gains:
+- A small inbox badge ("3 new replies") when inbound items exist.
+- A "Restore" button on Recently Deleted rows.
 
-All auth-gated with `requireOwnerAuth`.
+## 3. "Send TEST" always goes to my registered email
 
-### 3. Storage buckets
-- `signed-contracts` (private, owner-only RLS).
-- `owner-signature-assets` (private, owner-only RLS).
-- `template-outputs` (private, owner-only RLS).
+File: `src/components/crm/BulkSendDialog.tsx` (line ~117 `sendTest`).
 
-### 4. UI — wired into existing routes
-- **`/owner/inbox`** — new **Required Actions** rail (right side) listing `developer_action_items`. Each row: developer name, request type, "Send link", "Open VAT", "Sign contract", "Dismiss".
-- **`/owner/templates/vat`** — VAT certificate composer (champagne-themed, ink text, gold tabs). Live preview, "Generate PDF", "Send to developer".
-- **`/owner/sign/:envelopeId`** — Adopt Signature Studio. Tabs: *Signature*, *Initials*, *Stamp*. Each pad supports draw, type, or upload. "Save & Adopt" persists to `owner_signature_assets`. Click "Adopt to all fields" to fill every placeholder; one-click "Sign & Send".
-- **`/owner/contracts`** — Contract Vault. Table with filters: developer, emirate, area, status, date range. Row actions: download, view audit log, re-send.
+- Resolve the owner's email server-side via the existing `useOwnerSettings()` hook (already imported in CRMRelationships) → fall back to `auth.user.email`.
+- Replace the manual `testEmail` Input with a read-only display of "Test will be sent to: <owner-email>".
+- Keep the input editable behind a small "Use a different address" toggle for power users, but default to the registered owner email.
+- The "Send TEST" button always fires regardless of what's selected — uses `previewDev` if any, otherwise template defaults.
 
-All four reuse existing primitives: `<IconTile />`, gold-active tabs, champagne surfaces, `--price-orange` for amounts, AdaptiveHairline.
+## 4. Real developer logos everywhere
 
-### 5. AI rules for auto-reply
-- High confidence (≥ 0.85) + request_type ∈ {docs_library, registration, license, MOU} → auto-send pre-canned reply with the documents library link, mark `auto_replied`, log under thread.
-- Lower confidence or `vat_certificate`/`contract_signature` → leave pending in Required Actions for owner one-click resolution.
-- Owner can flip the per-type "auto-send" toggle in `/owner/comm-settings`.
+Logo source of truth is already `developers.logo_url` (validated via `src/utils/developerLogo.ts`). Two gaps to close:
 
-## Files to create / edit
+### 4a. Registry & history rows
 
-**New**
-- `supabase/migrations/<timestamp>_developer_documents_hub.sql`
-- `supabase/functions/gmail-inbox-sync/index.ts`
-- `supabase/functions/classify-developer-request/index.ts`
-- `supabase/functions/send-developer-reply/index.ts`
-- `supabase/functions/generate-vat-certificate/index.ts`
-- `supabase/functions/apply-adopt-signature/index.ts`
-- `src/pages/owner/DeveloperActionsRail.tsx` (rail component)
-- `src/pages/owner/templates/VatCertificate.tsx`
-- `src/pages/owner/sign/AdoptSignatureStudio.tsx`
-- `src/pages/owner/contracts/ContractVault.tsx`
-- `src/hooks/useDeveloperActionItems.ts`
-- `src/hooks/useOwnerSignatureAssets.ts`
+- `CRMRelationships.tsx` queue row (line ~1103) currently uses raw `<img src={r.logo_url}>` with a letter fallback. Replace with `<DeveloperLogo src={r.logo_url} alt={r.developer_name} renderFallback />` so the locked Building2 icon appears when a logo is missing — and so the same component is used everywhere.
+- `SentHistoryView.tsx` cards currently show no logo at all. Add a `<DeveloperLogo />` (size `w-10 h-10`) to the left of `developer_name`.
+- Bulk send dialog preview list (BulkSendDialog right column rows) — same component beside each name.
 
-**Edit**
-- `src/pages/OwnerInbox.tsx` — mount `<DeveloperActionsRail />`
-- `src/routes/OwnerRoutes.tsx` — register the three new routes
-- `src/components/owner-dashboard/OwnerSidebarNav.tsx` — add "Contracts" + "Templates" links
+### 4b. Auto-fill missing `logo_url` from website
 
-## What I need from you, briefly
-- The shared documents library URL (Drive folder, Notion, etc.) so I can seed `document_library_links` — paste it after approval if I don't already have it. If not provided, I'll create the row with a placeholder you can edit in the UI.
-- Confirm `signed-contracts` storage bucket name is fine (or pick a different one).
+Add a small "Refresh logos" action in the Document Pack panel that calls a new edge function `fetch-developer-logos`:
 
-## Out of scope (this round)
-- Full Gmail label management (only INBOX is read).
-- Multi-user signature adoption (only the owner's signature/stamp).
-- Bulk historical email backfill beyond the last 30 days.
+- For each registry row missing `logo_url`, fetch `<website>/favicon.ico` and the `<link rel="icon">` from the homepage HTML, prefer 256×256+, store to `developer-logos` storage bucket, write back the public URL to `developers.logo_url` (and mirror to `developer_registry.logo_url`).
+- Respects the LOCKED `isValidDeveloperLogoUrl` allow-list (no screenshots, no project photos).
+
+### 4c. Project cards already covered
+
+`src/components/ProjectCard.tsx` already renders `DeveloperLogo` from `project.developer.logo_url` (lines 207-211). Once 4b backfills the missing logos, every project card automatically reflects the correct developer logo — no further code change needed there.
+
+Verify two adjacent surfaces also use the joined developer logo:
+- `src/components/project-detail/DeveloperInfoCard.tsx` — already uses it; no change.
+- `src/components/ReellyProjectCard.tsx` — confirm it pulls from `project.developer.logo_url`; if not, switch to `<DeveloperLogo />`.
+
+---
+
+## Technical summary
+
+**Files edited**
+- `src/pages/CRMRelationships.tsx` — wrap queue in Collapsible; swap raw `<img>` for `<DeveloperLogo>`.
+- `src/components/crm/SentHistoryView.tsx` — new sub-tab strip, joined inbox/action-item counts, logo on every card.
+- `src/components/crm/BulkSendDialog.tsx` — default test email to owner registered email, lock by default.
+- `src/components/ReellyProjectCard.tsx` — confirm/route through `<DeveloperLogo>`.
+
+**New file**
+- `supabase/functions/fetch-developer-logos/index.ts` — favicon/og:image scraper, validated against `isValidDeveloperLogoUrl`, writes to storage + `developers.logo_url`.
+
+**Migration**
+- Add `deleted_at timestamptz` column to `developer_registry` (if missing) for the Recently Deleted tab; add index on `developer_action_items(developer_registry_id, status, direction)` for the Inbox/Pending counts.
+
+**Hook**
+- Extend `useDeveloperActionItems` to expose per-developer counts grouped by status/direction.
+
+No removed features. All existing CRM functionality preserved.
