@@ -60,6 +60,7 @@ export const BulkSendDialog = ({
   const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
+  const [reviewing, setReviewing] = useState(false);
 
   const { data: template } = useEmailTemplate(variant);
 
@@ -68,6 +69,31 @@ export const BulkSendDialog = ({
     d.developer_email && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
   ), [selected, skipRecent]);
   const skipped = selected.length - targets.length;
+
+  // Skip reason breakdown
+  const skipBreakdown = useMemo(() => {
+    let noEmail = 0, recent = 0;
+    for (const d of selected) {
+      if (!d.developer_email) { noEmail++; continue; }
+      if (skipRecent && d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= sevenDaysAgo) {
+        recent++;
+      }
+    }
+    return { noEmail, recent };
+  }, [selected, skipRecent]);
+
+  // Status breakdown for the eligible recipients
+  const statusBreakdown = useMemo(() => {
+    const c: Record<string, number> = {};
+    targets.forEach((t) => {
+      const k = t.status || "not_started";
+      c[k] = (c[k] || 0) + 1;
+    });
+    return Object.entries(c).sort((a, b) => b[1] - a[1]);
+  }, [targets]);
+
+  // Reset review state if selection or filter changes
+  useEffect(() => { setReviewing(false); }, [variant, skipRecent, selected.length]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
