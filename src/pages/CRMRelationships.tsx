@@ -280,12 +280,16 @@ const BrokeragesTab = () => {
   const upsert = useUpsertBrokerage();
   const del = useDeleteBrokerage();
   const upsertReminder = useUpsertReminder();
+  const { data: ownerSettings } = useOwnerSettings();
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [emirateFilter, setEmirateFilter] = useState("all");
   const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
   const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
