@@ -7,11 +7,24 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks } from "lucide-react";
 import { toast } from "sonner";
-import { useSendDeveloperRegistration, useEmailTemplate, type RegistrationVariant } from "@/hooks/useCRMRelationships";
+import {
+  useSendDeveloperRegistration,
+  useSendBrokerageOutreach,
+  useEmailTemplate,
+  type RegistrationVariant,
+  type BrokerageVariant,
+  type AnyEmailVariant,
+} from "@/hooks/useCRMRelationships";
 
-const VARIANT_LABELS: Record<RegistrationVariant, string> = {
+type EntityType = "developer" | "brokerage";
+
+const VARIANT_LABELS_DEV: Record<RegistrationVariant, string> = {
   developer_registration: "New registration request",
   developer_confirm_registered: "Confirm we are already registered",
+};
+const VARIANT_LABELS_BRK: Record<BrokerageVariant, string> = {
+  brokerage_partnership_intro: "Partnership intro · Private breakfast",
+  brokerage_breakfast_invite: "Breakfast invitation · RSVP",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -22,6 +35,11 @@ const STATUS_LABEL: Record<string, string> = {
   registered: "Registered",
   rejected: "Rejected",
   expired: "Expired",
+  // brokerage-side
+  prospect: "Prospect",
+  introduced: "Introduced",
+  active: "Active partner",
+  paused: "Paused",
 };
 
 const STATUS_PILL: Record<string, string> = {
@@ -32,28 +50,58 @@ const STATUS_PILL: Record<string, string> = {
   registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
   rejected: "bg-red-100 text-red-900 border-red-300",
   expired: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
+  prospect: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
+  introduced: "bg-blue-100 text-blue-900 border-blue-300",
+  active: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  paused: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
 };
 
-interface Developer {
+interface Recipient {
   id: string;
-  developer_name: string;
+  // developer fields
+  developer_name?: string;
   developer_email?: string;
+  // brokerage fields
+  company_name?: string;
+  email?: string;
+  primary_contact?: { name?: string; email?: string };
+  // shared
   last_outreach_at?: string | null;
   status?: string;
 }
 
 type RowStatus = "queued" | "sending" | "ok" | "fail";
 
+const getName = (r: Recipient, entityType: EntityType) =>
+  entityType === "brokerage"
+    ? r.company_name || "Brokerage"
+    : r.developer_name || "Developer";
+
+const getEmail = (r: Recipient, entityType: EntityType) =>
+  entityType === "brokerage"
+    ? (r.primary_contact?.email || r.email || "")
+    : (r.developer_email || "");
+
 export const BulkSendDialog = ({
-  open, onOpenChange, selected, defaultTestEmail,
+  open, onOpenChange, selected, defaultTestEmail, entityType = "developer",
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  selected: Developer[];
+  selected: Recipient[];
   defaultTestEmail: string;
+  entityType?: EntityType;
 }) => {
-  const send = useSendDeveloperRegistration();
-  const [variant, setVariant] = useState<RegistrationVariant>("developer_registration");
+  const sendDev = useSendDeveloperRegistration();
+  const sendBrk = useSendBrokerageOutreach();
+  const send = entityType === "brokerage" ? sendBrk : sendDev;
+
+  const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
+  const defaultVariant: AnyEmailVariant =
+    entityType === "brokerage" ? "brokerage_partnership_intro" : "developer_registration";
+
+  const [variant, setVariant] = useState<AnyEmailVariant>(defaultVariant);
+  // Reset variant when entityType changes
+  useEffect(() => { setVariant(defaultVariant); }, [entityType]); // eslint-disable-line react-hooks/exhaustive-deps
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
   const [useCustomTestEmail, setUseCustomTestEmail] = useState(false);
@@ -72,21 +120,21 @@ export const BulkSendDialog = ({
 
   const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const targets = useMemo(() => selected.filter((d) =>
-    d.developer_email && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
-  ), [selected, skipRecent]);
+    !!getEmail(d, entityType) && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
+  ), [selected, skipRecent, entityType]);
   const skipped = selected.length - targets.length;
 
   // Skip reason breakdown
   const skipBreakdown = useMemo(() => {
     let noEmail = 0, recent = 0;
     for (const d of selected) {
-      if (!d.developer_email) { noEmail++; continue; }
+      if (!getEmail(d, entityType)) { noEmail++; continue; }
       if (skipRecent && d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= sevenDaysAgo) {
         recent++;
       }
     }
     return { noEmail, recent };
-  }, [selected, skipRecent]);
+  }, [selected, skipRecent, entityType]);
 
   // Status breakdown for the eligible recipients
   const statusBreakdown = useMemo(() => {
