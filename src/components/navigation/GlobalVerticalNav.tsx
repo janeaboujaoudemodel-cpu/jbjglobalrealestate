@@ -1193,7 +1193,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <div
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-0.5 pt-1 pb-1.5">
+                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-1 pt-1 pb-1.5">
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
