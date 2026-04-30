@@ -1128,15 +1128,13 @@ const DeveloperRegistryTab = () => {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-3 flex-1 min-w-[260px]">
                     <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleSel(r.id)} className="mt-1" />
-                    {r.logo_url ? (
-                      <div className="w-12 h-12 rounded-lg bg-[#F7F2EA] border border-[#1A1A1A]/10 flex items-center justify-center shrink-0 overflow-hidden">
-                        <img src={r.logo_url} alt={`${r.developer_name} logo`} className="max-w-full max-h-full object-contain p-1" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
-                      </div>
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center shrink-0 text-[#8A7556] font-bold text-sm">
-                        {String(r.developer_name || "?").charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    <DeveloperLogo
+                      src={r.logo_url}
+                      alt={r.developer_name || "Developer"}
+                      className="w-12 h-12"
+                      renderFallback
+                      loading="lazy"
+                    />
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-semibold text-[#1A1A1A]">{r.developer_name}</h3>
