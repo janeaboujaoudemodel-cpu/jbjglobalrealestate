@@ -1,0 +1,4 @@
+{
+  "$comment": "Owner-managed allowlist for files permitted to use faded gold (text-gold/XX where XX < 80). Synced from the Faded-Gold Allowlist admin page at /admin/faded-gold-allowlist. Do NOT edit by hand without coordinating with the owner.",
+  "files": []
+}

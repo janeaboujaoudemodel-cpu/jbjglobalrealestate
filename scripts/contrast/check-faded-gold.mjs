@@ -5,13 +5,25 @@
  *
  * Allowlist: branded watermarks intentionally faded over dark video.
  */
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { execSync } from "child_process";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
-const ALLOWLIST = new Set([
-  // Add full filepaths here for legitimate brand watermarks.
-  // Example: "src/components/video-meet/JBJMeetRoom.tsx",
-]);
+// Allowlist source-of-truth: scripts/contrast/faded-gold-allowlist.json
+// Managed by owners via the admin page at /admin/faded-gold-allowlist.
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ALLOWLIST_PATH = join(__dirname, "faded-gold-allowlist.json");
+let ALLOWLIST = new Set();
+if (existsSync(ALLOWLIST_PATH)) {
+  try {
+    const data = JSON.parse(readFileSync(ALLOWLIST_PATH, "utf8"));
+    if (Array.isArray(data?.files)) ALLOWLIST = new Set(data.files);
+  } catch (err) {
+    console.error(`! Failed to parse ${ALLOWLIST_PATH}: ${err.message}`);
+    process.exit(2);
+  }
+}
 
 const PATTERN = /\btext-gold\/(?:[1-7]\d?)\b/g;
 
