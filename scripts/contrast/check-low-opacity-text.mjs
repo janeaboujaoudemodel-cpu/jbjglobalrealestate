@@ -151,17 +151,30 @@ function check() {
     });
   }
 
-  // Dedupe (same file:line:kind)
+  // Dedupe (same file:line:kind), then filter out baseline entries.
   const seen = new Set();
+  const baselineHit = new Set();
   const unique = violations.filter((v) => {
     const k = `${v.file}:${v.line}:${v.kind}`;
     if (seen.has(k)) return false;
     seen.add(k);
+    if (BASELINE.has(k)) {
+      baselineHit.add(k);
+      return false;
+    }
     return true;
   });
 
   const textHits = unique.filter((v) => !v.isIcon);
   const iconHits = unique.filter((v) => v.isIcon);
+
+  // Stale baseline entries — fixed in code but still listed.
+  const staleBaseline = [...BASELINE].filter((k) => !baselineHit.has(k));
+  if (staleBaseline.length > 0) {
+    console.warn(`⚠ ${staleBaseline.length} stale baseline entr(y/ies) — remove from allowlist.json:`);
+    for (const k of staleBaseline) console.warn(`  ${k}`);
+    console.warn('');
+  }
 
   if (textHits.length === 0 && iconHits.length === 0) {
     console.log(`✓ No near-transparent text below alpha ${MIN_TEXT_ALPHA} found.`);
