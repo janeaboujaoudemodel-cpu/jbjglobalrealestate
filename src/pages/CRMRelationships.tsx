@@ -927,23 +927,112 @@ const DeveloperRegistryTab = () => {
       </div>
 
       {data.length > 0 && (
-        <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
-          {STATUS_DEV.map((s) => (
-            <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
-              <CardContent className="p-3 text-center">
-                <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                <div className="text-[10px] uppercase text-gray-600 mt-1">{s.label}</div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <>
+          {/* Quick filter chips — queue-relevant statuses only */}
+          <div className="flex flex-wrap gap-1.5 items-center">
+            <button
+              type="button"
+              onClick={() => setStatusFilter("all")}
+              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition ${
+                statusFilter === "all"
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-black border-black/15 hover:border-black/40"
+              }`}
+            >
+              All ({queuePool.length})
+            </button>
+            {STATUS_DEV.filter((s) => s.v !== "registered").map((s) => {
+              const n = counts[s.v] || 0;
+              const active = statusFilter === s.v;
+              return (
+                <button
+                  key={s.v}
+                  type="button"
+                  onClick={() => setStatusFilter(active ? "all" : s.v)}
+                  disabled={n === 0 && !active}
+                  className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
+                    active
+                      ? "bg-black text-white border-black"
+                      : n === 0
+                      ? "bg-white text-gray-400 border-black/10 cursor-not-allowed"
+                      : "bg-white text-black border-black/15 hover:border-black/40"
+                  }`}
+                >
+                  <span>{s.label}</span>
+                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    active ? "bg-white/20 text-white" : "bg-black/5 text-black"
+                  }`}>{n}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Detailed status cards (existing) */}
+          <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
+            {STATUS_DEV.map((s) => (
+              <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
+                <CardContent className="p-3 text-center">
+                  <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
+                  <div className="text-[10px] uppercase text-gray-600 mt-1">{s.label}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </>
       )}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500">
-          {data.length === 0
-            ? <>No developers in your registry yet. Click <b>Import all developers</b> or <b>Pre-fill</b> to seed.</>
-            : <>No developers match the current filters. Clear search and status filters to see all {queuePool.length} pending and not-started developers.</>}
+        <Card><CardContent className="p-8 text-center text-gray-500 space-y-4">
+          {data.length === 0 ? (
+            <div className="space-y-3">
+              <p>No developers in your registry yet.</p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                <Button
+                  variant="outline"
+                  onClick={() => importAll.mutate()}
+                  disabled={importAll.isPending}
+                >
+                  {importAll.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Import all developers
+                </Button>
+                <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
+                  {seed.isPending ? "Seeding…" : "Pre-fill"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p>
+                No developers match the current filters
+                {(q || statusFilter !== "all" || emailFilter !== "all") && (
+                  <>
+                    {" "}(<span className="text-black font-semibold">
+                      {[
+                        q && `search: "${q}"`,
+                        statusFilter !== "all" && `status: ${STATUS_DEV.find(s => s.v === statusFilter)?.label || statusFilter}`,
+                        emailFilter !== "all" && `email: ${emailFilter.replace("_", " ")}`,
+                      ].filter(Boolean).join(" · ")}
+                    </span>)
+                  </>
+                )}.
+              </p>
+              <div className="flex gap-2 justify-center flex-wrap">
+                <Button
+                  variant="outline"
+                  onClick={() => { setQ(""); setStatusFilter("all"); setEmailFilter("all"); }}
+                  disabled={!q && statusFilter === "all" && emailFilter === "all"}
+                >
+                  <RotateCcw className="w-3 h-3 mr-1" />Clear all filters
+                </Button>
+                <Button
+                  className="bg-black text-white hover:bg-gray-800"
+                  onClick={() => { setQ(""); setStatusFilter("all"); setEmailFilter("all"); setSubTab("queue"); }}
+                >
+                  Show full queue ({queuePool.length})
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
