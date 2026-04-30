@@ -1,53 +1,142 @@
 ## Goal
 
-Lock Market Intelligence to one shared typography scale so eyebrows, headings, card titles, body copy, KPI numbers, chips, and TOC items render identically section to section.
+Extend the existing `crm_developer_registry` and `crm_brokerages` tables with a shared, normalized **outreach field set** plus matching enums, indexes, and validation triggers — without removing or renaming any existing column. Add two thin support tables for outreach touchpoints and tags lookups.
 
-## Typography scale (single source of truth)
+This proposal is open for review before any SQL runs.
 
-| Role | Class string |
+---
+
+## What's already there (do not touch)
+
+- `crm_developer_registry` — owner_id, developer_name/slug, status, agency_code, commission_tier, registration/expiry dates, developer_contact (jsonb), documents (jsonb), priority, tags[], notes, ai_summary/ai_next_action, last_interaction_at, developer_email, etc.
+- `crm_brokerages` — owner_id, company_name, rera_license, office_location, website, primary/secondary_contact (jsonb), status, deal_count/value, last_interaction_at, tags[], notes, ai_summary, first_contact_at, next_followup_at, emirate, last_email/auto_reply timestamps.
+
+Both keep their RLS policies and existing data intact.
+
+---
+
+## Shared outreach field set (added to BOTH tables)
+
+| Column | Type | Purpose |
+|---|---|---|
+| `outreach_stage` | enum `outreach_stage` | Lifecycle: `not_contacted`, `attempted`, `engaged`, `meeting_booked`, `nda_pending`, `nda_signed`, `active_partner`, `dormant`, `declined`, `blacklisted` |
+| `outreach_channel_pref` | enum `outreach_channel` | `email`, `phone`, `whatsapp`, `linkedin`, `in_person`, `unknown` |
+| `last_outreach_at` | timestamptz | Last time WE reached out |
+| `last_response_at` | timestamptz | Last time THEY responded |
+| `response_count` | int default 0 | # responses ever received |
+| `attempt_count` | int default 0 | # outreach attempts |
+| `next_action_at` | timestamptz | Scheduled next-touch |
+| `next_action_note` | text | Short instruction (≤ 500 chars) |
+| `assigned_to` | uuid → auth.users | Owning rep (nullable) |
+| `do_not_contact` | bool default false | Hard suppression flag |
+| `dnc_reason` | text | Required when `do_not_contact = true` |
+| `nda_status` | enum `nda_status` | `none`, `requested`, `sent`, `signed`, `expired` |
+| `nda_signed_at` | timestamptz | |
+| `linkedin_url` | text | Validated URL |
+| `whatsapp_e164` | text | Validated E.164 phone |
+| `source` | enum `outreach_source` | `manual`, `import`, `referral`, `website`, `event`, `cold_research`, `inbound` |
+| `source_detail` | text | Free-form |
+| `health_score` | int (0–100) | Computed/curated |
+
+All columns are **nullable** with sensible defaults to preserve existing rows.
+
+---
+
+## New enums
+
+```sql
+create type public.outreach_stage as enum (...);
+create type public.outreach_channel as enum (...);
+create type public.nda_status as enum (...);
+create type public.outreach_source as enum (...);
+```
+
+---
+
+## New support tables
+
+### `crm_outreach_touchpoints`
+Single timeline for both entity types — replaces ad-hoc tracking.
+
+| Column | Type |
 |---|---|
-| Eyebrow / kicker | `text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground` |
-| Section H2 | `text-3xl md:text-4xl font-bold leading-tight tracking-tight text-foreground` |
-| Section lead | `text-base md:text-lg font-normal leading-relaxed text-muted-foreground` |
-| Card title (H3 / CardTitle) | `text-lg font-semibold leading-snug text-foreground` |
-| Sub-heading (H4) | `text-sm font-semibold leading-snug text-foreground` |
-| Body | `text-sm font-normal leading-relaxed text-foreground` |
-| Body muted | `text-sm font-normal leading-relaxed text-muted-foreground` |
-| Caption / footnote | `text-xs font-normal leading-relaxed text-muted-foreground` |
-| KPI value (large) | `text-2xl font-bold leading-none tracking-tight` (color preserved) |
-| Stat value (mid) | `text-lg font-bold leading-none tracking-tight text-foreground` |
-| Chip / pill | `text-xs font-semibold leading-none` |
-| TOC item | `text-sm font-medium leading-snug` (active state adds `font-semibold`) |
+| `id` | uuid pk |
+| `owner_id` | uuid not null |
+| `entity_type` | enum (`developer`, `brokerage`) |
+| `entity_id` | uuid not null |
+| `channel` | `outreach_channel` |
+| `direction` | enum (`outbound`, `inbound`) |
+| `subject` | text |
+| `body_excerpt` | text (≤ 2000 chars, sanitized) |
+| `occurred_at` | timestamptz default now() |
+| `created_by` | uuid → auth.users |
+| `metadata` | jsonb |
+| `created_at` / `updated_at` | timestamptz |
 
-Hero is exempt — uses its own oversized display scale (already standardized).
+Indexes: `(entity_type, entity_id, occurred_at desc)`, `(owner_id, occurred_at desc)`.
 
-## Files & specific changes
+### `crm_outreach_tags`
+Owner-scoped tag dictionary so tags[] arrays can be validated/autocompleted.
 
-1. **`MarketIntelligenceTypography.ts`** (new) — export the class strings as named constants (`MI_EYEBROW`, `MI_H2`, `MI_LEAD`, `MI_CARD_TITLE`, `MI_H4`, `MI_BODY`, `MI_BODY_MUTED`, `MI_CAPTION`, `MI_KPI`, `MI_STAT`, `MI_CHIP`, `MI_TOC_ITEM`). Single import point keeps drift impossible.
+| `id`, `owner_id`, `label` (unique per owner), `color`, `category`, `created_at` |
 
-2. **`AIMarketInsights.tsx`** — eyebrow → `MI_EYEBROW`; H2 → `MI_H2`; CardTitle (line 159) `text-lg` → `MI_CARD_TITLE`; quote `text-sm italic` → keep italic + `MI_BODY_MUTED`; insight body (165) → `MI_BODY`; "Ask AI" H3 (181) `text-xl font-bold` → `MI_CARD_TITLE`; sub-headers (229) → `MI_H4`; answer body (233) → `MI_BODY`; disclaimer (252) → `MI_CAPTION`.
+---
 
-3. **`AreaIntelligenceGrid.tsx`** — chip (32) `text-[11px] font-bold` → `MI_CHIP`; area H3 (62) → `MI_CARD_TITLE`; "Dubai, UAE" (65) → `MI_CAPTION`; metric labels (74, 81) → `MI_CAPTION`; metric values (78, 85) → `MI_STAT`; demand/supply labels (93, 105) → `text-xs font-semibold`; values (94, 106) → `text-xs font-bold`; YoY label (119) → `MI_BODY`; bullet rows (128) → `MI_CAPTION`; CTA (138) → `text-sm font-semibold`; eyebrow (163) + H2 (166) → tokens.
+## Validation rules (via triggers, not CHECK constraints)
 
-4. **`MarketOverviewDashboard.tsx`** — KPI delta chip (52) → `MI_CHIP` + color; KPI title (58) `font-medium text-sm` → `MI_BODY`; KPI value (59) `text-2xl font-bold` → `MI_KPI`; eyebrow (83) currently `font-bold text-foreground` → `MI_EYEBROW` (fixes outlier); H2 (86) → `MI_H2`; quarter label (151) → `text-sm font-semibold`; bar value (160) → `MI_CHIP`; footnote (168) → `MI_CAPTION`; property type (189) → `MI_CARD_TITLE` size dropped to `text-base font-semibold`, transactions (190) → `MI_CAPTION`; price (193) → `text-sm font-bold`; change (194) → `MI_CHIP` + color; segment legend (213, 217) → `MI_BODY`/`MI_BODY_MUTED`.
+Per project memory ("validation triggers, not CHECK"):
 
-5. **`MarketReports.tsx`** — eyebrow (128), H2 (131) → tokens; CardTitle (156) `text-xl` → `MI_CARD_TITLE`; description (159) → `MI_BODY_MUTED`; meta rows (164/168/172) → `MI_CAPTION`; methodology H4 (211) → `MI_H4`; methodology body (214) → `MI_BODY_MUTED`.
+1. **Email format** on `developer_email`, contact-jsonb emails — RFC-lite regex.
+2. **URL format** on `website`, `linkedin_url` — must start `https?://`.
+3. **E.164** on `whatsapp_e164` — `^\+[1-9]\d{6,14}$`.
+4. **DNC integrity** — if `do_not_contact = true`, require non-empty `dnc_reason` AND auto-set `outreach_stage = 'blacklisted'` if currently active.
+5. **NDA integrity** — `nda_signed_at` required when `nda_status = 'signed'`; clear it otherwise.
+6. **Stage progression guard** — cannot move from `blacklisted` back to active stages without owner role; logged to audit.
+7. **Counts** — `response_count` / `attempt_count` ≥ 0 (clamp).
+8. **Touchpoint hygiene** — on insert into `crm_outreach_touchpoints`, automatically bump `last_outreach_at`/`last_response_at`, `attempt_count`/`response_count`, and `last_interaction_at` on the parent row.
+9. **PII** — emails/phones never logged to audit diffs in plaintext (hash via existing PII helpers).
 
-6. **`DataSourcesPanel.tsx`** — eyebrow (45), H2 (48) → tokens; source name (73) `font-semibold text-lg` → `MI_CARD_TITLE`; provider (74) → `MI_CAPTION`; description (75) → `MI_BODY`; tag (81) `font-medium text-xs` → `MI_CHIP`; status row (88) → `text-xs font-semibold`; link (98) → `text-sm font-semibold`; quality items (124/127) → `MI_BODY`.
+---
 
-7. **`MarketIntelligenceNavigation.tsx`** — promo H3 (47) `text-xl font-bold` → `MI_CARD_TITLE`; lead (48) → `MI_BODY_MUTED`; CTA (53) → `text-sm font-semibold`; Prev/Next eyebrow (73) `tracking-wider` → `tracking-[0.3em]` (matches rest); titles (74, mirror) keep current responsive scale but normalize to `font-bold leading-snug tracking-tight`.
+## Indexes
 
-8. **`MarketIntelligenceTableOfContents.tsx`** — Quick-Nav H4 (112) → `MI_H4`; intro (113) → `MI_CAPTION`; section title H3 (141) → `MI_CARD_TITLE` (drops to `text-base` here for sidebar density); item button (171) → `MI_TOC_ITEM`; active branch keeps `font-semibold`; numeric pill (178) → `MI_CHIP`.
+- `crm_developer_registry (owner_id, outreach_stage, next_action_at)`
+- `crm_brokerages (owner_id, outreach_stage, next_action_at)`
+- `crm_developer_registry (assigned_to) where assigned_to is not null`
+- `crm_brokerages (assigned_to) where assigned_to is not null`
+- GIN on existing `tags[]` if missing.
 
-9. **`src/pages/MarketIntelligence.tsx`** — top eyebrow (137) `tracking-[0.3em]` already aligns; bump body description (150) `text-lg md:text-xl` → keep as page-hero lead but standardize to `font-light leading-relaxed text-white/95` to match hero; data-pill labels (176/180/184) → `MI_BODY`; cluster H3 (218) `text-xl font-bold` → `MI_CARD_TITLE`; cluster body (221) → `MI_BODY_MUTED`.
+---
 
-## Validation
+## RLS
 
-- `npm run check:contrast` and `npm run check:a11y` to confirm no regressions.
-- Visual scan of `/market-intelligence` and the four subpages at 1920 / 1366 / 768 / 390 — eyebrows, H2s, card titles, KPIs, chips, and TOC items should render identically across sections.
+- New columns inherit existing policies on parent tables (no policy change needed).
+- `crm_outreach_touchpoints` — owner-only read/write via `owner_id = auth.uid()` plus owner-role bypass through existing `has_role()` SECURITY DEFINER function. Aligns with [CRM Data Protection](mem://security/crm-data-protection-and-access-standard).
+- `crm_outreach_tags` — same model.
 
-## Out of scope
+---
 
-- Hero display scale (already standardized in the previous pass).
-- Color/contrast tokens (handled by the prior token migration).
-- No structural/layout changes; text-only class swaps.
+## Code touch points (after migration)
+
+- `src/integrations/supabase/types.ts` — auto-regenerated; do not edit manually.
+- Add `src/lib/crm/outreachSchema.ts` with zod schemas mirroring the DB validation (client-side parity).
+- No UI built in this step — schema + validation only. UI work will be a follow-up plan.
+
+---
+
+## Out of scope for this plan
+
+- UI for managing outreach (separate plan).
+- Backfilling `outreach_stage` from heuristics (separate task; default `not_contacted`).
+- Email/WhatsApp send infrastructure (already exists).
+- Removing or renaming any legacy column.
+
+---
+
+## Deliverables
+
+1. One migration: enums + column adds + new tables + indexes + triggers + RLS for new tables.
+2. `src/lib/crm/outreachSchema.ts` zod schemas.
+3. Short README at `docs/crm/outreach-schema.md` documenting the field set + state machine.
+
+After approval I will implement in default mode and report back.
