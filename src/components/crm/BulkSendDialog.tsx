@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye } from "lucide-react";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks } from "lucide-react";
 import { toast } from "sonner";
 import { useSendDeveloperRegistration, useEmailTemplate, type RegistrationVariant } from "@/hooks/useCRMRelationships";
 
@@ -14,7 +14,33 @@ const VARIANT_LABELS: Record<RegistrationVariant, string> = {
   developer_confirm_registered: "Confirm we are already registered",
 };
 
-interface Developer { id: string; developer_name: string; developer_email?: string; last_outreach_at?: string | null; }
+const STATUS_LABEL: Record<string, string> = {
+  not_started: "Not Started",
+  pending_application: "Pending Application",
+  documents_required: "Documents Required",
+  under_review: "Under Review",
+  registered: "Registered",
+  rejected: "Rejected",
+  expired: "Expired",
+};
+
+const STATUS_PILL: Record<string, string> = {
+  not_started: "bg-gray-200 text-black border-gray-300",
+  pending_application: "bg-amber-100 text-amber-900 border-amber-300",
+  documents_required: "bg-orange-100 text-orange-900 border-orange-300",
+  under_review: "bg-blue-100 text-blue-900 border-blue-300",
+  registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  rejected: "bg-red-100 text-red-900 border-red-300",
+  expired: "bg-zinc-200 text-black border-zinc-300",
+};
+
+interface Developer {
+  id: string;
+  developer_name: string;
+  developer_email?: string;
+  last_outreach_at?: string | null;
+  status?: string;
+}
 
 type RowStatus = "queued" | "sending" | "ok" | "fail";
 
