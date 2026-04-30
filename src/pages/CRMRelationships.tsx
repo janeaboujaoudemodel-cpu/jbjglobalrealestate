@@ -566,7 +566,18 @@ const BrokeragesTab = () => {
         defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
         entityType="brokerage"
       />
+
+      {dealOpen && (
+        <BrokerageDealModal
+          open={!!dealOpen}
+          onOpenChange={(v) => !v && setDealOpen(null)}
+          brokerageId={dealOpen.id}
+          brokerageName={dealOpen.name}
+          onSaved={() => refetch()}
+        />
+      )}
     </div>
+    </TooltipProvider>
   );
 };
 
