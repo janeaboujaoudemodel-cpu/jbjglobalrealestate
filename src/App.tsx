@@ -75,8 +75,8 @@ const App = () => {
           <SEOServiceArea />
           <Toaster />
           <Sonner />
-          <DevStyleToggle />
           <BrowserRouter>
+            <DevStyleToggle />
             <AuthProvider>
             <BrandPaletteProvider>
               <UserModeProvider>
