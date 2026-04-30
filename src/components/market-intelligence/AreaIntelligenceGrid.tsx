@@ -8,6 +8,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, type AreaMarketSnapshot } from "@/config/open-data-config";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_BODY,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+  MI_STAT,
+  MI_CHIP,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -29,7 +40,7 @@ const TrendBadge = ({ trend }: { trend: 'bullish' | 'bearish' | 'neutral' }) => 
 
   return (
     <Badge
-      className={`${colors[trend]} border whitespace-nowrap min-w-fit shrink-0 px-2 py-0.5 text-[11px] font-bold`}
+      className={`${colors[trend]} ${MI_CHIP} border whitespace-nowrap min-w-fit shrink-0 px-2 py-0.5`}
       style={{ wordBreak: 'keep-all', overflowWrap: 'normal' }}
     >
       <TrendIcon trend={trend} />
@@ -59,10 +70,10 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
             <div className="flex items-center gap-2 min-w-0">
               <IconBox icon={MapPin} />
               <div className="min-w-0">
-                <h3 className="font-semibold transition-colors truncate text-foreground">
+                <h3 className={`${MI_CARD_TITLE} truncate transition-colors`}>
                   {area.area}
                 </h3>
-                <p className="font-medium text-xs text-muted-foreground">Dubai, UAE</p>
+                <p className={MI_CAPTION}>Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
@@ -71,18 +82,18 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="rounded-lg p-3 bg-muted">
-              <div className="flex items-center gap-1 font-medium text-xs mb-1 text-muted-foreground">
+              <div className={`${MI_CAPTION} flex items-center gap-1 mb-1`}>
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
-              <p className="font-bold text-lg text-foreground">{area.priceIndex}</p>
+              <p className={MI_STAT}>{area.priceIndex}</p>
             </div>
             <div className="rounded-lg p-3 bg-muted">
-              <div className="flex items-center gap-1 font-medium text-xs mb-1 text-muted-foreground">
+              <div className={`${MI_CAPTION} flex items-center gap-1 mb-1`}>
                 <Building2 className="w-3 h-3" />
                 Rental Index
               </div>
-              <p className="font-bold text-lg text-foreground">{area.rentalIndex}</p>
+              <p className={MI_STAT}>{area.rentalIndex}</p>
             </div>
           </div>
 
@@ -116,8 +127,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* YoY Change */}
           <div className="flex items-center justify-between py-3 border-t border-border/60">
-            <span className="font-medium text-sm text-foreground">Year-over-Year</span>
-            <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
+            <span className={MI_BODY}>Year-over-Year</span>
+            <span className={`text-sm font-bold leading-none tracking-tight ${area.yoyChange >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
           </div>
@@ -125,7 +136,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4 mt-3">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-xs flex items-start gap-2 text-muted-foreground">
+              <p key={idx} className={`${MI_CAPTION} flex items-start gap-2`}>
                 <span className="mt-0.5 font-bold text-foreground">•</span>
                 {highlight}
               </p>
@@ -160,13 +171,13 @@ export const AreaIntelligenceGrid = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
+            <span className={`${MI_EYEBROW} mb-4 block`}>
               Area Intelligence
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className={`${MI_H2} mb-4`}>
               Market Snapshot by Location
             </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
+            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>
