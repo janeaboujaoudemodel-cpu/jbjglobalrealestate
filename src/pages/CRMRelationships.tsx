@@ -376,6 +376,28 @@ const BrokeragesTab = () => {
           { key: "deal_count", label: "Deals" }, { key: "primary_contact", label: "Primary Contact" },
           { key: "entry_source", label: "Source" }, { key: "notes", label: "Notes" },
         ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            const eligible = filtered.filter((r: any) => r.entry_source !== "directory" && (r.primary_contact?.email || r.email));
+            const ids = new Set<string>(eligible.map((r: any) => r.id));
+            setBulkSel((cur) => (cur.size === ids.size ? new Set() : ids));
+          }}
+          title="Select all eligible brokerages on this view"
+        >
+          <CheckCircle2 className="w-4 h-4 mr-2" />
+          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all"}
+        </Button>
+        <Button
+          variant="gold"
+          onClick={() => {
+            if (bulkSel.size === 0) { toast.error("Select at least one brokerage first"); return; }
+            setBulkOpen(true);
+          }}
+          className="shadow-md"
+        >
+          <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
+        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
