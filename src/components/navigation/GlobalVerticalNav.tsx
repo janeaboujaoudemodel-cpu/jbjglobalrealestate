@@ -817,10 +817,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    // Saturated colored row → white icon for legibility on the colored fill.
-    if (isSaturatedColorRow(item)) {
-      return shouldHighlight ? 'text-white' : 'text-white';
-    }
+    // (Highlighted hubs were previously saturated; now unified to gold — no white-on-color override.)
     // Active on champagne row → deeper gold for stronger contrast.
     if (shouldHighlight) return 'text-[hsl(var(--gold-dark))]';
     // Resting state → premium gold.
