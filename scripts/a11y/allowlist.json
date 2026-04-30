@@ -1,0 +1,40 @@
+{
+  "$schema": "./allowlist.schema.json",
+  "_doc": "Waivers + baseline for the automated a11y suite. Mirrors scripts/contrast/allowlist.json. Refresh baselines with the per-script --print-baseline flag.",
+
+  "rules": {
+    "_doc": "Per-rule waivers for the rendered axe sweep. Set 'waived: true' to suppress an entire rule globally. Use sparingly — prefer per-selector waivers below.",
+    "region": {
+      "reason": "Marketing pages legitimately use multiple top-level wrappers (hero + main + footer). Re-evaluate when we land a single-<main> refactor.",
+      "waived": false
+    }
+  },
+
+  "axeNodeSelectors": [
+    {
+      "selector": "[data-radix-scroll-area-viewport]",
+      "rule": "scrollable-region-focusable",
+      "reason": "Radix internals; not authored by us."
+    }
+  ],
+
+  "ariaBaseline": {
+    "_doc": "Pre-existing axe violations at suite introduction. Refresh with: PREVIEW_URL=... node scripts/a11y/check-aria.mjs --print-baseline",
+    "entries": []
+  },
+
+  "staticAriaBaseline": {
+    "_doc": "Pre-existing static a11y findings. Refresh with: node scripts/a11y/check-static-aria.mjs --print-baseline",
+    "entries": []
+  },
+
+  "keyboardBaseline": {
+    "_doc": "Pre-existing keyboard / focus-order findings. Refresh with: PREVIEW_URL=... node scripts/a11y/check-keyboard.mjs --print-baseline",
+    "entries": []
+  },
+
+  "keyboardRouteWaivers": {
+    "_doc": "Per-route selector waivers for the keyboard probe (e.g., skip-to-content links that intentionally appear out of visual order).",
+    "/": []
+  }
+}
