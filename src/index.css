@@ -43,6 +43,11 @@ All colors MUST be HSL.
     /* Responsive header height — used by mobile menu Sheet positioning */
     --responsive-header-height: 96px;
 
+    /* Shared shell header height — locks sidebar logo divider and main top header
+     * to identical pixel height so the L-frame bottom borders align perfectly.
+     * Used by OwnerDashboardShell (and any future dashboard shell). */
+    --shell-header-h: 64px;
+
     /* ============================================================
      * CHAMPAGNE / GOLD GLOBAL THEME (replaces white-monochrome)
      * Page #FDFBF7 · surface #F7F2EA · raised #EFE6D6 · gold #B89555

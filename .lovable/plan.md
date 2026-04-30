@@ -1,46 +1,58 @@
 ## Problem
 
-Three concrete bugs from the screenshot and message:
+In the Owner Dashboard shell (and similar shells across the site), the horizontal header containing **"Founder & CEO / Jane Bou Jaoude — Executive Command Center"** does not align with the sidebar's first divider (the line under **"JBJ Owner"**). The "Founder & CEO" title sits visually lower than the sidebar's logo divider, breaking the L-shaped frame standard.
 
-1. **Error overlay shows a black full-screen backdrop** behind the champagne card (`background: "#0a0a0a"` in `AppErrorBoundary.tsx`). User says this should never have a black background.
-2. **"Go to Homepage" button** renders effectively white-on-champagne — `background: transparent` over a champagne card with a faint gold border, low contrast and unreadable until hover.
-3. **"Coming Soon" pills** on Instagram / Facebook / LinkedIn / Snapchat tiles in Comm Hub. User wants honest backend-driven status: **"Not Connected"** instead of "Coming Soon", because connection availability is determined by backend state, not a future promise.
-4. **Why is the error boundary even showing?** It triggers on any React render error, including transient chunk-loading hiccups during preview. Currently it auto-retries chunk errors but still flashes the full overlay before retry. The overlay should be silent for transient chunk errors (no UI flash) and only show after retries are exhausted.
+Both bars are nominally `h-16` (64px), but a small gap appears at the top of the right-hand header, causing the bottom borders to be misaligned. The same alignment issue likely repeats in other shell layouts.
 
-## Fixes
+## Root cause
 
-### 1. `src/components/AppErrorBoundary.tsx`
+- The sidebar logo block uses `h-16` with no internal padding shift.
+- The main `<header>` is `h-16 sticky top-0`, but its content (`<h1>` + `<p>`) is centered with `items-center`, and the dual-line text combined with `tracking-wide` lifts the visual baseline. Combined with the `backdrop-blur` and shadow, the perceived border position drifts a few pixels.
+- More importantly, there is no shared height token — sidebar header, top header, and any banner offsets are hard-coded `h-16` in multiple files, so they drift independently when one is touched.
 
-- Replace outer wrapper `background: "#0a0a0a"` → champagne page color `#FDFBF7` so the screen never goes black.
-- "Go to Homepage" button: change from `transparent` background to a solid high-contrast surface — `background: "#1A1A1A"` (ink) with `color: "#FDFBF7"` (champagne text). Keep gold border for brand accent. This guarantees readable contrast on the champagne card.
-- Suppress the visible overlay during chunk-error retry: if `isChunkError && retryCount < 3`, render `null` (or a tiny invisible placeholder) instead of the full card. The card only renders for genuine, non-recoverable errors after retries exhausted.
-- Add `data-no-contrast-guard` on the buttons so the runtime guard doesn't fight the explicit ink/champagne styling.
+## Fix
 
-### 2. `src/hooks/useCommChannels.ts`
+### 1. Lock header alignment in `OwnerDashboardShell.tsx`
 
-- Drop the `coming_soon` status entirely from the `ChannelStatus` union.
-- Remove `comingSoon: true` from Instagram/Facebook/LinkedIn/Snapchat provider entries.
-- Update their `description` to "Not connected — provider not linked yet" so the copy matches the new pill.
-- All four social providers fall through to the standard `not_linked` status.
+- Both the sidebar logo block and the main `<header>` will use the exact same height class and box model: `h-16 min-h-16 max-h-16` and identical `border-b border-[#B89555]/30`.
+- Remove any padding/margin that pushes the title down. Title block becomes `flex flex-col justify-center leading-tight` so the two lines stay vertically centered without overflow.
+- Confirm `<main>` has no `pt-*` / no implicit margin; the sticky `<header>` sits flush at `top-0`.
 
-### 3. `src/components/owner-comm/ChannelTile.tsx`
+### 2. Introduce a shared header-height token
 
-- Remove the `coming_soon` branch from `statusPill` and from the action button block.
-- Social tiles now show the existing **"Not Connected"** badge and a disabled gold-outline `Connect` button with tooltip "Backend integration pending — contact admin" so the user sees true status, not a marketing label.
+Add `--shell-header-h: 64px` to `src/index.css` under the existing design-tokens block, and replace the hard-coded `h-16` in:
 
-## Technical details
+- `src/pages/OwnerDashboardShell.tsx` (sidebar logo + top header)
+- `src/pages/JBJBrokerDashboard.tsx` shell header (broker dashboard)
+- `src/pages/InvestorDashboard.tsx` shell header
+- `src/components/jbj-broker/JBJSidebar.tsx` (logo block)
 
-- `AppErrorBoundary.tsx` outer `<div>` style change: `background: "#FDFBF7"` (was `#0a0a0a`).
-- "Go to Homepage" button: `background: "#1A1A1A"`, `color: "#FDFBF7"`, `border: "2px solid rgba(200,167,102,0.6)"`.
-- Chunk-retry path: replace `return (...)` with `return null` when `isChunkError && retryCount < 3`. Genuine errors still get the visible card.
-- `ChannelStatus` becomes `"connected" | "available" | "not_linked"`. Type narrowing in `ChannelTile.tsx` and `ChannelGrid.tsx` updated accordingly.
-- No DB or migration changes needed — `coming_soon` was a UI-only label.
-- Same-tone CI guard already passes; ink-on-champagne button is high-contrast.
+Each becomes `style={{ height: 'var(--shell-header-h)' }}` (or a Tailwind arbitrary class `h-[var(--shell-header-h)]`), guaranteeing every shell's logo block + top header are pixel-identical.
 
-## Files touched
+### 3. Title block tightening
 
-- `src/components/AppErrorBoundary.tsx` (background, button contrast, silent chunk retry)
-- `src/hooks/useCommChannels.ts` (remove `coming_soon`, update social provider descriptions)
-- `src/components/owner-comm/ChannelTile.tsx` (remove `coming_soon` branches)
+In each shell header where a two-line title appears:
 
-No new components, no migration, no edge functions touched.
+- Container: `flex flex-col justify-center leading-tight gap-0`
+- Title `<h1>`: `text-sm md:text-base font-semibold tracking-wide`
+- Subtitle `<p>`: `text-xs text-[#5A4A2E]`
+
+This removes the perceived top gap above "Founder & CEO" so its baseline matches the sidebar divider.
+
+### 4. Memory update
+
+Update `mem://ui-ux/navigation/header-sidebar-alignment-standard-v11-locked` (already exists) with the `--shell-header-h` token rule so future shells inherit the lock automatically.
+
+## Files to edit
+
+- `src/index.css` — add `--shell-header-h: 64px` token
+- `src/pages/OwnerDashboardShell.tsx` — apply token + title tightening
+- `src/pages/JBJBrokerDashboard.tsx` — same
+- `src/pages/InvestorDashboard.tsx` — same
+- `src/components/jbj-broker/JBJSidebar.tsx` — apply token to logo block
+- `mem://ui-ux/navigation/header-sidebar-alignment-standard-v11-locked` — add token rule
+
+## Out of scope
+
+- No restructure of sidebar nav, no color changes, no removal of any feature (per No-Removal policy).
+- Mobile sheet header keeps current behavior; only the desktop shell alignment is being locked.
