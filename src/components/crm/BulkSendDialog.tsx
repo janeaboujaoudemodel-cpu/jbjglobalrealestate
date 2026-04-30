@@ -323,7 +323,7 @@ export const BulkSendDialog = ({
           <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
             <div className="text-xs text-[#1A1A1A]"><strong>Step 2 — Broadcast</strong></div>
             <div className="flex items-center justify-between text-sm text-[#1A1A1A]">
-              <span>Selected developers</span>
+              <span>Selected {entityType === "brokerage" ? "brokerages" : "developers"}</span>
               <span className="font-bold">{selected.length}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
