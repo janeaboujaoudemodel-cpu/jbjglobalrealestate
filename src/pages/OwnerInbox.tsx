@@ -243,6 +243,11 @@ export default function OwnerInbox() {
             </div>
           </div>
 
+          {/* Developer Required Actions Rail */}
+          <div className="mb-4">
+            <DeveloperActionsRail />
+          </div>
+
           {/* Main Content - Split View */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
             {/* Thread List */}
