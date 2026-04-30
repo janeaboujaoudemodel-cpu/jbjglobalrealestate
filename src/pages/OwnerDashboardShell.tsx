@@ -37,8 +37,11 @@ const OwnerDashboardShell = () => {
 
   const SidebarContent = ({ collapsed = false }: { collapsed?: boolean }) => (
     <>
-      {/* Logo Area */}
-      <div className="h-16 border-b border-[#B89555]/30 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
+      {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
+      <div
+        className="border-b border-[#B89555]/30 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]"
+        style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
+      >
         {!collapsed && (
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B89555] via-[#A68444] to-[#B89555] font-bold text-lg tracking-wide">
             JBJ Owner
@@ -125,8 +128,12 @@ const OwnerDashboardShell = () => {
         )}
         role="main"
       >
-        {/* Top Bar - always horizontal, never vertical stacking */}
-        <header className="h-16 bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0">
+        {/* Top Bar — height locked to --shell-header-h so its bottom border aligns
+            pixel-for-pixel with the sidebar logo divider. No top padding/margin. */}
+        <header
+          className="bg-[#FDFBF7]/80 backdrop-blur-md border-b border-[#B89555]/30 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0"
+          style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
+        >
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
               <Button
@@ -139,9 +146,9 @@ const OwnerDashboardShell = () => {
                 <Menu className="w-5 h-5" />
               </Button>
             )}
-            <div className="min-w-0">
-              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Founder & CEO</h1>
-              <p className="text-[#5A4A2E] text-xs hidden md:block whitespace-nowrap">Jane Bou Jaoude — Executive Command Center</p>
+            <div className="min-w-0 flex flex-col justify-center leading-tight">
+              <h1 className="text-[#1A1A1A] font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate leading-tight">Founder & CEO</h1>
+              <p className="text-[#5A4A2E] text-xs hidden md:block whitespace-nowrap leading-tight">Jane Bou Jaoude — Executive Command Center</p>
             </div>
           </div>
           
