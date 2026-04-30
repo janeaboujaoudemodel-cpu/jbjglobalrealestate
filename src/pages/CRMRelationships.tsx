@@ -342,27 +342,54 @@ const BrokeragesTab = () => {
   const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
 
   return (
+    <TooltipProvider>
     <div className="space-y-4">
       {/* Source sub-tabs */}
-      <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
-        {[
-          { v: "all", label: `All · ${data.length}` },
-          { v: "directory", label: `UAE Directory · ${directoryCount}` },
-          { v: "owner", label: `My Additions · ${ownerCount}` },
-          { v: "existing", label: `Existing Matches · ${existingCount}` },
-        ].map((t) => (
-          <button
-            key={t.v}
-            onClick={() => setSourceTab(t.v as any)}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-              sourceTab === t.v
-                ? "bg-[#B89555] text-white shadow-sm"
-                : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+          {[
+            { v: "all", label: `All · ${data.length}` },
+            { v: "directory", label: `UAE Directory · ${directoryCount}` },
+            { v: "owner", label: `My Additions · ${ownerCount}` },
+            { v: "existing", label: `Existing Matches · ${existingCount}` },
+          ].map((t) => (
+            <button
+              key={t.v}
+              onClick={() => setSourceTab(t.v as any)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                sourceTab === t.v
+                  ? "bg-[#B89555] text-white shadow-sm"
+                  : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+              aria-label="What is the UAE Directory?"
+            >
+              <HelpCircle className="w-4 h-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="max-w-xs bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40">
+            <p className="font-semibold mb-1">What's the difference?</p>
+            <p className="text-xs">
+              <strong>UAE Directory</strong> = pre-loaded RERA-licensed brokerages (currently {directoryCount}).
+              Reference data only — read-only until you contact them.
+            </p>
+            <p className="text-xs mt-1">
+              <strong>My Additions</strong> = brokerages you added yourself.
+            </p>
+            <p className="text-xs mt-1">
+              <strong>Existing Matches</strong> = your additions that match a directory entry.
+            </p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="flex flex-wrap gap-2 items-center">
@@ -371,10 +398,14 @@ const BrokeragesTab = () => {
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
         </div>
         <Select value={emirateFilter} onValueChange={setEmirateFilter}>
-          <SelectTrigger className="w-[170px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
+          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All emirates</SelectItem>
-            {EMIRATES.map((e) => <SelectItem key={e} value={e}>{e}</SelectItem>)}
+            <SelectItem value="all">All emirates · {data.length}</SelectItem>
+            {EMIRATES.map((e) => (
+              <SelectItem key={e} value={e}>
+                {e} · {emirateCounts[e] || 0}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
