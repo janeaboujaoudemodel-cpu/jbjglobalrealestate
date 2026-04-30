@@ -26,6 +26,7 @@ const InternalDashboard = lazy(() => import("@/pages/market-intelligence/interna
 const BrokerIntelligence = lazy(() => import("@/pages/market-intelligence/internal/BrokerIntelligence"));
 const AIInsights = lazy(() => import("@/pages/market-intelligence/internal/AIInsights"));
 const DataOperations = lazy(() => import("@/pages/market-intelligence/internal/DataOperations"));
+const ContrastReview = lazy(() => import("@/pages/internal/ContrastReview"));
 const HRAgent = lazy(() => import("@/pages/HRAgent"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
 const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
@@ -100,6 +101,7 @@ export const AdminRoutes = () => (
     <Route path="/internal/market-intelligence/brokers" element={<OwnerGuard><BrokerIntelligence /></OwnerGuard>} />
     <Route path="/internal/market-intelligence/ai-insights" element={<OwnerGuard><AIInsights /></OwnerGuard>} />
     <Route path="/internal/market-intelligence/data-ops" element={<OwnerGuard><DataOperations /></OwnerGuard>} />
+    <Route path="/internal/contrast-review" element={<OwnerGuard><Suspense fallback={<PageLoader />}><ContrastReview /></Suspense></OwnerGuard>} />
 
     {/* ── Legacy Redirects ── */}
     <Route path="/crm" element={<Navigate to="/owner/crm" replace />} />
