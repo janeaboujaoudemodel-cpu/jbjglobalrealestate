@@ -1064,7 +1064,20 @@ const DeveloperRegistryTab = () => {
                         <div className="flex items-center gap-1.5 min-w-0">
                           <MapPin className="w-3 h-3 text-[#8A7556] shrink-0" />
                           <span className="text-[#8A7556] shrink-0">Office:</span>
-                          <span className="font-medium text-[#1A1A1A] truncate">{r.emirate || "—"}</span>
+                          {r.office_address ? (
+                            <a
+                              href={r.office_map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${r.office_address} ${r.developer_name || ""}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-medium text-[#1A1A1A] underline truncate"
+                              onClick={(e) => e.stopPropagation()}
+                              title="Open in Google Maps"
+                            >
+                              {r.office_address}{r.emirate ? ` · ${r.emirate}` : ""}
+                            </a>
+                          ) : (
+                            <span className="font-medium text-[#1A1A1A] truncate">{r.emirate || "—"}</span>
+                          )}
                           <FieldSource meta={r.field_sources?.emirate} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
