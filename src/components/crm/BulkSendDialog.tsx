@@ -228,6 +228,38 @@ export const BulkSendDialog = ({
               <span className="font-bold text-emerald-700">{targets.length}</span>
             </div>
           </div>
+
+          {/* Status breakdown of eligible recipients */}
+          <div className="space-y-2 border border-black/10 rounded-xl p-3 bg-white">
+            <div className="flex items-center gap-2 text-xs text-black">
+              <ListChecks className="w-4 h-4" /><strong>Recipient breakdown</strong>
+            </div>
+            {statusBreakdown.length === 0 ? (
+              <div className="text-xs text-gray-500 py-1">No eligible recipients to send to.</div>
+            ) : (
+              <div className="space-y-1.5">
+                {statusBreakdown.map(([s, n]) => (
+                  <div key={s} className="flex items-center justify-between text-xs">
+                    <span className={`px-2 py-0.5 rounded-full border font-semibold ${STATUS_PILL[s] || "bg-gray-100 text-black border-gray-300"}`}>
+                      {STATUS_LABEL[s] || s}
+                    </span>
+                    <span className="font-bold text-black">{n}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {(skipBreakdown.noEmail > 0 || skipBreakdown.recent > 0) && (
+              <div className="pt-2 mt-2 border-t border-black/10 space-y-1 text-xs text-gray-700">
+                <div className="font-semibold text-black mb-0.5">Skipped:</div>
+                {skipBreakdown.noEmail > 0 && (
+                  <div className="flex justify-between"><span>Missing email</span><span className="font-bold">{skipBreakdown.noEmail}</span></div>
+                )}
+                {skipBreakdown.recent > 0 && (
+                  <div className="flex justify-between"><span>Contacted in last 7 days</span><span className="font-bold">{skipBreakdown.recent}</span></div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* RIGHT COLUMN */}
