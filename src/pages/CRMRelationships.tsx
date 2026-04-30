@@ -1,6 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { ChevronDown, ChevronRight as ChevronRightIcon } from "lucide-react";
 import { isInHistoryPool, isInQueuePool } from "@/lib/crm/developerPools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
