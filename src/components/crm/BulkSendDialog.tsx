@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye } from "lucide-react";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks } from "lucide-react";
 import { toast } from "sonner";
 import { useSendDeveloperRegistration, useEmailTemplate, type RegistrationVariant } from "@/hooks/useCRMRelationships";
 
@@ -14,7 +14,33 @@ const VARIANT_LABELS: Record<RegistrationVariant, string> = {
   developer_confirm_registered: "Confirm we are already registered",
 };
 
-interface Developer { id: string; developer_name: string; developer_email?: string; last_outreach_at?: string | null; }
+const STATUS_LABEL: Record<string, string> = {
+  not_started: "Not Started",
+  pending_application: "Pending Application",
+  documents_required: "Documents Required",
+  under_review: "Under Review",
+  registered: "Registered",
+  rejected: "Rejected",
+  expired: "Expired",
+};
+
+const STATUS_PILL: Record<string, string> = {
+  not_started: "bg-gray-200 text-black border-gray-300",
+  pending_application: "bg-amber-100 text-amber-900 border-amber-300",
+  documents_required: "bg-orange-100 text-orange-900 border-orange-300",
+  under_review: "bg-blue-100 text-blue-900 border-blue-300",
+  registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
+  rejected: "bg-red-100 text-red-900 border-red-300",
+  expired: "bg-zinc-200 text-black border-zinc-300",
+};
+
+interface Developer {
+  id: string;
+  developer_name: string;
+  developer_email?: string;
+  last_outreach_at?: string | null;
+  status?: string;
+}
 
 type RowStatus = "queued" | "sending" | "ok" | "fail";
 
@@ -34,6 +60,7 @@ export const BulkSendDialog = ({
   const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
+  const [reviewing, setReviewing] = useState(false);
 
   const { data: template } = useEmailTemplate(variant);
 
@@ -42,6 +69,31 @@ export const BulkSendDialog = ({
     d.developer_email && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
   ), [selected, skipRecent]);
   const skipped = selected.length - targets.length;
+
+  // Skip reason breakdown
+  const skipBreakdown = useMemo(() => {
+    let noEmail = 0, recent = 0;
+    for (const d of selected) {
+      if (!d.developer_email) { noEmail++; continue; }
+      if (skipRecent && d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= sevenDaysAgo) {
+        recent++;
+      }
+    }
+    return { noEmail, recent };
+  }, [selected, skipRecent]);
+
+  // Status breakdown for the eligible recipients
+  const statusBreakdown = useMemo(() => {
+    const c: Record<string, number> = {};
+    targets.forEach((t) => {
+      const k = t.status || "not_started";
+      c[k] = (c[k] || 0) + 1;
+    });
+    return Object.entries(c).sort((a, b) => b[1] - a[1]);
+  }, [targets]);
+
+  // Reset review state if selection or filter changes
+  useEffect(() => { setReviewing(false); }, [variant, skipRecent, selected.length]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
@@ -73,7 +125,8 @@ export const BulkSendDialog = ({
 
   const sendAll = async () => {
     if (!targets.length) { toast.error("No eligible recipients"); return; }
-    if (!confirm(`Send "${VARIANT_LABELS[variant]}" to ${targets.length} developer(s)?`)) return;
+    if (!reviewing) { setReviewing(true); return; }
+    setReviewing(false);
     setRunning(true);
     const init: Record<string, { status: RowStatus }> = {};
     targets.forEach((t) => { init[t.id] = { status: "queued" }; });
@@ -175,6 +228,38 @@ export const BulkSendDialog = ({
               <span className="font-bold text-emerald-700">{targets.length}</span>
             </div>
           </div>
+
+          {/* Status breakdown of eligible recipients */}
+          <div className="space-y-2 border border-black/10 rounded-xl p-3 bg-white">
+            <div className="flex items-center gap-2 text-xs text-black">
+              <ListChecks className="w-4 h-4" /><strong>Recipient breakdown</strong>
+            </div>
+            {statusBreakdown.length === 0 ? (
+              <div className="text-xs text-gray-500 py-1">No eligible recipients to send to.</div>
+            ) : (
+              <div className="space-y-1.5">
+                {statusBreakdown.map(([s, n]) => (
+                  <div key={s} className="flex items-center justify-between text-xs">
+                    <span className={`px-2 py-0.5 rounded-full border font-semibold ${STATUS_PILL[s] || "bg-gray-100 text-black border-gray-300"}`}>
+                      {STATUS_LABEL[s] || s}
+                    </span>
+                    <span className="font-bold text-black">{n}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {(skipBreakdown.noEmail > 0 || skipBreakdown.recent > 0) && (
+              <div className="pt-2 mt-2 border-t border-black/10 space-y-1 text-xs text-gray-700">
+                <div className="font-semibold text-black mb-0.5">Skipped:</div>
+                {skipBreakdown.noEmail > 0 && (
+                  <div className="flex justify-between"><span>Missing email</span><span className="font-bold">{skipBreakdown.noEmail}</span></div>
+                )}
+                {skipBreakdown.recent > 0 && (
+                  <div className="flex justify-between"><span>Contacted in last 7 days</span><span className="font-bold">{skipBreakdown.recent}</span></div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* RIGHT COLUMN */}
@@ -257,12 +342,42 @@ export const BulkSendDialog = ({
         </div>
         </div>
 
+        {reviewing && !running && (
+          <div className="mt-3 border-2 border-amber-400 bg-amber-50 rounded-xl p-3 text-sm text-black">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <div className="font-bold mb-1">Confirm bulk send</div>
+                <div className="text-xs leading-relaxed">
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> developer{targets.length === 1 ? "" : "s"}.
+                  {statusBreakdown.length > 0 && (
+                    <span> Includes:{" "}
+                      {statusBreakdown.map(([s, n], i) => (
+                        <span key={s}>
+                          <strong>{n} {STATUS_LABEL[s] || s}</strong>{i < statusBreakdown.length - 1 ? ", " : ""}
+                        </span>
+                      ))}.
+                    </span>
+                  )}
+                  {skipped > 0 && <span> {skipped} will be skipped ({skipBreakdown.noEmail > 0 && `${skipBreakdown.noEmail} no email`}{skipBreakdown.noEmail > 0 && skipBreakdown.recent > 0 && ", "}{skipBreakdown.recent > 0 && `${skipBreakdown.recent} contacted recently`}).</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <DialogFooter>
           <Button variant="outline" onClick={closeAndReset} disabled={running}>
             {Object.keys(statuses).length > 0 && !running ? "Close" : "Cancel"}
           </Button>
+          {reviewing && !running && (
+            <Button variant="outline" onClick={() => setReviewing(false)}>
+              Back
+            </Button>
+          )}
           <Button onClick={sendAll} disabled={running || !targets.length} className="bg-black text-white hover:bg-gray-800">
-            <Send className="w-3 h-3 mr-1" />{running ? `Sending…` : `Send to ${targets.length}`}
+            <Send className="w-3 h-3 mr-1" />
+            {running ? "Sending…" : reviewing ? `Confirm & send to ${targets.length}` : `Review & send (${targets.length})`}
           </Button>
         </DialogFooter>
       </DialogContent>
