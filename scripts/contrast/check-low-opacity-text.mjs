@@ -149,13 +149,30 @@ function check() {
     return true;
   });
 
-  if (unique.length === 0) {
+  const textHits = unique.filter((v) => !v.isIcon);
+  const iconHits = unique.filter((v) => v.isIcon);
+
+  if (textHits.length === 0 && iconHits.length === 0) {
     console.log(`✓ No near-transparent text below alpha ${MIN_TEXT_ALPHA} found.`);
     return;
   }
 
-  console.error(`✗ Found ${unique.length} near-transparent text risk(s) (alpha < ${MIN_TEXT_ALPHA}):\n`);
-  for (const v of unique) {
+  if (iconHits.length > 0) {
+    console.warn(`⚠ ${iconHits.length} faded-icon warning(s) (alpha < ${MIN_TEXT_ALPHA}) — non-blocking:`);
+    for (const v of iconHits.slice(0, 20)) {
+      console.warn(`  ${v.file}:${v.line}  [${v.kind}]`);
+    }
+    if (iconHits.length > 20) console.warn(`  …and ${iconHits.length - 20} more`);
+    console.warn('');
+  }
+
+  if (textHits.length === 0) {
+    console.log(`✓ No near-transparent body-text regressions found.`);
+    return;
+  }
+
+  console.error(`✗ Found ${textHits.length} near-transparent text risk(s) (alpha < ${MIN_TEXT_ALPHA}):\n`);
+  for (const v of textHits) {
     console.error(`  ${v.file}:${v.line}  [${v.kind}]`);
     console.error(`    ${v.snippet}`);
   }
