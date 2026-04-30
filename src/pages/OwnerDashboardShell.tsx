@@ -88,8 +88,10 @@ const OwnerDashboardShell = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex">
-      {/* Owner Tasks Popup Alert */}
-      <OwnerTasksPopupAlert />
+      {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
+      <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
+        <OwnerTasksPopupAlert />
+      </div>
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -118,7 +120,7 @@ const OwnerDashboardShell = () => {
       {/* Main Content */}
       <main 
         className={cn(
-          "flex-1 transition-all duration-300",
+          "flex-1 transition-all duration-300 overscroll-contain",
           isMobile ? "ml-0" : (sidebarCollapsed ? "ml-16" : "ml-64")
         )}
         role="main"
