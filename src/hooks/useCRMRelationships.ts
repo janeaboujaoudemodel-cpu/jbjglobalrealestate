@@ -364,6 +364,37 @@ export const useQuickStatusUpdate = () => {
 };
 
 export type RegistrationVariant = "developer_registration" | "developer_confirm_registered";
+export type BrokerageVariant = "brokerage_partnership_intro" | "brokerage_breakfast_invite";
+export type AnyEmailVariant = RegistrationVariant | BrokerageVariant;
+
+export const useSendBrokerageOutreach = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: {
+      brokerageId?: string;
+      variant?: BrokerageVariant;
+      testRecipient?: string;
+      testBrokerageName?: string;
+      overrideEmail?: string;
+      fromEmailOverride?: string;
+      ccEmailOverride?: string;
+      silent?: boolean;
+    }) => {
+      const { silent, ...payload } = vars;
+      const { data, error } = await supabase.functions.invoke("crm-send-brokerage-outreach", { body: payload });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return { ...data, silent };
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      if (!data?.silent) {
+        toast.success(data?.test ? `Test email sent to ${data.recipient}` : `Email sent to ${data.recipient}`);
+      }
+    },
+    onError: (e: any) => toast.error(e.message || "Send failed"),
+  });
+};
 
 export const useSendDeveloperRegistration = () => {
   const qc = useQueryClient();
