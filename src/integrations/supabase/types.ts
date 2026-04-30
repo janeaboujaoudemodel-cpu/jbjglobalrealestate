@@ -5462,6 +5462,7 @@ export type Database = {
           catalog_developer_id: string | null
           commission_tier: string | null
           created_at: string
+          deleted_at: string | null
           developer_contact: Json | null
           developer_email: string | null
           developer_name: string
@@ -5521,6 +5522,7 @@ export type Database = {
           catalog_developer_id?: string | null
           commission_tier?: string | null
           created_at?: string
+          deleted_at?: string | null
           developer_contact?: Json | null
           developer_email?: string | null
           developer_name: string
@@ -5580,6 +5582,7 @@ export type Database = {
           catalog_developer_id?: string | null
           commission_tier?: string | null
           created_at?: string
+          deleted_at?: string | null
           developer_contact?: Json | null
           developer_email?: string | null
           developer_name?: string
