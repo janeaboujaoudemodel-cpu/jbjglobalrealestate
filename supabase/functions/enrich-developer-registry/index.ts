@@ -407,7 +407,7 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ processed: results.length, results }),
+      JSON.stringify({ processed: results.length, results, timedOut, remaining: rows.length - results.length }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
