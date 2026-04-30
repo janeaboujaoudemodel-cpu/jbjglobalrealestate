@@ -1292,7 +1292,8 @@ const DeveloperRegistryTab = () => {
           );})}
         </div>
       )}
-      </>
+        </CollapsibleContent>
+      </Collapsible>
       )}
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
