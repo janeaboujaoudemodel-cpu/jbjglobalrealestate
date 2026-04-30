@@ -65,15 +65,12 @@ const REPORT_TYPES: MarketReportType[] = [
   },
 ];
 
-/* ============================================================
- * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
- * ============================================================ */
+/* ICON BOX - inverted on light surfaces */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${className}`}
-    style={{ backgroundColor: '#000000', boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}
+    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-foreground shadow-md ${className}`}
   >
-    <Icon className="w-6 h-6" style={{ color: '#ffffff' }} />
+    <Icon className="w-6 h-6 text-background" />
   </div>
 );
 
@@ -116,7 +113,7 @@ export const MarketReports = () => {
   };
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+    <section className="surface-light py-16 bg-muted" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -128,13 +125,13 @@ export const MarketReports = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold" style={{ color: '#6b7280' }}>
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
               Market Reports
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Downloadable Reports
             </h2>
-            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
               Generate AI-powered market reports based on official Open Data.
               Reports are descriptive summaries, not predictive forecasts.
             </p>
@@ -144,40 +141,36 @@ export const MarketReports = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {REPORT_TYPES.map((report) => (
               <motion.div key={report.id} variants={fadeInUp} className="h-full">
-                <Card
-                  className="transition-all h-full flex flex-col hover:shadow-lg"
-                  style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
-                >
+                <Card className="transition-all h-full flex flex-col hover:shadow-lg bg-card border border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <IconBox icon={report.icon} />
                       <Badge
                         variant="outline"
-                        className="whitespace-nowrap"
-                        style={{ backgroundColor: '#F3F4F6', color: '#000000', borderColor: '#D1D5DB' }}
+                        className="whitespace-nowrap bg-muted text-foreground border-border"
                       >
-                        <Clock className="w-3 h-3 mr-1" style={{ color: '#000000' }} />
+                        <Clock className="w-3 h-3 mr-1" />
                         {report.frequency}
                       </Badge>
                     </div>
-                    <CardTitle className="text-xl mt-4" style={{ color: '#000000' }}>{report.title}</CardTitle>
+                    <CardTitle className="text-xl mt-4 text-foreground">{report.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
-                    <p className="text-sm mb-6" style={{ color: '#374151' }}>
+                    <p className="text-sm mb-6 text-muted-foreground">
                       {report.description}
                     </p>
 
                     <div className="space-y-2 mb-6 flex-1">
-                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
-                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <CheckCircle className="w-4 h-4 text-emerald-700" />
                         Powered by Government Open Data
                       </div>
-                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
-                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <CheckCircle className="w-4 h-4 text-emerald-700" />
                         AI-generated insights included
                       </div>
-                      <div className="flex items-center gap-2 text-xs" style={{ color: '#1F2937' }}>
-                        <CheckCircle className="w-4 h-4" style={{ color: '#059669' }} />
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <CheckCircle className="w-4 h-4 text-emerald-700" />
                         Source attribution & timestamps
                       </div>
                     </div>
@@ -187,18 +180,17 @@ export const MarketReports = () => {
                       onClick={() => generateReport(report)}
                       disabled={generatingId === report.id}
                       className="w-full mt-auto"
-                      style={{ backgroundColor: '#000000', color: '#ffffff' }}
                     >
                       {generatingId === report.id ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                          <span style={{ color: '#ffffff' }}>Generating...</span>
+                          <div className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin mr-2" />
+                          <span>Generating...</span>
                         </>
                       ) : (
                         <>
-                          <Download className="w-4 h-4 mr-2" style={{ color: '#ffffff' }} />
-                          <span style={{ color: '#ffffff' }}>Generate Report</span>
-                          <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#ffffff' }} />
+                          <Download className="w-4 h-4 mr-2" />
+                          <span>Generate Report</span>
+                          <ChevronRight className="w-4 h-4 ml-1" />
                         </>
                       )}
                     </Button>
@@ -210,17 +202,16 @@ export const MarketReports = () => {
 
           {/* Report Disclaimer */}
           <motion.div
-            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-2xl"
+            className="mt-10 p-6 max-w-3xl mx-auto text-center rounded-2xl bg-card border border-border"
             variants={fadeInUp}
-            style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
           >
             <div className="flex justify-center mb-4">
               <IconBox icon={FileText} />
             </div>
-            <h4 className="font-semibold mb-2" style={{ color: '#000000' }}>
+            <h4 className="font-semibold mb-2 text-foreground">
               Report Disclaimer
             </h4>
-            <p className="text-sm leading-relaxed" style={{ color: '#374151' }}>
+            <p className="text-sm leading-relaxed text-muted-foreground">
               All market reports are generated using AI analysis of publicly available government Open Data.
               Reports are for informational purposes only and do not constitute investment advice.
               Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department.

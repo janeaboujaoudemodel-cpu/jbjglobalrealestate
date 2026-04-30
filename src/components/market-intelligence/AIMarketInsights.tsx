@@ -25,15 +25,12 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
-/* ============================================================
- * ICON BOX STYLE - Active Champagne + Gold Border + Black Icon
- * ============================================================ */
+/* ICON BOX - inverted on light surfaces */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
   <div
-    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${className}`}
-    style={{ backgroundColor: '#000000', boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}
+    className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 bg-foreground shadow-md ${className}`}
   >
-    <Icon className="w-5 h-5" style={{ color: '#ffffff' }} />
+    <Icon className="w-5 h-5 text-background" />
   </div>
 );
 
@@ -126,7 +123,7 @@ export const AIMarketInsights = () => {
   };
 
   return (
-    <section className="py-16" style={{ backgroundColor: '#FFFFFF' }} data-surface="light">
+    <section className="surface-light py-16 bg-background" data-surface="light">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -138,13 +135,13 @@ export const AIMarketInsights = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold" style={{ color: '#6b7280' }}>
+            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
               AI-Powered Insights
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: '#000000' }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Understanding the Market
             </h2>
-            <p className="max-w-2xl mx-auto" style={{ color: '#374151' }}>
+            <p className="max-w-2xl mx-auto text-muted-foreground">
               AI-generated explanations of market trends based on official government data.
               These insights help contextualize the "why" behind the numbers.
             </p>
@@ -154,21 +151,18 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card
-                  className="h-full transition-all hover:shadow-lg"
-                  style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
-                >
+                <Card className="h-full transition-all hover:shadow-lg bg-card border border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
                       <div>
-                        <CardTitle className="text-lg mb-1" style={{ color: '#000000' }}>{insight.title}</CardTitle>
-                        <p className="text-sm italic" style={{ color: '#4B5563' }}>"{insight.question}"</p>
+                        <CardTitle className="text-lg mb-1 text-foreground">{insight.title}</CardTitle>
+                        <p className="text-sm italic text-muted-foreground">"{insight.question}"</p>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm leading-relaxed" style={{ color: '#1F2937' }}>
+                    <p className="text-sm leading-relaxed text-foreground">
                       {insight.insight}
                     </p>
                   </CardContent>
@@ -179,15 +173,15 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="shadow-lg" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}>
+            <Card className="shadow-lg bg-card border border-border">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <IconBox icon={Brain} className="w-12 h-12 shrink-0" />
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-2" style={{ color: '#000000' }}>
+                    <h3 className="text-xl font-bold mb-2 text-foreground">
                       Generate Market Narrative
                     </h3>
-                    <p className="text-sm mb-4" style={{ color: '#374151' }}>
+                    <p className="text-sm mb-4 text-muted-foreground">
                       Get an AI-generated analysis based on official government Open Data.
                       Select a topic below to generate educational market insights.
                     </p>
@@ -195,12 +189,12 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6" style={{ backgroundColor: '#F3F4F6', borderColor: '#E5E7EB' }}>
+                  <TabsList className="mb-6 bg-muted border border-border">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
-                        className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white"
+                        className="flex items-center gap-2 data-[state=active]:bg-foreground data-[state=active]:text-background"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>
@@ -215,32 +209,28 @@ export const AIMarketInsights = () => {
                           variant="primary"
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
-                          style={{ backgroundColor: '#000000', color: '#ffffff' }}
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
-                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" style={{ color: '#ffffff' }} />
-                              <span style={{ color: '#ffffff' }}>Generating...</span>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              <span>Generating...</span>
                             </>
                           ) : (
                             <>
-                              <Sparkles className="w-4 h-4 mr-2" style={{ color: '#ffffff' }} />
-                              <span style={{ color: '#ffffff' }}>Generate {opt.label}</span>
-                              <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#ffffff' }} />
+                              <Sparkles className="w-4 h-4 mr-2" />
+                              <span>Generate {opt.label}</span>
+                              <ChevronRight className="w-4 h-4 ml-1" />
                             </>
                           )}
                         </Button>
 
                         {generatedNarratives[opt.id] && (
-                          <div
-                            className="p-6 rounded-xl"
-                            style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB', borderWidth: 1 }}
-                          >
-                            <div className="flex items-center gap-2 text-sm mb-3 font-semibold" style={{ color: '#000000' }}>
-                              <MessageSquare className="w-4 h-4" style={{ color: '#000000' }} />
+                          <div className="p-6 rounded-xl bg-muted border border-border">
+                            <div className="flex items-center gap-2 text-sm mb-3 font-semibold text-foreground">
+                              <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
                             </div>
-                            <div className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: '#1F2937' }}>
+                            <div className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
                               {generatedNarratives[opt.id]}
                             </div>
                           </div>
@@ -255,12 +245,11 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div
-            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-xl"
+            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-xl bg-muted border border-border"
             variants={fadeInUp}
-            style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB', borderWidth: 1 }}
           >
-            <Info className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#000000' }} />
-            <p className="text-xs leading-relaxed" style={{ color: '#374151' }}>
+            <Info className="w-5 h-5 shrink-0 mt-0.5 text-foreground" />
+            <p className="text-xs leading-relaxed text-muted-foreground">
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only.
               They do not constitute financial, investment, or legal advice.
               AI explains data but does not predict prices or provide specific investment recommendations.
