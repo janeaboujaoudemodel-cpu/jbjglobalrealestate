@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit, BookOpen, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit, BookOpen, Loader2, RotateCcw } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -654,6 +654,7 @@ const DeveloperRegistryTab = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkRunning, setBulkRunning] = useState(false);
+  const [bulkResetting, setBulkResetting] = useState(false);
   const [emailFilter, setEmailFilter] = useState<"all" | "not_sent" | "sent" | "registered">("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
@@ -744,6 +745,49 @@ const DeveloperRegistryTab = () => {
     }
     toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
     setBulkRunning(false);
+    refetch();
+  };
+
+  const selectAllPending = () => {
+    const ids = queuePool
+      .filter((r: any) => r.status === "pending_application")
+      .map((r: any) => r.id);
+    if (!ids.length) {
+      toast.info("No developers in Pending Application");
+      return;
+    }
+    setSelected(new Set(ids));
+    toast.success(`Selected ${ids.length} pending developer${ids.length === 1 ? "" : "s"}`);
+  };
+
+  const bulkResetToNotStarted = async () => {
+    if (!selected.size) return;
+    if (!confirm(`Reset ${selected.size} developer${selected.size === 1 ? "" : "s"} back to Not Started? They'll reappear in the queue ready to send.`)) return;
+    setBulkResetting(true);
+    const t = toast.loading(`Resetting 0 / ${selectedDevs.length}…`);
+    let ok = 0, fail = 0;
+    for (let i = 0; i < selectedDevs.length; i++) {
+      const d = selectedDevs[i];
+      if (d.status === "not_started") {
+        ok++;
+      } else {
+        try {
+          await quickStatus.mutateAsync({
+            entityType: "developer_registry",
+            id: d.id,
+            status: "not_started",
+            previousStatus: d.status,
+          });
+          ok++;
+        } catch {
+          fail++;
+        }
+      }
+      toast.loading(`Resetting ${i + 1} / ${selectedDevs.length}…`, { id: t });
+    }
+    toast.success(`Reset: ${ok} · Failed: ${fail}`, { id: t });
+    setBulkResetting(false);
+    clearSelection();
     refetch();
   };
 
@@ -845,8 +889,21 @@ const DeveloperRegistryTab = () => {
       <div className="flex flex-wrap gap-2 items-center bg-white border border-black/10 rounded-xl p-3">
         <div className="text-sm text-black"><strong>{selected.size}</strong> of {filtered.length} selected</div>
         <Button size="sm" variant="outline" onClick={selectAllFiltered}>Select all filtered</Button>
+        <Button size="sm" variant="outline" onClick={selectAllPending} title="Select every developer currently in Pending Application">
+          Select all Pending ({counts["pending_application"] || 0})
+        </Button>
         <Button size="sm" variant="outline" onClick={clearSelection} disabled={!selected.size}>Clear</Button>
         <div className="flex-1" />
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={!selected.size || bulkResetting}
+          onClick={bulkResetToNotStarted}
+          title="Move selected developers back to Not Started so they can be re-emailed"
+        >
+          {bulkResetting ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <RotateCcw className="w-3 h-3 mr-1" />}
+          Reset to Not Started ({selected.size})
+        </Button>
         <Button
           size="sm"
           className="bg-black text-white hover:bg-gray-800"
