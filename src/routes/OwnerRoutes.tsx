@@ -65,6 +65,9 @@ const PrintCheck = lazy(() => import("@/pages/owner/PrintCheck"));
 const BaselinePdfDashboard = lazy(() => import("@/pages/owner/BaselinePdfDashboard"));
 const IconAuditDashboard = lazy(() => import("@/pages/owner/IconAuditDashboard"));
 const IconSizePreview = lazy(() => import("@/pages/owner/IconSizePreview"));
+const VatCertificate = lazy(() => import("@/pages/owner/templates/VatCertificate"));
+const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatureStudio"));
+const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -143,5 +146,9 @@ export const OwnerRoutes = () => (
     <Route path="baseline-pdf" element={<BaselinePdfDashboard />} />
     <Route path="icon-audit" element={<IconAuditDashboard />} />
     <Route path="icon-size-preview" element={<IconSizePreview />} />
+    <Route path="templates/vat" element={<VatCertificate />} />
+    <Route path="sign" element={<AdoptSignatureStudio />} />
+    <Route path="sign/:envelopeId" element={<AdoptSignatureStudio />} />
+    <Route path="contracts" element={<ContractVault />} />
   </Route>
 );
