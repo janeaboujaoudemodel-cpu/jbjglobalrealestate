@@ -11560,6 +11560,33 @@ export type Database = {
           },
         ]
       }
+      faded_gold_allowlist: {
+        Row: {
+          added_by: string | null
+          created_at: string
+          file_path: string
+          id: string
+          reason: string
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string | null
+          created_at?: string
+          file_path: string
+          id?: string
+          reason?: string
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string | null
+          created_at?: string
+          file_path?: string
+          id?: string
+          reason?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       faq_unanswered_questions: {
         Row: {
           answer_added: boolean
