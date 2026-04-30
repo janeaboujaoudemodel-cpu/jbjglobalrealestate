@@ -342,12 +342,42 @@ export const BulkSendDialog = ({
         </div>
         </div>
 
+        {reviewing && !running && (
+          <div className="mt-3 border-2 border-amber-400 bg-amber-50 rounded-xl p-3 text-sm text-black">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <div className="font-bold mb-1">Confirm bulk send</div>
+                <div className="text-xs leading-relaxed">
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> developer{targets.length === 1 ? "" : "s"}.
+                  {statusBreakdown.length > 0 && (
+                    <span> Includes:{" "}
+                      {statusBreakdown.map(([s, n], i) => (
+                        <span key={s}>
+                          <strong>{n} {STATUS_LABEL[s] || s}</strong>{i < statusBreakdown.length - 1 ? ", " : ""}
+                        </span>
+                      ))}.
+                    </span>
+                  )}
+                  {skipped > 0 && <span> {skipped} will be skipped ({skipBreakdown.noEmail > 0 && `${skipBreakdown.noEmail} no email`}{skipBreakdown.noEmail > 0 && skipBreakdown.recent > 0 && ", "}{skipBreakdown.recent > 0 && `${skipBreakdown.recent} contacted recently`}).</span>}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <DialogFooter>
           <Button variant="outline" onClick={closeAndReset} disabled={running}>
             {Object.keys(statuses).length > 0 && !running ? "Close" : "Cancel"}
           </Button>
+          {reviewing && !running && (
+            <Button variant="outline" onClick={() => setReviewing(false)}>
+              Back
+            </Button>
+          )}
           <Button onClick={sendAll} disabled={running || !targets.length} className="bg-black text-white hover:bg-gray-800">
-            <Send className="w-3 h-3 mr-1" />{running ? `Sending…` : `Send to ${targets.length}`}
+            <Send className="w-3 h-3 mr-1" />
+            {running ? "Sending…" : reviewing ? `Confirm & send to ${targets.length}` : `Review & send (${targets.length})`}
           </Button>
         </DialogFooter>
       </DialogContent>
