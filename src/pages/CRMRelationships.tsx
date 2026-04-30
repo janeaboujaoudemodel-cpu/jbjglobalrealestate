@@ -513,6 +513,14 @@ const BrokeragesTab = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <BulkSendDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        selected={data.filter((r: any) => bulkSel.has(r.id))}
+        defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+        entityType="brokerage"
+      />
     </div>
   );
 };
