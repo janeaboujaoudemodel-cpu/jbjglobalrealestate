@@ -1127,6 +1127,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <Link
                 key={item.href + item.label + i}
                 to={item.href}
+                onMouseEnter={() => prefetchAITool(item.href)}
+                onFocus={() => prefetchAITool(item.href)}
                 onClick={(e) => {
                   if (hasMega) handleNavClick(item.megaMenu, e);
                   else handleNavClick(undefined);
