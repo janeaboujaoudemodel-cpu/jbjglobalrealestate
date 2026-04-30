@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
             },
             { onConflict: "user_id,channel_type,contact_identifier" }
           )
-          .select("id")
+          .select("id, unread_count")
           .single();
 
         if (threadErr || !thread?.id) {
@@ -109,19 +109,10 @@ Deno.serve(async (req) => {
         }
         const threadId = thread.id;
 
-        // Bump unread_count atomically (upsert above only sets fields; increment separately).
-        await admin.rpc("increment_thread_unread", { p_thread_id: threadId }).catch(() => {
-          // Fallback: best-effort update if RPC missing.
-          return admin
-            .from("owner_comm_threads")
-            .update({ unread_count: 1 })
-            .eq("id", threadId);
-        });
-
         // 3) Idempotent message upsert on (user_id, external_message_id).
         //    If a concurrent poll already inserted this message, the unique index causes
-        //    onConflict to no-op instead of producing a duplicate.
-        const { error: msgErr } = await admin
+        //    ignoreDuplicates: true to no-op instead of producing a duplicate.
+        const { data: insertedMsg, error: msgErr } = await admin
           .from("owner_comm_messages")
           .upsert(
             {
@@ -133,10 +124,11 @@ Deno.serve(async (req) => {
               external_message_id: m.id,
               sender_identifier: fromEmail,
               sender_name: fromName,
-              status: "received",
+              status: "delivered",
             },
             { onConflict: "user_id,external_message_id", ignoreDuplicates: true }
-          );
+          )
+          .select("id");
 
         if (msgErr) {
           console.error("[comm-inbound-sync] message upsert failed", msgErr);
