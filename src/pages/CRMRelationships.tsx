@@ -670,8 +670,19 @@ const DeveloperRegistryTab = () => {
   // `!last_outreach_at` which incorrectly hid the 24 Pending Application records as
   // soon as a first email had been sent. Sent History keeps everything that has
   // received an email plus all Registered developers.
-  const queuePool = useMemo(() => data.filter((r: any) => r.status !== "registered"), [data]);
-  const historyPool = useMemo(() => data.filter((r: any) => !!r.last_outreach_at || r.status === "registered"), [data]);
+  // Sent History: a developer must have actually received an email
+  // (last_outreach_at set, OR a positive outreach_count). Registered developers
+  // are kept ONLY if they were also emailed — otherwise they appear nowhere in
+  // history and stay in the queue. This prevents the same developer showing up
+  // in both tabs.
+  const queuePool = useMemo(
+    () => data.filter((r: any) => r.status !== "registered" && !r.last_outreach_at && !(r.outreach_count > 0)),
+    [data]
+  );
+  const historyPool = useMemo(
+    () => data.filter((r: any) => !!r.last_outreach_at || (r.outreach_count ?? 0) > 0),
+    [data]
+  );
 
   const filtered = useMemo(() => queuePool.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
