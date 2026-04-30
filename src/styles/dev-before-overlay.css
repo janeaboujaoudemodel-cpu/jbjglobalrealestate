@@ -1,59 +1,219 @@
 /**
  * Pre-refactor "before" style overlay — DEV ONLY.
  *
- * When <html> has `data-style-mode="before"`, these rules re-apply the
- * faded / inconsistent typography & contrast that existed prior to the
- * Market Intelligence + global contrast refactor. Toggling lets reviewers
- * spot any wash-out that may still leak into the corrected build.
+ * When <html> has data-style-mode="before", these rules visually revert
+ * the cumulative design rollouts (champagne theme, IconTile, gold tabs &
+ * CTAs, price-orange, semantic data colors, AI purple, adaptive hairlines,
+ * obsidian footer, ink typography, etc.) so reviewers can A/B the full
+ * scope of changes side-by-side with the live "after" build.
  *
- * Scope: presentation only. No layout/structural changes.
+ * Scope: presentation only — never alters layout, structure, or behavior.
+ * Toggle via <DevStyleToggle /> (Shift+B). Owner / dev gate handled there.
+ *
+ * Rules use !important and are scoped under the data-style-mode attribute
+ * so they have zero cost when the toggle is off (the selector simply
+ * doesn't match).
  */
 
+/* ════════════════════════════════════════════════════════════════
+   1. ROOT TOKEN OVERRIDES
+   Reset the champagne-dominant palette to the prior neutral set.
+   ════════════════════════════════════════════════════════════════ */
 html[data-style-mode="before"] {
-  /* ── Faded muted foregrounds (used in body copy + TOC) ─────────────── */
-  --before-muted: 113 113 122; /* zinc-500 */
+  --before-muted: 113 113 122;        /* zinc-500 */
+  --before-ink: 63 63 70;             /* zinc-700 (was #1A1A1A) */
+  --before-page: 255 255 255;         /* white (was #FDFBF7) */
 }
 
-/* Body copy & paragraphs — drop opacity to mimic pre-refactor */
+/* ════════════════════════════════════════════════════════════════
+   2. CHAMPAGNE SURFACES → plain white
+   Page #FDFBF7, surface #F7F2EA, raised #EFE6D6 → revert.
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="bg-[#FDFBF7]"],
+html[data-style-mode="before"] [class*="bg-[#F7F2EA]"],
+html[data-style-mode="before"] [class*="bg-[#EFE6D6]"],
+html[data-style-mode="before"] [class*="from-[#FDFBF7]"],
+html[data-style-mode="before"] [class*="via-[#F7F2EA]"],
+html[data-style-mode="before"] [class*="to-[#EFE6D6]"],
+html[data-style-mode="before"] [class*="to-[#F7F2EA]"],
+html[data-style-mode="before"] [class*="from-[#F7F2EA]"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   3. INK TEXT → muted gray (the pre-refactor default body color)
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="text-[#1A1A1A]"] {
+  color: #3f3f46 !important;
+}
+html[data-style-mode="before"] [class*="text-[#5A4A2E]"],
+html[data-style-mode="before"] [class*="text-[#6B5A3E]"] {
+  color: #71717a !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   4. GOLD-ACTIVE TABS → previous primary recipe
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [data-state="active"][class*="bg-[#B89555]"],
+html[data-style-mode="before"] [data-state="active"][class*="data-[state=active]:bg-[#B89555]"] {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5. GOLD CTA BUTTONS → previous black/primary
+   Catches variant="gold" and inline gold backgrounds on buttons/links.
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] button[class*="bg-[#B89555]"],
+html[data-style-mode="before"] a[class*="bg-[#B89555]"],
+html[data-style-mode="before"] button[class*="bg-gold"]:not([class*="bg-gold/"]),
+html[data-style-mode="before"] a[class*="bg-gold"]:not([class*="bg-gold/"]) {
+  background-color: #1a1a1a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: #1a1a1a !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6. ICON TILES → bare lucide stroke
+   IconTile replaces inline color tile patterns site-wide. Reverting
+   this lets reviewers see how naked the original icons were.
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [data-icon-tile] {
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+html[data-style-mode="before"] [data-icon-tile] svg {
+  color: #71717a !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7. PRICE ORANGE → neutral ink
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="text-[hsl(var(--price-orange))]"],
+html[data-style-mode="before"] [style*="--price-orange"],
+html[data-style-mode="before"] [class*="price-orange"] {
+  color: #18181b !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   8. SEMANTIC DATA COLORS → neutral
+   Emerald / Red / Blue / Amber semantic mapping for KPIs/charts.
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="text-emerald-"],
+html[data-style-mode="before"] [class*="text-amber-"],
+html[data-style-mode="before"] [class*="text-blue-"]:not([class*="text-blue-50"]),
+html[data-style-mode="before"] [class*="text-red-"] {
+  color: #52525b !important;
+}
+html[data-style-mode="before"] [class*="bg-emerald-50"],
+html[data-style-mode="before"] [class*="bg-red-50"],
+html[data-style-mode="before"] [class*="bg-blue-50"],
+html[data-style-mode="before"] [class*="bg-amber-50"] {
+  background-color: #f4f4f5 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   9. AI PURPLE GRADIENT → previous gold/teal hint
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="from-violet-"],
+html[data-style-mode="before"] [class*="to-purple-"],
+html[data-style-mode="before"] [class*="from-purple-"],
+html[data-style-mode="before"] [class*="to-violet-"],
+html[data-style-mode="before"] [class*="bg-violet-"],
+html[data-style-mode="before"] [class*="bg-purple-"]:not([class*="bg-purple-50"]) {
+  background-image: none !important;
+  background-color: rgba(184, 149, 106, 0.08) !important;
+  color: #1a1a1a !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   10. ADAPTIVE HAIRLINES → flat border
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [data-adaptive-hairline] {
+  background: hsl(var(--border)) !important;
+  background-image: none !important;
+  opacity: 1 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   11. CORPORATE FOOTER → previous lighter footer
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] footer[data-footer="corporate"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #3f3f46 !important;
+}
+html[data-style-mode="before"] footer[data-footer="corporate"] * {
+  color: #3f3f46 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+html[data-style-mode="before"] footer[data-footer="corporate"] a {
+  color: #18181b !important;
+  text-decoration: underline !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   12. GOLD ACCENT BORDERS → neutral border
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="border-gold"],
+html[data-style-mode="before"] [class*="ring-gold"],
+html[data-style-mode="before"] [class*="border-[#B89555]"] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  --tw-ring-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   13. TYPOGRAPHY (original v1 rules — pre-MI refactor)
+   Body opacity, eyebrow tracking, H2/H3 weights.
+   ════════════════════════════════════════════════════════════════ */
 html[data-style-mode="before"] p,
 html[data-style-mode="before"] li,
 html[data-style-mode="before"] .text-muted-foreground {
   opacity: 0.8 !important;
   line-height: 1.45 !important;
 }
-
-/* Eyebrows — looser tracking, lower weight (pre-MI_EYEBROW) */
 html[data-style-mode="before"] [class*="uppercase"][class*="tracking-"] {
   letter-spacing: 0.05em !important;
   font-weight: 500 !important;
   opacity: 0.7 !important;
 }
-
-/* Section H2 — under-sized, lighter weight */
 html[data-style-mode="before"] h2 {
   font-size: 1.5rem !important;
   font-weight: 600 !important;
   letter-spacing: normal !important;
 }
-
-/* Card titles (H3) — soft hierarchy */
 html[data-style-mode="before"] h3 {
   font-weight: 500 !important;
 }
-
-/* KPI / large stat numbers — under-emphasized */
 html[data-style-mode="before"] [class*="text-2xl"],
 html[data-style-mode="before"] [class*="text-3xl"] {
   font-weight: 600 !important;
 }
 
-/* Re-introduce faded gold on chips/badges (banned token) */
-html[data-style-mode="before"] [class*="bg-gold"],
+/* ════════════════════════════════════════════════════════════════
+   14. FADED GOLD ON CHIPS (pre-prohibition)
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [class*="bg-gold/"],
+html[data-style-mode="before"] [class*="text-gold/"],
 html[data-style-mode="before"] [class*="text-gold"] {
   color: rgba(184, 149, 106, 0.7) !important;
 }
 
-/* Dim white-on-image hero descriptions back to /85 */
+/* ════════════════════════════════════════════════════════════════
+   15. WHITE-ON-IMAGE / DROP-SHADOW (pre-contrast-guard)
+   ════════════════════════════════════════════════════════════════ */
 html[data-style-mode="before"] .text-white,
 html[data-style-mode="before"] [class*="text-white/95"],
 html[data-style-mode="before"] [class*="text-white/9"] {
@@ -61,13 +221,9 @@ html[data-style-mode="before"] [class*="text-white/9"] {
   text-shadow: none !important;
   filter: none !important;
 }
-
-/* Strip drop-shadows added to hero text in the refactor */
 html[data-style-mode="before"] [class*="drop-shadow-"] {
   filter: none !important;
 }
-
-/* Soften the hero composite overlays (revert to single layer) */
 html[data-style-mode="before"] [data-mi-overlay="composite"] {
   background: linear-gradient(
     to bottom,
@@ -76,7 +232,19 @@ html[data-style-mode="before"] [data-mi-overlay="composite"] {
   ) !important;
 }
 
-/* Visual marker so reviewers know overlay is active */
+/* ════════════════════════════════════════════════════════════════
+   16. DEVELOPER LOGO PADDED CHAMPAGNE BOX → previous bare image
+   ════════════════════════════════════════════════════════════════ */
+html[data-style-mode="before"] [data-developer-logo] {
+  background-color: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   17. ACTIVE-OVERLAY VISUAL BADGE (so reviewers don't forget it's on)
+   ════════════════════════════════════════════════════════════════ */
 html[data-style-mode="before"] body::before {
   content: "BEFORE";
   position: fixed;
