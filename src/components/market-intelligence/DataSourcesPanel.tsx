@@ -6,6 +6,16 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { OPEN_DATA_SOURCES } from "@/config/open-data-config";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_BODY,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+  MI_CHIP,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -42,13 +52,13 @@ export const DataSourcesPanel = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
+            <span className={`${MI_EYEBROW} mb-4 block`}>
               Data Sources
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className={`${MI_H2} mb-4`}>
               Powered by Official Open Data
             </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
+            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               All Market Intelligence is derived exclusively from official government Open Data sources.
               We do not scrape, republish, or use proprietary third-party data.
             </p>
@@ -70,22 +80,22 @@ export const DataSourcesPanel = () => {
                         </Badge>
                       </div>
 
-                      <h3 className="font-semibold text-lg mb-1 text-foreground">{source.name}</h3>
-                      <p className="text-sm mb-3 font-medium text-muted-foreground">{source.provider}</p>
-                      <p className="text-sm mb-4 text-foreground">{source.description}</p>
+                      <h3 className={`${MI_CARD_TITLE} mb-1`}>{source.name}</h3>
+                      <p className={`${MI_CAPTION} mb-3`}>{source.provider}</p>
+                      <p className={`${MI_BODY} mb-4`}>{source.description}</p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {source.dataTypes.map((type) => (
                           <span
                             key={type}
-                            className="px-2 py-1 font-medium text-xs rounded-md capitalize bg-muted text-foreground"
+                            className={`${MI_CHIP} px-2 py-1 rounded-md capitalize bg-muted text-foreground`}
                           >
                             {type}
                           </span>
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-medium text-emerald-700">
+                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-emerald-700">
                         <Shield className="w-4 h-4" />
                         Official Government Source
                       </div>
@@ -95,7 +105,7 @@ export const DataSourcesPanel = () => {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm mt-4 font-semibold underline-offset-4 hover:underline text-foreground"
+                          className="inline-flex items-center gap-1 text-sm mt-4 font-semibold leading-none underline-offset-4 hover:underline text-foreground"
                         >
                           Visit Source
                           <ExternalLink className="w-3 h-3" />
@@ -121,10 +131,10 @@ export const DataSourcesPanel = () => {
             ].map((item) => (
               <div
                 key={item.text}
-                className="flex items-center gap-2 font-medium text-foreground"
+                className={`${MI_BODY} flex items-center gap-2`}
               >
                 <item.icon className="w-5 h-5 text-emerald-700" />
-                <span className="text-sm">{item.text}</span>
+                <span>{item.text}</span>
               </div>
             ))}
           </motion.div>

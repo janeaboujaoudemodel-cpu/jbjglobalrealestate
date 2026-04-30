@@ -10,6 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_H4,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -125,13 +134,13 @@ export const MarketReports = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
+            <span className={`${MI_EYEBROW} mb-4 block`}>
               Market Reports
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className={`${MI_H2} mb-4`}>
               Downloadable Reports
             </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
+            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               Generate AI-powered market reports based on official Open Data.
               Reports are descriptive summaries, not predictive forecasts.
             </p>
@@ -153,23 +162,23 @@ export const MarketReports = () => {
                         {report.frequency}
                       </Badge>
                     </div>
-                    <CardTitle className="text-xl mt-4 text-foreground">{report.title}</CardTitle>
+                    <CardTitle className={`${MI_CARD_TITLE} mt-4`}>{report.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col">
-                    <p className="text-sm mb-6 text-muted-foreground">
+                    <p className={`${MI_BODY_MUTED} mb-6`}>
                       {report.description}
                     </p>
 
                     <div className="space-y-2 mb-6 flex-1">
-                      <div className="flex items-center gap-2 text-xs text-foreground">
+                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
                         <CheckCircle className="w-4 h-4 text-emerald-700" />
                         Powered by Government Open Data
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
+                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
                         <CheckCircle className="w-4 h-4 text-emerald-700" />
                         AI-generated insights included
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-foreground">
+                      <div className={`${MI_CAPTION} flex items-center gap-2 text-foreground`}>
                         <CheckCircle className="w-4 h-4 text-emerald-700" />
                         Source attribution & timestamps
                       </div>
@@ -208,10 +217,10 @@ export const MarketReports = () => {
             <div className="flex justify-center mb-4">
               <IconBox icon={FileText} />
             </div>
-            <h4 className="font-semibold mb-2 text-foreground">
+            <h4 className={`${MI_H4} mb-2`}>
               Report Disclaimer
             </h4>
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className={MI_BODY_MUTED}>
               All market reports are generated using AI analysis of publicly available government Open Data.
               Reports are for informational purposes only and do not constitute investment advice.
               Data sources include Dubai Pulse, Dubai Statistics Center, and Dubai Land Department.

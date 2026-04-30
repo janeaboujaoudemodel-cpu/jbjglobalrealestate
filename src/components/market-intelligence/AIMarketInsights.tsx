@@ -10,6 +10,16 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import {
+  MI_EYEBROW,
+  MI_H2,
+  MI_LEAD,
+  MI_CARD_TITLE,
+  MI_H4,
+  MI_BODY,
+  MI_BODY_MUTED,
+  MI_CAPTION,
+} from "./MarketIntelligenceTypography";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -135,13 +145,13 @@ export const AIMarketInsights = () => {
         >
           {/* Section Header */}
           <motion.div className="text-center mb-12" variants={fadeInUp}>
-            <span className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold text-muted-foreground">
+            <span className={`${MI_EYEBROW} mb-4 block`}>
               AI-Powered Insights
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className={`${MI_H2} mb-4`}>
               Understanding the Market
             </h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground">
+            <p className={`${MI_LEAD} max-w-2xl mx-auto`}>
               AI-generated explanations of market trends based on official government data.
               These insights help contextualize the "why" behind the numbers.
             </p>
@@ -156,13 +166,13 @@ export const AIMarketInsights = () => {
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
                       <div>
-                        <CardTitle className="text-lg mb-1 text-foreground">{insight.title}</CardTitle>
-                        <p className="text-sm italic text-muted-foreground">"{insight.question}"</p>
+                        <CardTitle className={`${MI_CARD_TITLE} mb-1`}>{insight.title}</CardTitle>
+                        <p className={`${MI_BODY_MUTED} italic`}>"{insight.question}"</p>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm leading-relaxed text-foreground">
+                    <p className={MI_BODY}>
                       {insight.insight}
                     </p>
                   </CardContent>
@@ -178,10 +188,10 @@ export const AIMarketInsights = () => {
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
                   <IconBox icon={Brain} className="w-12 h-12 shrink-0" />
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-2 text-foreground">
+                    <h3 className={`${MI_CARD_TITLE} mb-2`}>
                       Generate Market Narrative
                     </h3>
-                    <p className="text-sm mb-4 text-muted-foreground">
+                    <p className={`${MI_BODY_MUTED} mb-4`}>
                       Get an AI-generated analysis based on official government Open Data.
                       Select a topic below to generate educational market insights.
                     </p>
@@ -226,11 +236,11 @@ export const AIMarketInsights = () => {
 
                         {generatedNarratives[opt.id] && (
                           <div className="p-6 rounded-xl bg-muted border border-border">
-                            <div className="flex items-center gap-2 text-sm mb-3 font-semibold text-foreground">
+                            <div className={`${MI_H4} flex items-center gap-2 mb-3`}>
                               <MessageSquare className="w-4 h-4" />
                               AI Market Analysis
                             </div>
-                            <div className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
+                            <div className={MI_BODY}>
                               {generatedNarratives[opt.id]}
                             </div>
                           </div>
@@ -249,7 +259,7 @@ export const AIMarketInsights = () => {
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 shrink-0 mt-0.5 text-foreground" />
-            <p className="text-xs leading-relaxed text-muted-foreground">
+            <p className={MI_CAPTION}>
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only.
               They do not constitute financial, investment, or legal advice.
               AI explains data but does not predict prices or provide specific investment recommendations.

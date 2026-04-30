@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
+import {
+  MI_CARD_TITLE,
+  MI_BODY_MUTED,
+  MI_EYEBROW,
+} from "./MarketIntelligenceTypography";
 
 interface MarketIntelligenceLink {
   title: string;
@@ -44,13 +49,13 @@ export const MarketIntelligenceNavigation = ({
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg bg-foreground">
               <BarChart3 className="w-7 h-7 text-background" />
             </div>
-            <h3 className="text-xl font-bold mb-3 text-foreground">New to Market Intelligence?</h3>
-            <p className="text-sm mb-5 max-w-md mx-auto leading-relaxed text-muted-foreground">
+            <h3 className={`${MI_CARD_TITLE} mb-3`}>New to Market Intelligence?</h3>
+            <p className={`${MI_BODY_MUTED} mb-5 max-w-md mx-auto`}>
               Start with our Market Overview to understand the Dubai real estate landscape.
             </p>
             <Link 
               to="/market-intelligence/overview"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-sm font-semibold hover:-translate-y-0.5 bg-foreground text-background"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-sm font-semibold leading-none hover:-translate-y-0.5 bg-foreground text-background"
             >
               <span>Start Here: Market Overview</span>
               <ArrowRight className="w-4 h-4" />
@@ -70,10 +75,10 @@ export const MarketIntelligenceNavigation = ({
                   <ArrowLeft className="w-5 h-5 md:w-7 md:h-7 text-background" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold text-muted-foreground">Previous</p>
-                  <p className="font-bold text-lg md:text-xl lg:text-2xl text-foreground">{prevLink.title}</p>
+                  <p className={`${MI_EYEBROW} mb-1 md:mb-2`}>Previous</p>
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold leading-snug tracking-tight text-foreground">{prevLink.title}</p>
                   {prevLink.description && (
-                    <p className="text-sm mt-1 md:mt-2 hidden md:block text-muted-foreground">{prevLink.description}</p>
+                    <p className="text-sm font-normal leading-relaxed mt-1 md:mt-2 hidden md:block text-muted-foreground">{prevLink.description}</p>
                   )}
                 </div>
               </div>
@@ -89,10 +94,10 @@ export const MarketIntelligenceNavigation = ({
             >
               <div className="flex items-center justify-end gap-4 md:gap-6">
                 <div className="flex-1">
-                  <p className="text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold text-muted-foreground">Next</p>
-                  <p className="font-bold text-lg md:text-xl lg:text-2xl text-foreground">{nextLink.title}</p>
+                  <p className={`${MI_EYEBROW} mb-1 md:mb-2`}>Next</p>
+                  <p className="text-lg md:text-xl lg:text-2xl font-bold leading-snug tracking-tight text-foreground">{nextLink.title}</p>
                   {nextLink.description && (
-                    <p className="text-sm mt-1 md:mt-2 hidden md:block text-muted-foreground">{nextLink.description}</p>
+                    <p className="text-sm font-normal leading-relaxed mt-1 md:mt-2 hidden md:block text-muted-foreground">{nextLink.description}</p>
                   )}
                 </div>
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center transition-all shadow-lg bg-foreground">
@@ -107,7 +112,7 @@ export const MarketIntelligenceNavigation = ({
 
         {/* All Market Intelligence Links */}
         <div className="mt-8 pt-6 border-t border-border">
-          <p className="text-center text-sm font-medium uppercase tracking-wider mb-4 text-muted-foreground">Market Intelligence</p>
+          <p className={`${MI_EYEBROW} text-center mb-4`}>Market Intelligence</p>
           <div className="flex flex-wrap justify-center gap-3">
             {MARKET_INTELLIGENCE_LINKS.map((link) => (
               <Link

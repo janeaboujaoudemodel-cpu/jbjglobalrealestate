@@ -5,6 +5,12 @@ import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } fr
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { scrollToId } from "@/lib/scroll";
+import {
+  MI_H4,
+  MI_CAPTION,
+  MI_TOC_ITEM,
+  MI_CHIP,
+} from "./MarketIntelligenceTypography";
 
 interface TOCItem {
   id: string;
@@ -109,8 +115,8 @@ export const MarketIntelligenceTableOfContents = ({
                   <HelpCircle className="w-4 h-4 text-background" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-sm mb-1 text-foreground">Quick Navigation</h4>
-                  <p className="text-xs leading-relaxed text-muted-foreground">
+                  <h4 className={`${MI_H4} mb-1`}>Quick Navigation</h4>
+                  <p className={MI_CAPTION}>
                     Click any section button to jump directly to that part of the page. The active section is highlighted.
                   </p>
                 </div>
@@ -138,7 +144,7 @@ export const MarketIntelligenceTableOfContents = ({
         <div className="flex items-center justify-between p-4 border-b bg-muted border-border">
           <div className="flex items-center gap-2">
             <List className="w-5 h-5 text-foreground" />
-            <h3 className="font-semibold text-foreground">{title}</h3>
+            <h3 className="text-base font-semibold leading-snug text-foreground">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
@@ -168,14 +174,16 @@ export const MarketIntelligenceTableOfContents = ({
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all border",
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all border",
+                    MI_TOC_ITEM,
                     activeId === item.id
                       ? "font-semibold shadow-sm bg-foreground text-background border-foreground"
                       : "border-transparent text-muted-foreground bg-transparent hover:bg-accent"
                   )}
                 >
                   <span className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
+                    "w-6 h-6 rounded-full flex items-center justify-center",
+                    MI_CHIP,
                     activeId === item.id
                       ? "bg-background text-foreground"
                       : "bg-muted text-foreground"

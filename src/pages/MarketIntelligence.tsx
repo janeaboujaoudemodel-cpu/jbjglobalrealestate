@@ -13,6 +13,10 @@ import {
   MarketReports,
   DataSourcesPanel,
 } from "@/components/market-intelligence";
+import {
+  MI_CARD_TITLE,
+  MI_BODY_MUTED,
+} from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import VideoBackground from "@/components/VideoBackground";
 import marketIntelligenceHero from "@/assets/market-intelligence-hero.jpg";
@@ -173,15 +177,15 @@ const MarketIntelligence = () => {
           >
             <div className="flex items-center gap-2 text-white">
               <Database className="w-5 h-5" />
-              <span className="text-sm font-medium">Government Open Data</span>
+              <span className="text-sm font-semibold leading-none tracking-tight">Government Open Data</span>
             </div>
             <div className="flex items-center gap-2 text-white">
               <Shield className="w-5 h-5" />
-              <span className="text-sm font-medium">Analytics Only</span>
+              <span className="text-sm font-semibold leading-none tracking-tight">Analytics Only</span>
             </div>
             <div className="flex items-center gap-2 text-white">
               <BarChart3 className="w-5 h-5" />
-              <span className="text-sm font-medium">No Listings</span>
+              <span className="text-sm font-semibold leading-none tracking-tight">No Listings</span>
             </div>
           </motion.div>
         </motion.div>
@@ -215,10 +219,10 @@ const MarketIntelligence = () => {
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-foreground">
                 <Info className="w-6 h-6 text-background" />
               </div>
-              <h3 className="text-xl font-bold mb-4 text-foreground">
+              <h3 className={`${MI_CARD_TITLE} mb-4`}>
                 Compliance & Transparency
               </h3>
-              <p className="text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
+              <p className={`${MI_BODY_MUTED} whitespace-pre-line`}>
                 {MARKET_DISCLAIMER}
               </p>
             </div>
