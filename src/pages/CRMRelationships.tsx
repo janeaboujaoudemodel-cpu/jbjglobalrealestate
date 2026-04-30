@@ -292,11 +292,22 @@ const BrokeragesTab = () => {
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
   const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
   const existingCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner" && r.is_existing_match).length, [data]);
+
+  // Live counts per emirate so the filter shows agencies-per-emirate at a glance
+  const emirateCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const r of data as any[]) {
+      const e = r.emirate || "Unknown";
+      counts[e] = (counts[e] || 0) + 1;
+    }
+    return counts;
+  }, [data]);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.company_name?.toLowerCase().includes(q.toLowerCase()) || r.primary_contact?.name?.toLowerCase?.().includes(q.toLowerCase());
