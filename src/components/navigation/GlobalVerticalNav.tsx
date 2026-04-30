@@ -1245,17 +1245,21 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
-               className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A]/80 hover:text-[#1A1A1A] transition-all px-1 py-[5px] rounded-lg hover:bg-[#1A1A1A]/[0.04]"
+              data-no-contrast-guard
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#1A1A1A]/[0.04] transition-all px-1 py-[5px] rounded-lg"
+              style={{ color: '#1A1A1A' }}
             >
-              <Headphones className="w-3.5 h-3.5 text-red-600" strokeWidth={2.5} />
-              Contact
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2.5} style={{ color: '#DC2626' }} />
+              <span style={{ color: '#1A1A1A' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A]/80 hover:text-[#1A1A1A] transition-all px-1 py-[5px] rounded-lg hover:bg-[#1A1A1A]/[0.04]"
+              data-no-contrast-guard
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#1A1A1A]/[0.04] transition-all px-1 py-[5px] rounded-lg"
+              style={{ color: '#1A1A1A' }}
             >
-              <Ticket className="w-3.5 h-3.5 text-red-600" strokeWidth={2.5} />
-              Support
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2.5} style={{ color: '#DC2626' }} />
+              <span style={{ color: '#1A1A1A' }}>Support</span>
             </Link>
           </div>
           {session ? (
