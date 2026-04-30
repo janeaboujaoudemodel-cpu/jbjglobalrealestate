@@ -14,7 +14,9 @@
     "check:contrast:tokens": "node scripts/contrast/check-tokens.mjs",
     "check:contrast:rendered": "node scripts/contrast/check-rendered.mjs",
     "check:contrast:white-on-light": "node scripts/contrast/check-white-on-light.mjs",
-    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:white-on-light && npm run check:contrast:rendered",
+    "check:contrast:black-on-dark": "node scripts/contrast/check-black-on-dark.mjs",
+    "check:contrast:low-opacity": "node scripts/contrast/check-low-opacity-text.mjs",
+    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:white-on-light && npm run check:contrast:black-on-dark && npm run check:contrast:low-opacity && npm run check:contrast:rendered",
     "prepare": "husky || true"
   },
   "lint-staged": {
