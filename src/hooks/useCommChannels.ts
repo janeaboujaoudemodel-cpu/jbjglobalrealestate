@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type ChannelStatus = "connected" | "available" | "not_linked" | "coming_soon";
+export type ChannelStatus = "connected" | "available" | "not_linked";
 
 export type ChannelProvider = {
   id: string;
@@ -29,10 +29,10 @@ export const PROVIDERS: ChannelProvider[] = [
   { id: "slack",              label: "Slack",                description: "Internal messaging and broker workspaces", connectorId: "slack" },
   { id: "telegram",           label: "Telegram",             description: "Bot-driven Telegram messaging", connectorId: "telegram" },
   { id: "voice_elevenlabs",   label: "Voice (ElevenLabs Clone)", description: "AI voice replies in your cloned voice", connectorId: "elevenlabs" },
-  { id: "instagram",          label: "Instagram DM",         description: "Coming soon — provider integration pending", connectorId: null, comingSoon: true },
-  { id: "facebook",           label: "Facebook Messenger",   description: "Coming soon — provider integration pending", connectorId: null, comingSoon: true },
-  { id: "linkedin",           label: "LinkedIn DM",          description: "Coming soon — provider integration pending", connectorId: null, comingSoon: true },
-  { id: "snapchat",           label: "Snapchat",             description: "Coming soon — provider integration pending", connectorId: null, comingSoon: true },
+  { id: "instagram",          label: "Instagram DM",         description: "Not connected — provider not linked yet", connectorId: null },
+  { id: "facebook",           label: "Facebook Messenger",   description: "Not connected — provider not linked yet", connectorId: null },
+  { id: "linkedin",           label: "LinkedIn DM",          description: "Not connected — provider not linked yet", connectorId: null },
+  { id: "snapchat",           label: "Snapchat",             description: "Not connected — provider not linked yet", connectorId: null },
 ];
 
 export type ProviderState = {
@@ -87,8 +87,7 @@ export function useCommChannels() {
         );
 
         let status: ChannelStatus = "not_linked";
-        if (provider.comingSoon) status = "coming_soon";
-        else if (channelRows.length > 0) status = "connected";
+        if (channelRows.length > 0) status = "connected";
         // "available" is computed at the edge function level (workspace has connection but project not linked).
         // We optimistically show "not_linked" and let the autowire endpoint flip it.
 

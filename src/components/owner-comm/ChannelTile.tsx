@@ -58,13 +58,6 @@ export default function ChannelTile({ state, onConnect, onAddAnother, isConnecti
         </Badge>
       );
     }
-    if (status === "coming_soon") {
-      return (
-        <Badge variant="outline" className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40">
-          Coming Soon
-        </Badge>
-      );
-    }
     if (lastError) {
       return (
         <Badge className="bg-red-600 text-white border-red-700">
@@ -128,10 +121,6 @@ export default function ChannelTile({ state, onConnect, onAddAnother, isConnecti
               {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Resync"}
             </Button>
           </>
-        ) : status === "coming_soon" ? (
-          <Button variant="tertiary" size="sm" className="w-full" disabled>
-            Notify me when available
-          </Button>
         ) : (
           <Button variant="gold" size="sm" className="w-full" onClick={onConnect} disabled={isConnecting}>
             {isConnecting ? (
