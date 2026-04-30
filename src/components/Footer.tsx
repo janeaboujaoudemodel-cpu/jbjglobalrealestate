@@ -456,6 +456,7 @@ const Footer = () => {
     <footer
       ref={footerRef}
       id="site-footer"
+      data-footer="corporate"
       data-surface="dark"
       data-hairline-luminance={hairline.luminance.toFixed(4)}
       className="relative overflow-x-hidden isolate"
