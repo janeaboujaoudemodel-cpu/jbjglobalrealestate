@@ -76,15 +76,18 @@ export const LeadAIStar = ({
           : e?.message || "Assistant failed";
       toast.message(msg);
       // Best-effort: save to local notes table where supported
-      if (text.trim()) {
+      if (text.trim() && entityType === "brokerage") {
         const note = `[AI Star] ${text}`;
-        if (entityType === "brokerage") {
-          await supabase
+        const { data: u } = await supabase.auth.getUser();
+        if (u?.user) {
+          const { error: noteErr } = await supabase
             .from("crm_brokerage_notes")
-            .insert({ brokerage_id: entityId, body: note })
-            .then(({ error }) => {
-              if (!error) toast.success("Note saved to brokerage");
+            .insert({
+              brokerage_id: entityId,
+              body: note,
+              author_id: u.user.id,
             });
+          if (!noteErr) toast.success("Note saved to brokerage");
         }
       }
     } finally {
