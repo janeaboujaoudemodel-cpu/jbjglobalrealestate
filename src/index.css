@@ -567,6 +567,41 @@ All colors MUST be HSL.
   [style*="#0A0908"] .text-gray-600 {
     color: rgba(255, 255, 255, 0.75) !important;
   }
+
+  /* ----------------------------------------------------------
+   * NEAR-TRANSPARENT TEXT FLOOR
+   * A global text-color override (e.g. accidental `text-foreground/10`,
+   * or a dark-mode rule applying `color: rgba(...,0.05)` to body text)
+   * can render copy effectively invisible. Lift any element that ends
+   * up below ~25% opacity back to a legible floor, except elements that
+   * explicitly opt out as decorative.
+   *
+   * Companion to the static check-low-opacity-text.mjs CI guard.
+   * Decorative watermarks: add data-decorative="true" or class .jj-watermark.
+   * ---------------------------------------------------------- */
+  :is(p, span, a, h1, h2, h3, h4, h5, h6, li, label, button, div):not([data-decorative="true"]):not(.jj-watermark):is(
+    .text-white\/0, .text-white\/5, .text-white\/10, .text-white\/15, .text-white\/20, .text-white\/25,
+    .text-black\/0, .text-black\/5, .text-black\/10, .text-black\/15, .text-black\/20, .text-black\/25,
+    .text-foreground\/0, .text-foreground\/5, .text-foreground\/10, .text-foreground\/15, .text-foreground\/20, .text-foreground\/25,
+    .text-muted-foreground\/0, .text-muted-foreground\/5, .text-muted-foreground\/10, .text-muted-foreground\/15, .text-muted-foreground\/20, .text-muted-foreground\/25,
+    .text-card-foreground\/0, .text-card-foreground\/5, .text-card-foreground\/10, .text-card-foreground\/15, .text-card-foreground\/20, .text-card-foreground\/25,
+    .text-primary\/0, .text-primary\/5, .text-primary\/10, .text-primary\/15, .text-primary\/20, .text-primary\/25
+  ) {
+    opacity: 1 !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  /* Same floor when expressed via the bare opacity-* utilities on text-bearing nodes */
+  :is(p, span, a, h1, h2, h3, h4, h5, h6, li, label):not([data-decorative="true"]):not(.jj-watermark):is(
+    .opacity-0, .opacity-5, .opacity-10, .opacity-15, .opacity-20, .opacity-25
+  ) {
+    opacity: 1 !important;
+  }
+
+  /* Mirror of the existing white-on-light guard: black text on dark surfaces */
+  [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950) {
+    color: hsl(var(--foreground)) !important;
+  }
 }
 
 @media (max-width: 767px) {
