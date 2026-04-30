@@ -49,7 +49,7 @@ export default function QuickActionsGrid() {
 
   return (
     <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
-      <h3 className="text-sm font-semibold text-black mb-4">Quick Actions</h3>
+      <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Quick Actions</h3>
       <TooltipProvider delayDuration={200}>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
           {QUICK_ACTIONS.map((action) => (
@@ -59,7 +59,7 @@ export default function QuickActionsGrid() {
                   onClick={() => navigate(action.path)}
                   className={cn(
                     "flex flex-col items-center justify-center gap-2 p-4 rounded-xl min-w-0",
-                    "bg-white/70 border border-[#B89555]/20",
+                    "bg-[#FDFBF7]/70 border border-[#B89555]/20",
                     "hover:border-[#B89555]/50 hover:bg-[#B89555]/10 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#B89555]/10",
                     "transition-all duration-200 cursor-pointer group active:scale-95"
                   )}
@@ -67,12 +67,12 @@ export default function QuickActionsGrid() {
                   <div className="w-10 h-10 rounded-lg bg-[#B89555]/10 flex items-center justify-center group-hover:bg-[#B89555]/20 transition-colors">
                     <action.icon className={cn("h-5 w-5 flex-shrink-0", action.color, "group-hover:text-[#B89555] transition-colors")} />
                   </div>
-                  <span className="text-xs text-black/80 group-hover:text-black transition-colors text-center font-medium leading-tight">
+                  <span className="text-xs text-[#1A1A1A]/80 group-hover:text-[#1A1A1A] transition-colors text-center font-medium leading-tight">
                     {action.label}
                   </span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="bg-black text-white text-xs border-none">
+              <TooltipContent side="bottom" className="bg-[#1A1A1A] text-white text-xs border-none">
                 {action.description}
               </TooltipContent>
             </Tooltip>

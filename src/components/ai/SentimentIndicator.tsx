@@ -122,7 +122,7 @@ export function SentimentBadge({ emotion, confidence, compact = false }: Sentime
     sad: 'bg-blue-100 text-blue-800 border-blue-200',
     disappointed: 'bg-slate-100 text-slate-800 border-slate-200',
     confused: 'bg-purple-100 text-purple-800 border-purple-200',
-    neutral: 'bg-gray-100 text-gray-800 border-gray-200',
+    neutral: 'bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30',
     happy: 'bg-green-100 text-green-800 border-green-200',
     satisfied: 'bg-teal-100 text-teal-800 border-teal-200',
   };
@@ -171,7 +171,7 @@ export function UrgencyIndicator({ urgency, deadline, showCountdown = false }: U
     critical: 'bg-red-500 text-white animate-pulse',
     high: 'bg-orange-500 text-white',
     normal: 'bg-green-500 text-white',
-    low: 'bg-gray-400 text-white',
+    low: 'bg-[#B89555] text-white',
   };
   
   const getCountdown = () => {

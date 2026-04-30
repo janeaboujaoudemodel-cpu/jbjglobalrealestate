@@ -158,14 +158,14 @@ export default function OwnerInbox() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border border-gold/20 rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/20 rounded-2xl p-4 shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <MessageSquare className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Unified Inbox</h1>
-                  <p className="text-gray-600 text-sm">Jane Bou Jaoude — All communications in one place</p>
+                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Unified Inbox</h1>
+                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — All communications in one place</p>
                 </div>
               </div>
               
@@ -220,7 +220,7 @@ export default function OwnerInbox() {
                   <span>{tab.label}</span>
                   {unreadCount > 0 && (
                     <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
-                      isActive ? 'bg-gold text-black' : 'bg-muted text-muted-foreground'
+                      isActive ? 'bg-gold text-[#1A1A1A]' : 'bg-muted text-muted-foreground'
                     }`}>
                       {unreadCount}
                     </span>
@@ -233,7 +233,7 @@ export default function OwnerInbox() {
           {/* Search & Status Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
               <Input
                 placeholder="Search contacts..."
                 value={filters.search}
@@ -247,7 +247,7 @@ export default function OwnerInbox() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
             {/* Thread List */}
             <div className="lg:col-span-1 min-h-0 overflow-hidden">
-              <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
+              <Card className="border border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
                 <ScrollArea className="h-full">
                   {threadsLoading ? (
                     <div className="p-4 space-y-3">
@@ -263,9 +263,9 @@ export default function OwnerInbox() {
                     </div>
                   ) : threads.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                      <MessageSquare className="h-12 w-12 text-gray-500 mb-4" />
-                      <p className="text-gray-600 font-medium">No conversations yet</p>
-                      <p className="text-gray-600 text-sm mt-1">Connect channels to start receiving messages</p>
+                      <MessageSquare className="h-12 w-12 text-[#8A7556] mb-4" />
+                      <p className="text-[#5A4A2E] font-medium">No conversations yet</p>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Connect channels to start receiving messages</p>
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
@@ -292,11 +292,11 @@ export default function OwnerInbox() {
                   onClose={() => setSelectedThread(null)}
                 />
               ) : (
-                <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
+                <Card className="border border-gold/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
                   <div className="text-center p-8">
-                    <MessageSquare className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 font-medium">Select a conversation</p>
-                    <p className="text-gray-600 text-sm mt-1">Choose a thread from the list to view messages</p>
+                    <MessageSquare className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                    <p className="text-[#5A4A2E] font-medium">Select a conversation</p>
+                    <p className="text-[#5A4A2E] text-sm mt-1">Choose a thread from the list to view messages</p>
                   </div>
                 </Card>
               )}
@@ -325,7 +325,7 @@ function StatsCard({
   onClick: () => void;
 }) {
   const baseVariants = {
-    default: "border-gold/30 bg-white",
+    default: "border-gold/30 bg-[#FDFBF7]",
     warning: "border-yellow-500/30 bg-yellow-50",
     danger: "border-red-500/30 bg-red-50",
     info: "border-blue-500/30 bg-blue-50",
@@ -360,10 +360,10 @@ function StatsCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-600">{label}</p>
-            <p className="text-xl font-bold text-black">{value}</p>
+            <p className="text-xs text-[#5A4A2E]">{label}</p>
+            <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
           </div>
-          <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
+          <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
             {icon}
           </div>
         </div>
@@ -402,24 +402,24 @@ function ThreadListItem({
               <User className="h-5 w-5 text-gold" />
             )}
           </div>
-          <div className="absolute -bottom-1 -right-1 p-0.5 bg-white rounded-full">
+          <div className="absolute -bottom-1 -right-1 p-0.5 bg-[#FDFBF7] rounded-full">
             {channelIcons[thread.channel_type] || <Globe className="h-3 w-3" />}
           </div>
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <span className="font-medium text-black truncate">
+            <span className="font-medium text-[#1A1A1A] truncate">
               {thread.contact_name || thread.contact_identifier}
             </span>
             {thread.unread_count > 0 && (
-              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gold text-black text-xs font-bold flex items-center justify-center">
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-gold text-[#1A1A1A] text-xs font-bold flex items-center justify-center">
                 {thread.unread_count}
               </span>
             )}
           </div>
           
-          <p className="text-sm text-gray-600 truncate mt-0.5">
+          <p className="text-sm text-[#5A4A2E] truncate mt-0.5">
             {thread.last_message_preview || 'No messages yet'}
           </p>
 
@@ -430,7 +430,7 @@ function ThreadListItem({
             </Badge>
             
             {thread.last_message_at && (
-              <span className="text-[10px] text-gray-600">
+              <span className="text-[10px] text-[#5A4A2E]">
                 {formatDistanceToNow(new Date(thread.last_message_at), { addSuffix: true })}
               </span>
             )}

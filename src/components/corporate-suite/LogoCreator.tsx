@@ -601,7 +601,7 @@ export default function LogoCreator() {
               style={{ background: previewBg === "white" ? "#fff" : previewBg === "black" ? "#111" : colors.primary }}>
               <LogoPreview svgContent={displayLogo.svgContent} size={260} />
               <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="bg-black/60 rounded-lg px-2 py-1 flex items-center gap-1">
+                <div className="bg-[#1A1A1A]/60 rounded-lg px-2 py-1 flex items-center gap-1">
                   <Maximize2 size={11} className="text-white" />
                   <span className="text-[10px] text-white">Fullscreen</span>
                 </div>
@@ -610,7 +610,7 @@ export default function LogoCreator() {
             <div className="flex items-end gap-6 flex-wrap justify-center">
               {[{ label: "Favicon (32)", size: 32 }, { label: "Small (64)", size: 64 }, { label: "Medium (128)", size: 128 }].map(v => (
                 <div key={v.size} className="flex flex-col items-center gap-2">
-                  <div className="rounded-xl border border-[hsl(var(--border))] bg-white p-2 flex items-center justify-center shadow-sm" style={{ width: v.size + 16, height: v.size + 16 }}>
+                  <div className="rounded-xl border border-[hsl(var(--border))] bg-[#FDFBF7] p-2 flex items-center justify-center shadow-sm" style={{ width: v.size + 16, height: v.size + 16 }}>
                     <LogoPreview svgContent={displayLogo.svgContent} size={v.size} />
                   </div>
                   <p className="text-[10px] text-[hsl(var(--muted-foreground))]">{v.label}</p>

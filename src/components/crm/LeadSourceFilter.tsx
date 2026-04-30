@@ -71,15 +71,15 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
   return (
     <div className="flex items-center gap-2">
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="h-10 min-w-[220px] max-w-[320px] bg-zinc-900 border-gray-700 text-white">
+        <SelectTrigger className="h-10 min-w-[220px] max-w-[320px] bg-zinc-900 border-[#1A1A1A] text-white">
           <div className="flex items-center gap-2">
             <SelectedIcon className={`h-4 w-4 ${selectedSource.color}`} />
             <SelectValue placeholder="Select Source" />
           </div>
         </SelectTrigger>
-        <SelectContent className="bg-zinc-800 border-gray-700">
+        <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
           {/* Main Sources - All Clickable */}
-          <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-b border-gray-700/50">
+          <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-b border-[#1A1A1A]/50">
             Lead Sources
           </div>
           {LEAD_SOURCES.map((source) => {
@@ -88,7 +88,7 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
               <SelectItem 
                 key={source.value} 
                 value={source.value}
-                className="text-white hover:bg-gray-700 cursor-pointer"
+                className="text-white hover:bg-[#1A1A1A] cursor-pointer"
               >
                 <div className="flex items-center gap-2">
                   <Icon className={`h-4 w-4 ${source.color}`} />
@@ -101,14 +101,14 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
           {/* Recent Imports - If Available */}
           {importOptions.length > 0 && (
             <>
-              <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-t border-gray-700/50 mt-1">
+              <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-t border-[#1A1A1A]/50 mt-1">
                 Recent Imports
               </div>
               {importOptions.map((s) => (
                 <SelectItem 
                   key={s.id} 
                   value={`source:${s.id}`}
-                  className="text-white hover:bg-gray-700 cursor-pointer pl-4"
+                  className="text-white hover:bg-[#1A1A1A] cursor-pointer pl-4"
                 >
                   <div className="flex items-center gap-2">
                     <Upload className="h-3 w-3 text-blue-400" />

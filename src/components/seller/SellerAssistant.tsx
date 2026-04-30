@@ -179,19 +179,19 @@ Help the user complete their listing form and answer questions about the selling
       {/* Header - ACTIVE COLOR */}
       <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b-2 border-gold/40 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white border border-gold/30 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-[#FDFBF7] border border-gold/30 rounded-full flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-gold" />
           </div>
           <div>
-            <h3 className="text-black font-semibold text-sm">JBJ Seller Assistant</h3>
-            <p className="text-gray-600 text-xs">Here to help you list your property</p>
+            <h3 className="text-[#1A1A1A] font-semibold text-sm">JBJ Seller Assistant</h3>
+            <p className="text-[#5A4A2E] text-xs">Here to help you list your property</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-gray-600 hover:text-black hover:bg-white/50"
+          className="text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
         >
           <X className="w-4 h-4" />
         </Button>
@@ -205,7 +205,7 @@ Help the user complete their listing form and answer questions about the selling
             variant="outline"
             size="sm"
             onClick={action.action}
-            className="border-gold/40 text-gray-700 hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-white"
+            className="border-gold/40 text-[#5A4A2E] hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-[#FDFBF7]"
           >
             <action.icon className={`w-3 h-3 mr-1 ${action.iconClass}`} />
             {action.label}
@@ -224,8 +224,8 @@ Help the user complete their listing form and answer questions about the selling
               <div
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
-                    ? "bg-gold text-black"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-gray-800 border border-gold/30"
+                    ? "bg-gold text-[#1A1A1A]"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-[#1A1A1A] border border-gold/30"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -244,7 +244,7 @@ Help the user complete their listing form and answer questions about the selling
 
       {/* Suggested Questions - Champagne BG */}
       <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
-        <p className="text-gray-600 text-xs mb-2 flex items-center gap-1">
+        <p className="text-[#5A4A2E] text-xs mb-2 flex items-center gap-1">
           <Lightbulb className="w-3 h-3 text-gold" />
           Suggested questions:
         </p>
@@ -254,7 +254,7 @@ Help the user complete their listing form and answer questions about the selling
               key={index}
               onClick={() => sendMessage(question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 bg-white text-gray-700 border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 bg-[#FDFBF7] text-[#5A4A2E] border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
             >
               {question}
             </button>
@@ -276,7 +276,7 @@ Help the user complete their listing form and answer questions about the selling
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask me anything about selling..."
-              className="bg-white border-gold/30 text-black placeholder:text-gray-600 pr-10 focus:border-gold"
+              className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] pr-10 focus:border-gold"
               disabled={isLoading}
             />
             <div className="absolute right-1 top-1/2 -translate-y-1/2">
@@ -301,7 +301,7 @@ Help the user complete their listing form and answer questions about the selling
             )}
           </Button>
         </form>
-        <p className="text-gray-600 text-xs mt-2 text-center">
+        <p className="text-[#5A4A2E] text-xs mt-2 text-center">
           AI responses are informational only. For advice, contact our team.
         </p>
       </div>

@@ -174,8 +174,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold">
-            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
+          <DialogTitle className="flex items-center gap-3 text-[#1A1A1A] text-xl font-bold">
+            <div className="w-10 h-10 bg-[#1A1A1A] rounded-lg flex items-center justify-center">
               <Video className="w-5 h-5 text-gold" />
             </div>
             Book Online Meeting
@@ -188,14 +188,14 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
-            <h3 className="text-2xl font-bold text-black mb-4">Meeting Request Submitted</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Meeting Request Submitted</h3>
+            <p className="text-[#5A4A2E] mb-6">
               We have received your meeting request and will confirm your appointment via email within 24 hours.
             </p>
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-left max-w-sm mx-auto mb-6">
-              <p className="text-sm text-gray-600">
-                <strong className="text-black">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}<br />
-                <strong className="text-black">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)
+            <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-left max-w-sm mx-auto mb-6">
+              <p className="text-sm text-[#5A4A2E]">
+                <strong className="text-[#1A1A1A]">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}<br />
+                <strong className="text-[#1A1A1A]">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)
               </p>
             </div>
             <Button onClick={handleClose} variant="primary">
@@ -211,11 +211,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   <div key={s} className="flex items-center gap-2">
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      step >= s ? "bg-gold text-black" : "bg-gray-200 text-gray-600"
+                      step >= s ? "bg-gold text-[#1A1A1A]" : "bg-[#EFE6D6] text-[#5A4A2E]"
                     )}>
                       {s}
                     </div>
-                    {s < 3 && <div className={cn("w-12 h-0.5", step > s ? "bg-gold" : "bg-gray-200")} />}
+                    {s < 3 && <div className={cn("w-12 h-0.5", step > s ? "bg-gold" : "bg-[#EFE6D6]")} />}
                   </div>
                 ))}
               </div>
@@ -224,8 +224,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
               {step === 1 && (
                 <div className="space-y-4">
                   <div className="text-center mb-6">
-                    <h3 className="text-lg font-semibold text-black">Your Information</h3>
-                    <p className="text-gray-600 text-sm">Please provide accurate details for verification</p>
+                    <h3 className="text-lg font-semibold text-[#1A1A1A]">Your Information</h3>
+                    <p className="text-[#5A4A2E] text-sm">Please provide accurate details for verification</p>
                   </div>
 
                   <FormField
@@ -233,9 +233,9 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Full Name *</FormLabel>
+                        <FormLabel className="text-[#5A4A2E]">Full Name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="Your full legal name" />
+                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="Your full legal name" />
                         </FormControl>
                         <FormMessage className="text-red-500 text-xs" />
                       </FormItem>
@@ -248,9 +248,9 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700">Email Address *</FormLabel>
+                          <FormLabel className="text-[#5A4A2E]">Email Address *</FormLabel>
                           <FormControl>
-                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="email@example.com" />
+                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="email@example.com" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -262,7 +262,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700">Phone Number *</FormLabel>
+                          <FormLabel className="text-[#5A4A2E]">Phone Number *</FormLabel>
                           <FormControl>
                             <PhoneInput value={field.value} onChange={field.onChange} />
                           </FormControl>
@@ -278,7 +278,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="nationality"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700">Nationality *</FormLabel>
+                          <FormLabel className="text-[#5A4A2E]">Nationality *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -299,9 +299,9 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="currentLocation"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700">Current Location *</FormLabel>
+                          <FormLabel className="text-[#5A4A2E]">Current Location *</FormLabel>
                           <FormControl>
-                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="City, Country" />
+                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="City, Country" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -314,16 +314,16 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="serviceNeeded"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Service Needed *</FormLabel>
+                        <FormLabel className="text-[#5A4A2E]">Service Needed *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
+                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold">
                               <SelectValue placeholder="Select a service" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent className="bg-white border-gray-200">
+                          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
                             {SERVICE_OPTIONS.map((option) => (
-                              <SelectItem key={option.value} value={option.value} className="text-black">
+                              <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A]">
                                 {option.label}
                               </SelectItem>
                             ))}
@@ -339,11 +339,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="purpose"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Meeting Purpose *</FormLabel>
+                        <FormLabel className="text-[#5A4A2E]">Meeting Purpose *</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black resize-none focus:border-gold" 
+                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] resize-none focus:border-gold" 
                             placeholder="Please describe in detail: What specific property or service are you interested in? What is your budget range? What is your timeline? Any specific requirements?"
                           />
                         </FormControl>
@@ -352,7 +352,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     )}
                   />
 
-                  <Button type="button" onClick={handleNext} className="w-full h-12 bg-gold hover:bg-gold-light text-black font-semibold">
+                  <Button type="button" onClick={handleNext} className="w-full h-12 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold">
                     Continue to Select Date & Time
                   </Button>
                 </div>
@@ -362,8 +362,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
               {step === 2 && (
                 <div className="space-y-6">
                   <div className="text-center mb-6">
-                    <h3 className="text-lg font-semibold text-black">Select Date & Time</h3>
-                    <p className="text-gray-600 text-sm">Online meetings are scheduled at least 1 day in advance</p>
+                    <h3 className="text-lg font-semibold text-[#1A1A1A]">Select Date & Time</h3>
+                    <p className="text-[#5A4A2E] text-sm">Online meetings are scheduled at least 1 day in advance</p>
                   </div>
 
                   <FormField
@@ -371,14 +371,14 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="meetingDate"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="text-gray-700">Meeting Date *</FormLabel>
+                        <FormLabel className="text-[#5A4A2E]">Meeting Date *</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "h-12 w-full pl-3 text-left font-normal bg-gray-50 border-gray-300",
+                                  "h-12 w-full pl-3 text-left font-normal bg-[#F7F2EA] border-[#B89555]/30",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -387,7 +387,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0 bg-white" align="start">
+                          <PopoverContent className="w-auto p-0 bg-[#FDFBF7]" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value}
@@ -407,7 +407,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="meetingTime"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700">Meeting Time (Dubai Time - GMT+4) *</FormLabel>
+                        <FormLabel className="text-[#5A4A2E]">Meeting Time (Dubai Time - GMT+4) *</FormLabel>
                         <div className="grid grid-cols-5 gap-2">
                           {TIME_SLOTS.map((time) => (
                             <Button
@@ -417,8 +417,8 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                               className={cn(
                                 "h-10",
                                 field.value === time 
-                                  ? "bg-gold text-black hover:bg-gold-light" 
-                                  : "bg-gray-50 border-gray-300 text-gray-700 hover:border-gold"
+                                  ? "bg-gold text-[#1A1A1A] hover:bg-gold-light" 
+                                  : "bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E] hover:border-gold"
                               )}
                               onClick={() => field.onChange(time)}
                             >
@@ -432,10 +432,10 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   />
 
                   <div className="flex gap-4">
-                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-gray-300 text-gray-700">
+                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#5A4A2E]">
                       Back
                     </Button>
-                    <Button type="button" onClick={handleNext} className="flex-1 h-12 bg-gold hover:bg-gold-light text-black font-semibold">
+                    <Button type="button" onClick={handleNext} className="flex-1 h-12 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold">
                       Continue to Confirmation
                     </Button>
                   </div>
@@ -446,19 +446,19 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
               {step === 3 && (
                 <div className="space-y-6">
                   <div className="text-center mb-6">
-                    <h3 className="text-lg font-semibold text-black">Confirm Your Booking</h3>
-                    <p className="text-gray-600 text-sm">Please review and accept the terms</p>
+                    <h3 className="text-lg font-semibold text-[#1A1A1A]">Confirm Your Booking</h3>
+                    <p className="text-[#5A4A2E] text-sm">Please review and accept the terms</p>
                   </div>
 
                   {/* Summary */}
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-2">
-                    <h4 className="font-semibold text-black mb-3">Meeting Summary</h4>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Name:</strong> {form.getValues("fullName")}</p>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Email:</strong> {form.getValues("email")}</p>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Service:</strong> {SERVICE_OPTIONS.find(s => s.value === form.getValues("serviceNeeded"))?.label}</p>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}</p>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)</p>
-                    <p className="text-sm text-gray-600"><strong className="text-black">Type:</strong> Online Video Meeting</p>
+                  <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 space-y-2">
+                    <h4 className="font-semibold text-[#1A1A1A] mb-3">Meeting Summary</h4>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Name:</strong> {form.getValues("fullName")}</p>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Email:</strong> {form.getValues("email")}</p>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Service:</strong> {SERVICE_OPTIONS.find(s => s.value === form.getValues("serviceNeeded"))?.label}</p>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}</p>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)</p>
+                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Type:</strong> Online Video Meeting</p>
                   </div>
 
                   {/* Legal Disclaimer */}
@@ -487,11 +487,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             <Checkbox 
                               checked={field.value} 
                               onCheckedChange={field.onChange}
-                              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
+                            <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
                               I confirm all information provided is accurate and truthful. *
                             </FormLabel>
                             <FormMessage className="text-red-500 text-xs" />
@@ -509,11 +509,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             <Checkbox 
                               checked={field.value} 
                               onCheckedChange={field.onChange}
-                              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
+                            <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
                               I understand and agree to the legal disclaimer above. *
                             </FormLabel>
                             <FormMessage className="text-red-500 text-xs" />
@@ -524,13 +524,13 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   </div>
 
                   <div className="flex gap-4">
-                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-gray-300 text-gray-700">
+                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#5A4A2E]">
                       Back
                     </Button>
                     <Button 
                       type="submit" 
                       disabled={isSubmitting}
-                      className="flex-1 h-12 bg-gradient-to-r from-gold via-gold-light to-gold text-black font-semibold shadow-lg shadow-gold/20"
+                      className="flex-1 h-12 bg-gradient-to-r from-gold via-gold-light to-gold text-[#1A1A1A] font-semibold shadow-lg shadow-gold/20"
                     >
                       {isSubmitting ? (
                         <>

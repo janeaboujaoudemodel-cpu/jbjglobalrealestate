@@ -497,13 +497,13 @@ const AdminChatDashboard = () => {
                   placeholder="Search by name, email, or phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white border-[#B89555]/20 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]/50 focus:ring-[#B89555]/20"
+                  className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]/50 focus:ring-[#B89555]/20"
                 />
               </div>
               <select
                 value={filterService}
                 onChange={(e) => setFilterService(e.target.value)}
-                className="h-10 rounded-lg border border-[#B89555]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
+                className="h-10 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
               >
                 <option value="all">All Services</option>
                 {ALL_SERVICES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
@@ -511,7 +511,7 @@ const AdminChatDashboard = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="h-10 rounded-lg border border-[#B89555]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
+                className="h-10 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -698,7 +698,7 @@ const AdminChatDashboard = () => {
 
       {/* ============ TRANSCRIPT MODAL ============ */}
       {selectedConversation && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
+        <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
@@ -737,7 +737,7 @@ const AdminChatDashboard = () => {
                     setConversations(prev => prev.map(c => c.id === selectedConversation.id ? { ...c, status: newStatus } : c));
                     toast.success(`Status updated to ${getStatusConfig(newStatus).label}`);
                   }}
-                  className="h-6 rounded-md border border-[#B89555]/20 bg-white text-[10px] text-stone-600 pl-1 pr-5 cursor-pointer hover:border-[#B89555]/40"
+                  className="h-6 rounded-md border border-[#B89555]/20 bg-[#FDFBF7] text-[10px] text-stone-600 pl-1 pr-5 cursor-pointer hover:border-[#B89555]/40"
                   onClick={e => e.stopPropagation()}
                 >
                   <option value="active">Mark Active</option>
@@ -800,25 +800,25 @@ const AdminChatDashboard = () => {
                 <p className="text-sm text-stone-700 leading-relaxed">{aiSummary.summary}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-stone-500">Resolution</p>
                     <p className={`text-xs font-bold ${aiSummary.resolution_status === 'resolved' ? 'text-emerald-700' : aiSummary.resolution_status === 'unresolved' ? 'text-red-600' : 'text-amber-600'}`}>
                       {aiSummary.resolution_status?.replace('_', ' ')}
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-stone-500">Sentiment</p>
                     <p className={`text-xs font-bold ${aiSummary.sentiment === 'positive' ? 'text-emerald-700' : aiSummary.sentiment === 'negative' ? 'text-red-600' : 'text-stone-600'}`}>
                       {aiSummary.sentiment} ({aiSummary.sentiment_score}%)
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-stone-500">Priority</p>
                     <p className={`text-xs font-bold ${aiSummary.priority_level === 'critical' ? 'text-red-600' : aiSummary.priority_level === 'high' ? 'text-orange-600' : 'text-stone-600'}`}>
                       {aiSummary.priority_level}
                     </p>
                   </div>
-                  <div className="p-2 rounded-lg bg-white/60 border border-stone-200 text-center">
+                  <div className="p-2 rounded-lg bg-[#FDFBF7]/60 border border-stone-200 text-center">
                     <p className="text-[9px] uppercase tracking-wider text-stone-500">Lead</p>
                     <p className={`text-xs font-bold ${aiSummary.is_lead_opportunity ? 'text-emerald-700' : 'text-stone-500'}`}>
                       {aiSummary.is_lead_opportunity ? 'Yes' : 'No'}
@@ -846,7 +846,7 @@ const AdminChatDashboard = () => {
 
                 {/* Suggested Reply */}
                 {aiSummary.suggested_reply && (
-                  <div className="p-3 rounded-lg bg-white border border-[#B89555]/20">
+                  <div className="p-3 rounded-lg bg-[#FDFBF7] border border-[#B89555]/20">
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Suggested Auto-Reply</p>
                       <div className="flex gap-1">
@@ -903,7 +903,7 @@ const AdminChatDashboard = () => {
                       <div className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm ${
                         msg.role === 'user'
                           ? 'bg-[#B89555]/10 text-stone-900 rounded-br-md border border-[#B89555]/20'
-                          : 'bg-white text-stone-700 rounded-bl-md border border-stone-200 shadow-sm'
+                          : 'bg-[#FDFBF7] text-stone-700 rounded-bl-md border border-stone-200 shadow-sm'
                       }`}>
                         <p className="whitespace-pre-wrap leading-relaxed text-[13px]">{msg.content}</p>
                         {msg.timestamp && (
@@ -947,7 +947,7 @@ const AdminChatDashboard = () => {
                     onChange={(e) => setOwnerReplyInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendOwnerReply()}
                     placeholder="Type your reply as Sarah..."
-                    className="flex-1 bg-white border-emerald-200 text-stone-900 text-sm focus:border-emerald-400 focus:ring-emerald-200"
+                    className="flex-1 bg-[#FDFBF7] border-emerald-200 text-stone-900 text-sm focus:border-emerald-400 focus:ring-emerald-200"
                   />
                   <Button
                     size="sm"
@@ -984,7 +984,7 @@ const AdminChatDashboard = () => {
 
       {/* ============ CV VIEWER MODAL ============ */}
       {selectedCV && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
+        <div className="fixed inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
             <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
@@ -1054,14 +1054,14 @@ const AdminChatDashboard = () => {
                         href={selectedCV.cv_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 text-xs font-medium rounded-lg transition-colors border border-stone-200"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-stone-50 text-stone-700 text-xs font-medium rounded-lg transition-colors border border-stone-200"
                       >
                         <Eye className="w-3 h-3" /> Open in New Tab
                       </a>
                       <a
                         href={selectedCV.cv_url}
                         download={`CV-${selectedCV.full_name.replace(/\s+/g, '-')}`}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 text-xs font-medium rounded-lg transition-colors border border-stone-200"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FDFBF7] hover:bg-stone-50 text-stone-700 text-xs font-medium rounded-lg transition-colors border border-stone-200"
                       >
                         <Download className="w-3 h-3" /> Download
                       </a>
@@ -1083,7 +1083,7 @@ const AdminChatDashboard = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="border border-[#B89555]/15 rounded-xl overflow-hidden bg-white">
+                  <div className="border border-[#B89555]/15 rounded-xl overflow-hidden bg-[#FDFBF7]">
                     {/* Direct PDF embed - no Google Docs viewer to avoid blocking */}
                     <object
                       data={selectedCV.cv_url}

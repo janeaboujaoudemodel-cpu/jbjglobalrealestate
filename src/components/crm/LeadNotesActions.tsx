@@ -95,7 +95,7 @@ const LeadNotesActions = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-gray-800">
+    <Card className="bg-zinc-900 border-[#1A1A1A]">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
           <StickyNote className="w-4 h-4 text-gold" />
@@ -122,7 +122,7 @@ const LeadNotesActions = ({
               type="date"
               value={nextFollowUp}
               onChange={(e) => setNextFollowUp(e.target.value)}
-              className="bg-zinc-900 border-gray-700 text-white flex-1"
+              className="bg-zinc-900 border-[#1A1A1A] text-white flex-1"
             />
             <Button 
               onClick={setFollowUpReminder} 
@@ -152,7 +152,7 @@ const LeadNotesActions = ({
                   <Textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
-                    className="bg-zinc-900 border-gray-700 text-white text-sm"
+                    className="bg-zinc-900 border-[#1A1A1A] text-white text-sm"
                     rows={2}
                   />
                   <div className="flex gap-2">
@@ -205,7 +205,7 @@ const LeadNotesActions = ({
               value={newNote}
               onChange={(e) => setNewNote(e.target.value)}
               placeholder="Write your note here..."
-              className="bg-zinc-800 border-gray-700 text-white text-sm"
+              className="bg-zinc-800 border-[#1A1A1A] text-white text-sm"
               rows={3}
               autoFocus
             />
@@ -227,7 +227,7 @@ const LeadNotesActions = ({
           <Button 
             onClick={() => setIsAddingNote(true)} 
             variant="outline" 
-            className="w-full border-dashed border-gray-700 text-white/70 hover:text-white hover:border-gold/50"
+            className="w-full border-dashed border-[#1A1A1A] text-white/70 hover:text-white hover:border-gold/50"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Note

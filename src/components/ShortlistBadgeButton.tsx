@@ -34,7 +34,7 @@ const badgeConfig = {
     label: "Top 2 — Silver", 
     emoji: "🥈",
     color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", 
-    textColor: "text-gray-900",
+    textColor: "text-[#1A1A1A]",
     menuColor: "text-white/85"
   },
   top3: { 
@@ -114,19 +114,19 @@ const ShortlistBadgeButton = ({
         <DropdownMenuTrigger asChild>
           <button
             onClick={(e) => e.stopPropagation()}
-            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-white border border-gold/30 text-gold hover:bg-white/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
+            className={`${sizeClasses[size]} flex items-center gap-1.5 rounded-full bg-[#FDFBF7] border border-gold/30 text-gold hover:bg-[#FDFBF7]/90 transition-all cursor-pointer whitespace-nowrap ${className}`}
           >
             <Award className={iconSizes[size]} />
             <span className="hidden sm:inline">{currentBadge ? "Change" : "Add Badge"}</span>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-zinc-900 border-gray-800" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenuContent className="bg-zinc-900 border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
               handleSetBadge('top1');
             }}
-            className={`${badgeConfig.top1.menuColor} hover:bg-gray-800 cursor-pointer font-medium`}
+            className={`${badgeConfig.top1.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
           >
             🥇 Top 1 (Gold)
           </DropdownMenuItem>
@@ -135,7 +135,7 @@ const ShortlistBadgeButton = ({
               e.stopPropagation();
               handleSetBadge('top2');
             }}
-            className={`${badgeConfig.top2.menuColor} hover:bg-gray-800 cursor-pointer font-medium`}
+            className={`${badgeConfig.top2.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
           >
             🥈 Top 2 (Silver)
           </DropdownMenuItem>
@@ -144,7 +144,7 @@ const ShortlistBadgeButton = ({
               e.stopPropagation();
               handleSetBadge('top3');
             }}
-            className={`${badgeConfig.top3.menuColor} hover:bg-gray-800 cursor-pointer font-medium`}
+            className={`${badgeConfig.top3.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
           >
             🥉 Top 3 (Bronze)
           </DropdownMenuItem>
@@ -154,7 +154,7 @@ const ShortlistBadgeButton = ({
                 e.stopPropagation();
                 handleSetBadge(null);
               }}
-              className="text-white/70 hover:bg-gray-800 cursor-pointer"
+              className="text-white/70 hover:bg-[#1A1A1A] cursor-pointer"
             >
               <X className="w-4 h-4 mr-2" />
               Remove Badge

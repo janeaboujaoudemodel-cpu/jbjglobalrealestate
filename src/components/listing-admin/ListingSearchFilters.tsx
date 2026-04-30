@@ -93,7 +93,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
                 developerValue !== "all" ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -102,9 +102,9 @@ const ListingSearchFilters = ({
               {developerValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
             <Select value={developerValue} onValueChange={(v) => { onDeveloperChange(v); setActiveFilter(null); }}>
-              <SelectTrigger className="bg-gray-50 border-gray-300 text-black">
+              <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
                 <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
               </SelectTrigger>
               <SelectContent>
@@ -124,7 +124,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
                 searchValue ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -133,14 +133,14 @@ const ListingSearchFilters = ({
               {searchValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
               <Input
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={t('listingAdmin.searchProjects')}
-                className="pl-10 bg-gray-50 border-gray-300 text-black"
+                className="pl-10 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]"
                 autoFocus
               />
             </div>
@@ -152,7 +152,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
                 emirateValue !== "all" ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -161,9 +161,9 @@ const ListingSearchFilters = ({
               {emirateValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
             <Select value={emirateValue} onValueChange={(v) => { onEmirateChange(v); setActiveFilter(null); }}>
-              <SelectTrigger className="bg-gray-50 border-gray-300 text-black">
+              <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
                 <SelectValue placeholder={t('listingAdmin.emirate')} />
               </SelectTrigger>
               <SelectContent>
@@ -182,7 +182,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] transition-all duration-300 ${
                 locationValue ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -191,12 +191,12 @@ const ListingSearchFilters = ({
               {locationValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-[#FDFBF7] border-[#B89555]/30" align="start">
             <Input
               value={locationValue}
               onChange={(e) => onLocationChange(e.target.value)}
               placeholder={t('listingAdmin.searchByArea')}
-              className="bg-gray-50 border-gray-300 text-black"
+              className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]"
               autoFocus
             />
           </PopoverContent>
@@ -219,7 +219,7 @@ const ListingSearchFilters = ({
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2">
           {searchValue && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-black">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
               Project: {searchValue}
               <button onClick={() => onSearchChange("")} className="hover:text-gold">
                 <X className="w-3 h-3" />
@@ -227,7 +227,7 @@ const ListingSearchFilters = ({
             </span>
           )}
           {developerValue !== "all" && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-black">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
               Developer: {developers.find((d) => d.id === developerValue)?.name}
               <button onClick={() => onDeveloperChange("all")} className="hover:text-gold">
                 <X className="w-3 h-3" />
@@ -235,7 +235,7 @@ const ListingSearchFilters = ({
             </span>
           )}
           {emirateValue !== "all" && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-black">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
               Emirate: {emirateValue}
               <button onClick={() => onEmirateChange("all")} className="hover:text-gold">
                 <X className="w-3 h-3" />
@@ -243,7 +243,7 @@ const ListingSearchFilters = ({
             </span>
           )}
           {locationValue && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-black">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/10 border border-gold/30 rounded-full text-xs text-[#1A1A1A]">
               Area: {locationValue}
               <button onClick={() => onLocationChange("")} className="hover:text-gold">
                 <X className="w-3 h-3" />

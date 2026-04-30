@@ -176,7 +176,7 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         size={size}
         className={cn(
           "absolute h-10 w-10 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/60 hover:border-gold transition-all z-10",
-          "bg-white/95 hover:bg-white",
+          "bg-[#FDFBF7]/95 hover:bg-[#FDFBF7]",
           orientation === "horizontal"
             ? "left-2 top-1/2 -translate-y-1/2"
             : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -189,7 +189,7 @@ const CarouselPrevious = React.forwardRef<HTMLButtonElement, React.ComponentProp
         }}
         {...props}
       >
-        <ArrowLeft className="h-5 w-5 text-gray-800" />
+        <ArrowLeft className="h-5 w-5 text-[#1A1A1A]" />
         <span className="sr-only">Previous slide</span>
       </Button>
     );
@@ -208,7 +208,7 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         size={size}
         className={cn(
           "absolute h-10 w-10 rounded-full border-2 border-gold shadow-lg hover:shadow-gold/60 hover:border-gold transition-all z-10",
-          "bg-white/95 hover:bg-white",
+          "bg-[#FDFBF7]/95 hover:bg-[#FDFBF7]",
           orientation === "horizontal"
             ? "right-2 top-1/2 -translate-y-1/2"
             : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -221,7 +221,7 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
         }}
         {...props}
       >
-        <ArrowRight className="h-5 w-5 text-gray-800" />
+        <ArrowRight className="h-5 w-5 text-[#1A1A1A]" />
         <span className="sr-only">Next slide</span>
       </Button>
     );

@@ -118,7 +118,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
   const pagedConcepts = nonStandardConcepts.slice(conceptPage * CONCEPTS_PER_PAGE, (conceptPage + 1) * CONCEPTS_PER_PAGE);
 
   return (
-    <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden bg-white/80 border-l border-[hsl(var(--border))]">
+    <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden bg-[#FDFBF7]/80 border-l border-[hsl(var(--border))]">
       {/* Header */}
       <div className="flex-shrink-0 px-3 py-2 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
         <div className="flex items-center justify-between">
@@ -559,7 +559,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Search projects, presets, assets…"
-          className="w-full h-8 pl-3 pr-8 text-[10px] rounded-lg border border-[hsl(var(--border))] bg-white focus:outline-none focus:border-[hsl(var(--gold))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))]"
+          className="w-full h-8 pl-3 pr-8 text-[10px] rounded-lg border border-[hsl(var(--border))] bg-[#FDFBF7] focus:outline-none focus:border-[hsl(var(--gold))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))]"
         />
         {searchQuery && (
           <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2">
@@ -592,7 +592,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         {filteredProjects.length > 0 ? (
           <div className="space-y-1.5">
             {filteredProjects.slice(0, 8).map((proj: any) => (
-              <div key={proj.id} className="w-full flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+              <div key={proj.id} className="w-full flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
                   <FolderOpen size={10} className="text-[hsl(var(--muted-foreground))]" />
                 </div>
@@ -640,7 +640,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         {filteredPresets.length > 0 ? (
           <div className="space-y-1.5">
             {filteredPresets.map((preset: any) => (
-              <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+              <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
                   <Save size={10} className="text-[hsl(var(--gold))]" />
                 </div>
@@ -683,7 +683,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         {filteredAssets.length > 0 ? (
           <div className="space-y-1.5">
             {filteredAssets.map((asset: any) => (
-              <div key={asset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+              <div key={asset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-[#FDFBF7]/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {asset.thumbnail_url ? (
                     <img src={asset.thumbnail_url} alt="" className="w-full h-full object-contain" />
@@ -932,34 +932,34 @@ function ConceptCard({
         )}
         {/* Favorite heart button — top-left */}
         <button onClick={e => { e.stopPropagation(); onToggleFav(concept); }} disabled={togglingFav === concept.id}
-          className={`absolute top-1 left-1 z-10 w-5 h-5 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
+          className={`absolute top-1 left-1 z-10 w-5 h-5 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-[#FDFBF7]/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={8} className="animate-spin" /> : <Heart size={8} className={isFav ? 'fill-rose-500' : ''} />}
         </button>
         {/* Delete + Duplicate + Compare — bottom-right */}
         <div className="absolute bottom-1 right-1 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
           {onCompare && (
             <button onClick={e => { e.stopPropagation(); onCompare(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              className="w-5 h-5 rounded bg-[#FDFBF7]/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
               title="Compare">
               <GitCompare size={8} />
             </button>
           )}
           {onSaveToLibrary && (
             <button onClick={e => { e.stopPropagation(); onSaveToLibrary(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              className="w-5 h-5 rounded bg-[#FDFBF7]/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
               title="Save to Library">
               <Archive size={8} />
             </button>
           )}
           {onDuplicate && (
             <button onClick={e => { e.stopPropagation(); onDuplicate(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]">
+              className="w-5 h-5 rounded bg-[#FDFBF7]/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]">
               <Copy size={8} />
             </button>
           )}
           {onDelete && (
             <button onClick={e => { e.stopPropagation(); onDelete(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-destructive/30 flex items-center justify-center hover:bg-destructive/10 text-destructive">
+              className="w-5 h-5 rounded bg-[#FDFBF7]/90 border border-destructive/30 flex items-center justify-center hover:bg-destructive/10 text-destructive">
               <Trash2 size={8} />
             </button>
           )}

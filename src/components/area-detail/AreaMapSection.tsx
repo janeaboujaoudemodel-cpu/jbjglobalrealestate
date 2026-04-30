@@ -145,7 +145,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div className="flex items-center gap-3 mb-8">
           <MapIcon className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             {t('map.mapOf')} {areaName}
           </h2>
         </div>
@@ -154,10 +154,10 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
           {/* Click to enable overlay */}
           {!mapInteractive && (
             <div
-              className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-black/5"
+              className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
               onClick={() => setMapInteractive(true)}
             >
-              <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
+              <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-[#1A1A1A]/70">
                 {t('map.clickToEnable')}
               </div>
             </div>
@@ -205,7 +205,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                         </Link>
                       </div>
                       {project.developer_name && (
-                        <p className="text-[11px] text-gray-600">{t('map.by')} {project.developer_name}</p>
+                        <p className="text-[11px] text-[#5A4A2E]">{t('map.by')} {project.developer_name}</p>
                       )}
                       {project.price_from && (
                         <p className="text-xs font-semibold text-amber-700 mt-1">

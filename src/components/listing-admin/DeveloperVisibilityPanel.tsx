@@ -129,7 +129,7 @@ export function DeveloperVisibilityPanel() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search developers..."
-              className="pl-9 bg-white border-gold/30"
+              className="pl-9 bg-[#FDFBF7] border-gold/30"
             />
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -179,7 +179,7 @@ export function DeveloperVisibilityPanel() {
           {filtered.map((dev) => (
             <div
               key={dev.id}
-              className={`flex items-center justify-between p-3 rounded-lg border bg-white/50 transition-colors cursor-pointer ${
+              className={`flex items-center justify-between p-3 rounded-lg border bg-[#FDFBF7]/50 transition-colors cursor-pointer ${
                 selectedIds.has(dev.id) ? "border-gold ring-2 ring-gold/20" : "border-gold/20"
               }`}
               onClick={() => toggleSelect(dev.id)}

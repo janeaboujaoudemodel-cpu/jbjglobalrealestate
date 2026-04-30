@@ -90,10 +90,10 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-4">
               <FileSpreadsheet className="w-4 h-4 text-[#8A7356]" />
-              <span className="text-black text-sm font-medium">Job Offer Template</span>
+              <span className="text-[#1A1A1A] text-sm font-medium">Job Offer Template</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">Job Offer Generator</h1>
-            <p className="text-gray-600">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">Job Offer Generator</h1>
+            <p className="text-[#5A4A2E]">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
           </div>
         </div>
       </div>
@@ -102,11 +102,11 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
         <div className="grid lg:grid-cols-5 gap-8">
           {/* Form */}
           <div className="lg:col-span-2 space-y-5">
-            <div className="bg-white/80 border border-gold/20 rounded-xl p-6 space-y-4">
-              <div><Label className="font-semibold text-black">Company Name</Label><Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} /></div>
-              <div><Label className="font-semibold text-black">Applicant Full Name *</Label><Input value={applicantName} onChange={(e) => setApplicantName(e.target.value)} placeholder="John Doe" /></div>
-              <div><Label className="font-semibold text-black">Job Title *</Label><Input value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="Senior Sales Manager" /></div>
-              <div><Label className="font-semibold text-black">Start Date</Label>
+            <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-6 space-y-4">
+              <div><Label className="font-semibold text-[#1A1A1A]">Company Name</Label><Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} /></div>
+              <div><Label className="font-semibold text-[#1A1A1A]">Applicant Full Name *</Label><Input value={applicantName} onChange={(e) => setApplicantName(e.target.value)} placeholder="John Doe" /></div>
+              <div><Label className="font-semibold text-[#1A1A1A]">Job Title *</Label><Input value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="Senior Sales Manager" /></div>
+              <div><Label className="font-semibold text-[#1A1A1A]">Start Date</Label>
                 <div className="flex gap-2 items-center">
                   <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} disabled={useCurrentDate} className="flex-1" />
                   <label className="flex items-center gap-1.5 text-xs whitespace-nowrap cursor-pointer">
@@ -115,9 +115,9 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
                   </label>
                 </div>
               </div>
-              <div><Label className="font-semibold text-black">Salary / Package</Label><Input value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="AED 25,000 per month" /></div>
-              <div><Label className="font-semibold text-black">ID / Passport Number</Label><Input value={idNumber} onChange={(e) => setIdNumber(e.target.value)} placeholder="Optional" /></div>
-              <div><Label className="font-semibold text-black">Tone</Label>
+              <div><Label className="font-semibold text-[#1A1A1A]">Salary / Package</Label><Input value={salary} onChange={(e) => setSalary(e.target.value)} placeholder="AED 25,000 per month" /></div>
+              <div><Label className="font-semibold text-[#1A1A1A]">ID / Passport Number</Label><Input value={idNumber} onChange={(e) => setIdNumber(e.target.value)} placeholder="Optional" /></div>
+              <div><Label className="font-semibold text-[#1A1A1A]">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>{TONES.map(t => <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>)}</SelectContent>
@@ -128,8 +128,8 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
                 <div><Label className="text-xs">Color 2</Label><input type="color" value={headerColor2} onChange={(e) => setHeaderColor2(e.target.value)} className="w-8 h-8 rounded cursor-pointer border" /></div>
                 <div className="flex-1 flex items-end"><div className="w-full h-3 rounded" style={{ background: `linear-gradient(90deg,${headerColor1},${headerColor2})` }} /></div>
               </div>
-              <div><Label className="font-semibold text-black">Additional Prompt</Label><Textarea value={additionalPrompt} onChange={(e) => setAdditionalPrompt(e.target.value)} placeholder="e.g. Include relocation package, mention 30-day probation..." rows={3} /></div>
-              <Button onClick={generateOffer} disabled={generating} className="w-full bg-black text-white hover:bg-gray-800">
+              <div><Label className="font-semibold text-[#1A1A1A]">Additional Prompt</Label><Textarea value={additionalPrompt} onChange={(e) => setAdditionalPrompt(e.target.value)} placeholder="e.g. Include relocation package, mention 30-day probation..." rows={3} /></div>
+              <Button onClick={generateOffer} disabled={generating} className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
                 {generating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</> : <><Wand2 className="h-4 w-4 mr-2" /> Generate Job Offer</>}
               </Button>
             </div>
@@ -137,7 +137,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
 
           {/* Preview */}
           <div className="lg:col-span-3">
-            <div className="bg-white border border-gold/20 rounded-xl shadow-lg overflow-hidden">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl shadow-lg overflow-hidden">
               <div className="h-3" style={{ background: `linear-gradient(90deg,${headerColor1},${headerColor2})` }} />
               <div ref={previewRef} className="p-10 min-h-[700px]" style={{ fontFamily: 'Georgia, serif' }}>
                 {generatedHtml ? (
@@ -154,7 +154,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
             </div>
             {generatedHtml && (
               <div className="flex gap-3 mt-4">
-                <Button onClick={handlePrint} className="flex-1 bg-black text-white hover:bg-gray-800"><Download className="h-4 w-4 mr-2" /> Print / Save PDF</Button>
+                <Button onClick={handlePrint} className="flex-1 bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"><Download className="h-4 w-4 mr-2" /> Print / Save PDF</Button>
                 <Button variant="outline" className="border-gold/30" onClick={() => {
                   const content = previewRef.current?.innerText || "";
                   navigator.clipboard.writeText(content);

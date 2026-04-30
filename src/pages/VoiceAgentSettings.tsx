@@ -64,7 +64,7 @@ const VoiceAgentSettings = () => {
         <div className="bg-zinc-900/80 border border-gold/30 rounded-2xl p-6 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
-              <Phone className="w-5 h-5 text-black" />
+              <Phone className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <h2 className="text-xl font-bold text-white">Agent Settings</h2>
           </div>
@@ -75,7 +75,7 @@ const VoiceAgentSettings = () => {
               <Input
                 value={settings.agentName}
                 onChange={(e) => setSettings(s => ({ ...s, agentName: e.target.value }))}
-                className="bg-zinc-800 border-gray-700 text-white"
+                className="bg-zinc-800 border-[#1A1A1A] text-white"
               />
             </div>
 
@@ -84,7 +84,7 @@ const VoiceAgentSettings = () => {
               <Textarea
                 value={settings.greeting}
                 onChange={(e) => setSettings(s => ({ ...s, greeting: e.target.value }))}
-                className="bg-zinc-800 border-gray-700 text-white min-h-[100px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white min-h-[100px]"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ const VoiceAgentSettings = () => {
         <div className="bg-zinc-900/80 border border-gold/30 rounded-2xl p-6 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-black" />
+              <Building2 className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <h2 className="text-xl font-bold text-white">Integrations</h2>
           </div>
@@ -139,7 +139,7 @@ const VoiceAgentSettings = () => {
         <div className="bg-zinc-900/80 border border-gold/30 rounded-2xl p-6 md:p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
-              <CreditCard className="w-5 h-5 text-black" />
+              <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
             </div>
             <h2 className="text-xl font-bold text-white">Business Card Branding</h2>
             <span className="text-xs text-white/90">Applied to generated documents</span>
@@ -152,7 +152,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardName}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardName: e.target.value }))}
                 placeholder="Enter your full name"
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -162,7 +162,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardTitle}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardTitle: e.target.value }))}
                 placeholder="e.g., Senior Property Consultant"
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -172,7 +172,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardPhone}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardPhone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -182,7 +182,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardEmail}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardEmail: e.target.value }))}
                 placeholder="your.email@jbjglobal.com"
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -191,7 +191,7 @@ const VoiceAgentSettings = () => {
               <Input
                 value={settings.businessCardCompany}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardCompany: e.target.value }))}
-                className="bg-zinc-800 border-gray-700 text-white"
+                className="bg-zinc-800 border-[#1A1A1A] text-white"
               />
             </div>
           </div>
@@ -201,7 +201,7 @@ const VoiceAgentSettings = () => {
         <Button
           onClick={handleSave}
           disabled={isSaving}
-          className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-500 text-black font-bold py-6 text-lg"
+          className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-500 text-[#1A1A1A] font-bold py-6 text-lg"
         >
           {isSaving ? (
             <>

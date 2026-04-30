@@ -42,7 +42,7 @@ const Accessibility = () => {
           <div className="absolute top-20 right-20 w-72 h-72 bg-[#C8A766]/6 rounded-full blur-[100px]" />
           <div className="max-w-5xl mx-auto px-4 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-black/30 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/30 bg-[#1A1A1A]/30 backdrop-blur-sm">
                 <AccessibilityIcon className="w-4 h-4 text-[#C8A766]" />
                 <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">Inclusion</span>
               </div>
@@ -52,7 +52,7 @@ const Accessibility = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Committed to Inclusive Digital Experiences
               </p>
-              <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-[#5A4A2E] text-base md:text-lg max-w-3xl leading-relaxed">
                 We are committed to ensuring that our website and digital services are accessible to all individuals, including persons with disabilities.
               </p>
             </motion.div>
@@ -66,7 +66,7 @@ const Accessibility = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-600 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-[#5A4A2E] hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -75,11 +75,11 @@ const Accessibility = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-600 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-[#5A4A2E] hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
             <section id="commitment" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">1.</span>Our Commitment</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>We are dedicated to:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Designing content that is perceivable and readable</li><li>Ensuring keyboard navigability across all interactive elements</li><li>Supporting assistive technologies including screen readers</li><li>Maintaining responsive layouts across devices and screen sizes</li><li>Improving clarity, structure, and usability throughout the platform</li></ul>
               </CCard>
@@ -88,17 +88,17 @@ const Accessibility = () => {
 
             <section id="standards" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">2.</span>Standards &amp; Guidelines</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>Our digital experience is designed with reference to internationally recognised accessibility guidelines, including:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Web Content Accessibility Guidelines (WCAG) principles</li><li>Responsive design standards</li><li>Accessibility-aware development practices</li></ul>
-                <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-gray-600 text-sm">We continuously review and improve accessibility features as part of our ongoing digital enhancement process.</p></div>
+                <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#5A4A2E] text-sm">We continuously review and improve accessibility features as part of our ongoing digital enhancement process.</p></div>
               </CCard>
             </section>
             <GoldDivider />
 
             <section id="features" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">3.</span>Current Accessibility Features</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>The following accessibility features are implemented across our platform:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Structured headings and semantic HTML for logical content hierarchy</li><li>Alternative text for images and visual content</li><li>Clear colour contrast hierarchy for readability</li><li>Scalable text support for user-defined font sizes</li><li>Mobile and tablet compatibility with responsive layouts</li><li>Logical page structure for assistive technology navigation</li></ul>
               </CCard>
@@ -107,7 +107,7 @@ const Accessibility = () => {
 
             <section id="improvement" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">4.</span>Ongoing Enhancements</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>We recognise accessibility as an evolving standard. Our team continuously evaluates and enhances the platform to improve accessibility compliance and usability.</p>
                 <p>This includes periodic audits, user feedback integration, and updates to reflect current best practices and emerging standards.</p>
               </CCard>
@@ -116,23 +116,23 @@ const Accessibility = () => {
 
             <section id="feedback" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">5.</span>Feedback &amp; Support</h2>
-              <CCard className="space-y-4 text-gray-700 leading-relaxed">
+              <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">
                 <p>If you encounter accessibility barriers or require assistance accessing any content, please contact our support team.</p>
                 <div className="bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-5 mt-4">
-                  <p className="font-semibold text-black">Contact Us</p>
-                  <p className="text-sm text-gray-600 mt-2">Email: <a href="mailto:accessibility@JBJ.ae" className="text-[#C8A766] hover:underline">accessibility@JBJ.ae</a></p>
-                  <p className="text-sm text-gray-600 mt-1">Or use our <Link to="/contact" className="text-[#C8A766] hover:underline">contact form</Link>.</p>
-                  <p className="text-xs text-gray-600 mt-3">We aim to respond to accessibility-related inquiries within 5 business days.</p>
+                  <p className="font-semibold text-[#1A1A1A]">Contact Us</p>
+                  <p className="text-sm text-[#5A4A2E] mt-2">Email: <a href="mailto:accessibility@JBJ.ae" className="text-[#C8A766] hover:underline">accessibility@JBJ.ae</a></p>
+                  <p className="text-sm text-[#5A4A2E] mt-1">Or use our <Link to="/contact" className="text-[#C8A766] hover:underline">contact form</Link>.</p>
+                  <p className="text-xs text-[#5A4A2E] mt-3">We aim to respond to accessibility-related inquiries within 5 business days.</p>
                 </div>
               </CCard>
             </section>
 
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-gray-600 text-xs leading-relaxed mb-6">This Accessibility Statement may be updated periodically.</p>
-              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-[#5A4A2E] text-xs leading-relaxed mb-6">This Accessibility Statement may be updated periodically.</p>
+              <p className="text-[#5A4A2E] text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-gray-600">|</span>
+                <span className="text-[#5A4A2E]">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

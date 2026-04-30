@@ -57,7 +57,7 @@ export function CurrencyTooltip() {
         </div>
         <button
           onClick={dismiss}
-          className="mt-3 w-full py-2 rounded-lg bg-gold text-black text-sm font-semibold hover:bg-gold/90 transition-colors"
+          className="mt-3 w-full py-2 rounded-lg bg-gold text-[#1A1A1A] text-sm font-semibold hover:bg-gold/90 transition-colors"
         >
           Got it
         </button>

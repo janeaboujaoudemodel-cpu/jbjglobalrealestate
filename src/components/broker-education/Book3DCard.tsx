@@ -49,7 +49,7 @@ const LEARNING_PATH_COLORS: Record<string, { bg: string; text: string; border: s
 const DEFAULT_PATH_COLOR = { 
   bg: 'from-zinc-900 via-zinc-800 to-zinc-950', 
   text: 'text-gray-200', 
-  border: 'border-gray-400/40',
+  border: 'border-[#B89555]/30/40',
   glow: 'rgba(161, 161, 170, 0.3)'
 };
 
@@ -153,17 +153,17 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
             <div className="absolute left-0 top-0 bottom-0 w-5 bg-gradient-to-r from-gold/30 via-gold/15 to-transparent" />
 
             {/* Top Section with Icon */}
-            <div className="relative h-28 flex items-center justify-center bg-black/20 flex-shrink-0">
+            <div className="relative h-28 flex items-center justify-center bg-[#1A1A1A]/20 flex-shrink-0">
               <div className="w-14 h-14 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
                 <span className="text-gold text-xl font-bold">{book.book_number}</span>
               </div>
               
               {/* Locked Overlay (restricted or access-locked) */}
               {effectivelyLocked && (
-                <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
-                  <Lock className="w-10 h-10 text-gray-800" />
+                <div className="absolute inset-0 bg-[#1A1A1A]/70 flex flex-col items-center justify-center backdrop-blur-sm gap-2">
+                  <Lock className="w-10 h-10 text-[#1A1A1A]" />
                   {isLocked && !book.is_restricted && (
-                    <span className="text-gray-700 text-[10px] uppercase tracking-widest">Join to Unlock</span>
+                    <span className="text-[#5A4A2E] text-[10px] uppercase tracking-widest">Join to Unlock</span>
                   )}
                 </div>
               )}
@@ -190,10 +190,10 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </p>
 
               {/* Footer */}
-              <div className="pt-3 border-t border-gray-700 mt-auto">
+              <div className="pt-3 border-t border-[#1A1A1A] mt-auto">
                 {effectivelyLocked ? (
                   <div className="space-y-2">
-                    <p className="text-gray-600 text-[10px] leading-tight">
+                    <p className="text-[#5A4A2E] text-[10px] leading-tight">
                       {book.is_restricted 
                         ? 'Available after completing all foundational books and manager approval.'
                         : 'Join the JBJ Broker Circle to unlock this book.'}
@@ -201,7 +201,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="w-full bg-gold/10 hover:bg-gold/20 text-gray-700 border border-gold/30"
+                      className="w-full bg-gold/10 hover:bg-gold/20 text-[#5A4A2E] border border-gold/30"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (!book.is_restricted) onOpen(book);
@@ -215,7 +215,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="w-full bg-gold/20 hover:bg-gold hover:text-black text-gold border border-gold/40 font-semibold transition-colors"
+                    className="w-full bg-gold/20 hover:bg-gold hover:text-[#1A1A1A] text-gold border border-gold/40 font-semibold transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
                       onOpen(book);
@@ -240,7 +240,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
           </div>
 
           {/* Shadow */}
-          <div className="absolute -bottom-3 left-3 right-3 h-6 bg-black/50 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-8" />
+          <div className="absolute -bottom-3 left-3 right-3 h-6 bg-[#1A1A1A]/50 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-8" />
         </div>
       </div>
     </motion.div>

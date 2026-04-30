@@ -151,7 +151,7 @@ const LawFirm = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-black">Schedule</span><span className="text-gold"> Consultation</span>
+                <span className="text-[#1A1A1A]">Schedule</span><span className="text-gold"> Consultation</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -160,7 +160,7 @@ const LawFirm = () => {
       </section>
 
       {/* Practice Areas - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -175,7 +175,7 @@ const LawFirm = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Practice Areas" />
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Comprehensive legal services covering all aspects of real estate law in Dubai.
               </p>
             </motion.div>
@@ -186,19 +186,19 @@ const LawFirm = () => {
                   <Card className="jj-card-inner hover:border-white transition-all group h-full">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <area.icon className="w-7 h-7 text-gold" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-black font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-semibold text-xl mb-2 group-hover:text-gold transition-colors">
                             {area.title}
                           </h3>
-                          <p className="text-black/70 text-sm mb-4">
+                          <p className="text-[#1A1A1A]/70 text-sm mb-4">
                             {area.description}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {area.services.map((service) => (
-                              <div key={service} className="flex items-center gap-2 text-xs text-black/60">
+                              <div key={service} className="flex items-center gap-2 text-xs text-[#1A1A1A]/60">
                                 <CheckCircle className="w-3 h-3 text-gold" />
                                 {service}
                               </div>
@@ -216,7 +216,7 @@ const LawFirm = () => {
       </section>
 
       {/* Why Choose Us - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -238,13 +238,13 @@ const LawFirm = () => {
                 <motion.div key={item.title} variants={fadeInUp}>
                   <Card className="jj-card-inner h-full">
                     <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
                         <item.icon className="w-8 h-8 text-gold" />
                       </div>
-                      <h3 className="text-black font-semibold text-lg mb-2">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-black/70 text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         {item.description}
                       </p>
                     </CardContent>
@@ -257,7 +257,7 @@ const LawFirm = () => {
       </section>
 
       {/* CTA Section - 3-Layer System */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -270,14 +270,14 @@ const LawFirm = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Need Legal Assistance?" />
               </h2>
-              <p className="text-black/70 mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Our legal team is ready to assist with your real estate legal needs. 
                 Schedule a confidential consultation today.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button variant="primary" size="lg" asChild>
                   <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                    <span className="text-black">Book</span><span className="text-gold"> Consultation</span>
+                    <span className="text-[#1A1A1A]">Book</span><span className="text-gold"> Consultation</span>
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </a>
                 </Button>

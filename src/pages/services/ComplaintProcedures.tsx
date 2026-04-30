@@ -144,14 +144,14 @@ const ComplaintProcedures = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <AlertTriangle className="w-12 h-12 text-gray-600" />
+                <AlertTriangle className="w-12 h-12 text-[#5A4A2E]" />
               </div>
-              <p className="text-gray-600 text-sm tracking-widest uppercase">How Complaints Are Handled</p>
+              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">How Complaints Are Handled</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -169,7 +169,7 @@ const ComplaintProcedures = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <AlertTriangle className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -201,13 +201,13 @@ const ComplaintProcedures = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* WHAT QUALIFIES AS A COMPLAINT */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -218,13 +218,13 @@ const ComplaintProcedures = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What Qualifies as a Complaint
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-[#5A4A2E] leading-relaxed">
                 A complaint is any formal issue related to service quality, communication breakdown, process deviation, or misconduct concerns that requires structured review and resolution.
               </p>
             </motion.div>
@@ -233,7 +233,7 @@ const ComplaintProcedures = () => {
       </section>
 
       {/* THE COMPLAINT WORKFLOW */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -243,7 +243,7 @@ const ComplaintProcedures = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               The Complaint Workflow
@@ -259,15 +259,15 @@ const ComplaintProcedures = () => {
                       variants={fadeInUp}
                       className="flex items-start gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-start gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0 mt-1" />
                           <div>
-                            <h3 className="font-semibold text-black">{step.title}</h3>
-                            <p className="text-sm text-gray-600 mt-1">{step.description}</p>
+                            <h3 className="font-semibold text-[#1A1A1A]">{step.title}</h3>
+                            <p className="text-sm text-[#5A4A2E] mt-1">{step.description}</p>
                           </div>
                         </div>
                       </div>
@@ -281,7 +281,7 @@ const ComplaintProcedures = () => {
       </section>
 
       {/* WHAT YOU RECEIVE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -292,7 +292,7 @@ const ComplaintProcedures = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What You Receive
@@ -301,10 +301,10 @@ const ComplaintProcedures = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {whatYouReceive.map((item, index) => (
                   <div key={index} className="jj-card-inner flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <span className="text-gray-700">{item.text}</span>
+                    <span className="text-[#5A4A2E]">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -314,7 +314,7 @@ const ComplaintProcedures = () => {
       </section>
 
       {/* HOW TO SUBMIT */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -325,19 +325,19 @@ const ComplaintProcedures = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               How to Submit
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
               Good Complaint Format
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-gray-600 mb-6 font-medium">Include:</p>
+              <p className="text-[#5A4A2E] mb-6 font-medium">Include:</p>
               <ul className="space-y-4">
                 {goodComplaintFormat.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-gray-700">
+                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -349,7 +349,7 @@ const ComplaintProcedures = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -360,7 +360,7 @@ const ComplaintProcedures = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -374,9 +374,9 @@ const ComplaintProcedures = () => {
                     className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
-                      <span className="text-black font-medium">{faq.question}</span>
+                      <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-gray-600">
+                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -388,7 +388,7 @@ const ComplaintProcedures = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -400,12 +400,12 @@ const ComplaintProcedures = () => {
             <div className="jj-card-inner border-2 border-gold/30">
               <AlertTriangle className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2
-                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
                 Submit a Complaint with Clarity
               </h2>
-              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                 Use the form to log the issue and receive a trackable ticket ID.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

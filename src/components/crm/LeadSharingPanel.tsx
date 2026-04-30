@@ -160,7 +160,7 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
               <SelectItem value="none">No expiry</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={handleShare} disabled={!selectedUser || loading} size="sm" className="bg-gold text-black hover:bg-gold/90">
+          <Button onClick={handleShare} disabled={!selectedUser || loading} size="sm" className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
             <UserPlus className="w-4 h-4" />
           </Button>
         </div>

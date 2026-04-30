@@ -72,11 +72,11 @@ export function EmbeddedITDepartment() {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-orange-500/30">
+        <Card className="bg-[#FDFBF7] border-2 border-orange-500/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Pending Applications</p>
+                <p className="text-[#5A4A2E] text-xs">Pending Applications</p>
                 <p className="text-2xl font-bold text-orange-600">{stats.pendingApplications}</p>
               </div>
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
@@ -86,11 +86,11 @@ export function EmbeddedITDepartment() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-blue-500/30">
+        <Card className="bg-[#FDFBF7] border-2 border-blue-500/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Open IT Tasks</p>
+                <p className="text-[#5A4A2E] text-xs">Open IT Tasks</p>
                 <p className="text-2xl font-bold text-blue-600">{stats.openTasks}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -100,11 +100,11 @@ export function EmbeddedITDepartment() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-green-500/30">
+        <Card className="bg-[#FDFBF7] border-2 border-green-500/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Completed Today</p>
+                <p className="text-[#5A4A2E] text-xs">Completed Today</p>
                 <p className="text-2xl font-bold text-green-600">{stats.completedToday}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -114,11 +114,11 @@ export function EmbeddedITDepartment() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Active Employees</p>
+                <p className="text-[#5A4A2E] text-xs">Active Employees</p>
                 <p className="text-2xl font-bold text-gold">{stats.activeEmployees}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -132,16 +132,16 @@ export function EmbeddedITDepartment() {
       {/* Main Content */}
       <Tabs defaultValue="applications" className="space-y-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-            <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black text-xs">
+          <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+            <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs">
               <UserPlus className="w-3.5 h-3.5 mr-1.5" />
               New Joiner Apps
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs">
               <FileText className="w-3.5 h-3.5 mr-1.5" />
               IT Tasks
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black text-xs">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A] text-xs">
               <Users className="w-3.5 h-3.5 mr-1.5" />
               IT Team
             </TabsTrigger>
@@ -154,12 +154,12 @@ export function EmbeddedITDepartment() {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 bg-white border-2 border-gold/30 text-black w-48 h-9 text-sm placeholder:text-gray-600"
+                className="pl-8 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-48 h-9 text-sm placeholder:text-[#5A4A2E]"
               />
             </div>
             <Button
               size="sm"
-              className="bg-gold text-black hover:bg-gold/90"
+              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
               onClick={() => setShowNewJoinerForm(true)}
             >
               <Plus className="w-3.5 h-3.5 mr-1" />

@@ -257,9 +257,9 @@ export default function ContrastReview() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900">
+    <div className="min-h-screen bg-[#FDFBF7] text-zinc-900">
       {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur">
+      <header className="sticky top-0 z-20 border-b border-zinc-200 bg-[#FDFBF7]/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-4">
             <Link
@@ -319,7 +319,7 @@ export default function ContrastReview() {
               href={active.path}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-4 py-2 text-xs font-semibold text-zinc-900 transition hover:bg-zinc-100"
+              className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-[#FDFBF7] px-4 py-2 text-xs font-semibold text-zinc-900 transition hover:bg-zinc-100"
             >
               Open in new tab <ExternalLink className="h-3.5 w-3.5" />
             </a>
@@ -333,7 +333,7 @@ export default function ContrastReview() {
                 className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
                   r.path === active.path
                     ? "border-zinc-900 bg-zinc-900 text-white"
-                    : "border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100"
+                    : "border-zinc-300 bg-[#FDFBF7] text-zinc-700 hover:bg-zinc-100"
                 }`}
               >
                 {r.label}
@@ -341,7 +341,7 @@ export default function ContrastReview() {
             ))}
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm">
+          <div className="overflow-hidden rounded-xl border border-zinc-200 bg-[#FDFBF7] shadow-sm">
             <iframe
               key={active.path}
               src={active.path}
@@ -375,7 +375,7 @@ export default function ContrastReview() {
               return (
                 <article
                   key={p.id}
-                  className="overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+                  className="overflow-hidden rounded-2xl border border-zinc-200 bg-[#FDFBF7]"
                 >
                   <header className="border-b border-zinc-100 px-5 py-4">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-zinc-500">
@@ -457,9 +457,9 @@ export default function ContrastReview() {
         <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6">
           <h3 className="text-sm font-semibold text-zinc-950">Verification checklist</h3>
           <ul className="mt-3 space-y-2 text-sm text-zinc-700">
-            <li>• <code className="rounded bg-white px-1.5 py-0.5 text-xs">npm run check:contrast</code> — automated WCAG sweep.</li>
-            <li>• <code className="rounded bg-white px-1.5 py-0.5 text-xs">npm run check:a11y</code> — focus order, ARIA, keyboard nav.</li>
-            <li>• <code className="rounded bg-white px-1.5 py-0.5 text-xs">npm run check:faded-gold</code> — guards against faded-gold reintroduction.</li>
+            <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:contrast</code> — automated WCAG sweep.</li>
+            <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:a11y</code> — focus order, ARIA, keyboard nav.</li>
+            <li>• <code className="rounded bg-[#FDFBF7] px-1.5 py-0.5 text-xs">npm run check:faded-gold</code> — guards against faded-gold reintroduction.</li>
           </ul>
         </section>
       </main>

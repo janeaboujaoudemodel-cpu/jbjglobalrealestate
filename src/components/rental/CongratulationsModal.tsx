@@ -83,7 +83,7 @@ export function CongratulationsModal({
               transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
               className="w-20 h-20 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center shadow-xl"
             >
-              <PartyPopper className="h-10 w-10 text-black" />
+              <PartyPopper className="h-10 w-10 text-[#1A1A1A]" />
             </motion.div>
           </div>
 
@@ -167,7 +167,7 @@ export function CongratulationsModal({
           >
             <Button
               onClick={handleViewListing}
-              className="w-full bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90 h-12"
+              className="w-full bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90 h-12"
             >
               <ExternalLink className="mr-2 h-4 w-4" />
               View My Listing

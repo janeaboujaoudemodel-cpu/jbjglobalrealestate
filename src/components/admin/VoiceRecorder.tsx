@@ -169,13 +169,13 @@ const VoiceRecorder = () => {
   const progressPercent = Math.min((totalDuration / 180) * 100, 100);
 
   return (
-    <Card className="bg-white border-2 border-gold/30">
+    <Card className="bg-[#FDFBF7] border-2 border-gold/30">
       <CardHeader>
         <CardTitle className="text-gold flex items-center gap-2">
           <Mic className="w-5 h-5" />
           Voice Cloning Recorder
         </CardTitle>
-        <CardDescription className="text-black/60">
+        <CardDescription className="text-[#1A1A1A]/60">
           Record your voice for ElevenLabs voice cloning. Use your own script or speak freely.
           Target: 3+ minutes of clear speech.
         </CardDescription>
@@ -184,7 +184,7 @@ const VoiceRecorder = () => {
         {/* Progress toward 3 minutes */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-black/60">Recording Progress</span>
+            <span className="text-[#1A1A1A]/60">Recording Progress</span>
             <span className={totalDuration >= 180 ? "text-green-600" : "text-gold"}>
               {formatTime(totalDuration)} / 3:00 min
             </span>
@@ -201,11 +201,11 @@ const VoiceRecorder = () => {
         {/* Sample selector */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-black/60">Voice Sample Type:</span>
+            <span className="text-sm text-[#1A1A1A]/60">Voice Sample Type:</span>
             <select
               value={currentSample}
               onChange={(e) => setCurrentSample(Number(e.target.value))}
-              className="bg-white border-2 border-gold/30 rounded px-2 py-1 text-sm text-black"
+              className="bg-[#FDFBF7] border-2 border-gold/30 rounded px-2 py-1 text-sm text-[#1A1A1A]"
             >
               {VOICE_SAMPLES.map((sample, i) => (
                 <option key={i} value={i}>{sample.title}</option>
@@ -217,10 +217,10 @@ const VoiceRecorder = () => {
             <h4 className="text-gold font-medium text-sm">
               {VOICE_SAMPLES[currentSample].title}
             </h4>
-            <p className="text-black text-lg leading-relaxed">
+            <p className="text-[#1A1A1A] text-lg leading-relaxed">
               {VOICE_SAMPLES[currentSample].instruction}
             </p>
-            <p className="text-black/50 text-sm italic">
+            <p className="text-[#1A1A1A]/50 text-sm italic">
               This recording will be used exclusively for voice cloning. Speak in your natural voice.
             </p>
           </div>
@@ -257,7 +257,7 @@ const VoiceRecorder = () => {
         {/* Recordings list */}
         {recordings.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-black font-medium">Your Recordings ({recordings.length})</h4>
+            <h4 className="text-[#1A1A1A] font-medium">Your Recordings ({recordings.length})</h4>
             <div className="space-y-2">
               {recordings.map((recording) => (
                 <div
@@ -278,10 +278,10 @@ const VoiceRecorder = () => {
                       )}
                     </Button>
                     <div>
-                      <p className="text-black text-sm">
+                      <p className="text-[#1A1A1A] text-sm">
                         {VOICE_SAMPLES[recording.sampleIndex]?.title || `Sample ${recording.sampleIndex + 1}`}
                       </p>
-                      <p className="text-black/40 text-xs">
+                      <p className="text-[#1A1A1A]/40 text-xs">
                         {formatTime(recording.duration)}
                       </p>
                     </div>
@@ -290,7 +290,7 @@ const VoiceRecorder = () => {
                     size="sm"
                     variant="ghost"
                     onClick={() => deleteRecording(recording.id)}
-                    className="text-black/40 hover:text-red-500"
+                    className="text-[#1A1A1A]/40 hover:text-red-500"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -312,8 +312,8 @@ const VoiceRecorder = () => {
         )}
 
         {/* Instructions */}
-        <div className="bg-gold/5 border border-gold/20 rounded-lg p-4 text-sm text-black/60 space-y-2">
-          <p className="font-medium text-black">Recording Tips:</p>
+        <div className="bg-gold/5 border border-gold/20 rounded-lg p-4 text-sm text-[#1A1A1A]/60 space-y-2">
+          <p className="font-medium text-[#1A1A1A]">Recording Tips:</p>
           <ul className="list-disc list-inside space-y-1">
             <li>Record in a quiet room with minimal echo</li>
             <li>Speak naturally at your normal pace</li>

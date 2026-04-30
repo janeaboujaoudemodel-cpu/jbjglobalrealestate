@@ -64,7 +64,7 @@ export function HandoverDateRange({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white/90 border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -78,7 +78,7 @@ export function HandoverDateRange({
       <PopoverContent 
         className={cn(
           "w-[280px] p-4",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
         )}
         align="start"
         sideOffset={8}
@@ -88,7 +88,7 @@ export function HandoverDateRange({
         <div className="space-y-4">
           <h4 className={cn(
             "text-sm font-medium",
-            isDark ? "text-white" : "text-black"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             Project Handover By
           </h4>
@@ -98,7 +98,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-gray-600" : "text-black/60"
+                isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"
               )}>
                 From
               </label>
@@ -110,11 +110,11 @@ export function HandoverDateRange({
                   "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-gold/30 text-black"
+                    : "bg-champagne-light border-gold/30 text-[#1A1A1A]"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white")}>
+                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7]")}>
                   <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
                     Any
                   </SelectItem>
@@ -135,7 +135,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-gray-600" : "text-black/60"
+                isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"
               )}>
                 To
               </label>
@@ -147,11 +147,11 @@ export function HandoverDateRange({
                   "h-10 w-full",
                   isDark 
                     ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-gold/30 text-black"
+                    : "bg-champagne-light border-gold/30 text-[#1A1A1A]"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white")}>
+                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7]")}>
                   <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
                     Any
                   </SelectItem>
@@ -178,8 +178,8 @@ export function HandoverDateRange({
               className={cn(
                 "w-full",
                 isDark 
-                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-black/60 hover:text-black hover:bg-champagne-light"
+                  ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
               )}
             >
               Clear Selection
@@ -221,7 +221,7 @@ export function HandoverDateInline({
           "h-10 w-24",
           isDark 
             ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-white/90 border-gold/30 text-black"
+            : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A]"
         )}>
           <SelectValue placeholder="From" />
         </SelectTrigger>
@@ -235,7 +235,7 @@ export function HandoverDateInline({
         </SelectContent>
       </Select>
       
-      <span className={isDark ? "text-gray-600" : "text-black/40"}>–</span>
+      <span className={isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/40"}>–</span>
       
       <Select
         value={toYear?.toString() ?? "any"}
@@ -245,7 +245,7 @@ export function HandoverDateInline({
           "h-10 w-24",
           isDark 
             ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-white/90 border-gold/30 text-black"
+            : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A]"
         )}>
           <SelectValue placeholder="To" />
         </SelectTrigger>

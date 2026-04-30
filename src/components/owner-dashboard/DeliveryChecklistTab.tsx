@@ -46,42 +46,42 @@ export default function DeliveryChecklistTab() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-white/70 border-[#B89555]/20">
+        <Card className="bg-[#FDFBF7]/70 border-[#B89555]/20">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-black">{stats.total}</div>
-            <div className="text-xs text-gray-600">Total Items</div>
+            <div className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</div>
+            <div className="text-xs text-[#5A4A2E]">Total Items</div>
           </CardContent>
         </Card>
-        <Card className="bg-white/70 border-green-200">
+        <Card className="bg-[#FDFBF7]/70 border-green-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600">{stats.done}</div>
-            <div className="text-xs text-gray-600">Done</div>
+            <div className="text-xs text-[#5A4A2E]">Done</div>
           </CardContent>
         </Card>
-        <Card className="bg-white/70 border-amber-200">
+        <Card className="bg-[#FDFBF7]/70 border-amber-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-amber-600">{stats.partial}</div>
-            <div className="text-xs text-gray-600">Partial</div>
+            <div className="text-xs text-[#5A4A2E]">Partial</div>
           </CardContent>
         </Card>
-        <Card className="bg-white/70 border-red-200">
+        <Card className="bg-[#FDFBF7]/70 border-red-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-red-600">{stats.missing}</div>
-            <div className="text-xs text-gray-600">Missing</div>
+            <div className="text-xs text-[#5A4A2E]">Missing</div>
           </CardContent>
         </Card>
-        <Card className="bg-white/70 border-blue-200">
+        <Card className="bg-[#FDFBF7]/70 border-blue-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">{stats.needsVerification}</div>
-            <div className="text-xs text-gray-600">Needs Verification</div>
+            <div className="text-xs text-[#5A4A2E]">Needs Verification</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Completion bar */}
-      <div className="bg-white/70 border border-[#B89555]/20 rounded-lg p-4">
+      <div className="bg-[#FDFBF7]/70 border border-[#B89555]/20 rounded-lg p-4">
         <div className="flex justify-between text-sm mb-2">
-          <span className="text-gray-600">Overall Completion</span>
+          <span className="text-[#5A4A2E]">Overall Completion</span>
           <span className="text-[#B89555] font-semibold">{Math.round((stats.done / stats.total) * 100)}%</span>
         </div>
         <div className="w-full h-3 bg-[#B89555]/10 rounded-full overflow-hidden">
@@ -95,7 +95,7 @@ export default function DeliveryChecklistTab() {
       {/* Filters */}
       <div className="flex gap-3">
         <Select value={scopeFilter} onValueChange={(v) => setScopeFilter(v as any)}>
-          <SelectTrigger className="w-48 bg-white/70 border-[#B89555]/30 text-black">
+          <SelectTrigger className="w-48 bg-[#FDFBF7]/70 border-[#B89555]/30 text-[#1A1A1A]">
             <Filter className="w-4 h-4 mr-2 text-[#B89555]" />
             <SelectValue placeholder="Filter by scope" />
           </SelectTrigger>
@@ -108,7 +108,7 @@ export default function DeliveryChecklistTab() {
         </Select>
 
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
-          <SelectTrigger className="w-48 bg-white/70 border-[#B89555]/30 text-black">
+          <SelectTrigger className="w-48 bg-[#FDFBF7]/70 border-[#B89555]/30 text-[#1A1A1A]">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -127,7 +127,7 @@ export default function DeliveryChecklistTab() {
           const cfg = STATUS_CONFIG[item.status];
           const Icon = cfg.icon;
           return (
-            <Card key={item.id} className="bg-white/70 border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
+            <Card key={item.id} className="bg-[#FDFBF7]/70 border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <div className={`mt-0.5 ${cfg.color}`}>
@@ -135,13 +135,13 @@ export default function DeliveryChecklistTab() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="text-black font-medium">{item.title}</span>
+                      <span className="text-[#1A1A1A] font-medium">{item.title}</span>
                       <Badge className={cfg.badgeClass}>{cfg.label}</Badge>
-                      <Badge className="bg-[#B89555]/10 text-gray-600 border-[#B89555]/20 text-[10px]">
+                      <Badge className="bg-[#B89555]/10 text-[#5A4A2E] border-[#B89555]/20 text-[10px]">
                         {item.scope.replace('_', ' ')}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{item.requirement}</p>
+                    <p className="text-sm text-[#5A4A2E] mb-2">{item.requirement}</p>
                     {item.notes && (
                       <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-2">
                         Note: {item.notes}
@@ -150,7 +150,7 @@ export default function DeliveryChecklistTab() {
                     {item.evidence && item.evidence.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {item.evidence.map((e, i) => (
-                          <span key={i} className="text-[10px] text-gray-600 bg-[#B89555]/5 border border-[#B89555]/10 px-2 py-0.5 rounded font-mono">
+                          <span key={i} className="text-[10px] text-[#5A4A2E] bg-[#B89555]/5 border border-[#B89555]/10 px-2 py-0.5 rounded font-mono">
                             {e}
                           </span>
                         ))}
@@ -165,7 +165,7 @@ export default function DeliveryChecklistTab() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-gray-600">
+        <div className="text-center py-12 text-[#5A4A2E]">
           No items match the current filters.
         </div>
       )}

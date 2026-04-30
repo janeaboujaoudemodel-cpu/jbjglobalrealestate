@@ -242,7 +242,7 @@ export default function AIDescriptionWriterPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-lime-500 hover:bg-lime-600 text-black font-semibold"
+              className="w-full bg-lime-500 hover:bg-lime-600 text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>

@@ -136,7 +136,7 @@ interface Recommendation {
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   published: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
   live: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  draft: { label: "Draft", className: "bg-gray-500/20 text-white/85 border-gray-500/40" },
+  draft: { label: "Draft", className: "bg-[#B89555]/20 text-white/85 border-[#B89555]/30/40" },
   applied: { label: "Applied – Pending Test", className: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   tested: { label: "Tested – Pending Publish", className: "bg-blue-500/20 text-blue-300 border-blue-500/40" },
   reverted: { label: "Reverted", className: "bg-orange-500/20 text-orange-300 border-orange-500/40" },
@@ -317,7 +317,7 @@ export default function AIToolsControlPanel() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-gray-900 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-[#1A1A1A] p-4 md:p-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-gold mb-2 flex items-center gap-3">
@@ -337,7 +337,7 @@ export default function AIToolsControlPanel() {
           { label: "Reverted", value: stats.reverted, color: "text-orange-400" },
           { label: "Error", value: stats.error, color: "text-red-400" },
         ].map(s => (
-          <div key={s.label} className="bg-zinc-900/60 border border-gray-800 rounded-lg p-3 text-center">
+          <div key={s.label} className="bg-zinc-900/60 border border-[#1A1A1A] rounded-lg p-3 text-center">
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
             <div className="text-xs text-white/90">{s.label}</div>
           </div>
@@ -352,7 +352,7 @@ export default function AIToolsControlPanel() {
             placeholder="Search tools..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-10 !bg-zinc-900 !border-gray-700 !text-white"
+            className="pl-10 !bg-zinc-900 !border-[#1A1A1A] !text-white"
           />
         </div>
         <div className="flex gap-2 flex-wrap">
@@ -362,7 +362,7 @@ export default function AIToolsControlPanel() {
               size="sm"
               variant={catFilter === c ? "default" : "outline"}
               onClick={() => setCatFilter(c)}
-              className={catFilter === c ? "bg-gold text-black hover:bg-gold/90" : "border-gray-700 text-white/70 hover:text-white"}
+              className={catFilter === c ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-[#1A1A1A] text-white/70 hover:text-white"}
             >
               {c === "all" ? "All" : CATEGORY_LABELS[c]}
             </Button>
@@ -385,7 +385,7 @@ export default function AIToolsControlPanel() {
 
             return (
               <Collapsible key={tool.id} open={isExpanded} onOpenChange={() => setExpandedTool(isExpanded ? null : tool.id)}>
-                <Card className="!bg-zinc-900/80 !border-gray-800 hover:!border-gray-700 transition-colors">
+                <Card className="!bg-zinc-900/80 !border-[#1A1A1A] hover:!border-[#1A1A1A] transition-colors">
                   <CollapsibleTrigger asChild>
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
@@ -397,7 +397,7 @@ export default function AIToolsControlPanel() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <Badge className="bg-zinc-800 text-white/70 border-gray-700 text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
+                          <Badge className="bg-zinc-800 text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
                       </div>
@@ -428,7 +428,7 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 1: Fixes ── */}
                         <TabsContent value="fixes">
                           {toolRecs.length === 0 ? (
-                            <div className="text-center py-8 text-gray-600 text-sm">No pending recommendations for this tool.</div>
+                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No pending recommendations for this tool.</div>
                           ) : (
                             <div className="space-y-3">
                               {toolRecs.map(rec => (
@@ -447,7 +447,7 @@ export default function AIToolsControlPanel() {
                           )}
                           {/* Quick actions for tools with applied versions */}
                           {(status === "applied" || status === "tested") && (
-                            <div className="mt-4 flex gap-2 border-t border-gray-800 pt-4">
+                            <div className="mt-4 flex gap-2 border-t border-[#1A1A1A] pt-4">
                               {status === "applied" && (
                                 <Button size="sm" onClick={() => testTool(tool.id, fullUrl)} className="bg-blue-600 hover:bg-blue-700 text-white gap-1">
                                   <Play className="w-3 h-3" /> Test
@@ -458,7 +458,7 @@ export default function AIToolsControlPanel() {
                                   <Rocket className="w-3 h-3" /> Save & Publish
                                 </Button>
                               )}
-                              <Button size="sm" variant="outline" onClick={() => revertFix(tool.id)} className="border-gray-700 text-white/70 hover:text-red-400 gap-1">
+                              <Button size="sm" variant="outline" onClick={() => revertFix(tool.id)} className="border-[#1A1A1A] text-white/70 hover:text-red-400 gap-1">
                                 <Undo2 className="w-3 h-3" /> Revert
                               </Button>
                             </div>
@@ -468,11 +468,11 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 2: Version History ── */}
                         <TabsContent value="history">
                           {toolVersions.length === 0 ? (
-                            <div className="text-center py-8 text-gray-600 text-sm">No version history yet.</div>
+                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No version history yet.</div>
                           ) : (
                             <div className="space-y-2">
                               {toolVersions.map(v => (
-                                <div key={v.id} className="bg-zinc-800/50 border border-gray-700/50 rounded-lg p-3">
+                                <div key={v.id} className="bg-zinc-800/50 border border-[#1A1A1A]/50 rounded-lg p-3">
                                   <div className="flex items-center justify-between gap-2">
                                     <div className="flex items-center gap-2">
                                       <span className="text-sm font-mono text-gold">v{v.version_number}</span>
@@ -493,7 +493,7 @@ export default function AIToolsControlPanel() {
                                     <div className="flex items-center gap-1 mt-1">
                                       {v.test_result === "pass" ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <XCircle className="w-3 h-3 text-red-400" />}
                                       <span className="text-xs text-white/90">Test: {v.test_result}</span>
-                                      {v.test_notes && <span className="text-xs text-gray-600"> — {v.test_notes}</span>}
+                                      {v.test_notes && <span className="text-xs text-[#5A4A2E]"> — {v.test_notes}</span>}
                                     </div>
                                   )}
                                   {/* Before/After */}
@@ -522,11 +522,11 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 3: Test Logs ── */}
                         <TabsContent value="tests">
                           {toolTestLogs.length === 0 ? (
-                            <div className="text-center py-8 text-gray-600 text-sm">No test logs yet.</div>
+                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No test logs yet.</div>
                           ) : (
                             <div className="space-y-2">
                               {toolTestLogs.map(t => (
-                                <div key={t.id} className="bg-zinc-800/50 border border-gray-700/50 rounded-lg p-3 flex items-center justify-between">
+                                <div key={t.id} className="bg-zinc-800/50 border border-[#1A1A1A]/50 rounded-lg p-3 flex items-center justify-between">
                                   <div className="flex items-center gap-3">
                                     {t.result === "pass" ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <XCircle className="w-4 h-4 text-red-400" />}
                                     <div>
@@ -535,8 +535,8 @@ export default function AIToolsControlPanel() {
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    {t.tool_url && <code className="text-[10px] text-gray-600 font-mono">{t.tool_url}</code>}
-                                    <span className="text-[10px] text-gray-600">{new Date(t.created_at).toLocaleString()}</span>
+                                    {t.tool_url && <code className="text-[10px] text-[#5A4A2E] font-mono">{t.tool_url}</code>}
+                                    <span className="text-[10px] text-[#5A4A2E]">{new Date(t.created_at).toLocaleString()}</span>
                                   </div>
                                 </div>
                               ))}
@@ -571,13 +571,13 @@ function FixCard({
   const isApplied = rec.status === "applied";
   const isTested = rec.status === "tested" || rec.status === "published";
   return (
-    <div className="bg-zinc-800/40 border border-gray-700/40 rounded-lg p-4">
+    <div className="bg-zinc-800/40 border border-[#1A1A1A]/40 rounded-lg p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-white">{rec.title}</span>
             {rec.impact_level && (
-              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-gray-500/20 text-gray-600 border-gray-500/40"}`}>
+              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/40"}`}>
                 {rec.impact_level}
               </Badge>
             )}
@@ -589,7 +589,7 @@ function FixCard({
         {/* Action Buttons — inline next to fix */}
         <div className="flex items-center gap-1 shrink-0">
           {!isApplied && !isTested && (
-            <Button size="sm" onClick={onApply} className="h-7 text-xs bg-gold text-black hover:bg-gold/90 gap-1">
+            <Button size="sm" onClick={onApply} className="h-7 text-xs bg-gold text-[#1A1A1A] hover:bg-gold/90 gap-1">
               <CheckCircle2 className="w-3 h-3" /> Apply
             </Button>
           )}

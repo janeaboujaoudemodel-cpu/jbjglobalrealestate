@@ -111,16 +111,16 @@ export function FeatureReviewPrompt({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-md bg-white border-2 border-gold/30">
+      <DialogContent className="max-w-md bg-[#FDFBF7] border-2 border-gold/30">
         <DialogHeader>
-          <DialogTitle className="text-black flex items-center gap-2">
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
             <Star className="h-5 w-5 text-gold fill-gold" />
             Rate {featureLabel}
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5">
-          <p className="text-sm text-gray-600">{question || `How would you rate your experience with ${featureLabel}?`}</p>
+          <p className="text-sm text-[#5A4A2E]">{question || `How would you rate your experience with ${featureLabel}?`}</p>
 
           <div className="flex gap-2 justify-center py-2">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -134,7 +134,7 @@ export function FeatureReviewPrompt({
               >
                 <Star
                   className={`h-10 w-10 transition-colors ${
-                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-gray-600"
+                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-[#5A4A2E]"
                   }`}
                 />
               </button>
@@ -147,51 +147,51 @@ export function FeatureReviewPrompt({
           )}
 
           <div>
-            <Label className="text-gray-700 text-sm">Review title</Label>
+            <Label className="text-[#5A4A2E] text-sm">Review title</Label>
             <Input
               value={reviewTitle}
               onChange={(e) => setReviewTitle(e.target.value)}
               placeholder="Review title"
-              className="mt-1 bg-gray-50 border-gray-200"
+              className="mt-1 bg-[#F7F2EA] border-[#B89555]/30"
             />
           </div>
 
           <div>
-            <Label className="text-gray-700 text-sm">Your review (optional)</Label>
+            <Label className="text-[#5A4A2E] text-sm">Your review (optional)</Label>
             <Textarea
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
               placeholder="Share your experience..."
-              className="mt-1 bg-gray-50 border-gray-200"
+              className="mt-1 bg-[#F7F2EA] border-[#B89555]/30"
               rows={3}
             />
           </div>
 
           <div>
-            <Label className="text-gray-700 text-sm">What can we improve?</Label>
+            <Label className="text-[#5A4A2E] text-sm">What can we improve?</Label>
             <Textarea
               value={improveText}
               onChange={(e) => setImproveText(e.target.value)}
               placeholder="Any suggestions for improvement..."
-              className="mt-1 bg-gray-50 border-gray-200"
+              className="mt-1 bg-[#F7F2EA] border-[#B89555]/30"
               rows={2}
             />
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-sm text-gray-600">Publish anonymously</Label>
+              <Label className="text-sm text-[#5A4A2E]">Publish anonymously</Label>
               <Switch checked={isAnonymous} onCheckedChange={setIsAnonymous} />
             </div>
             <div className="flex items-center justify-between">
-              <Label className="text-sm text-gray-600">Allow publishing on website</Label>
+              <Label className="text-sm text-[#5A4A2E]">Allow publishing on website</Label>
               <Switch checked={publishRequested} onCheckedChange={setPublishRequested} />
             </div>
           </div>
 
-          <p className="text-xs text-gray-600">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
+          <p className="text-xs text-[#5A4A2E]">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
 
-          <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-black font-bold">
+          <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold">
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
             Submit Review
           </Button>

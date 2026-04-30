@@ -144,7 +144,7 @@ const JoinBrokerList = () => {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {benefits.map((b) => (
-                <div key={b.label} className="icon-tile flex items-start gap-3 p-4 bg-white/60 border border-blue-200/50">
+                <div key={b.label} className="icon-tile flex items-start gap-3 p-4 bg-[#FDFBF7]/60 border border-blue-200/50">
                   <div className="w-9 h-9 bg-blue-600/15 flex items-center justify-center flex-shrink-0">
                     <b.icon className="w-4.5 h-4.5 text-blue-700" />
                   </div>
@@ -176,7 +176,7 @@ const JoinBrokerList = () => {
               </motion.div>
 
               {/* Form Card */}
-              <motion.form variants={fadeInUp} onSubmit={handleSubmit} className="bg-white shadow-lg border border-stone-200 p-6 md:p-8 space-y-6">
+              <motion.form variants={fadeInUp} onSubmit={handleSubmit} className="bg-[#FDFBF7] shadow-lg border border-stone-200 p-6 md:p-8 space-y-6">
                 {/* Section 1: Contact Details */}
                 <div className="space-y-1 mb-4">
                   <h3 className="text-lg font-bold text-foreground tracking-wide uppercase flex items-center gap-2">

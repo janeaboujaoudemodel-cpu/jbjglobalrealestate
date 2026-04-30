@@ -692,7 +692,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
     return (
       <div
-        className="bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
+        className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-md overflow-hidden hover:shadow-xl transition-all cursor-pointer group"
         onClick={() => {
           if (listing.viewUrl.startsWith("http")) window.open(listing.viewUrl, "_blank");
           else navigate(listing.viewUrl);
@@ -709,7 +709,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Building2 className="w-12 h-12 text-gray-600" />
+              <Building2 className="w-12 h-12 text-[#5A4A2E]" />
             </div>
           )}
           {/* Status Badge */}
@@ -722,17 +722,17 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           </div>
           {/* Photo/Doc Count */}
           <div className="absolute bottom-2 right-2 flex gap-1.5">
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-white backdrop-blur-sm flex items-center gap-1">
               <ImageIcon className="w-3 h-3" />{listing.imageCount}
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 text-white backdrop-blur-sm flex items-center gap-1">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-white backdrop-blur-sm flex items-center gap-1">
               <FileText className="w-3 h-3" />{listing.docCount}
             </span>
           </div>
           {/* Project Status */}
           {listing.projectStatus && (
             <div className="absolute top-2 right-2">
-              <span className="text-[9px] px-2 py-0.5 rounded-full bg-black/50 text-white backdrop-blur-sm uppercase tracking-wider font-medium">
+              <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#1A1A1A]/50 text-white backdrop-blur-sm uppercase tracking-wider font-medium">
                 {listing.projectStatus}
               </span>
             </div>
@@ -760,12 +760,12 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
           {/* Price & Bedrooms Row */}
           {(priceDisplay || bedroomDisplay) && (
-            <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-2 pb-2 border-b border-[#B89555]/30">
               {priceDisplay && (
                 <span className="text-sm font-bold text-foreground">{priceDisplay}</span>
               )}
               {bedroomDisplay && (
-                <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full font-medium">{bedroomDisplay}</span>
+                <span className="text-xs px-2 py-0.5 bg-[#F7F2EA] text-[#5A4A2E] rounded-full font-medium">{bedroomDisplay}</span>
               )}
             </div>
           )}
@@ -773,31 +773,31 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           {/* Key Details Grid */}
           <div className="grid grid-cols-3 gap-1.5 mb-2">
             {listing.propertyType && (
-              <div className="text-center px-1.5 py-1 bg-gray-50 rounded-lg">
+              <div className="text-center px-1.5 py-1 bg-[#F7F2EA] rounded-lg">
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Type</p>
                 <p className="text-[11px] font-semibold text-foreground truncate">{listing.propertyType}</p>
               </div>
             )}
             {listing.handoverDate && (
-              <div className="text-center px-1.5 py-1 bg-gray-50 rounded-lg">
+              <div className="text-center px-1.5 py-1 bg-[#F7F2EA] rounded-lg">
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Handover</p>
                 <p className="text-[11px] font-semibold text-foreground truncate">{listing.handoverDate}</p>
               </div>
             )}
             {listing.paymentPlan && (
-              <div className="text-center px-1.5 py-1 bg-gray-50 rounded-lg">
+              <div className="text-center px-1.5 py-1 bg-[#F7F2EA] rounded-lg">
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Payment</p>
                 <p className="text-[11px] font-semibold text-foreground">{listing.paymentPlan}</p>
               </div>
             )}
             {listing.totalUnits && (
-              <div className="text-center px-1.5 py-1 bg-gray-50 rounded-lg">
+              <div className="text-center px-1.5 py-1 bg-[#F7F2EA] rounded-lg">
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Units</p>
                 <p className="text-[11px] font-semibold text-foreground">{listing.totalUnits}</p>
               </div>
             )}
             {listing.floors && (
-              <div className="text-center px-1.5 py-1 bg-gray-50 rounded-lg">
+              <div className="text-center px-1.5 py-1 bg-[#F7F2EA] rounded-lg">
                 <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Floors</p>
                 <p className="text-[11px] font-semibold text-foreground">{listing.floors}</p>
               </div>
@@ -826,10 +826,10 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           {listing.amenities && listing.amenities.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-2">
               {listing.amenities.slice(0, 5).map((a, i) => (
-                <span key={i} className="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded-full">{a}</span>
+                <span key={i} className="text-[9px] px-1.5 py-0.5 bg-[#F7F2EA] text-[#5A4A2E] rounded-full">{a}</span>
               ))}
               {listing.amenities.length > 5 && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded-full">+{listing.amenities.length - 5}</span>
+                <span className="text-[9px] px-1.5 py-0.5 bg-[#F7F2EA] text-[#5A4A2E] rounded-full">+{listing.amenities.length - 5}</span>
               )}
             </div>
           )}
@@ -884,7 +884,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
   return (
     <div
-      className="flex flex-col h-full bg-white overflow-hidden transition-all relative"
+      className="flex flex-col h-full bg-[#FDFBF7] overflow-hidden transition-all relative"
       style={{ borderRadius: 0 }}
       onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
       onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); dragCounter.current++; if (!isDragOver) setIsDragOver(true); }}
@@ -892,28 +892,28 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       onDrop={handleDropFiles}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-gray-200 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ borderRadius: 0 }}>
+      <div className="flex items-center gap-3 p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ borderRadius: 0 }}>
         <Avatar className="w-10 h-10 border-2 border-gold/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
           <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
         </Avatar>
         <div className="flex-1">
-          <h3 className="font-semibold text-black text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
-          <p className="text-xs text-gray-600">{adminPersona?.role || "Senior Listing Administrator"}</p>
+          <h3 className="font-semibold text-[#1A1A1A] text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
+          <p className="text-xs text-[#5A4A2E]">{adminPersona?.role || "Senior Listing Administrator"}</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={handleClearChat} className="h-8 w-8 p-0 text-gray-600 hover:text-red-500 hover:bg-red-50" title="Clear chat">
+        <Button variant="ghost" size="sm" onClick={handleClearChat} className="h-8 w-8 p-0 text-[#5A4A2E] hover:text-red-500 hover:bg-red-50" title="Clear chat">
           <Trash2 className="w-4 h-4" />
         </Button>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-xs text-gray-600">Online</span>
+          <span className="text-xs text-[#5A4A2E]">Online</span>
         </div>
       </div>
 
       {/* Manual Review Mode - Auto-approve disabled */}
-      <div className="flex items-center gap-3 px-4 py-2 border-b border-gray-100 bg-gray-50">
+      <div className="flex items-center gap-3 px-4 py-2 border-b border-[#B89555]/30 bg-[#F7F2EA]">
         <CheckCircle className="w-4 h-4 text-emerald-500" />
-        <span className="text-xs font-medium text-gray-700 flex-1">Manual Review Mode</span>
+        <span className="text-xs font-medium text-[#5A4A2E] flex-1">Manual Review Mode</span>
         <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-100 text-emerald-700">
           REVIEW
         </span>
@@ -933,14 +933,14 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               <div className="flex flex-col max-w-[85%]">
                 <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md"
+                    ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md"
                     : message.type === "processing"
-                    ? "bg-amber-50 text-black border border-amber-200"
+                    ? "bg-amber-50 text-[#1A1A1A] border border-amber-200"
                     : message.type === "success"
-                    ? "bg-green-50 text-black border border-green-200"
+                    ? "bg-green-50 text-[#1A1A1A] border border-green-200"
                     : message.type === "error"
-                    ? "bg-red-50 text-black border border-red-200"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm"
+                    ? "bg-red-50 text-[#1A1A1A] border border-red-200"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm"
                 }`}>
                   {message.type === "processing" && (
                     <div className="flex items-center gap-2 mb-2 text-amber-600">
@@ -1012,7 +1012,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
                 <button
                   onClick={async () => { await navigator.clipboard.writeText(message.content); toast.success("Copied"); }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gray-700 transition-colors opacity-0 group-hover:opacity-100 ${message.role === "user" ? "self-end mr-1" : "self-start ml-1"}`}
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-[#5A4A2E] transition-colors opacity-0 group-hover:opacity-100 ${message.role === "user" ? "self-end mr-1" : "self-start ml-1"}`}
                 >
                   <Copy className="w-3 h-3" /><span>Copy</span>
                 </button>
@@ -1027,7 +1027,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </Avatar>
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                <span className="text-sm text-gray-600">Extracting & processing...</span>
+                <span className="text-sm text-[#5A4A2E]">Extracting & processing...</span>
               </div>
             </div>
           )}
@@ -1038,7 +1038,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 variant="ghost"
                 size="sm"
                 onClick={handleClearChat}
-                className="h-7 text-[11px] text-gray-600 hover:text-red-500 hover:bg-red-50/80 gap-1.5 rounded-full px-4 border border-transparent hover:border-red-200 transition-all"
+                className="h-7 text-[11px] text-[#5A4A2E] hover:text-red-500 hover:bg-red-50/80 gap-1.5 rounded-full px-4 border border-transparent hover:border-red-200 transition-all"
               >
                 <Trash2 className="w-3 h-3" />
                 Clear Chat
@@ -1055,7 +1055,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <Button
             size="sm"
             variant="outline"
-            className="h-7 text-xs bg-white/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
+            className="h-7 text-xs bg-[#FDFBF7]/90 backdrop-blur-sm border-gold/30 shadow-md hover:bg-gold/10"
             onClick={() => {
               messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
               isNearBottom.current = true;
@@ -1069,21 +1069,21 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* Multi-URL Upload Section */}
       {showBulkUpload && (
-        <div className="p-4 border-t border-gray-200 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto">
+        <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto">
           <div className="flex items-center gap-2 mb-3">
             <ListChecks className="w-5 h-5 text-gold" />
-            <span className="font-medium text-black text-sm">Batch URL Extraction</span>
-            <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(false)} className="ml-auto h-6 w-6 p-0 text-gray-600 hover:text-black">
+            <span className="font-medium text-[#1A1A1A] text-sm">Batch URL Extraction</span>
+            <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(false)} className="ml-auto h-6 w-6 p-0 text-[#5A4A2E] hover:text-[#1A1A1A]">
               <X className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-xs text-gray-600 mb-3">Add multiple URLs. Each will be scraped, documents saved, and queued.</p>
+          <p className="text-xs text-[#5A4A2E] mb-3">Add multiple URLs. Each will be scraped, documents saved, and queued.</p>
           <div className="space-y-2 mb-3">
             {urlInputs.map((urlVal, i) => (
               <div key={i} className="flex gap-2">
-                <Input value={urlVal} onChange={(e) => updateUrlInput(i, e.target.value)} placeholder={`https://example.com/project-${i + 1}`} className="flex-1 bg-white border-gray-300 text-black text-sm h-9" />
+                <Input value={urlVal} onChange={(e) => updateUrlInput(i, e.target.value)} placeholder={`https://example.com/project-${i + 1}`} className="flex-1 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] text-sm h-9" />
                 {urlInputs.length > 1 && (
-                  <Button variant="ghost" size="sm" onClick={() => removeUrlInput(i)} className="h-9 w-9 p-0 text-gray-600 hover:text-red-500">
+                  <Button variant="ghost" size="sm" onClick={() => removeUrlInput(i)} className="h-9 w-9 p-0 text-[#5A4A2E] hover:text-red-500">
                     <X className="w-4 h-4" />
                   </Button>
                 )}
@@ -1091,7 +1091,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             ))}
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={addUrlInput} className="text-xs h-8 border-gray-300 text-gray-600" disabled={urlInputs.length >= 20}>
+            <Button variant="outline" size="sm" onClick={addUrlInput} className="text-xs h-8 border-[#B89555]/30 text-[#5A4A2E]" disabled={urlInputs.length >= 20}>
               <Plus className="w-3 h-3 mr-1" /> Add URL
             </Button>
             <Button onClick={handleBulkUpload} variant="primary" size="sm" disabled={isLoading || urlInputs.every(u => !u.trim())} className="ml-auto text-xs h-8">
@@ -1104,7 +1104,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             <span className="text-[10px] px-2 py-0.5 bg-purple-100 text-purple-700 rounded">PropertyFinder</span>
             <span className="text-[10px] px-2 py-0.5 bg-orange-100 text-orange-700 rounded">Developer Sites</span>
             <span className="text-[10px] px-2 py-0.5 bg-red-100 text-red-700 rounded">Provident</span>
-            <span className="text-[10px] px-2 py-0.5 bg-gray-100 text-gray-700 rounded">Any URL</span>
+            <span className="text-[10px] px-2 py-0.5 bg-[#F7F2EA] text-[#5A4A2E] rounded">Any URL</span>
           </div>
         </div>
       )}
@@ -1114,8 +1114,8 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* WhatsApp-style full-screen drag overlay */}
       {isDragOver && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm pointer-events-none">
-          <div className="flex flex-col items-center gap-4 p-10 border-2 border-dashed border-gold rounded-2xl bg-white/95 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm pointer-events-none">
+          <div className="flex flex-col items-center gap-4 p-10 border-2 border-dashed border-gold rounded-2xl bg-[#FDFBF7]/95 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
               <Upload className="w-8 h-8 text-gold" />
             </div>
@@ -1140,16 +1140,16 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </span>
             </div>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-gray-600 hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
+              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-[#5A4A2E] hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
               <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2 cursor-pointer"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto mb-3">
             {uploadedFiles.map((file, idx) => (
-              <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white border border-gray-200 rounded text-xs text-foreground group/file">
+              <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-[#FDFBF7] border border-[#B89555]/30 rounded text-xs text-foreground group/file">
                 {file.type.includes("image") ? <ImageIcon className="w-3 h-3 text-blue-500" /> : <FileText className="w-3 h-3 text-red-500" />}
                 <span className="truncate max-w-[100px]">{file.name}</span>
-                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-gray-600 hover:text-red-500 cursor-pointer"><X className="w-3 h-3" /></button>
+                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-[#5A4A2E] hover:text-red-500 cursor-pointer"><X className="w-3 h-3" /></button>
               </div>
             ))}
           </div>
@@ -1167,22 +1167,22 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       )}
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-200 bg-white" style={{ borderRadius: 0 }}>
+      <div className="p-4 border-t border-[#B89555]/30 bg-[#FDFBF7]" style={{ borderRadius: 0 }}>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-gray-600 hover:text-gold hover:bg-gold/10 cursor-pointer" title="Upload files" disabled={isLoading}>
+          <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-10 w-10 p-0 text-[#5A4A2E] hover:text-gold hover:bg-gold/10 cursor-pointer" title="Upload files" disabled={isLoading}>
             <Paperclip className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="sm" onClick={() => setShowBulkUpload(!showBulkUpload)}
-            className={`h-10 w-10 p-0 ${showBulkUpload ? "text-gold bg-gold/10" : "text-gray-600 hover:text-gold hover:bg-gold/10"}`} title="Batch URL Extraction">
+            className={`h-10 w-10 p-0 ${showBulkUpload ? "text-gold bg-gold/10" : "text-[#5A4A2E] hover:text-gold hover:bg-gold/10"}`} title="Batch URL Extraction">
             <LinkIcon className="w-5 h-5" />
           </Button>
-          <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} language={language} variant="ghost" className="h-10 w-10 p-0 text-gray-600 hover:text-gold hover:bg-gold/10" />
+          <VoiceInputButton onTranscript={handleVoiceTranscript} disabled={isLoading} language={language} variant="ghost" className="h-10 w-10 p-0 text-[#5A4A2E] hover:text-gold hover:bg-gold/10" />
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
             placeholder="Paste a URL, ask Sarah anything, or upload files..."
-            className="flex-1 bg-gray-50 border-gray-300 text-black placeholder:text-gray-600 h-10"
+            className="flex-1 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-10"
             disabled={isLoading}
           />
           <Button onClick={() => handleSendMessage()} disabled={isLoading || !input.trim()} className="h-10 w-10 p-0 bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90 disabled:opacity-50">

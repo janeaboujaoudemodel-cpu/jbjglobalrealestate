@@ -157,7 +157,7 @@ const EmployeeManagementHub: React.FC = () => {
       completed: { color: 'bg-green-500/20 text-green-700 border-green-500/30', label: 'Completed' },
       rejected: { color: 'bg-red-500/20 text-red-700 border-red-500/30', label: 'Rejected' }
     };
-    const config = statusConfig[status] || { color: 'bg-gray-500/20 text-gray-700', label: status };
+    const config = statusConfig[status] || { color: 'bg-[#B89555]/20 text-[#5A4A2E]', label: status };
     return <Badge className={`${config.color} border`}>{config.label}</Badge>;
   };
 
@@ -176,8 +176,8 @@ const EmployeeManagementHub: React.FC = () => {
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-gold" />
           </div>
-          <h1 className="text-3xl font-bold text-black mb-4">Access Restricted</h1>
-          <p className="text-gray-600 mb-8">
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">Access Restricted</h1>
+          <p className="text-[#5A4A2E] mb-8">
             This area is restricted to HR, IT Department personnel, and administrators.
           </p>
           <Button variant="primary" onClick={() => navigate('/crm')}>
@@ -196,7 +196,7 @@ const EmployeeManagementHub: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to="/crm">
-                <Button variant="ghost" size="sm" className="text-black hover:text-gold">
+                <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-gold">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to CRM
                 </Button>
@@ -207,8 +207,8 @@ const EmployeeManagementHub: React.FC = () => {
                   <Users className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Employee Management Hub</h1>
-                  <p className="text-sm text-gray-600">HR + IT Unified Onboarding & Audit System</p>
+                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Employee Management Hub</h1>
+                  <p className="text-sm text-[#5A4A2E]">HR + IT Unified Onboarding & Audit System</p>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Clock className="w-5 h-5 text-amber-600" />
                 <span className="text-2xl font-bold text-amber-700">{stats.pendingHR}</span>
               </div>
-              <p className="text-xs text-gray-600">Pending HR</p>
+              <p className="text-xs text-[#5A4A2E]">Pending HR</p>
             </CardContent>
           </Card>
 
@@ -245,7 +245,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Monitor className="w-5 h-5 text-purple-600" />
                 <span className="text-2xl font-bold text-purple-700">{stats.pendingIT}</span>
               </div>
-              <p className="text-xs text-gray-600">IT Queue</p>
+              <p className="text-xs text-[#5A4A2E]">IT Queue</p>
             </CardContent>
           </Card>
 
@@ -255,7 +255,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Zap className="w-5 h-5 text-blue-600" />
                 <span className="text-2xl font-bold text-blue-700">{stats.inProgress}</span>
               </div>
-              <p className="text-xs text-gray-600">In Progress</p>
+              <p className="text-xs text-[#5A4A2E]">In Progress</p>
             </CardContent>
           </Card>
 
@@ -265,7 +265,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <span className="text-2xl font-bold text-green-700">{stats.completedThisMonth}</span>
               </div>
-              <p className="text-xs text-gray-600">This Month</p>
+              <p className="text-xs text-[#5A4A2E]">This Month</p>
             </CardContent>
           </Card>
 
@@ -273,9 +273,9 @@ const EmployeeManagementHub: React.FC = () => {
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <Users className="w-5 h-5 text-gold" />
-                <span className="text-2xl font-bold text-black">{stats.activeEmployees}</span>
+                <span className="text-2xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</span>
               </div>
-              <p className="text-xs text-gray-600">Active Staff</p>
+              <p className="text-xs text-[#5A4A2E]">Active Staff</p>
             </CardContent>
           </Card>
 
@@ -285,7 +285,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <AlertCircle className="w-5 h-5 text-orange-600" />
                 <span className="text-2xl font-bold text-orange-700">{stats.onProbation}</span>
               </div>
-              <p className="text-xs text-gray-600">On Probation</p>
+              <p className="text-xs text-[#5A4A2E]">On Probation</p>
             </CardContent>
           </Card>
 
@@ -295,7 +295,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <TrendingUp className="w-5 h-5 text-cyan-600" />
                 <span className="text-2xl font-bold text-cyan-700">{stats.avgOnboardingDays}d</span>
               </div>
-              <p className="text-xs text-gray-600">Avg Onboard</p>
+              <p className="text-xs text-[#5A4A2E]">Avg Onboard</p>
             </CardContent>
           </Card>
         </div>
@@ -306,23 +306,23 @@ const EmployeeManagementHub: React.FC = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Applications
               </TabsTrigger>
-              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <Key className="w-4 h-4 mr-2" />
                 IT Provisioning
               </TabsTrigger>
-              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <Activity className="w-4 h-4 mr-2" />
                 Employee Journey
               </TabsTrigger>
-              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-[#1A1A1A]">
                 <Eye className="w-4 h-4 mr-2" />
                 Activity Audit
               </TabsTrigger>
@@ -335,7 +335,7 @@ const EmployeeManagementHub: React.FC = () => {
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black w-64 placeholder:text-gray-600"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] w-64 placeholder:text-[#5A4A2E]"
                 />
               </div>
             </div>
@@ -347,7 +347,7 @@ const EmployeeManagementHub: React.FC = () => {
               {/* Recent Activity */}
               <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Activity className="w-5 h-5 text-gold" />
                     Recent Onboarding Activity
                   </CardTitle>
@@ -358,27 +358,27 @@ const EmployeeManagementHub: React.FC = () => {
                       {recentActivity.map((item) => (
                         <div 
                           key={item.id}
-                          className="flex items-center justify-between p-3 rounded-lg bg-white/50 border border-gold/20"
+                          className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7]/50 border border-gold/20"
                         >
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
                               <UserCheck className="w-5 h-5 text-gold" />
                             </div>
                             <div>
-                              <p className="font-medium text-black">{item.full_name}</p>
-                              <p className="text-xs text-gray-600">{item.department}</p>
+                              <p className="font-medium text-[#1A1A1A]">{item.full_name}</p>
+                              <p className="text-xs text-[#5A4A2E]">{item.department}</p>
                             </div>
                           </div>
                           <div className="text-right">
                             {getStatusBadge(item.status)}
-                            <p className="text-xs text-gray-600 mt-1">
+                            <p className="text-xs text-[#5A4A2E] mt-1">
                               {new Date(item.updated_at).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
                       ))}
                       {recentActivity.length === 0 && (
-                        <p className="text-center text-gray-600 py-8">No recent activity</p>
+                        <p className="text-center text-[#5A4A2E] py-8">No recent activity</p>
                       )}
                     </div>
                   </ScrollArea>
@@ -388,7 +388,7 @@ const EmployeeManagementHub: React.FC = () => {
               {/* Quick Actions */}
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Zap className="w-5 h-5 text-gold" />
                     Quick Actions
                   </CardTitle>
@@ -432,11 +432,11 @@ const EmployeeManagementHub: React.FC = () => {
               {/* Onboarding Pipeline */}
               <Card className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
-                  <CardTitle className="text-black flex items-center gap-2">
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <Briefcase className="w-5 h-5 text-gold" />
                     Onboarding Pipeline
                   </CardTitle>
-                  <CardDescription className="text-gray-600">
+                  <CardDescription className="text-[#5A4A2E]">
                     Visual workflow from application to fully onboarded employee
                   </CardDescription>
                 </CardHeader>
@@ -454,7 +454,7 @@ const EmployeeManagementHub: React.FC = () => {
                           <div className={`w-12 h-12 mx-auto rounded-full ${stage.color} text-white flex items-center justify-center text-lg font-bold`}>
                             {stage.count}
                           </div>
-                          <p className="text-xs text-gray-600 mt-2">{stage.label}</p>
+                          <p className="text-xs text-[#5A4A2E] mt-2">{stage.label}</p>
                         </div>
                         {idx < 4 && (
                           <div className="w-8 h-0.5 bg-gold/30" />

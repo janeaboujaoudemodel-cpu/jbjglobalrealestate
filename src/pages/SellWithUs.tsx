@@ -147,7 +147,7 @@ const SellWithUs = () => {
           
           <div className="container mx-auto px-4 relative z-10">
             <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-4xl mx-auto text-center">
-              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 mb-8">
+              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-[#FDFBF7]/5 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 mb-8">
                 <Shield className="w-4 h-4 text-white/70" />
                 <span className="text-white/80 text-sm font-medium tracking-wide">DLD Licensed · RERA Certified · 2,700+ Properties</span>
               </motion.div>
@@ -160,7 +160,7 @@ const SellWithUs = () => {
                 <span className="text-white/85 text-4xl md:text-5xl lg:text-6xl">with Confidence</span>
               </motion.h1>
               
-              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-[#5A4A2E] mb-10 max-w-2xl mx-auto leading-relaxed">
                 Pricing accuracy, qualified demand, and structured execution — handled by a licensed brokerage team in Dubai.
               </motion.p>
               
@@ -168,7 +168,7 @@ const SellWithUs = () => {
                 <Button 
                   size="lg" 
                   onClick={() => scrollTo(valuationRef)}
-                  className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-6 text-base rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)]"
+                  className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] font-semibold px-8 py-6 text-base rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)]"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
                   Get Instant AI Valuation
@@ -177,7 +177,7 @@ const SellWithUs = () => {
                   size="lg" 
                   variant="outline"
                   onClick={() => scrollTo(listingRef)}
-                  className="border-white/20 text-white hover:bg-white/5 font-medium px-8 py-6 text-base rounded-xl backdrop-blur-sm"
+                  className="border-white/20 text-white hover:bg-[#FDFBF7]/5 font-medium px-8 py-6 text-base rounded-xl backdrop-blur-sm"
                 >
                   List Your Property
                   <ArrowDown className="ml-2 h-5 w-5" />
@@ -194,7 +194,7 @@ const SellWithUs = () => {
               <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-white mb-6">
                 A Selling Process Built for Clarity
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-lg text-gray-600 leading-relaxed">
+              <motion.p variants={fadeInUp} className="text-lg text-[#5A4A2E] leading-relaxed">
                 Selling isn't only about listing a property — it's about pricing correctly, positioning the asset, 
                 qualifying buyers, and coordinating from offer to transfer. Our role is to manage the process 
                 professionally and transparently.
@@ -215,13 +215,13 @@ const SellWithUs = () => {
                   <motion.div
                     key={index}
                     variants={fadeInUp}
-                    className="group p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.06] hover:scale-[1.02] hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.05)] transition-all duration-500"
+                    className="group p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08] hover:border-white/20 hover:bg-[#FDFBF7]/[0.06] hover:scale-[1.02] hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.05)] transition-all duration-500"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-white/10 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-[#FDFBF7]/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-[#FDFBF7]/10 transition-colors">
                       <card.icon className="w-6 h-6 text-white/90 group-hover:text-white transition-colors" />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">{card.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{card.description}</p>
+                    <p className="text-[#5A4A2E] leading-relaxed">{card.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -250,12 +250,12 @@ const SellWithUs = () => {
                     </div>
                     {/* Content */}
                     <div className="pb-10">
-                      <div className="p-5 rounded-xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all duration-300">
+                      <div className="p-5 rounded-xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08] hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.03)] transition-all duration-300">
                         <div className="flex items-center gap-3 mb-2">
                           <step.icon className="w-5 h-5 text-white/90" />
                           <h3 className="text-lg font-semibold text-white">{step.title}</h3>
                         </div>
-                        <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                        <p className="text-[#5A4A2E] text-sm leading-relaxed">{step.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -275,22 +275,22 @@ const SellWithUs = () => {
                   <span className="text-blue-300 text-sm font-medium">AI-Powered</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Instant Property Valuation</h2>
-                <p className="text-gray-600">Get an estimated market value based on DLD data and comparable transactions</p>
+                <p className="text-[#5A4A2E]">Get an estimated market value based on DLD data and comparable transactions</p>
               </motion.div>
 
-              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08]">
+              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08]">
                 {!valResult ? (
                   <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-400" />
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Community *</Label>
+                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E] focus:border-blue-400" />
                       </div>
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Property Type</Label>
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Property Type</Label>
                         <Select value={valType} onValueChange={setValType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-gray-700">
+                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
                             <SelectItem value="studio" className="text-white">Studio</SelectItem>
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="penthouse" className="text-white">Penthouse</SelectItem>
@@ -302,14 +302,14 @@ const SellWithUs = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Size (sq ft) *</Label>
-                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-400" />
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Size (sq ft) *</Label>
+                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E] focus:border-blue-400" />
                       </div>
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Bedrooms</Label>
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Bedrooms</Label>
                         <Select value={valBedrooms} onValueChange={setValBedrooms}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-gray-700">
+                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
                             {['0', '1', '2', '3', '4', '5'].map(b => (
                               <SelectItem key={b} value={b} className="text-white">{b === '0' ? 'Studio' : `${b} BR`}</SelectItem>
                             ))}
@@ -320,33 +320,33 @@ const SellWithUs = () => {
                     <Button onClick={handleQuickValuation} disabled={isValuating} className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-6 rounded-xl">
                       {isValuating ? <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Analyzing...</> : <><Search className="w-4 h-4 mr-2" />Get Instant Valuation</>}
                     </Button>
-                    <p className="text-xs text-gray-600 text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
+                    <p className="text-xs text-[#5A4A2E] text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
                   </div>
                 ) : (
                   <div className="text-center space-y-5">
                     <p className="text-blue-400 text-sm uppercase tracking-wider">Estimated Market Value</p>
                     <div className="space-y-1">
                       <div className="flex items-center justify-center gap-3">
-                        <span className="text-xl text-gray-600">AED {valResult.estimatedValue?.low?.toLocaleString()}</span>
-                        <span className="text-gray-700">—</span>
+                        <span className="text-xl text-[#5A4A2E]">AED {valResult.estimatedValue?.low?.toLocaleString()}</span>
+                        <span className="text-[#5A4A2E]">—</span>
                         <span className="text-4xl font-bold text-white">AED {valResult.estimatedValue?.mid?.toLocaleString()}</span>
-                        <span className="text-gray-700">—</span>
-                        <span className="text-xl text-gray-600">AED {valResult.estimatedValue?.high?.toLocaleString()}</span>
+                        <span className="text-[#5A4A2E]">—</span>
+                        <span className="text-xl text-[#5A4A2E]">AED {valResult.estimatedValue?.high?.toLocaleString()}</span>
                       </div>
-                      <p className="text-gray-600 text-sm">AED {valResult.estimatedValue?.pricePerSqFt?.toLocaleString()} per sq ft</p>
+                      <p className="text-[#5A4A2E] text-sm">AED {valResult.estimatedValue?.pricePerSqFt?.toLocaleString()} per sq ft</p>
                     </div>
-                    <p className="text-sm text-gray-600 leading-relaxed max-w-lg mx-auto">{valResult.marketInsights}</p>
+                    <p className="text-sm text-[#5A4A2E] leading-relaxed max-w-lg mx-auto">{valResult.marketInsights}</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                      <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl">
+                      <Button asChild className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] font-medium rounded-xl">
                         <Link to="/property-evaluator">
                           Get Detailed Report <ChevronRight className="w-4 h-4 ml-1" />
                         </Link>
                       </Button>
-                      <Button variant="outline" onClick={() => setValResult(null)} className="border-white/20 text-white hover:bg-white/5 rounded-xl">
+                      <Button variant="outline" onClick={() => setValResult(null)} className="border-white/20 text-white hover:bg-[#FDFBF7]/5 rounded-xl">
                         Try Another Property
                       </Button>
                     </div>
-                    {valResult.sources && <p className="text-xs text-gray-600">{valResult.sources}</p>}
+                    {valResult.sources && <p className="text-xs text-[#5A4A2E]">{valResult.sources}</p>}
                   </div>
                 )}
               </motion.div>
@@ -360,28 +360,28 @@ const SellWithUs = () => {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-3xl mx-auto">
               <motion.div variants={fadeInUp} className="text-center mb-10">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">List Your Property</h2>
-                <p className="text-gray-600">Submit your details and our team will handle the rest</p>
+                <p className="text-[#5A4A2E]">Submit your details and our team will handle the rest</p>
               </motion.div>
 
-              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08]">
+              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08]">
                 {!listSubmitted ? (
                   <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Full Name</Label>
-                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Full Name</Label>
+                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E]" />
                       </div>
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Phone Number *</Label>
-                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Phone Number *</Label>
+                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E]" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Property Type *</Label>
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Property Type *</Label>
                         <Select value={listType} onValueChange={setListType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue placeholder="Select type" /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-gray-700">
+                          <SelectContent className="bg-zinc-900 border-[#1A1A1A]">
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="villa" className="text-white">Villa</SelectItem>
                             <SelectItem value="townhouse" className="text-white">Townhouse</SelectItem>
@@ -391,18 +391,18 @@ const SellWithUs = () => {
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-gray-600 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
+                        <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Community *</Label>
+                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E]" />
                       </div>
                     </div>
                     <div>
-                      <Label className="text-gray-600 text-sm mb-1.5 block">Email (optional)</Label>
-                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
+                      <Label className="text-[#5A4A2E] text-sm mb-1.5 block">Email (optional)</Label>
+                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-[#5A4A2E]" />
                     </div>
-                    <Button onClick={handleListingSubmit} className="w-full bg-white text-black hover:bg-gray-100 font-semibold py-6 rounded-xl">
+                    <Button onClick={handleListingSubmit} className="w-full bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] font-semibold py-6 rounded-xl">
                       Submit Listing Request <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                    <p className="text-xs text-gray-600 text-center">
+                    <p className="text-xs text-[#5A4A2E] text-center">
                       Want to add photos and full details? <Link to="/listing-portal" className="text-white/70 hover:text-white underline">Go to Full Listing Portal</Link>
                     </p>
                   </div>
@@ -412,11 +412,11 @@ const SellWithUs = () => {
                       <CheckCircle className="w-8 h-8 text-emerald-400" />
                     </div>
                     <h3 className="text-2xl font-bold text-white">Request Submitted</h3>
-                    <p className="text-gray-600 max-w-md mx-auto">
+                    <p className="text-[#5A4A2E] max-w-md mx-auto">
                       Our selling advisor will contact you within 24 hours to discuss your property and next steps.
                     </p>
                     <div className="flex gap-3 justify-center pt-2">
-                      <Button asChild variant="outline" className="border-white/20 text-white hover:bg-white/5 rounded-xl">
+                      <Button asChild variant="outline" className="border-white/20 text-white hover:bg-[#FDFBF7]/5 rounded-xl">
                         <a href={getWhatsAppUrl("Hi, I just submitted a listing request on your website.")} target="_blank" rel="noopener noreferrer">
                           <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Us Now
                         </a>
@@ -436,14 +436,14 @@ const SellWithUs = () => {
               <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
                 What We'll Ask You For
               </motion.h2>
-              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08]">
+              <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08]">
                 <ul className="space-y-4">
                   {documentChecklist.map((item, index) => (
                     <li key={index} className="flex items-center gap-4 group">
-                      <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/10 transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-[#FDFBF7]/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#FDFBF7]/10 transition-colors">
                         <CheckCircle className="w-4 h-4 text-white/90 group-hover:text-white transition-colors" />
                       </div>
-                      <span className="text-gray-600 group-hover:text-white transition-colors">{item}</span>
+                      <span className="text-[#5A4A2E] group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -457,20 +457,20 @@ const SellWithUs = () => {
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-2 gap-6">
-                <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
+                <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08] text-center">
                   <MessageCircle className="w-10 h-10 text-white/85 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Speak to a Selling Advisor</h3>
-                  <p className="text-gray-600 text-sm mb-6">Get personalized guidance from our licensed team</p>
-                  <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl w-full">
+                  <p className="text-[#5A4A2E] text-sm mb-6">Get personalized guidance from our licensed team</p>
+                  <Button asChild className="bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] font-medium rounded-xl w-full">
                     <a href={getWhatsAppUrl("Hello, I'd like to speak with a Selling Advisor.")} target="_blank" rel="noopener noreferrer">
                       <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Us
                     </a>
                   </Button>
                 </motion.div>
-                <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
+                <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-[#FDFBF7]/[0.03] border border-white/[0.08] text-center">
                   <Sparkles className="w-10 h-10 text-white/85 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Get Started Now</h3>
-                  <p className="text-gray-600 text-sm mb-6">Use our AI tools to get an instant valuation</p>
+                  <p className="text-[#5A4A2E] text-sm mb-6">Use our AI tools to get an instant valuation</p>
                   <Button onClick={() => scrollTo(valuationRef)} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-xl w-full">
                     <Sparkles className="mr-2 h-4 w-4" /> AI Valuation
                   </Button>

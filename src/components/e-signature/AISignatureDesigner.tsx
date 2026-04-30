@@ -336,7 +336,7 @@ export default function AISignatureDesigner() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Enter your full name for signature"
-              className="bg-white/80 border-[hsl(var(--gold)/.2)] focus:border-[hsl(var(--gold))]"
+              className="bg-[#FDFBF7]/80 border-[hsl(var(--gold)/.2)] focus:border-[hsl(var(--gold))]"
             />
           </div>
 
@@ -488,7 +488,7 @@ export default function AISignatureDesigner() {
             </Button>
             {uploadedSignature && (
               <div className="space-y-3">
-                <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-white flex items-center justify-center">
+                <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-[#FDFBF7] flex items-center justify-center">
                   <img src={uploadedSignature} alt="Uploaded signature" className="max-h-24 object-contain" />
                 </div>
                 <Button
@@ -522,7 +522,7 @@ export default function AISignatureDesigner() {
             </Button>
             {uploadedStamp && (
               <div className="space-y-3">
-                <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-white flex items-center justify-center">
+                <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-[#FDFBF7] flex items-center justify-center">
                   <img src={uploadedStamp} alt="Uploaded stamp" className="max-h-24 object-contain" />
                 </div>
                 <Button
@@ -550,7 +550,7 @@ export default function AISignatureDesigner() {
             {favoriteSaved.map((sig) => (
               <Card key={sig.id} className="border border-[hsl(var(--gold)/.3)]">
                 <CardContent className="p-3 space-y-2">
-                  <div className="bg-white rounded-lg p-3 flex items-center justify-center min-h-[60px]">
+                  <div className="bg-[#FDFBF7] rounded-lg p-3 flex items-center justify-center min-h-[60px]">
                     <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain" />
                   </div>
                   <div className="flex items-center justify-between">
@@ -576,7 +576,7 @@ export default function AISignatureDesigner() {
             {savedSignatures.map((sig) => (
               <Card key={sig.id} className="border border-border">
                 <CardContent className="p-3 space-y-2">
-                  <div className="bg-white rounded-lg p-3 flex items-center justify-center min-h-[60px]">
+                  <div className="bg-[#FDFBF7] rounded-lg p-3 flex items-center justify-center min-h-[60px]">
                     <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain" />
                   </div>
                   <div className="flex items-center justify-between">

@@ -225,10 +225,10 @@ const ExploreServicesCard = () => {
     <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
       {/* Header */}
       <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-        <h3 className="text-2xl md:text-3xl font-bold text-black">
+        <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
           Explore Our Services
         </h3>
-        <p className="text-sm md:text-base text-gray-600 mt-1">Premium real estate solutions tailored to your needs</p>
+        <p className="text-sm md:text-base text-[#5A4A2E] mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
       {/* Slideshow - Persistent image stack (no AnimatePresence) */}
@@ -279,21 +279,21 @@ const ExploreServicesCard = () => {
             {currentService.available ? (
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Link to={currentService.href}>
-                  <Button variant="default" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base bg-white text-black font-bold hover:bg-gray-100 border border-gray-200 shadow-lg">
+                  <Button variant="default" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base bg-[#FDFBF7] text-[#1A1A1A] font-bold hover:bg-[#F7F2EA] border border-[#B89555]/30 shadow-lg">
                     <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                    <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 {currentService.id === "golden-visa" && (
                   <Link to="/guides/golden-visa-uae">
-                    <Button variant="outline" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg border-white/40 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:border-white/60 text-sm sm:text-base font-medium tracking-wide">
+                    <Button variant="outline" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg border-white/40 bg-[#FDFBF7]/10 backdrop-blur-sm text-white hover:bg-[#FDFBF7]/20 hover:border-white/60 text-sm sm:text-base font-medium tracking-wide">
                       Read Guide
                     </Button>
                   </Link>
                 )}
               </div>
             ) : (
-              <Button variant="default" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm bg-gray-200 text-gray-600 border border-gray-300 cursor-not-allowed">
+              <Button variant="default" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm bg-[#EFE6D6] text-[#5A4A2E] border border-[#B89555]/30 cursor-not-allowed">
                 {CTA_LABELS[currentService.id] ?? "Coming Soon"}
               </Button>
             )}

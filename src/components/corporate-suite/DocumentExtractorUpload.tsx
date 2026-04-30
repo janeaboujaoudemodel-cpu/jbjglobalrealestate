@@ -109,7 +109,7 @@ export function DocumentExtractorUpload({ extractionType, onExtracted, label, hi
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors duration-200 hover:border-[hsl(var(--gold))]">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden transition-colors duration-200 hover:border-[hsl(var(--gold))]">
         {/* Header trigger */}
         <CollapsibleTrigger asChild>
           <button className="w-full flex items-center justify-between px-4 py-3 group">
@@ -193,7 +193,7 @@ export function DocumentExtractorUpload({ extractionType, onExtracted, label, hi
                 onClick={extract}
                 disabled={loading}
                 size="sm"
-                className="w-full h-8 text-[11px] bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-black font-semibold gap-1.5"
+                className="w-full h-8 text-[11px] bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.85)] text-[#1A1A1A] font-semibold gap-1.5"
               >
                 {loading ? (
                   <>

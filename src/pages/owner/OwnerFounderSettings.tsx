@@ -18,8 +18,8 @@ const OwnerFounderSettings = () => {
             <User className="w-5 h-5 text-[#B89555]" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-black">Founder & Podcast Controls</h1>
-            <p className="text-sm text-gray-600">Manage visibility toggles and podcast recording studio</p>
+            <h1 className="text-xl font-bold text-[#1A1A1A]">Founder & Podcast Controls</h1>
+            <p className="text-sm text-[#5A4A2E]">Manage visibility toggles and podcast recording studio</p>
           </div>
         </div>
       </div>
@@ -33,7 +33,7 @@ const OwnerFounderSettings = () => {
       {/* Podcast Studio Quick Access */}
       <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-sm">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-bold text-black flex items-center gap-2.5">
+          <CardTitle className="text-base font-bold text-[#1A1A1A] flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#B89555]/15 flex items-center justify-center">
               <Headphones className="w-4 h-4 text-[#B89555]" />
             </div>
@@ -41,7 +41,7 @@ const OwnerFounderSettings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A4A2E]">
             Record, edit, and manage podcast episodes with integrated voice synthesis. Choose from premium voices, accents, and languages for professional audio production.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -57,7 +57,7 @@ const OwnerFounderSettings = () => {
           </div>
           <Button 
             onClick={() => navigate("/owner/podcast-studio")}
-            className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#B89555]/20"
+            className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold shadow-lg shadow-[#B89555]/20"
           >
             <Headphones className="w-4 h-4 mr-2" />
             Open Podcast Studio
@@ -67,54 +67,54 @@ const OwnerFounderSettings = () => {
 
       {/* Info Section */}
       <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6 space-y-5 shadow-sm">
-        <h3 className="text-base font-bold text-black flex items-center gap-2.5">
+        <h3 className="text-base font-bold text-[#1A1A1A] flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-[#B89555]/15 flex items-center justify-center">
             <Info className="w-4 h-4 text-[#B89555]" />
           </div>
           About These Controls
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="rounded-lg border border-[#B89555]/20 bg-white/60 p-4 space-y-3">
+          <div className="rounded-lg border border-[#B89555]/20 bg-[#FDFBF7]/60 p-4 space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-md bg-[#B89555]/10 flex items-center justify-center">
                 <User className="w-3.5 h-3.5 text-[#B89555]" />
               </div>
-              <span className="font-semibold text-black text-sm">Founder Visibility</span>
+              <span className="font-semibold text-[#1A1A1A] text-sm">Founder Visibility</span>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-[#5A4A2E] leading-relaxed">
               Controls all founder-related content across the website including biography, headshots, video footage, Press Kit page, and Company Profile page. The Digital Business Card remains always visible.
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
               <Eye className="w-3.5 h-3.5" />
               <span>Affects: Homepage, About, Press Kit, Company Profile</span>
             </div>
           </div>
-          <div className="rounded-lg border border-[#B89555]/20 bg-white/60 p-4 space-y-3">
+          <div className="rounded-lg border border-[#B89555]/20 bg-[#FDFBF7]/60 p-4 space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-md bg-[#B89555]/10 flex items-center justify-center">
                 <Radio className="w-3.5 h-3.5 text-[#B89555]" />
               </div>
-              <span className="font-semibold text-black text-sm">Podcast Visibility</span>
+              <span className="font-semibold text-[#1A1A1A] text-sm">Podcast Visibility</span>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-[#5A4A2E] leading-relaxed">
               Controls the JBJ Podcast section on the homepage. When hidden, only the owner can see it for testing purposes. Toggle to public when ready to launch episodes to all visitors.
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
               <EyeOff className="w-3.5 h-3.5" />
               <span>Owner-only preview mode available when hidden</span>
             </div>
           </div>
-          <div className="rounded-lg border border-[#B89555]/20 bg-white/60 p-4 space-y-3">
+          <div className="rounded-lg border border-[#B89555]/20 bg-[#FDFBF7]/60 p-4 space-y-3">
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-md bg-[#B89555]/10 flex items-center justify-center">
                 <Headphones className="w-3.5 h-3.5 text-[#B89555]" />
               </div>
-              <span className="font-semibold text-black text-sm">Podcast Studio</span>
+              <span className="font-semibold text-[#1A1A1A] text-sm">Podcast Studio</span>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-sm text-[#5A4A2E] leading-relaxed">
               Access the full podcast recording studio with ElevenLabs voice integration. Record episodes, choose voices, control accents, and manage your podcast production workflow.
             </p>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
               <Mic className="w-3.5 h-3.5" />
               <span>Integrated with ElevenLabs voice API</span>
             </div>

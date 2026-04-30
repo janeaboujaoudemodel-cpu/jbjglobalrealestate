@@ -168,7 +168,7 @@ export default function ProjectLocationMap({
           className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
           onClick={() => setScrollZoomEnabled(true)}
         >
-          <div className="bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
+          <div className="bg-[#1A1A1A]/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
             <MousePointer className="w-4 h-4" />
             {t('map.clickToEnable')}
           </div>

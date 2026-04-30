@@ -125,10 +125,10 @@ export const ShortlistRequestForm = ({
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2">
+        <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#5A4A2E]">
           Our team will curate a personalized shortlist and reach out within 24 hours.
         </p>
       </motion.div>
@@ -148,10 +148,10 @@ export const ShortlistRequestForm = ({
           <Sparkles className="w-3 h-3" />
           {transactionType === 'buy' ? 'Property Shortlist' : 'Rental Shortlist'}
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-black">
+        <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
           Get a <span className="text-gold">Curated Shortlist</span>
         </h3>
-        <p className="text-gray-600 text-sm mt-2">
+        <p className="text-[#5A4A2E] text-sm mt-2">
           Tell us what you're looking for and we'll send you matching properties.
         </p>
       </div>
@@ -162,7 +162,7 @@ export const ShortlistRequestForm = ({
           placeholder="Full Name *"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-600"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           required
         />
         
@@ -171,7 +171,7 @@ export const ShortlistRequestForm = ({
           placeholder="Phone Number *"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-600"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           required
         />
 
@@ -180,13 +180,13 @@ export const ShortlistRequestForm = ({
             placeholder={transactionType === 'buy' ? 'Budget (AED)' : 'Max Rent (AED)'}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-600"
+            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           />
           <Input
             placeholder="Bedrooms (e.g. 2-3)"
             value={formData.bedrooms}
             onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-            className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-600"
+            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
           />
         </div>
 
@@ -194,19 +194,19 @@ export const ShortlistRequestForm = ({
           placeholder="Preferred Areas (e.g. Downtown, Marina)"
           value={formData.preferredAreas}
           onChange={(e) => setFormData({ ...formData, preferredAreas: e.target.value })}
-          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-600"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
         />
 
         <Select
           value={formData.timeline}
           onValueChange={(value) => setFormData({ ...formData, timeline: value as LeadTimeline })}
         >
-          <SelectTrigger className="h-12 bg-white border-gray-300 text-gray-600">
+          <SelectTrigger className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#5A4A2E]">
             <SelectValue placeholder={transactionType === 'buy' ? 'When do you want to buy?' : 'When do you need to move?'} />
           </SelectTrigger>
-          <SelectContent className="bg-white border-gray-200">
+          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
             {TIMELINE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10">
+              <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10">
                 {opt.label}
               </SelectItem>
             ))}
@@ -220,9 +220,9 @@ export const ShortlistRequestForm = ({
               id="privacy"
               checked={formData.privacyAccepted}
               onCheckedChange={(checked) => setFormData({ ...formData, privacyAccepted: !!checked })}
-              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
-            <label htmlFor="privacy" className="text-black text-sm leading-tight">
+            <label htmlFor="privacy" className="text-[#1A1A1A] text-sm leading-tight">
               I agree to the <a href="/privacy" className="text-gold underline">Privacy Policy</a> *
             </label>
           </div>
@@ -231,9 +231,9 @@ export const ShortlistRequestForm = ({
               id="marketing"
               checked={formData.marketingOptIn}
               onCheckedChange={(checked) => setFormData({ ...formData, marketingOptIn: !!checked })}
-              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
-            <label htmlFor="marketing" className="text-black text-sm leading-tight">
+            <label htmlFor="marketing" className="text-[#1A1A1A] text-sm leading-tight">
               Send me property updates and market insights
             </label>
           </div>
@@ -251,15 +251,15 @@ export const ShortlistRequestForm = ({
           }}
         >
           {isSubmitting ? (
-            <span className="flex items-center gap-2 text-black">
+            <span className="flex items-center gap-2 text-[#1A1A1A]">
               <Loader2 className="w-5 h-5 animate-spin" />
               Submitting...
             </span>
           ) : (
             <span className="flex items-center gap-2">
-              <span className="text-black group-hover:text-gold transition-colors">Request</span>
-              <span className="text-gold group-hover:text-black transition-colors">Shortlist</span>
-              <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+              <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Request</span>
+              <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Shortlist</span>
+              <Send className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" />
             </span>
           )}
         </Button>

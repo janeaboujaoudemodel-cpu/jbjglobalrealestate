@@ -458,7 +458,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                             className="w-full flex items-center gap-2 px-2.5 py-2 text-left group"
                           >
                             <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                              isPlaying ? 'bg-amber-500 text-black' : 'bg-slate-700 text-slate-300 group-hover:bg-amber-500/20 group-hover:text-amber-400'
+                              isPlaying ? 'bg-amber-500 text-[#1A1A1A]' : 'bg-slate-700 text-slate-300 group-hover:bg-amber-500/20 group-hover:text-amber-400'
                             }`}>
                               {isPlaying
                                 ? <Square className="w-2.5 h-2.5 fill-current" />
@@ -473,7 +473,7 @@ export function SoundEffectsPanel({ onAddToTimeline }: SoundEffectsPanelProps) {
                           {/* Add button */}
                           <button
                             onClick={() => handleAdd(preset)}
-                            className="w-full flex items-center justify-center gap-1 py-1 bg-slate-700/60 hover:bg-amber-500 hover:text-black text-slate-400 text-[9px] font-bold transition-all border-t border-slate-700/60"
+                            className="w-full flex items-center justify-center gap-1 py-1 bg-slate-700/60 hover:bg-amber-500 hover:text-[#1A1A1A] text-slate-400 text-[9px] font-bold transition-all border-t border-slate-700/60"
                           >
                             <Plus className="w-2.5 h-2.5" />
                             Add to Timeline

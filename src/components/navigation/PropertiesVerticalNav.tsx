@@ -102,7 +102,7 @@ export default function PropertiesVerticalNav() {
       <>
         {/* Backdrop */}
         <div
-          className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] bg-[#1A1A1A]/30 backdrop-blur-sm"
           style={{ left: '200px' }}
           onClick={closeMegaMenu}
         />
@@ -124,7 +124,7 @@ export default function PropertiesVerticalNav() {
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-black/80 hover:bg-gold/10 hover:text-black transition-all"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1A1A1A]/80 hover:bg-gold/10 hover:text-[#1A1A1A] transition-all"
                   >
                     <Icon className="w-4 h-4 text-gold flex-shrink-0" />
                     <span>{link.label}</span>
@@ -148,7 +148,7 @@ export default function PropertiesVerticalNav() {
         <Link to="/" className="p-4 border-b border-gold/20 flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
           <div className="flex flex-col">
-            <span className="text-[11px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
+            <span className="text-[11px] font-bold text-[#1A1A1A] tracking-wide leading-tight">JBJ GLOBAL</span>
             <span className="text-[11px] font-bold text-gold tracking-wide leading-tight">REAL ESTATE</span>
           </div>
         </Link>
@@ -174,14 +174,14 @@ export default function PropertiesVerticalNav() {
                   }}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
                     isActive || isMenuOpen
-                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-black border border-gold/40 font-bold"
-                      : "text-black/70 hover:bg-white/60 hover:text-black"
+                      ? "bg-gradient-to-r from-gold/20 to-gold/10 text-[#1A1A1A] border border-gold/40 font-bold"
+                      : "text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A]"
                   }`}
                 >
-                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive || isMenuOpen ? "text-gold" : "text-black/50"}`} />
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive || isMenuOpen ? "text-gold" : "text-[#1A1A1A]/50"}`} />
                   <span className="flex-1">{item.label}</span>
                   {hasMegaMenu && (
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-[#1A1A1A]/30"}`} />
                   )}
                 </Link>
               </div>
@@ -193,9 +193,9 @@ export default function PropertiesVerticalNav() {
         <div className="px-3 py-2 border-t border-gold/20 space-y-1">
           <button
             onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-black/70 hover:bg-white/60 hover:text-black transition-all w-full"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A] transition-all w-full"
           >
-            <Search className="w-4 h-4 text-black/50" />
+            <Search className="w-4 h-4 text-[#1A1A1A]/50" />
             Search
           </button>
           <div className="flex items-center gap-1 px-1">
@@ -204,16 +204,16 @@ export default function PropertiesVerticalNav() {
           </div>
           <Link
             to="/my-dashboard"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-black/70 hover:bg-white/60 hover:text-black transition-all"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A] transition-all"
           >
-            <User className="w-4 h-4 text-black/50" />
+            <User className="w-4 h-4 text-[#1A1A1A]/50" />
             Dashboard
           </Link>
           <Link
             to="/profile"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-black/70 hover:bg-white/60 hover:text-black transition-all"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium text-[#1A1A1A]/70 hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A] transition-all"
           >
-            <Settings className="w-4 h-4 text-black/50" />
+            <Settings className="w-4 h-4 text-[#1A1A1A]/50" />
             Settings
           </Link>
         </div>
@@ -222,14 +222,14 @@ export default function PropertiesVerticalNav() {
         <div className="p-4 border-t border-gold/20 space-y-2">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2 text-sm font-bold text-black hover:text-red-700 transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-[#1A1A1A] hover:text-red-700 transition-colors"
           >
             <Headphones className="w-4 h-4 text-red-600" strokeWidth={2.5} />
             Contact Support
           </a>
           <a
             href="/support"
-            className="text-xs font-semibold text-black/80 hover:text-red-700 transition-colors block pl-6"
+            className="text-xs font-semibold text-[#1A1A1A]/80 hover:text-red-700 transition-colors block pl-6"
           >
             Raise a Support Ticket
           </a>

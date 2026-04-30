@@ -290,19 +290,19 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
       {/* Sub-tabs */}
       <Tabs value={subTab} onValueChange={setSubTab}>
         <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
-          <TabsTrigger value="calendar" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+          <TabsTrigger value="calendar" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <Calendar className="w-4 h-4 mr-1" /> Briefings
           </TabsTrigger>
-          <TabsTrigger value="attendance" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+          <TabsTrigger value="attendance" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <Eye className="w-4 h-4 mr-1" /> Attendance
           </TabsTrigger>
-          <TabsTrigger value="broker-lists" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+          <TabsTrigger value="broker-lists" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <Users className="w-4 h-4 mr-1" /> Broker Lists
           </TabsTrigger>
-          <TabsTrigger value="leaderboard" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+          <TabsTrigger value="leaderboard" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <Trophy className="w-4 h-4 mr-1" /> Rep Leaderboard
           </TabsTrigger>
-          <TabsTrigger value="whatsapp" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+          <TabsTrigger value="whatsapp" className="data-[state=active]:bg-[#FDFBF7] data-[state=active]:shadow-md">
             <MessageCircle className="w-4 h-4 mr-1" /> WhatsApp Log
           </TabsTrigger>
         </TabsList>
@@ -316,7 +316,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                 placeholder="Search briefings..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-white border-gold/20"
+                className="pl-10 bg-[#FDFBF7] border-gold/20"
               />
             </div>
             <div className="flex gap-2">
@@ -432,7 +432,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
         <TabsContent value="broker-lists" className="mt-4 space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-foreground font-semibold">Broker Notification Lists</h3>
-            <Button onClick={() => setListDialogOpen(true)} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={() => setListDialogOpen(true)} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" /> New List
             </Button>
           </div>
@@ -563,7 +563,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                     Generate AI Summary
                   </Button>
                   {aiSummary && (
-                    <div className="mt-3 p-4 rounded-xl bg-white/80 border border-gold/20 text-sm whitespace-pre-wrap">
+                    <div className="mt-3 p-4 rounded-xl bg-[#FDFBF7]/80 border border-gold/20 text-sm whitespace-pre-wrap">
                       {aiSummary}
                     </div>
                   )}
@@ -580,7 +580,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                       size="sm"
                       variant={selectedBriefing.broker_list_id === list.id ? 'default' : 'outline'}
                       onClick={() => handleAssignList(selectedBriefing.id, list.id)}
-                      className={selectedBriefing.broker_list_id === list.id ? 'bg-gold text-black' : 'border-gold/30 text-foreground'}
+                      className={selectedBriefing.broker_list_id === list.id ? 'bg-gold text-[#1A1A1A]' : 'border-gold/30 text-foreground'}
                     >
                       {list.name} ({list.broker_ids?.length || 0})
                     </Button>
@@ -594,7 +594,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
                   <Label className="text-muted-foreground mb-2 block">Attendance ({getBriefingAttendance(selectedBriefing.id).length})</Label>
                   <div className="space-y-2">
                     {getBriefingAttendance(selectedBriefing.id).map(a => (
-                      <div key={a.id} className="flex items-center justify-between p-3 bg-white/60 rounded-lg border border-gold/15">
+                      <div key={a.id} className="flex items-center justify-between p-3 bg-[#FDFBF7]/60 rounded-lg border border-gold/15">
                         <div className="flex items-center gap-3">
                           <Badge className={a.confirmed_attended ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'}>
                             {a.confirmed_attended ? '✓' : '○'}
@@ -626,16 +626,16 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           <div className="space-y-4">
             <div>
               <Label>List Name *</Label>
-              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-white border-gold/20" />
+              <Input value={newListName} onChange={(e) => setNewListName(e.target.value)} placeholder="e.g. Core Briefing Team" className="bg-[#FDFBF7] border-gold/20" />
             </div>
             <div>
               <Label>Description</Label>
-              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-white border-gold/20" />
+              <Input value={newListDesc} onChange={(e) => setNewListDesc(e.target.value)} placeholder="Optional description" className="bg-[#FDFBF7] border-gold/20" />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setListDialogOpen(false)} className="border-gold/30">Cancel</Button>
-            <Button onClick={handleCreateList} className="bg-gold text-black hover:bg-gold/90">Create List</Button>
+            <Button onClick={handleCreateList} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">Create List</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -690,14 +690,14 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label>Representative</Label>
-          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-foreground">
+          <select value={selectedRep} onChange={(e) => setSelectedRep(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
             <option value="">Select rep...</option>
             {reps.map(r => <option key={r.id} value={r.id}>{r.full_name} — {r.developer_name}</option>)}
           </select>
         </div>
         <div>
           <Label>Activity Type</Label>
-          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-foreground">
+          <select value={activityType} onChange={(e) => setActivityType(e.target.value)} className="flex h-10 w-full rounded-md border border-gold/20 bg-[#FDFBF7] px-3 py-2 text-sm text-foreground">
             <option value="whatsapp_message">Message Sent</option>
             <option value="whatsapp_response">Response Received</option>
           </select>
@@ -706,12 +706,12 @@ const WhatsAppLogger = ({ reps, onLog }: { reps: RepActivity[]; onLog: () => voi
       {activityType === 'whatsapp_response' && (
         <div>
           <Label>Response Time (minutes)</Label>
-          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-white border-gold/20" />
+          <Input type="number" value={responseMinutes} onChange={(e) => setResponseMinutes(e.target.value)} placeholder="e.g. 15" className="bg-[#FDFBF7] border-gold/20" />
         </div>
       )}
       <div>
         <Label>Description</Label>
-        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-white border-gold/20" />
+        <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief note about the activity" className="bg-[#FDFBF7] border-gold/20" />
       </div>
       <Button onClick={handleLog} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700 text-white">
         {submitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <MessageCircle className="w-4 h-4 mr-2" />}

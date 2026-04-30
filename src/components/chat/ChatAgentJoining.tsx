@@ -44,7 +44,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           className="text-center mb-8"
         >
           <h3 className="text-gold text-lg font-semibold">JBJ GLOBAL REAL ESTATE</h3>
-          <p className="text-gray-600 text-sm"><T>Chat Support</T></p>
+          <p className="text-[#5A4A2E] text-sm"><T>Chat Support</T></p>
         </motion.div>
 
         {/* Status Message */}
@@ -61,7 +61,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-black/70 text-sm"
+                className="text-[#1A1A1A]/70 text-sm"
               >
                 <T>Connecting you to one of our realty members...</T>
               </motion.p>
@@ -115,7 +115,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
               stage === 'connecting' ? 'bg-gold/20' : 'bg-emerald-500'
             } transition-colors duration-500 border-2 border-gold/40`}>
               {stage === 'connecting' ? (
-                <Loader2 className="w-4 h-4 text-black/60 animate-spin" />
+                <Loader2 className="w-4 h-4 text-[#1A1A1A]/60 animate-spin" />
               ) : (
                 <Check className="w-4 h-4 text-white" />
               )}
@@ -129,7 +129,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             transition={{ delay: 0.8 }}
             className="text-center mt-4"
           >
-            <h4 className="text-black font-semibold text-lg">{agent.fullName}</h4>
+            <h4 className="text-[#1A1A1A] font-semibold text-lg">{agent.fullName}</h4>
             <p className="text-gold text-sm">{agent.title}</p>
           </motion.div>
         </motion.div>
@@ -141,7 +141,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
             animate={{ opacity: 1, y: 0 }}
             className="mt-8 flex items-center gap-2"
           >
-            <span className="text-black/60 text-sm"><T>{`${agent.name} is typing`}</T></span>
+            <span className="text-[#1A1A1A]/60 text-sm"><T>{`${agent.name} is typing`}</T></span>
             <div className="flex gap-1">
               <motion.span
                 animate={{ opacity: [0.4, 1, 0.4] }}

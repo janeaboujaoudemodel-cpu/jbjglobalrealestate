@@ -217,7 +217,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
       {preview ? (
         <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)]">
           <img src={preview} alt="Preview" className="w-full h-48 object-cover" />
-          <button onClick={() => inputRef.current?.click()} className="absolute bottom-2 right-2 px-3 py-1.5 rounded-none bg-black/70 text-white text-xs font-medium hover:bg-black/90 transition">Change</button>
+          <button onClick={() => inputRef.current?.click()} className="absolute bottom-2 right-2 px-3 py-1.5 rounded-none bg-[#1A1A1A]/70 text-white text-xs font-medium hover:bg-[#1A1A1A]/90 transition">Change</button>
         </div>
       ) : (
         <button onClick={() => inputRef.current?.click()} className="w-full h-40 border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-none flex flex-col items-center justify-center gap-2 text-white/90 hover:border-[hsl(var(--gold)/0.6)] hover:bg-[hsl(var(--gold)/0.05)] transition-all">
@@ -233,7 +233,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[hsl(var(--gold)/0.3)]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-black">
+          <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <ShieldCheck className="w-5 h-5 text-[hsl(var(--gold))]" />
             Identity Verification
           </DialogTitle>
@@ -246,8 +246,8 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Intro */}
           {step === "intro" && (
             <div className="space-y-4 pt-2">
-              <div className="bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)] rounded-none p-4 text-sm text-gray-700 leading-relaxed">
-                <p className="font-medium text-black mb-2">What you'll need:</p>
+              <div className="bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)] rounded-none p-4 text-sm text-[#5A4A2E] leading-relaxed">
+                <p className="font-medium text-[#1A1A1A] mb-2">What you'll need:</p>
                 <ul className="space-y-1.5 list-disc list-inside">
                   <li>A clear photo of your government-issued ID (front & back)</li>
                   <li>A selfie of you holding your ID</li>
@@ -256,10 +256,10 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <p className="mt-3 text-xs text-white/90">We review submissions within 24–48 hours. Your documents are stored securely.</p>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-black">Full Name (as on ID)</label>
+                <label className="text-sm font-medium text-[#1A1A1A]">Full Name (as on ID)</label>
                 <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Enter your full legal name" />
               </div>
-              <Button onClick={() => fullName.trim() ? setStep("id-front") : toast({ title: "Please enter your name", variant: "destructive" })} className="w-full bg-black text-white font-semibold hover:bg-gray-800 border border-black">
+              <Button onClick={() => fullName.trim() ? setStep("id-front") : toast({ title: "Please enter your name", variant: "destructive" })} className="w-full bg-[#1A1A1A] text-white font-semibold hover:bg-[#1A1A1A] border border-[#1A1A1A]">
                 Continue
               </Button>
             </div>
@@ -268,11 +268,11 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: ID Front */}
           {step === "id-front" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-gray-600">Upload a clear photo of the <strong>front</strong> of your government-issued ID.</p>
+              <p className="text-sm text-[#5A4A2E]">Upload a clear photo of the <strong>front</strong> of your government-issued ID.</p>
               {renderFileUpload(idFrontPreview, idFrontRef, (f) => handleFileSelect(f, "id-front"), "Upload ID Front", <Upload className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep("intro")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
-                <Button onClick={() => idFrontFile ? setStep("id-back") : toast({ title: "Please upload ID front", variant: "destructive" })} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next</Button>
+                <Button variant="outline" onClick={() => setStep("intro")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-[#1A1A1A]">Back</Button>
+                <Button onClick={() => idFrontFile ? setStep("id-back") : toast({ title: "Please upload ID front", variant: "destructive" })} className="flex-1 bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next</Button>
               </div>
             </div>
           )}
@@ -280,11 +280,11 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: ID Back */}
           {step === "id-back" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-gray-600">Upload a clear photo of the <strong>back</strong> of your ID (optional but recommended).</p>
+              <p className="text-sm text-[#5A4A2E]">Upload a clear photo of the <strong>back</strong> of your ID (optional but recommended).</p>
               {renderFileUpload(idBackPreview, idBackRef, (f) => handleFileSelect(f, "id-back"), "Upload ID Back", <RotateCcw className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep("id-front")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
-                <Button onClick={() => setStep("selfie-upload")} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">{idBackFile ? "Next" : "Skip"}</Button>
+                <Button variant="outline" onClick={() => setStep("id-front")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-[#1A1A1A]">Back</Button>
+                <Button onClick={() => setStep("selfie-upload")} className="flex-1 bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">{idBackFile ? "Next" : "Skip"}</Button>
               </div>
             </div>
           )}
@@ -292,11 +292,11 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Selfie Upload */}
           {step === "selfie-upload" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-gray-600">Take a selfie while holding your ID next to your face.</p>
+              <p className="text-sm text-[#5A4A2E]">Take a selfie while holding your ID next to your face.</p>
               {renderFileUpload(selfiePreview, selfieInputRef, (f) => handleFileSelect(f, "selfie"), "Upload Selfie with ID", <Camera className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep("id-back")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
-                <Button onClick={() => selfieFile ? setStep("liveness") : toast({ title: "Please upload your selfie", variant: "destructive" })} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next: Liveness Check</Button>
+                <Button variant="outline" onClick={() => setStep("id-back")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-[#1A1A1A]">Back</Button>
+                <Button onClick={() => selfieFile ? setStep("liveness") : toast({ title: "Please upload your selfie", variant: "destructive" })} className="flex-1 bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next: Liveness Check</Button>
               </div>
             </div>
           )}
@@ -304,9 +304,9 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Liveness Detection */}
           {step === "liveness" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-gray-600 font-medium">Liveness Verification — follow the instructions below</p>
+              <p className="text-sm text-[#5A4A2E] font-medium">Liveness Verification — follow the instructions below</p>
               
-              <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)] bg-black aspect-video">
+              <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)] bg-[#1A1A1A] aspect-video">
                 <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
                 <canvas ref={canvasRef} className="hidden" />
                 
@@ -328,7 +328,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 )}
                 
                 {livenessComplete && (
-                  <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-2">
+                  <div className="absolute inset-0 bg-[#1A1A1A]/70 flex flex-col items-center justify-center gap-2">
                     <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                     <span className="text-white text-sm font-medium">Liveness verified</span>
                   </div>
@@ -336,14 +336,14 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
               </div>
 
               {!livenessComplete ? (
-                <Button onClick={handleLivenessCapture} disabled={livenessCapturing} className="w-full bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">
+                <Button onClick={handleLivenessCapture} disabled={livenessCapturing} className="w-full bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">
                   {livenessCapturing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   Capture — {LIVENESS_INSTRUCTIONS[livenessStage].text}
                 </Button>
               ) : (
                 <div className="flex gap-3">
-                  <Button variant="outline" onClick={() => { setLivenessStage("blink"); setLivenessFrames([]); setLivenessComplete(false); setStep("liveness"); }} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Redo</Button>
-                  <Button onClick={handleSubmit} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Submit for Review</Button>
+                  <Button variant="outline" onClick={() => { setLivenessStage("blink"); setLivenessFrames([]); setLivenessComplete(false); setStep("liveness"); }} className="flex-1 border-[hsl(var(--gold)/0.3)] text-[#1A1A1A]">Redo</Button>
+                  <Button onClick={handleSubmit} className="flex-1 bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Submit for Review</Button>
                 </div>
               )}
             </div>
@@ -353,7 +353,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {step === "submitting" && (
             <div className="flex flex-col items-center justify-center py-8 gap-4">
               <Loader2 className="w-10 h-10 text-[hsl(var(--gold))] animate-spin" />
-              <p className="text-sm text-gray-600 font-medium">Uploading your documents...</p>
+              <p className="text-sm text-[#5A4A2E] font-medium">Uploading your documents...</p>
             </div>
           )}
 
@@ -363,9 +363,9 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
                 <CheckCircle2 className="w-8 h-8 text-emerald-500" />
               </div>
-              <h3 className="text-lg font-semibold text-black">Verification Submitted!</h3>
-              <p className="text-sm text-gray-600 max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once verified.</p>
-              <Button onClick={() => handleClose(false)} className="mt-2 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Done</Button>
+              <h3 className="text-lg font-semibold text-[#1A1A1A]">Verification Submitted!</h3>
+              <p className="text-sm text-[#5A4A2E] max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once verified.</p>
+              <Button onClick={() => handleClose(false)} className="mt-2 bg-[#1A1A1A] text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Done</Button>
             </div>
           )}
 
@@ -375,9 +375,9 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
               <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
-              <h3 className="text-lg font-semibold text-black">Submission Failed</h3>
-              <p className="text-sm text-gray-600 max-w-xs">{errorMsg}</p>
-              <Button onClick={() => setStep("selfie-upload")} variant="outline" className="mt-2 border-[hsl(var(--gold)/0.3)] text-black">Try Again</Button>
+              <h3 className="text-lg font-semibold text-[#1A1A1A]">Submission Failed</h3>
+              <p className="text-sm text-[#5A4A2E] max-w-xs">{errorMsg}</p>
+              <Button onClick={() => setStep("selfie-upload")} variant="outline" className="mt-2 border-[hsl(var(--gold)/0.3)] text-[#1A1A1A]">Try Again</Button>
             </div>
           )}
         </div>

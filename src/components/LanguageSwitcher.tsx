@@ -27,7 +27,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
         {isMobile ? (
           <button
             type="button"
-            className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
+            className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-gold py-2 w-16 transition-colors"
             aria-label={t('header.language')}
           >
             <Globe className="w-5 h-5 pointer-events-none" />
@@ -87,7 +87,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
                 <span className="flex items-center gap-3">
                   <span className="text-lg">{lang.flag}</span>
                   <span className={`text-sm font-semibold transition-colors ${
-                    language === lang.code ? 'text-gold' : 'text-black group-hover:text-gold'
+                    language === lang.code ? 'text-gold' : 'text-[#1A1A1A] group-hover:text-gold'
                   }`}>{lang.nativeName}</span>
                 </span>
                 {language === lang.code && (

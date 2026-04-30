@@ -47,7 +47,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
             variant="ghost"
             size="icon"
             onClick={onBack}
-            className="text-black hover:text-gold hover:bg-black/5 mr-1"
+            className="text-[#1A1A1A] hover:text-gold hover:bg-[#1A1A1A]/5 mr-1"
           >
             {isRTL ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
           </Button>
@@ -61,15 +61,15 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
             />
           </div>
         ) : (
-          <div className="w-10 h-10 rounded-full bg-white border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
+          <div className="w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold flex items-center justify-center shadow-lg shadow-gold/20">
             <SquareChatIcon className="w-5 h-5 text-gold" size={20} />
           </div>
         )}
         <div>
-          <h3 className="text-black font-bold text-sm flex items-center gap-1.5">
+          <h3 className="text-[#1A1A1A] font-bold text-sm flex items-center gap-1.5">
             {showAgentPhoto ? agent.name : t('chat.title', 'JBJ Support')}
           </h3>
-          <p className="text-gray-600 text-xs font-medium">{getStatusText()}</p>
+          <p className="text-[#5A4A2E] text-xs font-medium">{getStatusText()}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -82,7 +82,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           variant="ghost"
           size="icon"
           onClick={onToggleCollapse}
-          className="w-10 h-10 rounded-lg bg-white border-2 border-gold text-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 transition-all"
+          className="w-10 h-10 rounded-lg bg-[#FDFBF7] border-2 border-gold text-gold hover:bg-gold/10 hover:shadow-lg hover:shadow-gold/20 transition-all"
           title={t('chat.minimize', 'Minimize chat')}
         >
           <Minus className="w-5 h-5" />

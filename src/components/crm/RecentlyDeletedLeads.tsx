@@ -139,11 +139,11 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
   return (
     <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg text-black flex items-center gap-2">
+        <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
           <Trash2 className="h-5 w-5 text-red-500" />
           Leads Management
         </CardTitle>
-        <CardDescription className="text-gray-600">
+        <CardDescription className="text-[#5A4A2E]">
           Recently deleted leads — auto-purged after 30 days. Restore leads before they are permanently removed.
         </CardDescription>
       </CardHeader>
@@ -156,7 +156,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search deleted leads..."
-              className="pl-10 bg-white border-gold/30"
+              className="pl-10 bg-[#FDFBF7] border-gold/30"
             />
           </div>
           <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
@@ -170,11 +170,11 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
 
         {/* Table */}
         {loading ? (
-          <div className="text-center py-12 text-gray-600">Loading...</div>
+          <div className="text-center py-12 text-[#5A4A2E]">Loading...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12">
-            <Trash2 className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-600">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
+            <Trash2 className="h-12 w-12 text-[#5A4A2E] mx-auto mb-3" />
+            <p className="text-[#5A4A2E]">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
           </div>
         ) : (
           <div className="overflow-auto">
@@ -192,9 +192,9 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
               <TableBody>
                 {filtered.map((lead) => (
                   <TableRow key={lead.id} className="hover:bg-gold/5">
-                    <TableCell className="font-medium text-black">{lead.full_name}</TableCell>
-                    <TableCell className="text-gray-600 text-sm">{lead.email_lower || "—"}</TableCell>
-                    <TableCell className="text-gray-600 text-sm">{lead.phone_e164 || "—"}</TableCell>
+                    <TableCell className="font-medium text-[#1A1A1A]">{lead.full_name}</TableCell>
+                    <TableCell className="text-[#5A4A2E] text-sm">{lead.email_lower || "—"}</TableCell>
+                    <TableCell className="text-[#5A4A2E] text-sm">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.source && (
                         <Badge variant="secondary" className="text-xs bg-gold/10 border-gold/20">
@@ -202,7 +202,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-gray-600 text-sm">
+                    <TableCell className="text-[#5A4A2E] text-sm">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDisplayDate(lead.deleted_at)}

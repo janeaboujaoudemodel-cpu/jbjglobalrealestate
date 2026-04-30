@@ -160,27 +160,27 @@ export default function LeadIntentModal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1A1A1A]/80 backdrop-blur-sm"
           onClick={handleSkip}
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="w-full max-w-lg bg-zinc-900 border border-gray-800 rounded-2xl overflow-hidden relative"
+            className="w-full max-w-lg bg-zinc-900 border border-[#1A1A1A] rounded-2xl overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={handleSkip}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-gray-700 text-white/70 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-[#1A1A1A] text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
             
             {/* Header */}
-            <div className="p-6 text-center border-b border-gray-800 bg-gradient-to-b from-zinc-800/50 to-transparent">
+            <div className="p-6 text-center border-b border-[#1A1A1A] bg-gradient-to-b from-zinc-800/50 to-transparent">
               <div className="flex justify-center mb-4">
                 <JJLogoImage variant="light" size="sm" />
               </div>
@@ -203,12 +203,12 @@ export default function LeadIntentModal() {
                     className={`w-full p-4 rounded-xl border transition-all text-left flex items-start gap-4 ${
                       isSelected
                         ? "border-gold bg-gold/10"
-                        : "border-gray-700 bg-zinc-800/50 hover:border-gray-600"
+                        : "border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]"
                     }`}
                   >
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        isSelected ? "bg-gold text-black" : "bg-zinc-700 text-white/85"
+                        isSelected ? "bg-gold text-[#1A1A1A]" : "bg-zinc-700 text-white/85"
                       }`}
                     >
                       <option.icon className="w-5 h-5" />
@@ -233,7 +233,7 @@ export default function LeadIntentModal() {
                 <Checkbox
                   checked={marketingConsent}
                   onCheckedChange={(checked) => setMarketingConsent(checked === true)}
-                  className="mt-0.5 border-gray-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                  className="mt-0.5 border-[#1A1A1A] data-[state=checked]:bg-gold data-[state=checked]:border-gold"
                 />
                 <span className="text-white/70 text-sm leading-relaxed">
                   I agree to receive updates, property alerts, and marketing communications from JBJ Global Real Estate. 
@@ -243,19 +243,19 @@ export default function LeadIntentModal() {
             </div>
 
             {/* Actions */}
-            <div className="p-6 border-t border-gray-800">
+            <div className="p-6 border-t border-[#1A1A1A]">
               <div className="flex flex-col sm:flex-row gap-3 mb-3">
                 <Button
                   variant="ghost"
                   onClick={handleSkip}
-                  className="text-white/70 hover:text-white hover:bg-gray-800"
+                  className="text-white/70 hover:text-white hover:bg-[#1A1A1A]"
                 >
                   Skip for now
                 </Button>
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110"
+                  className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110"
                 >
                   {isSubmitting ? "Saving..." : "Continue"}
                   <ArrowRight className="w-4 h-4 ml-2" />

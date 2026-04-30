@@ -162,8 +162,8 @@ export function MessageFiltersPanel() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-black text-xl font-semibold">Message Filters</h2>
-          <p className="text-black/60 text-sm mt-1">
+          <h2 className="text-[#1A1A1A] text-xl font-semibold">Message Filters</h2>
+          <p className="text-[#1A1A1A]/60 text-sm mt-1">
             Block or replace restricted content in broker messages
           </p>
         </div>
@@ -171,15 +171,15 @@ export function MessageFiltersPanel() {
           <DialogTrigger asChild>
             <Button
               onClick={() => setEditingFilter(null)}
-              className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold"
+              className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold"
             >
               <Plus className="h-4 w-4 mr-2" />
               Add Filter
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-white border-2 border-gold/30 max-w-md">
+          <DialogContent className="bg-[#FDFBF7] border-2 border-gold/30 max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-black">
+              <DialogTitle className="text-[#1A1A1A]">
                 {editingFilter ? "Edit Filter" : "Create Message Filter"}
               </DialogTitle>
             </DialogHeader>
@@ -197,44 +197,44 @@ export function MessageFiltersPanel() {
 
       {/* Stats Summary */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-gold" />
-              <span className="text-black/60">Total Filters</span>
+              <span className="text-[#1A1A1A]/60">Total Filters</span>
             </div>
-            <p className="text-black text-2xl font-bold mt-2">{filters.length}</p>
+            <p className="text-[#1A1A1A] text-2xl font-bold mt-2">{filters.length}</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-red-500" />
-              <span className="text-black/60">Critical</span>
+              <span className="text-[#1A1A1A]/60">Critical</span>
             </div>
-            <p className="text-black text-2xl font-bold mt-2">
+            <p className="text-[#1A1A1A] text-2xl font-bold mt-2">
               {filters.filter((f) => f.severity === "critical").length}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-emerald-500" />
-              <span className="text-black/60">Active</span>
+              <span className="text-[#1A1A1A]/60">Active</span>
             </div>
-            <p className="text-black text-2xl font-bold mt-2">
+            <p className="text-[#1A1A1A] text-2xl font-bold mt-2">
               {filters.filter((f) => f.is_active).length}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-purple-500" />
-              <span className="text-black/60">Competitor</span>
+              <span className="text-[#1A1A1A]/60">Competitor</span>
             </div>
-            <p className="text-black text-2xl font-bold mt-2">
+            <p className="text-[#1A1A1A] text-2xl font-bold mt-2">
               {filters.filter((f) => f.filter_type === "competitor").length}
             </p>
           </CardContent>
@@ -246,7 +246,7 @@ export function MessageFiltersPanel() {
         {filters.map((filter) => (
           <Card
             key={filter.id}
-            className={`bg-white border-2 border-gold/30 ${
+            className={`bg-[#FDFBF7] border-2 border-gold/30 ${
               !filter.is_active ? "opacity-60" : ""
             }`}
           >
@@ -254,12 +254,12 @@ export function MessageFiltersPanel() {
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <code className="text-black bg-gold/10 border border-gold/20 px-2 py-1 rounded text-sm font-mono">
+                    <code className="text-[#1A1A1A] bg-gold/10 border border-gold/20 px-2 py-1 rounded text-sm font-mono">
                       {filter.filter_value}
                     </code>
                     <Badge
                       variant="outline"
-                      className="border-gold/30 text-black/60"
+                      className="border-gold/30 text-[#1A1A1A]/60"
                     >
                       {FILTER_TYPES.find((t) => t.value === filter.filter_type)
                         ?.label || filter.filter_type}
@@ -272,9 +272,9 @@ export function MessageFiltersPanel() {
                     </Badge>
                   </div>
                   {filter.replacement_text && (
-                    <p className="text-black/50 text-sm mt-1">
+                    <p className="text-[#1A1A1A]/50 text-sm mt-1">
                       Replaces with:{" "}
-                      <span className="text-black/60">
+                      <span className="text-[#1A1A1A]/60">
                         "{filter.replacement_text}"
                       </span>
                     </p>
@@ -296,7 +296,7 @@ export function MessageFiltersPanel() {
                       setEditingFilter(filter);
                       setIsDialogOpen(true);
                     }}
-                    className="text-black/60 hover:text-black"
+                    className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -304,7 +304,7 @@ export function MessageFiltersPanel() {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleDeleteFilter(filter.id)}
-                    className="text-black/60 hover:text-red-500"
+                    className="text-[#1A1A1A]/60 hover:text-red-500"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -315,10 +315,10 @@ export function MessageFiltersPanel() {
         ))}
 
         {filters.length === 0 && (
-          <Card className="bg-white border-2 border-gold/30 border-dashed">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <Shield className="h-12 w-12 text-gray-500 mb-4" />
-              <p className="text-black/60 text-center">
+              <Shield className="h-12 w-12 text-[#8A7556] mb-4" />
+              <p className="text-[#1A1A1A]/60 text-center">
                 No message filters configured.
                 <br />
                 Add filters to block restricted content.
@@ -348,19 +348,19 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
   return (
     <div className="space-y-4 mt-4">
       <div>
-        <Label className="text-black/60">Filter Type</Label>
+        <Label className="text-[#1A1A1A]/60">Filter Type</Label>
         <Select
           value={formData.filter_type}
           onValueChange={(value) =>
             setFormData({ ...formData, filter_type: value })
           }
         >
-          <SelectTrigger className="mt-1 bg-white border-2 border-gold/30 text-black">
+          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-white border-2 border-gold/30 z-50">
+          <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
             {FILTER_TYPES.map((type) => (
-              <SelectItem key={type.value} value={type.value} className="text-black hover:bg-gold/10">
+              <SelectItem key={type.value} value={type.value} className="text-[#1A1A1A] hover:bg-gold/10">
                 {type.label}
               </SelectItem>
             ))}
@@ -369,13 +369,13 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
       </div>
 
       <div>
-        <Label className="text-black/60">Filter Value</Label>
+        <Label className="text-[#1A1A1A]/60">Filter Value</Label>
         <Input
           value={formData.filter_value}
           onChange={(e) =>
             setFormData({ ...formData, filter_value: e.target.value })
           }
-          className="bg-white border-2 border-gold/30 text-black mt-1 font-mono"
+          className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] mt-1 font-mono"
           placeholder={
             formData.filter_type === "regex"
               ? "\\b(word1|word2)\\b"
@@ -385,35 +385,35 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
       </div>
 
       <div>
-        <Label className="text-black/60">Replacement Text (Optional)</Label>
+        <Label className="text-[#1A1A1A]/60">Replacement Text (Optional)</Label>
         <Input
           value={formData.replacement_text}
           onChange={(e) =>
             setFormData({ ...formData, replacement_text: e.target.value })
           }
-          className="bg-white border-2 border-gold/30 text-black mt-1"
+          className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] mt-1"
           placeholder="Leave empty to block message entirely"
         />
-        <p className="text-black/50 text-xs mt-1">
+        <p className="text-[#1A1A1A]/50 text-xs mt-1">
           If provided, the filtered content will be replaced. Otherwise, the
           message will be blocked.
         </p>
       </div>
 
       <div>
-        <Label className="text-black/60">Severity</Label>
+        <Label className="text-[#1A1A1A]/60">Severity</Label>
         <Select
           value={formData.severity}
           onValueChange={(value) =>
             setFormData({ ...formData, severity: value })
           }
         >
-          <SelectTrigger className="mt-1 bg-white border-2 border-gold/30 text-black">
+          <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-white border-2 border-gold/30 z-50">
+          <SelectContent className="bg-[#FDFBF7] border-2 border-gold/30 z-50">
             {SEVERITIES.map((sev) => (
-              <SelectItem key={sev.value} value={sev.value} className="text-black hover:bg-gold/10">
+              <SelectItem key={sev.value} value={sev.value} className="text-[#1A1A1A] hover:bg-gold/10">
                 {sev.label}
               </SelectItem>
             ))}
@@ -425,14 +425,14 @@ function FilterForm({ filter, onSave, onCancel }: FilterFormProps) {
         <Button
           variant="outline"
           onClick={onCancel}
-          className="border-gold/30 text-black hover:bg-gold/10"
+          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
         >
           Cancel
         </Button>
         <Button
           onClick={() => onSave(formData)}
           disabled={!formData.filter_value}
-          className="bg-gradient-to-r from-gold to-amber-600 text-black font-semibold"
+          className="bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold"
         >
           {filter ? "Update Filter" : "Create Filter"}
         </Button>

@@ -47,7 +47,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-black/40 border-gold/20 backdrop-blur-sm", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm", className)}>
         <CardContent className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-gold animate-spin" />
         </CardContent>
@@ -58,10 +58,10 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
   const eligibility = getEligibility();
 
   return (
-    <Card className={cn("bg-black/40 border-gold/20 backdrop-blur-sm overflow-hidden", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm overflow-hidden", className)}>
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-purple-600/20 via-gold/20 to-purple-600/20 p-1">
-        <CardHeader className="bg-black/60 backdrop-blur-sm pb-4">
+        <CardHeader className="bg-[#1A1A1A]/60 backdrop-blur-sm pb-4">
           <CardTitle className="text-xl text-white flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
               <Gift className="w-5 h-5 text-purple-400" />
@@ -121,7 +121,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
                     {eligibility.progress !== undefined && (
                       <Progress 
                         value={eligibility.progress} 
-                        className="h-2 bg-white/10"
+                        className="h-2 bg-[#FDFBF7]/10"
                       />
                     )}
                   </div>
@@ -148,7 +148,7 @@ export function MonthlyDrawCard({ className }: MonthlyDrawCardProps) {
               {pastDraws.slice(0, 3).map((draw) => (
                 <div 
                   key={draw.id}
-                  className="flex items-center justify-between text-sm py-2 px-3 bg-white/5 rounded-lg"
+                  className="flex items-center justify-between text-sm py-2 px-3 bg-[#FDFBF7]/5 rounded-lg"
                 >
                   <span className="text-white/90">
                     {getMonthName(draw.draw_month)} {draw.draw_year}

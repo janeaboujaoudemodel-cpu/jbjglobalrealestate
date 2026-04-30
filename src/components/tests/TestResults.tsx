@@ -29,7 +29,7 @@ export function TestResults({
   const incorrectAnswers = latestAttempt ? getIncorrectAnswers(latestAttempt.id) : [];
 
   return (
-    <Card className={cn("bg-black/40 border-gold/20", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20", className)}>
       <CardHeader className="text-center pb-4">
         <div className={cn(
           "w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center",
@@ -87,7 +87,7 @@ export function TestResults({
               {incorrectAnswers.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="bg-white/5 rounded-lg p-4 border border-white/10"
+                  className="bg-[#FDFBF7]/5 rounded-lg p-4 border border-white/10"
                 >
                   <p className="text-white/80 text-sm mb-2">
                     {item.question.question_text}
@@ -140,7 +140,7 @@ export function TestResults({
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
           {passed ? (
-            <Button className="flex-1 bg-gold hover:bg-gold/90 text-black">
+            <Button className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -149,7 +149,7 @@ export function TestResults({
               <Button 
                 variant="outline"
                 onClick={onRetake}
-                className="flex-1 border-white/20 text-white hover:bg-white/10"
+                className="flex-1 border-white/20 text-white hover:bg-[#FDFBF7]/10"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Retake Test

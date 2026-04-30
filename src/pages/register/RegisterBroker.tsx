@@ -102,21 +102,21 @@ export default function RegisterBroker() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-10 px-4">
+    <div className="min-h-screen bg-[#FDFBF7] py-10 px-4">
       <SEOHead title="Broker Registration | JBJ Global" description="Register as a broker and access CRM, leads, and developer inventory." />
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-black">Broker Registration</h1>
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Broker Registration</h1>
             <p className="text-neutral-600 text-sm">Tell us about your professional background</p>
           </div>
         </div>
 
         <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-          <h2 className="text-lg font-semibold text-black">Personal</h2>
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">Personal</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Full Name *"><Input value={fullName} onChange={(e) => setFullName(e.target.value)} /></Field>
             <Field label="Phone *"><Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+971..." /></Field>
@@ -126,7 +126,7 @@ export default function RegisterBroker() {
         </section>
 
         <section className="space-y-5 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-          <h2 className="text-lg font-semibold text-black">Professional</h2>
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">Professional</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Current Company / Brokerage *"><Input value={company} onChange={(e) => setCompany(e.target.value)} /></Field>
             <Field label="Years of Experience"><Input type="number" value={years} onChange={(e) => setYears(e.target.value)} /></Field>
@@ -142,7 +142,7 @@ export default function RegisterBroker() {
         </section>
 
         <section className="space-y-3 bg-neutral-50 rounded-2xl p-6 border border-neutral-200 mb-6">
-          <h2 className="text-lg font-semibold text-black">CV / Resume</h2>
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">CV / Resume</h2>
           <p className="text-xs text-neutral-600">Optional — PDF or DOCX, max 10MB.</p>
           <input
             ref={cvInputRef}
@@ -163,7 +163,7 @@ export default function RegisterBroker() {
           </div>
         </section>
 
-        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-black text-white hover:bg-neutral-800">
+        <Button onClick={handleSubmit} disabled={submitting} className="w-full h-14 text-base bg-[#1A1A1A] text-white hover:bg-neutral-800">
           {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (<>Submit Registration <ArrowRight className="ml-2 w-5 h-5" /></>)}
         </Button>
         <p className="text-xs text-neutral-500 text-center mt-4 flex items-center justify-center gap-1.5">

@@ -223,7 +223,7 @@ const BusinessCardUpload = ({
                 >
                   <X className="h-3 w-3" />
                 </button>
-                <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 text-center">
+                <div className="absolute bottom-0 left-0 right-0 bg-[#1A1A1A]/50 text-white text-xs p-1 text-center">
                   Card {index + 1}
                 </div>
               </div>

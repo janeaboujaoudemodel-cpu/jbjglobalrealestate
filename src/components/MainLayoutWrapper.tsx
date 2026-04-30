@@ -11,7 +11,7 @@ const MainLayoutWrapper = () => {
   if (isPrintMode) {
     // Baseline / print mode: render content only — no header, sidebar, footer, popups, or chrome.
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#FDFBF7]">
         <main className="w-full max-w-full">
           <Outlet />
         </main>

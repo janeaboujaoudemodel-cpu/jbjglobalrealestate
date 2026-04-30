@@ -187,7 +187,7 @@ export default function ContractForms() {
               variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedCategory(null)}
-              className={selectedCategory === null ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
+              className={selectedCategory === null ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
             >
               All Templates
             </Button>
@@ -197,7 +197,7 @@ export default function ContractForms() {
                 variant={selectedCategory === cat ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(cat)}
-                className={selectedCategory === cat ? "bg-gold text-black hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
+                className={selectedCategory === cat ? "bg-gold text-[#1A1A1A] hover:bg-gold/90" : "border-gold/30 text-gold hover:bg-gold/10"}
               >
                 {categoryLabels[cat].label}
               </Button>
@@ -228,7 +228,7 @@ export default function ContractForms() {
                   <h3 className="text-lg font-bold text-foreground mb-1">
                     {template.name}
                   </h3>
-                  <p className="text-sm text-gray-800 font-arabic mb-3" dir="rtl">
+                  <p className="text-sm text-[#1A1A1A] font-arabic mb-3" dir="rtl">
                     {template.arabicName}
                   </p>
 
@@ -259,7 +259,7 @@ export default function ContractForms() {
                           <Eye className="w-4 h-4 mr-1" />
                           Preview
                         </Button>
-                        <Button size="sm" className="flex-1 bg-gold text-black hover:bg-gold/90">
+                        <Button size="sm" className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90">
                           <Download className="w-4 h-4 mr-1" />
                           Download
                         </Button>
@@ -286,7 +286,7 @@ export default function ContractForms() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
-                <Button className="bg-gold text-black hover:bg-gold/90">
+                <Button className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
                   <FileSignature className="w-4 h-4 mr-2" />
                   Request Assistance
                 </Button>

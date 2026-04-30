@@ -102,8 +102,8 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
         alt={agent.name}
         className="w-10 h-10 rounded-full object-cover border-2 border-gold/40 shrink-0"
       />
-      <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-gold/20 max-w-[85%]">
-        <p className="text-black text-sm">{message}</p>
+      <div className="bg-[#FDFBF7] rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-gold/20 max-w-[85%]">
+        <p className="text-[#1A1A1A] text-sm">{message}</p>
       </div>
     </div>
   );
@@ -111,7 +111,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
   const renderUserMessage = (message: string, key: string) => (
     <div key={key} className="flex justify-end mb-4">
       <div className="bg-gradient-to-br from-gold/20 to-gold/10 rounded-2xl rounded-tr-none px-4 py-3 shadow-sm border border-gold/30 max-w-[85%]">
-        <p className="text-black text-sm font-medium">{message}</p>
+        <p className="text-[#1A1A1A] text-sm font-medium">{message}</p>
       </div>
     </div>
   );
@@ -123,7 +123,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
         alt={agent.name}
         className="w-10 h-10 rounded-full object-cover border-2 border-gold/40 shrink-0"
       />
-      <div className="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-gold/20">
+      <div className="bg-[#FDFBF7] rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-gold/20">
         <div className="flex gap-1">
           <span className="w-2 h-2 bg-gold/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
           <span className="w-2 h-2 bg-gold/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -174,12 +174,12 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gold/30 bg-white/50">
+      <div className="p-4 border-t border-gold/30 bg-[#FDFBF7]/50">
         {collectStep === 'confirm_name' && detectedFullName && (
           <div className="space-y-3">
             <Button
               onClick={handleConfirmName}
-              className="w-full bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark text-black font-medium rounded-lg transition-all duration-200"
+              className="w-full bg-gold hover:bg-gold-light hover:shadow-[0_4px_15px_rgba(200,167,102,0.5)] active:bg-gold-dark text-[#1A1A1A] font-medium rounded-lg transition-all duration-200"
             >
               Yes, my name is {detectedFullName} ✓
             </Button>
@@ -195,14 +195,14 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 inputMode="text"
                 enterKeyHint="send"
                 autoComplete="off"
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleNameSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
-                <Send className="w-4 h-4 text-black" />
+                <Send className="w-4 h-4 text-[#1A1A1A]" />
               </Button>
             </div>
             {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -224,14 +224,14 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleNameSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
-                <Send className="w-4 h-4 text-black" />
+                <Send className="w-4 h-4 text-[#1A1A1A]" />
               </Button>
             </div>
             {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -253,14 +253,14 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handleEmailSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
-                <Send className="w-4 h-4 text-black" />
+                <Send className="w-4 h-4 text-[#1A1A1A]" />
               </Button>
             </div>
             {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -282,14 +282,14 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
                 onClick={handlePhoneSubmit}
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10 bg-gold hover:bg-gold-light rounded-lg"
               >
-                <Send className="w-4 h-4 text-black" />
+                <Send className="w-4 h-4 text-[#1A1A1A]" />
               </Button>
             </div>
             {error && <p className="text-red-500 text-xs">{error}</p>}
@@ -298,7 +298,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
 
         <button
           onClick={onPreferForm}
-          className="w-full mt-3 text-center text-xs text-black/50 hover:text-gold transition-colors flex items-center justify-center gap-1"
+          className="w-full mt-3 text-center text-xs text-[#1A1A1A]/50 hover:text-gold transition-colors flex items-center justify-center gap-1"
         >
           <FileText className="w-3 h-3" />
           Prefer to fill a form instead?

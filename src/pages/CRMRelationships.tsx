@@ -48,7 +48,7 @@ const SOURCE_STYLES: Record<string, string> = {
   perplexity: "bg-blue-50 text-blue-800 border-blue-200",
   firecrawl: "bg-indigo-50 text-indigo-800 border-indigo-200",
   ai_inference: "bg-amber-50 text-amber-900 border-amber-200",
-  manual: "bg-gray-100 text-gray-700 border-gray-200",
+  manual: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30",
 };
 
 const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
@@ -67,8 +67,8 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
           {label}
         </button>
       </PopoverTrigger>
-      <PopoverContent className="text-xs w-64 bg-white border-black/10" onClick={(e) => e.stopPropagation()}>
-        <div className="font-semibold text-black">{label}</div>
+      <PopoverContent className="text-xs w-64 bg-[#FDFBF7] border-[#1A1A1A]/10" onClick={(e) => e.stopPropagation()}>
+        <div className="font-semibold text-[#1A1A1A]">{label}</div>
         {meta.url && (
           <a
             href={meta.url}
@@ -80,7 +80,7 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
           </a>
         )}
         {meta.fetched_at && (
-          <div className="text-gray-500 mt-1">
+          <div className="text-[#8A7556] mt-1">
             Fetched {new Date(meta.fetched_at).toLocaleString()}
           </div>
         )}
@@ -146,17 +146,17 @@ const RegistryDebugBanner = ({ registryRows, isLoading }: { registryRows: number
   if (!enabled) return null;
 
   return (
-    <div className="rounded-xl border border-dashed border-black/30 bg-amber-50 p-4 text-sm text-black">
+    <div className="rounded-xl border border-dashed border-[#1A1A1A]/30 bg-amber-50 p-4 text-sm text-[#1A1A1A]">
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="space-y-1">
           <div className="font-semibold flex items-center gap-2">
             <FlaskConical className="w-4 h-4" />
             Registry verification
           </div>
-          <div className="text-black/80">
-            This list reads from <code className="px-1 py-0.5 bg-black/10 rounded">crm_developer_registry</code> (per-owner CRM table) — never directly from <code className="px-1 py-0.5 bg-black/10 rounded">developers</code> (the public master catalog).
+          <div className="text-[#1A1A1A]/80">
+            This list reads from <code className="px-1 py-0.5 bg-[#1A1A1A]/10 rounded">crm_developer_registry</code> (per-owner CRM table) — never directly from <code className="px-1 py-0.5 bg-[#1A1A1A]/10 rounded">developers</code> (the public master catalog).
           </div>
-          <div className="text-black/80 pt-1">
+          <div className="text-[#1A1A1A]/80 pt-1">
             Rendered rows in this view: <b>{isLoading ? "loading…" : registryRows.toLocaleString()}</b>
             {" · "}
             crm_developer_registry total: <b>{counts.registry === null ? "—" : counts.registry.toLocaleString()}</b>
@@ -180,30 +180,30 @@ const RegistryDebugBanner = ({ registryRows, isLoading }: { registryRows: number
 };
 
 const STATUS_BROKERAGE = [
-  { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
-  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-black" },
-  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-black" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
-  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-black" },
+  { v: "prospect", label: "Prospect", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-[#1A1A1A]" },
+  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-[#1A1A1A]" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-[#1A1A1A]" },
+  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-[#1A1A1A]" },
 ];
 const STATUS_CLIENT = [
-  { v: "lead", label: "Lead", cls: "bg-gray-200 text-black" },
-  { v: "qualified", label: "Qualified", cls: "bg-blue-200 text-black" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
-  { v: "vip", label: "VIP", cls: "bg-purple-200 text-black" },
-  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-black" },
-  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-black" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
+  { v: "lead", label: "Lead", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
+  { v: "qualified", label: "Qualified", cls: "bg-blue-200 text-[#1A1A1A]" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-[#1A1A1A]" },
+  { v: "vip", label: "VIP", cls: "bg-purple-200 text-[#1A1A1A]" },
+  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-[#1A1A1A]" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-[#1A1A1A]" },
 ];
 const STATUS_DEV = [
-  { v: "not_started", label: "Not Started", cls: "bg-gray-200 text-black" },
-  { v: "pending_application", label: "Pending Application", cls: "bg-amber-200 text-black" },
-  { v: "documents_required", label: "Documents Required", cls: "bg-orange-200 text-black" },
-  { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-black" },
-  { v: "registered", label: "Registered", cls: "bg-emerald-200 text-black" },
-  { v: "rejected", label: "Rejected", cls: "bg-red-200 text-black" },
-  { v: "expired", label: "Expired", cls: "bg-zinc-300 text-black" },
+  { v: "not_started", label: "Not Started", cls: "bg-[#EFE6D6] text-[#1A1A1A]" },
+  { v: "pending_application", label: "Pending Application", cls: "bg-amber-200 text-[#1A1A1A]" },
+  { v: "documents_required", label: "Documents Required", cls: "bg-orange-200 text-[#1A1A1A]" },
+  { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-[#1A1A1A]" },
+  { v: "registered", label: "Registered", cls: "bg-emerald-200 text-[#1A1A1A]" },
+  { v: "rejected", label: "Rejected", cls: "bg-red-200 text-[#1A1A1A]" },
+  { v: "expired", label: "Expired", cls: "bg-zinc-300 text-[#1A1A1A]" },
 ];
 
 type StatusOption = { v: string; label: string; cls: string };
@@ -229,9 +229,9 @@ const InlineStatusSelect = ({
       <SelectTrigger className={`h-8 w-auto min-w-[160px] px-3 py-1 border-0 font-semibold rounded-full ${current.cls} focus:ring-2 focus:ring-black/40`}>
         <SelectValue />
       </SelectTrigger>
-      <SelectContent className="bg-white border border-black/10 z-50">
+      <SelectContent className="bg-[#FDFBF7] border border-[#1A1A1A]/10 z-50">
         {options.map((s) => (
-          <SelectItem key={s.v} value={s.v} className="text-black">
+          <SelectItem key={s.v} value={s.v} className="text-[#1A1A1A]">
             <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${s.cls}`}>{s.label}</span>
           </SelectItem>
         ))}
@@ -311,7 +311,7 @@ const BrokeragesTab = () => {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -331,11 +331,11 @@ const BrokeragesTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-700">No brokerages yet. Click <b className="text-black">Add Brokerage</b> to start.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-[#5A4A2E]">No brokerages yet. Click <b className="text-[#1A1A1A]">Add Brokerage</b> to start.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
+            <Card key={r.id} className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 hover:shadow-lg hover:border-[#1A1A1A]/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -343,11 +343,11 @@ const BrokeragesTab = () => {
                       <h3 className="font-semibold text-base">{r.company_name}</h3>
                       <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
                     </div>
-                    <div className="text-xs text-gray-600 space-y-0.5">
+                    <div className="text-xs text-[#5A4A2E] space-y-0.5">
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
                       {r.office_location && <div>{r.office_location}</div>}
                       {r.primary_contact?.name && (
-                        <div className="font-medium text-gray-800">
+                        <div className="font-medium text-[#1A1A1A]">
                           Contact: {r.primary_contact.name} {r.primary_contact.role && `· ${r.primary_contact.role}`}
                           {r.primary_contact.phone && ` · ${r.primary_contact.phone}`}
                         </div>
@@ -454,7 +454,7 @@ const ClientsTab = () => {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search client" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -474,11 +474,11 @@ const ClientsTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500">No clients yet.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-[#8A7556]">No clients yet.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
+            <Card key={r.id} className="bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 hover:shadow-lg hover:border-[#1A1A1A]/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -486,7 +486,7 @@ const ClientsTab = () => {
                       <h3 className="font-semibold">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
                       <InlineStatusSelect entityType="client" id={r.id} value={r.status} options={STATUS_CLIENT} />
                     </div>
-                    <div className="text-xs text-gray-600 space-y-0.5">
+                    <div className="text-xs text-[#5A4A2E] space-y-0.5">
                       {r.email && <div>{r.email}</div>}
                       {r.phone && <div>{r.phone}</div>}
                       {(r.budget_min || r.budget_max) && <div>Budget: {r.currency} {(r.budget_min || 0).toLocaleString()} – {(r.budget_max || 0).toLocaleString()}</div>}
@@ -565,18 +565,18 @@ const DocumentPackPanel = () => {
   if (isLoading) return <Skeleton className="h-32" />;
 
   return (
-    <Card className="bg-white border border-black/10 rounded-2xl">
+    <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-3">
-          <LinkIcon className="w-4 h-4 text-black" />
-          <h3 className="font-semibold text-black">Document Pack & Outreach Settings</h3>
+          <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
+          <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
-        <p className="text-xs text-gray-700 mb-4">
+        <p className="text-xs text-[#5A4A2E] mb-4">
           Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
-            <Label className="text-xs text-black mb-1 block">Google Drive document pack URL *</Label>
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">Google Drive document pack URL *</Label>
             <div className="flex gap-2">
               <Input
                 placeholder="https://drive.google.com/drive/folders/..."
@@ -588,7 +588,7 @@ const DocumentPackPanel = () => {
                   href={s.drive_doc_pack_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 rounded-md border border-black/30 text-black text-sm hover:bg-black hover:text-white whitespace-nowrap"
+                  className="inline-flex items-center px-3 rounded-md border border-[#1A1A1A]/30 text-[#1A1A1A] text-sm hover:bg-[#1A1A1A] hover:text-white whitespace-nowrap"
                 >
                   Open Pack ↗
                 </a>
@@ -599,27 +599,27 @@ const DocumentPackPanel = () => {
             )}
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">From name</Label>
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">From name</Label>
             <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">Primary sender email (Reply-to)</Label>
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">Primary sender email (Reply-to)</Label>
             <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} placeholder="contact@jbj.ae" />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">CC email</Label>
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">CC email</Label>
             <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} placeholder="infoo.jane@gmail.com" />
           </div>
           <div className="flex flex-col justify-center gap-2 pt-2">
             <div className="flex items-center gap-3">
               <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
-              <span className="text-sm text-black">Always CC this address</span>
+              <span className="text-sm text-[#1A1A1A]">Always CC this address</span>
             </div>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="self-start border-black/30 text-black hover:bg-black hover:text-white"
+              className="self-start border-[#1A1A1A]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
               onClick={() => update({
                 reply_to_email: s.cc_email || "",
                 cc_email: s.reply_to_email || "",
@@ -802,12 +802,12 @@ const DeveloperRegistryTab = () => {
       <DocumentPackPanel />
 
       {/* Sub-tabs: Outreach Queue vs Sent History */}
-      <div className="flex gap-1 p-1 bg-black/5 rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-[#1A1A1A]/5 rounded-xl w-fit">
         <button
           type="button"
           onClick={() => setSubTab("queue")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "queue" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+            subTab === "queue" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
           }`}
         >
           Outreach Queue ({queuePool.length})
@@ -816,7 +816,7 @@ const DeveloperRegistryTab = () => {
           type="button"
           onClick={() => setSubTab("history")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "history" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+            subTab === "history" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
           }`}
         >
           Sent History ({historyPool.length})
@@ -833,7 +833,7 @@ const DeveloperRegistryTab = () => {
       <>
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -891,8 +891,8 @@ const DeveloperRegistryTab = () => {
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
 
-      <div className="flex flex-wrap gap-2 items-center bg-white border border-black/10 rounded-xl p-3">
-        <div className="text-sm text-black"><strong>{selected.size}</strong> of {filtered.length} selected</div>
+      <div className="flex flex-wrap gap-2 items-center bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-xl p-3">
+        <div className="text-sm text-[#1A1A1A]"><strong>{selected.size}</strong> of {filtered.length} selected</div>
         <Button size="sm" variant="outline" onClick={selectAllFiltered}>Select all filtered</Button>
         <Button size="sm" variant="outline" onClick={selectAllPending} title="Select every developer currently in Pending Application">
           Select all Pending ({counts["pending_application"] || 0})
@@ -911,7 +911,7 @@ const DeveloperRegistryTab = () => {
         </Button>
         <Button
           size="sm"
-          className="bg-black text-white hover:bg-gray-800"
+          className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
           disabled={!selected.size}
           onClick={() => setBulkOpen(true)}
         >
@@ -928,8 +928,8 @@ const DeveloperRegistryTab = () => {
               onClick={() => setStatusFilter("all")}
               className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition ${
                 statusFilter === "all"
-                  ? "bg-black text-white border-black"
-                  : "bg-white text-black border-black/15 hover:border-black/40"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
               }`}
             >
               All ({queuePool.length})
@@ -945,15 +945,15 @@ const DeveloperRegistryTab = () => {
                   disabled={n === 0 && !active}
                   className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
                     active
-                      ? "bg-black text-white border-black"
+                      ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
                       : n === 0
-                      ? "bg-white text-gray-400 border-black/10 cursor-not-allowed"
-                      : "bg-white text-black border-black/15 hover:border-black/40"
+                      ? "bg-[#FDFBF7] text-[#8A7556] border-[#1A1A1A]/10 cursor-not-allowed"
+                      : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
                   }`}
                 >
                   <span>{s.label}</span>
                   <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    active ? "bg-white/20 text-white" : "bg-black/5 text-black"
+                    active ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
                   }`}>{n}</span>
                 </button>
               );
@@ -966,7 +966,7 @@ const DeveloperRegistryTab = () => {
               <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
                 <CardContent className="p-3 text-center">
                   <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                  <div className="text-[10px] uppercase text-gray-600 mt-1">{s.label}</div>
+                  <div className="text-[10px] uppercase text-[#5A4A2E] mt-1">{s.label}</div>
                 </CardContent>
               </Card>
             ))}
@@ -975,7 +975,7 @@ const DeveloperRegistryTab = () => {
       )}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-gray-500 space-y-4">
+        <Card><CardContent className="p-8 text-center text-[#8A7556] space-y-4">
           {data.length === 0 ? (
             <div className="space-y-3">
               <p>No developers in your registry yet.</p>
@@ -999,7 +999,7 @@ const DeveloperRegistryTab = () => {
                 No developers match the current filters
                 {(q || statusFilter !== "all" || emailFilter !== "all") && (
                   <>
-                    {" "}(<span className="text-black font-semibold">
+                    {" "}(<span className="text-[#1A1A1A] font-semibold">
                       {[
                         q && `search: "${q}"`,
                         statusFilter !== "all" && `status: ${STATUS_DEV.find(s => s.v === statusFilter)?.label || statusFilter}`,
@@ -1018,7 +1018,7 @@ const DeveloperRegistryTab = () => {
                   <RotateCcw className="w-3 h-3 mr-1" />Clear all filters
                 </Button>
                 <Button
-                  className="bg-black text-white hover:bg-gray-800"
+                  className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
                   onClick={() => { setQ(""); setStatusFilter("all"); setEmailFilter("all"); setSubTab("queue"); }}
                 >
                   Show full queue ({queuePool.length})
@@ -1034,14 +1034,14 @@ const DeveloperRegistryTab = () => {
               ? Math.floor((Date.now() - new Date(r.last_outreach_at).getTime()) / 86400000)
               : null;
             return (
-            <Card key={r.id} className={`bg-white text-black border ${selected.has(r.id) ? "border-black ring-1 ring-black" : "border-black/10"} hover:shadow-lg transition rounded-2xl`}>
+            <Card key={r.id} className={`bg-[#FDFBF7] text-[#1A1A1A] border ${selected.has(r.id) ? "border-[#1A1A1A] ring-1 ring-black" : "border-[#1A1A1A]/10"} hover:shadow-lg transition rounded-2xl`}>
               <CardContent className="p-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div className="flex items-start gap-3 flex-1 min-w-[260px]">
                     <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleSel(r.id)} className="mt-1" />
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-black">{r.developer_name}</h3>
+                        <h3 className="font-semibold text-[#1A1A1A]">{r.developer_name}</h3>
                         <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
                         {r.status === "registered" && (
                           <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
@@ -1055,50 +1055,50 @@ const DeveloperRegistryTab = () => {
                         )}
                         {r.outreach_count > 1 && <span className="text-xs text-emerald-700">×{r.outreach_count}</span>}
                       </div>
-                      <div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-800">
+                      <div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-[#1A1A1A]">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Building2 className="w-3 h-3 text-gray-500 shrink-0" />
-                          <span className="text-gray-500 shrink-0">Company:</span>
-                          <span className="font-medium text-black truncate">{r.developer_name || "—"}</span>
+                          <Building2 className="w-3 h-3 text-[#8A7556] shrink-0" />
+                          <span className="text-[#8A7556] shrink-0">Company:</span>
+                          <span className="font-medium text-[#1A1A1A] truncate">{r.developer_name || "—"}</span>
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <MapPin className="w-3 h-3 text-gray-500 shrink-0" />
-                          <span className="text-gray-500 shrink-0">Office:</span>
-                          <span className="font-medium text-black truncate">{r.emirate || "—"}</span>
+                          <MapPin className="w-3 h-3 text-[#8A7556] shrink-0" />
+                          <span className="text-[#8A7556] shrink-0">Office:</span>
+                          <span className="font-medium text-[#1A1A1A] truncate">{r.emirate || "—"}</span>
                           <FieldSource meta={r.field_sources?.emirate} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Phone className="w-3 h-3 text-gray-500 shrink-0" />
-                          <span className="text-gray-500 shrink-0">Phone:</span>
+                          <Phone className="w-3 h-3 text-[#8A7556] shrink-0" />
+                          <span className="text-[#8A7556] shrink-0">Phone:</span>
                           {r.phone ? (
-                            <a href={`tel:${r.phone}`} className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.phone}</a>
+                            <a href={`tel:${r.phone}`} className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.phone}</a>
                           ) : (
-                            <span className="font-medium text-black">—</span>
+                            <span className="font-medium text-[#1A1A1A]">—</span>
                           )}
                           <FieldSource meta={r.field_sources?.phone} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Mail className="w-3 h-3 text-gray-500 shrink-0" />
-                          <span className="text-gray-500 shrink-0">Email:</span>
+                          <Mail className="w-3 h-3 text-[#8A7556] shrink-0" />
+                          <span className="text-[#8A7556] shrink-0">Email:</span>
                           {r.developer_email ? (
-                            <a href={`mailto:${r.developer_email}`} className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.developer_email}</a>
+                            <a href={`mailto:${r.developer_email}`} className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.developer_email}</a>
                           ) : (
-                            <span className="font-medium text-black">—</span>
+                            <span className="font-medium text-[#1A1A1A]">—</span>
                           )}
                           <FieldSource meta={r.field_sources?.developer_email} />
                         </div>
                         {r.website && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
-                            <LinkIcon className="w-3 h-3 text-gray-500 shrink-0" />
-                            <span className="text-gray-500 shrink-0">Website:</span>
-                            <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-black underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
+                            <LinkIcon className="w-3 h-3 text-[#8A7556] shrink-0" />
+                            <span className="text-[#8A7556] shrink-0">Website:</span>
+                            <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
                             <FieldSource meta={r.field_sources?.website} />
                           </div>
                         )}
                         {r.agency_code && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
-                            <span className="text-gray-500 shrink-0">Agency code:</span>
-                            <span className="font-medium text-black">{r.agency_code}</span>
+                            <span className="text-[#8A7556] shrink-0">Agency code:</span>
+                            <span className="font-medium text-[#1A1A1A]">{r.agency_code}</span>
                           </div>
                         )}
                       </div>
@@ -1108,9 +1108,9 @@ const DeveloperRegistryTab = () => {
                           <FieldSource meta={r.field_sources?.developer_contact} />
                         </div>
                         {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
-                          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-black">
+                          <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#1A1A1A]">
                             <span className="font-semibold">{r.developer_contact?.name || "—"}</span>
-                            {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
+                            {r.developer_contact?.role && <span className="text-[#5A4A2E]">· {r.developer_contact.role}</span>}
                             {r.developer_contact?.phone && (
                               <a href={`tel:${r.developer_contact.phone}`} className="underline flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                                 <Phone className="w-3 h-3" />{r.developer_contact.phone}
@@ -1144,7 +1144,7 @@ const DeveloperRegistryTab = () => {
                       ) : (
                         <button
                           onClick={() => setNoteEditing(r.id)}
-                          className="mt-1 text-xs text-left text-gray-600 hover:text-black italic block w-full"
+                          className="mt-1 text-xs text-left text-[#5A4A2E] hover:text-[#1A1A1A] italic block w-full"
                         >
                           {r.notes ? `📝 ${r.notes}` : "+ Add note"}
                         </button>
@@ -1252,25 +1252,25 @@ const CRMRelationships = () => {
       <SEOHead title="CRM Relationships | JBJ Global" description="Manage brokerages, clients and developer registrations" canonicalPath="/crm/relationships" />
       <div className="min-h-screen bg-[#FAF7F2] w-full">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-[96px] pb-12">
-          <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-black/10">
+          <div className="flex flex-wrap items-center gap-4 mb-6 pb-6 border-b border-[#1A1A1A]/10">
             <Button
               variant="outline"
               onClick={() => navigate("/owner/crm")}
-              className="h-11 px-6 bg-white border-2 border-black/10 text-black hover:bg-black hover:text-white hover:border-black rounded-full font-semibold shrink-0"
+              className="h-11 px-6 bg-[#FDFBF7] border-2 border-[#1A1A1A]/10 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] rounded-full font-semibold shrink-0"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />Back to CRM Hub
             </Button>
             <div className="flex-1 min-w-[240px]">
-              <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
-              <p className="text-sm text-gray-700 mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-black">Leads &amp; Clients</span>.</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">Relationships Hub</h1>
+              <p className="text-sm text-[#5A4A2E] mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-[#1A1A1A]">Leads &amp; Clients</span>.</p>
             </div>
           </div>
 
           {/* Clients tab intentionally removed — all client + lead records now live in the unified
               "Leads & Clients" workspace at /crm/leads (powered by crm_leads). Do NOT re-add a Clients tab here. */}
-          <div className="mb-6 rounded-xl border border-black/10 bg-white p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div className="text-sm text-gray-700">
-              <span className="font-semibold text-black">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
+          <div className="mb-6 rounded-xl border border-[#1A1A1A]/10 bg-[#FDFBF7] p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="text-sm text-[#5A4A2E]">
+              <span className="font-semibold text-[#1A1A1A]">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
             </div>
             <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
               <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
@@ -1279,9 +1279,9 @@ const CRMRelationships = () => {
 
           <Tabs value={tab} onValueChange={setTab}>
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
-              <TabsList className="bg-white border border-black/10 p-1 rounded-xl inline-flex w-auto">
-                <TabsTrigger value="brokerages" className="min-w-fit text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold whitespace-nowrap"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-                <TabsTrigger value="developers" className="min-w-fit text-gray-700 data-[state=active]:bg-black data-[state=active]:text-white hover:bg-black/5 rounded-lg px-5 font-semibold whitespace-nowrap"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+              <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A]/10 p-1 rounded-xl inline-flex w-auto">
+                <TabsTrigger value="brokerages" className="min-w-fit text-[#5A4A2E] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white hover:bg-[#1A1A1A]/5 rounded-lg px-5 font-semibold whitespace-nowrap"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+                <TabsTrigger value="developers" className="min-w-fit text-[#5A4A2E] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white hover:bg-[#1A1A1A]/5 rounded-lg px-5 font-semibold whitespace-nowrap"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>

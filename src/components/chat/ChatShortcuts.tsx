@@ -32,7 +32,7 @@ const BASE_SHORTCUTS: ShortcutItem[] = [
   { id: 'guides', icon: Plane, label: 'Guides & Resources', description: 'Dubai guides, visa, golden visa', color: 'text-sky-500' },
   { id: 'ai_tools', icon: Compass, label: 'AI Tools & Features', description: 'Property finder, measure, explore', color: 'text-indigo-500' },
   { id: 'submit_cv', icon: FileText, label: 'Submit Your CV', description: 'Career opportunities with us', color: 'text-blue-500' },
-  { id: 'general_inquiry', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-gray-600' },
+  { id: 'general_inquiry', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-[#5A4A2E]' },
 ];
 
 const OWNER_SHORTCUTS: ShortcutItem[] = [
@@ -105,10 +105,10 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
   return (
     <div className="flex-1 p-4 overflow-y-auto">
       <div className="text-center mb-4">
-        <h4 className="text-black text-lg font-semibold mb-1">
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
           <T>{`Hi ${userFullName}! 👋`}</T>
         </h4>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#5A4A2E] text-sm">
           <T>What would you like help with today?</T>
         </p>
       </div>
@@ -120,16 +120,16 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
             <button
               key={shortcut.id}
               onClick={() => onSelectShortcut(shortcut.id)}
-              className="w-full p-3 bg-white border-2 border-gold/30 hover:border-gold hover:bg-gold/5 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
+              className="w-full p-3 bg-[#FDFBF7] border-2 border-gold/30 hover:border-gold hover:bg-gold/5 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
             >
               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center border border-gold/30 shadow-sm`}>
                 <Icon className={`w-5 h-5 ${shortcut.color}`} />
               </div>
               <div className="flex-1">
-                <h5 className="text-black text-sm font-semibold group-hover:text-gold transition-colors">
+                <h5 className="text-[#1A1A1A] text-sm font-semibold group-hover:text-gold transition-colors">
                   <T>{shortcut.label}</T>
                 </h5>
-                <p className="text-gray-600 text-xs">
+                <p className="text-[#5A4A2E] text-xs">
                   <T>{shortcut.description}</T>
                 </p>
               </div>
@@ -141,7 +141,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
         })}
       </div>
 
-      <p className="text-center text-gray-600 text-xs mt-4">
+      <p className="text-center text-[#5A4A2E] text-xs mt-4">
         <T>Select an option to get started</T>
       </p>
     </div>

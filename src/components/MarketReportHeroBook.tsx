@@ -112,7 +112,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                   <p className="text-white/90 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                 </FounderContent>
 
-                <div className="mt-6 pt-4 border-t border-gray-800">
+                <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
                   <p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
             </div>
 
             {/* Shadow */}
-            <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/60 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-10" />
+            <div className="absolute -bottom-4 left-4 right-4 h-8 bg-[#1A1A1A]/60 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-10" />
           </div>
 
           {/* Floating Badge */}
@@ -130,7 +130,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/50 px-4 py-2 rounded-full shadow-lg"
+            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/50 px-4 py-2 rounded-full shadow-lg"
           >
             <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
           </motion.div>

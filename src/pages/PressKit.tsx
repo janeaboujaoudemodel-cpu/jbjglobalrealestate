@@ -137,7 +137,7 @@ const PressKit = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black select-none" style={{ WebkitUserSelect: 'none', userSelect: 'none' }}>
+    <div className="min-h-screen bg-[#1A1A1A] select-none" style={{ WebkitUserSelect: 'none', userSelect: 'none' }}>
       {/* Hero Section with Video */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         {/* Video Background */}
@@ -178,7 +178,7 @@ const PressKit = () => {
               Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Kit</span>
             </motion.h1>
             <motion.p 
-              className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-6"
+              className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto mb-6"
               variants={fadeInUp}
             >
               Official media resources for JBJ Global Real Estate
@@ -190,7 +190,7 @@ const PressKit = () => {
               variants={fadeInUp}
             >
               <Lock className="w-4 h-4 text-gold" />
-              <span className="text-gray-600 text-sm">Protected Content • Contact for Access</span>
+              <span className="text-[#5A4A2E] text-sm">Protected Content • Contact for Access</span>
             </motion.div>
           </motion.div>
         </div>
@@ -198,7 +198,7 @@ const PressKit = () => {
 
       <FounderContent>
       {/* Quick Bio Section - Premium White/Gold Style */}
-      <section className="py-16 border-y border-gray-800">
+      <section className="py-16 border-y border-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -213,21 +213,21 @@ const PressKit = () => {
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center border border-gold/30">
+                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center border border-gold/30">
                     <FileText className="w-6 h-6 text-gold" />
                   </div>
                   <div>
-                    <h3 className="text-black text-xl font-semibold">Official Biography</h3>
-                    <p className="text-gray-600 text-sm">Short bio for press releases</p>
+                    <h3 className="text-[#1A1A1A] text-xl font-semibold">Official Biography</h3>
+                    <p className="text-[#5A4A2E] text-sm">Short bio for press releases</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 bg-black/10 border border-gold/30 rounded-full px-3 py-1">
+                <div className="flex items-center gap-2 bg-[#1A1A1A]/10 border border-gold/30 rounded-full px-3 py-1">
                   <Shield className="w-3 h-3 text-gold" />
-                  <span className="text-xs text-gray-600">Protected</span>
+                  <span className="text-xs text-[#5A4A2E]">Protected</span>
                 </div>
               </div>
               
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-[#5A4A2E] leading-relaxed">
                 <span className="text-gold font-semibold">Jane Bou Jaoude (جاين بو جودة)</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
                 a Dubai-based Real Estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
@@ -261,7 +261,7 @@ const PressKit = () => {
                 </h2>
               </div>
               <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
-                <p className="text-gray-700 text-sm">
+                <p className="text-[#5A4A2E] text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>
                 </p>
@@ -290,24 +290,24 @@ const PressKit = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     
                     {/* Protected badge */}
-                    <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm text-gold text-xs px-3 py-1 rounded-full border border-gold/30 flex items-center gap-1.5">
+                    <div className="absolute top-4 right-4 bg-[#1A1A1A]/80 backdrop-blur-sm text-gold text-xs px-3 py-1 rounded-full border border-gold/30 flex items-center gap-1.5">
                       <Lock className="w-3 h-3" />
                       Protected
                     </div>
                     
                     {/* Hover overlay with contact message */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/70">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[#1A1A1A]/70">
                       <div className="text-center px-4">
                         <Shield className="w-8 h-8 text-gold mx-auto mb-2" />
                         <p className="text-white text-sm font-medium mb-1">Protected Content</p>
-                        <p className="text-gray-600 text-xs">Contact media@JBJ.ae for access</p>
+                        <p className="text-[#5A4A2E] text-xs">Contact media@JBJ.ae for access</p>
                       </div>
                     </div>
                   </div>
                   
                   <div className="p-5">
-                    <h4 className="text-black font-semibold mb-1">{asset.name}</h4>
-                    <p className="text-gray-600 text-sm">{asset.description}</p>
+                    <h4 className="text-[#1A1A1A] font-semibold mb-1">{asset.name}</h4>
+                    <p className="text-[#5A4A2E] text-sm">{asset.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -352,23 +352,23 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Company Name</span>
-                    <span className="text-black font-medium">JBJ GLOBAL REAL ESTATE</span>
+                    <span className="text-[#5A4A2E]">Company Name</span>
+                    <span className="text-[#1A1A1A] font-medium">JBJ GLOBAL REAL ESTATE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Founded</span>
-                    <span className="text-black font-medium">2025</span>
+                    <span className="text-[#5A4A2E]">Founded</span>
+                    <span className="text-[#1A1A1A] font-medium">2025</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Headquarters</span>
-                    <span className="text-black font-medium">Downtown Dubai, UAE</span>
+                    <span className="text-[#5A4A2E]">Headquarters</span>
+                    <span className="text-[#1A1A1A] font-medium">Downtown Dubai, UAE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Industry</span>
-                    <span className="text-black font-medium">Real Estate Brokerage</span>
+                    <span className="text-[#5A4A2E]">Industry</span>
+                    <span className="text-[#1A1A1A] font-medium">Real Estate Brokerage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Website</span>
+                    <span className="text-[#5A4A2E]">Website</span>
                     <a href="https://jbj.ae" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline flex items-center gap-1">
                       jbj.ae
                       <ExternalLink className="w-3 h-3" />
@@ -388,19 +388,19 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Industry Experience</span>
+                    <span className="text-[#5A4A2E]">Industry Experience</span>
                     <span className="text-gold font-bold">12+ Years</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Brokers Trained</span>
+                    <span className="text-[#5A4A2E]">Brokers Trained</span>
                     <span className="text-gold font-bold">{`${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`}</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-gray-600">Team Members</span>
+                    <span className="text-[#5A4A2E]">Team Members</span>
                     <span className="text-gold font-bold">10+</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Client Satisfaction</span>
+                    <span className="text-[#5A4A2E]">Client Satisfaction</span>
                     <span className="text-gold font-bold">98%</span>
                   </div>
                 </div>
@@ -411,7 +411,7 @@ const PressKit = () => {
       </section>
 
       {/* Media Contact - Premium champagne Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-t border-gray-200">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-t border-[#B89555]/30">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -422,18 +422,18 @@ const PressKit = () => {
           >
             {/* Premium Contact Card */}
             <motion.div
-              className="bg-white border border-gold/30 rounded-3xl p-8 md:p-12 text-center shadow-lg"
+              className="bg-[#FDFBF7] border border-gold/30 rounded-3xl p-8 md:p-12 text-center shadow-lg"
               variants={fadeInUp}
             >
               <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">
                 Press Inquiries
               </span>
               <h2
-                className="text-black text-3xl md:text-4xl font-bold mb-6"
+                className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-6"
               >
                 Media <span className="text-gold">Contact</span>
               </h2>
-              <p className="text-gray-600 text-lg mb-10">
+              <p className="text-[#5A4A2E] text-lg mb-10">
                 For press inquiries, interview requests, or additional assets, please contact our media relations team.
               </p>
 
@@ -470,10 +470,10 @@ const PressKit = () => {
 
             {/* Phone actions (Call / WhatsApp / Add Contact / Share) */}
             <AlertDialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
-              <AlertDialogContent className="bg-white border border-gold/30">
+              <AlertDialogContent className="bg-[#FDFBF7] border border-gold/30">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-black">Contact Options</AlertDialogTitle>
-                  <AlertDialogDescription className="text-gray-600">
+                  <AlertDialogTitle className="text-[#1A1A1A]">Contact Options</AlertDialogTitle>
+                  <AlertDialogDescription className="text-[#5A4A2E]">
                     Choose how you would like to contact JBJ GLOBAL REAL ESTATE.
                   </AlertDialogDescription>
                 </AlertDialogHeader>

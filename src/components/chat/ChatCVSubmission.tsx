@@ -188,10 +188,10 @@ const ChatCVSubmission = ({
         <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-4">
           <CheckCircle className="w-8 h-8 text-green-500" />
         </div>
-        <h4 className="text-black text-lg font-semibold mb-2">
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>CV Submitted Successfully!</T>
         </h4>
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#5A4A2E] text-sm">
           <T>Thank you for your interest in joining JBJ Global. Our HR team will review your application and contact you soon.</T>
         </p>
       </div>
@@ -214,34 +214,34 @@ const ChatCVSubmission = ({
         <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-500/10 flex items-center justify-center">
           <FileText className="w-7 h-7 text-blue-500" />
         </div>
-        <h4 className="text-black text-lg font-semibold mb-1"><T>Submit Your CV</T></h4>
-        <p className="text-gray-600 text-sm"><T>Join our growing team at JBJ Global</T></p>
+        <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1"><T>Submit Your CV</T></h4>
+        <p className="text-[#5A4A2E] text-sm"><T>Join our growing team at JBJ Global</T></p>
       </div>
 
       <div className="space-y-3">
         {/* Name Row */}
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <Label className="text-black text-xs mb-1 block"><T>First Name</T> *</Label>
+            <Label className="text-[#1A1A1A] text-xs mb-1 block"><T>First Name</T> *</Label>
             <input
               value={userInfo.firstName}
               onChange={(e) => onUserInfoChange('firstName', e.target.value)}
               placeholder="First"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5">{formErrors.firstName}</p>}
           </div>
           <div>
-            <Label className="text-black text-xs mb-1 block"><T>Last Name</T> *</Label>
+            <Label className="text-[#1A1A1A] text-xs mb-1 block"><T>Last Name</T> *</Label>
             <input
               value={userInfo.lastName}
               onChange={(e) => onUserInfoChange('lastName', e.target.value)}
               placeholder="Last"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5">{formErrors.lastName}</p>}
           </div>
@@ -249,7 +249,7 @@ const ChatCVSubmission = ({
 
         {/* Email */}
         <div>
-          <Label className="text-black text-xs mb-1 block"><T>Email Address</T> *</Label>
+          <Label className="text-[#1A1A1A] text-xs mb-1 block"><T>Email Address</T> *</Label>
           <input
             type="email"
             value={userInfo.email}
@@ -257,14 +257,14 @@ const ChatCVSubmission = ({
             placeholder="your@email.com"
             inputMode="email"
             autoComplete="off"
-            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5">{formErrors.email}</p>}
         </div>
 
         {/* Phone */}
         <div>
-          <Label className="text-black text-xs mb-1 block"><T>Phone Number</T> *</Label>
+          <Label className="text-[#1A1A1A] text-xs mb-1 block"><T>Phone Number</T> *</Label>
           <input
             type="tel"
             value={userInfo.phone}
@@ -272,14 +272,14 @@ const ChatCVSubmission = ({
             placeholder="+971 50 123 4567"
             inputMode="tel"
             autoComplete="off"
-            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5">{formErrors.phone}</p>}
         </div>
 
         {/* CV Upload */}
         <div>
-          <Label className="text-black text-xs mb-1 block"><T>Upload Your CV</T> *</Label>
+          <Label className="text-[#1A1A1A] text-xs mb-1 block"><T>Upload Your CV</T> *</Label>
           <input
             ref={fileInputRef}
             type="file"
@@ -294,7 +294,7 @@ const ChatCVSubmission = ({
                 ? 'border-green-500 bg-green-50' 
                 : formErrors.cv 
                   ? 'border-red-500 bg-red-50'
-                  : 'border-gold/40 hover:border-gold bg-white'
+                  : 'border-gold/40 hover:border-gold bg-[#FDFBF7]'
             }`}
           >
             {cvFile ? (
@@ -306,8 +306,8 @@ const ChatCVSubmission = ({
             ) : (
               <>
                 <Upload className="w-6 h-6 text-gold" />
-                <span className="text-black text-sm font-medium"><T>Click to upload</T></span>
-                <span className="text-gray-600 text-xs">PDF or Word (max 5MB)</span>
+                <span className="text-[#1A1A1A] text-sm font-medium"><T>Click to upload</T></span>
+                <span className="text-[#5A4A2E] text-xs">PDF or Word (max 5MB)</span>
               </>
             )}
           </button>
@@ -323,14 +323,14 @@ const ChatCVSubmission = ({
         {isUploading && (
           <div className="flex items-center justify-center gap-2 py-2">
             <Loader2 className="w-5 h-5 text-gold animate-spin" />
-            <span className="text-sm text-black/70 font-medium">Uploading your CV...</span>
+            <span className="text-sm text-[#1A1A1A]/70 font-medium">Uploading your CV...</span>
           </div>
         )}
 
         <Button
           onClick={handleSubmit}
           disabled={isUploading}
-          className="w-full bg-gold hover:bg-gold-light text-black font-bold py-3 rounded-xl shadow-lg shadow-gold/20"
+          className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold py-3 rounded-xl shadow-lg shadow-gold/20"
         >
           {isUploading ? (
             <><Loader2 className="w-4 h-4 mr-2 animate-spin" /><T>Uploading...</T></>
@@ -339,7 +339,7 @@ const ChatCVSubmission = ({
           )}
         </Button>
 
-        <p className="text-center text-gray-600 text-xs">
+        <p className="text-center text-[#5A4A2E] text-xs">
           <T>Your information will be securely stored and reviewed by our HR team</T>
         </p>
       </div>

@@ -42,23 +42,23 @@ const ShareButton = ({ projectName, projectSlug }: ShareButtonProps) => {
         <Button
           variant="outline"
           size="sm"
-          className="bg-black border-[#A8925A] text-white hover:bg-[#A8925A]/20 hover:text-white font-medium"
+          className="bg-[#1A1A1A] border-[#A8925A] text-white hover:bg-[#A8925A]/20 hover:text-white font-medium"
         >
           <Share2 className="w-4 h-4 mr-2 text-[#A8925A]" />
           Share
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-zinc-900 border-gray-800">
+      <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A]">
         <DropdownMenuItem
           onClick={() => window.open(whatsappUrl, "_blank")}
-          className="text-white/85 hover:text-white hover:bg-gray-800 cursor-pointer"
+          className="text-white/85 hover:text-white hover:bg-[#1A1A1A] cursor-pointer"
         >
           <MessageCircle className="w-4 h-4 mr-2 text-green-500" />
           Share via WhatsApp
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleCopyLink}
-          className="text-white/85 hover:text-white hover:bg-gray-800 cursor-pointer"
+          className="text-white/85 hover:text-white hover:bg-[#1A1A1A] cursor-pointer"
         >
           {copied ? (
             <Check className="w-4 h-4 mr-2 text-green-500" />

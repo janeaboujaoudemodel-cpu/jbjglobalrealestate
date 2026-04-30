@@ -334,7 +334,7 @@ export function BrandAssetLibrary({
               onClick={() => setActiveType(type)}
               className={`flex-1 py-1 rounded-md text-[10px] font-semibold capitalize transition-all ${
                 activeType === type
-                  ? "bg-white shadow-sm text-[hsl(var(--foreground))]"
+                  ? "bg-[#FDFBF7] shadow-sm text-[hsl(var(--foreground))]"
                   : "text-[hsl(var(--muted-foreground))]"
               }`}
             >
@@ -352,7 +352,7 @@ export function BrandAssetLibrary({
           </p>
           <div
             ref={sigContainerRef}
-            className="border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl bg-white overflow-hidden"
+            className="border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-xl bg-[#FDFBF7] overflow-hidden"
           >
             <canvas
               ref={canvasRef}

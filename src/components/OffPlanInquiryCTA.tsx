@@ -79,7 +79,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               required
               className="flex-1"
             />
-            <Button type="submit" disabled={isSubmitting} className="bg-gold text-black hover:bg-gold/90">
+            <Button type="submit" disabled={isSubmitting} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Get Advice"}
             </Button>
           </form>
@@ -99,7 +99,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                 <div className="p-3 rounded-xl bg-gold/20">
                   <Building2 className="w-8 h-8 text-gold" />
                 </div>
-                <HelpCircle className="w-6 h-6 text-gray-600" />
+                <HelpCircle className="w-6 h-6 text-[#5A4A2E]" />
               </div>
               
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
@@ -171,7 +171,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                 <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-semibold py-6"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold py-6"
                 >
                   {isSubmitting ? (
                     <>

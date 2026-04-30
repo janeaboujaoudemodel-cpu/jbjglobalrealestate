@@ -29,7 +29,7 @@ const PRIORITY_CONFIG: Record<string, { color: string; icon: React.ReactNode; la
   urgent: { color: "bg-red-100 text-red-700 border-red-300", icon: <AlertTriangle className="w-3 h-3" />, label: "Urgent" },
   high: { color: "bg-amber-100 text-amber-700 border-amber-300", icon: <Zap className="w-3 h-3" />, label: "High" },
   normal: { color: "bg-blue-100 text-blue-700 border-blue-300", icon: <Clock className="w-3 h-3" />, label: "Normal" },
-  low: { color: "bg-gray-100 text-gray-600 border-gray-300", icon: <CheckCircle2 className="w-3 h-3" />, label: "Low" },
+  low: { color: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30", icon: <CheckCircle2 className="w-3 h-3" />, label: "Low" },
 };
 
 export default function EmailAssistantPanel({
@@ -83,7 +83,7 @@ export default function EmailAssistantPanel({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-[#B89555]" />
-          <span className="text-sm font-semibold text-black">Amanda Clarke — Executive Assistant</span>
+          <span className="text-sm font-semibold text-[#1A1A1A]">Amanda Clarke — Executive Assistant</span>
           {analysis && (
             <Badge className={`${priorityCfg.color} text-[9px] gap-1`}>
               {priorityCfg.icon} {priorityCfg.label}
@@ -91,7 +91,7 @@ export default function EmailAssistantPanel({
           )}
         </div>
         {analysis?.cached && (
-          <span className="text-[9px] text-black/30">cached</span>
+          <span className="text-[9px] text-[#1A1A1A]/30">cached</span>
         )}
       </div>
 
@@ -107,21 +107,21 @@ export default function EmailAssistantPanel({
         <>
           {/* Bilingual Summaries */}
           <div className="grid grid-cols-2 gap-3 mb-3">
-            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3">
-              <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Summary (EN)</p>
-              <p className="text-xs text-black/70 leading-relaxed">{analysis.summary_en}</p>
+            <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-3">
+              <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-1">Summary (EN)</p>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">{analysis.summary_en}</p>
             </div>
-            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3" dir="rtl">
-              <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
-              <p className="text-xs text-black/70 leading-relaxed text-right">{analysis.summary_ar}</p>
+            <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-3" dir="rtl">
+              <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed text-right">{analysis.summary_ar}</p>
             </div>
           </div>
 
           {/* Suggested Reply */}
           {analysis.suggested_reply && (
-            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3 mb-3">
-              <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Suggested Reply</p>
-              <p className="text-xs text-black/70 leading-relaxed">{analysis.suggested_reply}</p>
+            <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-3 mb-3">
+              <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-1">Suggested Reply</p>
+              <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">{analysis.suggested_reply}</p>
               <div className="flex gap-2 mt-2">
                 <Button
                   variant="outline"
@@ -134,7 +134,7 @@ export default function EmailAssistantPanel({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-7 text-[10px] border-[#B89555]/30 text-black/60"
+                  className="h-7 text-[10px] border-[#B89555]/30 text-[#1A1A1A]/60"
                   onClick={() => onEditDraft(analysis.suggested_reply)}
                 >
                   <Pencil className="w-3 h-3 mr-1" /> Edit Draft
@@ -145,11 +145,11 @@ export default function EmailAssistantPanel({
 
           {/* Action Items */}
           {analysis.action_items && analysis.action_items.length > 0 && (
-            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3">
-              <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-2">Action Items</p>
+            <div className="bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 p-3">
+              <p className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider mb-2">Action Items</p>
               <ul className="space-y-1">
                 {analysis.action_items.map((item, i) => (
-                  <li key={i} className="text-xs text-black/70 flex items-start gap-2">
+                  <li key={i} className="text-xs text-[#1A1A1A]/70 flex items-start gap-2">
                     <span className="text-[#B89555] mt-0.5">•</span>
                     {item}
                   </li>
@@ -159,7 +159,7 @@ export default function EmailAssistantPanel({
           )}
         </>
       ) : (
-        <p className="text-xs text-black/40 text-center py-4">Select an email to analyze</p>
+        <p className="text-xs text-[#1A1A1A]/40 text-center py-4">Select an email to analyze</p>
       )}
     </div>
   );

@@ -49,7 +49,7 @@ export function PhaseCard({
         );
       default:
         return (
-          <Badge className="bg-gold/10 text-black/50 border-gold/20">
+          <Badge className="bg-gold/10 text-[#1A1A1A]/50 border-gold/20">
             Locked
           </Badge>
         );
@@ -81,7 +81,7 @@ export function PhaseCard({
                 ? "bg-emerald-500/20 text-emerald-600"
                 : status === 'in_progress' || status === 'test_pending'
                   ? "bg-gold/20 text-gold"
-                  : "bg-gold/10 text-black/40"
+                  : "bg-gold/10 text-[#1A1A1A]/40"
             )}>
               {phase.phase_number}
             </div>
@@ -92,13 +92,13 @@ export function PhaseCard({
           <div className="flex-1">
             <h3 className={cn(
               "text-lg font-semibold mb-2",
-              status === 'locked' ? "text-black/50" : "text-black"
+              status === 'locked' ? "text-[#1A1A1A]/50" : "text-[#1A1A1A]"
             )}>
               {phase.title}
             </h3>
             <p className={cn(
               "text-sm line-clamp-3",
-              status === 'locked' ? "text-black/50" : "text-black/60"
+              status === 'locked' ? "text-[#1A1A1A]/50" : "text-[#1A1A1A]/60"
             )}>
               {phase.description}
             </p>
@@ -123,7 +123,7 @@ export function PhaseCard({
             ) : status === 'test_pending' ? (
               <Button 
                 size="sm" 
-                className="w-full bg-gold hover:bg-gold/90 text-black"
+                className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
               >
                 Take Test
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -138,7 +138,7 @@ export function PhaseCard({
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <div className="flex items-center gap-2 text-black/40 text-sm">
+              <div className="flex items-center gap-2 text-[#1A1A1A]/40 text-sm">
                 <Lock className="w-4 h-4" />
                 Complete previous phase first
               </div>

@@ -220,8 +220,8 @@ export const AIMarketAnalyzer = ({
               <Brain className="w-4 h-4 text-white" />
             </div>
             <div className="text-left">
-              <p className="text-xs font-semibold text-black">JBJ AI Market Analysis</p>
-              <p className="text-[10px] text-gray-600">
+              <p className="text-xs font-semibold text-[#1A1A1A]">JBJ AI Market Analysis</p>
+              <p className="text-[10px] text-[#5A4A2E]">
                 {insights ? 'View insights' : 'Click to analyze'}
               </p>
             </div>
@@ -257,8 +257,8 @@ export const AIMarketAnalyzer = ({
             <Brain className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-black">JBJ AI Market Intelligence</h3>
-            <p className="text-sm text-gray-600">Powered by advanced market analysis</p>
+            <h3 className="text-lg font-bold text-[#1A1A1A]">JBJ AI Market Intelligence</h3>
+            <p className="text-sm text-[#5A4A2E]">Powered by advanced market analysis</p>
           </div>
         </div>
       </div>
@@ -279,10 +279,10 @@ export const AIMarketAnalyzer = ({
             </div>
             <div className="h-16 bg-gold/10 rounded-xl" />
           </div>
-          <p className="text-gray-600 text-sm text-center">Loading market intelligence for {name}...</p>
+          <p className="text-[#5A4A2E] text-sm text-center">Loading market intelligence for {name}...</p>
           {isTimedOut && (
             <div className="text-center mt-4">
-              <p className="text-gray-600 text-sm mb-2">Taking longer than expected...</p>
+              <p className="text-[#5A4A2E] text-sm mb-2">Taking longer than expected...</p>
               <Button variant="secondary" size="sm" onClick={fetchAnalysis}>
                 Retry Analysis
               </Button>
@@ -310,41 +310,41 @@ export const AIMarketAnalyzer = ({
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${getDemandColor(insights.supplyDemandScore)}`} />
-              <p className="text-xs text-gray-600 mb-1">Supply/Demand</p>
-              <p className="text-lg font-bold text-black">{insights.supplyDemandLabel}</p>
+              <p className="text-xs text-[#5A4A2E] mb-1">Supply/Demand</p>
+              <p className="text-lg font-bold text-[#1A1A1A]">{insights.supplyDemandLabel}</p>
             </div>
-            <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <BarChart3 className={`w-6 h-6 mx-auto mb-2 ${getPriceComparisonColor(insights.priceComparisonPercent)}`} />
-              <p className="text-xs text-gray-600 mb-1">Price Position</p>
-              <p className="text-lg font-bold text-black">{insights.priceComparisonLabel}</p>
+              <p className="text-xs text-[#5A4A2E] mb-1">Price Position</p>
+              <p className="text-lg font-bold text-[#1A1A1A]">{insights.priceComparisonLabel}</p>
             </div>
-            <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <Target className="w-6 h-6 mx-auto mb-2 text-gold" />
-              <p className="text-xs text-gray-600 mb-1">Area Avg/sqft</p>
+              <p className="text-xs text-[#5A4A2E] mb-1">Area Avg/sqft</p>
               <p className="text-lg font-bold text-price-orange">AED {insights.avgAreaPriceSqft.toLocaleString()}</p>
             </div>
-            <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
+            <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               {insights.priceComparisonPercent < 0 ? (
                 <TrendingDown className="w-6 h-6 mx-auto mb-2 text-green-600" />
               ) : (
                 <TrendingUp className="w-6 h-6 mx-auto mb-2 text-orange-500" />
               )}
-              <p className="text-xs text-gray-600 mb-1">vs Market</p>
-              <p className="text-lg font-bold text-black">
+              <p className="text-xs text-[#5A4A2E] mb-1">vs Market</p>
+              <p className="text-lg font-bold text-[#1A1A1A]">
                 {insights.priceComparisonPercent > 0 ? '+' : ''}{insights.priceComparisonPercent}%
               </p>
             </div>
           </div>
 
           {/* Summary */}
-          <div className="p-4 bg-white/60 rounded-xl border border-gold/20">
-            <h4 className="font-semibold text-black mb-2 flex items-center gap-2">
+          <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20">
+            <h4 className="font-semibold text-[#1A1A1A] mb-2 flex items-center gap-2">
               <Brain className="w-4 h-4 text-purple-600" />
               Executive Summary
             </h4>
-            <p className="text-gray-700 leading-relaxed">{insights.summary}</p>
+            <p className="text-[#5A4A2E] leading-relaxed">{insights.summary}</p>
           </div>
 
           {/* Insights & Risks */}
@@ -383,7 +383,7 @@ export const AIMarketAnalyzer = ({
           <div className="border-t border-gold/20 pt-6">
             <div className="flex items-center gap-2 mb-4">
               <MessageCircle className="w-5 h-5 text-purple-600" />
-              <h4 className="font-semibold text-black">Ask AI Analyzer</h4>
+              <h4 className="font-semibold text-[#1A1A1A]">Ask AI Analyzer</h4>
             </div>
             
             {/* Quick Questions */}
@@ -396,7 +396,7 @@ export const AIMarketAnalyzer = ({
                     handleChatSubmit();
                   }}
                   disabled={isChatLoading}
-                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-gray-700 hover:border-gold hover:bg-gold/10 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-[#5A4A2E] hover:border-gold hover:bg-gold/10 transition-colors"
                 >
                   {q}
                 </button>
@@ -407,14 +407,14 @@ export const AIMarketAnalyzer = ({
             {chatMessages.length > 0 && (
               <div 
                 ref={chatContainerRef}
-                className="max-h-60 overflow-y-auto mb-4 space-y-3 p-4 bg-white/50 rounded-xl border border-gold/20"
+                className="max-h-60 overflow-y-auto mb-4 space-y-3 p-4 bg-[#FDFBF7]/50 rounded-xl border border-gold/20"
               >
                 {chatMessages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
                       msg.role === 'user' 
                         ? 'bg-purple-600 text-white' 
-                        : 'bg-white border border-gold/20 text-gray-700'
+                        : 'bg-[#FDFBF7] border border-gold/20 text-[#5A4A2E]'
                     }`}>
                       {msg.content}
                     </div>
@@ -422,7 +422,7 @@ export const AIMarketAnalyzer = ({
                 ))}
                 {isChatLoading && (
                   <div className="flex justify-start">
-                    <div className="p-3 rounded-xl bg-white border border-gold/20">
+                    <div className="p-3 rounded-xl bg-[#FDFBF7] border border-gold/20">
                       <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
                     </div>
                   </div>
@@ -451,11 +451,11 @@ export const AIMarketAnalyzer = ({
           </div>
 
           {/* Disclaimer */}
-          <div className="p-4 bg-gray-100/50 rounded-xl border border-gray-200">
+          <div className="p-4 bg-[#F7F2EA]/50 rounded-xl border border-[#B89555]/30">
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-gray-600 mt-0.5 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-[#5A4A2E] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-gray-600 leading-relaxed">
+                <p className="text-xs text-[#5A4A2E] leading-relaxed">
                   <strong>AI Disclosure:</strong> This analysis is generated by artificial intelligence based on market data patterns. 
                   It does not constitute financial or investment advice.{" "}
                   <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

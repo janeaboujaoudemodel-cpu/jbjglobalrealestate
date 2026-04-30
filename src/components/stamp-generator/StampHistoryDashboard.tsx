@@ -171,7 +171,7 @@ export default function StampHistoryDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))]">
       {/* ── Header ── */}
-      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm">
+      <div className="sticky top-0 lg:top-[48px] z-20 border-b border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3 flex-wrap">
           <Button variant="ghost" size="sm" className="gap-1.5 text-[hsl(var(--muted-foreground))]"
             onClick={() => navigate('/toolkit/stamp-generator/projects')}>
@@ -212,7 +212,7 @@ export default function StampHistoryDashboard() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search company, project, template…"
-            className="w-full pl-8 pr-3 py-1.5 text-sm border border-[hsl(var(--border))] rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[hsl(var(--gold)/0.5)]"
+            className="w-full pl-8 pr-3 py-1.5 text-sm border border-[hsl(var(--border))] rounded-lg bg-[#FDFBF7] focus:outline-none focus:ring-1 focus:ring-[hsl(var(--gold)/0.5)]"
           />
           {search && (
             <button onClick={() => setSearch('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">
@@ -228,7 +228,7 @@ export default function StampHistoryDashboard() {
               onClick={() => setFilterExported(f)}
               className={`px-3 py-1.5 capitalize transition-colors ${filterExported === f
                 ? 'bg-[hsl(var(--gold))] text-white font-medium'
-                : 'bg-white text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+                : 'bg-[#FDFBF7] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
               {f}
             </button>
           ))}
@@ -239,7 +239,7 @@ export default function StampHistoryDashboard() {
           onClick={() => setFilterFav(v => !v)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs transition-colors ${filterFav
             ? 'bg-amber-50 border-amber-300 text-amber-700'
-            : 'bg-white border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+            : 'bg-[#FDFBF7] border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
           <Star size={12} className={filterFav ? 'fill-amber-500 text-amber-500' : ''}/>
           Favorites
         </button>
@@ -250,7 +250,7 @@ export default function StampHistoryDashboard() {
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value as any)}
-            className="border border-[hsl(var(--border))] rounded-lg px-2 py-1.5 bg-white text-[hsl(var(--foreground))] focus:outline-none">
+            className="border border-[hsl(var(--border))] rounded-lg px-2 py-1.5 bg-[#FDFBF7] text-[hsl(var(--foreground))] focus:outline-none">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
             <option value="exported">Export date</option>
@@ -259,11 +259,11 @@ export default function StampHistoryDashboard() {
 
         <div className="ml-auto flex rounded-lg border border-[hsl(var(--border))] overflow-hidden">
           <button onClick={() => setView('grid')}
-            className={`p-1.5 transition-colors ${view === 'grid' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-white text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+            className={`p-1.5 transition-colors ${view === 'grid' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[#FDFBF7] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
             <LayoutGrid size={14}/>
           </button>
           <button onClick={() => setView('list')}
-            className={`p-1.5 transition-colors ${view === 'list' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-white text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+            className={`p-1.5 transition-colors ${view === 'list' ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[#FDFBF7] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
             <List size={14}/>
           </button>
         </div>
@@ -321,7 +321,7 @@ function GridView({ rows, getTint, navigate }: {
         const tint = getTint(row);
         return (
           <div key={row.design_id}
-            className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all group overflow-hidden">
+            className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all group overflow-hidden">
 
             {/* Thumbnail */}
             <div className="relative h-44 flex items-center justify-center bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1))]">
@@ -407,7 +407,7 @@ function ListView({ rows, getTint, navigate }: {
         const tint = getTint(row);
         return (
           <div key={row.design_id}
-            className="bg-white rounded-xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all flex items-center gap-4 px-4 py-3">
+            className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] shadow-sm hover:shadow-md transition-all flex items-center gap-4 px-4 py-3">
 
             {/* Thumbnail */}
             <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-[hsl(var(--pearl-1))] to-[hsl(var(--champagne-1))] flex items-center justify-center shrink-0">

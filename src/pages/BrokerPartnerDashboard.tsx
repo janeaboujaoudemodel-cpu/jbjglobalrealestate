@@ -115,7 +115,7 @@ const BrokerPartnerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-[#1A1A1A]">
       <div className="container mx-auto px-4 py-8">
         <motion.div
           initial="initial"
@@ -148,7 +148,7 @@ const BrokerPartnerDashboard = () => {
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-gray-800">
+              <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-[#1A1A1A]">
                 <DropdownMenuItem asChild>
                   <Link to="/my-account" className="flex items-center gap-2 cursor-pointer">
                     <User className="w-4 h-4" /> My Profile
@@ -179,7 +179,7 @@ const BrokerPartnerDashboard = () => {
                       placeholder="Search properties by location, developer, or keyword..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-zinc-900/80 border-gray-700 h-12"
+                      className="pl-10 bg-zinc-900/80 border-[#1A1A1A] h-12"
                     />
                   </div>
                   <Button type="submit" className="bg-purple-600 hover:bg-purple-700 h-12 px-8">
@@ -196,7 +196,7 @@ const BrokerPartnerDashboard = () => {
               const Icon = tool.icon;
               return (
                 <Link key={tool.name} to={tool.href}>
-                  <Card className="bg-zinc-900/50 border-gray-800 hover:border-purple-500/50 transition-all cursor-pointer group">
+                  <Card className="bg-zinc-900/50 border-[#1A1A1A] hover:border-purple-500/50 transition-all cursor-pointer group">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:bg-purple-500/30 transition-colors">
@@ -219,7 +219,7 @@ const BrokerPartnerDashboard = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* Client Shortlisting */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle className="text-xl flex items-center gap-2">
@@ -229,7 +229,7 @@ const BrokerPartnerDashboard = () => {
                       <CardDescription>Properties saved for your clients</CardDescription>
                     </div>
                     <Link to="/favorites">
-                      <Button variant="outline" className="border-gray-700">
+                      <Button variant="outline" className="border-[#1A1A1A]">
                         Create New List
                       </Button>
                     </Link>
@@ -239,7 +239,7 @@ const BrokerPartnerDashboard = () => {
                       {MOCK_SHORTLIST.map((list) => (
                         <div 
                           key={list.id}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-gray-800 transition-colors cursor-pointer"
+                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
@@ -262,7 +262,7 @@ const BrokerPartnerDashboard = () => {
                       
                       {MOCK_SHORTLIST.length === 0 && (
                         <div className="text-center py-8">
-                          <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                          <Users className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
                           <p className="text-white/70 mb-4">No client shortlists yet</p>
                           <Link to="/favorites">
                             <Button className="bg-purple-600 hover:bg-purple-700">
@@ -278,7 +278,7 @@ const BrokerPartnerDashboard = () => {
 
               {/* Saved Reports */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-xl flex items-center gap-2">
                       <FileText className="w-5 h-5 text-purple-400" />
@@ -291,7 +291,7 @@ const BrokerPartnerDashboard = () => {
                       {MOCK_REPORTS.map((report, idx) => (
                         <div 
                           key={idx}
-                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-gray-800 transition-colors"
+                          className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors"
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -323,7 +323,7 @@ const BrokerPartnerDashboard = () => {
             <div className="space-y-6">
               {/* Broker Resources */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Briefcase className="w-5 h-5 text-purple-400" />
@@ -333,19 +333,19 @@ const BrokerPartnerDashboard = () => {
                   <CardContent>
                     <div className="space-y-2">
                       <Link to="/broker-resources">
-                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <FileText className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Marketing Materials</span>
                         </div>
                       </Link>
                       <Link to="/areas">
-                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <MapPin className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Area Guides</span>
                         </div>
                       </Link>
                       <Link to="/developers">
-                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <Building2 className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Developer Directory</span>
                         </div>
@@ -357,7 +357,7 @@ const BrokerPartnerDashboard = () => {
 
               {/* Broker Education */}
               <motion.div variants={fadeInUp}>
-                <Card className="bg-zinc-900/50 border-gray-800">
+                <Card className="bg-zinc-900/50 border-[#1A1A1A]">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <BookOpen className="w-5 h-5 text-purple-400" />
@@ -374,7 +374,7 @@ const BrokerPartnerDashboard = () => {
                         </div>
                       </Link>
                       <Link to="/broker-faq">
-                        <div className="p-3 rounded-lg bg-zinc-800/50 hover:bg-gray-800 transition-colors cursor-pointer">
+                        <div className="p-3 rounded-lg bg-zinc-800/50 hover:bg-[#1A1A1A] transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Broker FAQ</p>
                           <p className="text-xs text-white/90">Common questions answered</p>
                         </div>
@@ -408,7 +408,7 @@ const BrokerPartnerDashboard = () => {
 
           {/* Footer Note */}
           <motion.div variants={fadeInUp} className="mt-12 text-center">
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-[#5A4A2E]">
               External Broker Partner access. CRM features are available to JBJ Internal Brokers only.
             </p>
           </motion.div>

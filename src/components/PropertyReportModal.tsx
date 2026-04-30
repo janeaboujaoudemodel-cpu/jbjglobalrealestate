@@ -191,9 +191,9 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
         }
         onOpenChange(isOpen);
       }}>
-        <DialogContent className="bg-white border-gray-200 max-w-4xl h-[90vh] p-0 flex flex-col overflow-hidden">
+        <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 max-w-4xl h-[90vh] p-0 flex flex-col overflow-hidden">
           {/* Report Viewer Header */}
-          <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shrink-0">
+          <div className="sticky top-0 z-10 bg-[#FDFBF7] border-b border-[#B89555]/30 px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
@@ -202,12 +202,12 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                   setShowReportViewer(false);
                   setReportHtml(null);
                 }}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-[#5A4A2E] hover:text-[#1A1A1A]"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back
               </Button>
-              <span className="text-gray-900 font-semibold">{project.name} - Report</span>
+              <span className="text-[#1A1A1A] font-semibold">{project.name} - Report</span>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -245,24 +245,24 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-white border-gray-200 text-black max-w-lg max-h-[85vh] overflow-y-auto my-4">
+      <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] max-w-lg max-h-[85vh] overflow-y-auto my-4">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold flex items-center gap-3 text-black">
-            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+          <DialogTitle className="text-xl font-semibold flex items-center gap-3 text-[#1A1A1A]">
+            <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center">
               <FileText className="w-5 h-5 text-gold" />
             </div>
             Property Report & Share
           </DialogTitle>
-          <DialogDescription className="text-gray-600">
+          <DialogDescription className="text-[#5A4A2E]">
             View the complete property report or share it with others.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           {/* Property Info Summary */}
-          <div className="bg-gray-100 rounded-lg p-4 border border-gray-200">
-            <h3 className="font-semibold text-black mb-1">{project.name}</h3>
-            <p className="text-sm text-gray-600">
+          <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/30">
+            <h3 className="font-semibold text-[#1A1A1A] mb-1">{project.name}</h3>
+            <p className="text-sm text-[#5A4A2E]">
               {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
             </p>
             <p className="text-gold font-medium mt-2">
@@ -312,19 +312,19 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
           {/* Send to Email */}
           <div className="space-y-2">
-            <Label className="text-gray-600 text-sm">Share via Email</Label>
+            <Label className="text-[#5A4A2E] text-sm">Share via Email</Label>
             <div className="flex gap-2">
               <Input
                 type="email"
                 placeholder="Enter email address"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
-                className="bg-white border-gray-300 text-black placeholder:text-gray-600 flex-1"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] flex-1"
               />
               <Button
                 onClick={handleShareToEmail}
                 variant="outline"
-                className="border-gray-300 text-black hover:bg-gray-100"
+                className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -344,21 +344,21 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
           {/* Individual Documents */}
           {project.documents && project.documents.length > 0 && (
-            <div className="pt-4 border-t border-gray-200">
-              <Label className="text-gray-600 text-sm mb-3 block">Individual Materials</Label>
+            <div className="pt-4 border-t border-[#B89555]/30">
+              <Label className="text-[#5A4A2E] text-sm mb-3 block">Individual Materials</Label>
               <div className="space-y-2">
                 {project.documents.map((doc, idx) => (
                   <button
                     key={idx}
                     onClick={() => window.open(doc.file_url, "_blank")}
-                    className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors text-left border border-gray-200"
+                    className="w-full flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] hover:bg-[#F7F2EA] transition-colors text-left border border-[#B89555]/30"
                   >
-                    <div className="w-8 h-8 rounded bg-black flex items-center justify-center">
+                    <div className="w-8 h-8 rounded bg-[#1A1A1A] flex items-center justify-center">
                       <FileText className="w-4 h-4 text-gold" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-black text-sm font-medium truncate">{doc.file_name}</p>
-                      <p className="text-gray-600 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
+                      <p className="text-[#1A1A1A] text-sm font-medium truncate">{doc.file_name}</p>
+                      <p className="text-[#5A4A2E] text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
                     </div>
                     <Download className="w-4 h-4 text-gold" />
                   </button>

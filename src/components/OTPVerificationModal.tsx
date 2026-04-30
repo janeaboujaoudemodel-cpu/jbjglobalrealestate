@@ -164,7 +164,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-900 border border-gray-800 text-white sm:max-w-md">
+      <DialogContent className="bg-zinc-900 border border-[#1A1A1A] text-white sm:max-w-md">
         {/* Gold accent line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
@@ -210,7 +210,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     value={digit}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className={`w-12 h-14 text-center text-2xl font-bold bg-zinc-800 border-gray-700 text-white focus:border-gold rounded-lg ${
+                    className={`w-12 h-14 text-center text-2xl font-bold bg-zinc-800 border-[#1A1A1A] text-white focus:border-gold rounded-lg ${
                       error ? 'border-red-500' : ''
                     }`}
                     autoFocus={index === 0}
@@ -227,7 +227,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               <Button
                 onClick={verifyOTP}
                 disabled={isVerifying || otp.some(d => !d)}
-                className="w-full h-12 bg-gold hover:bg-gold/90 text-black font-semibold"
+                className="w-full h-12 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
               >
                 {isVerifying ? (
                   <>
@@ -249,7 +249,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     sendOTP();
                   }}
                   disabled={countdown > 0 || isSending}
-                  className="text-gold hover:text-gray-800 hover:bg-gold/10"
+                  className="text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
                 >
                   {isSending ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />

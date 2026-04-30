@@ -31,14 +31,14 @@ export default function CRMLeadsInbox() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-black">Leads &amp; Clients</h1>
-            <p className="text-black/60 text-sm">
+            <h1 className="text-2xl font-bold text-[#1A1A1A]">Leads &amp; Clients</h1>
+            <p className="text-[#1A1A1A]/60 text-sm">
               All leads, prospects, and clients in one workspace · {cx.totalLeads} record{cx.totalLeads !== 1 ? "s" : ""}
               {cx.hasActiveFilters && " (filtered)"}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={cx.handleRefresh} disabled={cx.isFetching} className="text-black/60 hover:text-black hover:bg-gold/10">
+            <Button variant="ghost" size="sm" onClick={cx.handleRefresh} disabled={cx.isFetching} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10">
               <RefreshCw className={`h-4 w-4 ${cx.isFetching ? "animate-spin" : ""}`} />
             </Button>
             <Button variant="secondary" size="sm" onClick={cx.handleExport}>
@@ -53,8 +53,8 @@ export default function CRMLeadsInbox() {
         {/* Active / Deleted Tabs */}
         <Tabs value={cx.activeView} onValueChange={(v) => { cx.setActiveView(v as "active" | "deleted"); cx.setPage(1); }} className="mb-6">
           <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-1">
-            <TabsTrigger value="active" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">All Leads</TabsTrigger>
-            <TabsTrigger value="deleted" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">
+            <TabsTrigger value="active" className="tab-trigger-champagne text-[#1A1A1A] data-[state=active]:text-[#1A1A1A] px-6 py-2">All Leads</TabsTrigger>
+            <TabsTrigger value="deleted" className="tab-trigger-champagne text-[#1A1A1A] data-[state=active]:text-[#1A1A1A] px-6 py-2">
               <Trash2 className="h-4 w-4 mr-2" />Recently Deleted
             </TabsTrigger>
           </TabsList>
@@ -66,18 +66,18 @@ export default function CRMLeadsInbox() {
             <div className="flex flex-col gap-3">
               <div className="flex flex-col md:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/40" />
                   <Input placeholder="Search by name, email, or phone..." value={cx.search}
                     onChange={(e) => { cx.setSearch(e.target.value); cx.setPage(1); }}
-                    className="pl-10 bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold" />
+                    className="pl-10 bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold" />
                 </div>
 
                 <Select value={cx.statusFilter} onValueChange={(v) => { cx.setStatusFilter(v); cx.setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[200px] bg-white/80 border-2 border-gold/30 text-black">
+                  <SelectTrigger className="w-full md:w-[200px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
                   <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-h-[400px]">
-                    <SelectItem value="all" className="text-black hover:bg-gold/10 font-medium focus:bg-gold/15 focus:text-black">All Statuses</SelectItem>
+                    <SelectItem value="all" className="text-[#1A1A1A] hover:bg-gold/10 font-medium focus:bg-gold/15 focus:text-[#1A1A1A]">All Statuses</SelectItem>
                     {(["positive", "neutral", "negative"] as const).map((cat) => {
                       const colors = { positive: "emerald", neutral: "blue", negative: "red" };
                       const c = colors[cat];
@@ -87,7 +87,7 @@ export default function CRMLeadsInbox() {
                             <span className={`w-2 h-2 rounded-full bg-${c}-500`} />{cat}
                           </div>
                           {PIPELINE_STATUSES.filter((s) => s.category === cat).map((opt) => (
-                            <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-black">
+                            <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10 pl-4 focus:bg-gold/15 focus:text-[#1A1A1A]">
                               <div className="flex items-center gap-2">
                                 <span className={`w-2 h-2 rounded-full bg-${c}-500`} />{opt.label}
                               </div>
@@ -100,28 +100,28 @@ export default function CRMLeadsInbox() {
                 </Select>
 
                 <Select value={cx.sourceFilter} onValueChange={(v) => { cx.setSourceFilter(v); cx.setPage(1); }}>
-                  <SelectTrigger className="w-full md:w-[180px] bg-white/80 border-2 border-gold/30 text-black">
+                  <SelectTrigger className="w-full md:w-[180px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]">
                     <SelectValue placeholder="Source" />
                   </SelectTrigger>
                   <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
                     {SOURCE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/15 focus:text-black">{opt.label}</SelectItem>
+                      <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/15 focus:text-[#1A1A1A]">{opt.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="flex flex-col md:flex-row gap-3 items-center">
-                <div className="flex items-center gap-2 text-sm text-black/60">
+                <div className="flex items-center gap-2 text-sm text-[#1A1A1A]/60">
                   <Calendar className="h-4 w-4" /><span>Date range:</span>
                 </div>
                 <Input type="date" value={cx.dateStart} onChange={(e) => { cx.setDateStart(e.target.value); cx.setPage(1); }}
-                  className="w-full md:w-[160px] bg-white/80 border-2 border-gold/30 text-black" />
-                <span className="text-black/40">to</span>
+                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]" />
+                <span className="text-[#1A1A1A]/40">to</span>
                 <Input type="date" value={cx.dateEnd} onChange={(e) => { cx.setDateEnd(e.target.value); cx.setPage(1); }}
-                  className="w-full md:w-[160px] bg-white/80 border-2 border-gold/30 text-black" />
+                  className="w-full md:w-[160px] bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A]" />
                 {cx.hasActiveFilters && (
-                  <Button variant="ghost" size="sm" onClick={cx.clearFilters} className="text-black/60 hover:text-black hover:bg-gold/10 ml-auto">
+                  <Button variant="ghost" size="sm" onClick={cx.clearFilters} className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 ml-auto">
                     <X className="h-4 w-4 mr-1" />Clear
                   </Button>
                 )}
@@ -146,8 +146,8 @@ export default function CRMLeadsInbox() {
               </div>
             ) : cx.leads.length === 0 ? (
               <div className="text-center py-16">
-                <Filter className="h-12 w-12 text-black/30 mx-auto mb-4" />
-                <p className="text-black/60 mb-2">
+                <Filter className="h-12 w-12 text-[#1A1A1A]/30 mx-auto mb-4" />
+                <p className="text-[#1A1A1A]/60 mb-2">
                   {cx.activeView === "deleted" ? "No deleted leads" : cx.hasActiveFilters ? "No leads match your filters" : "No leads yet"}
                 </p>
                 {cx.hasActiveFilters && cx.activeView === "active" ? (
@@ -162,45 +162,45 @@ export default function CRMLeadsInbox() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-gold/20 hover:bg-transparent">
-                        <TableHead className="text-black/70 font-bold">Name</TableHead>
-                        <TableHead className="text-black/70 font-bold">Phone</TableHead>
-                        <TableHead className="text-black/70 font-bold">Email</TableHead>
-                        <TableHead className="text-black/70 font-bold">Source</TableHead>
-                        <TableHead className="text-black/70 font-bold">Status</TableHead>
-                        <TableHead className="text-black/70 font-bold">Created</TableHead>
-                        <TableHead className="text-black/70 font-bold">{cx.activeView === "deleted" ? "Deleted" : "Last Activity"}</TableHead>
-                        <TableHead className="text-black/70 font-bold text-right">Actions</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Name</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Phone</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Email</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Source</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Status</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">Created</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold">{cx.activeView === "deleted" ? "Deleted" : "Last Activity"}</TableHead>
+                        <TableHead className="text-[#1A1A1A]/70 font-bold text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {cx.leads.map((lead) => (
                         <TableRow key={lead.id} className="border-gold/20 hover:bg-gold/5 cursor-pointer"
                           onClick={() => cx.activeView === "active" && cx.navigate(`/crm/leads/${lead.id}`)}>
-                          <TableCell className="font-semibold text-black">
+                          <TableCell className="font-semibold text-[#1A1A1A]">
                             <div>
                               <p className="font-semibold">{lead.full_name}</p>
                               {lead.tags && lead.tags.length > 0 && (
                                 <div className="flex gap-1 mt-1">
                                   {lead.tags.slice(0, 2).map((tag, i) => (
-                                    <Badge key={i} variant="secondary" className="text-xs bg-gold/10 text-black/70 border-gold/20">{tag}</Badge>
+                                    <Badge key={i} variant="secondary" className="text-xs bg-gold/10 text-[#1A1A1A]/70 border-gold/20">{tag}</Badge>
                                   ))}
-                                  {lead.tags.length > 2 && <span className="text-xs text-black/40">+{lead.tags.length - 2}</span>}
+                                  {lead.tags.length > 2 && <span className="text-xs text-[#1A1A1A]/40">+{lead.tags.length - 2}</span>}
                                 </div>
                               )}
                             </div>
                           </TableCell>
-                          <TableCell className="text-black/70 text-sm font-mono">{lead.phone_e164 || "—"}</TableCell>
-                          <TableCell className="text-black/70 text-sm truncate max-w-[180px]">{lead.email_lower || "—"}</TableCell>
+                          <TableCell className="text-[#1A1A1A]/70 text-sm font-mono">{lead.phone_e164 || "—"}</TableCell>
+                          <TableCell className="text-[#1A1A1A]/70 text-sm truncate max-w-[180px]">{lead.email_lower || "—"}</TableCell>
                           <TableCell>
                             {lead.source ? (
-                              <Badge variant="secondary" className="bg-gold/10 text-black/80 border-gold/20">{lead.source}</Badge>
-                            ) : <span className="text-black/40">—</span>}
+                              <Badge variant="secondary" className="bg-gold/10 text-[#1A1A1A]/80 border-gold/20">{lead.source}</Badge>
+                            ) : <span className="text-[#1A1A1A]/40">—</span>}
                           </TableCell>
                           <TableCell onClick={(e) => e.stopPropagation()}>
                             <InlineStatusSelect leadId={lead.id} currentStatus={lead.pipeline_stage || "new"} />
                           </TableCell>
-                          <TableCell className="text-black/60 text-sm">{formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}</TableCell>
-                          <TableCell className="text-black/60 text-sm">
+                          <TableCell className="text-[#1A1A1A]/60 text-sm">{formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}</TableCell>
+                          <TableCell className="text-[#1A1A1A]/60 text-sm">
                             {cx.activeView === "deleted" && lead.deleted_at
                               ? formatDistanceToNow(new Date(lead.deleted_at), { addSuffix: true })
                               : cx.getLastActivity(lead)}
@@ -248,7 +248,7 @@ export default function CRMLeadsInbox() {
                                     onClick={(e) => { e.stopPropagation(); cx.setLeadToDelete(lead); cx.setDeleteDialogOpen(true); }} title="Delete">
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
-                                  <Button variant="ghost" size="sm" className="h-8 px-2 text-gold hover:text-black hover:bg-gold/10"
+                                  <Button variant="ghost" size="sm" className="h-8 px-2 text-gold hover:text-[#1A1A1A] hover:bg-gold/10"
                                     onClick={(e) => { e.stopPropagation(); cx.navigate(`/crm/leads/${lead.id}`); }} title="Open">
                                     Open<ExternalLink className="h-3 w-3 ml-1" />
                                   </Button>
@@ -264,14 +264,14 @@ export default function CRMLeadsInbox() {
 
                 {cx.totalPages > 1 && (
                   <div className="flex items-center justify-between px-6 py-4 border-t border-gold/20">
-                    <p className="text-sm text-black/60">Page {cx.page} of {cx.totalPages}</p>
+                    <p className="text-sm text-[#1A1A1A]/60">Page {cx.page} of {cx.totalPages}</p>
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="sm" onClick={() => cx.setPage((p) => Math.max(1, p - 1))} disabled={cx.page === 1}
-                        className="text-black/60 hover:text-black hover:bg-gold/10 disabled:opacity-50">
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 disabled:opacity-50">
                         <ChevronLeft className="h-4 w-4 mr-1" />Previous
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => cx.setPage((p) => Math.min(cx.totalPages, p + 1))} disabled={cx.page === cx.totalPages}
-                        className="text-black/60 hover:text-black hover:bg-gold/10 disabled:opacity-50">
+                        className="text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-gold/10 disabled:opacity-50">
                         Next<ChevronRight className="h-4 w-4 ml-1" />
                       </Button>
                     </div>

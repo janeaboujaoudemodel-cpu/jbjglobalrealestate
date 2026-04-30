@@ -335,8 +335,8 @@ const BuyerGuide = () => {
                 boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
               }}
             >
-              <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              <span className="text-white group-hover:text-black transition-colors">Read the Full Guide</span>
+              <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+              <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
               <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
             <Link to="/properties?transaction=buy">
@@ -347,8 +347,8 @@ const BuyerGuide = () => {
                   boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
                 }}
               >
-                <span className="text-white group-hover:text-black transition-colors">Browse Properties</span>
-                <ArrowRight className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
+                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Browse Properties</span>
+                <ArrowRight className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
@@ -381,7 +381,7 @@ const BuyerGuide = () => {
       <section id="who-this-guide-for" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
         <div className="jj-guide-content">
           <div className="mb-12">
-            <h2 className="text-3xl md:text-4xl font-light text-black mb-6">
+            <h2 className="text-3xl md:text-4xl font-light text-[#1A1A1A] mb-6">
               <span className="text-gold">Who</span> This Guide Is For
             </h2>
           </div>
@@ -392,8 +392,8 @@ const BuyerGuide = () => {
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl mx-auto mb-4">
                   <item.icon className="w-6 h-6" />
                 </div>
-                <p className="font-medium text-black mb-1">{item.label}</p>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <p className="font-medium text-[#1A1A1A] mb-1">{item.label}</p>
+                <p className="text-sm text-[#5A4A2E]">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -420,7 +420,7 @@ const BuyerGuide = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         <step.icon className="w-5 h-5 text-gold" />
-                        <h3 className="text-xl md:text-2xl font-medium text-gray-900">
+                        <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A]">
                           {step.title}
                         </h3>
                       </div>
@@ -431,7 +431,7 @@ const BuyerGuide = () => {
                           {step.items.map((item, itemIndex) => (
                             <li key={itemIndex} className="flex items-start gap-3">
                               <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                              <span className="text-gray-600 text-sm">{item}</span>
+                              <span className="text-[#5A4A2E] text-sm">{item}</span>
                             </li>
                           ))}
                         </ul>
@@ -439,24 +439,24 @@ const BuyerGuide = () => {
 
                       {step.isComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.offPlan?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlan?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlan?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.ready?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.ready?.title}</h4>
                             <ul className="space-y-2">
                               {step.ready?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -466,24 +466,24 @@ const BuyerGuide = () => {
 
                       {step.isOfferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.readyOffer?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.readyOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyOffer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.offPlanOffer?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlanOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanOffer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -493,24 +493,24 @@ const BuyerGuide = () => {
 
                       {step.isTransferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.readyTransfer?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.readyTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyTransfer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-black/5 rounded-xl p-5 border border-black/10">
-                            <h4 className="font-semibold text-black mb-3">{step.offPlanTransfer?.title}</h4>
+                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                            <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlanTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanTransfer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{point}</span>
+                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -538,32 +538,32 @@ const BuyerGuide = () => {
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold text-black">Off-Plan Purchases</h3>
+                <h3 className="text-xl font-semibold text-[#1A1A1A]">Off-Plan Purchases</h3>
               </div>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">No agency fees are paid by the buyer</span>
+                  <span className="text-[#5A4A2E] text-sm">No agency fees are paid by the buyer</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Developers pay the brokerage commission</span>
+                  <span className="text-[#5A4A2E] text-sm">Developers pay the brokerage commission</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Buyer pays only: Unit price as per payment plan</span>
+                  <span className="text-[#5A4A2E] text-sm">Buyer pays only: Unit price as per payment plan</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Dubai Land Department (DLD) registration fees</span>
+                  <span className="text-[#5A4A2E] text-sm">Dubai Land Department (DLD) registration fees</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Oqood registration (for off-plan)</span>
+                  <span className="text-[#5A4A2E] text-sm">Oqood registration (for off-plan)</span>
                 </li>
               </ul>
               <div className="jj-card-inner rounded-lg p-4 border-gold/50">
-                <p className="text-black text-sm font-medium flex items-center gap-2">
+                <p className="text-[#1A1A1A] text-sm font-medium flex items-center gap-2">
                   <ArrowRight className="w-4 h-4 text-gold" />
                   You do not pay JBJ Global Real Estate any commission when purchasing off-plan.
                 </p>
@@ -576,32 +576,32 @@ const BuyerGuide = () => {
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                   <Home className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold text-black">Ready Property Purchases</h3>
+                <h3 className="text-xl font-semibold text-[#1A1A1A]">Ready Property Purchases</h3>
               </div>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Buyer pays agency commission</span>
+                  <span className="text-[#5A4A2E] text-sm">Buyer pays agency commission</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Standard market rate: 2% + VAT</span>
+                  <span className="text-[#5A4A2E] text-sm">Standard market rate: 2% + VAT</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">This fee covers: Property sourcing & shortlisting</span>
+                  <span className="text-[#5A4A2E] text-sm">This fee covers: Property sourcing & shortlisting</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Negotiation support</span>
+                  <span className="text-[#5A4A2E] text-sm">Negotiation support</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Transaction coordination</span>
+                  <span className="text-[#5A4A2E] text-sm">Transaction coordination</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm">Legal & transfer guidance</span>
+                  <span className="text-[#5A4A2E] text-sm">Legal & transfer guidance</span>
                 </li>
               </ul>
             </div>
@@ -615,7 +615,7 @@ const BuyerGuide = () => {
           <GuideSectionHeader icon={Calculator} title="Buyer Costs Overview" centered />
 
           <div className="mb-8">
-            <h3 className="text-xl font-semibold text-black mb-6">Mandatory Government Fees</h3>
+            <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6">Mandatory Government Fees</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {governmentFees.map((fee, index) => (
                 <div 
@@ -627,8 +627,8 @@ const BuyerGuide = () => {
                       <fee.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-black font-semibold mb-1">{fee.title}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">{fee.description}</p>
+                      <h4 className="text-[#1A1A1A] font-semibold mb-1">{fee.title}</h4>
+                      <p className="text-[#5A4A2E] text-sm leading-relaxed">{fee.description}</p>
                     </div>
                   </div>
                 </div>
@@ -637,7 +637,7 @@ const BuyerGuide = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-black mb-6">Additional Costs (If Applicable)</h3>
+            <h3 className="text-xl font-semibold text-[#1A1A1A] mb-6">Additional Costs (If Applicable)</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {additionalCosts.map((cost, index) => (
                 <div 
@@ -649,8 +649,8 @@ const BuyerGuide = () => {
                       <cost.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-black font-semibold mb-1">{cost.title}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">{cost.description}</p>
+                      <h4 className="text-[#1A1A1A] font-semibold mb-1">{cost.title}</h4>
+                      <p className="text-[#5A4A2E] text-sm leading-relaxed">{cost.description}</p>
                     </div>
                   </div>
                 </div>
@@ -669,7 +669,7 @@ const BuyerGuide = () => {
               {mortgagePoints.map((point, index) => (
                 <div key={index} className="flex items-start gap-3 jj-card-inner rounded-lg p-4">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-sm leading-relaxed">{point}</span>
+                  <span className="text-[#5A4A2E] text-sm leading-relaxed">{point}</span>
                 </div>
               ))}
             </div>
@@ -688,15 +688,15 @@ const BuyerGuide = () => {
                 key={index}
                 className="jj-card-inner p-6 hover:border-gold transition-all"
               >
-                <h4 className="text-black font-semibold mb-2">{item.title}</h4>
-                <p className="text-gray-600 text-sm">{item.description}</p>
+                <h4 className="text-[#1A1A1A] font-semibold mb-2">{item.title}</h4>
+                <p className="text-[#5A4A2E] text-sm">{item.description}</p>
               </div>
             ))}
           </div>
 
           <div className="jj-card-inner rounded-xl p-6">
-            <p className="text-gray-700 text-sm leading-relaxed">
-              <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
+            <p className="text-[#5A4A2E] text-sm leading-relaxed">
+              <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
             </p>
           </div>
         </div>
@@ -710,11 +710,11 @@ const BuyerGuide = () => {
           <div className="jj-card-inner rounded-2xl p-6 md:p-8">
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`faq-${index}`} className="border-b border-gray-200 last:border-0">
-                  <AccordionTrigger className="text-left text-black font-medium hover:text-gold py-4">
+                <AccordionItem key={index} value={`faq-${index}`} className="border-b border-[#B89555]/30 last:border-0">
+                  <AccordionTrigger className="text-left text-[#1A1A1A] font-medium hover:text-gold py-4">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-gray-600 pb-4">
+                  <AccordionContent className="text-[#5A4A2E] pb-4">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -728,14 +728,14 @@ const BuyerGuide = () => {
       <FounderPhilosophySection />
 
       {/* Final CTA - Next Step - 3-Layer System */}
-      <section className="py-20 md:py-28 bg-black relative overflow-hidden">
+      <section className="py-20 md:py-28 bg-[#1A1A1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-5" />
         
         <div className="jj-layer-2 relative z-10">
           <div className="max-w-3xl mx-auto">
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-gold/50">
               <GuideSectionHeader icon={Sparkles} title="Next Step" centered />
-              <p className="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">
+              <p className="text-lg text-[#5A4A2E] mb-10 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
               </p>
               
@@ -748,7 +748,7 @@ const BuyerGuide = () => {
                 >
                   <Link to="/contact">
                     <Phone className="w-4 h-4 mr-2" />
-                    <span className="text-black">Book a</span>
+                    <span className="text-[#1A1A1A]">Book a</span>
                     <span className="text-gold ml-1">Consultation</span>
                   </Link>
                 </Button>
@@ -774,15 +774,15 @@ const BuyerGuide = () => {
       <DLDMarketWidget />
 
       {/* Legal Disclaimer - 3-Layer System */}
-      <section className="py-8 bg-black">
+      <section className="py-8 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="max-w-5xl mx-auto">
             <div className="jj-card-inner rounded-lg p-6">
-              <h4 className="text-black font-semibold mb-3 flex items-center gap-2">
+              <h4 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
                 <Shield className="w-4 h-4 text-gold" />
                 Important Disclaimer
               </h4>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-[#5A4A2E] text-sm leading-relaxed">
                 This guide is provided for general educational and informational purposes only. It does not constitute legal, 
                 mortgage, or professional advice. JBJ Global Real Estate is a licensed 
                 real estate brokerage providing buying, selling, and rental services. We do not provide legal or investment advisory services. 
@@ -795,7 +795,7 @@ const BuyerGuide = () => {
       </section>
 
       {/* Guide Navigation - Active Layer Background */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <GuideNavigation current="/buyer-guide" guides={GUIDE_LINKS} showStartHere={false} />
         </div>

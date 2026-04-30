@@ -103,9 +103,9 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-gray-600 mb-1">
+            <div className="flex items-center gap-2 text-[#5A4A2E] mb-1">
               <Users className="h-4 w-4" />
               <span className="text-sm">Total Leads</span>
             </div>
@@ -113,9 +113,9 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-gray-600 mb-1">
+            <div className="flex items-center gap-2 text-[#5A4A2E] mb-1">
               <MessageSquare className="h-4 w-4 text-emerald-500" />
               <span className="text-sm">Messages</span>
             </div>
@@ -123,9 +123,9 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-gray-600 mb-1">
+            <div className="flex items-center gap-2 text-[#5A4A2E] mb-1">
               <Mail className="h-4 w-4 text-blue-500" />
               <span className="text-sm">Emails</span>
             </div>
@@ -133,9 +133,9 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-gray-600 mb-1">
+            <div className="flex items-center gap-2 text-[#5A4A2E] mb-1">
               <Phone className="h-4 w-4 text-purple-500" />
               <span className="text-sm">Calls</span>
             </div>
@@ -143,9 +143,9 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-gray-800">
+        <Card className="bg-zinc-900 border-[#1A1A1A]">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-gray-600 mb-1">
+            <div className="flex items-center gap-2 text-[#5A4A2E] mb-1">
               <TrendingUp className="h-4 w-4 text-gold" />
               <span className="text-sm">Conversions</span>
             </div>
@@ -155,7 +155,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
       </div>
 
       {/* Activity Timeline */}
-      <Card className="bg-zinc-900 border-gray-800">
+      <Card className="bg-zinc-900 border-[#1A1A1A]">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Activity className="h-5 w-5 text-gold" />
@@ -165,8 +165,8 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
         <CardContent>
           {stats.length === 0 ? (
             <div className="text-center py-8">
-              <Clock className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-600">No activity recorded yet</p>
+              <Clock className="h-12 w-12 text-[#5A4A2E] mx-auto mb-4" />
+              <p className="text-[#5A4A2E]">No activity recorded yet</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -174,14 +174,14 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
                 {stats.map((stat) => (
                   <div
                     key={stat.id}
-                    className="bg-zinc-800/50 rounded-lg p-4 border border-gray-700/50"
+                    className="bg-zinc-800/50 rounded-lg p-4 border border-[#1A1A1A]/50"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-white font-medium">
                         {formatDate(stat.stat_date)}
                       </h3>
                       {stat.avg_response_time_seconds && (
-                        <Badge variant="outline" className="border-gray-600 text-gray-600">
+                        <Badge variant="outline" className="border-[#1A1A1A] text-[#5A4A2E]">
                           <Clock className="h-3 w-3 mr-1" />
                           Avg: {formatResponseTime(stat.avg_response_time_seconds)}
                         </Badge>
@@ -190,31 +190,31 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
 
                     <div className="grid grid-cols-5 gap-4">
                       <div className="text-center">
-                        <p className="text-gray-600 text-xs mb-1">Leads</p>
+                        <p className="text-[#5A4A2E] text-xs mb-1">Leads</p>
                         <p className="text-white font-semibold">
                           {stat.leads_contacted || 0}
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-gray-600 text-xs mb-1">Messages</p>
+                        <p className="text-[#5A4A2E] text-xs mb-1">Messages</p>
                         <p className="text-emerald-400 font-semibold">
                           {stat.messages_sent || 0}
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-gray-600 text-xs mb-1">Emails</p>
+                        <p className="text-[#5A4A2E] text-xs mb-1">Emails</p>
                         <p className="text-blue-400 font-semibold">
                           {stat.emails_sent || 0}
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-gray-600 text-xs mb-1">Calls</p>
+                        <p className="text-[#5A4A2E] text-xs mb-1">Calls</p>
                         <p className="text-purple-400 font-semibold">
                           {stat.calls_made || 0}
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-gray-600 text-xs mb-1">Converted</p>
+                        <p className="text-[#5A4A2E] text-xs mb-1">Converted</p>
                         <p className="text-gold font-semibold">
                           {stat.leads_converted || 0}
                         </p>

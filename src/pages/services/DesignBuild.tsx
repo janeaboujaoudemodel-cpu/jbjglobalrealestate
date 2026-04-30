@@ -152,7 +152,7 @@ const DesignBuild = () => {
                 }}
               >
                 <Calendar className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
+                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Book a Consultation</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
                 <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
@@ -177,7 +177,7 @@ const DesignBuild = () => {
       </section>
 
       {/* Services Grid - White Pearl/Champagne Gold Cards */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -219,7 +219,7 @@ const DesignBuild = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     
-                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-black flex items-center justify-center border border-gold/30">
+                    <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-gold/30">
                       <service.icon className="w-6 h-6 text-gold" />
                     </div>
 
@@ -232,17 +232,17 @@ const DesignBuild = () => {
                   {/* Content */}
                   <CardContent className="p-6">
                     <h3 
-                      className="text-black text-2xl font-bold mb-3 group-hover:text-gold transition-colors"
+                      className="text-[#1A1A1A] text-2xl font-bold mb-3 group-hover:text-gold transition-colors"
                     >
                       {service.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-6">
+                    <p className="text-[#5A4A2E] text-sm mb-6">
                       {service.description}
                     </p>
 
                     <ul className="space-y-2 mb-6">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-gray-700 text-sm">
+                        <li key={idx} className="flex items-center gap-2 text-[#5A4A2E] text-sm">
                           <div className="w-1.5 h-1.5 rounded-full bg-gold" />
                           {feature}
                         </li>
@@ -250,7 +250,7 @@ const DesignBuild = () => {
                     </ul>
 
                     <Link to={`/services/${service.slug}`}>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         Explore {service.title}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -299,20 +299,20 @@ const DesignBuild = () => {
                   <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
                     <CardContent className="p-8">
                       <div className="flex items-start gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
                           <tool.icon className="w-7 h-7 text-gold" />
                         </div>
                         <div className="flex-1">
                           <Badge className="bg-purple-500/20 text-purple-600 border-purple-400/40 mb-2">
                             {tool.badge}
                           </Badge>
-                          <h3 className="text-black text-xl font-bold group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] text-xl font-bold group-hover:text-gold transition-colors">
                             {tool.title}
                           </h3>
                         </div>
                       </div>
-                      <p className="text-gray-600 mb-6">{tool.description}</p>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <p className="text-[#5A4A2E] mb-6">{tool.description}</p>
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-[#1A1A1A] hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         {tool.cta}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -326,7 +326,7 @@ const DesignBuild = () => {
       </section>
 
       {/* CTA Section - 3-Layer System */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-16 md:py-20 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD (Active Champagne) */}
@@ -343,11 +343,11 @@ const DesignBuild = () => {
                   Through Our Partners
                 </Badge>
                 <h2 
-                  className="text-black text-2xl md:text-3xl font-bold mb-4"
+                  className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4"
                 >
                   Ready to Transform <span className="text-gold">Your Space?</span>
                 </h2>
-                <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+                <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                   Book a consultation with our licensed partners now. Our expert network is ready to bring your vision to life.
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">
@@ -368,15 +368,15 @@ const DesignBuild = () => {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center gap-1">
-                        <Calendar className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Book a</span>
-                        <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
-                        <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                        <Calendar className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+                        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Book a</span>
+                        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Consultation</span>
+                        <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
                       </span>
                     </button>
                   </a>
                   <a href={`https://wa.me/${CONTACT_INFO.phone.replace(/\D/g, '')}?text=Hello, I'm interested in Design & Build services.`} target="_blank" rel="noopener noreferrer">
-                    <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white">
+                    <button className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white">
                       <MessageCircle className="w-5 h-5" />
                       WhatsApp Us
                     </button>

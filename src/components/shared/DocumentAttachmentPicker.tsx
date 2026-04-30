@@ -121,19 +121,19 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
   }
 
   return (
-    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl border border-[#B89555]/30 w-[90vw] max-w-[420px] overflow-hidden"
+        className="bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[#B89555]/30 w-[90vw] max-w-[420px] overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#FDFBF7] to-white">
           <div className="flex items-center gap-2">
             <Paperclip className="w-4 h-4 text-[#B89555]" />
-            <span className="font-semibold text-sm text-black">Attach Document or Asset</span>
+            <span className="font-semibold text-sm text-[#1A1A1A]">Attach Document or Asset</span>
           </div>
           <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[#B89555]/10 flex items-center justify-center">
-            <X className="w-4 h-4 text-black/60" />
+            <X className="w-4 h-4 text-[#1A1A1A]/60" />
           </button>
         </div>
 
@@ -156,8 +156,8 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
               <Paperclip className={cn("w-5 h-5 transition-colors", isDragOver ? "text-[#B89555]" : "text-[#B89555]/60")} />
             </div>
             <div className="text-center">
-              <p className="text-sm font-medium text-black">{isDragOver ? 'Drop files here' : 'Upload Files'}</p>
-              <p className="text-[11px] text-black/40">Drag & drop or click to browse</p>
+              <p className="text-sm font-medium text-[#1A1A1A]">{isDragOver ? 'Drop files here' : 'Upload Files'}</p>
+              <p className="text-[11px] text-[#1A1A1A]/40">Drag & drop or click to browse</p>
             </div>
           </div>
 
@@ -173,7 +173,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
           {/* Divider */}
           <div className="flex items-center gap-2 py-1.5 px-2">
             <div className="flex-1 h-px bg-[#B89555]/15" />
-            <span className="text-[10px] text-black/30 uppercase tracking-wider font-medium">Brand Assets</span>
+            <span className="text-[10px] text-[#1A1A1A]/30 uppercase tracking-wider font-medium">Brand Assets</span>
             <div className="flex-1 h-px bg-[#B89555]/15" />
           </div>
 
@@ -188,8 +188,8 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
                 {React.cloneElement(opt.icon as React.ReactElement, { className: 'w-4 h-4 text-[#B89555]' })}
               </div>
               <div>
-                <p className="text-sm font-medium text-black">{opt.label}</p>
-                <p className="text-[11px] text-black/50">{opt.description}</p>
+                <p className="text-sm font-medium text-[#1A1A1A]">{opt.label}</p>
+                <p className="text-[11px] text-[#1A1A1A]/50">{opt.description}</p>
               </div>
             </button>
           ))}
@@ -199,7 +199,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
             <>
               <div className="flex items-center gap-2 py-1.5 px-2">
                 <div className="flex-1 h-px bg-[#B89555]/15" />
-                <span className="text-[10px] text-black/30 uppercase tracking-wider font-medium">Actions</span>
+                <span className="text-[10px] text-[#1A1A1A]/30 uppercase tracking-wider font-medium">Actions</span>
                 <div className="flex-1 h-px bg-[#B89555]/15" />
               </div>
               <button
@@ -210,8 +210,8 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
                   <PenTool className="w-4 h-4 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-black">Send for E-Signature</p>
-                  <p className="text-[11px] text-black/50">Create a document for signing</p>
+                  <p className="text-sm font-medium text-[#1A1A1A]">Send for E-Signature</p>
+                  <p className="text-[11px] text-[#1A1A1A]/50">Create a document for signing</p>
                 </div>
               </button>
             </>
@@ -311,7 +311,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Business Card: card layout with shadow
   if (attachment.type === 'business_card' && attachment.content) {
     return (
-      <div className="mt-2 rounded-xl overflow-hidden border border-amber-200 bg-white shadow-md p-2 max-w-[220px]">
+      <div className="mt-2 rounded-xl overflow-hidden border border-amber-200 bg-[#FDFBF7] shadow-md p-2 max-w-[220px]">
         <div className="flex items-center gap-1.5 mb-1.5">
           <CreditCard className="w-3 h-3 text-amber-600" />
           <span className="text-[9px] font-semibold text-amber-700 uppercase tracking-wider">Business Card</span>
@@ -341,7 +341,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Logo: centered with brand badge
   if (attachment.type === 'logo' && attachment.content) {
     return (
-      <div className="mt-2 rounded-xl overflow-hidden border border-emerald-200 bg-white p-3 max-w-[180px] flex flex-col items-center">
+      <div className="mt-2 rounded-xl overflow-hidden border border-emerald-200 bg-[#FDFBF7] p-3 max-w-[180px] flex flex-col items-center">
         <div className="flex items-center gap-1.5 mb-2 self-start">
           <Image className="w-3 h-3 text-emerald-500" />
           <span className="text-[9px] font-semibold text-emerald-600 uppercase tracking-wider">Logo</span>
@@ -369,7 +369,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Generic image fallback
   if (isImage && attachment.content) {
     return (
-      <div className="mt-2 rounded-lg overflow-hidden border border-[#B89555]/15 bg-white/80 p-2 max-w-[200px]">
+      <div className="mt-2 rounded-lg overflow-hidden border border-[#B89555]/15 bg-[#FDFBF7]/80 p-2 max-w-[200px]">
         <img src={attachment.content} alt={attachment.name} className="max-h-[150px] object-contain rounded" />
         <p className="text-[10px] text-muted-foreground mt-1 truncate">{attachment.name}</p>
       </div>
@@ -378,7 +378,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
 
   // Document / PDF / file card
   return (
-    <div className="mt-2 flex items-center gap-2 bg-white border border-[#B89555]/15 rounded-lg px-3 py-2 max-w-[250px]">
+    <div className="mt-2 flex items-center gap-2 bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg px-3 py-2 max-w-[250px]">
       <FileText className="w-5 h-5 text-[#B89555] shrink-0" />
       <div className="min-w-0 flex-1">
         <p className="text-xs font-medium text-foreground truncate">{attachment.name}</p>

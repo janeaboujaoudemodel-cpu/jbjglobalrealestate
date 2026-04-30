@@ -605,7 +605,7 @@ const HeroSearchBar = () => {
         {/* Buy/Rent Dropdown - Opens upward */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all text-sm font-semibold shadow-lg">
+            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-[#FDFBF7]/20 backdrop-blur-md border border-white/40 text-white hover:bg-[#FDFBF7]/30 transition-all text-sm font-semibold shadow-lg">
               <Home className="w-4 h-4 text-gold" />
               <span className="font-semibold">{purpose === 'buy' ? 'Buy' : 'Rent'}</span>
               <ChevronDown className="w-3.5 h-3.5 text-white/80" />
@@ -618,7 +618,7 @@ const HeroSearchBar = () => {
             sideOffset={4}
             avoidCollisions={false}
           >
-            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Purpose</div>
+            <div className="text-xs font-semibold text-[#1A1A1A]/60 px-3 py-1.5 uppercase tracking-wider">Purpose</div>
             {(['buy', 'rent'] as const).map((p) => (
               <button
                 key={p}
@@ -629,8 +629,8 @@ const HeroSearchBar = () => {
                 className={cn(
                   "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors capitalize",
                   purpose === p 
-                    ? "bg-gold/20 text-black font-semibold border border-gold/40" 
-                    : "text-black hover:bg-white/50"
+                    ? "bg-gold/20 text-[#1A1A1A] font-semibold border border-gold/40" 
+                    : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                 )}
               >
                 {p}
@@ -642,7 +642,7 @@ const HeroSearchBar = () => {
         {/* Currency Dropdown - Opens upward with scroll */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-white/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-white/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
+            <button className="flex items-center gap-2 h-[38px] px-4 rounded-lg bg-[#FDFBF7]/10 backdrop-blur-sm border border-gold/40 text-white hover:bg-[#FDFBF7]/20 transition-all text-sm font-semibold min-w-[64px] justify-center">
               <span className="text-base leading-none">{currentCurrency.flag}</span>
               <span className="font-semibold">{currentCurrency.code}</span>
               <ChevronDown className="w-3 h-3 text-white/90" />
@@ -658,7 +658,7 @@ const HeroSearchBar = () => {
             onWheelCapture={(e) => e.stopPropagation()}
             
           >
-            <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
+            <div className="text-xs font-semibold text-[#1A1A1A]/60 px-3 py-1.5 uppercase tracking-wider">Currency</div>
             {SUPPORTED_CURRENCIES.map((c) => (
               <button
                 key={c.code}
@@ -669,13 +669,13 @@ const HeroSearchBar = () => {
                 className={cn(
                   "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
                   currency === c.code 
-                    ? "bg-gold/20 text-black font-semibold border border-gold/40" 
-                    : "text-black hover:bg-white/50"
+                    ? "bg-gold/20 text-[#1A1A1A] font-semibold border border-gold/40" 
+                    : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                 )}
               >
                 <span>{c.flag}</span>
                 <span>{c.label}</span>
-                <span className="text-black/50 ml-auto text-xs">{c.symbol}</span>
+                <span className="text-[#1A1A1A]/50 ml-auto text-xs">{c.symbol}</span>
               </button>
             ))}
           </PopoverContent>
@@ -688,21 +688,21 @@ const HeroSearchBar = () => {
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqft'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black"
-                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A]"
+                : "bg-[#FDFBF7]/10 text-white/70 hover:bg-[#FDFBF7]/20 hover:text-white"
             )}
           >
             <Ruler className="w-3.5 h-3.5" />
             sqft
           </button>
-          <div className="w-px bg-white/20" />
+          <div className="w-px bg-[#FDFBF7]/20" />
           <button
             onClick={() => { setAreaUnit('sqm'); setSizeRange('any'); }}
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqm'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black"
-                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-[#1A1A1A]"
+                : "bg-[#FDFBF7]/10 text-white/70 hover:bg-[#FDFBF7]/20 hover:text-white"
             )}
           >
             sqm
@@ -733,7 +733,7 @@ const HeroSearchBar = () => {
           {/* Beds Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {getBedsLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -751,8 +751,8 @@ const HeroSearchBar = () => {
                   className={cn(
                     "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     bedrooms === option.value 
-                      ? "bg-white/90 text-black font-semibold" 
-                      : "text-black hover:bg-white/50"
+                      ? "bg-[#FDFBF7]/90 text-[#1A1A1A] font-semibold" 
+                      : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                   )}
                 >
                   {option.label} {option.value !== 'any' && option.value !== 'studio' && 'Bed'}
@@ -767,7 +767,7 @@ const HeroSearchBar = () => {
           {/* Price Range Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {getPriceLabel()}
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
               </button>
@@ -785,8 +785,8 @@ const HeroSearchBar = () => {
                   className={cn(
                     "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     priceRange === option.value 
-                      ? "bg-white/90 text-black font-semibold" 
-                      : "text-black hover:bg-white/50"
+                      ? "bg-[#FDFBF7]/90 text-[#1A1A1A] font-semibold" 
+                      : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                   )}
                 >
                   {option.label}
@@ -801,7 +801,7 @@ const HeroSearchBar = () => {
           {/* Emirates Dropdown — always visible in main bar */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 <MapPin className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden md:inline">{emirate === 'all' ? 'Emirates' : emirate}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-gold" />
@@ -813,13 +813,13 @@ const HeroSearchBar = () => {
               align="start"
               sideOffset={4}
             >
-              <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Emirates</div>
+              <div className="text-xs font-semibold text-[#1A1A1A]/60 px-3 py-1.5 uppercase tracking-wider">Emirates</div>
               <input
                 type="text"
                 value={mainEmirateSearch}
                 onChange={(e) => setMainEmirateSearch(e.target.value)}
                 placeholder="Search emirate..."
-                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:border-gold"
+                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 outline-none focus:border-gold"
               />
               {UAE_EMIRATES
                 .filter((item) => !mainEmirateSearch || item.label.toLowerCase().includes(mainEmirateSearch.toLowerCase()))
@@ -830,8 +830,8 @@ const HeroSearchBar = () => {
                   className={cn(
                     "w-full text-center px-3 py-2 rounded-lg text-sm transition-colors",
                     emirate === item.value
-                      ? "bg-gold/20 text-black font-semibold border border-gold/40"
-                      : "text-black hover:bg-white/50"
+                      ? "bg-gold/20 text-[#1A1A1A] font-semibold border border-gold/40"
+                      : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                   )}
                 >
                   {item.label}
@@ -846,12 +846,12 @@ const HeroSearchBar = () => {
           {/* Developer Dropdown — always visible in main bar with logos */}
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200 whitespace-nowrap">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200 whitespace-nowrap">
                 {developerId !== 'all' && developers?.find(d => d.id === developerId)?.logo_url ? (
                   <img
                     src={developers.find(d => d.id === developerId)?.logo_url!}
                     alt=""
-                    className="w-4 h-4 object-contain rounded-sm bg-white"
+                    className="w-4 h-4 object-contain rounded-sm bg-[#FDFBF7]"
                   />
                 ) : (
                   <svg className="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
@@ -868,19 +868,19 @@ const HeroSearchBar = () => {
               align="start"
               sideOffset={4}
             >
-              <div className="text-xs font-semibold text-black/60 px-3 py-1.5 uppercase tracking-wider">Developer</div>
+              <div className="text-xs font-semibold text-[#1A1A1A]/60 px-3 py-1.5 uppercase tracking-wider">Developer</div>
               <input
                 type="text"
                 value={mainDeveloperSearch}
                 onChange={(e) => setMainDeveloperSearch(e.target.value)}
                 placeholder="Search developer..."
-                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-white text-sm text-black placeholder:text-black/40 outline-none focus:border-gold"
+                className="w-full h-9 px-3 mb-2 rounded-lg border border-gold/30 bg-[#FDFBF7] text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 outline-none focus:border-gold"
               />
               <button
                 onClick={() => setDeveloperId('all')}
                 className={cn(
                   "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
-                  developerId === 'all' ? "bg-gold/20 text-black font-semibold border border-gold/40" : "text-black hover:bg-white/50"
+                  developerId === 'all' ? "bg-gold/20 text-[#1A1A1A] font-semibold border border-gold/40" : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                 )}
               >
                 All Developers
@@ -894,11 +894,11 @@ const HeroSearchBar = () => {
                     onClick={() => setDeveloperId(dev.id)}
                     className={cn(
                       "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2",
-                      developerId === dev.id ? "bg-gold/20 text-black font-semibold border border-gold/40" : "text-black hover:bg-white/50"
+                      developerId === dev.id ? "bg-gold/20 text-[#1A1A1A] font-semibold border border-gold/40" : "text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
                     )}
                   >
                     {dev.logo_url ? (
-                      <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-white flex-shrink-0" />
+                      <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-[#FDFBF7] flex-shrink-0" />
                     ) : (
                       <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">
                         {dev.name?.charAt(0)}
@@ -916,14 +916,14 @@ const HeroSearchBar = () => {
           {/* More Filters Button */}
           <Dialog open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
             <DialogTrigger asChild>
-              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-white/10 transition-all duration-200">
+              <button className="flex items-center gap-2 px-3 h-[60px] text-white/90 font-medium text-sm hover:bg-[#FDFBF7]/10 transition-all duration-200">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-gold" />
                 <span className="hidden sm:inline">Filters</span>
               </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto overscroll-contain bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <DialogHeader>
-                <DialogTitle className="text-black text-xl font-bold">
+                <DialogTitle className="text-[#1A1A1A] text-xl font-bold">
                   Advanced Filters
                 </DialogTitle>
               </DialogHeader>
@@ -931,9 +931,9 @@ const HeroSearchBar = () => {
                 {/* Row 1: Property Type & Status */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-semibold text-black/80 mb-2 block">Property Type</label>
+                    <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Property Type</label>
                     <Select value={propertyType} onValueChange={setPropertyType}>
-                      <SelectTrigger className="h-11 bg-white border-gold/30">
+                      <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                         <SelectValue placeholder="All Types" />
                       </SelectTrigger>
                       <SelectContent>
@@ -946,9 +946,9 @@ const HeroSearchBar = () => {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-sm font-semibold text-black/80 mb-2 block">Status</label>
+                    <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Status</label>
                     <Select value={propertyStatus} onValueChange={setPropertyStatus}>
-                      <SelectTrigger className="h-11 bg-white border-gold/30">
+                      <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                         <SelectValue placeholder="All Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -964,9 +964,9 @@ const HeroSearchBar = () => {
 
                 {/* Row 2: Sale Status with color dots */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Sale Status</label>
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Sale Status</label>
                   <Select value={saleStatus} onValueChange={setSaleStatus}>
-                    <SelectTrigger className="h-11 bg-white border-gold/30">
+                    <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                       <SelectValue placeholder="All Sale Statuses" />
                     </SelectTrigger>
                     <SelectContent>
@@ -986,7 +986,7 @@ const HeroSearchBar = () => {
 
                 {/* Row 3: Emirates Filter - with search */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-gold" />
                     Emirate
                   </label>
@@ -995,12 +995,12 @@ const HeroSearchBar = () => {
                     value={mainEmirateSearch}
                     onChange={(e) => setMainEmirateSearch(e.target.value)}
                     placeholder="Search emirate..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-gray-400 focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
                   />
-                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
                       onClick={() => setEmirate('all')}
-                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === 'all' ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                     >
                       All Emirates
                     </button>
@@ -1010,7 +1010,7 @@ const HeroSearchBar = () => {
                       <button
                         key={item.value}
                         onClick={() => setEmirate(item.value)}
-                        className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === item.value ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                        className={cn("w-full text-left px-3 py-2 text-sm transition-colors", emirate === item.value ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                       >
                         {item.label}
                       </button>
@@ -1020,7 +1020,7 @@ const HeroSearchBar = () => {
 
                 {/* Payment Plan Slider */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">
                     Down Payment (Min %)
                   </label>
                   <div className="flex items-center gap-4 px-1">
@@ -1032,23 +1032,23 @@ const HeroSearchBar = () => {
                       step={5}
                       className="flex-1"
                     />
-                    <span className="text-sm font-bold text-black min-w-[3.5rem] text-right bg-white/80 px-2 py-1 rounded-lg border border-gold/30">
+                    <span className="text-sm font-bold text-[#1A1A1A] min-w-[3.5rem] text-right bg-[#FDFBF7]/80 px-2 py-1 rounded-lg border border-gold/30">
                       {paymentPlan}%
                     </span>
                   </div>
-                  <p className="text-xs text-black/50 mt-1.5">
+                  <p className="text-xs text-[#1A1A1A]/50 mt-1.5">
                     Filter projects by minimum down payment requirement
                   </p>
                 </div>
 
                 {/* Handover Year */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block flex items-center gap-2">
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gold" />
                     Handover Year
                   </label>
                   <Select value={handoverYear} onValueChange={setHandoverYear}>
-                    <SelectTrigger className="h-11 bg-white border-gold/30">
+                    <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                       <SelectValue placeholder="Any Year" />
                     </SelectTrigger>
                     <SelectContent>
@@ -1070,9 +1070,9 @@ const HeroSearchBar = () => {
                 <div className="grid grid-cols-1 gap-4">
                   <div className="grid grid-cols-3 gap-3">
                     <div>
-                      <label className="text-sm font-semibold text-black/80 mb-2 block">Price Range</label>
+                      <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Price Range</label>
                       <Select value={priceRange} onValueChange={setPriceRange}>
-                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                        <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                           <SelectValue placeholder="Any Price" />
                         </SelectTrigger>
                         <SelectContent>
@@ -1085,9 +1085,9 @@ const HeroSearchBar = () => {
                       </Select>
                     </div>
                     <div>
-                      <label className="text-sm font-semibold text-black/80 mb-2 block">Size ({areaUnit})</label>
+                      <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Size ({areaUnit})</label>
                       <Select value={sizeRange} onValueChange={setSizeRange}>
-                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                        <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                           <SelectValue placeholder="Any Size" />
                         </SelectTrigger>
                         <SelectContent>
@@ -1100,9 +1100,9 @@ const HeroSearchBar = () => {
                       </Select>
                     </div>
                     <div>
-                      <label className="text-sm font-semibold text-black/80 mb-2 block">Sort By</label>
+                      <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Sort By</label>
                       <Select value={sortBy} onValueChange={setSortBy}>
-                        <SelectTrigger className="h-11 bg-white border-gold/30">
+                        <SelectTrigger className="h-11 bg-[#FDFBF7] border-gold/30">
                           <SelectValue placeholder="Newest First" />
                         </SelectTrigger>
                         <SelectContent>
@@ -1119,18 +1119,18 @@ const HeroSearchBar = () => {
 
                 {/* Row 4: Developer — with logos */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Developer</label>
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Developer</label>
                   <input
                     type="text"
                     value={advancedDeveloperSearch}
                     onChange={(e) => setAdvancedDeveloperSearch(e.target.value)}
                     placeholder="Search developer..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-gray-400 focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
                   />
-                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                  <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
                       onClick={() => setDeveloperId('all')}
-                      className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                      className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === 'all' ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                     >
                       All Developers
                     </button>
@@ -1141,10 +1141,10 @@ const HeroSearchBar = () => {
                       <button
                         key={dev.id}
                         onClick={() => setDeveloperId(dev.id)}
-                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === dev.id ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                        className={cn("w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors", developerId === dev.id ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                       >
                         {dev.logo_url ? (
-                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-white flex-shrink-0" />
+                          <img src={dev.logo_url} alt="" className="w-5 h-5 object-contain rounded-sm bg-[#FDFBF7] flex-shrink-0" />
                         ) : (
                           <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">{dev.name?.charAt(0)}</span>
                         )}
@@ -1156,18 +1156,18 @@ const HeroSearchBar = () => {
 
                 {/* Row 5: Community / Area — all areas from DB grouped by emirate with search */}
                 <div>
-                  <label className="text-sm font-semibold text-black/80 mb-2 block">Community / Area</label>
+                  <label className="text-sm font-semibold text-[#1A1A1A]/80 mb-2 block">Community / Area</label>
                   <input
                     type="text"
                     value={advancedAreaSearch}
                     onChange={(e) => setAdvancedAreaSearch(e.target.value)}
                     placeholder="Search area or community..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-white border border-gold/30 text-black text-sm placeholder:text-gray-400 focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
                   />
-                  <div className="max-h-52 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-white">
+                  <div className="max-h-52 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
                       onClick={() => setCommunityId('all')}
-                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", communityId === 'all' ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                      className={cn("w-full text-left px-3 py-2 text-sm transition-colors", communityId === 'all' ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                     >
                       All Areas
                     </button>
@@ -1184,12 +1184,12 @@ const HeroSearchBar = () => {
                       });
                       return EMIRATE_ORDER.filter(em => grouped[em]?.length).map(em => (
                         <div key={em}>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-800 bg-gold/5 border-y border-gold/10">{em}</div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1A1A1A] bg-gold/5 border-y border-gold/10">{em}</div>
                           {grouped[em]!.map(area => (
                             <button
                               key={area.id}
                               onClick={() => setCommunityId(area.id)}
-                              className={cn("w-full text-left px-4 py-1.5 text-sm transition-colors", communityId === area.id ? "bg-gold/20 font-semibold text-black" : "text-black hover:bg-gold/10")}
+                              className={cn("w-full text-left px-4 py-1.5 text-sm transition-colors", communityId === area.id ? "bg-gold/20 font-semibold text-[#1A1A1A]" : "text-[#1A1A1A] hover:bg-gold/10")}
                             >
                               {area.name}
                             </button>
@@ -1207,11 +1207,11 @@ const HeroSearchBar = () => {
                   onClick={() => setIsFiltersOpen(false)}
                 >
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-gold to-amber-600 border-2 border-gold/80 flex items-center justify-center shadow-[0_0_20px_rgba(184,148,62,0.4)] group-hover:shadow-[0_0_30px_rgba(184,148,62,0.7)] transition-all">
-                    <Sparkles className="w-5 h-5 text-black" />
+                    <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1">
                     <p className="text-white font-bold text-sm">Not sure what you're looking for?</p>
-                    <p className="text-gray-800 text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
+                    <p className="text-[#1A1A1A] text-xs">Try our AI Home Matchmaker for personalized recommendations</p>
                   </div>
                   <ChevronDown className="w-5 h-5 text-gold -rotate-90 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -1220,14 +1220,14 @@ const HeroSearchBar = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => { setShowSaveInput(!showSaveInput); setShowSavedList(false); }}
-                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-black/70 hover:bg-gold/10 hover:text-black transition-colors text-sm font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/10 hover:text-[#1A1A1A] transition-colors text-sm font-medium"
                   >
                     <Save className="w-4 h-4 text-gold" />
                     Save Filter
                   </button>
                   <button
                     onClick={() => { setShowSavedList(!showSavedList); setShowSaveInput(false); }}
-                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-black/70 hover:bg-gold/10 hover:text-black transition-colors text-sm font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 h-10 rounded-xl border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/10 hover:text-[#1A1A1A] transition-colors text-sm font-medium"
                   >
                     <FolderOpen className="w-4 h-4 text-gold" />
                     Load Saved
@@ -1241,24 +1241,24 @@ const HeroSearchBar = () => {
                       onChange={(e) => setSaveFilterName(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveFilter()}
                       placeholder="Filter name..."
-                      className="flex-1 h-10 px-3 rounded-xl bg-white border-2 border-gold/30 text-black text-sm placeholder:text-gray-400 focus:outline-none focus:border-gold/60"
+                      className="flex-1 h-10 px-3 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
                       style={{ fontSize: '16px' }}
                     />
-                    <Button onClick={handleSaveFilter} disabled={!saveFilterName.trim()} className="h-10 px-4 bg-gold text-black font-bold rounded-xl">
+                    <Button onClick={handleSaveFilter} disabled={!saveFilterName.trim()} className="h-10 px-4 bg-gold text-[#1A1A1A] font-bold rounded-xl">
                       Save
                     </Button>
                   </div>
                 )}
 
                 {showSavedList && (
-                  <div className="bg-white/80 rounded-xl border border-gold/30 p-3 max-h-48 overflow-y-auto overscroll-contain">
+                  <div className="bg-[#FDFBF7]/80 rounded-xl border border-gold/30 p-3 max-h-48 overflow-y-auto overscroll-contain">
                     {getSavedFilters().length === 0 ? (
-                      <p className="text-xs text-black/50 text-center py-3">No saved filters yet</p>
+                      <p className="text-xs text-[#1A1A1A]/50 text-center py-3">No saved filters yet</p>
                     ) : (
                       <div className="space-y-1.5">
                         {getSavedFilters().map((sf: any, idx: number) => (
                           <div key={idx} className="flex items-center justify-between p-2 rounded-lg hover:bg-gold/10 transition-colors group">
-                            <button onClick={() => loadSavedFilter(sf.filters)} className="flex-1 text-left text-sm font-medium text-black hover:text-gold transition-colors">
+                            <button onClick={() => loadSavedFilter(sf.filters)} className="flex-1 text-left text-sm font-medium text-[#1A1A1A] hover:text-gold transition-colors">
                               {sf.name}
                             </button>
                             <button onClick={() => deleteSavedFilter(idx)} className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 transition-all">
@@ -1293,10 +1293,10 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="shrink-0 h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-black font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0 mx-1"
+            className="shrink-0 h-[52px] px-5 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-[#1A1A1A] font-bold text-sm rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(200,167,102,0.3)] hover:shadow-[0_0_30px_rgba(200,167,102,0.5)] disabled:opacity-70 border-0 mx-1"
           >
             {isSearching ? (
-              <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-1.5" />
+              <div className="w-4 h-4 border-2 border-[#1A1A1A]/40 border-t-black rounded-full animate-spin mr-1.5" />
             ) : (
               <Search className="w-4 h-4 mr-1.5" />
             )}
@@ -1305,7 +1305,7 @@ const HeroSearchBar = () => {
         </div>
 
         {/* Mobile-only: Search input */}
-        <div className="flex sm:hidden items-center bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 min-h-[48px]">
+        <div className="flex sm:hidden items-center bg-[#FDFBF7]/[0.07] backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-3 min-h-[48px]">
           <Search className="w-5 h-5 text-gold shrink-0" style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.5))' }} />
           <input
             type="text"
@@ -1321,7 +1321,7 @@ const HeroSearchBar = () => {
         <div className="flex sm:hidden items-center gap-2 w-full">
           <button
             onClick={() => setIsFiltersOpen(true)}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 min-h-[48px] bg-white/10 backdrop-blur-md border border-white/30 rounded-xl text-white text-sm font-medium hover:bg-white/20 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 min-h-[48px] bg-[#FDFBF7]/10 backdrop-blur-md border border-white/30 rounded-xl text-white text-sm font-medium hover:bg-[#FDFBF7]/20 transition-colors"
           >
             <SlidersHorizontal className="w-4 h-4 text-gold" />
             Filters
@@ -1329,10 +1329,10 @@ const HeroSearchBar = () => {
           <Button
             onClick={handleSearch}
             disabled={isSearching}
-            className="flex-1 min-h-[48px] bg-gold hover:bg-gold-dark text-black font-bold rounded-xl shadow-lg disabled:opacity-70"
+            className="flex-1 min-h-[48px] bg-gold hover:bg-gold-dark text-[#1A1A1A] font-bold rounded-xl shadow-lg disabled:opacity-70"
           >
             {isSearching ? (
-              <div className="w-4 h-4 border-2 border-black/40 border-t-black rounded-full animate-spin mr-2" />
+              <div className="w-4 h-4 border-2 border-[#1A1A1A]/40 border-t-black rounded-full animate-spin mr-2" />
             ) : (
               <Search className="w-4 h-4 mr-2" />
             )}

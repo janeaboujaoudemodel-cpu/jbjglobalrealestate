@@ -311,7 +311,7 @@ const JBJDesignStudio: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 lg:top-[48px] z-50">
+      <div className="border-b border-[#1A1A1A] bg-zinc-950/80 backdrop-blur-sm sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -336,20 +336,20 @@ const JBJDesignStudio: React.FC = () => {
       <main className="container mx-auto px-4 py-6">
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-zinc-900 border border-gray-800 p-1">
-            <TabsTrigger value="create" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+          <TabsList className="bg-zinc-900 border border-[#1A1A1A] p-1">
+            <TabsTrigger value="create" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
               <Wand2 className="w-4 h-4 mr-2" />
               Create Design
             </TabsTrigger>
-            <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+            <TabsTrigger value="projects" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
               <FolderOpen className="w-4 h-4 mr-2" />
               My Projects
             </TabsTrigger>
-            <TabsTrigger value="palettes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+            <TabsTrigger value="palettes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
               <Palette className="w-4 h-4 mr-2" />
               Color Palettes
             </TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+            <TabsTrigger value="team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
               <Users className="w-4 h-4 mr-2" />
               Design Team
             </TabsTrigger>
@@ -371,7 +371,7 @@ const JBJDesignStudio: React.FC = () => {
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 whitespace-nowrap ${
                       selectedCategory === cat.id 
                         ? `bg-gradient-to-r ${cat.color} text-white shadow-lg` 
-                        : 'bg-zinc-900 text-white/70 hover:bg-gray-800 hover:text-white border border-gray-800'
+                        : 'bg-zinc-900 text-white/70 hover:bg-[#1A1A1A] hover:text-white border border-[#1A1A1A]'
                     }`}
                   >
                     <cat.icon className="w-4 h-4" />
@@ -384,7 +384,7 @@ const JBJDesignStudio: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
               {/* Left Panel - Templates */}
               <div className="lg:col-span-3">
-                <Card className="bg-zinc-900 border-gray-800">
+                <Card className="bg-zinc-900 border-[#1A1A1A]">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-white text-lg flex items-center gap-2">
                       <LayoutTemplate className="w-5 h-5 text-gold" />
@@ -400,7 +400,7 @@ const JBJDesignStudio: React.FC = () => {
                             value={signatureData.name}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, name: e.target.value }))}
                             placeholder="Jane Bou Jaoude"
-                            className="bg-zinc-800 border-gray-700 text-white mt-1"
+                            className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                           />
                         </div>
                         <div>
@@ -409,7 +409,7 @@ const JBJDesignStudio: React.FC = () => {
                             value={signatureData.title}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, title: e.target.value }))}
                             placeholder="Senior Consultant"
-                            className="bg-zinc-800 border-gray-700 text-white mt-1"
+                            className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                           />
                         </div>
                         <div>
@@ -418,7 +418,7 @@ const JBJDesignStudio: React.FC = () => {
                             value={signatureData.email}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, email: e.target.value }))}
                             placeholder="name@JBJ.ae"
-                            className="bg-zinc-800 border-gray-700 text-white mt-1"
+                            className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                           />
                         </div>
                         <div>
@@ -427,13 +427,13 @@ const JBJDesignStudio: React.FC = () => {
                             value={signatureData.phone}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, phone: e.target.value }))}
                             placeholder="+971 56 591 1000"
-                            className="bg-zinc-800 border-gray-700 text-white mt-1"
+                            className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                           />
                         </div>
                         <Button 
                           onClick={handleGenerateSignature}
                           disabled={isGenerating || !signatureData.name || !signatureData.email}
-                          className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
+                          className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold"
                         >
                           {isGenerating ? (
                             <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -455,7 +455,7 @@ const JBJDesignStudio: React.FC = () => {
                               className={`p-3 rounded-lg border-2 transition-all duration-200 text-left ${
                                 selectedTemplate?.id === template.id 
                                   ? 'border-gold bg-gold/10' 
-                                  : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
+                                  : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
                               }`}
                             >
                               <div className="aspect-video bg-zinc-700 rounded mb-2 flex items-center justify-center min-h-[60px]">
@@ -471,7 +471,7 @@ const JBJDesignStudio: React.FC = () => {
 
                     {/* Selected Palette Display */}
                     {selectedPalette && (
-                      <div className="mt-4 pt-4 border-t border-gray-800">
+                      <div className="mt-4 pt-4 border-t border-[#1A1A1A]">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="text-white/70 text-xs font-medium">Active Palette</h4>
                           <button 
@@ -500,10 +500,10 @@ const JBJDesignStudio: React.FC = () => {
 
               {/* Center - Canvas / Preview */}
               <div className="lg:col-span-5">
-                <Card className="bg-zinc-900 border-gray-800 h-full">
+                <Card className="bg-zinc-900 border-[#1A1A1A] h-full">
                   <CardContent className="p-4 h-full flex flex-col">
                     {/* Canvas Area */}
-                    <div className="flex-1 bg-zinc-950 rounded-xl border border-gray-800 flex items-center justify-center min-h-[400px] relative overflow-hidden">
+                    <div className="flex-1 bg-zinc-950 rounded-xl border border-[#1A1A1A] flex items-center justify-center min-h-[400px] relative overflow-hidden">
                       {generatedImage ? (
                         <motion.img
                           initial={{ opacity: 0, scale: 0.95 }}
@@ -525,8 +525,8 @@ const JBJDesignStudio: React.FC = () => {
                         </div>
                       ) : (
                         <div className="text-center p-8">
-                          <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-gray-700 flex items-center justify-center mx-auto mb-4">
-                            <ImagePlus className="w-10 h-10 text-gray-600" />
+                          <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
+                            <ImagePlus className="w-10 h-10 text-[#5A4A2E]" />
                           </div>
                           <h3 className="text-white/70 font-medium mb-2">Select a Template</h3>
                           <p className="text-white/90 text-sm">Choose a template from the left panel to get started</p>
@@ -537,7 +537,7 @@ const JBJDesignStudio: React.FC = () => {
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          className="absolute inset-0 bg-black/80 flex items-center justify-center"
+                          className="absolute inset-0 bg-[#1A1A1A]/80 flex items-center justify-center"
                         >
                           <div className="text-center">
                             <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
@@ -562,13 +562,13 @@ const JBJDesignStudio: React.FC = () => {
                           <DialogTrigger asChild>
                             <Button 
                               variant="outline"
-                              className="flex-1 border-gray-700 text-white/85 hover:bg-gray-800"
+                              className="flex-1 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
                             >
                               <Globe className="w-4 h-4 mr-2" />
                               Upload to Website
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="bg-zinc-900 border-gray-800">
+                          <DialogContent className="bg-zinc-900 border-[#1A1A1A]">
                             <DialogHeader>
                               <DialogTitle className="text-white">Upload to Website</DialogTitle>
                             </DialogHeader>
@@ -580,12 +580,12 @@ const JBJDesignStudio: React.FC = () => {
                                 value={websiteUploadPrompt}
                                 onChange={(e) => setWebsiteUploadPrompt(e.target.value)}
                                 placeholder="e.g., Replace the book in the 'Download Free Market Report' section on the homepage with this new design. Make it 3D style."
-                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-600 resize-none"
+                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-[#1A1A1A] rounded-lg text-white placeholder:text-[#5A4A2E] resize-none"
                               />
                               <Button
                                 onClick={handleUploadToWebsite}
                                 disabled={!websiteUploadPrompt.trim()}
-                                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
+                                className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold"
                               >
                                 <FileUp className="w-4 h-4 mr-2" />
                                 Submit Request
@@ -598,7 +598,7 @@ const JBJDesignStudio: React.FC = () => {
                             setGeneratedImage(null);
                           }}
                           variant="outline"
-                          className="border-gray-700 text-white/85 hover:bg-gray-800"
+                          className="border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
                         >
                           <RefreshCw className="w-4 h-4" />
                         </Button>
@@ -610,7 +610,7 @@ const JBJDesignStudio: React.FC = () => {
 
               {/* Right Panel - AI Assistant */}
               <div className="lg:col-span-4">
-                <Card className="bg-zinc-900 border-gray-800 h-[600px]">
+                <Card className="bg-zinc-900 border-[#1A1A1A] h-[600px]">
                   <AIDesignAssistant
                     selectedTemplate={selectedTemplate ? {
                       name: selectedTemplate.name,
@@ -636,7 +636,7 @@ const JBJDesignStudio: React.FC = () => {
 
           {/* PROJECTS TAB */}
           <TabsContent value="projects">
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <DesignProjectManager
                   onSelectProject={(project) => {
@@ -659,7 +659,7 @@ const JBJDesignStudio: React.FC = () => {
 
           {/* PALETTES TAB */}
           <TabsContent value="palettes">
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <ColorPaletteManager
                   onSelectPalette={(palette) => {
@@ -678,7 +678,7 @@ const JBJDesignStudio: React.FC = () => {
 
           {/* TEAM TAB */}
           <TabsContent value="team">
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardContent className="p-6">
                 <div className="text-center py-12">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500/20 to-fuchsia-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-4">
@@ -691,7 +691,7 @@ const JBJDesignStudio: React.FC = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                     {/* AI Designer Persona */}
-                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-gray-700">
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-[#1A1A1A]">
                       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center mx-auto mb-3">
                         <Sparkles className="w-8 h-8 text-white" />
                       </div>
@@ -701,7 +701,7 @@ const JBJDesignStudio: React.FC = () => {
                     </div>
 
                     {/* Brand Manager Persona */}
-                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-gray-700">
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-[#1A1A1A]">
                       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-3">
                         <Crown className="w-8 h-8 text-white" />
                       </div>
@@ -711,7 +711,7 @@ const JBJDesignStudio: React.FC = () => {
                     </div>
 
                     {/* Content Designer Persona */}
-                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-gray-700">
+                    <div className="p-4 rounded-xl bg-zinc-800/50 border border-[#1A1A1A]">
                       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-3">
                         <Book className="w-8 h-8 text-white" />
                       </div>

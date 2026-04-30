@@ -136,7 +136,7 @@ const DeveloperMessageForm = ({ representativeId, developerName, autoApprove }: 
             className="border-2 border-dashed border-gold/40 rounded-xl p-4 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload className="w-6 h-6 mx-auto text-gray-600 mb-1" />
+            <Upload className="w-6 h-6 mx-auto text-[#5A4A2E] mb-1" />
             <p className="text-xs text-muted-foreground">Upload documents, images, or presentations</p>
             <input ref={fileInputRef} type="file" className="hidden" multiple
               accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.xlsx"

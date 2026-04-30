@@ -288,7 +288,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
                   
                   <p className="text-xs text-muted-foreground mb-2">{alert.message}</p>
                   
-                  <div className="p-2 rounded bg-black/20 mb-3">
+                  <div className="p-2 rounded bg-[#1A1A1A]/20 mb-3">
                     <p className="text-[10px] text-muted-foreground">Suggested:</p>
                     <p className="text-xs text-foreground">{alert.suggestedAction}</p>
                   </div>

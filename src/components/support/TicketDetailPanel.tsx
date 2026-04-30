@@ -204,12 +204,12 @@ const SuggestionCard = ({
         <p className="text-xs text-[#8A7356] line-clamp-2">
           {suggestion.message.slice(0, 120)}...
         </p>
-        <p className="text-[10px] text-gray-600 mt-1">Click to preview full response</p>
+        <p className="text-[10px] text-[#5A4A2E] mt-1">Click to preview full response</p>
       </button>
 
       {/* Expanded Preview Modal */}
       {expanded && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
           <div
             className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -219,15 +219,15 @@ const SuggestionCard = ({
                 <Badge className={cn("border text-xs mb-1", typeColors[suggestion.type])}>
                   {typeLabels[suggestion.type] || suggestion.title}
                 </Badge>
-                <h3 className="text-black font-bold text-lg">{suggestion.title}</h3>
+                <h3 className="text-[#1A1A1A] font-bold text-lg">{suggestion.title}</h3>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-gold hover:text-black hover:bg-gold/20 border border-gold/40">
+              <Button variant="ghost" size="icon" onClick={() => setExpanded(false)} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 border border-gold/40">
                 <X className="w-5 h-5" />
               </Button>
             </div>
             <ScrollArea className="flex-1 p-5">
-              <div className="bg-white/60 border border-gold/20 rounded-lg p-4">
-                <p className="text-black text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
+              <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-4">
+                <p className="text-[#1A1A1A] text-sm whitespace-pre-wrap leading-relaxed">{suggestion.message}</p>
               </div>
             </ScrollArea>
             <div className="px-5 py-4 border-t border-gold/30 flex gap-3">
@@ -236,7 +236,7 @@ const SuggestionCard = ({
                   onSelect();
                   setExpanded(false);
                 }}
-                className="flex-1 bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70"
+                className="flex-1 bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Use This Reply
@@ -283,8 +283,8 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   if (!ticketId) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
-        <div className="text-center text-gray-600">
-          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+        <div className="text-center text-[#5A4A2E]">
+          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-[#8A7556]" />
           <p>Select a ticket to view details</p>
         </div>
       </div>
@@ -307,7 +307,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   if (!data) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
-        <p className="text-gray-600">Ticket not found</p>
+        <p className="text-[#5A4A2E]">Ticket not found</p>
       </div>
     );
   }
@@ -381,13 +381,13 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               {status.label}
             </Badge>
           </div>
-          <h2 className="text-sm font-semibold text-black truncate">{ticket.subject}</h2>
+          <h2 className="text-sm font-semibold text-[#1A1A1A] truncate">{ticket.subject}</h2>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="bg-gold border-2 border-gold text-black hover:bg-gold/80 transition-all duration-200"
+          className="bg-gold border-2 border-gold text-[#1A1A1A] hover:bg-gold/80 transition-all duration-200"
         >
           <X className="w-5 h-5" />
         </Button>
@@ -413,14 +413,14 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           )}
 
           {/* Customer Info */}
-          <div className="bg-white/50 rounded-lg p-3 space-y-2 border border-gold/20">
+          <div className="bg-[#FDFBF7]/50 rounded-lg p-3 space-y-2 border border-gold/20">
             <h3 className="text-xs font-semibold text-gold uppercase tracking-wide mb-2">
               Customer Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="flex items-center gap-2 text-sm">
                 <User className="w-4 h-4 text-gold" />
-                <span className="text-black">{ticket.full_name}</span>
+                <span className="text-[#1A1A1A]">{ticket.full_name}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <Mail className="w-4 h-4 text-gold" />
@@ -445,7 +445,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               )}
               <div className="flex items-center gap-2 text-sm">
                 <Tag className="w-4 h-4 text-gold" />
-                <span className="text-black">{ticket.service_category}</span>
+                <span className="text-[#1A1A1A]">{ticket.service_category}</span>
               </div>
             </div>
           </div>
@@ -455,7 +455,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             <h3 className="text-sm font-semibold text-gold uppercase tracking-wide mb-3">
               Issue Description
             </h3>
-            <div className="bg-white/40 rounded-lg p-4 text-black text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/20">
+            <div className="bg-[#FDFBF7]/40 rounded-lg p-4 text-[#1A1A1A] text-sm whitespace-pre-wrap break-words overflow-hidden max-w-full border border-gold/20">
               {ticket.description}
             </div>
           </div>
@@ -538,7 +538,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               <Button
                 size="sm"
                 onClick={() => navigate(`/ai-notes?ticket=${ticket.ticket_number}&title=${encodeURIComponent(`Note: ${ticket.subject}`)}`)}
-                className="bg-gold/30 hover:bg-gold/50 text-black border border-gold/40"
+                className="bg-gold/30 hover:bg-gold/50 text-[#1A1A1A] border border-gold/40"
               >
                 <StickyNote className="w-4 h-4 mr-2" />
                 Add Note
@@ -556,7 +556,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 size="sm"
                 onClick={handleGenerateAISuggestions}
                 disabled={aiSuggestions.isLoading}
-                className="bg-gradient-to-r from-gold to-[#D8C7A6] hover:from-gold/90 hover:to-[#D8C7A6]/90 text-black font-semibold"
+                className="bg-gradient-to-r from-gold to-[#D8C7A6] hover:from-gold/90 hover:to-[#D8C7A6]/90 text-[#1A1A1A] font-semibold"
               >
                 {aiSuggestions.isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -602,7 +602,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
             </h3>
             <div className="space-y-3">
               {messages.length === 0 ? (
-                <p className="text-gray-600 text-sm italic">No messages yet</p>
+                <p className="text-[#5A4A2E] text-sm italic">No messages yet</p>
               ) : (
                 messages.map((msg) => (
                   <div
@@ -611,7 +611,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                       "rounded-lg p-3",
                       msg.sender_type === "staff"
                         ? "bg-gold/10 border border-gold/20 ml-6"
-                        : "bg-white/40 border border-gold/15 mr-6"
+                        : "bg-[#FDFBF7]/40 border border-gold/15 mr-6"
                     )}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -625,11 +625,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                       >
                         {msg.sender_type === "staff" ? "Staff Reply" : "Customer"}
                       </span>
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-[#5A4A2E]">
                         {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                       </span>
                     </div>
-                    <p className="text-sm text-black whitespace-pre-wrap">
+                    <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">
                       {msg.message}
                     </p>
                   </div>
@@ -639,7 +639,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           </div>
 
           {/* Metadata */}
-          <div className="text-xs text-gray-600 pt-4 border-t border-gold/20">
+          <div className="text-xs text-[#5A4A2E] pt-4 border-t border-gold/20">
             <p>Created: {format(new Date(ticket.created_at), "MMM d, yyyy h:mm a")}</p>
             {ticket.customer_confirmation_sent_at && (
               <p className="text-green-400">
@@ -653,7 +653,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       {/* Reply Composer */}
       <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
-        <p className="text-[10px] text-gray-600 mb-1 flex items-center gap-1">
+        <p className="text-[10px] text-[#5A4A2E] mb-1 flex items-center gap-1">
           <Mic className="w-3 h-3" /> Speak in any language — auto-translated to English
         </p>
         <div className="flex gap-2">
@@ -663,7 +663,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               onChange={(e) => setReplyMessage(e.target.value)}
               placeholder="Type your reply to the customer..."
               rows={2}
-              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
             />
             <div className="absolute top-2 right-2 flex items-center gap-1">
               <VoiceInputButton
@@ -677,11 +677,11 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 }}
                 size="icon"
                 variant="ghost"
-                className="h-6 w-6 text-gray-600 hover:text-gold"
+                className="h-6 w-6 text-[#5A4A2E] hover:text-gold"
               />
               <button
                 onClick={() => setReplyMaximized(true)}
-                className="text-gray-600 hover:text-gold transition-colors p-0.5"
+                className="text-[#5A4A2E] hover:text-gold transition-colors p-0.5"
                 title="Maximize reply editor"
               >
                 <Maximize2 className="w-4 h-4" />
@@ -691,7 +691,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
           <Button
             onClick={handleSendReply}
             disabled={!replyMessage.trim() || sendReply.isPending}
-            className="bg-gold hover:bg-gold/90 text-black self-end"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A] self-end"
           >
             {sendReply.isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -704,17 +704,17 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
       {/* Maximized Reply Editor Modal */}
       {replyMaximized && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
           <div
             className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
-              <h3 className="text-black font-bold text-lg flex items-center gap-2">
+              <h3 className="text-[#1A1A1A] font-bold text-lg flex items-center gap-2">
                 <MessageSquare className="w-5 h-5 text-gold" />
                 Reply Editor
               </h3>
-              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-gold hover:text-black hover:bg-gold/20 border border-gold/40">
+              <Button variant="ghost" size="icon" onClick={() => setReplyMaximized(false)} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 border border-gold/40">
                 <Minimize2 className="w-5 h-5" />
               </Button>
             </div>
@@ -723,7 +723,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 value={replyMessage}
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply to the customer..."
-                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-white/80 border border-gold/30 text-black text-sm placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
+                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
                 autoFocus
               />
             </div>
@@ -755,7 +755,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                   setReplyMaximized(false);
                 }}
                 disabled={!replyMessage.trim() || sendReply.isPending}
-                className="bg-gradient-to-r from-gold to-gold/80 text-black font-bold hover:from-gold/90 hover:to-gold/70"
+                className="bg-gradient-to-r from-gold to-gold/80 text-[#1A1A1A] font-bold hover:from-gold/90 hover:to-gold/70"
               >
                 {sendReply.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />

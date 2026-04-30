@@ -67,7 +67,7 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
 
   if (authLoading || ownerLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
           <p className="text-white/70">Verifying executive access...</p>
@@ -78,7 +78,7 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
             <Lock className="w-10 h-10 text-red-500" />
@@ -100,7 +100,7 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
           </div>
           <Button
             onClick={() => navigate("/")}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             Return to Home
           </Button>

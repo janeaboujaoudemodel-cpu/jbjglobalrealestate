@@ -204,7 +204,7 @@ export default function AIEmailGeneratorPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-black font-semibold"
+              className="w-full bg-teal-500 hover:bg-teal-600 text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>

@@ -489,14 +489,14 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
   // NOTE: openFullPagePreview removed - using Link component instead for reliable navigation
 
   const ChecklistItem = ({ label, passed, detail }: { label: string; passed: boolean; detail?: string }) => (
-    <div className="flex items-center justify-between py-1 px-2 rounded bg-gray-50">
+    <div className="flex items-center justify-between py-1 px-2 rounded bg-[#F7F2EA]">
       <div className="flex items-center gap-2">
         {passed ? (
           <CheckCircle className="w-4 h-4 text-emerald-600" />
         ) : (
           <XCircle className="w-4 h-4 text-red-500" />
         )}
-        <span className={`text-sm ${passed ? "text-gray-700" : "text-red-700"}`}>{label}</span>
+        <span className={`text-sm ${passed ? "text-[#5A4A2E]" : "text-red-700"}`}>{label}</span>
       </div>
       {detail && <span className="text-xs text-muted-foreground">{detail}</span>}
     </div>
@@ -581,7 +581,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
             {testResult.project && (
               <div className="space-y-4">
                 {/* SMALL CARD PREVIEW (Provident style) */}
-                <Card className="bg-white border-gold shadow-lg overflow-hidden">
+                <Card className="bg-[#FDFBF7] border-gold shadow-lg overflow-hidden">
                   <div className="flex flex-col md:flex-row">
                     {/* Main Image */}
                     <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 bg-muted">
@@ -678,7 +678,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
                 {/* CHECKLIST */}
                 {testResult.checklist && (
-                  <Card className="bg-white border-gray-200">
+                  <Card className="bg-[#FDFBF7] border-[#B89555]/30">
                     <CardHeader className="py-2 px-3">
                       <CardTitle className="text-sm">Extraction Checklist (Provident Mirror Standard)</CardTitle>
                       <p className="text-xs text-muted-foreground mt-1">
@@ -686,7 +686,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       </p>
                     </CardHeader>
                     <CardContent className="py-2 px-3 space-y-1">
-                      <div className="text-xs font-medium text-gray-600 mb-2">Core Requirements (needed for approval)</div>
+                      <div className="text-xs font-medium text-[#5A4A2E] mb-2">Core Requirements (needed for approval)</div>
                       <ChecklistItem 
                         label="Images (2+ required)" 
                         passed={testResult.checklist.hasImages} 
@@ -708,7 +708,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         detail={testResult.checklist.hasDeveloper ? testResult.project?.developer_name : "Unknown or missing"}
                       />
                       
-                      <div className="text-xs font-medium text-gray-600 mt-3 mb-2">Extended Fields (from page-data.json + Firecrawl)</div>
+                      <div className="text-xs font-medium text-[#5A4A2E] mt-3 mb-2">Extended Fields (from page-data.json + Firecrawl)</div>
                       <ChecklistItem 
                         label="USP Bullets (2+ recommended)" 
                         passed={testResult.checklist.hasUsps} 
@@ -760,7 +760,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
                 {/* ========== EXTRACTED DATA PREVIEW ========== */}
                 {testResult.project && (
-                  <Card className="bg-white border-gray-200">
+                  <Card className="bg-[#FDFBF7] border-[#B89555]/30">
                     <CardHeader className="py-2 px-3">
                       <CardTitle className="text-sm">Extracted Data Preview</CardTitle>
                     </CardHeader>
@@ -768,16 +768,16 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* FAQs */}
                       {testResult.project.faqs && testResult.project.faqs.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-[#5A4A2E] mb-2 flex items-center gap-1">
                             <FileText className="w-3 h-3" />
                             FAQs ({testResult.project.faqs.length})
                           </div>
                           <ScrollArea className="max-h-48">
                             <div className="space-y-2">
                               {testResult.project.faqs.map((faq, idx) => (
-                                <div key={idx} className="bg-gray-50 rounded p-2 text-xs">
-                                  <div className="font-medium text-gray-800">{faq.question}</div>
-                                  <div className="text-gray-600 mt-1 line-clamp-2">{faq.answer}</div>
+                                <div key={idx} className="bg-[#F7F2EA] rounded p-2 text-xs">
+                                  <div className="font-medium text-[#1A1A1A]">{faq.question}</div>
+                                  <div className="text-[#5A4A2E] mt-1 line-clamp-2">{faq.answer}</div>
                                 </div>
                               ))}
                             </div>
@@ -788,7 +788,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* Location Distances */}
                       {testResult.project.location_distances && testResult.project.location_distances.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-[#5A4A2E] mb-2 flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
                             Location Distances ({testResult.project.location_distances.length})
                           </div>
@@ -805,19 +805,19 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* USP Bullets */}
                       {testResult.project.usp_bullets && testResult.project.usp_bullets.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-[#5A4A2E] mb-2 flex items-center gap-1">
                             <Award className="w-3 h-3" />
                             USP Bullets ({testResult.project.usp_bullets.length})
                           </div>
                           <ul className="space-y-1">
                             {testResult.project.usp_bullets.slice(0, 5).map((usp, idx) => (
-                              <li key={idx} className="text-xs text-gray-700 flex items-start gap-1">
+                              <li key={idx} className="text-xs text-[#5A4A2E] flex items-start gap-1">
                                 <Check className="w-3 h-3 text-emerald-600 flex-shrink-0 mt-0.5" />
                                 {usp}
                               </li>
                             ))}
                             {testResult.project.usp_bullets.length > 5 && (
-                              <li className="text-xs text-gray-600">+{testResult.project.usp_bullets.length - 5} more</li>
+                              <li className="text-xs text-[#5A4A2E]">+{testResult.project.usp_bullets.length - 5} more</li>
                             )}
                           </ul>
                         </div>
@@ -826,7 +826,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* Amenities */}
                       {testResult.project.amenities_list && testResult.project.amenities_list.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-[#5A4A2E] mb-2 flex items-center gap-1">
                             <Building2 className="w-3 h-3" />
                             Amenities ({testResult.project.amenities_list.length})
                           </div>
@@ -837,7 +837,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                               </Badge>
                             ))}
                             {testResult.project.amenities_list.length > 10 && (
-                              <Badge variant="outline" className="text-xs bg-gray-100 border-gray-200 text-gray-600">
+                              <Badge variant="outline" className="text-xs bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E]">
                                 +{testResult.project.amenities_list.length - 10} more
                               </Badge>
                             )}
@@ -851,7 +851,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         testResult.project.payment_breakdown.during_construction || 
                         testResult.project.payment_breakdown.on_completion) && (
                         <div>
-                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-[#5A4A2E] mb-2 flex items-center gap-1">
                             <DollarSign className="w-3 h-3" />
                             Payment Breakdown
                           </div>
@@ -880,7 +880,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                        (!testResult.project.location_distances || testResult.project.location_distances.length === 0) &&
                        (!testResult.project.usp_bullets || testResult.project.usp_bullets.length === 0) &&
                        (!testResult.project.amenities_list || testResult.project.amenities_list.length === 0) && (
-                        <div className="text-center py-4 text-gray-600 text-sm">
+                        <div className="text-center py-4 text-[#5A4A2E] text-sm">
                           <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
                           No extended data extracted (FAQs, Distances, USPs, Amenities)
                         </div>
@@ -891,7 +891,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
 
                 {/* IMAGE GALLERY PREVIEW */}
                 {testResult.project.images.length > 0 && (
-                  <Card className="bg-white border-gray-200">
+                  <Card className="bg-[#FDFBF7] border-[#B89555]/30">
                     <CardHeader className="py-2 px-3">
                       <CardTitle className="text-sm flex items-center justify-between">
                         <span>Image Gallery Preview</span>
@@ -903,7 +903,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                     <CardContent className="py-2 px-3">
                       <div className="grid grid-cols-4 gap-1">
                         {testResult.project.images.slice(0, 8).map((img, idx) => (
-                          <div key={idx} className="aspect-video bg-gray-100 rounded overflow-hidden">
+                          <div key={idx} className="aspect-video bg-[#F7F2EA] rounded overflow-hidden">
                             <SafeImage
                               src={img.url}
                               alt={img.alt_text || `Image ${idx + 1}`}
@@ -918,7 +918,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                 )}
 
                 {/* SOURCE URL */}
-                <Card className="bg-white border-gray-200">
+                <Card className="bg-[#FDFBF7] border-[#B89555]/30">
                   <CardHeader className="py-2 px-3">
                     <CardTitle className="text-sm flex items-center justify-between">
                       <span>Source URL</span>
@@ -933,8 +933,8 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="py-2 px-3">
-                    <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                      <div className="text-xs font-mono break-all text-gray-600">
+                    <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3">
+                      <div className="text-xs font-mono break-all text-[#5A4A2E]">
                         {testResult.project.source_url}
                       </div>
                     </div>

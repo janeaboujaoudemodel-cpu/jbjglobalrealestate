@@ -57,7 +57,7 @@ const CommunityDetail = () => {
     filters.facilities.length > 0;
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-[#1A1A1A]">
       <SEOHead
         title={`${community.name} Community | Dubai Properties`}
         description={(community.description || `Discover properties for sale and rent in ${community.name}, Dubai. Browse off-plan and ready listings curated by JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
@@ -79,7 +79,7 @@ const CommunityDetail = () => {
         
         <Link
           to="/communities"
-          className="absolute top-6 left-6 flex items-center gap-2 text-black hover:text-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm px-4 py-2 rounded-full border border-gold/40 shadow-md"
+          className="absolute top-6 left-6 flex items-center gap-2 text-[#1A1A1A] hover:text-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm px-4 py-2 rounded-full border border-gold/40 shadow-md"
         >
           <ChevronLeft className="w-5 h-5" />
           <span className="font-medium">Back to Communities</span>
@@ -92,14 +92,14 @@ const CommunityDetail = () => {
         <div className="jj-card-inner rounded-xl p-6 md:p-8 shadow-xl">
           {/* Layer 3: Locked Champagne - Community Info Card */}
           <div className="jj-card-inner rounded-xl p-6 md:p-8">
-            <h1 className="text-black font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
+            <h1 className="text-[#1A1A1A] font-bold mb-2 text-3xl md:text-4xl lg:text-5xl">
               <span className="text-gold">{community.name.split(' ')[0]}</span> {community.name.split(' ').slice(1).join(' ')}
             </h1>
             {community.location && (
               <p className="text-gold text-lg mb-4 font-medium">{community.location}</p>
             )}
             {community.description && (
-              <p className="text-gray-700 text-lg max-w-3xl">{community.description}</p>
+              <p className="text-[#5A4A2E] text-lg max-w-3xl">{community.description}</p>
             )}
           </div>
         </div>
@@ -108,7 +108,7 @@ const CommunityDetail = () => {
         <div className="py-10 px-4 md:px-8 jj-layer-active rounded-2xl shadow-lg">
           {/* Layer 3: Locked Champagne */}
           <div className="jj-card-inner rounded-xl p-6 md:p-8">
-            <h2 className="text-black font-semibold mb-6 text-2xl">
+            <h2 className="text-[#1A1A1A] font-semibold mb-6 text-2xl">
               <span className="text-gold">Projects</span> in {community.name}
             </h2>
 
@@ -121,7 +121,7 @@ const CommunityDetail = () => {
             />
 
             {hasFiltersApplied && (
-              <p className="text-gray-600 mb-6">
+              <p className="text-[#5A4A2E] mb-6">
                 Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
               </p>
             )}
@@ -140,7 +140,7 @@ const CommunityDetail = () => {
               </div>
             ) : (
               <div className="text-center py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg border-2 border-gold/30">
-                <p className="text-gray-700 mb-2">
+                <p className="text-[#5A4A2E] mb-2">
                   {hasFiltersApplied
                     ? "No projects match your filters"
                     : "No projects available in this community yet."}
@@ -163,13 +163,13 @@ const CommunityDetail = () => {
           <div className="jj-card-inner rounded-lg p-5">
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg flex items-center justify-center flex-shrink-0 border border-gold/30">
-                <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-5 h-5 text-[#1A1A1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div>
                 <h3 className="text-gold font-semibold mb-1">Information provided is for general guidance only</h3>
-                <p className="text-gray-700 text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
+                <p className="text-[#5A4A2E] text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
               </div>
             </div>
           </div>
@@ -182,7 +182,7 @@ const CommunityDetail = () => {
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
           >
             <span className="text-gold font-semibold">View All Area Guides</span>
-            <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-[#1A1A1A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </Link>

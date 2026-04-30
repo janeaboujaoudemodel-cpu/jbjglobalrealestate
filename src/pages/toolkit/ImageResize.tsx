@@ -513,12 +513,12 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               {/* Upload Zone (shown when no images) */}
               {!hasImages && (
                 <div
-                  className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 border-2 border-dashed border-gold/30 hover:border-gold/60 bg-white/60 hover:bg-white/80"
+                  className="rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 border-2 border-dashed border-gold/30 hover:border-gold/60 bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80"
                   onClick={() => fileInputRef.current?.click()}
                   onDrop={(e) => { e.preventDefault(); handleFileSelect(e.dataTransfer.files); }}
                   onDragOver={(e) => e.preventDefault()}
                 >
-                  <Upload className="h-14 w-14 mx-auto mb-4 text-gray-500" />
+                  <Upload className="h-14 w-14 mx-auto mb-4 text-[#8A7556]" />
                   <p className="text-foreground font-semibold text-lg mb-1">Drop images here or click to upload</p>
                   <p className="text-muted-foreground text-sm">JPG, PNG, WebP — unlimited photos</p>
                   <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileSelect(e.target.files)} />
@@ -527,7 +527,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Live Preview Area */}
               {hasImages && activeImage && (
-                <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                   {/* Preview Header */}
                   <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100 bg-stone-50/50">
                     <div className="flex items-center gap-2">
@@ -606,10 +606,10 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
                   {/* Tool-specific controls */}
                   {activeTool === "text" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-white space-y-3">
+                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
                       <div className="flex gap-2">
                         <Input value={newText} onChange={(e) => setNewText(e.target.value)} placeholder="Enter text..." className="flex-1 h-9 text-sm" />
-                        <Button size="sm" onClick={addTextOverlay} className="bg-gold hover:bg-gold/90 text-black h-9">Add</Button>
+                        <Button size="sm" onClick={addTextOverlay} className="bg-gold hover:bg-gold/90 text-[#1A1A1A] h-9">Add</Button>
                       </div>
                       <div className="flex items-center gap-3 flex-wrap">
                         <div className="flex items-center gap-1.5">
@@ -636,7 +636,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   )}
 
                   {activeTool === "border" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-white space-y-3">
+                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
                       <div className="flex items-center gap-3">
                         <label className="text-xs text-muted-foreground whitespace-nowrap">Width</label>
                         <Slider value={[borderWidth]} min={0} max={60} step={2} onValueChange={([v]) => setBorderWidth(v)} className="flex-1" />
@@ -651,7 +651,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   )}
 
                   {activeTool === "collage" && (
-                    <div className="px-4 py-3 border-t border-stone-100 bg-white space-y-3">
+                    <div className="px-4 py-3 border-t border-stone-100 bg-[#FDFBF7] space-y-3">
                       <div className="flex gap-2">
                         {(["horizontal", "vertical", "grid"] as const).map(layout => (
                           <button key={layout} onClick={() => setCollageLayout(layout)}
@@ -671,7 +671,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         <label className="text-xs text-muted-foreground">Background</label>
                         <input type="color" value={collageBgColor} onChange={(e) => setCollageBgColor(e.target.value)} className="w-7 h-7 rounded cursor-pointer border border-stone-200" />
                       </div>
-                      <Button onClick={exportCollage} disabled={images.length < 2 || processing} className="w-full bg-gold hover:bg-gold/90 text-black">
+                      <Button onClick={exportCollage} disabled={images.length < 2 || processing} className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                         <Layers className="h-4 w-4 mr-2" /> Export Collage ({images.length} images)
                       </Button>
                     </div>
@@ -681,7 +681,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Thumbnail Strip */}
               {hasImages && (
-                <div className="bg-white rounded-xl border border-stone-200 shadow-sm p-3">
+                <div className="bg-[#FDFBF7] rounded-xl border border-stone-200 shadow-sm p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-medium text-foreground">Images ({images.length})</span>
                     <div className="flex-1" />
@@ -718,13 +718,13 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
               {/* Generated Results */}
               {processedImages.length > 0 && (
-                <div className="bg-white rounded-2xl border border-green-200 shadow-sm overflow-hidden">
+                <div className="bg-[#FDFBF7] rounded-2xl border border-green-200 shadow-sm overflow-hidden">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-green-100 bg-green-50/50">
                     <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                       <Check className="h-4 w-4 text-green-600" />
                       Generated ({processedImages.length})
                     </h3>
-                    <Button size="sm" onClick={downloadZip} className="bg-gold hover:bg-gold/90 text-black h-8">
+                    <Button size="sm" onClick={downloadZip} className="bg-gold hover:bg-gold/90 text-[#1A1A1A] h-8">
                       <FileArchive className="h-3.5 w-3.5 mr-1.5" /> Download ZIP
                     </Button>
                   </div>
@@ -736,7 +736,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                         </div>
                         <button onClick={() => downloadSingle(p)}
                           className="absolute bottom-2 right-2 w-7 h-7 rounded-full bg-gold/90 hover:bg-gold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
-                          <Download className="h-3.5 w-3.5 text-black" />
+                          <Download className="h-3.5 w-3.5 text-[#1A1A1A]" />
                         </button>
                         <p className="text-xs text-foreground font-medium mt-1.5 truncate">{p.presetName}</p>
                         <p className="text-xs text-muted-foreground">{p.width}×{p.height}</p>
@@ -750,7 +750,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
             {/* ━━━ RIGHT: Settings Panel ━━━ */}
             <div className="space-y-4">
               {/* Preset Selector */}
-              <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100">
                   <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Grid3X3 className="h-4 w-4 text-gold" /> Size Presets
@@ -794,7 +794,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               </div>
 
               {/* Fit Mode */}
-              <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                   <Crop className="h-4 w-4 text-gold" /> Fit Mode
                 </h3>
@@ -900,7 +900,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               </div>
 
               {/* Output Settings */}
-              <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-2xl border border-stone-200 shadow-sm p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                   <SlidersHorizontal className="h-4 w-4 text-gold" /> Output
                 </h3>
@@ -934,7 +934,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
               <Button
                 onClick={processImages}
                 disabled={processing || !hasImages || selectedPresets.length === 0}
-                className="w-full h-12 bg-gradient-to-r from-gold to-[#d4af37] hover:from-gold/90 hover:to-[#d4af37]/90 text-black font-bold text-base shadow-lg shadow-gold/20 rounded-xl"
+                className="w-full h-12 bg-gradient-to-r from-gold to-[#d4af37] hover:from-gold/90 hover:to-[#d4af37]/90 text-[#1A1A1A] font-bold text-base shadow-lg shadow-gold/20 rounded-xl"
               >
                 {processing ? (
                   <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Processing...</>

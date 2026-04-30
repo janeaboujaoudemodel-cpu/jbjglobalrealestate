@@ -46,7 +46,7 @@ export function PaymentPlanSlider({
       <div className="flex items-center justify-between">
         <label className={cn(
           "text-sm font-medium",
-          isDark ? "text-white" : "text-black"
+          isDark ? "text-white" : "text-[#1A1A1A]"
         )}>
           Payment Plan
         </label>
@@ -58,8 +58,8 @@ export function PaymentPlanSlider({
             className={cn(
               "h-7 px-2 text-xs gap-1",
               isDark 
-                ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
-                : "text-black/60 hover:text-black hover:bg-champagne-light"
+                ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
+                : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
             )}
           >
             <RotateCcw className="w-3 h-3" />
@@ -70,10 +70,10 @@ export function PaymentPlanSlider({
       
       {/* Labels */}
       <div className="flex justify-between text-xs">
-        <span className={isDark ? "text-gray-600" : "text-black/60"}>
+        <span className={isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"}>
           Pre-Handover
         </span>
-        <span className={isDark ? "text-gray-600" : "text-black/60"}>
+        <span className={isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"}>
           Post-Handover
         </span>
       </div>
@@ -93,13 +93,13 @@ export function PaymentPlanSlider({
         <div className="flex justify-between mt-2">
           <div className={cn(
             "text-sm font-medium tabular-nums",
-            isDark ? "text-white" : "text-black"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             {preHandoverMin}%
           </div>
           <div className={cn(
             "text-sm font-medium tabular-nums",
-            isDark ? "text-white" : "text-black"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             {preHandoverMax}%
           </div>
@@ -113,7 +113,7 @@ export function PaymentPlanSlider({
           checked={hasPostHandover}
           onCheckedChange={(checked) => onHasPostHandoverChange(checked === true)}
           className={cn(
-            isDark ? "border-gray-600" : "border-gold/40",
+            isDark ? "border-[#1A1A1A]" : "border-gold/40",
             "data-[state=checked]:bg-gold data-[state=checked]:border-gold"
           )}
         />
@@ -121,7 +121,7 @@ export function PaymentPlanSlider({
           htmlFor="post-handover" 
           className={cn(
             "text-sm cursor-pointer",
-            isDark ? "text-gray-600" : "text-black/80"
+            isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/80"
           )}
         >
           Only show projects with post-handover payments
@@ -150,7 +150,7 @@ export function PaymentPlanCompact({
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-xs">
-        <span className={isDark ? "text-gray-600" : "text-black/60"}>
+        <span className={isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"}>
           Payment Plan: {value[0]}% - {value[1]}%
         </span>
       </div>

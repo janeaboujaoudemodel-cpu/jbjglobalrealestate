@@ -46,19 +46,19 @@ export default function PortfolioGroupingControls({
       {/* Primary Grouping Tabs */}
       <Tabs value={activeGrouping} onValueChange={(v) => onGroupingChange(v as GroupingType)}>
         <TabsList className="bg-muted/50 h-auto p-1 flex-wrap">
-          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+          <TabsTrigger value="objective" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
             <Target className="w-4 h-4" />
             By Objective
           </TabsTrigger>
-          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+          <TabsTrigger value="asset-type" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
             <Layers className="w-4 h-4" />
             By Asset Type
           </TabsTrigger>
-          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+          <TabsTrigger value="location" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
             <MapPin className="w-4 h-4" />
             By Location
           </TabsTrigger>
-          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
+          <TabsTrigger value="status" className="gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40">
             <CheckSquare className="w-4 h-4" />
             By Status
           </TabsTrigger>

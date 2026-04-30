@@ -243,35 +243,35 @@ export function EnhancedAssignModal({
 
   const renderSelectionScreen = () => (
     <div className="space-y-4">
-      <p className="text-gray-600 text-sm text-center mb-6">
+      <p className="text-[#5A4A2E] text-sm text-center mb-6">
         Who would you like to assign {leadName ? `"${leadName}"` : "this lead"} to?
       </p>
 
       <Button
         variant="outline"
         onClick={() => setStep("employees")}
-        className="w-full h-20 justify-start gap-4 border-gray-700 hover:bg-gray-800 hover:border-gold/50"
+        className="w-full h-20 justify-start gap-4 border-[#1A1A1A] hover:bg-[#1A1A1A] hover:border-gold/50"
       >
         <div className="p-3 rounded-lg bg-blue-500/20">
           <Users className="h-6 w-6 text-blue-400" />
         </div>
         <div className="text-left">
           <p className="text-white font-medium">Employees</p>
-          <p className="text-gray-600 text-sm">Assign to a team member</p>
+          <p className="text-[#5A4A2E] text-sm">Assign to a team member</p>
         </div>
       </Button>
 
       <Button
         variant="outline"
         onClick={() => setStep("brokers")}
-        className="w-full h-20 justify-start gap-4 border-gray-700 hover:bg-gray-800 hover:border-gold/50"
+        className="w-full h-20 justify-start gap-4 border-[#1A1A1A] hover:bg-[#1A1A1A] hover:border-gold/50"
       >
         <div className="p-3 rounded-lg bg-gold/20">
           <Bot className="h-6 w-6 text-gold" />
         </div>
         <div className="text-left">
           <p className="text-white font-medium">Brokers</p>
-          <p className="text-gray-600 text-sm">Assign to human or AI broker</p>
+          <p className="text-[#5A4A2E] text-sm">Assign to human or AI broker</p>
         </div>
       </Button>
     </div>
@@ -286,19 +286,19 @@ export function EnhancedAssignModal({
           variant="ghost"
           size="sm"
           onClick={() => setStep("select")}
-          className="text-gray-600 hover:text-white -ml-2"
+          className="text-[#5A4A2E] hover:text-white -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
           <Input
             placeholder="Search employees..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-800 border-gray-700 text-white"
+            className="pl-10 bg-zinc-800 border-[#1A1A1A] text-white"
           />
         </div>
 
@@ -309,7 +309,7 @@ export function EnhancedAssignModal({
                 <Loader2 className="h-6 w-6 animate-spin text-gold" />
               </div>
             ) : filtered.length === 0 ? (
-              <p className="text-gray-600 text-center py-8">No employees found</p>
+              <p className="text-[#5A4A2E] text-center py-8">No employees found</p>
             ) : (
               filtered.map((employee) => (
                   <button
@@ -321,9 +321,9 @@ export function EnhancedAssignModal({
                       type: "employee",
                     })
                   }
-                  className="w-full p-3 rounded-lg bg-zinc-800 border border-gray-700 hover:border-gold/50 flex items-center gap-3 transition-all text-left"
+                  className="w-full p-3 rounded-lg bg-zinc-800 border border-[#1A1A1A] hover:border-gold/50 flex items-center gap-3 transition-all text-left"
                 >
-                  <Avatar className="h-10 w-10 border border-gray-600">
+                  <Avatar className="h-10 w-10 border border-[#1A1A1A]">
                     <AvatarFallback className="bg-blue-500/20 text-blue-400">
                       {getInitials(employee.display_name)}
                     </AvatarFallback>
@@ -334,7 +334,7 @@ export function EnhancedAssignModal({
                     </p>
                   </div>
                   {employee.crm_role && (
-                    <Badge variant="outline" className="border-gray-600 text-gray-600">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-[#5A4A2E]">
                       {employee.crm_role}
                     </Badge>
                   )}
@@ -356,19 +356,19 @@ export function EnhancedAssignModal({
           variant="ghost"
           size="sm"
           onClick={() => setStep("select")}
-          className="text-gray-600 hover:text-white -ml-2"
+          className="text-[#5A4A2E] hover:text-white -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
           <Input
             placeholder="Search brokers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-800 border-gray-700 text-white"
+            className="pl-10 bg-zinc-800 border-[#1A1A1A] text-white"
           />
         </div>
 
@@ -383,7 +383,7 @@ export function EnhancedAssignModal({
                 {/* Human Brokers */}
                 {filtered.jbj.length > 0 && (
                   <div>
-                    <h4 className="text-gray-600 text-xs uppercase tracking-wide mb-2">
+                    <h4 className="text-[#5A4A2E] text-xs uppercase tracking-wide mb-2">
                       Human Brokers
                     </h4>
                     <div className="space-y-2">
@@ -406,8 +406,8 @@ export function EnhancedAssignModal({
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
                               isAtCapacity
-                                ? "bg-zinc-800/50 border-gray-700 opacity-50 cursor-not-allowed"
-                                : "bg-zinc-800 border-gray-700 hover:border-gold/50"
+                                ? "bg-zinc-800/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
+                                : "bg-zinc-800 border-[#1A1A1A] hover:border-gold/50"
                             }`}
                           >
                             <Avatar className="h-10 w-10 border border-gold/30">
@@ -424,7 +424,7 @@ export function EnhancedAssignModal({
                                 {broker.name}
                               </p>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-600 text-sm">
+                                <span className="text-[#5A4A2E] text-sm">
                                   {broker.active_leads}/{broker.capacity}
                                 </span>
                                 {isAtCapacity && (
@@ -444,7 +444,7 @@ export function EnhancedAssignModal({
                 {/* AI Brokers */}
                 {filtered.ai.length > 0 && (
                   <div>
-                    <h4 className="text-gray-600 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <h4 className="text-[#5A4A2E] text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
                       <Bot className="h-3 w-3" />
                       AI Brokers
                     </h4>
@@ -468,8 +468,8 @@ export function EnhancedAssignModal({
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
                               isAtCapacity
-                                ? "bg-zinc-800/50 border-gray-700 opacity-50 cursor-not-allowed"
-                                : "bg-zinc-800 border-gray-700 hover:border-emerald-500/50"
+                                ? "bg-zinc-800/50 border-[#1A1A1A] opacity-50 cursor-not-allowed"
+                                : "bg-zinc-800 border-[#1A1A1A] hover:border-emerald-500/50"
                             }`}
                           >
                             <Avatar className="h-10 w-10 border border-emerald-500/30">
@@ -487,7 +487,7 @@ export function EnhancedAssignModal({
                                 <Bot className="h-3 w-3 text-emerald-400" />
                               </p>
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-600 text-sm">
+                                <span className="text-[#5A4A2E] text-sm">
                                   {broker.current_daily_interactions}/{broker.daily_interaction_limit} today
                                 </span>
                                 {isAtCapacity && (
@@ -505,7 +505,7 @@ export function EnhancedAssignModal({
                 )}
 
                 {filtered.jbj.length === 0 && filtered.ai.length === 0 && (
-                  <p className="text-gray-600 text-center py-8">No brokers found</p>
+                  <p className="text-[#5A4A2E] text-center py-8">No brokers found</p>
                 )}
               </>
             )}
@@ -518,7 +518,7 @@ export function EnhancedAssignModal({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="bg-zinc-900 border-gray-700 text-white max-w-md">
+        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <UserPlus className="h-5 w-5 text-gold" />
@@ -534,26 +534,26 @@ export function EnhancedAssignModal({
 
       {/* Confirmation Dialog */}
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <AlertDialogContent className="bg-zinc-900 border-gray-700">
+        <AlertDialogContent className="bg-zinc-900 border-[#1A1A1A]">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-white flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-gold" />
               Confirm Assignment
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600">
+            <AlertDialogDescription className="text-[#5A4A2E]">
               Are you sure you want to assign{" "}
               <span className="text-white font-medium">{leadName || "this lead"}</span> to{" "}
               <span className="text-gold font-medium">{selectedPerson?.name}</span>?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-gray-700 text-gray-600 hover:bg-gray-800">
+            <AlertDialogCancel className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmAssign}
               disabled={submitting}
-              className="bg-gold hover:bg-gold-dark text-black"
+              className="bg-gold hover:bg-gold-dark text-[#1A1A1A]"
             >
               {submitting ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />

@@ -154,13 +154,13 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
           {/* ── Left Panel: Controls ── */}
           <div className="space-y-4">
             {/* Project Title */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold text-[hsl(var(--foreground))]">Project Title</Label>
               <Input value={projectTitle} onChange={e => setProjectTitle(e.target.value)} className="h-8 text-sm" />
             </div>
 
             {/* Upload */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4">
               <Label className="text-xs font-bold text-[hsl(var(--foreground))] mb-2 block">
                 Images ({images.length}/{totalSlots} slots)
               </Label>
@@ -188,7 +188,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
             </div>
 
             {/* Layout Selection */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold text-[hsl(var(--foreground))]">Layout</Label>
               <div className="grid grid-cols-3 gap-2">
                 {LAYOUTS.map(l => (
@@ -202,7 +202,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
             </div>
 
             {/* Style */}
-            <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
               <Label className="text-xs font-bold text-[hsl(var(--foreground))]">Style</Label>
               <div className="flex items-center gap-3">
                 <Label className="text-[10px] text-[hsl(var(--muted-foreground))] w-16">Gap</Label>
@@ -228,7 +228,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
           </div>
 
           {/* ── Right Panel: Preview ── */}
-          <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-6 flex items-center justify-center min-h-[500px]">
+          <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-6 flex items-center justify-center min-h-[500px]">
             {images.length === 0 ? (
               <div className="text-center text-[hsl(var(--muted-foreground))]">
                 <ImageIcon className="w-16 h-16 mx-auto mb-3 opacity-30" />

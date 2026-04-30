@@ -143,7 +143,7 @@ const AICompetitorAnalysisPremium = () => {
         <Button
           onClick={handleSubmit}
           disabled={loading || !formData.projectName}
-          className="w-full font-bold py-6 text-lg rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black"
+          className="w-full font-bold py-6 text-lg rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-[#1A1A1A]"
         >
           {loading ? (
             <>
@@ -272,7 +272,7 @@ const AICompetitorAnalysisPremium = () => {
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>

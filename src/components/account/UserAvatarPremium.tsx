@@ -119,7 +119,7 @@ export function UserAvatarPremium({
       aria-label={displayName}
     >
       <span
-        className="relative w-full h-full rounded-full overflow-hidden bg-white flex items-center justify-center"
+        className="relative w-full h-full rounded-full overflow-hidden bg-[#FDFBF7] flex items-center justify-center"
       >
         {showImage ? (
           <img
@@ -137,7 +137,7 @@ export function UserAvatarPremium({
           <span
             className={cn(
               "w-full h-full flex items-center justify-center font-bold tracking-tight",
-              "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-black",
+              "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A]",
               TEXT_SIZE[size]
             )}
             style={{ color: "#111" }}

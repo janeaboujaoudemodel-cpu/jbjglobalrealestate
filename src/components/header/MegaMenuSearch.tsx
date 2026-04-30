@@ -73,11 +73,11 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       href: `mailto:${CONTACT_INFO.email}`,
       label: 'Email',
       icon: Mail,
-      iconClassName: 'text-black',
-      borderClassName: 'border-black/40 hover:border-black',
+      iconClassName: 'text-[#1A1A1A]',
+      borderClassName: 'border-[#1A1A1A]/40 hover:border-[#1A1A1A]',
       external: true,
     },
-    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-black', borderClassName: 'border-gray-300 hover:border-gray-400' },
+    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-[#1A1A1A]', borderClassName: 'border-[#B89555]/30 hover:border-[#B89555]/30' },
   ];
 
   // Quick Links with Guides Library and Market Intelligence
@@ -104,7 +104,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       }}
     >
       {/* Gold border overlay (matches Language dropdown) */}
-      <div className="absolute inset-0 rounded-xl border-2 border-gray-300 pointer-events-none" />
+      <div className="absolute inset-0 rounded-xl border-2 border-[#B89555]/30 pointer-events-none" />
 
       <div className="px-5 lg:px-8 py-4 lg:py-5">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
@@ -118,13 +118,13 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools & guides"
-            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-300 transition-all duration-200"
+            className="flex-1 h-12 rounded-xl px-4 text-base text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 bg-[#FDFBF7] border border-[#B89555]/30 focus:outline-none focus:ring-2 focus:ring-[#B89555]/30 focus:border-[#B89555]/30 transition-all duration-200"
             aria-label="Search"
           />
           <button
             type="button"
             onClick={openGlobalSearch}
-            className="h-12 px-6 rounded-xl border-2 border-gray-300 bg-transparent text-black text-base font-bold transition-all duration-300 hover:text-black hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:-translate-y-0.5"
+            className="h-12 px-6 rounded-xl border-2 border-[#B89555]/30 bg-transparent text-[#1A1A1A] text-base font-bold transition-all duration-300 hover:text-[#1A1A1A] hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:-translate-y-0.5"
           >
             Search
           </button>
@@ -135,7 +135,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
           {/* Services */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-2">Services</p>
+            <p className="text-[10px] uppercase tracking-wider text-[#1A1A1A] font-medium mb-2">Services</p>
             <div className="space-y-0">
               {servicesLinks.map((link) => (
                 <MegaMenuIconLink
@@ -157,7 +157,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Quick Links */}
           <div className="md:col-start-2 md:col-end-3">
-            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-2">Quick Links</p>
+            <p className="text-[10px] uppercase tracking-wider text-[#1A1A1A] font-medium mb-2">Quick Links</p>
             <div className="space-y-0">
               {navigationLinks.map((link) => (
                 <MegaMenuIconLink
@@ -174,7 +174,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Contact */}
           <div className="flex flex-col md:col-start-3">
-            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-3">Contact</p>
+            <p className="text-[10px] uppercase tracking-wider text-[#1A1A1A] font-medium mb-3">Contact</p>
             <div className="grid grid-cols-2 gap-3 flex-1">
               {contactLinks.map((link) =>
                 link.external ? (
@@ -189,12 +189,12 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                       }, 100);
                     }}
                     className={cn(
-                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
-                      link.borderClassName ?? "border-gray-300 hover:border-gray-400"
+                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-[#1A1A1A]/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
+                      link.borderClassName ?? "border-[#B89555]/30 hover:border-[#B89555]/30"
                     )}
                   >
-                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
-                    <span className="text-black text-sm font-bold">{link.label}</span>
+                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-[#1A1A1A]")} />
+                    <span className="text-[#1A1A1A] text-sm font-bold">{link.label}</span>
                   </a>
                 ) : (
                   <Link
@@ -202,12 +202,12 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     to={link.href}
                     onClick={onClose}
                     className={cn(
-                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
-                      link.borderClassName ?? "border-gray-300 hover:border-gray-400"
+                      "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-[#1A1A1A]/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
+                      link.borderClassName ?? "border-[#B89555]/30 hover:border-[#B89555]/30"
                     )}
                   >
-                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
-                    <span className="text-black text-sm font-bold">{link.label}</span>
+                    <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-[#1A1A1A]")} />
+                    <span className="text-[#1A1A1A] text-sm font-bold">{link.label}</span>
                   </Link>
                 )
               )}

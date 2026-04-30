@@ -446,7 +446,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={speed}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-black h-7 text-xs"
+                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-7 text-xs"
                   >
                     {speed}x
                   </Button>
@@ -491,7 +491,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={filter.id}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-black h-8 text-xs justify-start"
+                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs justify-start"
                   >
                     {filter.name}
                   </Button>
@@ -571,7 +571,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
           <TabsContent value="captions" className="mt-0 p-3 space-y-4">
             <h4 className="text-xs font-medium text-slate-400 uppercase">Captions</h4>
             
-            <Button size="sm" className="w-full bg-gold text-black hover:bg-gold/90">
+            <Button size="sm" className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90">
               <Subtitles className="w-4 h-4 mr-2" />
               Auto-Transcribe
             </Button>
@@ -609,7 +609,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={ratio}
                     size="sm"
                     variant="outline"
-                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-black h-8 text-xs"
+                    className="border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {ratio}
                   </Button>
@@ -625,7 +625,7 @@ export function InspectorPanel({ selectedClip, onUpdateClip }: InspectorPanelPro
                     key={angle}
                     size="sm"
                     variant="outline"
-                    className="flex-1 border-slate-700 text-slate-400 hover:bg-gold hover:text-black h-8 text-xs"
+                    className="flex-1 border-slate-700 text-slate-400 hover:bg-gold hover:text-[#1A1A1A] h-8 text-xs"
                   >
                     {angle}
                   </Button>

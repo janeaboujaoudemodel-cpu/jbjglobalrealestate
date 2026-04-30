@@ -315,7 +315,7 @@ export const DeveloperApprovalQueue = () => {
               size="sm"
               onClick={triggerExtraction}
               disabled={isExtracting}
-              className="bg-gold text-black hover:bg-gold/90"
+              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
             >
               {isExtracting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
               Extract from Source
@@ -349,7 +349,7 @@ export const DeveloperApprovalQueue = () => {
             <Loader2 className="w-8 h-8 animate-spin text-gold" />
           </div>
         ) : pendingDevelopers.length === 0 ? (
-          <div className="text-center py-12 text-gray-600">
+          <div className="text-center py-12 text-[#5A4A2E]">
             <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-green-500/50" />
             <p>No pending developers to review</p>
             <p className="text-sm mt-2">Click "Extract from Source" to fetch new developers</p>
@@ -365,11 +365,11 @@ export const DeveloperApprovalQueue = () => {
                 return (
                   <div
                     key={developer.id}
-                    className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer h-full"
+                    className="group relative bg-[#FDFBF7] rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer h-full"
                     onClick={() => handleCardClick(developer.slug)}
                   >
                     {/* Feature Image - Fixed height */}
-                    <div className="relative h-[180px] bg-gray-100 flex-shrink-0">
+                    <div className="relative h-[180px] bg-[#F7F2EA] flex-shrink-0">
                       {developer.feature_image_url ? (
                         <img
                           src={developer.feature_image_url}
@@ -384,12 +384,12 @@ export const DeveloperApprovalQueue = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
-                          <Building2 className="w-16 h-16 text-gray-600" />
+                          <Building2 className="w-16 h-16 text-[#5A4A2E]" />
                         </div>
                       )}
 
                       {/* Logo overlay at bottom-left - Fixed height */}
-                      <div className="absolute bottom-3 left-3 bg-white/95 px-2 py-1 rounded shadow h-8 flex items-center">
+                      <div className="absolute bottom-3 left-3 bg-[#FDFBF7]/95 px-2 py-1 rounded shadow h-8 flex items-center">
                         {developer.logo_url ? (
                           <img
                             src={developer.logo_url}
@@ -401,7 +401,7 @@ export const DeveloperApprovalQueue = () => {
                             }}
                           />
                         ) : (
-                          <span className="text-xs text-gray-600">No logo</span>
+                          <span className="text-xs text-[#5A4A2E]">No logo</span>
                         )}
                       </div>
 
@@ -414,23 +414,23 @@ export const DeveloperApprovalQueue = () => {
                     </div>
 
                     {/* Content - Fixed heights */}
-                    <div className="p-4 bg-white flex flex-col flex-grow">
+                    <div className="p-4 bg-[#FDFBF7] flex flex-col flex-grow">
                       {/* Name + arrow - Fixed height */}
                       <div className="flex items-center gap-2 mb-2 h-7 min-h-[28px]">
-                        <h3 className="text-gray-900 font-semibold text-sm leading-tight truncate flex-1 min-w-0">
+                        <h3 className="text-[#1A1A1A] font-semibold text-sm leading-tight truncate flex-1 min-w-0">
                           {developer.name}
                         </h3>
-                        <ChevronUp className="w-4 h-4 text-gray-600 rotate-45 flex-shrink-0" />
+                        <ChevronUp className="w-4 h-4 text-[#5A4A2E] rotate-45 flex-shrink-0" />
                       </div>
 
                       {/* Description - Fixed height with line clamp */}
-                      <p className="text-gray-600 text-xs leading-relaxed mb-4 h-[54px] min-h-[54px] line-clamp-3 overflow-hidden">
+                      <p className="text-[#5A4A2E] text-xs leading-relaxed mb-4 h-[54px] min-h-[54px] line-clamp-3 overflow-hidden">
                         {developer.description || "No description available"}
                       </p>
 
                       {/* Action buttons */}
                       <div
-                        className="flex items-center gap-2 pt-3 border-t border-gray-100 mt-auto"
+                        className="flex items-center gap-2 pt-3 border-t border-[#B89555]/30 mt-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <Button
@@ -465,7 +465,7 @@ export const DeveloperApprovalQueue = () => {
                           variant="ghost"
                           onClick={() => window.open(developer.provident_link || "#", "_blank")}
                           disabled={!developer.provident_link}
-                          className="w-8 h-8 p-0 text-gray-600 hover:text-gray-900"
+                          className="w-8 h-8 p-0 text-[#5A4A2E] hover:text-[#1A1A1A]"
                           title="View Source"
                         >
                           <Pencil className="w-3 h-3" />

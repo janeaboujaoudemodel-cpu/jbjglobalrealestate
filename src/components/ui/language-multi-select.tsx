@@ -132,7 +132,7 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search languages..."
-        className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+        className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
       />
 
       {/* Selected languages */}
@@ -141,7 +141,7 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
           {value.map(lang => (
             <span 
               key={lang}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gold text-black text-sm rounded-md"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gold text-[#1A1A1A] text-sm rounded-md"
             >
               <span className="text-base leading-none">{getFlag(lang)}</span>
               {!getFlag(lang) && <Globe className="w-3.5 h-3.5" />}
@@ -169,8 +169,8 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
             onClick={() => handleToggle(lang)}
             className={`border-2 border-gold/30 transition-all ${
               value.includes(lang)
-                ? 'bg-gold text-black hover:bg-gold/90 border-gold'
-                : 'text-black hover:bg-gold/10 hover:border-gold'
+                ? 'bg-gold text-[#1A1A1A] hover:bg-gold/90 border-gold'
+                : 'text-[#1A1A1A] hover:bg-gold/10 hover:border-gold'
             }`}
           >
             <span className="mr-1.5 text-base leading-none">{getFlag(lang)}</span>
@@ -187,13 +187,13 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
             value={otherValue}
             onChange={(e) => setOtherValue(e.target.value)}
             placeholder="Type language name..."
-            className="flex-1 bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+            className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
             onKeyDown={(e) => e.key === 'Enter' && handleAddOther()}
           />
           <Button
             type="button"
             onClick={handleAddOther}
-            className="bg-gold text-black hover:bg-gold/90"
+            className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
           >
             Add
           </Button>
@@ -204,7 +204,7 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
               setShowOtherInput(false);
               setOtherValue('');
             }}
-            className="border-gold/30 text-black hover:bg-gold/10"
+            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             Cancel
           </Button>
@@ -215,7 +215,7 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
           variant="outline"
           size="sm"
           onClick={() => setShowOtherInput(true)}
-          className="border-2 border-dashed border-gold/40 text-black hover:bg-gold/10 hover:border-gold w-full"
+          className="border-2 border-dashed border-gold/40 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold w-full"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Other Language

@@ -227,13 +227,13 @@ export default function JBJBrokerMessages() {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/jbj-broker-dashboard")}
-                className="text-black hover:text-gold hover:bg-gold/10"
+                className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10"
               >
                 <MessageSquare className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-black text-xl font-bold">Messages</h1>
-                <span className="text-gray-600 text-sm">Communicate with your leads</span>
+                <h1 className="text-[#1A1A1A] text-xl font-bold">Messages</h1>
+                <span className="text-[#5A4A2E] text-sm">Communicate with your leads</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -281,11 +281,11 @@ export default function JBJBrokerMessages() {
       {/* Main Content - Full Width Chat */}
       <main className="flex h-[calc(100vh-220px)]">
         {/* Conversations List - Left Panel */}
-        <div className="w-80 bg-white border-r border-gold/20 flex flex-col">
+        <div className="w-80 bg-[#FDFBF7] border-r border-gold/20 flex flex-col">
           <div className="p-4 border-b border-gold/20">
-            <h2 className="font-semibold text-black mb-3">Conversations</h2>
+            <h2 className="font-semibold text-[#1A1A1A] mb-3">Conversations</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
@@ -311,8 +311,8 @@ export default function JBJBrokerMessages() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-black truncate">{lead.name}</p>
-                    <p className="text-sm text-gray-600 truncate">
+                    <p className="font-medium text-[#1A1A1A] truncate">{lead.name}</p>
+                    <p className="text-sm text-[#5A4A2E] truncate">
                       {lead.email || lead.phone || "No contact"}
                     </p>
                   </div>
@@ -323,7 +323,7 @@ export default function JBJBrokerMessages() {
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
                         ? "border-green-500 text-green-500"
-                        : "border-gray-500 text-gray-600"
+                        : "border-[#B89555]/30 text-[#5A4A2E]"
                     }
                   >
                     {lead.status}
@@ -335,7 +335,7 @@ export default function JBJBrokerMessages() {
         </div>
 
         {/* Chat Area - Full Width */}
-        <div className="flex-1 flex flex-col bg-white">
+        <div className="flex-1 flex flex-col bg-[#FDFBF7]">
           {selectedLead ? (
             <>
               {/* Chat Header */}
@@ -347,8 +347,8 @@ export default function JBJBrokerMessages() {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h3 className="font-semibold text-black">{selectedLead.name}</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="font-semibold text-[#1A1A1A]">{selectedLead.name}</h3>
+                    <p className="text-sm text-[#5A4A2E]">
                       {selectedLead.phone || selectedLead.email}
                     </p>
                   </div>
@@ -369,15 +369,15 @@ export default function JBJBrokerMessages() {
                         <div
                           className={`p-3 rounded-lg select-text cursor-text ${
                             msg.direction === "outbound"
-                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-sm"
-                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-tr-sm"
+                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-tl-sm"
                           }`}
                         >
                           <div className="flex items-center gap-2 mb-1">
                             <Badge variant="outline" className="text-xs border-gold/30">
                               {msg.channel}
                             </Badge>
-                            <span className="text-xs text-black/60">
+                            <span className="text-xs text-[#1A1A1A]/60">
                               {new Date(msg.created_at).toLocaleTimeString()}
                             </span>
                           </div>
@@ -385,7 +385,7 @@ export default function JBJBrokerMessages() {
                           {msg.direction === "outbound" && (
                             <div className="flex items-center justify-end gap-1 mt-1">
                               <CheckCircle className="h-3 w-3 text-green-600" />
-                              <span className="text-xs text-black/60">{msg.status}</span>
+                              <span className="text-xs text-[#1A1A1A]/60">{msg.status}</span>
                             </div>
                           )}
                         </div>
@@ -395,7 +395,7 @@ export default function JBJBrokerMessages() {
                             await navigator.clipboard.writeText(msg.content);
                             toast.success(t('chat.messageCopied') || "Message copied");
                           }}
-                          className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                             msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
                           }`}
                         >
@@ -410,7 +410,7 @@ export default function JBJBrokerMessages() {
               </ScrollArea>
 
               {/* Message Input */}
-              <div className="bg-white border-t border-gold/20 p-4">
+              <div className="bg-[#FDFBF7] border-t border-gold/20 p-4">
                 {filterWarning && (
                   <div className="flex items-center gap-2 text-red-600 text-sm mb-3 p-2 bg-red-50 rounded">
                     <AlertTriangle className="h-4 w-4" />
@@ -449,11 +449,11 @@ export default function JBJBrokerMessages() {
           ) : (
             <div className="flex-1 flex items-center justify-center text-center bg-gradient-to-br from-[#F7F1E6]/30 via-[#ECE2D2]/30 to-[#D8C7A6]/30">
               <div>
-                <MessageSquare className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-black">
+                <MessageSquare className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-[#1A1A1A]">
                   Select a conversation
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-[#5A4A2E]">
                   Choose a lead from the list to start messaging
                 </p>
               </div>
@@ -463,8 +463,8 @@ export default function JBJBrokerMessages() {
 
         {/* Lead Info Panel */}
         {selectedLead && (
-          <div className="w-72 bg-white border-l border-gold/20 p-4">
-            <h3 className="font-semibold text-black mb-4">Lead Information</h3>
+          <div className="w-72 bg-[#FDFBF7] border-l border-gold/20 p-4">
+            <h3 className="font-semibold text-[#1A1A1A] mb-4">Lead Information</h3>
 
             <div className="space-y-4">
               <div className="text-center">
@@ -473,7 +473,7 @@ export default function JBJBrokerMessages() {
                     {selectedLead.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <h4 className="font-medium text-black">{selectedLead.name}</h4>
+                <h4 className="font-medium text-[#1A1A1A]">{selectedLead.name}</h4>
                 <Badge variant="outline" className="mt-1 border-gold/30">
                   {selectedLead.status}
                 </Badge>
@@ -483,19 +483,19 @@ export default function JBJBrokerMessages() {
                 {selectedLead.phone && (
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-gold" />
-                    <span className="text-black">{selectedLead.phone}</span>
+                    <span className="text-[#1A1A1A]">{selectedLead.phone}</span>
                   </div>
                 )}
                 {selectedLead.email && (
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-gold" />
-                    <span className="text-black truncate">{selectedLead.email}</span>
+                    <span className="text-[#1A1A1A] truncate">{selectedLead.email}</span>
                   </div>
                 )}
                 {selectedLead.last_contact && (
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-gold" />
-                    <span className="text-black">
+                    <span className="text-[#1A1A1A]">
                       Last: {new Date(selectedLead.last_contact).toLocaleDateString()}
                     </span>
                   </div>

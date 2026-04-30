@@ -689,7 +689,7 @@ export default function StampExportPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] pt-24 sm:pt-28 lg:pt-32">
       {/* Header */}
-      <div className="border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
+      <div className="border-b border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm sticky top-24 sm:top-28 lg:top-32 z-10">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/generate`)} className="gap-1">
@@ -750,7 +750,7 @@ export default function StampExportPage() {
             {(rubberStampMode || embossMode) && (
               <div className="grid grid-cols-2 gap-3">
                 {rubberStampMode && (
-                  <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+                  <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                     <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide flex items-center gap-1">
                       <Stamp size={10}/> Rubber Stamp
                     </p>
@@ -763,7 +763,7 @@ export default function StampExportPage() {
                   </div>
                 )}
                 {embossMode && (
-                  <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+                  <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
                     <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide flex items-center gap-1">
                       <CircleDot size={10}/> Emboss / Engrave
                     </p>
@@ -779,7 +779,7 @@ export default function StampExportPage() {
             )}
 
             {/* On Letterhead */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Preview on Letterhead</p>
               <div className="bg-gradient-to-br from-[hsl(var(--pearl-1))] to-white rounded-xl p-5 border border-[hsl(var(--border)/0.5)] relative overflow-hidden">
                 <div className="flex items-start justify-between mb-4">
@@ -809,7 +809,7 @@ export default function StampExportPage() {
             </div>
 
             {/* On Business Card */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Preview on Business Card</p>
               <div className="relative bg-gradient-to-br from-[hsl(222,47%,11%)] to-[hsl(222,47%,20%)] rounded-xl p-5 overflow-hidden" style={{ aspectRatio: '1.75 / 1' }}>
                 <div className="absolute inset-0 flex items-stretch p-5 gap-4">
@@ -847,7 +847,7 @@ export default function StampExportPage() {
             <h2 className="font-semibold text-[hsl(var(--foreground))]">Export Options</h2>
 
             {/* Three-Color System */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
               <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                 <Palette size={14} className="text-[hsl(var(--gold))]"/> Export Colors
               </p>
@@ -875,7 +875,7 @@ export default function StampExportPage() {
               </div>
 
               {/* Standard Export Colors */}
-              <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
+              <div className="bg-[#FDFBF7] rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
                 <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                   <Palette size={14} className="text-[hsl(var(--gold))]"/> Standard Export Colors
                 </p>
@@ -907,7 +907,7 @@ export default function StampExportPage() {
             </div>
 
             {/* Formats + Sizes + DPI + Background */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
               <div>
                 <p className="text-sm font-medium text-[hsl(var(--foreground))] mb-2 flex items-center gap-1.5">
                   <File size={14} className="text-[hsl(var(--gold))]"/> File Formats
@@ -935,7 +935,7 @@ export default function StampExportPage() {
                   <Input
                     type="number" placeholder="Custom (128–8192)" min={128} max={8192}
                     value={customSize} onChange={e => setCustomSize(e.target.value)}
-                    className="h-8 w-40 text-xs bg-white border-[hsl(var(--border))]"
+                    className="h-8 w-40 text-xs bg-[#FDFBF7] border-[hsl(var(--border))]"
                   />
                   {customSize && parseInt(customSize) >= 128 && parseInt(customSize) <= 8192 && (
                     <Badge className="bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] text-[9px] border border-[hsl(var(--gold)/0.3)]">
@@ -987,7 +987,7 @@ export default function StampExportPage() {
             </div>
 
             {/* Manufacturer Export */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
               <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                 <Printer size={14} className="text-[hsl(var(--gold))]"/> Manufacturer Export
               </p>
@@ -1043,7 +1043,7 @@ export default function StampExportPage() {
             )}
 
             {/* Quick Download in Any Color */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-3">
               <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                 <Image size={14} className="text-[hsl(var(--gold))]"/> Quick Download in Color
               </p>
@@ -1192,7 +1192,7 @@ export default function StampExportPage() {
             </div>
 
             {/* Multi-Color ZIP Pack */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
+            <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                   <Package size={14} className="text-[hsl(var(--gold))]"/> Multi-Color Pack
@@ -1200,7 +1200,7 @@ export default function StampExportPage() {
                 <label className="flex items-center gap-2 cursor-pointer">
                   <div onClick={() => setMultiColorMode(v => !v)}
                     className={`w-9 h-5 rounded-full transition-colors relative flex-shrink-0 ${multiColorMode ? 'bg-[hsl(var(--gold))]' : 'bg-[hsl(var(--muted))]'}`}>
-                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${multiColorMode ? 'left-4' : 'left-0.5'}`}/>
+                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-[#FDFBF7] shadow transition-all ${multiColorMode ? 'left-4' : 'left-0.5'}`}/>
                   </div>
                   <span className="text-xs text-[hsl(var(--muted-foreground))]">Enable</span>
                 </label>

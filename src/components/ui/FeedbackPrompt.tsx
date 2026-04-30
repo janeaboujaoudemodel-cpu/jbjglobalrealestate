@@ -112,11 +112,11 @@ export const FeedbackPrompt = ({
             <div className="bg-gradient-to-r from-gold/20 to-gold/10 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-gold" />
-                <span className="font-semibold text-black text-sm">Quick Feedback</span>
+                <span className="font-semibold text-[#1A1A1A] text-sm">Quick Feedback</span>
               </div>
               <button
                 onClick={handleDismiss}
-                className="text-gray-600 hover:text-black transition-colors"
+                className="text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -124,7 +124,7 @@ export const FeedbackPrompt = ({
 
             {/* Content */}
             <div className="p-4 space-y-4">
-              <p className="text-black text-sm font-medium">{getTitle()}</p>
+              <p className="text-[#1A1A1A] text-sm font-medium">{getTitle()}</p>
 
               {/* Star Rating */}
               <div className="flex justify-center gap-2">
@@ -139,7 +139,7 @@ export const FeedbackPrompt = ({
                       className={`w-8 h-8 ${
                         star <= rating
                           ? "fill-gold text-gold"
-                          : "text-gray-600 hover:text-gray-500"
+                          : "text-[#5A4A2E] hover:text-[#8A7556]"
                       } transition-colors`}
                     />
                   </button>
@@ -156,7 +156,7 @@ export const FeedbackPrompt = ({
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Any additional thoughts? (optional)"
-                    className="bg-white/80 border-gold/30 text-black text-sm resize-none"
+                    className="bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] text-sm resize-none"
                     rows={2}
                   />
                 </motion.div>
@@ -166,7 +166,7 @@ export const FeedbackPrompt = ({
               <Button
                 onClick={handleSubmit}
                 disabled={rating === 0 || isSubmitting}
-                className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-black font-semibold"
+                className="w-full bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold"
               >
                 {isSubmitting ? (
                   "Submitting..."
@@ -178,7 +178,7 @@ export const FeedbackPrompt = ({
                 )}
               </Button>
 
-              <p className="text-xs text-gray-600 text-center">
+              <p className="text-xs text-[#5A4A2E] text-center">
                 Your feedback helps us improve
               </p>
             </div>

@@ -473,7 +473,7 @@ const Quiz = () => {
     return (
       <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
         {/* Header */}
-        <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm">
+        <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -503,7 +503,7 @@ const Quiz = () => {
             </div>
 
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-[#B89555]/30">
-              <Wand2 className="w-10 h-10 text-black" />
+              <Wand2 className="w-10 h-10 text-[#1A1A1A]" />
             </div>
 
             <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4">
@@ -561,7 +561,7 @@ const Quiz = () => {
 
             <Button
               onClick={() => setStarted(true)}
-              className="font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl bg-gradient-to-r from-[#B89555] to-[#A68444] text-black hover:brightness-110 shadow-[#B89555]/30"
+              className="font-semibold px-10 py-6 text-lg shadow-lg transition-all hover:shadow-xl bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110 shadow-[#B89555]/30"
             >
               Find My Property
               <ArrowUpRight className="w-5 h-5 ml-2" />
@@ -590,7 +590,7 @@ const Quiz = () => {
     return (
       <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
         {/* Header */}
-        <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm">
+        <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -613,7 +613,7 @@ const Quiz = () => {
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
-                <Sparkles className="w-8 h-8 text-black" />
+                <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
               </div>
               <h2 className="text-stone-900 text-3xl font-bold mb-2">
                 Get Your AI Analysis
@@ -623,7 +623,7 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="bg-white/70 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+            <div className="bg-[#FDFBF7]/70 border border-[#B89555]/30 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
               <div className="space-y-5">
                 <div>
                   <Label className="text-stone-700 mb-2 block">Full Name *</Label>
@@ -631,7 +631,7 @@ const Quiz = () => {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-white border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -641,7 +641,7 @@ const Quiz = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-white border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -651,7 +651,7 @@ const Quiz = () => {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-white border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
+                    className="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]"
                   />
                 </div>
                 <div>
@@ -663,8 +663,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
-                    className="bg-white border-[#B89555]/30"
+                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
+                    className="bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
                 <div>
@@ -676,8 +676,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
-                    className="bg-white border-[#B89555]/30"
+                    triggerClassName="bg-[#FDFBF7] border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
+                    className="bg-[#FDFBF7] border-[#B89555]/30"
                   />
                 </div>
               </div>
@@ -687,8 +687,8 @@ const Quiz = () => {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full mt-6 font-semibold py-6 text-lg disabled:opacity-50 ${
                   needsPayment
-                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-black hover:brightness-110"
-                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-black hover:brightness-110"
+                    ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
+                    : "bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] hover:brightness-110"
                 }`}
               >
                 {isSubmitting ? (
@@ -745,7 +745,7 @@ const Quiz = () => {
   return (
     <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
       {/* Header */}
-      <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b border-[#B89555]/20 bg-[#FDFBF7]/50 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-3">
             <button
@@ -788,7 +788,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-white text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -797,7 +797,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-white text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-[#FDFBF7] text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -819,14 +819,14 @@ const Quiz = () => {
                     className={`relative p-4 md:p-5 rounded-xl border-2 transition-all text-left group ${
                       isSelected
                         ? "border-[#B89555] bg-gradient-to-br from-white to-[#FDFBF7] shadow-lg shadow-[#B89555]/20"
-                        : "border-stone-200 bg-white hover:border-[#B89555]/50 hover:shadow-md"
+                        : "border-stone-200 bg-[#FDFBF7] hover:border-[#B89555]/50 hover:shadow-md"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
                         isSelected ? "border-[#B89555] bg-[#B89555]" : "border-stone-300"
                       }`}>
-                        {isSelected && <CheckCircle2 className="w-3 h-3 text-black" />}
+                        {isSelected && <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />}
                       </div>
                     )}
                     <span className="text-2xl mb-2 block">{option.icon}</span>
@@ -843,7 +843,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-stone-700 bg-white hover:bg-[#F7F2EA] hover:text-stone-900 px-8 py-6 text-lg"
+                className="border-[#B89555]/40 text-stone-700 bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:text-stone-900 px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back
@@ -851,7 +851,7 @@ const Quiz = () => {
               <Button
                 onClick={handleNext}
                 disabled={!isAnswered()}
-                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-black font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
+                className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-[#1A1A1A] font-semibold px-10 py-6 text-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#B89555]/20"
               >
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-5 h-5 ml-2" />
@@ -861,7 +861,7 @@ const Quiz = () => {
 
           {/* Preferences Summary Sidebar (desktop only) */}
           <div className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-white/80 backdrop-blur-sm p-5">
+            <div className="sticky top-24 rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7]/80 backdrop-blur-sm p-5">
               <h3 className="text-sm font-bold text-stone-800 mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-[#B89555]" />
                 Your Preferences

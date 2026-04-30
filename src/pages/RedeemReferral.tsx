@@ -124,7 +124,7 @@ export default function RedeemReferral() {
             </p>
           </div>
 
-          <Card className="bg-white border-2 border-gold/40 shadow-lg">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/40 shadow-lg">
             <CardContent className="p-6 md:p-8">
               {isSuccess ? (
                 /* Success State */

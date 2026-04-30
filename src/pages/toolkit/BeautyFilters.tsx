@@ -756,7 +756,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="Describe what you want: 'remove acne', 'add freckles', 'age me 10 years'..."
                         value={aiPrompt}
                         onChange={e => setAiPrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
+                        className="mb-2 !bg-[#1A1A1A]/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={2}
                       />
                       <button
@@ -952,7 +952,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="'Remove background and place me on a beach', 'Change to red suit'..."
                         value={aiPrompt}
                         onChange={e => setAiPrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
+                        className="mb-2 !bg-[#1A1A1A]/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={2}
                       />
                       <button
@@ -1015,7 +1015,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                         placeholder="'Make this into a luxury real estate ad', 'Create a before/after comparison', 'Add text: OPEN HOUSE'..."
                         value={createPrompt}
                         onChange={e => setCreatePrompt(e.target.value)}
-                        className="mb-2 !bg-black/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
+                        className="mb-2 !bg-[#1A1A1A]/20 !border-indigo-500/30 !text-white placeholder:!text-white/85"
                         rows={3}
                       />
                       <button
@@ -1134,7 +1134,7 @@ export default function BeautyFilters({ embedded = false }: BeautyFiltersProps) 
                           <Linkedin className="h-3.5 w-3.5" /> LinkedIn
                         </button>
                         <button onClick={() => { handleDownload(); toast.info('Download your image, then share on Snapchat'); }}
-                          className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-medium text-black transition-all"
+                          className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-medium text-[#1A1A1A] transition-all"
                           style={{ background: "#FFFC00", border: "none" }}>
                           <Camera className="h-3.5 w-3.5" /> Snapchat
                         </button>

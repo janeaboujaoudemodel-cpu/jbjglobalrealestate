@@ -360,7 +360,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={developerOpen}
-                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black"
+                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]"
                 >
                   {formData.preferredDeveloper || "Select developer..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -413,7 +413,7 @@ export function ProjectInquiryForm({
             value={formData.selectedEmirate}
             onValueChange={(value) => setFormData({ ...formData, selectedEmirate: value, location: "" })}
           >
-            <SelectTrigger className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
+            <SelectTrigger className="h-12 text-base px-4 border-2 border-gold/50 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
               <SelectValue placeholder="Select emirate..." />
             </SelectTrigger>
             <SelectContent className="bg-background border-border z-[9999]">
@@ -459,7 +459,7 @@ export function ProjectInquiryForm({
                   variant="outline"
                   role="combobox"
                   aria-expanded={locationOpen}
-                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black"
+                  className="w-full h-12 justify-between text-base px-4 font-normal border-2 border-gold/50 hover:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]"
                 >
                   {formData.location || "Select location..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

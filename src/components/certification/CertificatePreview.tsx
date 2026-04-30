@@ -63,7 +63,7 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
                 JBJ GLOBAL REAL ESTATE
               </div>
 
-              <div className="text-gray-800 text-sm tracking-[0.3em] uppercase mb-4">
+              <div className="text-[#1A1A1A] text-sm tracking-[0.3em] uppercase mb-4">
                 Certificate of Achievement
               </div>
 
@@ -114,13 +114,13 @@ export function CertificatePreview({ isLocked = false }: CertificatePreviewProps
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             {isLocked ? (
-              <Button disabled className="bg-gold/50 text-black/50 cursor-not-allowed">
+              <Button disabled className="bg-gold/50 text-[#1A1A1A]/50 cursor-not-allowed">
                 <Lock className="w-4 h-4 mr-2" />
                 Complete Certification to Download
               </Button>
             ) : (
               <>
-                <Button className="bg-gold hover:bg-gold/90 text-black">
+                <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>

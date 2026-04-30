@@ -34,7 +34,7 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
         <Button
           variant="outline"
           className={cn(
-            "border-gold/40 bg-white/80 hover:bg-gold/10 text-black gap-2",
+            "border-gold/40 bg-[#FDFBF7]/80 hover:bg-gold/10 text-[#1A1A1A] gap-2",
             className
           )}
         >
@@ -45,7 +45,7 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end"
-        className="bg-white border-gold/30 shadow-xl min-w-[180px] z-[200]"
+        className="bg-[#FDFBF7] border-gold/30 shadow-xl min-w-[180px] z-[200]"
       >
         {LANGUAGES.map((lang) => (
           <DropdownMenuItem
@@ -58,7 +58,7 @@ export function BookLanguageFilter({ value, onChange, className }: BookLanguageF
               "flex items-center gap-3 cursor-pointer",
               value === lang.code 
                 ? "bg-gold/15 !text-gold" 
-                : "!text-black hover:bg-gold/10 hover:!text-gold focus:!text-black focus:bg-gold/10"
+                : "!text-[#1A1A1A] hover:bg-gold/10 hover:!text-gold focus:!text-[#1A1A1A] focus:bg-gold/10"
             )}
           >
             <span className="text-lg">{lang.flag}</span>

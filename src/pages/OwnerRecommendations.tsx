@@ -37,7 +37,7 @@ const SOURCE_CONFIG: Record<string, { icon: any; label: string; color: string }>
 };
 
 const IMPACT_COLORS: Record<string, string> = {
-  low: "bg-gray-100 text-gray-600",
+  low: "bg-[#F7F2EA] text-[#5A4A2E]",
   medium: "bg-amber-100 text-amber-700",
   high: "bg-orange-100 text-orange-700",
   critical: "bg-red-100 text-red-700",
@@ -131,12 +131,12 @@ const OwnerRecommendations = () => {
             <div>
               <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-3">
                 <Sparkles className="w-4 h-4 text-[#8A7356]" />
-                <span className="text-black text-sm font-medium">AI Intelligence</span>
+                <span className="text-[#1A1A1A] text-sm font-medium">AI Intelligence</span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-black">Global Recommendations</h1>
-              <p className="text-gray-600 mt-1">Cross-department AI-driven insights with preview, apply, and revert controls</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">Global Recommendations</h1>
+              <p className="text-[#5A4A2E] mt-1">Cross-department AI-driven insights with preview, apply, and revert controls</p>
             </div>
-            <Button onClick={generateRecs} disabled={generating} className="bg-black text-white hover:bg-gray-800 self-start">
+            <Button onClick={generateRecs} disabled={generating} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] self-start">
               {generating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-4 w-4 mr-2" /> Generate New Recommendations</>}
             </Button>
           </div>
@@ -149,13 +149,13 @@ const OwnerRecommendations = () => {
           {[
             { label: "Pending", count: counts.pending, icon: AlertTriangle, color: "text-amber-600" },
             { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-emerald-600" },
-            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-gray-600" },
+            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-[#5A4A2E]" },
           ].map(s => (
-            <div key={s.label} className="bg-white/80 border border-gold/20 rounded-xl p-4 flex items-center gap-3">
+            <div key={s.label} className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-4 flex items-center gap-3">
               <s.icon className={`h-6 w-6 ${s.color}`} />
               <div>
-                <p className="text-2xl font-bold text-black">{s.count}</p>
-                <p className="text-xs text-gray-600">{s.label}</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{s.count}</p>
+                <p className="text-xs text-[#5A4A2E]">{s.label}</p>
               </div>
             </div>
           ))}
@@ -163,23 +163,23 @@ const OwnerRecommendations = () => {
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
-          <div className="flex flex-wrap gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-1">
             {["all", ...Object.keys(SOURCE_CONFIG)].map(s => {
               const cfg = SOURCE_CONFIG[s];
               const SrcIcon = cfg?.icon;
               return (
                 <button key={s} onClick={() => setFilterSource(s)}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 shadow-sm" : "text-gray-600 hover:bg-gold/10"}`}>
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#5A4A2E] hover:bg-gold/10"}`}>
                   {SrcIcon && <SrcIcon className="w-3 h-3 flex-shrink-0" />}
                   {s === "all" ? "All Sources" : cfg?.label || s}
                 </button>
               );
             })}
           </div>
-          <div className="flex flex-wrap gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
+          <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-1">
             {["all", "pending", "applied", "reverted", "dismissed"].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 shadow-sm" : "text-gray-600 hover:bg-gold/10"}`}>
+                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#5A4A2E] hover:bg-gold/10"}`}>
                 {s === "all" ? "All Status" : s}
               </button>
             ))}
@@ -192,10 +192,10 @@ const OwnerRecommendations = () => {
             <Loader2 className="h-8 w-8 animate-spin text-gold" />
           </div>
         ) : recs.length === 0 ? (
-          <div className="text-center py-20 bg-white/60 border border-gold/20 rounded-2xl">
-            <Sparkles className="h-12 w-12 mx-auto mb-4 text-gray-500" />
-            <p className="text-lg font-semibold text-black">No Recommendations Yet</p>
-            <p className="text-sm text-gray-600 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
+          <div className="text-center py-20 bg-[#FDFBF7]/60 border border-gold/20 rounded-2xl">
+            <Sparkles className="h-12 w-12 mx-auto mb-4 text-[#8A7556]" />
+            <p className="text-lg font-semibold text-[#1A1A1A]">No Recommendations Yet</p>
+            <p className="text-sm text-[#5A4A2E] mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -204,20 +204,20 @@ const OwnerRecommendations = () => {
               const SrcIcon = srcConfig.icon;
               const isExpanded = expandedId === rec.id;
               return (
-                <div key={rec.id} className="bg-white/90 border border-gold/20 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                <div key={rec.id} className="bg-[#FDFBF7]/90 border border-gold/20 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                   <div className="p-5 flex items-start gap-4 cursor-pointer" onClick={() => setExpandedId(isExpanded ? null : rec.id)}>
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${srcConfig.color}`}>
                       <SrcIcon className="h-5 w-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <h3 className="font-bold text-black text-sm">{rec.title}</h3>
+                        <h3 className="font-bold text-[#1A1A1A] text-sm">{rec.title}</h3>
                         <Badge className={`text-[10px] ${IMPACT_COLORS[rec.impact_level]}`}>{rec.impact_level}</Badge>
                         <Badge variant="outline" className="text-[10px] capitalize">{rec.status}</Badge>
                       </div>
-                      <p className="text-xs text-gray-600 line-clamp-2">{rec.description}</p>
+                      <p className="text-xs text-[#5A4A2E] line-clamp-2">{rec.description}</p>
                     </div>
-                    <Eye className={`h-4 w-4 text-gray-600 flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                    <Eye className={`h-4 w-4 text-[#5A4A2E] flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                   </div>
 
                   {isExpanded && (
@@ -228,13 +228,13 @@ const OwnerRecommendations = () => {
                           {rec.before_preview && (
                             <div className="rounded-lg border border-red-200 bg-red-50/50 p-4">
                               <p className="text-[10px] font-bold uppercase text-red-500 mb-2">Before</p>
-                              <p className="text-xs text-gray-700">{rec.before_preview}</p>
+                              <p className="text-xs text-[#5A4A2E]">{rec.before_preview}</p>
                             </div>
                           )}
                           {rec.after_preview && (
                             <div className="rounded-lg border border-green-200 bg-green-50/50 p-4">
                               <p className="text-[10px] font-bold uppercase text-green-600 mb-2">After</p>
-                              <p className="text-xs text-gray-700">{rec.after_preview}</p>
+                              <p className="text-xs text-[#5A4A2E]">{rec.after_preview}</p>
                             </div>
                           )}
                         </div>
@@ -242,7 +242,7 @@ const OwnerRecommendations = () => {
                       {rec.side_effects && (
                         <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3 mb-4">
                           <p className="text-[10px] font-bold uppercase text-amber-600 mb-1">Potential Side Effects</p>
-                          <p className="text-xs text-gray-600">{rec.side_effects}</p>
+                          <p className="text-xs text-[#5A4A2E]">{rec.side_effects}</p>
                         </div>
                       )}
                       {/* Actions */}

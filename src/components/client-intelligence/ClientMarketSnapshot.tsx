@@ -123,7 +123,7 @@ const ClientMarketSnapshot = ({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Info className="w-4 h-4 text-black/70" />
+                  <Info className="w-4 h-4 text-[#1A1A1A]/70" />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
                   <p className="text-xs">
@@ -133,27 +133,27 @@ const ClientMarketSnapshot = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <span className="text-xs text-black/70 font-medium">Updated {lastUpdated}</span>
+          <span className="text-xs text-[#1A1A1A]/70 font-medium">Updated {lastUpdated}</span>
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1">
-            <span className="text-xs text-black/80 font-medium uppercase tracking-wide">BUY Trend</span>
+            <span className="text-xs text-[#1A1A1A]/80 font-medium uppercase tracking-wide">BUY Trend</span>
             <div className="flex items-center gap-2">
               {getTrendIcon(buyTrend)}
               <span className="text-sm text-foreground capitalize">{buyTrend}</span>
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-xs text-black/80 font-medium uppercase tracking-wide">SELL Activity</span>
+            <span className="text-xs text-[#1A1A1A]/80 font-medium uppercase tracking-wide">SELL Activity</span>
             <div className="flex items-center gap-2">
               {getActivityBadge(sellActivity)}
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-xs text-black/80 font-medium uppercase tracking-wide">RENT Demand</span>
+            <span className="text-xs text-[#1A1A1A]/80 font-medium uppercase tracking-wide">RENT Demand</span>
             <div className="flex items-center gap-2">
               {getActivityBadge(rentDemand)}
             </div>
@@ -190,14 +190,14 @@ const ClientMarketSnapshot = ({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
-            <p className="text-sm text-black/90 leading-relaxed">
+            <p className="text-sm text-[#1A1A1A]/90 leading-relaxed">
               {getWhatThisMeans()}
             </p>
             
             {/* Historical Context if available */}
             {historicalData && historicalData.length > 0 && (
               <div className="mt-4 pt-3 border-t border-border/30">
-                <span className="text-xs text-black/80 font-medium uppercase tracking-wide block mb-2">
+                <span className="text-xs text-[#1A1A1A]/80 font-medium uppercase tracking-wide block mb-2">
                   Historical Trend
                 </span>
                 <div className="flex items-end gap-1 h-12">
@@ -223,7 +223,7 @@ const ClientMarketSnapshot = ({
         </Collapsible>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-black/80 border-t border-border/30 pt-3">
+        <p className="text-[10px] text-[#1A1A1A]/80 border-t border-border/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

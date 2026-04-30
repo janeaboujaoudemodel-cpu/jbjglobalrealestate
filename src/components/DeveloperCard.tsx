@@ -14,8 +14,8 @@ interface DeveloperCardProps {
 
 // Developer tier classification
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
-  ELITE: { label: "ELITE", color: "bg-gradient-to-r from-gold to-[#E8D5A3] text-black" },
-  PREMIUM: { label: "PREMIUM", color: "bg-gradient-to-r from-amber-500 to-amber-400 text-black" },
+  ELITE: { label: "ELITE", color: "bg-gradient-to-r from-gold to-[#E8D5A3] text-[#1A1A1A]" },
+  PREMIUM: { label: "PREMIUM", color: "bg-gradient-to-r from-amber-500 to-amber-400 text-[#1A1A1A]" },
   TOP_TIER: { label: "TOP TIER", color: "bg-gradient-to-r from-zinc-700 to-zinc-600 text-white" },
   ESTABLISHED: { label: "ESTABLISHED", color: "bg-gradient-to-r from-slate-600 to-slate-500 text-white" },
 };
@@ -75,12 +75,12 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               onError={() => setImageError(true)}
             />
           ) : isDamac ? (
-            <div className="w-full h-full bg-black flex items-center justify-center">
+            <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center">
               <div className="text-center">
                 <DeveloperLogo
                   src={developer.logo_url}
                   alt={developer.name}
-                  className="w-24 h-24 mx-auto mb-2 bg-white/95"
+                  className="w-24 h-24 mx-auto mb-2 bg-[#FDFBF7]/95"
                   loading={isEager ? "eager" : "lazy"}
                   renderFallback
                 />
@@ -93,7 +93,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                 <DeveloperLogo
                   src={developer.logo_url}
                   alt={developer.name}
-                  className="w-20 h-20 mx-auto mb-2 bg-white/95"
+                  className="w-20 h-20 mx-auto mb-2 bg-[#FDFBF7]/95"
                   loading="lazy"
                   renderFallback
                 />
@@ -125,25 +125,25 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
         {/* Content Section - Champagne Background */}
         <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
           {/* Developer Name */}
-          <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+          <h3 className="text-[#1A1A1A] font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {developer.name}
           </h3>
 
           {/* Description - Fixed 2 lines */}
           <div className="flex-1 min-h-[40px]">
             {developer.description ? (
-              <p className="text-gray-600 text-xs line-clamp-2">
+              <p className="text-[#5A4A2E] text-xs line-clamp-2">
                 {developer.description}
               </p>
             ) : (
-              <p className="text-gray-600 text-xs italic">
+              <p className="text-[#5A4A2E] text-xs italic">
                 Premier developer in the UAE market
               </p>
             )}
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center gap-3 text-gray-700 text-xs mt-3 pt-3 border-t border-gold/20">
+          <div className="flex items-center gap-3 text-[#5A4A2E] text-xs mt-3 pt-3 border-t border-gold/20">
             {projectCount > 0 ? (
               <div className="flex items-center gap-1">
                 <Building2 className="w-3.5 h-3.5 text-gold" />
@@ -157,7 +157,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               </div>
             ) : null}
             {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
-              <span className="text-gray-600 text-xs">View developer portfolio</span>
+              <span className="text-[#5A4A2E] text-xs">View developer portfolio</span>
             )}
           </div>
         </div>

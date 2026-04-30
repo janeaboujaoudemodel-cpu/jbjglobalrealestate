@@ -285,11 +285,11 @@ const VideoMediaUploader = ({ project, onUpdate, onNext }: VideoMediaUploaderPro
                 )}
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <div className="absolute inset-0 bg-[#1A1A1A]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="h-8 w-8 text-white hover:bg-white/20"
+                    className="h-8 w-8 text-white hover:bg-[#FDFBF7]/20"
                     onClick={() => handleRemoveMedia(item.id)}
                   >
                     <X className="h-4 w-4" />
@@ -324,7 +324,7 @@ const VideoMediaUploader = ({ project, onUpdate, onNext }: VideoMediaUploaderPro
 
                 {/* Duration */}
                 <div className="absolute bottom-2 right-2">
-                  <Badge className="bg-black/70 text-white text-xs">
+                  <Badge className="bg-[#1A1A1A]/70 text-white text-xs">
                     {(item.endTime - item.startTime).toFixed(1)}s
                   </Badge>
                 </div>

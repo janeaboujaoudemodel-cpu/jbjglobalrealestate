@@ -43,7 +43,7 @@ export function CompanyProfileBrochure({
         >
           {/* Front cover */}
           <div
-            className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-black"
+            className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-[#1A1A1A]"
             style={{
               transform: 'translateZ(1px)',
               backfaceVisibility: 'hidden',
@@ -72,7 +72,7 @@ export function CompanyProfileBrochure({
 
         {/* Download overlay */}
         {showDownload && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-30">
+          <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-30">
             {isGenerating ? (
               <div className="w-10 h-10 border-3 border-gold/30 border-t-gold rounded-full animate-spin" />
             ) : (

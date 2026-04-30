@@ -223,7 +223,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
               <button
                 onClick={handleGeocode}
                 disabled={isGeocoding}
-                className="bg-amber-500 hover:bg-amber-400 text-black rounded-lg px-2.5 flex items-center justify-center transition-colors font-bold disabled:opacity-50"
+                className="bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] rounded-lg px-2.5 flex items-center justify-center transition-colors font-bold disabled:opacity-50"
               >
                 {isGeocoding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
               </button>
@@ -337,14 +337,14 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
                 <FlyToLocation lat={coords.lat} lng={coords.lng} />
               </MapContainer>
 
-              <div className="absolute top-1 left-1 bg-black/75 text-white text-[9px] px-1.5 py-0.5 rounded flex items-center gap-1 z-10 max-w-[75%] truncate">
+              <div className="absolute top-1 left-1 bg-[#1A1A1A]/75 text-white text-[9px] px-1.5 py-0.5 rounded flex items-center gap-1 z-10 max-w-[75%] truncate">
                 <Navigation className="w-2 h-2 text-amber-400 shrink-0" />
                 <span className="truncate">{address}</span>
               </div>
 
               {isAnimating && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-20 pointer-events-none">
-                  <div className="flex items-center gap-1.5 bg-black/90 px-2 py-1 rounded-full border border-amber-400/40">
+                <div className="absolute inset-0 flex items-center justify-center bg-[#1A1A1A]/50 z-20 pointer-events-none">
+                  <div className="flex items-center gap-1.5 bg-[#1A1A1A]/90 px-2 py-1 rounded-full border border-amber-400/40">
                     <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                     <span className="text-amber-400 text-[9px] font-bold">Previewing…</span>
                   </div>
@@ -353,7 +353,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
 
               {animationComplete && !isAnimating && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                  <div className="flex items-center gap-1.5 bg-black/90 px-2 py-1 rounded-full border border-green-500/50">
+                  <div className="flex items-center gap-1.5 bg-[#1A1A1A]/90 px-2 py-1 rounded-full border border-green-500/50">
                     <Check className="w-2.5 h-2.5 text-green-400" />
                     <span className="text-green-400 text-[9px] font-bold">Ready to Insert</span>
                   </div>
@@ -369,7 +369,7 @@ export function MapEffectPanel({ onAddToTimeline }: MapEffectPanelProps) {
         <button
           onClick={handleAnimate}
           disabled={isAnimating}
-          className="flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 disabled:opacity-50 transition-all"
+          className="flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs font-bold bg-amber-500 text-[#1A1A1A] hover:bg-amber-400 disabled:opacity-50 transition-all"
         >
           {isAnimating
             ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />Animating…</>

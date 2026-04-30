@@ -55,7 +55,7 @@ export function HRInboxTab() {
   };
 
   return (
-    <Card className="bg-white border border-crm-border">
+    <Card className="bg-[#FDFBF7] border border-crm-border">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-crm-text">
           <Inbox className="h-5 w-5 text-gold" />
@@ -96,7 +96,7 @@ export function HRInboxTab() {
                   className={`p-4 rounded-lg border cursor-pointer hover:shadow-sm transition-all ${
                     thread.unread_count > 0
                       ? 'bg-gold/5 border-gold/30'
-                      : 'bg-white border-crm-border'
+                      : 'bg-[#FDFBF7] border-crm-border'
                   }`}
                   onClick={() => navigate('/owner/inbox')}
                 >

@@ -56,7 +56,7 @@ const DesignHistoryList = ({
   if (isLoading) {
     return (
       <div className="w-full max-w-4xl mx-auto">
-        <div className="bg-zinc-900/60 border border-gray-800 rounded-2xl p-6">
+        <div className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl p-6">
           <div className="flex items-center gap-3">
             <History className="w-5 h-5 text-white/90 animate-pulse" />
             <span className="text-white/90">Loading history...</span>
@@ -72,11 +72,11 @@ const DesignHistoryList = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="bg-zinc-900/60 border border-gray-800 rounded-2xl overflow-hidden">
+      <div className="bg-zinc-900/60 border border-[#1A1A1A] rounded-2xl overflow-hidden">
         {/* Header */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full p-4 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
+          className="w-full p-4 flex items-center justify-between hover:bg-[#1A1A1A]/50 transition-colors"
         >
           <div className="flex items-center gap-3">
             <History className="w-5 h-5 text-white/70" />
@@ -101,7 +101,7 @@ const DesignHistoryList = ({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden"
             >
-              <div className="border-t border-gray-800 max-h-[400px] overflow-y-auto">
+              <div className="border-t border-[#1A1A1A] max-h-[400px] overflow-y-auto">
                 {history.map((item) => {
                   const modeInfo = modeLabels[item.mode] || modeLabels.concept;
                   
@@ -109,7 +109,7 @@ const DesignHistoryList = ({
                     <div
                       key={item.id}
                       onClick={() => onSelect(item)}
-                      className="p-4 border-b border-gray-800/50 hover:bg-gray-800/30 cursor-pointer transition-colors flex gap-4"
+                      className="p-4 border-b border-[#1A1A1A]/50 hover:bg-[#1A1A1A]/30 cursor-pointer transition-colors flex gap-4"
                     >
                       {/* Thumbnail */}
                       <div className="w-20 h-20 rounded-lg overflow-hidden bg-zinc-800 flex-shrink-0">
@@ -121,7 +121,7 @@ const DesignHistoryList = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Palette className="w-6 h-6 text-gray-600" />
+                            <Palette className="w-6 h-6 text-[#5A4A2E]" />
                           </div>
                         )}
                       </div>
@@ -148,7 +148,7 @@ const DesignHistoryList = ({
                           {formatDate(item.createdAt)}
                           {item.designStyle && (
                             <>
-                              <span className="text-gray-700">•</span>
+                              <span className="text-[#5A4A2E]">•</span>
                               <span className="capitalize">{item.designStyle}</span>
                             </>
                           )}

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const WhyDubaiSection = () => {
   return (
-    <section className="bg-black">
+    <section className="bg-[#1A1A1A]">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -12,11 +12,11 @@ const WhyDubaiSection = () => {
             Investment Insights
           </span>
           <h2 
-            className="text-4xl md:text-5xl font-bold text-black mb-4"
+            className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4"
           >
             Why Invest in the <span className="text-gold">UAE</span>?
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-[#5A4A2E] text-lg max-w-2xl mx-auto">
             The UAE offers unparalleled opportunities for property investors with world-class infrastructure and tax-free returns
           </p>
         </div>
@@ -57,13 +57,13 @@ const WhyDubaiSection = () => {
           ].map((item, index) => (
             <div 
               key={index}
-              className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 hover:border-gold/60 transition-all duration-300 group shadow-sm hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
+              className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-6 hover:border-gold/60 transition-all duration-300 group shadow-sm hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1"
             >
-              <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
+              <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
                 <item.icon className="w-6 h-6 text-gold" />
               </div>
-              <h3 className="text-black text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+              <h3 className="text-[#1A1A1A] text-lg font-semibold mb-2">{item.title}</h3>
+              <p className="text-[#5A4A2E] text-sm leading-relaxed">{item.description}</p>
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ const WhyDubaiSection = () => {
               </ul>
 
               <Link to="/">
-                <Button className="bg-gradient-to-r from-gold to-gold-dark text-black hover:opacity-90 font-semibold group w-fit">
+                <Button className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] hover:opacity-90 font-semibold group w-fit">
                   Discover Properties
                   <ArrowUpRight className="w-4 h-4 ml-2 text-gold group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -126,7 +126,7 @@ const WhyDubaiSection = () => {
                   { value: "6–10%", label: "Avg. Rental Yield" },
                   { value: "#1", label: "Safest City" },
                 ].map((stat, i) => (
-                  <div key={i} className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-center border border-gold/30">
+                  <div key={i} className="bg-[#1A1A1A]/70 backdrop-blur-sm rounded-lg p-3 text-center border border-gold/30">
                     <div className="text-gold text-xl font-bold">{stat.value}</div>
                     <div className="text-white/70 text-xs">{stat.label}</div>
                   </div>
@@ -136,7 +136,7 @@ const WhyDubaiSection = () => {
           </div>
 
           {/* Source Citations Bar */}
-          <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-black/50">
+          <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-[#1A1A1A]/50">
             <span className="text-white/90 text-xs font-medium uppercase tracking-wider">Sources:</span>
             {[
               { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },

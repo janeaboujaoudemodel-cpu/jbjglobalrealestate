@@ -92,8 +92,8 @@ const ExecutiveMarketSignals = () => {
                 to={nav.path}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
-                    ? "bg-gold text-black"
-                    : "bg-zinc-800 text-white/85 hover:bg-gray-700"
+                    ? "bg-gold text-[#1A1A1A]"
+                    : "bg-zinc-800 text-white/85 hover:bg-[#1A1A1A]"
                 }`}
               >
                 {nav.label}
@@ -103,7 +103,7 @@ const ExecutiveMarketSignals = () => {
 
           {/* Market Overview Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                   <Zap className="w-4 h-4 text-gold" />
@@ -121,7 +121,7 @@ const ExecutiveMarketSignals = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-gold" />
@@ -139,7 +139,7 @@ const ExecutiveMarketSignals = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-zinc-900 border-gray-800">
+            <Card className="bg-zinc-900 border-[#1A1A1A]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 text-gold" />
@@ -159,7 +159,7 @@ const ExecutiveMarketSignals = () => {
           </div>
 
           {/* Area Heat Map */}
-          <Card className="bg-zinc-900 border-gray-800 mb-8">
+          <Card className="bg-zinc-900 border-[#1A1A1A] mb-8">
             <CardHeader>
               <CardTitle className="text-lg text-white">
                 Area-Level Market Signals
@@ -172,7 +172,7 @@ const ExecutiveMarketSignals = () => {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-gray-800">
+                    <tr className="border-b border-[#1A1A1A]">
                       <th className="text-left py-3 px-4 text-sm font-medium text-white/70">Area</th>
                       <th className="text-center py-3 px-4 text-sm font-medium text-white/70">Demand Pressure</th>
                       <th className="text-center py-3 px-4 text-sm font-medium text-white/70">RENT Absorption</th>
@@ -183,7 +183,7 @@ const ExecutiveMarketSignals = () => {
                   </thead>
                   <tbody>
                     {areaSignals.map((area, index) => (
-                      <tr key={index} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                      <tr key={index} className="border-b border-[#1A1A1A]/50 hover:bg-[#1A1A1A]/30">
                         <td className="py-3 px-4 text-white font-medium">{area.name}</td>
                         <td className="py-3 px-4 text-center">
                           <Badge className={getPressureColor(area.demandPressure)}>
@@ -217,7 +217,7 @@ const ExecutiveMarketSignals = () => {
           </Card>
 
           {/* Strategic Focus Areas */}
-          <Card className="bg-zinc-900 border-gray-800">
+          <Card className="bg-zinc-900 border-[#1A1A1A]">
             <CardHeader>
               <CardTitle className="text-lg text-white">
                 Strategic Focus Recommendations
@@ -251,12 +251,12 @@ const ExecutiveMarketSignals = () => {
           </Card>
 
           {/* Footer */}
-          <div className="mt-12 pt-6 border-t border-gray-800 text-center">
+          <div className="mt-12 pt-6 border-t border-[#1A1A1A] text-center">
             <p className="text-xs text-white/90">
               Market Signals Dashboard • Directional indicators for strategic planning • Not predictive
             </p>
             <FounderContent>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-xs text-[#5A4A2E] mt-1">
                 Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
               </p>
             </FounderContent>

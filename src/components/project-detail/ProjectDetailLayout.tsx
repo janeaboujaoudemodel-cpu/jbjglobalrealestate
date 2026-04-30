@@ -707,8 +707,8 @@ export default function ProjectDetailLayout({
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all relative ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-black border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
-                        : "text-black/70 hover:text-gold hover:bg-gold/10 border border-transparent"
+                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
+                        : "text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 border border-transparent"
                     }`}
                   >
                     <tab.icon className="w-3.5 h-3.5" />
@@ -722,7 +722,7 @@ export default function ProjectDetailLayout({
                     setCaptureDocUrl(undefined);
                     setLeadCaptureOpen(true);
                   }}
-                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-black border-2 border-gold/50 hover:brightness-105"
+                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-[#1A1A1A] border-2 border-gold/50 hover:brightness-105"
                   style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
                 >
                   <UserPlus className="w-3.5 h-3.5" />

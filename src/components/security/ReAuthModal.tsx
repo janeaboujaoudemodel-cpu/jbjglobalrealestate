@@ -149,7 +149,7 @@ export default function ReAuthModal({
             className={
               isCritical
                 ? "bg-red-600 text-white hover:bg-red-700"
-                : "bg-gold text-black hover:bg-gold/90"
+                : "bg-gold text-[#1A1A1A] hover:bg-gold/90"
             }
           >
             {loading ? (

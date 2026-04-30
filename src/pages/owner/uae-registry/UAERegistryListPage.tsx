@@ -14,7 +14,7 @@ import {
 import { toast } from "sonner";
 
 const STATUS_COLOR: Record<string, string> = {
-  "Not Contacted": "bg-gray-100 text-gray-800",
+  "Not Contacted": "bg-[#F7F2EA] text-[#1A1A1A]",
   "Test Sent": "bg-blue-100 text-blue-800",
   "Contacted": "bg-blue-100 text-blue-800",
   "Replied": "bg-emerald-100 text-emerald-800",
@@ -23,7 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
   "Documents Sent": "bg-blue-100 text-blue-800",
   "Registered": "bg-emerald-100 text-emerald-900",
   "Declined": "bg-red-100 text-red-800",
-  "No Response": "bg-gray-200 text-gray-800",
+  "No Response": "bg-[#EFE6D6] text-[#1A1A1A]",
 };
 
 export default function UAERegistryListPage({ type }: { type: RegistryRecordType }) {
@@ -87,7 +87,7 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
 
   return (
     <OwnerGuard>
-      <div className="min-h-screen bg-white px-6 py-8 max-w-7xl mx-auto">
+      <div className="min-h-screen bg-[#FDFBF7] px-6 py-8 max-w-7xl mx-auto">
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold" style={{ color: "#000" }}>{title}</h1>
@@ -95,9 +95,9 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
           </div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-black text-white hover:bg-gray-800"><Plus className="h-4 w-4 mr-1" />Add</Button>
+              <Button className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"><Plus className="h-4 w-4 mr-1" />Add</Button>
             </DialogTrigger>
-            <DialogContent className="bg-white">
+            <DialogContent className="bg-[#FDFBF7]">
               <DialogHeader><DialogTitle style={{ color: "#000" }}>New {type}</DialogTitle></DialogHeader>
               <div className="space-y-3">
                 <Input placeholder="Legal company name *" value={form.legal_company_name} onChange={(e) => setForm({ ...form, legal_company_name: e.target.value })} />
@@ -113,7 +113,7 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
                   <Input placeholder="Source name (e.g. Official website)" value={form.source_name} onChange={(e) => setForm({ ...form, source_name: e.target.value })} className="mb-2" />
                   <Input placeholder="Source URL *" value={form.source_url} onChange={(e) => setForm({ ...form, source_url: e.target.value })} />
                 </div>
-                <Button onClick={handleCreate} disabled={create.isPending} className="w-full bg-black text-white">Create</Button>
+                <Button onClick={handleCreate} disabled={create.isPending} className="w-full bg-[#1A1A1A] text-white">Create</Button>
               </div>
             </DialogContent>
           </Dialog>
@@ -130,19 +130,19 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
           </Select>
         </div>
 
-        <Card className="bg-white border border-gray-200 overflow-hidden">
+        <Card className="bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden">
           <div className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 text-xs font-semibold border-b" style={{ color: "#374151" }}>
             <span>Company</span><span>Emirate</span><span>Status</span><span>Verification</span><span>Actions</span>
           </div>
           {list.isLoading && <div className="p-6 text-sm" style={{ color: "#374151" }}>Loading…</div>}
           {!list.isLoading && filtered.length === 0 && <div className="p-6 text-sm" style={{ color: "#374151" }}>No records yet.</div>}
           {filtered.map((r: any) => (
-            <div key={r.id} className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 border-b items-center text-sm hover:bg-gray-50">
+            <div key={r.id} className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 border-b items-center text-sm hover:bg-[#F7F2EA]">
               <Link to={`${detailBase}/${r.id}`} className="font-medium hover:underline" style={{ color: "#000" }}>
                 {r.brand_name} <span className="text-xs" style={{ color: "#6b7280" }}>· {r.legal_company_name}</span>
               </Link>
               <span style={{ color: "#374151" }}>{r.emirate_section}</span>
-              <span><Badge className={STATUS_COLOR[r.outreach_status] ?? "bg-gray-100 text-gray-800"}>{r.outreach_status}</Badge></span>
+              <span><Badge className={STATUS_COLOR[r.outreach_status] ?? "bg-[#F7F2EA] text-[#1A1A1A]"}>{r.outreach_status}</Badge></span>
               <span style={{ color: "#374151" }}>{r.verification_status}</span>
               <div className="flex gap-1">
                 <Button size="sm" variant="outline" onClick={() => handleTestSend(r)} title="Test send"><Send className="h-3 w-3" /></Button>

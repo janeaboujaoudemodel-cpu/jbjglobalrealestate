@@ -98,7 +98,7 @@ export default function DocumentsManager({ documents, onUpdate }: DocumentsManag
                   : "border-border/30 bg-muted/30 opacity-60"
               )}
             >
-              <div className="w-9 h-9 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
                 <span className="text-gold">{getDocIcon(doc.type)}</span>
               </div>
 

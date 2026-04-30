@@ -152,7 +152,7 @@ const FoundersInsightsPanel: React.FC = () => {
                 ) : (
                   <TrendingDown className="h-4 w-4 text-destructive" />
                 )}
-                <span className="text-xs text-gray-600 font-medium">Efficiency</span>
+                <span className="text-xs text-[#5A4A2E] font-medium">Efficiency</span>
               </div>
               <p className={cn(
                 "text-2xl font-bold",
@@ -187,7 +187,7 @@ const FoundersInsightsPanel: React.FC = () => {
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-4 w-4 text-[#B89555]" />
-                <span className="text-xs text-gray-600 font-medium">Optimized</span>
+                <span className="text-xs text-[#5A4A2E] font-medium">Optimized</span>
               </div>
               <p className="text-2xl font-bold text-[#B89555]">{weeklySummary.optimizationsApplied}</p>
             </CardContent>
@@ -197,24 +197,24 @@ const FoundersInsightsPanel: React.FC = () => {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex w-full max-w-3xl mx-auto bg-white/80 border-2 border-gold/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)] justify-center gap-1">
-          <TabsTrigger value="overview" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
+        <TabsList className="flex w-full max-w-3xl mx-auto bg-[#FDFBF7]/80 border-2 border-gold/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)] justify-center gap-1">
+          <TabsTrigger value="overview" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="departments" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
+          <TabsTrigger value="departments" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Departments</span>
           </TabsTrigger>
-          <TabsTrigger value="performers" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
+          <TabsTrigger value="performers" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Award className="h-4 w-4" />
             <span className="hidden sm:inline">Top Performers</span>
           </TabsTrigger>
-          <TabsTrigger value="insights" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
+          <TabsTrigger value="insights" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Lightbulb className="h-4 w-4" />
             <span className="hidden sm:inline">Insights</span>
           </TabsTrigger>
-          <TabsTrigger value="health" className="tab-trigger-champagne text-black flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
+          <TabsTrigger value="health" className="tab-trigger-champagne text-[#1A1A1A] flex items-center gap-2 px-4 py-2 rounded-lg transition-all">
             <Activity className="h-4 w-4" />
             <span className="hidden sm:inline">Health</span>
           </TabsTrigger>
@@ -412,7 +412,7 @@ const FoundersInsightsPanel: React.FC = () => {
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-[#8B6914]">{emp.averageScore}%</p>
-                        <p className="text-xs text-gray-600">{emp.tasksCompleted} tasks</p>
+                        <p className="text-xs text-[#5A4A2E]">{emp.tasksCompleted} tasks</p>
                       </div>
                     </div>
                   ))}

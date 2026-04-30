@@ -155,20 +155,20 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   // Panel mode - unified consistent icon: gold headset in gold circle
   if (panelMode) {
     return (
-      <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
+      <div className="w-80 bg-[#FDFBF7] border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
         <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex items-center justify-between">
           <h3 className="font-semibold text-sm text-[hsl(var(--gold))]">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</h3>
           {unreadCount > 0 && (
-            <button onClick={markAllRead} className="text-xs text-gold hover:text-gray-800 font-medium transition-colors">
+            <button onClick={markAllRead} className="text-xs text-gold hover:text-[#1A1A1A] font-medium transition-colors">
               Mark all read
             </button>
           )}
         </div>
 
-        <div className="max-h-[300px] overflow-y-auto bg-white">
+        <div className="max-h-[300px] overflow-y-auto bg-[#FDFBF7]">
           {notifications.length === 0 ? (
             <div className="p-6 text-center text-stone-400 text-sm">
-              <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-gray-500" />
+              <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#8A7556]" />
               No notifications yet
             </div>
           ) : (
@@ -208,13 +208,13 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex gap-2">
           <button
             onClick={() => { navigate('/my-tickets'); onClose?.(); }}
-            className="flex-1 text-center text-xs text-gold hover:text-gray-800 font-semibold py-1.5 transition-colors"
+            className="flex-1 text-center text-xs text-gold hover:text-[#1A1A1A] font-semibold py-1.5 transition-colors"
           >
             My Tickets
           </button>
           <button
             onClick={() => { navigate('/my-dashboard#notifications'); onClose?.(); }}
-            className="flex-1 text-center text-xs text-gold hover:text-gray-800 font-semibold py-1.5 transition-colors"
+            className="flex-1 text-center text-xs text-gold hover:text-[#1A1A1A] font-semibold py-1.5 transition-colors"
           >
             All Notifications
           </button>
@@ -230,7 +230,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         onMouseEnter={onHoverEnter}
         onMouseLeave={onHoverLeave}
         onClick={onOpen}
-        className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
+        className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10 relative"
         aria-label="Notifications"
       >
         <Bell

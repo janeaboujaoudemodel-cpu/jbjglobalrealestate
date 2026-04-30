@@ -33,7 +33,7 @@ const departmentHierarchy = {
   'Technology': { order: 6, color: 'border-blue-500/30', bgColor: 'bg-blue-500/5' },
   'Design': { order: 7, color: 'border-cyan-500/30', bgColor: 'bg-cyan-500/5' },
   'Media': { order: 8, color: 'border-red-500/30', bgColor: 'bg-red-500/5' },
-  'Operations': { order: 9, color: 'border-gray-500/30', bgColor: 'bg-gray-500/5' },
+  'Operations': { order: 9, color: 'border-[#B89555]/30/30', bgColor: 'bg-[#B89555]/5' },
   'Customer Happiness': { order: 10, color: 'border-emerald-500/30', bgColor: 'bg-emerald-500/5' },
   'Client Relations': { order: 11, color: 'border-indigo-500/30', bgColor: 'bg-indigo-500/5' },
   'Legal': { order: 12, color: 'border-slate-500/30', bgColor: 'bg-slate-500/5' },
@@ -102,7 +102,7 @@ const FoundersTeamDirectory: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header with Team Count */}
-      <Card className="bg-white border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -110,13 +110,13 @@ const FoundersTeamDirectory: React.FC = () => {
                 <Users className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-black">Team Directory</h2>
-                <p className="text-sm text-gray-600">JBJ Global Real Estate Team</p>
+                <h2 className="text-xl font-bold text-[#1A1A1A]">Team Directory</h2>
+                <p className="text-sm text-[#5A4A2E]">JBJ Global Real Estate Team</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-gold">{totalTeamCount}</p>
-              <p className="text-xs text-gray-600">Total Members</p>
+              <p className="text-xs text-[#5A4A2E]">Total Members</p>
             </div>
           </div>
         </CardContent>
@@ -125,12 +125,12 @@ const FoundersTeamDirectory: React.FC = () => {
       {/* Search & Filter */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
           <Input
             placeholder="Search team members..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
+            className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] shadow-[0_0_10px_rgba(200,167,102,0.1)]"
           />
         </div>
         <div className="w-full md:w-auto overflow-x-auto">
@@ -141,8 +141,8 @@ const FoundersTeamDirectory: React.FC = () => {
                 size="sm"
                 onClick={() => setSelectedDepartment(dept)}
                 className={selectedDepartment === dept 
-                  ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-gray-900' 
-                  : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
+                  ? 'bg-[#1A1A1A] text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-[#1A1A1A]' 
+                  : 'bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
                 }
               >
                 {dept === 'All' ? `All (${totalTeamCount})` : dept}
@@ -162,9 +162,9 @@ const FoundersTeamDirectory: React.FC = () => {
 
             return (
               <Collapsible key={dept} open={isExpanded} onOpenChange={() => toggleDepartment(dept)}>
-                <Card className={`bg-white border-2 ${deptConfig?.color || 'border-gold/20'} shadow-[0_0_15px_rgba(200,167,102,0.1)]`}>
+                <Card className={`bg-[#FDFBF7] border-2 ${deptConfig?.color || 'border-gold/20'} shadow-[0_0_15px_rgba(200,167,102,0.1)]`}>
                   <CollapsibleTrigger asChild>
-                    <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors py-3">
+                    <CardHeader className="cursor-pointer hover:bg-[#F7F2EA] transition-colors py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {isExpanded ? (
@@ -172,7 +172,7 @@ const FoundersTeamDirectory: React.FC = () => {
                           ) : (
                             <ChevronRight className="w-5 h-5 text-gold" />
                           )}
-                          <CardTitle className="text-black text-lg">{dept}</CardTitle>
+                          <CardTitle className="text-[#1A1A1A] text-lg">{dept}</CardTitle>
                           <Badge className="bg-gold/10 text-gold border border-gold/30">
                             {members.length} members
                           </Badge>
@@ -191,7 +191,7 @@ const FoundersTeamDirectory: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.03 }}
                           >
-                            <Card className="bg-white border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all group">
+                            <Card className="bg-[#FDFBF7] border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all group">
                               <CardContent className="p-4">
                                 <div className="flex items-start gap-4">
                                   {/* Avatar */}
@@ -207,7 +207,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                     {/* Star indicator - visible only to founder/admin for AI personas */}
                                     {isFounderOrAdmin && member.isAI && (
                                       <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-gold rounded-full flex items-center justify-center">
-                                        <Sparkles className="w-3 h-3 text-black" />
+                                        <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
                                       </span>
                                     )}
                                   </div>
@@ -215,13 +215,13 @@ const FoundersTeamDirectory: React.FC = () => {
                                   {/* Info */}
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2">
-                                      <h4 className="text-black font-semibold truncate">{member.name}</h4>
+                                      <h4 className="text-[#1A1A1A] font-semibold truncate">{member.name}</h4>
                                       {member.role.includes('CEO') || member.role.includes('Founder') ? (
                                         <Crown className="w-4 h-4 text-gold" />
                                       ) : null}
                                     </div>
                                     <p className="text-sm text-gold truncate">{member.role}</p>
-                                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-600">
+                                    <div className="flex items-center gap-1 mt-1 text-xs text-[#5A4A2E]">
                                       <Building2 className="w-3 h-3" />
                                       Reports to: {getReportsTo(member)}
                                     </div>
@@ -232,7 +232,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                 {member.languages && member.languages.length > 0 && (
                                   <div className="flex flex-wrap gap-1 mt-3">
                                     {member.languages.slice(0, 3).map((lang) => (
-                                      <Badge key={lang} variant="outline" className="text-xs border-gold/20 text-gray-600 bg-gray-50">
+                                      <Badge key={lang} variant="outline" className="text-xs border-gold/20 text-[#5A4A2E] bg-[#F7F2EA]">
                                         {lang}
                                       </Badge>
                                     ))}
@@ -243,7 +243,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-gold/10">
                                   <Button
                                     size="sm"
-                                    className="flex-1 bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold shadow-[0_0_10px_rgba(200,167,102,0.15)]"
+                                    className="flex-1 bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold shadow-[0_0_10px_rgba(200,167,102,0.15)]"
                                     onClick={() => handleContact(member, 'whatsapp')}
                                   >
                                     <MessageSquare className="w-4 h-4 mr-2" />
@@ -251,19 +251,19 @@ const FoundersTeamDirectory: React.FC = () => {
                                   </Button>
                                   <button
                                     onClick={() => handleContact(member, 'email')}
-                                    className="w-8 h-8 rounded-full bg-white text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Mail className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => handleContact(member, 'phone')}
-                                    className="w-8 h-8 rounded-full bg-white text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Phone className="w-4 h-4" />
                                   </button>
                                   <button
                                     onClick={() => handleContact(member, 'video')}
-                                    className="w-8 h-8 rounded-full bg-white text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
+                                    className="w-8 h-8 rounded-full bg-[#FDFBF7] text-gold border-2 border-gold/30 hover:border-gold hover:shadow-[0_0_10px_rgba(200,167,102,0.3)] flex items-center justify-center transition-all"
                                   >
                                     <Video className="w-4 h-4" />
                                   </button>
@@ -284,11 +284,11 @@ const FoundersTeamDirectory: React.FC = () => {
 
       {/* Empty State */}
       {filteredMembers.length === 0 && (
-        <Card className="bg-white border-2 border-gold/20">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/20">
           <CardContent className="p-8 text-center">
-            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No team members found</p>
-            <p className="text-sm text-gray-600 mt-1">Try adjusting your search or filter</p>
+            <Search className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+            <p className="text-[#5A4A2E]">No team members found</p>
+            <p className="text-sm text-[#5A4A2E] mt-1">Try adjusting your search or filter</p>
           </CardContent>
         </Card>
       )}

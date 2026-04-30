@@ -76,7 +76,7 @@ export default function DocumentESignIntegration({ documentReady, onSignDocument
   };
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-4">
+    <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-4">
       <div className="flex items-center gap-2">
         <FileSignature size={12} className="text-[hsl(var(--gold))]" />
         <span className="text-xs font-bold text-[hsl(var(--foreground))]">E-Signature</span>

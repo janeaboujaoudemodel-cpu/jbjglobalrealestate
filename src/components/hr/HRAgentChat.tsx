@@ -135,7 +135,7 @@ export default function HRAgentChat() {
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-gold mx-auto" />
-            <p className="text-gray-600">Connecting to Jessica...</p>
+            <p className="text-[#5A4A2E]">Connecting to Jessica...</p>
           </div>
         </CardContent>
       </Card>
@@ -151,8 +151,8 @@ export default function HRAgentChat() {
               <Bot className="w-6 h-6 text-gold" />
             </div>
             <div>
-              <CardTitle className="text-lg text-black">Jessica</CardTitle>
-              <p className="text-sm text-gray-600">Available 24/7 to support you</p>
+              <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
+              <p className="text-sm text-[#5A4A2E]">Available 24/7 to support you</p>
             </div>
           </div>
           <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
@@ -176,7 +176,7 @@ export default function HRAgentChat() {
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.role === 'user' 
-                      ? 'bg-gold text-black' 
+                      ? 'bg-gold text-[#1A1A1A]' 
                       : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20'
                   }`}>
                     {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-gold" />}
@@ -184,13 +184,13 @@ export default function HRAgentChat() {
                   <div className="flex flex-col max-w-[80%]">
                     <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
                       message.role === 'user'
-                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-none'
-                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-none'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-tr-none'
+                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-tl-none'
                     }`}>
-                      <div className="prose prose-sm max-w-none whitespace-pre-wrap text-black select-text">
+                      <div className="prose prose-sm max-w-none whitespace-pre-wrap text-[#1A1A1A] select-text">
                         {message.content}
                       </div>
-                      <p className="text-xs mt-1 text-black/60 select-none">
+                      <p className="text-xs mt-1 text-[#1A1A1A]/60 select-none">
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -200,7 +200,7 @@ export default function HRAgentChat() {
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -248,12 +248,12 @@ export default function HRAgentChat() {
                 onClick={sendMessage} 
                 disabled={!input.trim() || loading}
                 size="icon"
-                className="bg-gold text-black hover:bg-gold/90"
+                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
-            <p className="text-xs text-gray-600 mt-2 text-center">
+            <p className="text-xs text-[#5A4A2E] mt-2 text-center">
               Press Enter to send • AI-powered interview assistant
             </p>
           </div>

@@ -245,7 +245,7 @@ export function EmployeePerformanceDashboard() {
                 const isExpanded = selectedEmployee === emp.id;
 
                 return (
-                  <div key={emp.id} className="border border-gold/20 rounded-xl overflow-hidden bg-white/60 hover:bg-white/80 transition-all">
+                  <div key={emp.id} className="border border-gold/20 rounded-xl overflow-hidden bg-[#FDFBF7]/60 hover:bg-[#FDFBF7]/80 transition-all">
                     <div
                       className="flex items-center justify-between p-4 cursor-pointer"
                       onClick={() => setSelectedEmployee(isExpanded ? null : emp.id)}
@@ -312,7 +312,7 @@ export function EmployeePerformanceDashboard() {
                         </div>
 
                         {metrics.summary && (
-                          <div className="mt-4 p-3 rounded-lg bg-white/60 border border-gold/20">
+                          <div className="mt-4 p-3 rounded-lg bg-[#FDFBF7]/60 border border-gold/20">
                             <p className="text-xs font-semibold text-muted-foreground mb-2">Monthly Summary</p>
                             <div className="grid grid-cols-3 md:grid-cols-6 gap-2 text-center text-xs">
                               <div><p className="text-muted-foreground">Logins</p><p className="font-bold text-foreground">{metrics.summary.total_logins ?? 0}</p></div>
@@ -345,7 +345,7 @@ export function EmployeePerformanceDashboard() {
 
 function MetricCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-2 p-3 rounded-lg bg-white/80 border border-gold/20">
+    <div className="flex items-center gap-2 p-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/20">
       <div className="text-gold">{icon}</div>
       <div>
         <p className="text-xs text-muted-foreground">{label}</p>

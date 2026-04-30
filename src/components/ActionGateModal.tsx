@@ -44,7 +44,7 @@ const ActionGateModal = () => {
   return (
     <Dialog open={isGateOpen} onOpenChange={(open) => { if (!open) closeGate(); }}>
       <DialogContent
-        className="bg-black/95 backdrop-blur-xl border border-gold/30 text-white max-w-lg p-0 overflow-hidden shadow-2xl rounded-2xl"
+        className="bg-[#1A1A1A]/95 backdrop-blur-xl border border-gold/30 text-white max-w-lg p-0 overflow-hidden shadow-2xl rounded-2xl"
         aria-describedby={undefined}
       >
         <VisuallyHidden.Root>
@@ -107,7 +107,7 @@ const ActionGateModal = () => {
           <div className="space-y-3">
             <Button
               onClick={handleSignIn}
-              className="w-full py-5 bg-gold hover:bg-gold/90 text-black font-bold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
+              className="w-full py-5 bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <Sparkles className="w-5 h-5 mr-2 relative z-10" />
@@ -132,7 +132,7 @@ const ActionGateModal = () => {
           </div>
 
           {/* Footer */}
-          <p className="text-center text-gray-600 text-[10px] mt-6">
+          <p className="text-center text-[#5A4A2E] text-[10px] mt-6">
             Your activity earns loyalty points redeemable on purchases & subscriptions
           </p>
         </div>

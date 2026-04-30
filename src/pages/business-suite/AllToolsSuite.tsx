@@ -93,7 +93,7 @@ const AllToolsSuite = () => {
                       "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all",
                       isActive
                         ? `${colors.active} border ${colors.border}`
-                        : `${colors.inactive} border border-transparent hover:border-gray-700`
+                        : `${colors.inactive} border border-transparent hover:border-[#1A1A1A]`
                     )}
                   >
                     <Icon className="w-4 h-4" />
@@ -206,7 +206,7 @@ const AllToolsSuite = () => {
                       "flex flex-col items-center gap-2 p-4 rounded-xl transition-all",
                       isActive
                         ? `${colors.active} border ${colors.border}`
-                        : "bg-zinc-900/50 border border-gray-800 hover:border-gray-700"
+                        : "bg-zinc-900/50 border border-[#1A1A1A] hover:border-[#1A1A1A]"
                     )}
                   >
                     <Icon className={cn("w-6 h-6", isActive ? colors.active.split(' ')[0] : "text-white/70")} />

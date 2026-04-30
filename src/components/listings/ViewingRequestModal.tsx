@@ -106,7 +106,7 @@ export const ViewingRequestModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-[#1A1A1A]/60 backdrop-blur-sm z-50"
           />
 
           {/* Modal */}
@@ -120,14 +120,14 @@ export const ViewingRequestModal = ({
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b border-gold/30">
                 <div>
-                  <h3 className="text-lg font-semibold text-black">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A]">
                     Book a Viewing
                   </h3>
-                  <p className="text-sm text-gray-600 truncate max-w-[280px]">{listingName}</p>
+                  <p className="text-sm text-[#5A4A2E] truncate max-w-[280px]">{listingName}</p>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-600 hover:text-black hover:border-gray-300 transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center text-[#5A4A2E] hover:text-[#1A1A1A] hover:border-[#B89555]/30 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -140,8 +140,8 @@ export const ViewingRequestModal = ({
                     <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircle className="w-8 h-8 text-gold" />
                     </div>
-                    <h4 className="text-xl font-semibold text-black mb-2">Request Submitted!</h4>
-                    <p className="text-gray-600 mb-6">
+                    <h4 className="text-xl font-semibold text-[#1A1A1A] mb-2">Request Submitted!</h4>
+                    <p className="text-[#5A4A2E] mb-6">
                       Our team will confirm your viewing appointment within 24 hours.
                     </p>
                     <Button onClick={handleClose} variant="primary">
@@ -154,7 +154,7 @@ export const ViewingRequestModal = ({
                       placeholder="Full Name *"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="h-12 bg-white border-gray-300"
+                      className="h-12 bg-[#FDFBF7] border-[#B89555]/30"
                       required
                     />
                     
@@ -163,7 +163,7 @@ export const ViewingRequestModal = ({
                       placeholder="Phone Number *"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="h-12 bg-white border-gray-300"
+                      className="h-12 bg-[#FDFBF7] border-[#B89555]/30"
                       required
                     />
 
@@ -172,27 +172,27 @@ export const ViewingRequestModal = ({
                       placeholder="Email Address"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="h-12 bg-white border-gray-300"
+                      className="h-12 bg-[#FDFBF7] border-[#B89555]/30"
                     />
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                         <Input
                           type="date"
                           value={formData.preferredDate}
                           onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
-                          className="h-12 bg-white border-gray-300 pl-10"
+                          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 pl-10"
                           min={new Date().toISOString().split('T')[0]}
                         />
                       </div>
                       <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                         <Input
                           placeholder="Time (e.g. 2pm)"
                           value={formData.preferredTime}
                           onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
-                          className="h-12 bg-white border-gray-300 pl-10"
+                          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 pl-10"
                         />
                       </div>
                     </div>
@@ -202,7 +202,7 @@ export const ViewingRequestModal = ({
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={3}
-                      className="w-full px-4 py-3 bg-white border border-gray-300 text-black placeholder:text-gray-600 rounded-lg resize-none focus:outline-none focus:border-gold"
+                      className="w-full px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] rounded-lg resize-none focus:outline-none focus:border-gold"
                     />
 
                     <div className="flex items-start gap-3">
@@ -210,9 +210,9 @@ export const ViewingRequestModal = ({
                         id="viewing-privacy"
                         checked={formData.privacyAccepted}
                         onCheckedChange={(checked) => setFormData({ ...formData, privacyAccepted: !!checked })}
-                        className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                        className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                       />
-                      <label htmlFor="viewing-privacy" className="text-black text-sm">
+                      <label htmlFor="viewing-privacy" className="text-[#1A1A1A] text-sm">
                         I agree to the <a href="/privacy" className="text-gold underline">Privacy Policy</a>
                       </label>
                     </div>

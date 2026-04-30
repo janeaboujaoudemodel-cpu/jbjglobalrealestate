@@ -440,13 +440,13 @@ const SupportTicketBox = () => {
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-red-500 font-semibold">24/7 Support</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black">
+                      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                         Need Help?
                       </h2>
                     </div>
                   </div>
 
-                  <p className="text-gray-700 mb-6 leading-relaxed">
+                  <p className="text-[#5A4A2E] mb-6 leading-relaxed">
                     Experiencing an issue with our services? Create a support ticket and our team will 
                     assist you promptly. You can attach screenshots or screen recordings to help us 
                     understand the problem better.
@@ -460,7 +460,7 @@ const SupportTicketBox = () => {
                         <AlertCircle className="w-5 h-5 text-gold" />
                         <span className="text-gold font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-gray-600">
+                      <ul className="space-y-2 text-sm text-[#5A4A2E]">
                         <li className="flex items-center gap-2">
                           <span className="text-gold">✓</span>
                           Response within 24 hours
@@ -481,7 +481,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-[#5A4A2E]">
                     All tickets are reviewed by our support team and forwarded to the relevant department.
                   </p>
                 </div>
@@ -491,7 +491,7 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="bg-black text-white border-2 border-black px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-gray-800 hover:border-gray-800 hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                        className="bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
                         <span className="flex items-center gap-2">
                           <PremiumHeadsetIcon size={20} color="#ffffff" />
@@ -502,7 +502,7 @@ const SupportTicketBox = () => {
 
                       <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                       <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
-                        <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
+                        <DialogTitle className="text-[#1A1A1A] text-xl font-bold flex items-center gap-2">
                           <PremiumHeadsetIcon size={20} color="#dc2626" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
                         </DialogTitle>
@@ -547,7 +547,7 @@ const SupportTicketBox = () => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="text-xl font-bold text-black mb-2"
+                                className="text-xl font-bold text-[#1A1A1A] mb-2"
                               >
                                 We've Got Your Ticket!
                               </motion.h3>
@@ -555,7 +555,7 @@ const SupportTicketBox = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                className="text-gray-600 mb-6"
+                                className="text-[#5A4A2E] mb-6"
                               >
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
@@ -568,10 +568,10 @@ const SupportTicketBox = () => {
                                  className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
                                >
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
-                                   <span className="text-sm text-gray-600">Your Ticket Number</span>
-                                   <span className="text-sm text-gray-600">|</span>
-                                   <span className="text-sm text-gray-600" dir="rtl">رقم التذكرة</span>
-                                   <span className="text-sm text-gray-600">—</span>
+                                   <span className="text-sm text-[#5A4A2E]">Your Ticket Number</span>
+                                   <span className="text-sm text-[#5A4A2E]">|</span>
+                                   <span className="text-sm text-[#5A4A2E]" dir="rtl">رقم التذكرة</span>
+                                   <span className="text-sm text-[#5A4A2E]">—</span>
                                    <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
                                    <button
                                      onClick={copyTicketNumber}
@@ -592,27 +592,27 @@ const SupportTicketBox = () => {
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.55 }}
-                                 className="bg-white border border-gold/30 rounded-xl p-4 mb-4 text-left"
+                                 className="bg-[#FDFBF7] border border-gold/30 rounded-xl p-4 mb-4 text-left"
                                >
-                                 <p className="text-sm font-bold text-black mb-3 flex items-center gap-2">
+                                 <p className="text-sm font-bold text-[#1A1A1A] mb-3 flex items-center gap-2">
                                    <FileText className="w-4 h-4 text-gold" />
                                    Ticket Summary
                                  </p>
                                  <div className="space-y-2 text-xs">
                                    <div className="flex justify-between">
-                                     <span className="text-gray-600">Ticket #</span>
-                                     <span className="text-black font-semibold">{ticketNumber}</span>
+                                     <span className="text-[#5A4A2E]">Ticket #</span>
+                                     <span className="text-[#1A1A1A] font-semibold">{ticketNumber}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-gray-600">Category</span>
-                                     <span className="text-black font-medium">{formData.serviceCategory}</span>
+                                     <span className="text-[#5A4A2E]">Category</span>
+                                     <span className="text-[#1A1A1A] font-medium">{formData.serviceCategory}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-gray-600">Subject</span>
-                                     <span className="text-black font-medium truncate max-w-[180px]">{formData.subject}</span>
+                                     <span className="text-[#5A4A2E]">Subject</span>
+                                     <span className="text-[#1A1A1A] font-medium truncate max-w-[180px]">{formData.subject}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-gray-600">Priority</span>
+                                     <span className="text-[#5A4A2E]">Priority</span>
                                      <span className={`font-medium ${
                                        formData.priority === 'critical' ? 'text-red-500' :
                                        formData.priority === 'high' ? 'text-orange-500' :
@@ -622,13 +622,13 @@ const SupportTicketBox = () => {
                                      </span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-gray-600">Submitted</span>
-                                     <span className="text-black font-medium">{new Date().toLocaleDateString()}</span>
+                                     <span className="text-[#5A4A2E]">Submitted</span>
+                                     <span className="text-[#1A1A1A] font-medium">{new Date().toLocaleDateString()}</span>
                                    </div>
                                    {attachments.length > 0 && (
                                      <div className="flex justify-between">
-                                       <span className="text-gray-600">Attachments</span>
-                                       <span className="text-black font-medium">{attachments.length} file(s)</span>
+                                       <span className="text-[#5A4A2E]">Attachments</span>
+                                       <span className="text-[#1A1A1A] font-medium">{attachments.length} file(s)</span>
                                      </div>
                                    )}
                                  </div>
@@ -654,7 +654,7 @@ const SupportTicketBox = () => {
                                  className="mb-4"
                                >
                                  {emailWasSent || emailResent ? (
-                                   <p className="text-sm text-gray-600 flex items-center justify-center gap-2">
+                                   <p className="text-sm text-[#5A4A2E] flex items-center justify-center gap-2">
                                      <MailCheck className="w-4 h-4 text-green-500" />
                                      Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
                                    </p>
@@ -702,18 +702,18 @@ const SupportTicketBox = () => {
                                  transition={{ delay: 0.65 }}
                                  className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 rounded-xl p-4 mb-4"
                                >
-                                 <p className="text-sm font-bold text-black mb-3 text-center">Explore While You Wait</p>
+                                 <p className="text-sm font-bold text-[#1A1A1A] mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
-                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/properties" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
                                       Properties
                                     </a>
-                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/ai-hub" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
                                       AI Tools
                                     </a>
-                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/buyer-guide" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
                                       Guides
                                     </a>
-                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-black hover:border-gold transition-colors">
+                                    <a href="/careers" className="flex items-center justify-center gap-1 px-3 py-2.5 border border-gold/30 rounded-lg text-xs font-semibold text-[#1A1A1A] hover:border-gold transition-colors">
                                       Careers
                                     </a>
                                  </div>
@@ -759,7 +759,7 @@ const SupportTicketBox = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[10100] flex items-center justify-center"
+                                    className="fixed inset-0 bg-[#1A1A1A]/60 backdrop-blur-sm z-[10100] flex items-center justify-center"
                                   >
                                     <motion.div
                                       initial={{ scale: 0.8, opacity: 0 }}
@@ -779,7 +779,7 @@ const SupportTicketBox = () => {
                                           {attachments.map((file, idx) => (
                                             <div key={idx} className="flex items-center gap-2 text-xs">
                                               {getUploadStatusIcon(idx)}
-                                              <span className="text-gray-600 truncate flex-1 text-left">{file.name}</span>
+                                              <span className="text-[#5A4A2E] truncate flex-1 text-left">{file.name}</span>
                                             </div>
                                           ))}
                                         </div>
@@ -789,11 +789,11 @@ const SupportTicketBox = () => {
                                         key={submissionStep}
                                         initial={{ opacity: 0, y: 5 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="text-base font-semibold text-black"
+                                        className="text-base font-semibold text-[#1A1A1A]"
                                       >
                                         {STEP_MESSAGES[submissionStep]}
                                       </motion.p>
-                                      <p className="text-sm text-gray-600 mt-2">Please wait...</p>
+                                      <p className="text-sm text-[#5A4A2E] mt-2">Please wait...</p>
                                       
                                       {/* Animated progress bar */}
                                       <div className="w-full mt-4 h-1.5 bg-gold/20 rounded-full overflow-hidden">
@@ -811,7 +811,7 @@ const SupportTicketBox = () => {
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -819,12 +819,12 @@ const SupportTicketBox = () => {
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                               </div>
                               <div>
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -833,14 +833,14 @@ const SupportTicketBox = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                               </div>
                             </div>
 
                             <div>
-                              <Label className="text-gray-700 flex items-center gap-2">
+                              <Label className="text-[#5A4A2E] flex items-center gap-2">
                                 <Phone className="w-4 h-4 text-gold" />
                                 Phone Number (Optional)
                               </Label>
@@ -849,13 +849,13 @@ const SupportTicketBox = () => {
                                 placeholder="+971 50 123 4567"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                               />
                             </div>
 
                             {/* Service Category */}
                             <div>
-                              <Label className="text-gray-700 flex items-center gap-2">
+                              <Label className="text-[#5A4A2E] flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-red-500" />
                                 Service with Issue *
                               </Label>
@@ -868,7 +868,7 @@ const SupportTicketBox = () => {
                                   }
                                 }}
                               >
-                                <SelectTrigger className={`mt-1 bg-white border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} focus:border-gold text-black rounded-lg cursor-pointer`}>
+                                <SelectTrigger className={`mt-1 bg-[#FDFBF7] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} focus:border-gold text-[#1A1A1A] rounded-lg cursor-pointer`}>
                                   <SelectValue placeholder="Select the service" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-60">
@@ -892,11 +892,11 @@ const SupportTicketBox = () => {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="bg-gradient-to-br from-gold/5 to-gold/10 border border-gold/30 rounded-xl p-4 space-y-3"
                               >
-                                <p className="text-sm font-semibold text-black flex items-center gap-2">
+                                <p className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-2">
                                   <MessageCircle className="w-4 h-4 text-gold" />
                                   Inquiry Details
                                 </p>
-                                <p className="text-xs text-gray-600">
+                                <p className="text-xs text-[#5A4A2E]">
                                   This inquiry will be tracked in the Inquiry Management Hub for follow-up.
                                 </p>
                               </motion.div>
@@ -909,7 +909,7 @@ const SupportTicketBox = () => {
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                               >
-                                <Label className="text-gray-700 flex items-center gap-2">
+                                <Label className="text-[#5A4A2E] flex items-center gap-2">
                                   <FileText className="w-4 h-4 text-gold" />
                                   Please Specify Your Issue *
                                 </Label>
@@ -917,10 +917,10 @@ const SupportTicketBox = () => {
                                   placeholder="Describe what service or feature the issue relates to..."
                                   value={formData.otherCategoryDetail}
                                   onChange={(e) => setFormData({ ...formData, otherCategoryDetail: e.target.value })}
-                                  className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                  className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                   required
                                 />
-                                <p className="text-xs text-gray-600 mt-1">
+                                <p className="text-xs text-[#5A4A2E] mt-1">
                                   This helps us route your ticket to the right team.
                                 </p>
                               </motion.div>
@@ -928,7 +928,7 @@ const SupportTicketBox = () => {
 
                             {/* Subject with Voice Note */}
                             <div>
-                              <Label className="text-gray-700 flex items-center gap-2">
+                              <Label className="text-[#5A4A2E] flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-gold" />
                                 Subject *
                               </Label>
@@ -937,7 +937,7 @@ const SupportTicketBox = () => {
                                   placeholder="Brief description of the issue"
                                   value={formData.subject}
                                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                                  className="flex-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                  className="flex-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                   required
                                 />
                                 <VoiceNoteRecorder
@@ -950,14 +950,14 @@ const SupportTicketBox = () => {
                                   }}
                                 />
                               </div>
-                              <p className="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                              <p className="text-xs text-[#5A4A2E] mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated
                               </p>
                             </div>
 
                             {/* Priority Selection */}
                             <div>
-                              <Label className="text-gray-700 flex items-center gap-2">
+                              <Label className="text-[#5A4A2E] flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-500" />
                                 Priority Level
                               </Label>
@@ -965,26 +965,26 @@ const SupportTicketBox = () => {
                                 value={formData.priority}
                                 onValueChange={(value) => setFormData({ ...formData, priority: value })}
                               >
-                                <SelectTrigger className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg cursor-pointer">
+                                <SelectTrigger className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg cursor-pointer">
                                   <SelectValue placeholder="Select priority" />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {PRIORITY_LEVELS.map((level) => (
                                     <SelectItem key={level.value} value={level.value}>
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>
-                                      <span className="text-gray-600 text-xs ml-2">- {level.description}</span>
+                                      <span className="text-[#5A4A2E] text-xs ml-2">- {level.description}</span>
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <p className="text-xs text-gray-600 mt-1">
+                              <p className="text-xs text-[#5A4A2E] mt-1">
                                 Our AI will verify and adjust priority based on issue analysis.
                               </p>
                             </div>
 
                             {/* Description with Voice Note */}
                             <div>
-                              <Label className="text-gray-700 flex items-center justify-between">
+                              <Label className="text-[#5A4A2E] flex items-center justify-between">
                                 <span>Detailed Description *</span>
                                 <VoiceNoteRecorder
                                   onTranscript={(text) => handleVoiceTranscript(text, 'description')}
@@ -1003,10 +1003,10 @@ const SupportTicketBox = () => {
                                 placeholder="Please describe the issue in detail. Include steps to reproduce, expected behavior, and what actually happened..."
                                 value={formData.description}
                                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                className="mt-1 min-h-[120px] bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                                className="mt-1 min-h-[120px] bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                 required
                               />
-                              <p className="text-xs text-gray-600 mt-1 flex items-center gap-1">
+                              <p className="text-xs text-[#5A4A2E] mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated to English
                               </p>
                             </div>
@@ -1015,11 +1015,11 @@ const SupportTicketBox = () => {
 
                             {/* File Upload */}
                             <div>
-                              <Label className="text-gray-700 flex items-center gap-2">
+                              <Label className="text-[#5A4A2E] flex items-center gap-2">
                                 <Upload className="w-4 h-4 text-gold" />
                                 Attachments (Optional)
                               </Label>
-                              <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gold transition-colors">
+                              <div className="mt-1 border-2 border-dashed border-[#B89555]/30 rounded-lg p-4 text-center hover:border-gold transition-colors">
                                 <input
                                   type="file"
                                   id="file-upload"
@@ -1032,11 +1032,11 @@ const SupportTicketBox = () => {
                                   htmlFor="file-upload"
                                   className="cursor-pointer flex flex-col items-center gap-2"
                                 >
-                                  <Upload className="w-8 h-8 text-gray-600" />
-                                  <span className="text-sm text-gray-600">
+                                  <Upload className="w-8 h-8 text-[#5A4A2E]" />
+                                  <span className="text-sm text-[#5A4A2E]">
                                     Click to upload screenshots, videos, or documents
                                   </span>
-                                  <span className="text-xs text-gray-600">
+                                  <span className="text-xs text-[#5A4A2E]">
                                     Max 10MB per file, up to 5 files
                                   </span>
                                 </label>
@@ -1056,21 +1056,21 @@ const SupportTicketBox = () => {
                                             ? 'bg-red-50 border border-red-200' 
                                             : uploadStatuses[index] === 'done'
                                             ? 'bg-green-50 border border-green-200'
-                                            : 'bg-gray-50'
+                                            : 'bg-[#F7F2EA]'
                                         }`}
                                       >
                                         <div className="flex items-center gap-2 min-w-0">
                                           {/* Thumbnail preview for images */}
                                           {previewUrl ? (
-                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-gray-200 flex-shrink-0" />
+                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-[#B89555]/30 flex-shrink-0" />
                                           ) : (
                                             getFileIcon(file)
                                           )}
                                           <div className="min-w-0">
-                                            <span className="text-sm text-gray-700 truncate block max-w-[140px]">
+                                            <span className="text-sm text-[#5A4A2E] truncate block max-w-[140px]">
                                               {file.name}
                                             </span>
-                                            <span className="text-xs text-gray-600">
+                                            <span className="text-xs text-[#5A4A2E]">
                                               {(file.size / 1024 / 1024).toFixed(2)}MB
                                             </span>
                                           </div>
@@ -1090,7 +1090,7 @@ const SupportTicketBox = () => {
                                                 <FileText className="w-4 h-4" />
                                               </Button>
                                             </DialogTrigger>
-                                            <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto bg-white z-[10060]">
+                                            <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto bg-[#FDFBF7] z-[10060]">
                                               <DialogHeader>
                                                 <DialogTitle className="text-sm truncate">{file.name}</DialogTitle>
                                               </DialogHeader>
@@ -1108,8 +1108,8 @@ const SupportTicketBox = () => {
                                                     <source src={URL.createObjectURL(file)} type={file.type} />
                                                   </video>
                                                 ) : (
-                                                  <div className="text-center py-10 text-gray-600">
-                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-gray-600" />
+                                                  <div className="text-center py-10 text-[#5A4A2E]">
+                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-[#5A4A2E]" />
                                                     <p className="text-sm">Preview not available for this file type</p>
                                                     <p className="text-xs mt-1">{file.type || 'Unknown type'} • {(file.size / 1024 / 1024).toFixed(2)}MB</p>
                                                   </div>
@@ -1221,9 +1221,9 @@ const SupportTicketBox = () => {
                                 </span>
                               ) : (
                                 <span className="relative flex items-center justify-center gap-2">
-                                  <Send className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                                  <span className="text-black group-hover:text-gold transition-colors">Create Ticket</span>
-                                  <span className="text-gold group-hover:text-black transition-colors">& Notify Support</span>
+                                  <Send className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+                                  <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Create Ticket</span>
+                                  <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">& Notify Support</span>
                                 </span>
                               )}
                             </button>
@@ -1234,7 +1234,7 @@ const SupportTicketBox = () => {
                     </DialogContent>
                   </Dialog>
 
-                  <p className="text-sm text-gray-600 mt-4">
+                  <p className="text-sm text-[#5A4A2E] mt-4">
                     Email:{" "}
                     <a
                       href={`mailto:${CONTACT_INFO.supportEmail}`}

@@ -332,12 +332,12 @@ const CRMLeadDetail = () => {
       {/* Header - Premium Champagne Gold */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-black hover:text-gold hover:bg-gold/10">
+          <Button variant="ghost" size="icon" onClick={() => navigate("/crm")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-black truncate">{lead.full_name}</h1>
-            <p className="text-xs text-gray-600">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
+            <h1 className="text-lg font-bold text-[#1A1A1A] truncate">{lead.full_name}</h1>
+            <p className="text-xs text-[#5A4A2E]">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
           </div>
           <Select value={currentStatus} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[160px]">

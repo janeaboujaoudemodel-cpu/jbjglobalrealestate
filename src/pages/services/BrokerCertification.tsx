@@ -221,14 +221,14 @@ const BrokerCertification = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <GraduationCap className="w-12 h-12 text-gray-600" />
+                <GraduationCap className="w-12 h-12 text-[#5A4A2E]" />
               </div>
-              <p className="text-gray-600 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
+              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -246,7 +246,7 @@ const BrokerCertification = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <GraduationCap className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -278,13 +278,13 @@ const BrokerCertification = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* IMPORTANT PROGRAM POSITIONING */}
-      <section className="bg-black py-12">
+      <section className="bg-[#1A1A1A] py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-6 text-center">
@@ -298,7 +298,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* WHO THIS PROGRAM IS FOR */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -308,7 +308,7 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Who This Program Is For
@@ -317,11 +317,11 @@ const BrokerCertification = () => {
               {whoIsFor.map((item, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="h-full jj-card-inner text-center">
-                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center">
+                    <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
                       <item.icon className="w-7 h-7 text-gold" />
                     </div>
-                    <h3 className="font-semibold text-black mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-600">{item.description}</p>
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">{item.title}</h3>
+                    <p className="text-sm text-[#5A4A2E]">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -331,7 +331,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* WHAT THIS PROGRAM DELIVERS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -342,7 +342,7 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What This Program Delivers
@@ -351,10 +351,10 @@ const BrokerCertification = () => {
               <ul className="space-y-4">
                 {programDelivers.map((item, index) => (
                   <li key={index} className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-gray-700 pt-2">{item.text}</span>
+                    <span className="text-[#5A4A2E] pt-2">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -364,7 +364,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* PROGRAM MODULES */}
-      <section id="modules" className="bg-black py-20">
+      <section id="modules" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -374,12 +374,12 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Program Modules
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-12 max-w-2xl mx-auto">
               Use "Book/Module" style cards — content is not downloadable
             </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
@@ -388,7 +388,7 @@ const BrokerCertification = () => {
                   <Card className="h-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden">
                     <CardContent className="p-0">
                       {/* Book-style header */}
-                      <div className="bg-black p-4 flex items-center gap-4">
+                      <div className="bg-[#1A1A1A] p-4 flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center">
                           <span className="text-gold font-bold">M{module.number}</span>
                         </div>
@@ -408,7 +408,7 @@ const BrokerCertification = () => {
                           <p className="text-xs text-white/90 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                              <li key={idx} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
                                 <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                                 <span>{topic}</span>
                               </li>
@@ -416,9 +416,9 @@ const BrokerCertification = () => {
                           </ul>
                         </div>
                         
-                        <div className="bg-black/10 rounded-lg p-3 border border-gold/20">
+                        <div className="bg-[#1A1A1A]/10 rounded-lg p-3 border border-gold/20">
                           <p className="text-xs text-white/90 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
-                          <p className="text-sm text-gray-700">{module.completionCheck}</p>
+                          <p className="text-sm text-[#5A4A2E]">{module.completionCheck}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -431,7 +431,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* CERTIFICATE PREVIEW */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -442,12 +442,12 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Certificate Preview
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
               On-screen preview only — certificate is not downloadable publicly
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -456,7 +456,7 @@ const BrokerCertification = () => {
                 {/* Premium Badge */}
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                   <div className="bg-gradient-to-r from-gold via-amber-400 to-gold px-6 py-2 rounded-full shadow-lg border border-gold/50">
-                    <span className="text-black font-bold text-sm tracking-widest uppercase flex items-center gap-2">
+                    <span className="text-[#1A1A1A] font-bold text-sm tracking-widest uppercase flex items-center gap-2">
                       <Award className="w-4 h-4" />
                       Certified Professional
                       <Award className="w-4 h-4" />
@@ -486,12 +486,12 @@ const BrokerCertification = () => {
 
                     {/* Logo area */}
                     <div className="mb-6">
-                      <div className="w-20 h-20 mx-auto rounded-full bg-black flex items-center justify-center border-4 border-gold shadow-xl">
+                      <div className="w-20 h-20 mx-auto rounded-full bg-[#1A1A1A] flex items-center justify-center border-4 border-gold shadow-xl">
                         <Award className="w-10 h-10 text-gold" />
                       </div>
                     </div>
 
-                    <h3 className="text-3xl font-bold text-black mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
+                    <h3 className="text-3xl font-bold text-[#1A1A1A] mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                       Certificate of Completion
                     </h3>
                     <p className="text-gold font-semibold tracking-widest uppercase text-sm mb-8">JBJ Broker Standards Program</p>
@@ -499,7 +499,7 @@ const BrokerCertification = () => {
                     <p className="text-muted-foreground text-sm mb-2">This certifies that</p>
                     
                     <div className="border-b-2 border-gold/40 py-4 mb-6 mx-auto max-w-md">
-                      <p className="text-2xl font-bold text-black" style={{ fontFamily: "Playfair Display, serif" }}>[Broker Full Name]</p>
+                      <p className="text-2xl font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, serif" }}>[Broker Full Name]</p>
                     </div>
                     
                     <p className="text-muted-foreground mb-8 max-w-md mx-auto">
@@ -509,10 +509,10 @@ const BrokerCertification = () => {
                     <div className="flex items-center justify-between max-w-lg mx-auto pt-6 border-t border-gold/20">
                       <div className="text-left">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Issue Date</p>
-                        <p className="text-black font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        <p className="text-[#1A1A1A] font-semibold">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                       </div>
                       <div className="text-center">
-                        <div className="w-16 h-16 mx-auto rounded-full bg-black/5 border-2 border-gold/30 flex items-center justify-center">
+                        <div className="w-16 h-16 mx-auto rounded-full bg-[#1A1A1A]/5 border-2 border-gold/30 flex items-center justify-center">
                           <Shield className="w-8 h-8 text-gold" />
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">Verified</p>
@@ -521,12 +521,12 @@ const BrokerCertification = () => {
                         <FounderContent
                           fallback={
                             <>
-                              <p className="text-black font-semibold">JBJ Global Real Estate</p>
+                              <p className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</p>
                               <p className="text-xs text-muted-foreground">Executive Leadership</p>
                             </>
                           }
                         >
-                          <p className="text-black font-semibold">Jane Bou Jaoude</p>
+                          <p className="text-[#1A1A1A] font-semibold">Jane Bou Jaoude</p>
                           <p className="text-xs text-muted-foreground">Founder & CEO</p>
                           <p className="text-gold italic text-xs mt-1">جاين بو جودة</p>
                         </FounderContent>
@@ -536,7 +536,7 @@ const BrokerCertification = () => {
                     {/* Certificate Number */}
                     <div className="mt-8 pt-4 border-t border-dashed border-gold/30">
                       <p className="text-xs text-muted-foreground">
-                        Certificate No: <span className="font-mono text-black">JBJ-CERT-2024-001</span>
+                        Certificate No: <span className="font-mono text-[#1A1A1A]">JBJ-CERT-2024-001</span>
                       </p>
                     </div>
                   </CardContent>
@@ -548,7 +548,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* ADMIN ISSUANCE WORKFLOW */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -559,23 +559,23 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Admin Issuance Workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
               Back-office administration capabilities
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-gray-600 mb-6 font-medium">Admin can:</p>
+              <p className="text-[#5A4A2E] mb-6 font-medium">Admin can:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {adminWorkflow.map((item, index) => (
-                  <div key={index} className="flex items-center gap-3 bg-black/5 rounded-lg p-4">
-                    <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                  <div key={index} className="flex items-center gap-3 bg-[#1A1A1A]/5 rounded-lg p-4">
+                    <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-gray-700 text-sm">{item.text}</span>
+                    <span className="text-[#5A4A2E] text-sm">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -585,7 +585,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -596,7 +596,7 @@ const BrokerCertification = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -610,9 +610,9 @@ const BrokerCertification = () => {
                     className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
-                      <span className="text-black font-medium">{faq.question}</span>
+                      <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-gray-600">
+                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -624,7 +624,7 @@ const BrokerCertification = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -636,12 +636,12 @@ const BrokerCertification = () => {
             <div className="jj-card-inner border-2 border-gold/30">
               <Award className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2
-                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
                 Join the Standards Program
               </h2>
-              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                 Request enrollment and receive the program pathway and requirements.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

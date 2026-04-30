@@ -115,7 +115,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
         <CollapsibleTrigger asChild>
           <Button
             variant="ghost"
-            className="w-full flex items-center justify-between p-4 hover:bg-gray-800/80 rounded-none h-auto"
+            className="w-full flex items-center justify-between p-4 hover:bg-[#1A1A1A]/80 rounded-none h-auto"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center">
@@ -135,7 +135,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
         </CollapsibleTrigger>
         
         <CollapsibleContent>
-          <div className="p-4 pt-0 space-y-4 border-t border-gray-700">
+          <div className="p-4 pt-0 space-y-4 border-t border-[#1A1A1A]">
             {/* Client Name */}
             <div>
               <Label className="text-gray-200 mb-2 block text-sm font-medium">Client Name</Label>
@@ -143,7 +143,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-gray-600 text-white placeholder:text-gray-600"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               />
             </div>
 
@@ -206,7 +206,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-gray-600 text-white placeholder:text-gray-600 min-h-[100px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[100px]"
               />
             </div>
 

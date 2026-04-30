@@ -124,8 +124,8 @@ export function FoundersDecisionPanel() {
             <Brain className="h-6 w-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-black">Business Intelligence</h2>
-            <p className="text-gray-600 text-sm">
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">Business Intelligence</h2>
+            <p className="text-[#5A4A2E] text-sm">
               Real-time insights, predictions & strategic recommendations
             </p>
           </div>
@@ -137,7 +137,7 @@ export function FoundersDecisionPanel() {
             </Badge>
           )}
           <Button 
-            className="bg-white text-black border-2 border-gold/30 hover:bg-black hover:text-gold hover:border-gold transition-all"
+            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-gold/30 hover:bg-[#1A1A1A] hover:text-gold hover:border-gold transition-all"
             size="sm" 
             onClick={() => setShowSummary(!showSummary)}
           >
@@ -145,7 +145,7 @@ export function FoundersDecisionPanel() {
             Daily Summary
           </Button>
           <Button 
-            className="bg-white text-black border-2 border-gold/30 hover:bg-black hover:text-gold hover:border-gold transition-all"
+            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-gold/30 hover:bg-[#1A1A1A] hover:text-gold hover:border-gold transition-all"
             size="sm" 
             onClick={refreshData}
             disabled={isProcessing}
@@ -158,20 +158,20 @@ export function FoundersDecisionPanel() {
 
       {/* Daily Summary Modal */}
       {showSummary && (
-        <Card className="bg-white border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-lg text-black">
+              <CardTitle className="flex items-center gap-2 text-lg text-[#1A1A1A]">
                 <Sparkles className="h-5 w-5 text-gold" />
                 AI Daily Summary
               </CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)} className="text-gray-600 hover:text-black">
+              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)} className="text-[#5A4A2E] hover:text-[#1A1A1A]">
                 ✕
               </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <pre className="whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded-lg text-black border border-gray-200">
+            <pre className="whitespace-pre-wrap text-sm font-mono bg-[#F7F2EA] p-4 rounded-lg text-[#1A1A1A] border border-[#B89555]/30">
               {generateDailySummary()}
             </pre>
           </CardContent>
@@ -179,7 +179,7 @@ export function FoundersDecisionPanel() {
       )}
 
       {/* Natural Language Query */}
-      <Card className="bg-white border-2 border-gold/30 shadow-[0_0_15px_rgba(200,167,102,0.1)]">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_0_15px_rgba(200,167,102,0.1)]">
         <CardContent className="pt-4">
           <form onSubmit={handleQuery} className="flex gap-2">
             <div className="relative flex-1">
@@ -188,10 +188,10 @@ export function FoundersDecisionPanel() {
                 placeholder="Ask Amanda anything... (e.g., 'Who's my top broker?' or 'How can I improve revenue?')"
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
-                className="pl-10 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600"
+                className="pl-10 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
               />
             </div>
-            <Button type="submit" disabled={isQuerying} className="bg-black text-gold hover:bg-gray-900 border border-gold/30">
+            <Button type="submit" disabled={isQuerying} className="bg-[#1A1A1A] text-gold hover:bg-[#1A1A1A] border border-gold/30">
               {isQuerying ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -202,20 +202,20 @@ export function FoundersDecisionPanel() {
 
           {/* Query Result */}
           {queryResult && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="mt-4 p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
               <div className="flex items-start gap-3">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
                   <Brain className="h-4 w-4 text-gold" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm text-black">{queryResult.answer}</p>
+                  <p className="text-sm text-[#1A1A1A]">{queryResult.answer}</p>
                   {queryResult.suggestions && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {queryResult.suggestions.map((suggestion, idx) => (
                         <Button 
                           key={idx} 
                           size="sm"
-                          className="bg-white text-gold border border-gold/30 hover:bg-black hover:text-gold"
+                          className="bg-[#FDFBF7] text-gold border border-gold/30 hover:bg-[#1A1A1A] hover:text-gold"
                           onClick={() => {
                             setQueryInput(suggestion);
                             processQuery(suggestion);
@@ -235,20 +235,20 @@ export function FoundersDecisionPanel() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full bg-white/80 border-2 border-[#B89555]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-          <TabsTrigger value="overview" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+        <TabsList className="grid grid-cols-6 w-full bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <TabsTrigger value="overview" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="insights" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Lightbulb className="h-4 w-4" />
             <span className="hidden sm:inline">Insights</span>
           </TabsTrigger>
-          <TabsTrigger value="predictions" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="predictions" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <LineChart className="h-4 w-4" />
             <span className="hidden sm:inline">Predictions</span>
           </TabsTrigger>
-          <TabsTrigger value="recommendations" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="recommendations" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Target className="h-4 w-4" />
             <span className="hidden sm:inline whitespace-nowrap">Recommendations</span>
             {recommendations.filter(r => r.status === 'pending').length > 0 && (
@@ -257,7 +257,7 @@ export function FoundersDecisionPanel() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="risks" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="risks" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <AlertTriangle className="h-4 w-4" />
             <span className="hidden sm:inline">Risks</span>
             {riskAlerts.filter(a => a.status === 'new').length > 0 && (
@@ -266,7 +266,7 @@ export function FoundersDecisionPanel() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="decisions" className="flex items-center gap-2 text-gray-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="decisions" className="flex items-center gap-2 text-[#5A4A2E] data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <History className="h-4 w-4" />
             <span className="hidden sm:inline">Decisions</span>
           </TabsTrigger>

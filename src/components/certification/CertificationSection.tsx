@@ -44,10 +44,10 @@ export function CertificationSection({ className, isLocked = false }: Certificat
             <Award className="w-3 h-3 mr-1" />
             Professional Certification
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold !text-black mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold !text-[#1A1A1A] mb-4">
             Broker Certification Program
           </h2>
-          <p className="!text-black/70 max-w-2xl mx-auto">
+          <p className="!text-[#1A1A1A]/70 max-w-2xl mx-auto">
             Complete all phases to earn your official JBJ Broker Certification. 
             Each phase must be completed in order.
           </p>
@@ -69,17 +69,17 @@ export function CertificationSection({ className, isLocked = false }: Certificat
                   )}
                 </div>
                 <div>
-                  <h3 className="text-black font-semibold text-lg">
+                  <h3 className="text-[#1A1A1A] font-semibold text-lg">
                     {certified ? "Certification Complete!" : "Your Progress"}
                   </h3>
-                  <p className="text-black/60">
+                  <p className="text-[#1A1A1A]/60">
                     {overallProgress.completed} of {overallProgress.total} phases completed
                   </p>
                 </div>
               </div>
               
               <div className="flex-1 max-w-md">
-                <div className="flex justify-between text-sm text-black/60 mb-2">
+                <div className="flex justify-between text-sm text-[#1A1A1A]/60 mb-2">
                   <span>Progress</span>
                   <span>{Math.round(overallProgress.percent)}%</span>
                 </div>
@@ -96,7 +96,7 @@ export function CertificationSection({ className, isLocked = false }: Certificat
         {isLocked && (
           <div className="mb-8 p-4 bg-gold/10 border border-gold/30 rounded-xl flex items-center gap-4">
             <Lock className="w-6 h-6 text-gold flex-shrink-0" />
-            <p className="text-black/70 text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               Certification phases are visible for preview. Join the JBJ Broker Circle to start your certification journey.
             </p>
           </div>

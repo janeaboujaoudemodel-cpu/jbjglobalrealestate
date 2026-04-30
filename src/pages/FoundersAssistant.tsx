@@ -237,7 +237,7 @@ export default function FoundersAssistant() {
       
       <div className="flex flex-col h-screen">
         {/* Amanda header bar — with proper padding from parent shell */}
-        <div className="flex-shrink-0 bg-white/80 backdrop-blur-sm border-b-2 border-gold/30 px-4 py-3 mt-1">
+        <div className="flex-shrink-0 bg-[#FDFBF7]/80 backdrop-blur-sm border-b-2 border-gold/30 px-4 py-3 mt-1">
           <div className="flex items-center justify-between gap-3">
             {/* Left: Amanda identity */}
             <div className="flex items-center gap-3">

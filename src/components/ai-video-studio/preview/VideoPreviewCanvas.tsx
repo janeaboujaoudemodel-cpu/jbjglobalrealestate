@@ -55,7 +55,7 @@ function InspirationCarousel() {
             <img src={v.img} alt={v.label} className="w-full h-full object-cover" loading="lazy" />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)' }} />
             <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center" style={{ background: `${v.accent}cc` }}>
-              <Play className="w-2.5 h-2.5 text-black ml-0.5" />
+              <Play className="w-2.5 h-2.5 text-[#1A1A1A] ml-0.5" />
             </div>
             <div className="absolute bottom-0 left-0 right-0 px-2.5 py-1.5">
               <p className="text-white text-[11px] font-bold leading-tight">{v.label}</p>
@@ -161,11 +161,11 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
   if (transitionId.startsWith('fade-black')) {
     // 0→0.5: fade to black; 0.5→1: fade out from black
     const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
-    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+    return <div className="absolute inset-0 pointer-events-none bg-[#1A1A1A]" style={{ opacity }} />;
   }
   if (transitionId.startsWith('fade-white')) {
     const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
-    return <div className="absolute inset-0 pointer-events-none bg-white" style={{ opacity }} />;
+    return <div className="absolute inset-0 pointer-events-none bg-[#FDFBF7]" style={{ opacity }} />;
   }
   if (transitionId.startsWith('fade-blur')) {
     const blur = p <= 0.5 ? p * 2 * 12 : (1 - p) * 2 * 12;
@@ -176,7 +176,7 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
   // dissolve: cross-fade overlay from semi-transparent black
   if (transitionId.startsWith('dissolve')) {
     const opacity = p <= 0.5 ? p * 2 * 0.6 : (1 - p) * 2 * 0.6;
-    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+    return <div className="absolute inset-0 pointer-events-none bg-[#1A1A1A]" style={{ opacity }} />;
   }
 
   // slide-left: incoming frame slides in from right
@@ -211,13 +211,13 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
   if (transitionId === 'zoom-in') {
     const scale = 1 + p * 0.3;
     const opacity = p <= 0.5 ? p * 2 * 0.4 : (1 - p) * 2 * 0.4;
-    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
+    return <div className="absolute inset-0 pointer-events-none bg-[#1A1A1A]" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
   }
   // zoom-out: scale down
   if (transitionId === 'zoom-out') {
     const scale = 1.3 - p * 0.3;
     const opacity = p <= 0.5 ? p * 2 * 0.4 : (1 - p) * 2 * 0.4;
-    return <div className="absolute inset-0 pointer-events-none bg-black" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
+    return <div className="absolute inset-0 pointer-events-none bg-[#1A1A1A]" style={{ transform: `scale(${scale})`, opacity, transformOrigin: 'center' }} />;
   }
   // zoom-punch: quick punch zoom
   if (transitionId === 'zoom-punch') {
@@ -228,7 +228,7 @@ function TransitionOverlay({ transitionId, progress, easing }: { transitionId: s
 
   // Fallback: simple fade
   const opacity = p <= 0.5 ? p * 2 : (1 - p) * 2;
-  return <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity }} />;
+  return <div className="absolute inset-0 pointer-events-none bg-[#1A1A1A]" style={{ opacity }} />;
 }
 
 export function VideoPreviewCanvas({
@@ -455,8 +455,8 @@ export function VideoPreviewCanvas({
               onClick={() => handleAspectRatioChange(pill.ratio)}
               className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-all ${
                 aspectRatio === pill.ratio
-                  ? 'bg-amber-500 text-black border-amber-500'
-                  : 'bg-black/60 text-slate-300 border-slate-600 hover:border-amber-400'
+                  ? 'bg-amber-500 text-[#1A1A1A] border-amber-500'
+                  : 'bg-[#1A1A1A]/60 text-slate-300 border-slate-600 hover:border-amber-400'
               }`}
             >
               {pill.icon} {pill.label}
@@ -466,7 +466,7 @@ export function VideoPreviewCanvas({
 
         {/* Constrained Canvas Box */}
         <div
-          className="relative bg-black overflow-hidden shadow-2xl"
+          className="relative bg-[#1A1A1A] overflow-hidden shadow-2xl"
           style={{
             aspectRatio: cssAspectRatio,
             maxWidth: '100%',
@@ -606,7 +606,7 @@ export function VideoPreviewCanvas({
               {beautyFilter && !beautyComparisonMode && (
                 <button
                   onClick={onClearBeautyFilter}
-                  className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-black hover:bg-amber-400 transition-colors shadow-lg"
+                  className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/90 text-[#1A1A1A] hover:bg-amber-400 transition-colors shadow-lg"
                   title="Click to clear beauty filter"
                 >
                   Beauty: ON
@@ -619,7 +619,7 @@ export function VideoPreviewCanvas({
               )}
 
               {/* Time Overlay */}
-              <div className="absolute top-3 right-3 bg-black/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">
+              <div className="absolute top-3 right-3 bg-[#1A1A1A]/80 px-2 py-1 rounded text-xs font-mono text-white border border-white/10">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </div>
 
@@ -724,7 +724,7 @@ export function VideoPreviewCanvas({
 
         {/* Format badge — fades after 2s */}
         {formatBadge && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full text-xs font-bold bg-black/80 text-white border border-white/20 pointer-events-none animate-fade-in">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 px-3 py-1 rounded-full text-xs font-bold bg-[#1A1A1A]/80 text-white border border-white/20 pointer-events-none animate-fade-in">
             {formatBadge}
           </div>
         )}
@@ -770,7 +770,7 @@ export function VideoPreviewCanvas({
             </button>
             <button
               onClick={onTogglePlayback}
-              className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-black font-bold flex items-center justify-center transition-all shadow-lg"
+              className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold flex items-center justify-center transition-all shadow-lg"
             >
               {isPlaying ? (
                 <Pause className="w-5 h-5" />

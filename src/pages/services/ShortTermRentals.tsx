@@ -161,7 +161,7 @@ const ShortTermRentals = () => {
             transition={{ duration: 0.7 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#C8A766]/40 bg-white/60 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-8 border border-[#C8A766]/40 bg-[#FDFBF7]/60 backdrop-blur-md">
               <Home className="w-4 h-4 text-[#C8A766]" />
               <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">
                 Holiday Home Services
@@ -214,7 +214,7 @@ const ShortTermRentals = () => {
             <SectionHeading title="What Is Short-Term Rental?" />
             <motion.div
               variants={fadeIn}
-              className="bg-white border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm"
+              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm"
             >
               <p className="text-[#444] text-base leading-relaxed mb-6">
                 Short-term rental refers to furnished property leasing for daily, weekly,
@@ -349,7 +349,7 @@ const ShortTermRentals = () => {
             <SectionHeading title="Short-Term vs Long-Term Strategy" />
             <motion.div
               variants={fadeIn}
-              className="bg-white border border-[#C8A766]/20 rounded-2xl overflow-hidden shadow-sm"
+              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl overflow-hidden shadow-sm"
             >
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -370,7 +370,7 @@ const ShortTermRentals = () => {
                     ].map(([cat, short, long], i) => (
                       <tr
                         key={i}
-                        className={`border-b border-[#C8A766]/10 ${i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-white"}`}
+                        className={`border-b border-[#C8A766]/10 ${i % 2 === 0 ? "bg-[#FDFBF7]" : "bg-[#FDFBF7]"}`}
                       >
                         <td className="p-4 font-medium text-[#1a1a1a]">{cat}</td>
                         <td className="p-4 text-[#555]">{short}</td>
@@ -397,7 +397,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           5. WHO THIS SERVICE IS DESIGNED FOR
       ═══════════════════════════════════════════ */}
-      <section className="bg-white py-20">
+      <section className="bg-[#FDFBF7] py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -446,7 +446,7 @@ const ShortTermRentals = () => {
             <SectionHeading title="Property Eligibility Requirements" />
             <motion.div
               variants={fadeIn}
-              className="bg-white border border-[#C8A766]/20 rounded-2xl p-8 shadow-sm"
+              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 shadow-sm"
             >
               <p className="text-[#444] text-base mb-6">Properties must meet:</p>
               <ul className="space-y-3 mb-6">
@@ -474,7 +474,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           7. RISK MANAGEMENT & ASSET PROTECTION
       ═══════════════════════════════════════════ */}
-      <section className="bg-white py-20">
+      <section className="bg-[#FDFBF7] py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -525,7 +525,7 @@ const ShortTermRentals = () => {
               className="bg-gradient-to-br from-[#1a1610] via-[#1e1a14] to-[#0d0b09] border border-[#C8A766]/30 rounded-2xl p-8 md:p-10 text-center"
             >
               <BarChart3 className="w-10 h-10 text-[#C8A766] mx-auto mb-6" />
-              <p className="text-gray-600 text-base mb-6">We provide:</p>
+              <p className="text-[#5A4A2E] text-base mb-6">We provide:</p>
               <ul className="space-y-3 text-left max-w-md mx-auto mb-8">
                 {[
                   "Estimated occupancy range",
@@ -534,7 +534,7 @@ const ShortTermRentals = () => {
                   "Expense ratio estimation",
                   "Net yield projection",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-600">
+                  <li key={i} className="flex items-start gap-3 text-[#5A4A2E]">
                     <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
                     <span className="text-sm">{item}</span>
                   </li>
@@ -559,7 +559,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           9. OWNER PERFORMANCE DASHBOARD
       ═══════════════════════════════════════════ */}
-      <section className="bg-white py-20">
+      <section className="bg-[#FDFBF7] py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -628,7 +628,7 @@ const ShortTermRentals = () => {
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8943F] flex items-center justify-center shrink-0 z-10 shadow-sm">
                       <span className="text-white font-bold text-sm">{i + 1}</span>
                     </div>
-                    <div className="flex-1 bg-white border border-[#C8A766]/20 rounded-xl px-6 py-4 shadow-sm">
+                    <div className="flex-1 bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl px-6 py-4 shadow-sm">
                       <span className="text-[#1a1a1a] font-medium text-sm">{step}</span>
                     </div>
                   </motion.div>
@@ -642,7 +642,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           11. OWNER BENEFITS
       ═══════════════════════════════════════════ */}
-      <section className="bg-white py-20">
+      <section className="bg-[#FDFBF7] py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -693,7 +693,7 @@ const ShortTermRentals = () => {
             <motion.form
               variants={fadeIn}
               onSubmit={handleSubmit}
-              className="bg-white border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm space-y-5"
+              className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-2xl p-8 md:p-10 shadow-sm space-y-5"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2">
@@ -841,7 +841,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           13. CLOSING STATEMENT
       ═══════════════════════════════════════════ */}
-      <section className="bg-white py-20">
+      <section className="bg-[#FDFBF7] py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"

@@ -63,7 +63,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
   };
 
   return (
-    <Card className="bg-zinc-900 border-gray-800 w-80">
+    <Card className="bg-zinc-900 border-[#1A1A1A] w-80">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-white text-lg flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-gold" />
@@ -86,16 +86,16 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
         {settings.enabled && (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-4 bg-zinc-800">
-              <TabsTrigger value="skin" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
+              <TabsTrigger value="skin" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A]">
                 <User className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="face" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
+              <TabsTrigger value="face" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A]">
                 <Wand2 className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="makeup" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
+              <TabsTrigger value="makeup" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A]">
                 <Palette className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="hair" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
+              <TabsTrigger value="hair" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A]">
                 <Shirt className="h-3 w-3" />
               </TabsTrigger>
             </TabsList>
@@ -233,7 +233,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`p-2 rounded-lg text-xs text-center border transition-all ${
                         settings.makeupPreset === preset.id 
                           ? 'border-gold bg-gold/20 text-white' 
-                          : 'border-gray-700 hover:border-gray-600 text-white/85'
+                          : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-white/85'
                       }`}
                     >
                       {preset.name}
@@ -252,7 +252,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.lipColor === color.id 
                           ? 'border-gold scale-110' 
-                          : 'border-gray-600 hover:border-gray-400'
+                          : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
                       title={color.name}
@@ -274,7 +274,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.hairColor === color.id 
                           ? 'border-gold scale-110' 
-                          : 'border-gray-600 hover:border-gray-400'
+                          : 'border-[#1A1A1A] hover:border-[#B89555]/30'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
                       title={color.name}
@@ -284,7 +284,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               </div>
 
               {isOwnerOrBroker && (
-                <div className="pt-4 border-t border-gray-700">
+                <div className="pt-4 border-t border-[#1A1A1A]">
                   <p className="text-xs text-gold mb-2">✨ Owner/Broker Exclusive</p>
                   <Button variant="outline" className="w-full border-gold/50 text-gold hover:bg-gold/10">
                     <Wand2 className="h-4 w-4 mr-2" />

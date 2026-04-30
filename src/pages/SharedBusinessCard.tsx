@@ -432,7 +432,7 @@ export default function SharedBusinessCard() {
     return (
       <div className="min-h-screen flex items-center justify-center px-6" style={{ background: "linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)" }}>
         <div className="text-center space-y-4 max-w-sm">
-          <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto">
+          <div className="w-16 h-16 rounded-full bg-[#FDFBF7]/5 flex items-center justify-center mx-auto">
             <CreditCard size={28} className="text-white/85" />
           </div>
           <p className="text-white font-semibold text-lg">Card Not Found</p>
@@ -460,7 +460,7 @@ export default function SharedBusinessCard() {
           </div>
           <span className="text-white/70 text-sm font-medium">Digital Business Card</span>
           {/* Subtle view count badge */}
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/85 text-[10px]">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FDFBF7]/5 border border-white/10 text-white/85 text-[10px]">
             <Eye size={10} />
             {viewCount}
           </span>
@@ -492,7 +492,7 @@ export default function SharedBusinessCard() {
           <a
             href={`tel:${cardData.phone}`}
             onClick={() => handleLinkClick("phone", cardData.phone)}
-            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+            className="flex items-center gap-3 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
           >
             <span className="text-base">📞</span>
             <span>{cardData.phone}</span>
@@ -502,7 +502,7 @@ export default function SharedBusinessCard() {
           <a
             href={`mailto:${cardData.email}`}
             onClick={() => handleLinkClick("email", cardData.email)}
-            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+            className="flex items-center gap-3 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
           >
             <span className="text-base">✉️</span>
             <span>{cardData.email}</span>
@@ -514,14 +514,14 @@ export default function SharedBusinessCard() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => handleLinkClick("website", cardData.website)}
-            className="flex items-center gap-3 bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
+            className="flex items-center gap-3 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 transition-colors rounded-xl px-4 py-3 text-white/80 text-sm"
           >
             <span className="text-base">🌐</span>
             <span>{cardData.website}</span>
           </a>
         )}
         {cardData.address && (
-          <div className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 text-white/90 text-sm">
+          <div className="flex items-center gap-3 bg-[#FDFBF7]/5 rounded-xl px-4 py-3 text-white/90 text-sm">
             <span className="text-base">📍</span>
             <span>{cardData.address}</span>
           </div>

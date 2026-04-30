@@ -42,7 +42,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
 };
 
 const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' };
+  const colors = CATEGORY_COLORS[category] || { bg: 'bg-[#F7F2EA]', text: 'text-[#5A4A2E]', border: 'border-[#B89555]/30' };
   return (
     <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
       {category}
@@ -161,78 +161,78 @@ const News = () => {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Off-plan vs Secondary */}
-        <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+        <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
           <div className="flex items-center gap-2 mb-1">
             <Building2 className="w-4 h-4 text-gold" />
-            <span className="text-xs font-semibold text-black uppercase tracking-wide">Transaction Type</span>
+            <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Transaction Type</span>
           </div>
-          <span className="text-[10px] text-gray-600">{dateLabel}</span>
+          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-700">Off-plan</span>
+              <span className="text-sm text-[#5A4A2E]">Off-plan</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-black">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
+                <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{offPlanPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-[#EFE6D6] rounded-full h-2">
               <div className="bg-gold rounded-full h-2" style={{ width: `${offPlanPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-700">Secondary</span>
+              <span className="text-sm text-[#5A4A2E]">Secondary</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-black">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
-                <span className="text-xs text-gray-600 font-medium bg-gray-100 px-1.5 py-0.5 rounded">{secondaryPct}%</span>
+                <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
+                <span className="text-xs text-[#5A4A2E] font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{secondaryPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-[#EFE6D6] rounded-full h-2">
               <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${secondaryPct}%` }} />
             </div>
           </div>
         </div>
 
         {/* Cash vs Mortgage */}
-        <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+        <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
           <div className="flex items-center gap-2 mb-1">
             <Banknote className="w-4 h-4 text-gold" />
-            <span className="text-xs font-semibold text-black uppercase tracking-wide">Payment Method</span>
+            <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Payment Method</span>
           </div>
-          <span className="text-[10px] text-gray-600">{dateLabel}</span>
+          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-700">Cash</span>
+              <span className="text-sm text-[#5A4A2E]">Cash</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-black">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
+                <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{cashPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-[#EFE6D6] rounded-full h-2">
               <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${cashPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-700">Mortgage</span>
+              <span className="text-sm text-[#5A4A2E]">Mortgage</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-black">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
-                <span className="text-xs text-gray-600 font-medium bg-gray-100 px-1.5 py-0.5 rounded">{mortgagePct}%</span>
+                <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
+                <span className="text-xs text-[#5A4A2E] font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{mortgagePct}%</span>
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-[#EFE6D6] rounded-full h-2">
               <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${mortgagePct}%` }} />
             </div>
           </div>
         </div>
 
         {/* Gift Transactions */}
-        <div className="bg-white/60 rounded-xl p-4 border border-gold/10">
+        <div className="bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/10">
           <div className="flex items-center gap-2 mb-1">
             <Gift className="w-4 h-4 text-gold" />
-            <span className="text-xs font-semibold text-black uppercase tracking-wide">Gift Transactions</span>
+            <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Gift Transactions</span>
           </div>
-          <span className="text-[10px] text-gray-600">{dateLabel}</span>
+          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
           <div className="flex flex-col items-center justify-center h-[calc(100%-2.5rem)] mt-2">
             <p className="text-4xl font-bold text-gold">~{isDaily ? gifts : gifts.toLocaleString()}</p>
-            <p className="text-sm text-gray-600 mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
-            <p className="text-xs text-gray-600 mt-2">{giftPct}% of total volume</p>
+            <p className="text-sm text-[#5A4A2E] mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
+            <p className="text-xs text-[#5A4A2E] mt-2">{giftPct}% of total volume</p>
           </div>
         </div>
       </div>
@@ -245,17 +245,17 @@ const News = () => {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gold/20">
-            <th className="text-left py-3 px-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
-            <th className="text-left py-3 px-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">Area</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">Transactions</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">YoY Change</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">#</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">Area</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">Transactions</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">YoY Change</th>
           </tr>
         </thead>
         <tbody>
           {areas.map((area, i) => (
-            <tr key={area.area} className="border-b border-gray-100 last:border-0 hover:bg-champagne-light/30 transition-colors">
-              <td className="py-3 px-2 text-gray-600 font-medium">{i + 1}</td>
-              <td className="py-3 px-2 text-black font-medium">{area.area}</td>
+            <tr key={area.area} className="border-b border-[#B89555]/30 last:border-0 hover:bg-champagne-light/30 transition-colors">
+              <td className="py-3 px-2 text-[#5A4A2E] font-medium">{i + 1}</td>
+              <td className="py-3 px-2 text-[#1A1A1A] font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-gold font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
                 <span className="text-emerald-600 font-medium text-xs bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -285,7 +285,7 @@ const News = () => {
           </Link>
           
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-[hsl(43,45%,54%)]/30 bg-white/50 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 border border-[hsl(43,45%,54%)]/30 bg-[#FDFBF7]/50 backdrop-blur-sm">
               <Landmark className="w-4 h-4 text-[hsl(43,45%,54%)]" />
               <span className="text-[hsl(43,45%,44%)] font-semibold text-xs uppercase tracking-[0.2em]">
                 Government &amp; Market Sources
@@ -318,7 +318,7 @@ const News = () => {
                   className={`px-5 py-2.5 text-sm whitespace-nowrap transition-all duration-300 rounded-full font-medium ${
                     (category === "All" && !selectedCategory) || selectedCategory === category
                       ? "bg-[hsl(43,45%,54%)] text-white shadow-md"
-                      : "bg-white/70 text-[hsl(0,0%,30%)] border border-[hsl(43,45%,54%)]/15 hover:border-[hsl(43,45%,54%)]/40"
+                      : "bg-[#FDFBF7]/70 text-[hsl(0,0%,30%)] border border-[hsl(43,45%,54%)]/15 hover:border-[hsl(43,45%,54%)]/40"
                   }`}
                 >
                   {category}
@@ -344,7 +344,7 @@ const News = () => {
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6">
                 <article 
-                  className="group relative bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-lg"
+                  className="group relative bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer hover:shadow-lg"
                   onClick={() => navigate(`/news/${filteredNews[0].id}`)}
                 >
                   <div className="grid md:grid-cols-2 gap-0">
@@ -363,7 +363,7 @@ const News = () => {
                               fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3';
                               const cat = filteredNews[0]?.category || 'News';
                               const src = filteredNews[0]?.source || '';
-                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gray-800 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-xs">${src}</span>`;
+                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#5A4A2E] text-xs">${src}</span>`;
                               parent.insertBefore(fallback, e.currentTarget);
                             }
                           }}
@@ -421,7 +421,7 @@ const News = () => {
               <article 
                 key={article.id}
                 onClick={() => navigate(`/news/${article.id}`)}
-                className="group bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+                className="group bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-xl overflow-hidden transition-all duration-500 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               >
                 <div className="aspect-video relative overflow-hidden">
                   {article.image ? (
@@ -438,7 +438,7 @@ const News = () => {
                           fallback.className = 'w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4';
                           const cat = article.category || 'News';
                           const src = article.source || '';
-                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gray-800 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-600 text-[10px]">${src}</span>`;
+                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#5A4A2E] text-[10px]">${src}</span>`;
                           parent.insertBefore(fallback, e.currentTarget);
                         }
                       }}
@@ -463,7 +463,7 @@ const News = () => {
                       <Calendar className="w-3 h-3" />
                       {new Date(article.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
-                    <span className="text-gray-600">•</span>
+                    <span className="text-[#5A4A2E]">•</span>
                     <span className="flex items-center gap-1">
                       <Landmark className="w-3 h-3" />
                       {article.source}
@@ -505,17 +505,17 @@ const News = () => {
           {/* 2026 YTD Market Stats with YTD / Daily Toggle */}
           <div className="mt-16">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10">
                 <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                      <TrendingUp className="w-6 h-6 text-black" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-black">
+                      <h3 className="text-xl font-bold text-[#1A1A1A]">
                         Key Market Statistics — 2026
                       </h3>
-                      <p className="text-xs text-gray-600 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
+                      <p className="text-xs text-[#5A4A2E] mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
@@ -525,10 +525,10 @@ const News = () => {
 
                 <Tabs defaultValue="ytd" className="w-full">
                   <TabsList className="mb-6 bg-champagne-light/50 border border-gold/20">
-                    <TabsTrigger value="ytd" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs font-semibold">
+                    <TabsTrigger value="ytd" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-xs font-semibold">
                       YTD 2026
                     </TabsTrigger>
-                    <TabsTrigger value="daily" className="data-[state=active]:bg-gold data-[state=active]:text-black text-xs font-semibold">
+                    <TabsTrigger value="daily" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-xs font-semibold">
                       Today's Average
                     </TabsTrigger>
                   </TabsList>
@@ -538,24 +538,24 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.value}</p>
-                        <p className="text-sm text-gray-700">YTD Transaction Value</p>
+                        <p className="text-sm text-[#5A4A2E]">YTD Transaction Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.transactions.toLocaleString()}+</p>
-                        <p className="text-sm text-gray-700">YTD Transactions</p>
+                        <p className="text-sm text-[#5A4A2E]">YTD Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.growth}</p>
-                        <p className="text-sm text-gray-700">YoY Volume Growth</p>
+                        <p className="text-sm text-[#5A4A2E]">YoY Volume Growth</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-gray-700">Top Performing Area</p>
+                        <p className="text-sm text-[#5A4A2E]">Top Performing Area</p>
                       </div>
                     </div>
 
                     <div className="border-t border-gold/20 pt-6">
-                      <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <h4 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wider mb-4 flex items-center gap-2">
                         <Landmark className="w-4 h-4 text-gold" />
                         DLD Transaction Breakdown
                       </h4>
@@ -575,24 +575,24 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daily2026.valuePerDay}</p>
-                        <p className="text-sm text-gray-700">Avg Daily Value</p>
+                        <p className="text-sm text-[#5A4A2E]">Avg Daily Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">~{daily2026.transactions}</p>
-                        <p className="text-sm text-gray-700">Avg Daily Transactions</p>
+                        <p className="text-sm text-[#5A4A2E]">Avg Daily Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daysElapsed2026}</p>
-                        <p className="text-sm text-gray-700">Days Elapsed in 2026</p>
+                        <p className="text-sm text-[#5A4A2E]">Days Elapsed in 2026</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-gray-700">Top Performing Area</p>
+                        <p className="text-sm text-[#5A4A2E]">Top Performing Area</p>
                       </div>
                     </div>
 
                     <div className="border-t border-gold/20 pt-6">
-                      <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <h4 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wider mb-4 flex items-center gap-2">
                         <Landmark className="w-4 h-4 text-gold" />
                         Daily Average Breakdown
                       </h4>
@@ -609,7 +609,7 @@ const News = () => {
                   </TabsContent>
                 </Tabs>
 
-                <p className="text-xs text-gray-600 mt-6 text-center">
+                <p className="text-xs text-[#5A4A2E] mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}
                 </p>
               </div>
@@ -619,16 +619,16 @@ const News = () => {
           {/* Top Areas Performance Table - 2026 */}
           <div className="mt-6">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-black" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black">
+                    <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-gray-600">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#5A4A2E]">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2026} yearLabel="2026" />
@@ -639,31 +639,31 @@ const News = () => {
           {/* Top Buyer Nationalities */}
           <div className="mt-6">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                    <Globe className="w-5 h-5 text-black" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                    <Globe className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black">
+                    <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top Buyer Nationalities
                     </h3>
-                    <p className="text-xs text-gray-600">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#5A4A2E]">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   {topNationalities.map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
-                      <span className="text-gray-600 font-medium text-sm w-5 text-right">{i + 1}</span>
+                      <span className="text-[#5A4A2E] font-medium text-sm w-5 text-right">{i + 1}</span>
                       <span className="text-lg">{nat.flag}</span>
-                      <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
+                      <span className="text-sm font-medium text-[#1A1A1A] flex-1">{nat.country}</span>
                       <div className="flex-1 max-w-[200px]">
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-[#EFE6D6] rounded-full h-2">
                           <div className="bg-gold rounded-full h-2 transition-all" style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
                       </div>
                       <span className="text-sm font-bold text-gold w-14 text-right">{nat.percentage}%</span>
-                      <span className="text-xs text-gray-600 w-16 text-right">{nat.transactions.toLocaleString()}</span>
+                      <span className="text-xs text-[#5A4A2E] w-16 text-right">{nat.transactions.toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -673,7 +673,7 @@ const News = () => {
 
           {/* Premium Separator */}
           <div className="mt-8 text-center">
-            <p className="text-gray-600 text-sm italic tracking-wide">
+            <p className="text-[#5A4A2E] text-sm italic tracking-wide">
               Looking back at last year's performance?
             </p>
           </div>
@@ -681,16 +681,16 @@ const News = () => {
           {/* 2025 Full Year Recap Card — Unified UI */}
           <div className="mt-4">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10 opacity-90">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10 opacity-90">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-black" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black">
+                    <h3 className="text-lg font-bold text-[#1A1A1A]">
                       2025 Full Year Recap
                     </h3>
-                    <p className="text-xs text-gray-600">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#5A4A2E]">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
 
@@ -698,25 +698,25 @@ const News = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">AED 761B</p>
-                    <p className="text-sm text-gray-700">Total Transaction Value</p>
+                    <p className="text-sm text-[#5A4A2E]">Total Transaction Value</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">226,000+</p>
-                    <p className="text-sm text-gray-700">Total Transactions</p>
+                    <p className="text-sm text-[#5A4A2E]">Total Transactions</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">+36%</p>
-                    <p className="text-sm text-gray-700">YoY Growth vs 2024</p>
+                    <p className="text-sm text-[#5A4A2E]">YoY Growth vs 2024</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">Record Year</p>
-                    <p className="text-sm text-gray-700">Highest Ever Recorded</p>
+                    <p className="text-sm text-[#5A4A2E]">Highest Ever Recorded</p>
                   </div>
                 </div>
 
                 {/* 2025 Breakdown — Same 3-card UI as 2026 */}
                 <div className="border-t border-gold/20 pt-6">
-                  <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h4 className="text-sm font-semibold text-[#1A1A1A] uppercase tracking-wider mb-4 flex items-center gap-2">
                     <Landmark className="w-4 h-4 text-gold" />
                     2025 Transaction Breakdown
                   </h4>
@@ -730,7 +730,7 @@ const News = () => {
                   />
                 </div>
 
-                <p className="text-xs text-gray-600 mt-6 text-center">
+                <p className="text-xs text-[#5A4A2E] mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Full Year 2025 Closed Figures
                 </p>
               </div>
@@ -740,16 +740,16 @@ const News = () => {
           {/* Top 10 Areas 2025 */}
           <div className="mt-6">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8 opacity-90">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8 opacity-90">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-black" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black">
+                    <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-gray-600">Full Year 2025 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#5A4A2E]">Full Year 2025 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2025} yearLabel="2025" />
@@ -760,9 +760,9 @@ const News = () => {
           {/* News Reporter Info - Victoria Hayes */}
           <div className="mt-8">
             <div className="p-3 md:p-4">
-              <div className="bg-white/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
+              <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-black/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#1A1A1A]/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
                     <img 
                       src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face" 
                       alt="Victoria Hayes - News Reporter"
@@ -770,9 +770,9 @@ const News = () => {
                     />
                   </div>
                   <div>
-                    <h3 className="text-black font-semibold text-lg mb-1">Victoria Hayes</h3>
+                    <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">Victoria Hayes</h3>
                     <p className="text-gold text-sm mb-3">Senior News Reporter, JBJ Global Real Estate</p>
-                    <p className="text-gray-700 text-sm mb-3">
+                    <p className="text-[#5A4A2E] text-sm mb-3">
                       Victoria curates the latest real estate news from official UAE government sources 
                       including Dubai Media Office, Dubai Land Department, Abu Dhabi Media Office, and Ministry of Economy. 
                       With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.

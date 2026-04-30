@@ -174,7 +174,7 @@ const PartnerVisaServices = () => {
               <div className="grid md:grid-cols-4 gap-6">
                 {PROCESS_STEPS.map((item) => (
                   <div key={item.step} className="text-center">
-                    <div className="w-12 h-12 bg-gold text-black rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-gold text-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       {item.step}
                     </div>
                     <h3 className="font-semibold mb-2">{item.title}</h3>
@@ -252,30 +252,30 @@ const PartnerVisaServices = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-[#FDFBF7]">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
-              <Card className="border-gray-200 bg-white shadow-sm">
+              <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-gold" />
                   </div>
-                  <CardTitle className="text-2xl text-black">Request Partner Introduction</CardTitle>
+                  <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <p className="text-center text-gray-600">
+                  <p className="text-center text-[#5A4A2E]">
                     Interested in UAE residency through property investment? We'll connect you with a 
                     licensed immigration consultant who can assess your eligibility and guide you through the process.
                   </p>
 
                   {/* Consent Checkbox */}
-                  <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex items-start gap-3 p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
                     <Checkbox 
                       id="visa-consent" 
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
                     />
-                    <Label htmlFor="visa-consent" className="text-sm text-gray-600 cursor-pointer">
+                    <Label htmlFor="visa-consent" className="text-sm text-[#5A4A2E] cursor-pointer">
                       I understand this service is provided by an independent licensed immigration consultant. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide visa services directly.
                     </Label>

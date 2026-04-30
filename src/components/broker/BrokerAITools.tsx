@@ -171,7 +171,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
       </div>
 
       {/* Search Section */}
-      <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
+      <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Search className="w-5 h-5 text-gold" />
           Select Properties to Compare
@@ -182,7 +182,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by project name..."
-            className="bg-zinc-800 border-gray-700 text-white"
+            className="bg-zinc-800 border-[#1A1A1A] text-white"
           />
           {isSearching && (
             <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gold" />
@@ -191,12 +191,12 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
 
         {/* Search Results */}
         {searchResults.length > 0 && (
-          <div className="mt-4 border border-gray-700 rounded-lg overflow-hidden">
+          <div className="mt-4 border border-[#1A1A1A] rounded-lg overflow-hidden">
             {searchResults.map((project) => (
               <button
                 key={project.id}
                 onClick={() => addProject(project)}
-                className="w-full flex items-center justify-between p-4 hover:bg-gray-800 transition-colors border-b border-gray-700 last:border-0 text-left"
+                className="w-full flex items-center justify-between p-4 hover:bg-[#1A1A1A] transition-colors border-b border-[#1A1A1A] last:border-0 text-left"
               >
                 <div>
                   <p className="text-white font-medium">{project.name}</p>
@@ -216,7 +216,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
 
       {/* Selected Projects */}
       {selectedProjects.length > 0 && (
-        <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
+        <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <FileSpreadsheet className="w-5 h-5 text-gold" />
             Properties to Compare ({selectedProjects.length}/3)
@@ -228,11 +228,11 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                 key={project.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="relative bg-zinc-800/50 border border-gray-700 rounded-lg p-4"
+                className="relative bg-zinc-800/50 border border-[#1A1A1A] rounded-lg p-4"
               >
                 <button
                   onClick={() => removeProject(project.id)}
-                  className="absolute top-2 right-2 p-1 hover:bg-gray-700 rounded transition-colors"
+                  className="absolute top-2 right-2 p-1 hover:bg-[#1A1A1A] rounded transition-colors"
                 >
                   <X className="w-4 h-4 text-white/70" />
                 </button>
@@ -250,7 +250,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
 
       {/* Recommendation Type */}
       {selectedProjects.length >= 2 && (
-        <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
+        <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Bot className="w-5 h-5 text-gold" />
             Recommendation Type
@@ -262,7 +262,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
             className="space-y-3"
           >
             <label className={`flex items-start gap-3 cursor-pointer rounded-xl border-2 p-4 transition-all ${
-              recommendationType === "ai" ? "border-purple-500 bg-purple-500/10" : "border-gray-700 hover:border-gray-600"
+              recommendationType === "ai" ? "border-purple-500 bg-purple-500/10" : "border-[#1A1A1A] hover:border-[#1A1A1A]"
             }`}>
               <RadioGroupItem value="ai" className="mt-1" />
               <div>
@@ -278,7 +278,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
             </label>
 
             <label className={`flex items-start gap-3 cursor-pointer rounded-xl border-2 p-4 transition-all ${
-              recommendationType === "manual" ? "border-gold bg-gold/10" : "border-gray-700 hover:border-gray-600"
+              recommendationType === "manual" ? "border-gold bg-gold/10" : "border-[#1A1A1A] hover:border-[#1A1A1A]"
             }`}>
               <RadioGroupItem value="manual" className="mt-1" />
               <div>

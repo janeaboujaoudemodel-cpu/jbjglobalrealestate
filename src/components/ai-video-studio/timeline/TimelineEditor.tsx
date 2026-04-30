@@ -72,7 +72,7 @@ function ToolBtn({
         size="sm"
         variant={active ? 'default' : 'ghost'}
         onClick={onClick}
-        className={active ? 'bg-gold text-black' : 'text-slate-400'}
+        className={active ? 'bg-gold text-[#1A1A1A]' : 'text-slate-400'}
       >
         {children}
       </Button>
@@ -520,8 +520,8 @@ export function TimelineEditor({
 
                             {selectedClipIds.includes(clip.id) && !isTransition && (
                               <>
-                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
-                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/30 cursor-ew-resize hover:bg-gold" />
+                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-gold" />
+                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-[#FDFBF7]/30 cursor-ew-resize hover:bg-gold" />
                               </>
                             )}
                           </div>

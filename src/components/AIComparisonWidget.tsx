@@ -45,14 +45,14 @@ const AIComparisonWidget = () => {
               <span className="text-xs font-medium uppercase tracking-wider" style={{ color: '#6d28d9' }}>AI Powered</span>
             </div>
             <h3 
-              className="text-black text-2xl md:text-3xl font-bold mb-2"
+              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-2"
             >
               AI Property Comparison
             </h3>
-            <p className="text-gray-600 max-w-md">
+            <p className="text-[#5A4A2E] max-w-md">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <p className="text-gray-600 text-sm mt-2">
+            <p className="text-[#5A4A2E] text-sm mt-2">
               Powered by JBJ Global Real Estate
             </p>
           </div>
@@ -66,22 +66,22 @@ const AIComparisonWidget = () => {
           {features.map((feature, i) => (
             <div 
               key={i}
-              className="flex items-center gap-4 p-4 bg-white/80 border border-gold/20 rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-4 bg-[#FDFBF7]/80 border border-gold/20 rounded-xl shadow-sm"
             >
               <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
                 <feature.icon className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <p className="text-black font-medium text-sm">{feature.label}</p>
-                <p className="text-gray-600 text-xs">{feature.description}</p>
+                <p className="text-[#1A1A1A] font-medium text-sm">{feature.label}</p>
+                <p className="text-[#5A4A2E] text-xs">{feature.description}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Sample comparison preview */}
-        <div className="bg-gray-100 border border-gold/20 rounded-xl p-4 mb-6">
-          <div className="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
+        <div className="bg-[#F7F2EA] border border-gold/20 rounded-xl p-4 mb-6">
+          <div className="grid grid-cols-3 gap-2 text-xs text-[#5A4A2E] mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
             <span className="text-right">Yield Est.</span>
@@ -91,9 +91,9 @@ const AIComparisonWidget = () => {
             { name: "Sobha Verde", price: "AED 2,280", roi: "7.2%" },
             { name: "Damac Lagoons", price: "AED 1,050", roi: "5.6%" },
           ].map((item, i) => (
-            <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-gray-200 text-sm">
-              <span className="text-black font-medium">{item.name}</span>
-              <span className="text-center text-gray-600">{item.price}</span>
+            <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-[#B89555]/30 text-sm">
+              <span className="text-[#1A1A1A] font-medium">{item.name}</span>
+              <span className="text-center text-[#5A4A2E]">{item.price}</span>
               <span className="text-right text-green-600 font-medium">{item.roi}</span>
             </div>
           ))}
@@ -117,10 +117,10 @@ const AIComparisonWidget = () => {
             <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
             <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
             <span className="relative flex items-center justify-center gap-2">
-              <BarChart3 className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-              <span className="text-black group-hover:text-gold transition-colors">Start</span>
-              <span className="text-gold group-hover:text-black transition-colors">Comparing</span>
-              <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+              <BarChart3 className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+              <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Start</span>
+              <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Comparing</span>
+              <ArrowUpRight className="w-5 h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
             </span>
           </button>
         </Link>

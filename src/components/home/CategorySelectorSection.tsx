@@ -66,14 +66,14 @@ export default function CategorySelectorSection() {
   return (
     <section
       aria-label="Choose your account type"
-      className="relative w-full bg-white py-16 px-4 sm:px-6 lg:px-8"
+      className="relative w-full bg-[#FDFBF7] py-16 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">
             Get started in 30 seconds
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-black tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">
             Tell us who you are
           </h2>
           <p className="mt-3 text-neutral-600 max-w-2xl mx-auto">
@@ -95,18 +95,18 @@ export default function CategorySelectorSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group relative text-left bg-white border border-neutral-200 rounded-2xl p-6 hover:border-black hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                className="group relative text-left bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
               >
                 <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-black transition-colors">
-                    <Icon className="w-6 h-6 text-black group-hover:text-white transition-colors" />
+                  <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">
+                    <Icon className="w-6 h-6 text-[#1A1A1A] group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-xs uppercase tracking-wider text-neutral-400 group-hover:text-black transition-colors">
+                  <span className="text-xs uppercase tracking-wider text-neutral-400 group-hover:text-[#1A1A1A] transition-colors">
                     {cat.tagline}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-black mb-2">{cat.label}</h3>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{cat.label}</h3>
                 <p className="text-sm text-neutral-600 mb-5 leading-relaxed">
                   {cat.description}
                 </p>
@@ -114,15 +114,15 @@ export default function CategorySelectorSection() {
                 <ul className="space-y-2 mb-6">
                   {cat.bullets.map((b) => (
                     <li key={b} className="flex items-center gap-2 text-sm text-neutral-700">
-                      <CheckCircle2 className="w-4 h-4 text-black flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
 
                 <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
-                  <span className="text-sm font-semibold text-black">Continue</span>
-                  <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
+                  <span className="text-sm font-semibold text-[#1A1A1A]">Continue</span>
+                  <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform" />
                 </div>
               </motion.button>
             );

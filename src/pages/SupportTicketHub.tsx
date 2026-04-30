@@ -161,7 +161,7 @@ const SupportTicketHub = () => {
   const isSomeSelected = selectedTicketIds.size > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-[#1A1A1A]">
       {/* Header */}
       <div className="border-b border-gold/20 bg-gradient-to-b from-zinc-900 to-black">
         <div className="max-w-[1600px] mx-auto px-6 py-6">
@@ -227,18 +227,18 @@ const SupportTicketHub = () => {
           {/* Filters */}
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
               <input
                 type="text"
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-[#5A4A2E] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-700" />
+              <Filter className="w-4 h-4 text-[#5A4A2E]" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
@@ -298,7 +298,7 @@ const SupportTicketHub = () => {
                   </SelectItem>
                   <SelectItem value="low">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-gray-500" />
+                      <span className="w-2 h-2 rounded-full bg-[#B89555]" />
                       <span className="text-white/70">Low</span>
                     </span>
                   </SelectItem>
@@ -424,7 +424,7 @@ const SupportTicketHub = () => {
                                 ? "bg-gold/15 border-l-4 border-l-gold"
                                 : isSelected
                                 ? "bg-gold/10"
-                                : "hover:bg-gray-800/50"
+                                : "hover:bg-[#1A1A1A]/50"
                             )}
                           >
                             <TableCell onClick={(e) => e.stopPropagation()} className="px-2">
@@ -494,7 +494,7 @@ const SupportTicketHub = () => {
                 </div>
               ) : (
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
-                  <Ticket className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <Ticket className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
                   <p className="text-white/70 font-medium">No tickets found</p>
                   <p className="text-white/90 text-sm mt-1">
                     Try adjusting your filters or check back later
@@ -524,7 +524,7 @@ const SupportTicketHub = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-zinc-800 border-gray-700 text-white hover:bg-gray-700">
+            <AlertDialogCancel className="bg-zinc-800 border-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

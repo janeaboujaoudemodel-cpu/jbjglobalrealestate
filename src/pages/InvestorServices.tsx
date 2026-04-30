@@ -128,14 +128,14 @@ const InvestorServices = () => {
         </button>
         <button
           onClick={handleCallClick}
-          className="w-12 h-12 bg-gold hover:bg-gold/90 rounded-full flex items-center justify-center text-black shadow-lg transition-all hover:scale-110"
+          className="w-12 h-12 bg-gold hover:bg-gold/90 rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110"
           aria-label="Call"
         >
           <Phone className="w-5 h-5" />
         </button>
         <Link
           to="/contact"
-          className="w-12 h-12 bg-gradient-to-br from-champagne-light to-champagne-dark hover:from-champagne hover:to-champagne-light rounded-full flex items-center justify-center text-black shadow-lg transition-all hover:scale-110 border border-gold/30"
+          className="w-12 h-12 bg-gradient-to-br from-champagne-light to-champagne-dark hover:from-champagne hover:to-champagne-light rounded-full flex items-center justify-center text-[#1A1A1A] shadow-lg transition-all hover:scale-110 border border-gold/30"
           aria-label="Contact Us"
         >
           <ArrowRight className="w-5 h-5" />
@@ -153,14 +153,14 @@ const InvestorServices = () => {
         </button>
         <button
           onClick={handleCallClick}
-          className="flex-1 h-11 bg-gold hover:bg-gold/90 rounded-lg flex items-center justify-center gap-2 text-black font-medium text-sm"
+          className="flex-1 h-11 bg-gold hover:bg-gold/90 rounded-lg flex items-center justify-center gap-2 text-[#1A1A1A] font-medium text-sm"
         >
           <Phone className="w-4 h-4" />
           Call
         </button>
         <Link
           to="/contact"
-          className="flex-1 h-11 bg-black hover:bg-black/90 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
+          className="flex-1 h-11 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 rounded-lg flex items-center justify-center gap-2 text-white font-medium text-sm"
         >
           Contact
           <ArrowRight className="w-4 h-4" />
@@ -182,7 +182,7 @@ const InvestorServices = () => {
             >
               <motion.div variants={fadeInUp} className="flex items-center justify-center gap-2 mb-5">
                 <div className="h-px w-10 bg-gold/60" />
-                <span className="px-4 py-1.5 bg-gradient-to-r from-champagne-light to-champagne-dark border border-gold/40 rounded-full text-black text-xs font-semibold tracking-wider uppercase">
+                <span className="px-4 py-1.5 bg-gradient-to-r from-champagne-light to-champagne-dark border border-gold/40 rounded-full text-[#1A1A1A] text-xs font-semibold tracking-wider uppercase">
                   Investor Advisory
                 </span>
                 <div className="h-px w-10 bg-gold/60" />
@@ -219,7 +219,7 @@ const InvestorServices = () => {
                   <Phone className="w-4 h-4" />
                   Call Now
                 </Button>
-                <Button variant="outline" className="border-gray-700 text-white/85 hover:bg-gray-800 px-6 h-11 rounded-lg gap-2" asChild>
+                <Button variant="outline" className="border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A] px-6 h-11 rounded-lg gap-2" asChild>
                   <Link to="/contact">
                     Book Consultation
                     <ArrowRight className="w-4 h-4" />
@@ -231,7 +231,7 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ OVERVIEW + PHILOSOPHY (merged, tighter) ═══ */}
-        <section className="py-10 md:py-14 bg-black">
+        <section className="py-10 md:py-14 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div
@@ -241,12 +241,12 @@ const InvestorServices = () => {
                 variants={staggerContainer}
                 className="max-w-5xl mx-auto"
               >
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   Investor Overview
                 </motion.h2>
                 
                 <motion.div variants={fadeInUp} className="jj-card-inner p-6 md:p-8 mb-8">
-                  <div className="space-y-4 text-black/70 leading-relaxed text-sm md:text-base">
+                  <div className="space-y-4 text-[#1A1A1A]/70 leading-relaxed text-sm md:text-base">
                     <p>
                       JBJ Global Real Estate provides structured investment advisory for individuals and institutions seeking exposure to Dubai's real estate market. Our role is to help investors evaluate opportunities with clarity, discipline, and full market context.
                     </p>
@@ -257,7 +257,7 @@ const InvestorServices = () => {
                 </motion.div>
 
                 {/* Philosophy Cards */}
-                <motion.h3 variants={fadeInUp} className="text-xl md:text-2xl font-bold text-black mb-5 text-center">
+                <motion.h3 variants={fadeInUp} className="text-xl md:text-2xl font-bold text-[#1A1A1A] mb-5 text-center">
                   Investment Philosophy
                 </motion.h3>
                 <div className="grid md:grid-cols-3 gap-4">
@@ -270,13 +270,13 @@ const InvestorServices = () => {
                       <div className="w-9 h-9 bg-gold/10 border border-gold/40 rounded-lg flex items-center justify-center mb-3">
                         <span className="text-gold font-bold text-sm">{item.n}</span>
                       </div>
-                      <h4 className="text-base font-semibold text-black mb-1.5">{item.title}</h4>
-                      <p className="text-black/60 text-sm leading-relaxed">{item.desc}</p>
+                      <h4 className="text-base font-semibold text-[#1A1A1A] mb-1.5">{item.title}</h4>
+                      <p className="text-[#1A1A1A]/60 text-sm leading-relaxed">{item.desc}</p>
                     </motion.div>
                   ))}
                 </div>
 
-                <motion.p variants={fadeInUp} className="text-black/50 text-center mt-5 text-xs">
+                <motion.p variants={fadeInUp} className="text-[#1A1A1A]/50 text-center mt-5 text-xs">
                   We do not promise returns, fixed yields, or guaranteed outcomes. Our responsibility is to provide clarity and structure so investors can decide with confidence.
                 </motion.p>
               </motion.div>
@@ -285,18 +285,18 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ WHO THIS IS FOR ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-5xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   Who This Is For
                 </motion.h2>
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {whoThisIsFor.map((item, index) => (
                     <motion.div key={index} variants={fadeInUp} className="jj-card-inner p-4 flex items-center gap-3">
                       <div className="w-2 h-2 bg-gold rounded-full flex-shrink-0" />
-                      <span className="text-black/70 text-sm">{item}</span>
+                      <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -306,14 +306,14 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ INVESTMENT SERVICES — Premium Connected Grid ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-3 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3 text-center">
                   Investment Services
                 </motion.h2>
-                <motion.p variants={fadeInUp} className="text-black/50 text-center text-sm mb-8 max-w-2xl mx-auto">
+                <motion.p variants={fadeInUp} className="text-[#1A1A1A]/50 text-center text-sm mb-8 max-w-2xl mx-auto">
                   Comprehensive advisory services designed for every stage of your investment journey.
                 </motion.p>
                 
@@ -329,9 +329,9 @@ const InvestorServices = () => {
                           <service.icon className="w-5 h-5 text-gold" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base font-semibold text-black mb-1">{service.title}</h3>
-                          <p className="text-black/60 text-sm mb-2 leading-relaxed">{service.description}</p>
-                          <p className="text-xs text-black/45">
+                          <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">{service.title}</h3>
+                          <p className="text-[#1A1A1A]/60 text-sm mb-2 leading-relaxed">{service.description}</p>
+                          <p className="text-xs text-[#1A1A1A]/45">
                             <span className="text-gold font-medium">Deliverables:</span> {service.deliverables}
                           </p>
                         </div>
@@ -345,7 +345,7 @@ const InvestorServices = () => {
                   <Button onClick={handleWhatsAppClick} className="bg-green-600 hover:bg-green-700 text-white gap-2 rounded-lg">
                     <MessageCircle className="w-4 h-4" /> Discuss Services
                   </Button>
-                  <Button variant="outline" className="border-gold/40 text-black hover:bg-gold/10 gap-2 rounded-lg" asChild>
+                  <Button variant="outline" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10 gap-2 rounded-lg" asChild>
                     <Link to="/contact">
                       <Phone className="w-4 h-4" /> Book a Call
                     </Link>
@@ -357,11 +357,11 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ INVESTMENT PROCESS ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-8 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-8 text-center">
                   Investment Process
                 </motion.h2>
                 
@@ -376,8 +376,8 @@ const InvestorServices = () => {
                       <div className="w-8 h-8 bg-gold/15 border border-gold/40 rounded-full flex items-center justify-center mx-auto mb-2">
                         <span className="text-gold text-xs font-bold">{index + 1}</span>
                       </div>
-                      <h4 className="text-xs font-semibold text-black mb-1 leading-tight">{item.step}</h4>
-                      <p className="text-black/50 text-[11px] leading-snug">{item.description}</p>
+                      <h4 className="text-xs font-semibold text-[#1A1A1A] mb-1 leading-tight">{item.step}</h4>
+                      <p className="text-[#1A1A1A]/50 text-[11px] leading-snug">{item.description}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -387,18 +387,18 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ WHAT WE DO NOT DO ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   What We Do NOT Do
                 </motion.h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {whatWeDoNot.map((item, index) => (
                     <motion.div key={index} variants={fadeInUp} className="jj-card-inner p-4 flex items-start gap-3 border-l-4 border-l-red-400/50">
                       <Shield className="w-4 h-4 text-red-400/70 flex-shrink-0 mt-0.5" />
-                      <span className="text-black/70 text-sm">{item}</span>
+                      <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -408,11 +408,11 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ MARKET FOCUS AREAS ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   Market Focus Areas
                 </motion.h2>
                 <div className="flex flex-wrap justify-center gap-2">
@@ -420,7 +420,7 @@ const InvestorServices = () => {
                     <motion.span
                       key={index}
                       variants={fadeInUp}
-                      className="px-4 py-2 bg-gradient-to-r from-champagne-light/50 to-champagne/50 border border-gold/30 rounded-full text-black text-sm font-medium hover:border-gold/60 transition-colors cursor-default"
+                      className="px-4 py-2 bg-gradient-to-r from-champagne-light/50 to-champagne/50 border border-gold/30 rounded-full text-[#1A1A1A] text-sm font-medium hover:border-gold/60 transition-colors cursor-default"
                     >
                       {area}
                     </motion.span>
@@ -432,18 +432,18 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ EXPERIENCE STANDARDS ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   Investor Experience Standards
                 </motion.h2>
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {experienceStandards.map((standard, index) => (
                     <motion.div key={index} variants={fadeInUp} className="jj-card-inner p-3.5 flex items-center gap-2.5">
                       <CheckCircle className="w-4 h-4 text-gold flex-shrink-0" />
-                      <span className="text-black/70 text-sm">{standard}</span>
+                      <span className="text-[#1A1A1A]/70 text-sm">{standard}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -453,13 +453,13 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ COMPLIANCE ═══ */}
-        <section className="py-6 md:py-10 bg-black">
+        <section className="py-6 md:py-10 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="max-w-4xl mx-auto">
                 <div className="jj-card-inner p-6">
-                  <h3 className="text-lg font-semibold text-black mb-2 text-center">Compliance & Disclosure</h3>
-                  <p className="text-black/55 text-sm leading-relaxed text-center">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2 text-center">Compliance & Disclosure</h3>
+                  <p className="text-[#1A1A1A]/55 text-sm leading-relaxed text-center">
                     All investment information is provided for educational and advisory purposes only. Real estate investments involve risk, and outcomes may vary based on market conditions. JBJ Global Real Estate does not guarantee performance, returns, or appreciation. Final decisions remain solely with the investor.
                   </p>
                 </div>
@@ -469,11 +469,11 @@ const InvestorServices = () => {
         </section>
 
         {/* ═══ GET STARTED — CTA Section ═══ */}
-        <section className="py-8 md:py-12 bg-black">
+        <section className="py-8 md:py-12 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="container mx-auto px-4">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-4xl mx-auto">
-                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-black mb-6 text-center">
+                <motion.h2 variants={fadeInUp} className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-6 text-center">
                   Get Started
                 </motion.h2>
                 
@@ -484,8 +484,8 @@ const InvestorServices = () => {
                         <div className="w-10 h-10 bg-green-600/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-green-600/20 transition-colors">
                           <MessageCircle className="w-5 h-5 text-green-600" />
                         </div>
-                        <h3 className="text-base font-semibold text-black mb-1 group-hover:text-gold transition-colors">WhatsApp Consultation</h3>
-                        <p className="text-black/60 text-sm mb-3">Discuss investment objectives confidentially</p>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">WhatsApp Consultation</h3>
+                        <p className="text-[#1A1A1A]/60 text-sm mb-3">Discuss investment objectives confidentially</p>
                         <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
                           Message Now <ArrowRight className="w-3.5 h-3.5" />
                         </span>
@@ -499,8 +499,8 @@ const InvestorServices = () => {
                         <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
                           <Phone className="w-5 h-5 text-gold" />
                         </div>
-                        <h3 className="text-base font-semibold text-black mb-1 group-hover:text-gold transition-colors">Call Our Team</h3>
-                        <p className="text-black/60 text-sm mb-3">Speak directly with an investment advisor</p>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">Call Our Team</h3>
+                        <p className="text-[#1A1A1A]/60 text-sm mb-3">Speak directly with an investment advisor</p>
                         <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
                           Call Now <ArrowRight className="w-3.5 h-3.5" />
                         </span>
@@ -514,8 +514,8 @@ const InvestorServices = () => {
                         <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
                           <Globe className="w-5 h-5 text-gold" />
                         </div>
-                        <h3 className="text-base font-semibold text-black mb-1 group-hover:text-gold transition-colors">Book Consultation</h3>
-                        <p className="text-black/60 text-sm mb-3">Schedule a detailed strategy session</p>
+                        <h3 className="text-base font-semibold text-[#1A1A1A] mb-1 group-hover:text-gold transition-colors">Book Consultation</h3>
+                        <p className="text-[#1A1A1A]/60 text-sm mb-3">Schedule a detailed strategy session</p>
                         <span className="text-gold text-sm font-medium inline-flex items-center gap-1">
                           Get Started <ArrowRight className="w-3.5 h-3.5" />
                         </span>

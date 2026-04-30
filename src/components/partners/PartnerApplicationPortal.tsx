@@ -130,8 +130,8 @@ export function PartnerApplicationPortal() {
     return (
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="jj-card-inner p-8 md:p-10 border-2 border-gold/50 text-center">
         <LogIn className="w-10 h-10 text-gold mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-black mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Partner Portal</h3>
-        <p className="text-gray-600 mb-6">Sign in to submit a partnership application and track your application status in real-time.</p>
+        <h3 className="text-xl font-bold text-[#1A1A1A] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Partner Portal</h3>
+        <p className="text-[#5A4A2E] mb-6">Sign in to submit a partnership application and track your application status in real-time.</p>
         <Button variant="primary" size="lg" onClick={() => window.location.href = "/auth"}>
           <LogIn className="w-5 h-5 mr-2" /> Sign In to Apply
         </Button>
@@ -146,7 +146,7 @@ export function PartnerApplicationPortal() {
         <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-gold" /></div>
       ) : applications.length > 0 ? (
         <div className="space-y-6">
-          <h3 className="text-xl font-bold text-black" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-xl font-bold text-[#1A1A1A]" style={{ fontFamily: "'Playfair Display', serif" }}>
             My <span className="text-gold">Applications</span>
           </h3>
           {applications.map(app => {
@@ -156,8 +156,8 @@ export function PartnerApplicationPortal() {
               <motion.div key={app.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="jj-card-inner p-6 border-2 border-gold/30">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h4 className="font-bold text-black text-lg">{app.company_name}</h4>
-                    <p className="text-sm text-gray-600">{app.partnership_type} · {new Date(app.created_at).toLocaleDateString()}</p>
+                    <h4 className="font-bold text-[#1A1A1A] text-lg">{app.company_name}</h4>
+                    <p className="text-sm text-[#5A4A2E]">{app.partnership_type} · {new Date(app.created_at).toLocaleDateString()}</p>
                   </div>
                   {isRejected && (
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-red-600 text-xs font-semibold">
@@ -189,17 +189,17 @@ export function PartnerApplicationPortal() {
                           <div className={`flex flex-col items-center gap-1 px-2 ${isCurrent ? "scale-110" : ""} transition-transform`}>
                             <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                               isCompleted
-                                ? "bg-gradient-to-br from-gold to-amber-500 border-gold text-black"
-                                : "bg-white border-gray-200 text-gray-600"
+                                ? "bg-gradient-to-br from-gold to-amber-500 border-gold text-[#1A1A1A]"
+                                : "bg-[#FDFBF7] border-[#B89555]/30 text-[#5A4A2E]"
                             }`}>
                               <StageIcon className="w-4 h-4" />
                             </div>
-                            <span className={`text-[10px] md:text-xs text-center leading-tight max-w-[70px] ${isCompleted ? "text-gold font-semibold" : "text-gray-600"}`}>
+                            <span className={`text-[10px] md:text-xs text-center leading-tight max-w-[70px] ${isCompleted ? "text-gold font-semibold" : "text-[#5A4A2E]"}`}>
                               {stage.label}
                             </span>
                           </div>
                           {idx < STAGES.length - 1 && (
-                            <div className={`w-6 md:w-10 h-0.5 mt-[-16px] ${idx < currentIdx ? "bg-gold" : "bg-gray-200"}`} />
+                            <div className={`w-6 md:w-10 h-0.5 mt-[-16px] ${idx < currentIdx ? "bg-gold" : "bg-[#EFE6D6]"}`} />
                           )}
                         </div>
                       );
@@ -230,7 +230,7 @@ export function PartnerApplicationPortal() {
         </motion.div>
       ) : (
         <motion.form initial="hidden" animate="visible" variants={fadeIn} onSubmit={handleSubmit} className="jj-card-inner p-8 md:p-10 border-2 border-gold/50 space-y-5">
-          <h3 className="text-xl font-bold text-black text-center mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h3 className="text-xl font-bold text-[#1A1A1A] text-center mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Partnership <span className="text-gold">Application</span>
           </h3>
 
@@ -244,25 +244,25 @@ export function PartnerApplicationPortal() {
               { label: "Country *", key: "country", type: "text", required: true },
             ].map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-semibold text-black mb-1.5">{field.label}</label>
+                <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">{field.label}</label>
                 <input
                   type={field.type}
                   required={field.required}
                   value={(formData as any)[field.key]}
                   onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm"
+                  className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm"
                 />
               </div>
             ))}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-black mb-1.5">Type of Partnership *</label>
+            <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Type of Partnership *</label>
             <select
               required
               value={formData.partnershipType}
               onChange={(e) => setFormData({ ...formData, partnershipType: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black focus:border-gold focus:outline-none transition-colors text-sm"
+              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] focus:border-gold focus:outline-none transition-colors text-sm"
             >
               <option value="">Select partnership type</option>
               {PARTNERSHIP_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -270,19 +270,19 @@ export function PartnerApplicationPortal() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-black mb-1.5">Estimated Portfolio Size</label>
+            <label className="block text-sm font-semibold text-[#1A1A1A] mb-1.5">Estimated Portfolio Size</label>
             <input
               type="text"
               value={formData.portfolioSize}
               onChange={(e) => setFormData({ ...formData, portfolioSize: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm"
+              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm"
               placeholder="e.g. $5M - $50M"
             />
           </div>
 
           {/* Company Profile */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-black mb-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] mb-1.5">
               <Building2 className="w-4 h-4 text-gold" /> Company Profile *
             </label>
             <textarea
@@ -290,7 +290,7 @@ export function PartnerApplicationPortal() {
               rows={3}
               value={formData.companyProfile}
               onChange={(e) => setFormData({ ...formData, companyProfile: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm resize-none"
+              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm resize-none"
               placeholder="Brief description of your company, its history, and core business activities..."
             />
           </div>
@@ -298,26 +298,26 @@ export function PartnerApplicationPortal() {
           {/* Website & Instagram */}
           <div className="grid md:grid-cols-2 gap-5">
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-black mb-1.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] mb-1.5">
                 <Globe className="w-4 h-4 text-gold" /> Website URL
               </label>
               <input
                 type="url"
                 value={formData.websiteUrl}
                 onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm"
                 placeholder="https://www.yourcompany.com"
               />
             </div>
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-black mb-1.5">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] mb-1.5">
                 <Instagram className="w-4 h-4 text-gold" /> Instagram Link
               </label>
               <input
                 type="url"
                 value={formData.instagramUrl}
                 onChange={(e) => setFormData({ ...formData, instagramUrl: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm"
                 placeholder="https://www.instagram.com/yourcompany"
               />
             </div>
@@ -325,7 +325,7 @@ export function PartnerApplicationPortal() {
 
           {/* Proposal */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-black mb-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] mb-1.5">
               <FileText className="w-4 h-4 text-gold" /> Proposal Overview *
             </label>
             <textarea
@@ -333,7 +333,7 @@ export function PartnerApplicationPortal() {
               rows={5}
               value={formData.proposal}
               onChange={(e) => setFormData({ ...formData, proposal: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-white/60 text-black placeholder:text-gray-600 focus:border-gold focus:outline-none transition-colors text-sm resize-none"
+              className="w-full px-4 py-2.5 rounded-lg border-2 border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:outline-none transition-colors text-sm resize-none"
               placeholder="Describe your partnership proposal: what value you bring, what you're looking for, proposed collaboration structure, expected outcomes..."
             />
           </div>
@@ -345,7 +345,7 @@ export function PartnerApplicationPortal() {
               onChange={(e) => setFormData({ ...formData, compliance: e.target.checked })}
               className="mt-1 accent-gold w-4 h-4"
             />
-            <span className="text-sm text-gray-600">I confirm my company operates within regulatory compliance.</span>
+            <span className="text-sm text-[#5A4A2E]">I confirm my company operates within regulatory compliance.</span>
           </label>
 
           <div className="flex gap-3">

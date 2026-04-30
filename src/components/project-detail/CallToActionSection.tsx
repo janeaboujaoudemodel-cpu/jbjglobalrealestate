@@ -141,8 +141,8 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                 <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-black mb-2">Thank You!</h3>
-                <p className="text-gray-600">We'll call you back shortly.</p>
+                <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">Thank You!</h3>
+                <p className="text-[#5A4A2E]">We'll call you back shortly.</p>
                 <Button 
                   onClick={() => setIsSuccess(false)}
                   variant="primary"
@@ -159,12 +159,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium">Full Name *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Full Name *</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Your full name" 
                             {...field}
-                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -177,13 +177,13 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium">Email *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Email *</FormLabel>
                         <FormControl>
                           <Input 
                             type="email" 
                             placeholder="your@email.com" 
                             {...field}
-                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />
@@ -196,7 +196,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium">Phone *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Phone *</FormLabel>
                         <FormControl>
                           <PhoneInput
                             value={field.value}
@@ -215,10 +215,10 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="language"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium">Preferred Language *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Preferred Language *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-black rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="Select language" />
                             </SelectTrigger>
                           </FormControl>
@@ -244,13 +244,13 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="preferredTime"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium flex items-center gap-1.5">
+                        <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-gold" />
                           Preferred Time to Call
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-black rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="Select time slot" />
                             </SelectTrigger>
                           </FormControl>
@@ -272,13 +272,13 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="contactMethod"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium flex items-center gap-1.5">
+                        <FormLabel className="text-[#1A1A1A] font-medium flex items-center gap-1.5">
                           <MessageCircle className="w-3.5 h-3.5 text-gold" />
                           Preferred Contact Method
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-black rounded-lg h-12">
+                            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold focus:border-gold text-[#1A1A1A] rounded-lg h-12">
                               <SelectValue placeholder="How should we contact you?" />
                             </SelectTrigger>
                           </FormControl>
@@ -299,12 +299,12 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-black font-medium">Message (Optional)</FormLabel>
+                        <FormLabel className="text-[#1A1A1A] font-medium">Message (Optional)</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Tell us about your requirements..."
                             {...field}
-                            className="min-h-[80px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-black rounded-lg"
+                            className="min-h-[80px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                           />
                         </FormControl>
                         <FormMessage />

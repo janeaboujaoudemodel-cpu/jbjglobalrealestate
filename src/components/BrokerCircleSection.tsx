@@ -140,10 +140,10 @@ const BrokerCircleSection = () => {
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <Badge className="bg-white text-gold border-gold/30 mb-4 shadow-sm">
-            <Star className="w-3 h-3 mr-1 text-black" />
+          <Badge className="bg-[#FDFBF7] text-gold border-gold/30 mb-4 shadow-sm">
+            <Star className="w-3 h-3 mr-1 text-[#1A1A1A]" />
             <span className="text-gold">JBJ</span>
-            <span className="text-black ml-1">Broker Circle</span>
+            <span className="text-[#1A1A1A] ml-1">Broker Circle</span>
           </Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Ready to Join the <span className="text-gold">Broker Circle</span>?
@@ -169,7 +169,7 @@ const BrokerCircleSection = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {SUPPORT_TEAM.map((member, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="bg-zinc-900/60 border-gray-800 hover:border-gold/40 transition-all duration-300 h-full">
+                <Card className="bg-zinc-900/60 border-[#1A1A1A] hover:border-gold/40 transition-all duration-300 h-full">
                   <CardContent className="p-5">
                     {/* Icon container with white/gold/champagne pearl fill */}
                     <div className="w-12 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl flex items-center justify-center mb-4 border border-gold/30 shadow-md shadow-gold/20">
@@ -211,7 +211,7 @@ const BrokerCircleSection = () => {
             {AI_TOOLS.map((tool, index) => (
               <motion.div key={index} variants={fadeInUp}>
                 <Link to="/ai-hub">
-                  <Card className="bg-zinc-900/60 border-gray-800 hover:border-purple-500/40 transition-all duration-300 h-full group">
+                  <Card className="bg-zinc-900/60 border-[#1A1A1A] hover:border-purple-500/40 transition-all duration-300 h-full group">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">

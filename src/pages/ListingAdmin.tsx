@@ -239,7 +239,7 @@ const ListingAdmin = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-gold" />
-          <p className="text-gray-600 text-sm">Verifying access permissions...</p>
+          <p className="text-[#5A4A2E] text-sm">Verifying access permissions...</p>
         </div>
         <div className="w-80 space-y-3">
           <div className="h-2 bg-zinc-800 rounded-full animate-pulse" />
@@ -675,7 +675,7 @@ const ListingAdmin = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate(-1)}
-                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                className="text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -684,10 +684,10 @@ const ListingAdmin = () => {
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-gray-900 text-xl font-bold">
+                  <h1 className="text-[#1A1A1A] text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
-                  <span className="text-gray-600 text-sm">{t('listingAdmin.propertyManager')}</span>
+                  <span className="text-[#5A4A2E] text-sm">{t('listingAdmin.propertyManager')}</span>
                 </div>
               </div>
             </div>
@@ -745,12 +745,12 @@ const ListingAdmin = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{totalCount ?? 0} Published</span>
-                <span className="text-xs text-gray-600">/ {allProjectsCount ?? 0} Total</span>
+                <span className="text-sm text-[#1A1A1A] font-medium">{totalCount ?? 0} Published</span>
+                <span className="text-xs text-[#5A4A2E]">/ {allProjectsCount ?? 0} Total</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
-                <span className="text-sm text-black font-medium">{paginatedProjects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
+                <span className="text-sm text-[#1A1A1A] font-medium">{paginatedProjects?.filter((p) => p.is_premium).length || 0} {t('listingAdmin.premium')}</span>
               </div>
             </div>
           </div>
@@ -911,7 +911,7 @@ const ListingAdmin = () => {
                     // Compute source + enrichment inline
                     const src = (project as any).import_source || project.source || "manual";
                     const srcLabel = src?.includes("provident") ? "PROVIDENT" : src?.includes("reelly") ? "REELLY" : "MANUAL";
-                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-gray-100 text-gray-600 border-gray-200";
+                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30";
                     const hasDesc = !!project.description && project.description.length > 20;
                     const hasImages = (project.images?.length ?? 0) >= 3;
                     const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
@@ -993,7 +993,7 @@ const ListingAdmin = () => {
                     );
                   })}
                   {filteredProjects?.length === 0 && (
-                    <div className="col-span-full text-center py-16 text-gray-600">
+                    <div className="col-span-full text-center py-16 text-[#5A4A2E]">
                       <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
                       <p className="text-lg">{t('listingAdmin.noProjectsFound')}</p>
                     </div>
@@ -1006,7 +1006,7 @@ const ListingAdmin = () => {
                     size="sm"
                     disabled={projectsPage === 0}
                     onClick={() => setProjectsPage(p => Math.max(0, p - 1))}
-                    className="bg-white border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
+                    className="bg-[#FDFBF7] border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
                   >
                     Previous
                   </Button>
@@ -1018,7 +1018,7 @@ const ListingAdmin = () => {
                     size="sm"
                     disabled={((projectsPage + 1) * 50) >= (filteredTabCount ?? 0)}
                     onClick={() => setProjectsPage(p => p + 1)}
-                    className="bg-white border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
+                    className="bg-[#FDFBF7] border-gold/30 text-foreground hover:bg-gold/10 disabled:opacity-40"
                   >
                     Next
                   </Button>
@@ -1061,7 +1061,7 @@ const ListingAdmin = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
               <CardHeader className="border-b border-gold/30">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-black">
+                  <CardTitle className="text-[#1A1A1A]">
                     {isCreating ? t('listingAdmin.createNewProject') : `${t('listingAdmin.editProject')}: ${selectedProject?.name}`}
                   </CardTitle>
                   <div className="flex items-center gap-2">
@@ -1070,7 +1070,7 @@ const ListingAdmin = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
-                        className="text-gray-600 hover:text-black"
+                        className="text-[#5A4A2E] hover:text-[#1A1A1A]"
                       >
                         <ExternalLink className="w-4 h-4 mr-1" />
                         {t('listingAdmin.view')}
@@ -1085,7 +1085,7 @@ const ListingAdmin = () => {
                         setSelectedProject(null);
                         setActiveView('projects');
                       }}
-                      className="text-gray-600 hover:text-black"
+                      className="text-[#5A4A2E] hover:text-[#1A1A1A]"
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -1095,19 +1095,19 @@ const ListingAdmin = () => {
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
                   <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30">
-                    <TabsTrigger value="details" className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black"
+                      className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black"
+                      className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}
@@ -1118,7 +1118,7 @@ const ListingAdmin = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Name */}
                       <div className="md:col-span-2">
-                        <Label className="text-gray-600">{t('listingAdmin.projectName')} *</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.projectName')} *</Label>
                         <Input
                           value={formData.name}
                           onChange={(e) => {
@@ -1129,7 +1129,7 @@ const ListingAdmin = () => {
                             });
                           }}
                           placeholder="e.g., Sobha Hartland II"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                         {/* Duplicate detection when creating */}
                         {isCreating && formData.name.length >= 3 && (
@@ -1149,14 +1149,14 @@ const ListingAdmin = () => {
 
                       {/* Developer */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.developer')} *</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.developer')} *</Label>
                         <Select
                           value={formData.developer_id}
                           onValueChange={(value) =>
                             setFormData({ ...formData, developer_id: value })
                           }
                         >
-                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
+                          <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1">
                             <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
                           </SelectTrigger>
                           <SelectContent>
@@ -1171,14 +1171,14 @@ const ListingAdmin = () => {
 
                       {/* Community */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.community')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.community')}</Label>
                         <Select
                           value={formData.community_id}
                           onValueChange={(value) =>
                             setFormData({ ...formData, community_id: value })
                           }
                         >
-                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
+                          <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1">
                             <SelectValue placeholder={t('listingAdmin.selectCommunity')} />
                           </SelectTrigger>
                           <SelectContent>
@@ -1193,27 +1193,27 @@ const ListingAdmin = () => {
 
                       {/* Location */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.location')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.location')}</Label>
                         <Input
                           value={formData.location}
                           onChange={(e) =>
                             setFormData({ ...formData, location: e.target.value })
                           }
                           placeholder="e.g., MBR City, Dubai"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       {/* Emirate */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.emirate')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.emirate')}</Label>
                         <Select
                           value={formData.emirate}
                           onValueChange={(value) =>
                             setFormData({ ...formData, emirate: value })
                           }
                         >
-                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
+                          <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -1228,7 +1228,7 @@ const ListingAdmin = () => {
 
                       {/* Price Range */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.priceFrom')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.priceFrom')}</Label>
                         <Input
                           type="number"
                           value={formData.price_from}
@@ -1236,12 +1236,12 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, price_from: e.target.value })
                           }
                           placeholder="e.g., 1500000"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.priceTo')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.priceTo')}</Label>
                         <Input
                           type="number"
                           value={formData.price_to}
@@ -1249,13 +1249,13 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, price_to: e.target.value })
                           }
                           placeholder="e.g., 5000000"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       {/* Bedrooms */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.bedroomsMin')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.bedroomsMin')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_min}
@@ -1263,12 +1263,12 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, bedrooms_min: e.target.value })
                           }
                           placeholder="e.g., 1"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.bedroomsMax')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.bedroomsMax')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_max}
@@ -1276,69 +1276,69 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, bedrooms_max: e.target.value })
                           }
                           placeholder="e.g., 4"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       {/* Handover & Service Charge */}
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.handoverDate')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.handoverDate')}</Label>
                         <Input
                           value={formData.handover_date}
                           onChange={(e) =>
                             setFormData({ ...formData, handover_date: e.target.value })
                           }
                           placeholder="e.g., Q4 2026"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-gray-600">{t('listingAdmin.serviceCharge')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.serviceCharge')}</Label>
                         <Input
                           value={formData.service_charge}
                           onChange={(e) =>
                             setFormData({ ...formData, service_charge: e.target.value })
                           }
                           placeholder="e.g., 15 AED/sqft"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       {/* Payment Plan */}
                       <div className="md:col-span-2">
-                        <Label className="text-gray-600">{t('listingAdmin.paymentPlan')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.paymentPlan')}</Label>
                         <Input
                           value={formData.payment_plan}
                           onChange={(e) =>
                             setFormData({ ...formData, payment_plan: e.target.value })
                           }
                           placeholder="e.g., 60/40 or 10/90"
-                          className="bg-gray-50 border-gray-300 text-black mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1"
                         />
                       </div>
 
                       {/* Description */}
                       <div className="md:col-span-2">
-                        <Label className="text-gray-600">{t('listingAdmin.description')}</Label>
+                        <Label className="text-[#5A4A2E]">{t('listingAdmin.description')}</Label>
                         <Textarea
                           value={formData.description}
                           onChange={(e) =>
                             setFormData({ ...formData, description: e.target.value })
                           }
                           placeholder="Enter project description..."
-                          className="bg-gray-50 border-gray-300 text-black mt-1 min-h-[120px]"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] mt-1 min-h-[120px]"
                         />
                       </div>
 
                       {/* Premium Listing */}
                       <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-gold/10 to-transparent border border-gold/20 rounded-lg">
                         <div>
-                          <Label className="text-black font-medium flex items-center gap-2">
+                          <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                             <Crown className="w-4 h-4 text-gold" />
                             {t('listingAdmin.premiumListing')}
                           </Label>
-                          <p className="text-gray-600 text-sm">
+                          <p className="text-[#5A4A2E] text-sm">
                             {t('listingAdmin.premiumDesc')}
                           </p>
                         </div>
@@ -1353,11 +1353,11 @@ const ListingAdmin = () => {
                       {/* Sold Out Toggle */}
                       <div className="md:col-span-2 flex items-center justify-between p-4 bg-gradient-to-r from-destructive/10 to-transparent border border-destructive/20 rounded-lg">
                         <div>
-                          <Label className="text-black font-medium flex items-center gap-2">
+                          <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                             <X className="w-4 h-4 text-destructive" />
                             {t('listingAdmin.soldOut')}
                           </Label>
-                          <p className="text-gray-600 text-sm">
+                          <p className="text-[#5A4A2E] text-sm">
                             {t('listingAdmin.soldOutDesc')}
                           </p>
                         </div>
@@ -1371,7 +1371,7 @@ const ListingAdmin = () => {
                     </div>
 
                     {/* Save/Delete Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <div className="flex items-center justify-between pt-4 border-t border-[#B89555]/30">
                       <div className="flex gap-2">
                         <Button
                           onClick={handleSaveProject}
@@ -1407,7 +1407,7 @@ const ListingAdmin = () => {
                     {/* Document Upload */}
                     <div className="flex items-center gap-4">
                       <Select value={selectedDocType} onValueChange={setSelectedDocType}>
-                        <SelectTrigger className="w-48 bg-gray-50 border-gray-300 text-black">
+                        <SelectTrigger className="w-48 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -1445,13 +1445,13 @@ const ListingAdmin = () => {
                       {projectDocuments.map((doc) => (
                         <div
                           key={doc.id}
-                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                          className="flex items-center justify-between p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30"
                         >
                           <div className="flex items-center gap-3">
-                            <File className="w-5 h-5 text-gray-600" />
+                            <File className="w-5 h-5 text-[#5A4A2E]" />
                             <div>
-                              <p className="text-black text-sm font-medium">{doc.file_name}</p>
-                              <p className="text-gray-600 text-xs">
+                              <p className="text-[#1A1A1A] text-sm font-medium">{doc.file_name}</p>
+                              <p className="text-[#5A4A2E] text-xs">
                                 {doc.document_type} • {formatFileSize(doc.file_size)}
                               </p>
                             </div>
@@ -1476,7 +1476,7 @@ const ListingAdmin = () => {
                         </div>
                       ))}
                       {projectDocuments.length === 0 && (
-                        <div className="text-center py-12 text-gray-600">
+                        <div className="text-center py-12 text-[#5A4A2E]">
                           <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
                           <p>{t('listingAdmin.noDocuments')}</p>
                         </div>

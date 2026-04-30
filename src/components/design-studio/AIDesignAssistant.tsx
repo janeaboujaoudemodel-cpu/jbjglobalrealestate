@@ -229,7 +229,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-2 p-4 border-b border-gray-800">
+      <div className="flex items-center gap-2 p-4 border-b border-[#1A1A1A]">
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-500 flex items-center justify-center">
           <Sparkles className="w-4 h-4 text-white" />
         </div>
@@ -240,14 +240,14 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
       </div>
 
       {/* Quick Prompts */}
-      <div className="p-3 border-b border-gray-800">
+      <div className="p-3 border-b border-[#1A1A1A]">
         <p className="text-white/90 text-xs mb-2">Quick Actions</p>
         <div className="flex flex-wrap gap-2">
           {QUICK_PROMPTS.map((prompt, index) => (
             <button
               key={index}
               onClick={() => handleQuickPrompt(prompt.prompt)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-800/80 hover:bg-gold/20 text-white hover:text-gold border border-gray-700 hover:border-gold/50 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-zinc-800/80 hover:bg-gold/20 text-white hover:text-gold border border-[#1A1A1A] hover:border-gold/50 transition-all"
             >
               <prompt.icon className="w-3 h-3" />
               {prompt.label}
@@ -273,7 +273,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                     : 'bg-gradient-to-br from-purple-500 to-fuchsia-500'
                 }`}>
                   {message.role === 'user' ? (
-                    <User className="w-4 h-4 text-black" />
+                    <User className="w-4 h-4 text-[#1A1A1A]" />
                   ) : (
                     <Bot className="w-4 h-4 text-white" />
                   )}
@@ -281,7 +281,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                 <div className={`flex-1 max-w-[85%] ${message.role === 'user' ? 'text-right' : ''}`}>
                   <div className={`inline-block p-3 rounded-2xl ${
                     message.role === 'user'
-                      ? 'bg-gold text-black rounded-tr-none'
+                      ? 'bg-gold text-[#1A1A1A] rounded-tr-none'
                       : 'bg-zinc-800 text-white rounded-tl-none'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -293,7 +293,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                       />
                     )}
                   </div>
-                  <p className="text-gray-600 text-[10px] mt-1">
+                  <p className="text-[#5A4A2E] text-[10px] mt-1">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -322,7 +322,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
 
       {/* Uploaded Image Preview */}
       {uploadedImage && (
-        <div className="px-4 py-2 border-t border-gray-800">
+        <div className="px-4 py-2 border-t border-[#1A1A1A]">
           <div className="relative inline-block">
             <img src={uploadedImage} alt="Reference" className="h-16 rounded-lg" />
             <button
@@ -336,7 +336,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
       )}
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-800">
+      <div className="p-4 border-t border-[#1A1A1A]">
         <div className="flex gap-2">
           <input
             ref={fileInputRef}
@@ -349,7 +349,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             size="icon"
             variant="ghost"
             onClick={() => fileInputRef.current?.click()}
-            className="text-white/70 hover:text-white hover:bg-gray-800"
+            className="text-white/70 hover:text-white hover:bg-[#1A1A1A]"
           >
             <Upload className="w-5 h-5" />
           </Button>
@@ -358,13 +358,13 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             disabled={isGenerating}
             variant="ghost"
             size="icon"
-            className="text-white/70 hover:text-white hover:bg-gray-800"
+            className="text-white/70 hover:text-white hover:bg-[#1A1A1A]"
           />
           <Textarea
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Describe your design or ask for changes..."
-            className="flex-1 bg-zinc-800 border-gray-700 text-white resize-none min-h-[44px] max-h-[120px]"
+            className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white resize-none min-h-[44px] max-h-[120px]"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();

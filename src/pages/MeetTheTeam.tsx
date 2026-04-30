@@ -97,7 +97,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
           {/* Info - Positioned below photo, not overlapping */}
           <div className="p-5 flex flex-col bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-            <h3 className="text-black font-semibold text-lg mb-1">{member.name}</h3>
+            <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">{member.name}</h3>
 
             {/* Premium shiny job title - allow wrapping */}
             <p className="text-sm font-medium mb-1 text-gold">
@@ -105,7 +105,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             </p>
 
             {/* Department and details - allow text wrapping, no truncation */}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-600 text-xs mb-2">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[#5A4A2E] text-xs mb-2">
               <span className="whitespace-normal">{member.department}</span>
               {typeof member.yearsExperience === "number" && (
                 <>
@@ -123,7 +123,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
             {/* Short Bio */}
             {member.bio && (
-              <p className="text-gray-600 text-xs line-clamp-2 mb-3">
+              <p className="text-[#5A4A2E] text-xs line-clamp-2 mb-3">
                 {member.bio}
               </p>
             )}
@@ -132,7 +132,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             <button
               type="button"
               onClick={() => onReadMore(member)}
-              className="text-gold hover:text-black text-xs font-medium transition-colors mb-3 text-left"
+              className="text-gold hover:text-[#1A1A1A] text-xs font-medium transition-colors mb-3 text-left"
             >
               Read more →
             </button>
@@ -146,7 +146,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                     <Badge
                       key={lang}
                       variant="outline"
-                      className="text-[10px] border-gold/30 text-black bg-gold/10 px-2 py-0.5"
+                      className="text-[10px] border-gold/30 text-[#1A1A1A] bg-gold/10 px-2 py-0.5"
                     >
                       {lang}
                     </Badge>
@@ -154,7 +154,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
                   {remainingLanguages > 0 && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] border-gold/30 text-black bg-gold/10 px-2 py-0.5"
+                      className="text-[10px] border-gold/30 text-[#1A1A1A] bg-gold/10 px-2 py-0.5"
                     >
                       +{remainingLanguages}
                     </Badge>
@@ -328,7 +328,7 @@ const MeetTheTeam: React.FC = () => {
                 </motion.h1>
 
                 <motion.p
-                  className="text-gray-600 text-lg max-w-2xl mx-auto mb-4"
+                  className="text-[#5A4A2E] text-lg max-w-2xl mx-auto mb-4"
                   variants={fadeInUp}
                 >
                   A world-class team of professionals dedicated to delivering
@@ -337,7 +337,7 @@ const MeetTheTeam: React.FC = () => {
 
                 {/* Company Summary */}
                 <motion.p
-                  className="text-gray-600 text-sm max-w-3xl mx-auto mb-6 italic"
+                  className="text-[#5A4A2E] text-sm max-w-3xl mx-auto mb-6 italic"
                   variants={fadeInUp}
                 >
                   {companySummary}
@@ -371,7 +371,7 @@ const MeetTheTeam: React.FC = () => {
         <div className="h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
         {/* Team Sections by Department - Each wrapped in Active Champagne Layer */}
-        <section className="py-12 bg-black">
+        <section className="py-12 bg-[#1A1A1A]">
           <div className="container mx-auto px-4 space-y-12">
             {departmentOrder.map((deptName) => {
               if (deptName === "Sales") {
@@ -398,10 +398,10 @@ const MeetTheTeam: React.FC = () => {
                             <Building2 className="w-5 h-5 text-gold" />
                           </div>
                           <div>
-                            <h2 className="text-black text-2xl font-semibold">
+                            <h2 className="text-[#1A1A1A] text-2xl font-semibold">
                             {deptName}
                           </h2>
-                          <p className="text-gray-600 text-sm">
+                          <p className="text-[#5A4A2E] text-sm">
                             {total} member{total > 1 ? "s" : ""}
                           </p>
                         </div>
@@ -421,10 +421,10 @@ const MeetTheTeam: React.FC = () => {
                             return (
                             <div key={category}>
                               <div className="flex items-center justify-between gap-4 mb-4">
-                                <h3 className="text-black text-lg font-semibold">
+                                <h3 className="text-[#1A1A1A] text-lg font-semibold">
                                   {category}
                                 </h3>
-                                <p className="text-gray-600 text-sm">
+                                <p className="text-[#5A4A2E] text-sm">
                                   {categoryMembers.length} member
                                   {categoryMembers.length > 1 ? "s" : ""}
                                 </p>
@@ -475,10 +475,10 @@ const MeetTheTeam: React.FC = () => {
                         <Building2 className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <h2 className="text-black text-2xl font-semibold">
+                        <h2 className="text-[#1A1A1A] text-2xl font-semibold">
                           {deptName}
                         </h2>
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-[#5A4A2E] text-sm">
                           {visibleMembers.length} member{visibleMembers.length > 1 ? "s" : ""}
                         </p>
                       </div>
@@ -507,7 +507,7 @@ const MeetTheTeam: React.FC = () => {
         </section>
 
         {/* CTA Section - 3-Layer System: Black > Active Champagne > Pearl */}
-        <section className="py-16 sm:py-20 bg-black">
+        <section className="py-16 sm:py-20 bg-[#1A1A1A]">
           <div className="container mx-auto px-3 sm:px-4 md:px-6">
             <div className="max-w-[1200px] mx-auto">
               {/* OUTER CARD - Active Champagne Layer - Larger padding for visible contrast */}
@@ -522,7 +522,7 @@ const MeetTheTeam: React.FC = () => {
                 >
                   {/* Badge */}
                   <motion.div 
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
                     variants={fadeInUp}
                   >
                     <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
@@ -531,13 +531,13 @@ const MeetTheTeam: React.FC = () => {
 
                   {/* Title */}
                   <motion.h3 
-                    className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+                    className="text-[#1A1A1A] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
                     variants={fadeInUp}
                   >
                     Ready to Work With Our Experts?
                   </motion.h3>
                   <motion.p 
-                    className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    className="text-[#5A4A2E] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
                     Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.
@@ -566,17 +566,17 @@ const MeetTheTeam: React.FC = () => {
                       <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                       <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                       <span className="relative flex items-center justify-center gap-2">
-                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-black transition-colors" />
-                        <span className="text-black group-hover:text-gold transition-colors">Get in</span>
-                        <span className="text-gold group-hover:text-black transition-colors">Touch</span>
-                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors" />
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+                        <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Get in</span>
+                        <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Touch</span>
+                        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-gold transition-colors" />
                       </span>
                     </button>
 
                     {/* Secondary Button - View Careers */}
                     <Link to="/careers" className="w-full sm:w-auto">
                       <button 
-                        className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                        className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
                       >
                         View Open Positions
                         <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

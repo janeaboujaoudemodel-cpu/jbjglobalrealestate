@@ -400,7 +400,7 @@ export function StampInteractivePreview({
       {selected && selectedZone && selectedMeta && (
         <div
           data-toolbar
-          className="absolute z-50 bg-white rounded-lg shadow-xl border border-[hsl(var(--gold)/0.3)] p-2 min-w-[200px] max-w-[280px]"
+          className="absolute z-50 bg-[#FDFBF7] rounded-lg shadow-xl border border-[hsl(var(--gold)/0.3)] p-2 min-w-[200px] max-w-[280px]"
           style={{
             left: Math.max(4, Math.min(toolbarPos.x - 100, size - 210)),
             top: Math.max(4, toolbarPos.y < 100 ? toolbarPos.y + selectedZone.rect.height + 12 : toolbarPos.y - 160),
@@ -445,7 +445,7 @@ export function StampInteractivePreview({
                 onChange={(e) => setEditValue(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') commitTextEdit(); if (e.key === 'Escape') setEditingText(null); }}
                 autoFocus
-                className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-white text-black font-mono"
+                className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-[#FDFBF7] text-[#1A1A1A] font-mono"
               />
               <button onClick={commitTextEdit} className="p-1 rounded hover:bg-green-50 text-green-600"><Check size={11} /></button>
               <button onClick={() => setEditingText(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11} /></button>
@@ -601,7 +601,7 @@ export function StampInteractivePreview({
 
       {/* Hint text */}
       {!selected && hitZones.length > 0 && (
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[8px] text-[hsl(var(--muted-foreground))] bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm pointer-events-none">
+        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[8px] text-[hsl(var(--muted-foreground))] bg-[#FDFBF7]/80 px-2 py-0.5 rounded-full backdrop-blur-sm pointer-events-none">
           Click letter · Double-click full arc
         </div>
       )}

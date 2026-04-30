@@ -48,7 +48,7 @@ export const FAQHero = ({
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-[#1A1A1A]/70" />
         </div>
       )}
       
@@ -84,7 +84,7 @@ export const FAQHero = ({
             className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-4 h-4 text-black" />
+            <BadgeIcon className="w-4 h-4 text-[#1A1A1A]" />
             <span className="text-gold text-sm font-semibold tracking-wide uppercase">{badge}</span>
           </motion.div>
           

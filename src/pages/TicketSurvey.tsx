@@ -93,14 +93,14 @@ const normalizeContext = (raw: string): SurveyContextKey => {
 
 const StarRating = ({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) => (
   <div className="space-y-2">
-    <Label className="text-sm font-semibold text-black">{label}</Label>
+    <Label className="text-sm font-semibold text-[#1A1A1A]">{label}</Label>
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button key={star} type="button" onClick={() => onChange(star)} className="transition-transform hover:scale-110">
-          <Star className={`w-8 h-8 ${star <= value ? "fill-[#C8A766] text-[#C8A766]" : "text-gray-600"}`} />
+          <Star className={`w-8 h-8 ${star <= value ? "fill-[#C8A766] text-[#C8A766]" : "text-[#5A4A2E]"}`} />
         </button>
       ))}
-      {value > 0 && <span className="ml-2 text-sm text-gray-600 self-center">{ratingLabels[value - 1]}</span>}
+      {value > 0 && <span className="ml-2 text-sm text-[#5A4A2E] self-center">{ratingLabels[value - 1]}</span>}
     </div>
   </div>
 );
@@ -177,16 +177,16 @@ const TicketSurvey = () => {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-4">
-        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
+        <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8956E] flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-black mb-2">Thank You!</h2>
-          <p className="text-gray-600 mb-4">Your feedback helps us improve our service.</p>
+          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Thank You!</h2>
+          <p className="text-[#5A4A2E] mb-4">Your feedback helps us improve our service.</p>
           <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-4 border border-[#C8A766]">
             <Gift className="w-6 h-6 text-[#C8A766] mx-auto mb-2" />
             <p className="text-lg font-bold text-[#C8A766]">+{pointsAwarded} Points Earned!</p>
-            <p className="text-xs text-gray-600">Thank you for your feedback</p>
+            <p className="text-xs text-[#5A4A2E]">Thank you for your feedback</p>
           </div>
         </motion.div>
       </div>
@@ -197,14 +197,14 @@ const TicketSurvey = () => {
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-12 px-4">
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-black mb-2">{surveyCopy.title}</h1>
-          <p className="text-gray-600">
+          <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">{surveyCopy.title}</h1>
+          <p className="text-[#5A4A2E]">
             Context: <span className="font-semibold text-[#C8A766]">{surveyCopy.badge}</span>
             {ticketNumber ? <span> · Ticket: <span className="font-mono text-[#C8A766] font-bold">{ticketNumber}</span></span> : null}
           </p>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-6 space-y-6">
+        <div className="bg-[#FDFBF7]/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-6 space-y-6">
           <StarRating value={overallRating} onChange={setOverallRating} label={`1. ${surveyCopy.questions[0]}`} />
           <StarRating value={easeOfSubmission} onChange={setEaseOfSubmission} label={`2. ${surveyCopy.questions[1]}`} />
           <StarRating value={responseSpeed} onChange={setResponseSpeed} label={`3. ${surveyCopy.questions[2]}`} />
@@ -212,7 +212,7 @@ const TicketSurvey = () => {
           <StarRating value={websiteSmartness} onChange={setWebsiteSmartness} label={`5. ${surveyCopy.questions[4]}`} />
 
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black">6. Would you recommend JBJ to others?</Label>
+            <Label className="text-sm font-semibold text-[#1A1A1A]">6. Would you recommend JBJ to others?</Label>
             <div className="flex gap-3">
               <button
                 type="button"
@@ -220,7 +220,7 @@ const TicketSurvey = () => {
                 className={`flex-1 py-3 rounded-xl border-2 font-semibold transition-all ${
                   wouldRecommend === true
                     ? "bg-gradient-to-br from-[#C8A766] to-[#B8956E] text-white border-[#C8A766]"
-                    : "bg-white text-black border-gray-200 hover:border-[#C8A766]"
+                    : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 hover:border-[#C8A766]"
                 }`}
               >
                 Yes
@@ -230,8 +230,8 @@ const TicketSurvey = () => {
                 onClick={() => setWouldRecommend(false)}
                 className={`flex-1 py-3 rounded-xl border-2 font-semibold transition-all ${
                   wouldRecommend === false
-                    ? "bg-zinc-800 text-white border-gray-800"
-                    : "bg-white text-black border-gray-200 hover:border-gray-400"
+                    ? "bg-zinc-800 text-white border-[#1A1A1A]"
+                    : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 hover:border-[#B89555]/30"
                 }`}
               >
                 No
@@ -240,7 +240,7 @@ const TicketSurvey = () => {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black">7. Suggestions, complaints, or remarks</Label>
+            <Label className="text-sm font-semibold text-[#1A1A1A]">7. Suggestions, complaints, or remarks</Label>
             <Textarea
               value={suggestions}
               onChange={(e) => setSuggestions(e.target.value)}

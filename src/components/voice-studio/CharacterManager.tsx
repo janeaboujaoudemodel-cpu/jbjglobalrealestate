@@ -156,12 +156,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
         
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-black">
+            <Button size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" />
               New Character
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-gray-800 max-w-lg">
+          <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
                 <Mic className="w-5 h-5 text-gold" />
@@ -177,7 +177,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Alex the Host"
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
 
@@ -188,10 +188,10 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.nationality} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-gray-700 text-white mt-1">
+                  <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white mt-1">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-gray-700">
+                  <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
                     {NATIONALITIES.map(nat => (
                       <SelectItem key={nat} value={nat} className="text-white hover:bg-gold/20">
                         {nat}
@@ -212,7 +212,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       className={`cursor-pointer transition-all ${
                         formData.languages.includes(lang)
                           ? 'bg-gold/20 border-gold text-gold'
-                          : 'border-gray-700 text-white/70 hover:border-gold/50'
+                          : 'border-[#1A1A1A] text-white/70 hover:border-gold/50'
                       }`}
                       onClick={() => {
                         setFormData(prev => ({
@@ -240,7 +240,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       className={`p-3 rounded-lg border-2 text-left transition-all ${
                         formData.voiceId === voice.id
                           ? 'border-gold bg-gold/10'
-                          : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
+                          : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -259,7 +259,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         </Button>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs border-gray-600 text-white/70">
+                        <Badge variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
                           {voice.gender}
                         </Badge>
                         <span className="text-xs text-white/90">{voice.accent}</span>
@@ -282,7 +282,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         className={`p-3 rounded-lg border-2 text-left transition-all ${
                           formData.persona === preset.id
                             ? 'border-gold bg-gold/10'
-                            : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
+                            : 'border-[#1A1A1A] bg-zinc-800 hover:border-[#1A1A1A]'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -303,14 +303,14 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Additional character notes..."
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
 
               <Button
                 onClick={handleCreateCharacter}
                 disabled={!formData.name.trim()}
-                className="w-full bg-gradient-to-r from-gold to-amber-600 text-black font-semibold"
+                className="w-full bg-gradient-to-r from-gold to-amber-600 text-[#1A1A1A] font-semibold"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Create Character
@@ -322,10 +322,10 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
       {/* Characters List */}
       {characters.length === 0 ? (
-        <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-lg">
-          <Users className="w-10 h-10 text-gray-600 mx-auto mb-2" />
+        <div className="text-center py-8 border-2 border-dashed border-[#1A1A1A] rounded-lg">
+          <Users className="w-10 h-10 text-[#5A4A2E] mx-auto mb-2" />
           <p className="text-white/90 text-sm">No characters created yet</p>
-          <p className="text-gray-600 text-xs">Create characters for multi-voice scripts</p>
+          <p className="text-[#5A4A2E] text-xs">Create characters for multi-voice scripts</p>
         </div>
       ) : (
         <ScrollArea className="h-[200px]">
@@ -342,7 +342,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                     isSelected
                       ? 'border-gold bg-gold/10'
-                      : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
+                      : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
                   }`}
                   onClick={() => onSelectCharacter?.(character.id)}
                 >
@@ -390,12 +390,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   {character.languages.length > 0 && (
                     <div className="flex gap-1 mt-2">
                       {character.languages.slice(0, 3).map(lang => (
-                        <Badge key={lang} variant="outline" className="text-xs border-gray-700 text-white/70">
+                        <Badge key={lang} variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
                           {lang}
                         </Badge>
                       ))}
                       {character.languages.length > 3 && (
-                        <Badge variant="outline" className="text-xs border-gray-700 text-white/70">
+                        <Badge variant="outline" className="text-xs border-[#1A1A1A] text-white/70">
                           +{character.languages.length - 3}
                         </Badge>
                       )}

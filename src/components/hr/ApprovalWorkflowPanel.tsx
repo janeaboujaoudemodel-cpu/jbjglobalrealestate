@@ -213,15 +213,15 @@ export function ApprovalWorkflowPanel() {
       {/* Tabs */}
       <Tabs defaultValue="pending" className="space-y-4">
         <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
-          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="pending" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
             <Clock className="h-4 w-4 mr-2" />
             Pending ({pendingApprovals.length})
           </TabsTrigger>
-          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="approved" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
             <CheckCircle className="h-4 w-4 mr-2" />
             Approved ({approvedRequests.length})
           </TabsTrigger>
-          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+          <TabsTrigger value="rejected" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
             <XCircle className="h-4 w-4 mr-2" />
             Rejected ({rejectedRequests.length})
           </TabsTrigger>

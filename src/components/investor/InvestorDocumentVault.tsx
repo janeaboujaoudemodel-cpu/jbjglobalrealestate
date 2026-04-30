@@ -268,7 +268,7 @@ export default function InvestorDocumentVault({ userId }: InvestorDocumentVaultP
                   className={`p-4 rounded-xl border-2 transition-all ${
                     existingDoc
                       ? "border-emerald-500/50 bg-emerald-50/50"
-                      : "border-border/50 bg-white/50 hover:border-gold/50"
+                      : "border-border/50 bg-[#FDFBF7]/50 hover:border-gold/50"
                   }`}
                 >
                   <div className="flex items-start gap-3">

@@ -37,13 +37,13 @@ function TransitionPreview({ id }: { id: string }) {
   if (id.startsWith('fade-black')) return (
     <div className={base}>
       <div className="flex-1 bg-slate-400" />
-      <div className="flex-1 bg-black" />
+      <div className="flex-1 bg-[#1A1A1A]" />
     </div>
   );
   if (id.startsWith('fade-white')) return (
     <div className={base}>
       <div className="flex-1 bg-slate-400" />
-      <div className="flex-1 bg-white" />
+      <div className="flex-1 bg-[#FDFBF7]" />
     </div>
   );
   if (id.startsWith('fade-blur')) return (

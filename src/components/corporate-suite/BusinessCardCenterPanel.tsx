@@ -210,7 +210,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
       </div>
 
       {/* Card preview */}
-      <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-8 shadow-sm flex flex-col items-center gap-4" style={cardShape === "digital" ? { background: "linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%)" } : {}}>
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-8 shadow-sm flex flex-col items-center gap-4" style={cardShape === "digital" ? { background: "linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 60%,#111 100%)" } : {}}>
         {cardShape === "digital" ? (
           <PhoneMockup>
             <CardCanvas {...canvasProps} />
@@ -319,7 +319,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
       </div>
 
       {/* All templates mini grid */}
-      <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[hsl(var(--border))] p-5 shadow-sm">
         <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] mb-4 block">
           All Templates Preview — click to assign
         </Label>
@@ -362,10 +362,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                   {t.badge && (
                     <div className="absolute top-1 right-1 text-[10px]">{t.badge}</div>
                   )}
-                  <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-black/40 text-white">
+                  <p className="absolute bottom-0 left-0 right-0 text-center text-[9px] font-semibold py-1 bg-[#1A1A1A]/40 text-white">
                     {t.label}
                   </p>
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
+                  <div className="absolute inset-0 bg-[#1A1A1A]/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5">
                     <button
                       onClick={() => handleSetFront(t.id)}
                       className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
@@ -380,8 +380,8 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
                       onClick={() => handleSetBack(t.id)}
                       className={`text-[9px] font-bold px-3 py-1 rounded-full hover:opacity-90 transition-all ${
                         isBack
-                          ? "bg-white text-black ring-2 ring-[hsl(var(--gold))]/50"
-                          : "bg-white/90 text-black"
+                          ? "bg-[#FDFBF7] text-[#1A1A1A] ring-2 ring-[hsl(var(--gold))]/50"
+                          : "bg-[#FDFBF7]/90 text-[#1A1A1A]"
                       }`}
                     >
                       {isBack ? "✓ Back" : "Set Back"}

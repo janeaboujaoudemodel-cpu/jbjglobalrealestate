@@ -71,7 +71,7 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
   // Show loading state while checking auth or broker status
   if ((authLoading || isLoading) && showLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
       </div>
     );

@@ -127,25 +127,25 @@ const CookiesConsentBanner = () => {
                     <Cookie className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-black font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
-                    <p className="text-black/90 text-xs sm:text-sm leading-relaxed mb-3">
+                    <h3 className="text-[#1A1A1A] font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
+                    <p className="text-[#1A1A1A]/90 text-xs sm:text-sm leading-relaxed mb-3">
                       We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="bg-gold text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="bg-black text-white font-semibold border-2 border-black hover:bg-gray-800 hover:border-gray-800 transition-all shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
+                        className="bg-[#1A1A1A] text-white font-semibold border-2 border-[#1A1A1A] hover:bg-[#1A1A1A] hover:border-[#1A1A1A] transition-all shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Manage Preferences
                       </Button>
                     </div>
-                    <p className="text-black/70 text-[10px] sm:text-xs mt-3">
+                    <p className="text-[#1A1A1A]/70 text-[10px] sm:text-xs mt-3">
                       <Link to="/cookies" className="text-[#8A6F3F] hover:text-[#6F5930] underline underline-offset-2 font-semibold">
                         Cookies Policy
                       </Link>{" · "}
@@ -160,16 +160,16 @@ const CookiesConsentBanner = () => {
               /* Preferences Panel */
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-black font-semibold text-lg">Cookie Preferences</h3>
+                  <h3 className="text-[#1A1A1A] font-semibold text-lg">Cookie Preferences</h3>
                   {/* X button removed - use Cancel button instead */}
                 </div>
 
                 <div className="space-y-4 mb-6">
                   {/* Essential - Always on */}
-                  <div className="flex items-center justify-between p-4 bg-white/70 border border-gold/20 rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl">
                     <div>
-                      <h4 className="text-black font-medium">Essential Cookies</h4>
-                      <p className="text-black/60 text-sm">Required for the website to function</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Essential Cookies</h4>
+                      <p className="text-[#1A1A1A]/60 text-sm">Required for the website to function</p>
                     </div>
                     <div className="px-3 py-1 bg-gradient-to-r from-gold/20 to-gold/10 text-gold text-xs font-medium rounded-full border border-gold/30">
                       Always on
@@ -177,30 +177,30 @@ const CookiesConsentBanner = () => {
                   </div>
 
                   {/* Analytics */}
-                  <label className="flex items-center justify-between p-4 bg-white/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-white/90 hover:border-gold/40 transition-all">
+                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-gold/40 transition-all">
                     <div>
-                      <h4 className="text-black font-medium">Analytics Cookies</h4>
-                      <p className="text-black/60 text-sm">Help us improve our website</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Analytics Cookies</h4>
+                      <p className="text-[#1A1A1A]/60 text-sm">Help us improve our website</p>
                     </div>
                     <input
                       type="checkbox"
                       checked={preferences.analytics}
                       onChange={(e) => setPreferences({ ...preferences, analytics: e.target.checked })}
-                      className="w-5 h-5 rounded border-gold/50 bg-white text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
+                      className="w-5 h-5 rounded border-gold/50 bg-[#FDFBF7] text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
                     />
                   </label>
 
                   {/* Marketing */}
-                  <label className="flex items-center justify-between p-4 bg-white/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-white/90 hover:border-gold/40 transition-all">
+                  <label className="flex items-center justify-between p-4 bg-[#FDFBF7]/70 border border-gold/20 rounded-xl cursor-pointer hover:bg-[#FDFBF7]/90 hover:border-gold/40 transition-all">
                     <div>
-                      <h4 className="text-black font-medium">Marketing Cookies</h4>
-                      <p className="text-black/60 text-sm">Personalized advertising</p>
+                      <h4 className="text-[#1A1A1A] font-medium">Marketing Cookies</h4>
+                      <p className="text-[#1A1A1A]/60 text-sm">Personalized advertising</p>
                     </div>
                     <input
                       type="checkbox"
                       checked={preferences.marketing}
                       onChange={(e) => setPreferences({ ...preferences, marketing: e.target.checked })}
-                      className="w-5 h-5 rounded border-gold/50 bg-white text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
+                      className="w-5 h-5 rounded border-gold/50 bg-[#FDFBF7] text-gold focus:ring-gold focus:ring-offset-0 accent-gold"
                     />
                   </label>
                 </div>
@@ -208,14 +208,14 @@ const CookiesConsentBanner = () => {
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSavePreferences}
-                    className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-6"
+                    className="bg-gold text-[#1A1A1A] font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-6"
                   >
                     Save preferences
                   </Button>
                   <Button
                     onClick={() => setShowPreferences(false)}
                     variant="outline"
-                    className="bg-white/80 border-black/20 text-black font-medium hover:bg-black hover:text-white transition-all px-6"
+                    className="bg-[#FDFBF7]/80 border-[#1A1A1A]/20 text-[#1A1A1A] font-medium hover:bg-[#1A1A1A] hover:text-white transition-all px-6"
                   >
                     Cancel
                   </Button>

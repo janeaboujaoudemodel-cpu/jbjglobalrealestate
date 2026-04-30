@@ -293,5 +293,5 @@ export const ACCESS_LEVEL_LABELS: Record<AccessLevel, { label: string; color: st
   "R*": { label: "Action-Gated", color: "text-amber-400" },
   "RW†": { label: "Sandboxed", color: "text-purple-400" },
   "RW‡": { label: "Re-auth Required", color: "text-red-400" },
-  "-": { label: "No Access", color: "text-gray-600" },
+  "-": { label: "No Access", color: "text-[#5A4A2E]" },
 };

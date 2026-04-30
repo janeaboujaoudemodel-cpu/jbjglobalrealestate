@@ -113,7 +113,7 @@ function BrokerProfileHero() {
           <h2 className="text-2xl font-bold text-foreground">{firstName}</h2>
           <TierBadge tierName={tier} />
           {performanceRating === "elite" && (
-            <Badge className="bg-gradient-to-r from-amber-500 to-yellow-400 text-black border-0">
+            <Badge className="bg-gradient-to-r from-amber-500 to-yellow-400 text-[#1A1A1A] border-0">
               <Trophy className="w-3 h-3 mr-1" /> Elite
             </Badge>
           )}
@@ -293,7 +293,7 @@ export default function BrokerPortal() {
                   <p className="text-[hsl(36,40%,70%)]/70 text-sm">JBJ Global Real Estate — Partner Hub</p>
                 </div>
               </div>
-              <div className="bg-black/30 backdrop-blur-sm rounded-2xl border border-[hsl(36,40%,70%)]/20 p-6 md:p-8">
+              <div className="bg-[#1A1A1A]/30 backdrop-blur-sm rounded-2xl border border-[hsl(36,40%,70%)]/20 p-6 md:p-8">
                 <BrokerProfileHero />
               </div>
             </motion.div>

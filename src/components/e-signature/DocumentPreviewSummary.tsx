@@ -104,7 +104,7 @@ export default function DocumentPreviewSummary({
         )}
 
         {/* Scaled-down preview with field overlays INSIDE the scaled container */}
-        <div className="relative border rounded-lg bg-white" style={{ maxHeight: "500px", overflow: "auto" }}>
+        <div className="relative border rounded-lg bg-[#FDFBF7]" style={{ maxHeight: "500px", overflow: "auto" }}>
           {/* Scroll fade indicator */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/80 to-transparent z-20 rounded-b-lg" />
 

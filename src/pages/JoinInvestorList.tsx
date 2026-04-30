@@ -165,7 +165,7 @@ const JoinInvestorList = () => {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
               {benefits.map((b) => (
-                <div key={b.label} className="flex items-start gap-3 p-4 bg-white/60 border border-gold/20">
+                <div key={b.label} className="flex items-start gap-3 p-4 bg-[#FDFBF7]/60 border border-gold/20">
                   <div className="w-9 h-9 bg-gold/15 flex items-center justify-center flex-shrink-0">
                     <b.icon className="w-4.5 h-4.5 text-gold" />
                   </div>
@@ -200,7 +200,7 @@ const JoinInvestorList = () => {
               <motion.form
                 variants={fadeInUp}
                 onSubmit={handleSubmit}
-                className="bg-white shadow-lg border border-stone-200 p-6 md:p-8 space-y-6"
+                className="bg-[#FDFBF7] shadow-lg border border-stone-200 p-6 md:p-8 space-y-6"
               >
                 {/* Contact Details */}
                 <div className="space-y-1 mb-4">
@@ -341,7 +341,7 @@ const JoinInvestorList = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 text-base tracking-wide uppercase"
+                  className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold h-12 text-base tracking-wide uppercase"
                 >
                   {isSubmitting ? "Submitting..." : "Submit Investor Profile"}
                   <ArrowRight className="ml-2 h-5 w-5" />

@@ -210,7 +210,7 @@ const FooterPreviewInner = () => {
   return (
     <div className="min-h-screen bg-neutral-950 text-white font-inter">
       {/* Toolbar */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#1A1A1A]/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-3 px-4 py-3">
           <div className="flex items-center gap-2 mr-2">
             <span className="inline-block h-2 w-2 rounded-full bg-[hsl(43_55%_60%)]" />
@@ -225,7 +225,7 @@ const FooterPreviewInner = () => {
               type="button"
               onClick={() => cyclePreset(-1)}
               aria-label="Previous background"
-              className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-white/5 hover:bg-white/10"
+              className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -234,11 +234,11 @@ const FooterPreviewInner = () => {
               onChange={(e) =>
                 setState((s) => ({ ...s, presetKey: e.target.value }))
               }
-              className="h-8 rounded border border-white/15 bg-black/60 px-2 text-xs text-white"
+              className="h-8 rounded border border-white/15 bg-[#1A1A1A]/60 px-2 text-xs text-white"
               aria-label="Background preset"
             >
               {PRESETS.map((p) => (
-                <option key={p.key} value={p.key} className="bg-black">
+                <option key={p.key} value={p.key} className="bg-[#1A1A1A]">
                   {p.label}
                 </option>
               ))}
@@ -247,14 +247,14 @@ const FooterPreviewInner = () => {
               type="button"
               onClick={() => cyclePreset(1)}
               aria-label="Next background"
-              className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-white/5 hover:bg-white/10"
+              className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
           {/* Width selector */}
-          <div className="flex items-center gap-1 rounded border border-white/15 bg-white/5 p-0.5">
+          <div className="flex items-center gap-1 rounded border border-white/15 bg-[#FDFBF7]/5 p-0.5">
             {WIDTHS.map((w) => (
               <button
                 key={w.key}
@@ -263,7 +263,7 @@ const FooterPreviewInner = () => {
                 className={cn(
                   "h-7 rounded px-2 text-[11px] font-medium transition-colors",
                   state.widthKey === w.key
-                    ? "bg-white text-black"
+                    ? "bg-[#FDFBF7] text-[#1A1A1A]"
                     : "text-white/70 hover:text-white",
                 )}
               >
@@ -280,7 +280,7 @@ const FooterPreviewInner = () => {
               "inline-flex h-8 items-center gap-1.5 rounded border px-2.5 text-xs",
               state.ruler
                 ? "border-[hsl(43_55%_60%)] bg-[hsl(43_55%_60%)]/15 text-[hsl(43_55%_60%)]"
-                : "border-white/15 bg-white/5 text-white/80 hover:bg-white/10",
+                : "border-white/15 bg-[#FDFBF7]/5 text-white/80 hover:bg-[#FDFBF7]/10",
             )}
             aria-pressed={state.ruler}
             title="Toggle 8px grid (R)"
@@ -316,7 +316,7 @@ const FooterPreviewInner = () => {
           <Link
             to="/"
             aria-label="Close preview"
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-white/5 hover:bg-white/10"
+            className="inline-flex h-8 w-8 items-center justify-center rounded border border-white/15 bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10"
           >
             <X className="h-4 w-4" />
           </Link>

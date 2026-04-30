@@ -269,7 +269,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         {/* Click to enable overlay */}
         {!mapInteractive && (
           <div
-            className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-black/5"
+            className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
             onClick={() => {
               setMapInteractive(true);
               if (mapInstanceRef.current) {
@@ -278,7 +278,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
               }
             }}
           >
-            <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
+            <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-[#1A1A1A]/70">
               {t('map.clickToEnable')}
             </div>
           </div>

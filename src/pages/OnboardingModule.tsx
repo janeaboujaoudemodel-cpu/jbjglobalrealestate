@@ -324,7 +324,7 @@ export default function OnboardingModule() {
                   <Link to="/onboarding">Back to Dashboard</Link>
                 </Button>
                 {!passed && (
-                  <Button onClick={handleRetakeQuiz} className="bg-gold hover:bg-gold/90 text-black">
+                  <Button onClick={handleRetakeQuiz} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                     Retake Quiz
                   </Button>
                 )}
@@ -422,7 +422,7 @@ export default function OnboardingModule() {
                 </Button>
                 
                 {currentQuestionIndex < questions.length - 1 ? (
-                  <Button onClick={handleNextQuestion} className="bg-gold hover:bg-gold/90 text-black">
+                  <Button onClick={handleNextQuestion} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                     Next
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
@@ -430,7 +430,7 @@ export default function OnboardingModule() {
                   <Button
                     onClick={handleSubmitQuiz}
                     disabled={!allAnswered || submitting}
-                    className="bg-gold hover:bg-gold/90 text-black"
+                    className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                   >
                     {submitting ? (
                       <>
@@ -454,7 +454,7 @@ export default function OnboardingModule() {
                 onClick={() => setCurrentQuestionIndex(index)}
                 className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
                   currentQuestionIndex === index
-                    ? 'bg-gold text-black'
+                    ? 'bg-gold text-[#1A1A1A]'
                     : answers[q.id]
                     ? 'bg-green-500/20 text-green-500 border border-green-500'
                     : 'bg-muted text-muted-foreground'
@@ -567,7 +567,7 @@ export default function OnboardingModule() {
                     </p>
                     <Button
                       onClick={() => setShowQuiz(true)}
-                      className="w-full bg-gold hover:bg-gold/90 text-black"
+                      className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                     >
                       Start Quiz
                     </Button>

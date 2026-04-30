@@ -54,7 +54,7 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
       >
         {formattedValue}
       </p>
-      <p className="text-black text-xs md:text-sm uppercase tracking-wider">{label}</p>
+      <p className="text-[#1A1A1A] text-xs md:text-sm uppercase tracking-wider">{label}</p>
     </div>
   );
 };
@@ -85,11 +85,11 @@ const Awards = () => {
             <div className="jj-layer-active rounded-2xl p-6 md:p-10">
               <p className="text-gold text-sm uppercase tracking-widest mb-4">Awards & Recognition</p>
               <h1 
-                className="text-black text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
+                className="text-[#1A1A1A] text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
               >
                 Recognized for <span className="text-gold">Excellence</span>
               </h1>
-              <p className="text-gray-700 text-lg max-w-2xl leading-relaxed">
+              <p className="text-[#5A4A2E] text-lg max-w-2xl leading-relaxed">
                 Our commitment to exceptional service and outstanding results has earned us 
                 recognition from the industry's most prestigious organizations.
               </p>
@@ -98,7 +98,7 @@ const Awards = () => {
         </section>
 
         {/* Stats with Counter Animation */}
-        <section className="py-16 bg-black relative overflow-hidden">
+        <section className="py-16 bg-[#1A1A1A] relative overflow-hidden">
           <div className="jj-layer-2">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10 relative">
               <div 
@@ -124,7 +124,7 @@ const Awards = () => {
         </section>
 
         {/* Awards Grid */}
-        <section className="py-20 bg-black">
+        <section className="py-20 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="jj-layer-active rounded-2xl p-6 md:p-10">
               {/* Section Header */}
@@ -132,11 +132,11 @@ const Awards = () => {
                 <span className="text-gold text-sm uppercase tracking-[0.4em]">Recognition</span>
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
-                  className="text-black text-3xl md:text-4xl font-bold"
+                  className="text-[#1A1A1A] text-3xl md:text-4xl font-bold"
                 >
                   Awards & <span className="text-gold">Achievements</span>
                 </h2>
-                <p className="text-gray-600 text-base mt-4 max-w-xl mx-auto">
+                <p className="text-[#5A4A2E] text-base mt-4 max-w-xl mx-auto">
                   A decade of excellence recognized by Dubai's leading developers and industry bodies.
                 </p>
               </div>
@@ -159,14 +159,14 @@ const Awards = () => {
                       />
                       {/* Year Badge */}
                       {award.year && (
-                        <span className="absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full bg-gold text-black shadow-lg">
+                        <span className="absolute top-3 right-3 px-3 py-1 text-xs font-bold rounded-full bg-gold text-[#1A1A1A] shadow-lg">
                           {award.year}
                         </span>
                       )}
                     </div>
                     {/* Text Area */}
                     <div className="jj-card-inner p-5">
-                      <h3 className="text-black text-base font-semibold leading-tight mb-1 line-clamp-2">{award.title}</h3>
+                      <h3 className="text-[#1A1A1A] text-base font-semibold leading-tight mb-1 line-clamp-2">{award.title}</h3>
                       <p className="text-gold text-sm font-medium line-clamp-1">{award.organization}</p>
                     </div>
                   </div>
@@ -177,17 +177,17 @@ const Awards = () => {
         </section>
 
         {/* CTA */}
-        <section className="py-20 bg-black">
+        <section className="py-20 bg-[#1A1A1A]">
           <div className="jj-layer-2">
             <div className="max-w-[1100px] mx-auto">
               <div className="jj-layer-active rounded-2xl p-4 sm:p-6">
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-8 md:p-12 text-center shadow-[0_0_30px_rgba(200,167,102,0.25)]">
                   <h2 
-                    className="text-black text-3xl md:text-4xl font-bold mb-4"
+                    className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-4"
                   >
                     Experience Award-Winning <span className="text-gold">Service</span>
                   </h2>
-                  <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+                  <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                     Join the thousands of satisfied clients who have trusted JBJ Global Real Estate 
                     with their property decisions.
                   </p>
@@ -209,8 +209,8 @@ const Awards = () => {
                   >
                     <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                     <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                    <span className="relative text-black group-hover:text-gold transition-colors">Get Started</span>
-                    <span className="relative text-gold group-hover:text-black transition-colors">Today</span>
+                    <span className="relative text-[#1A1A1A] group-hover:text-gold transition-colors">Get Started</span>
+                    <span className="relative text-gold group-hover:text-[#1A1A1A] transition-colors">Today</span>
                   </a>
                 </div>
               </div>

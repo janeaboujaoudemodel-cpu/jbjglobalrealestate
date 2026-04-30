@@ -70,11 +70,11 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
     { id: 'facebook', name: 'Facebook', icon: <Facebook className="w-5 h-5" />, color: 'text-blue-500', bgColor: 'bg-blue-600', connected: false },
     { id: 'linkedin', name: 'LinkedIn', icon: <Linkedin className="w-5 h-5" />, color: 'text-blue-600', bgColor: 'bg-blue-700', connected: false },
     { id: 'youtube', name: 'YouTube', icon: <Youtube className="w-5 h-5" />, color: 'text-red-500', bgColor: 'bg-red-600', connected: false },
-    { id: 'tiktok', name: 'TikTok', icon: <TikTokIcon />, color: 'text-white', bgColor: 'bg-black', connected: false },
+    { id: 'tiktok', name: 'TikTok', icon: <TikTokIcon />, color: 'text-white', bgColor: 'bg-[#1A1A1A]', connected: false },
     { id: 'pinterest', name: 'Pinterest', icon: <PinterestIcon />, color: 'text-red-600', bgColor: 'bg-red-600', connected: false },
-    { id: 'twitter', name: 'X (Twitter)', icon: <Twitter className="w-5 h-5" />, color: 'text-white', bgColor: 'bg-black', connected: false },
-    { id: 'snapchat', name: 'Snapchat', icon: <SnapchatIcon />, color: 'text-black', bgColor: 'bg-yellow-400', connected: false },
-    { id: 'threads', name: 'Threads', icon: <ThreadsIcon />, color: 'text-white', bgColor: 'bg-black', connected: false },
+    { id: 'twitter', name: 'X (Twitter)', icon: <Twitter className="w-5 h-5" />, color: 'text-white', bgColor: 'bg-[#1A1A1A]', connected: false },
+    { id: 'snapchat', name: 'Snapchat', icon: <SnapchatIcon />, color: 'text-[#1A1A1A]', bgColor: 'bg-yellow-400', connected: false },
+    { id: 'threads', name: 'Threads', icon: <ThreadsIcon />, color: 'text-white', bgColor: 'bg-[#1A1A1A]', connected: false },
     { id: 'telegram', name: 'Telegram', icon: <TelegramIcon />, color: 'text-white', bgColor: 'bg-blue-500', connected: false },
   ]);
   const [connecting, setConnecting] = useState<string | null>(null);
@@ -197,7 +197,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
                 </Badge>
                 <button
                   onClick={() => handleDisconnect(platform.id)}
-                  className="text-xs text-gray-600 hover:text-red-400 transition-colors"
+                  className="text-xs text-[#5A4A2E] hover:text-red-400 transition-colors"
                 >
                   Disconnect
                 </button>
@@ -224,7 +224,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
 
           {/* Connection indicator */}
           <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${
-            platform.connected ? 'bg-green-500' : 'bg-gray-600'
+            platform.connected ? 'bg-green-500' : 'bg-[#1A1A1A]'
           }`} />
         </motion.div>
       ))}

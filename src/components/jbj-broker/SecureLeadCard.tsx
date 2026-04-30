@@ -74,7 +74,7 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
     qualified: "bg-green-100 text-green-800 border-green-200",
     contacted: "bg-amber-100 text-amber-800 border-amber-200",
     negotiating: "bg-purple-100 text-purple-800 border-purple-200",
-    closed: "bg-gray-100 text-gray-800 border-gray-200",
+    closed: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30",
   };
 
   return (

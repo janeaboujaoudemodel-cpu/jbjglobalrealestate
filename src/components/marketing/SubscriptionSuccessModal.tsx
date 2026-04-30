@@ -42,7 +42,7 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
               You may manage or disable your subscription anytime from:
             </p>
             <div className="flex items-center gap-2 text-sm flex-wrap">
-              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/5 border border-gold/20">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-gold/20">
                 <User className="w-3.5 h-3.5 text-gold" />
                 <span className="text-foreground font-medium">My Account</span>
               </div>
@@ -52,7 +52,7 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
                 <span className="text-gold font-medium">Settings</span>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/5 border border-gold/20">
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-[#1A1A1A]/5 border border-gold/20">
                 <Mail className="w-3.5 h-3.5 text-gold" />
                 <span className="text-foreground font-medium">Email Notifications</span>
               </div>

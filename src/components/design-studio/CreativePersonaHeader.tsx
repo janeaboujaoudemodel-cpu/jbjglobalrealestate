@@ -102,7 +102,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
 
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-bold text-black">
+              <h2 className="text-xl font-bold text-[#1A1A1A]">
                 {persona.name}
               </h2>
               <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white border-0 text-xs">
@@ -111,7 +111,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
               </Badge>
             </div>
             
-            <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+            <p className="text-[#5A4A2E] text-sm mt-1 line-clamp-2">
               {persona.bio}
             </p>
 
@@ -120,7 +120,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                 <Badge 
                   key={spec} 
                   variant="outline" 
-                  className="bg-white/80 border-rose-200 text-rose-700 text-xs"
+                  className="bg-[#FDFBF7]/80 border-rose-200 text-rose-700 text-xs"
                 >
                   {spec}
                 </Badge>
@@ -135,7 +135,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="outline" 
-                className="w-full justify-between bg-white border-rose-200 hover:bg-rose-50 text-black"
+                className="w-full justify-between bg-[#FDFBF7] border-rose-200 hover:bg-rose-50 text-[#1A1A1A]"
               >
                 <div className="flex items-center gap-2">
                   <span className="text-lg">{selectedLanguage.flag}</span>
@@ -147,7 +147,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                     </Badge>
                   )}
                 </div>
-                <ChevronDown className="h-4 w-4 text-gray-600" />
+                <ChevronDown className="h-4 w-4 text-[#5A4A2E]" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -160,7 +160,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                   <div className="flex items-center gap-2">
                     <span>{lang.flag}</span>
                     <span>{lang.name}</span>
-                    <span className="text-gray-600 text-xs">({lang.native})</span>
+                    <span className="text-[#5A4A2E] text-xs">({lang.native})</span>
                   </div>
                   {lang.translator && (
                     <Globe className="h-3 w-3 text-amber-500" />
@@ -189,10 +189,10 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
             exit={{ opacity: 0, height: 0 }}
             className="mt-6 overflow-hidden"
           >
-            <div className="bg-white rounded-xl p-4 border border-rose-100 shadow-inner">
+            <div className="bg-[#FDFBF7] rounded-xl p-4 border border-rose-100 shadow-inner">
               <div className="flex items-center gap-2 mb-3">
                 <MessageCircle className="w-5 h-5 text-rose-500" />
-                <span className="font-medium text-black">Describe your design idea</span>
+                <span className="font-medium text-[#1A1A1A]">Describe your design idea</span>
                 {selectedLanguage.translator && (
                   <Badge className="bg-amber-100 text-amber-700 border-0 text-xs">
                     Using translator for {selectedLanguage.name}
@@ -204,7 +204,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                 placeholder={`Tell ${persona.name} what you want to create... Be specific about colors, style, and purpose.`}
                 value={ideaText}
                 onChange={(e) => setIdeaText(e.target.value)}
-                className="min-h-[100px] bg-gray-50 border-rose-100 focus:border-rose-300 text-black"
+                className="min-h-[100px] bg-[#F7F2EA] border-rose-100 focus:border-rose-300 text-[#1A1A1A]"
               />
               
               <div className="flex justify-end gap-2 mt-3">

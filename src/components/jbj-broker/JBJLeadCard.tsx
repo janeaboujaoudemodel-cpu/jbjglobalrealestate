@@ -37,7 +37,7 @@ interface JBJLeadCardProps {
 
 const statusColors: Record<string, string> = {
   new: "border-blue-500 text-blue-600 bg-blue-50",
-  contacted: "border-gray-500 text-gray-600 bg-gray-50",
+  contacted: "border-[#B89555]/30 text-[#5A4A2E] bg-[#F7F2EA]",
   follow_up: "border-amber-500 text-amber-600 bg-amber-50",
   qualified: "border-purple-500 text-purple-600 bg-purple-50",
   converted: "border-green-500 text-green-600 bg-green-50",
@@ -67,7 +67,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
 
   if (viewMode === "list") {
     return (
-      <Card className="bg-white border shadow-sm hover:shadow-md transition-shadow">
+      <Card className="bg-[#FDFBF7] border shadow-sm hover:shadow-md transition-shadow">
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-10 w-10">
@@ -78,25 +78,25 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-medium text-gray-900 truncate">{lead.name}</h3>
+                <h3 className="font-medium text-[#1A1A1A] truncate">{lead.name}</h3>
                 <Badge variant="outline" className={statusColors[lead.status] || ""}>
                   {lead.status}
                 </Badge>
               </div>
-              <p className="text-sm text-gray-600 truncate">
+              <p className="text-sm text-[#5A4A2E] truncate">
                 {lead.email || lead.phone || "No contact info"}
               </p>
             </div>
 
             {lead.property_interest && (
-              <div className="hidden lg:flex items-center gap-1 text-sm text-gray-600">
+              <div className="hidden lg:flex items-center gap-1 text-sm text-[#5A4A2E]">
                 <Building className="h-4 w-4" />
                 <span className="truncate max-w-[150px]">{lead.property_interest}</span>
               </div>
             )}
 
             {lead.last_contact && (
-              <div className="hidden md:flex items-center gap-1 text-sm text-gray-600">
+              <div className="hidden md:flex items-center gap-1 text-sm text-[#5A4A2E]">
                 <Clock className="h-4 w-4" />
                 <span>{new Date(lead.last_contact).toLocaleDateString()}</span>
               </div>
@@ -126,7 +126,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
                 variant="outline"
                 onClick={handleCall}
                 disabled={!lead.phone}
-                className="border-gray-500 text-gray-600 hover:bg-gray-50"
+                className="border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA]"
               >
                 <Phone className="h-4 w-4" />
               </Button>
@@ -138,7 +138,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
   }
 
   return (
-    <Card className="bg-white border shadow-sm hover:shadow-lg transition-all duration-200">
+    <Card className="bg-[#FDFBF7] border shadow-sm hover:shadow-lg transition-all duration-200">
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -148,8 +148,8 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-medium text-gray-900">{lead.name}</h3>
-              <p className="text-sm text-gray-600 truncate max-w-[150px]">
+              <h3 className="font-medium text-[#1A1A1A]">{lead.name}</h3>
+              <p className="text-sm text-[#5A4A2E] truncate max-w-[150px]">
                 {lead.email || lead.phone || "No contact"}
               </p>
             </div>
@@ -180,18 +180,18 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
         </Badge>
 
         {lead.property_interest && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-            <Building className="h-4 w-4 text-gray-600" />
+          <div className="flex items-center gap-2 text-sm text-[#5A4A2E] mb-3">
+            <Building className="h-4 w-4 text-[#5A4A2E]" />
             <span className="truncate">{lead.property_interest}</span>
           </div>
         )}
 
         {lead.notes && (
-          <p className="text-sm text-gray-600 mb-3 line-clamp-2">{lead.notes}</p>
+          <p className="text-sm text-[#5A4A2E] mb-3 line-clamp-2">{lead.notes}</p>
         )}
 
         {lead.last_contact && (
-          <div className="flex items-center gap-1 text-xs text-gray-600 mb-4">
+          <div className="flex items-center gap-1 text-xs text-[#5A4A2E] mb-4">
             <Clock className="h-3 w-3" />
             <span>Last contact: {new Date(lead.last_contact).toLocaleDateString()}</span>
           </div>
@@ -222,7 +222,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             variant="outline"
             onClick={handleCall}
             disabled={!lead.phone}
-            className="border-gray-300"
+            className="border-[#B89555]/30"
           >
             <Phone className="h-4 w-4" />
           </Button>

@@ -1288,7 +1288,7 @@ export default function StampGeneratorPage() {
           </div>
 
           {/* Canvas bottom toolbar: Edit & Export + Zoom Controls */}
-          <div className="flex-shrink-0 border-t border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm px-3 py-2 flex items-center justify-between">
+          <div className="flex-shrink-0 border-t border-[hsl(var(--border))] bg-[#FDFBF7]/90 backdrop-blur-sm px-3 py-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               {(selectedSvg || allConcepts[0]) && !generating && (
                 <>
@@ -1425,7 +1425,7 @@ export default function StampGeneratorPage() {
 
       {/* AI Designer Floating Panel */}
       {chatOpen && (
-        <div className="fixed z-[10050] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
+        <div className="fixed z-[10050] flex flex-col bg-[#FDFBF7] rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
           style={{ width: 340, maxHeight: aiPanelMinimized ? 'auto' : 'calc(100vh - 120px)', top: 60, right: 16,
             transform: `translate(${aiPanelPos.x}px, ${aiPanelPos.y}px)` }}>
           <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
@@ -1436,11 +1436,11 @@ export default function StampGeneratorPage() {
             </div>
             <div className="flex items-center gap-1">
               <button onClick={() => setAiPanelMinimized(v => !v)}
-                className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30">
+                className="w-6 h-6 rounded-full bg-[#FDFBF7]/20 flex items-center justify-center hover:bg-[#FDFBF7]/30">
                 <span className="text-white font-bold text-[10px]">{aiPanelMinimized ? '▲' : '▬'}</span>
               </button>
               <button onClick={() => setChatOpen(false)}
-                className="w-6 h-6 rounded-full bg-white flex items-center justify-center hover:bg-white/90">
+                className="w-6 h-6 rounded-full bg-[#FDFBF7] flex items-center justify-center hover:bg-[#FDFBF7]/90">
                 <X size={12} className="text-[hsl(var(--gold-dark))]" />
               </button>
             </div>
@@ -1452,7 +1452,7 @@ export default function StampGeneratorPage() {
                 <div className="grid grid-cols-2 gap-1">
                   {['Make borders thicker & add star dividers', 'Switch to minimalist style', 'Add decorative inner ring', 'Make text larger and bolder'].map(eg => (
                     <button key={eg} onClick={() => sendChatMessage(eg)}
-                      className="text-left text-[9px] p-1.5 bg-white rounded-md border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))] transition-colors leading-tight">
+                      className="text-left text-[9px] p-1.5 bg-[#FDFBF7] rounded-md border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.5)] text-[hsl(var(--foreground))] transition-colors leading-tight">
                       {eg}
                     </button>
                   ))}
@@ -1481,7 +1481,7 @@ export default function StampGeneratorPage() {
               {refinedPreview && (
                 <div className="flex-shrink-0 border-t border-[hsl(var(--border))] px-3 py-2 space-y-2 bg-[hsl(var(--pearl-1))]">
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Refined preview:</p>
-                  <div className="flex items-center justify-center bg-white rounded-lg border border-[hsl(var(--border))] py-2">
+                  <div className="flex items-center justify-center bg-[#FDFBF7] rounded-lg border border-[hsl(var(--border))] py-2">
                     <StampSVGRenderer svgSource={refinedPreview.svgSource} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={110} />
                   </div>
                   <div className="flex gap-1.5">
@@ -1494,12 +1494,12 @@ export default function StampGeneratorPage() {
                   </div>
                 </div>
               )}
-              <div className="flex-shrink-0 px-3 py-2 border-t border-[hsl(var(--border))] bg-white">
+              <div className="flex-shrink-0 px-3 py-2 border-t border-[hsl(var(--border))] bg-[#FDFBF7]">
                 <div className="flex gap-1.5">
                   <input value={chatInput} onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
                     placeholder="Describe changes…"
-                    className="flex-1 h-8 px-2.5 text-[10px] border-2 border-[hsl(var(--border))] rounded-lg focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-[hsl(var(--foreground))]" />
+                    className="flex-1 h-8 px-2.5 text-[10px] border-2 border-[hsl(var(--border))] rounded-lg focus:outline-none focus:border-[hsl(var(--gold))] bg-[#FDFBF7] text-[hsl(var(--foreground))]" />
                   <Button size="sm" className="h-8 px-2.5 bg-[hsl(var(--gold))] text-white" onClick={() => sendChatMessage()} disabled={chatLoading}>
                     <Send size={10} />
                   </Button>

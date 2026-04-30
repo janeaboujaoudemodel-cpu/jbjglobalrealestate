@@ -56,7 +56,7 @@ const categories = [
   { value: 'closing', label: 'Closing', color: 'bg-gold' },
   { value: 'nurture', label: 'Nurture', color: 'bg-pink-500' },
   { value: 'support', label: 'Support', color: 'bg-cyan-500' },
-  { value: 'custom', label: 'Custom', color: 'bg-gray-500' },
+  { value: 'custom', label: 'Custom', color: 'bg-[#B89555]' },
 ];
 
 const variables = [
@@ -208,14 +208,14 @@ export default function OwnerTemplates() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <FileText className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Message Templates</h1>
-                  <p className="text-gray-600 text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
+                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Message Templates</h1>
+                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
                 </div>
               </div>
               
@@ -271,7 +271,7 @@ export default function OwnerTemplates() {
                           <Badge
                             key={ch}
                             variant={formChannels.includes(ch) ? 'default' : 'outline'}
-                            className={`cursor-pointer ${formChannels.includes(ch) ? 'bg-gold text-black' : ''}`}
+                            className={`cursor-pointer ${formChannels.includes(ch) ? 'bg-gold text-[#1A1A1A]' : ''}`}
                             onClick={() => {
                               setFormChannels(prev => 
                                 prev.includes(ch) 
@@ -357,7 +357,7 @@ export default function OwnerTemplates() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
               <Input
                 placeholder="Search templates..."
                 value={searchQuery}
@@ -369,7 +369,7 @@ export default function OwnerTemplates() {
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                className={`cursor-pointer ${selectedCategory === 'all' ? 'bg-gold text-black' : ''}`}
+                className={`cursor-pointer ${selectedCategory === 'all' ? 'bg-gold text-[#1A1A1A]' : ''}`}
                 onClick={() => setSelectedCategory('all')}
               >
                 All
@@ -378,7 +378,7 @@ export default function OwnerTemplates() {
                 <Badge
                   key={cat.value}
                   variant={selectedCategory === cat.value ? 'default' : 'outline'}
-                  className={`cursor-pointer ${selectedCategory === cat.value ? 'bg-gold text-black' : ''}`}
+                  className={`cursor-pointer ${selectedCategory === cat.value ? 'bg-gold text-[#1A1A1A]' : ''}`}
                   onClick={() => setSelectedCategory(cat.value)}
                 >
                   {cat.label}
@@ -393,19 +393,19 @@ export default function OwnerTemplates() {
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <Card key={i} className="border-2 border-gold/20 animate-pulse">
                   <CardContent className="p-4">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-gray-100 rounded w-full mb-1" />
-                    <div className="h-3 bg-gray-100 rounded w-2/3" />
+                    <div className="h-4 bg-[#EFE6D6] rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-[#F7F2EA] rounded w-full mb-1" />
+                    <div className="h-3 bg-[#F7F2EA] rounded w-2/3" />
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : filteredTemplates.length === 0 ? (
-            <Card className="border-2 border-gold/20 bg-white/90">
+            <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
               <CardContent className="p-12 text-center">
-                <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">No templates found</p>
-                <p className="text-gray-600 text-sm mt-1">Create your first template to get started</p>
+                <FileText className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                <p className="text-[#5A4A2E] font-medium">No templates found</p>
+                <p className="text-[#5A4A2E] text-sm mt-1">Create your first template to get started</p>
               </CardContent>
             </Card>
           ) : (
@@ -418,11 +418,11 @@ export default function OwnerTemplates() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    <Card className="border-2 border-gold/20 bg-white/90 hover:border-gold/40 transition-all group">
+                    <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90 hover:border-gold/40 transition-all group">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <h3 className="font-semibold text-black">{template.name}</h3>
+                            <h3 className="font-semibold text-[#1A1A1A]">{template.name}</h3>
                             <Badge 
                               variant="outline" 
                               className={`mt-1 text-xs ${category?.color} text-white border-0`}
@@ -461,11 +461,11 @@ export default function OwnerTemplates() {
                           </div>
                         </div>
 
-                        <p className="text-sm text-gray-600 line-clamp-3 mb-3">
+                        <p className="text-sm text-[#5A4A2E] line-clamp-3 mb-3">
                           {template.content}
                         </p>
 
-                        <div className="flex items-center justify-between text-xs text-gray-600">
+                        <div className="flex items-center justify-between text-xs text-[#5A4A2E]">
                           <div className="flex gap-1">
                             {template.channel_types.includes('whatsapp') && <MessageSquare className="h-3 w-3" />}
                             {(template.channel_types.includes('email') || template.channel_types.includes('email_gmail')) && <Mail className="h-3 w-3" />}

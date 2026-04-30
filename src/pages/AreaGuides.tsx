@@ -169,7 +169,7 @@ const AreaGuides = () => {
       {/* ─── HERO SECTION ─── */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#1A1A1A]"
       >
         {/* Background — UAE aerial */}
         <div
@@ -203,7 +203,7 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto mb-10"
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -212,7 +212,7 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
-            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gold text-gold font-medium rounded-xl hover:bg-gold hover:text-black transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gold text-gold font-medium rounded-xl hover:bg-gold hover:text-[#1A1A1A] transition-all"
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
@@ -236,7 +236,7 @@ const AreaGuides = () => {
                   setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                   scrollToGrid();
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-gold/20 hover:border-gold/50 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2 bg-[#FDFBF7]/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-gold/20 hover:border-gold/50 transition-all cursor-pointer"
               >
                 <MapPin className="w-3 h-3 text-[hsl(var(--gold))]" />
                 <span className="text-white text-xs font-medium">{emirate}</span>
@@ -267,7 +267,7 @@ const AreaGuides = () => {
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
         <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
           <div className="px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-black mb-4">
+            <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">
               Browse by Emirate
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-2">
@@ -284,7 +284,7 @@ const AreaGuides = () => {
                     className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
                   >
                     <MapPin className="w-5 h-5 text-gold" />
-                    <span className="text-black font-semibold text-sm">{emirate}</span>
+                    <span className="text-[#1A1A1A] font-semibold text-sm">{emirate}</span>
                     <span className="text-gold text-xs font-bold">{count} Areas</span>
                   </button>
                 );
@@ -302,17 +302,17 @@ const AreaGuides = () => {
 
           {/* Results count */}
           <div className="mb-6 flex items-center justify-between">
-            <p className="text-black/70">
+            <p className="text-[#1A1A1A]/70">
               Showing <span className="text-gold font-medium">{paginatedAreas.length}</span> of{" "}
               <span className="text-gold font-medium">{filteredAreas.length}</span> areas
               {totalPages > 1 && (
-                <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
+                <span className="text-[#1A1A1A]/40 ml-2">· Page {currentPage} of {totalPages}</span>
               )}
             </p>
             {shortcutFilters.emirates && shortcutFilters.emirates.length > 0 && (
               <button
                 onClick={() => setShortcutFilters(prev => ({ ...prev, emirates: [] }))}
-                className="text-xs text-gold hover:text-gray-800 flex items-center gap-1 transition-colors"
+                className="text-xs text-gold hover:text-[#1A1A1A] flex items-center gap-1 transition-colors"
               >
                 ✕ Clear emirate filter
               </button>
@@ -322,7 +322,7 @@ const AreaGuides = () => {
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-gold animate-spin" />
-              <span className="ml-3 text-black/50">Loading areas...</span>
+              <span className="ml-3 text-[#1A1A1A]/50">Loading areas...</span>
             </div>
           ) : error ? (
             <div className="text-center py-20">
@@ -330,8 +330,8 @@ const AreaGuides = () => {
             </div>
           ) : paginatedAreas.length === 0 ? (
             <div className="text-center py-20">
-              <MapPin className="w-12 h-12 text-black/30 mx-auto mb-4" />
-              <p className="text-black/50 text-lg">No areas found.</p>
+              <MapPin className="w-12 h-12 text-[#1A1A1A]/30 mx-auto mb-4" />
+              <p className="text-[#1A1A1A]/50 text-lg">No areas found.</p>
             </div>
           ) : (
             <>
@@ -383,7 +383,7 @@ const AreaGuides = () => {
                           {/* Trending + High Demand Badges */}
                           <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
                             {area.is_trending && (
-                              <Badge className="bg-gradient-to-r from-amber-500 to-amber-400 text-black px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
+                              <Badge className="bg-gradient-to-r from-amber-500 to-amber-400 text-[#1A1A1A] px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
                                 <TrendingUp className="w-3 h-3 mr-1" />
                                 TRENDING
                               </Badge>
@@ -398,7 +398,7 @@ const AreaGuides = () => {
 
                           {/* Emirate Label (normalized) */}
                           <div className="absolute top-3 left-3 z-10">
-                            <Badge className="bg-black/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
+                            <Badge className="bg-[#1A1A1A]/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-gold/30">
                               <MapPin className="w-3 h-3 mr-1" />
                               {normalizeEmirate(area.emirate || "")}
                             </Badge>
@@ -407,13 +407,13 @@ const AreaGuides = () => {
 
                         {/* Content Section */}
                         <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col flex-1">
-                          <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
+                          <h3 className="text-[#1A1A1A] font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
                             {area.name}
                           </h3>
 
                           <div className="flex-1 min-h-[40px]">
                             {area.description ? (
-                              <p className="text-gray-600 text-xs line-clamp-2">
+                              <p className="text-[#5A4A2E] text-xs line-clamp-2">
                                 {area.description
                                   .replace(/!\[.*?\]\(.*?\)/g, "")
                                   .replace(/provident\s*(estate)?/gi, "")
@@ -422,14 +422,14 @@ const AreaGuides = () => {
                                   .trim()}
                               </p>
                             ) : (
-                              <p className="text-gray-600 text-xs italic">
+                              <p className="text-[#5A4A2E] text-xs italic">
                                 Explore properties in {area.name}
                               </p>
                             )}
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-gray-700 text-xs mt-3 pt-3 border-t border-gold/20">
+                          <div className="flex items-center gap-3 text-[#5A4A2E] text-xs mt-3 pt-3 border-t border-gold/20">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5 text-gold" />
@@ -438,7 +438,7 @@ const AreaGuides = () => {
                             )}
                             {(area.developer_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <span className="text-gray-600">{area.developer_count} Developers</span>
+                                <span className="text-[#5A4A2E]">{area.developer_count} Developers</span>
                               </div>
                             )}
                             {area.is_trending && (
@@ -454,7 +454,7 @@ const AreaGuides = () => {
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                              <span className="text-gray-600 text-xs">View area details</span>
+                              <span className="text-[#5A4A2E] text-xs">View area details</span>
                             )}
                           </div>
                         </div>
@@ -470,7 +470,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Previous
@@ -478,15 +478,15 @@ const AreaGuides = () => {
 
                   {getPageNumbers(currentPage, totalPages).map((page, idx) =>
                     page === "ellipsis" ? (
-                      <span key={`e-${idx}`} className="px-2 text-black/40">…</span>
+                      <span key={`e-${idx}`} className="px-2 text-[#1A1A1A]/40">…</span>
                     ) : (
                       <button
                         key={page}
                         onClick={() => handlePageChange(page)}
                         className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                           page === currentPage
-                            ? "bg-gold text-black shadow-md"
-                            : "bg-white/60 border border-gold/30 text-black/70 hover:bg-gold/20"
+                            ? "bg-gold text-[#1A1A1A] shadow-md"
+                            : "bg-[#FDFBF7]/60 border border-gold/30 text-[#1A1A1A]/70 hover:bg-gold/20"
                         }`}
                       >
                         {page}
@@ -497,7 +497,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-white/60 text-black/70 hover:bg-gold hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-gold/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-gold hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
@@ -519,15 +519,15 @@ const AreaGuides = () => {
       {/* CTA Section */}
       <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
             Can't Find What You're Looking For?
           </h2>
-          <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+          <p className="text-[#5A4A2E] mb-6 max-w-xl mx-auto">
             Our team can help you discover the perfect area based on your lifestyle and investment goals.
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-xl border-2 border-black hover:bg-white hover:text-black transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white font-semibold rounded-xl border-2 border-[#1A1A1A] hover:bg-[#FDFBF7] hover:text-[#1A1A1A] transition-all"
           >
             Contact Our Team
             <ArrowRight className="w-4 h-4" />

@@ -210,9 +210,9 @@ export function getStatusColorClass(status?: 'online' | 'away' | 'offline'): str
     case 'away':
       return 'bg-amber-500';
     case 'offline':
-      return 'bg-gray-500';
+      return 'bg-[#B89555]';
     default:
-      return 'bg-gray-500';
+      return 'bg-[#B89555]';
   }
 }
 

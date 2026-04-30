@@ -86,7 +86,7 @@ const DeveloperHubOverview = () => {
       submitted: { label: "Submitted", className: "bg-amber-500/20 text-amber-400 border-amber-500/30", icon: Clock },
       under_review: { label: "Under Review", className: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Clock },
       rejected: { label: "Rejected", className: "bg-red-500/20 text-red-400 border-red-500/30", icon: AlertTriangle },
-      draft: { label: "Draft", className: "bg-white/10 text-[#ECE2D2]/60 border-white/20", icon: Clock },
+      draft: { label: "Draft", className: "bg-[#FDFBF7]/10 text-[#ECE2D2]/60 border-white/20", icon: Clock },
     };
     const s = map[status || "draft"] || map.draft;
     const Icon = s.icon;
@@ -132,7 +132,7 @@ const DeveloperHubOverview = () => {
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-[#ECE2D2]/60">{card.title}</CardTitle>
-              <card.icon className="w-5 h-5 text-gray-600 group-hover:text-gold transition-colors" />
+              <card.icon className="w-5 h-5 text-[#5A4A2E] group-hover:text-gold transition-colors" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-gold">

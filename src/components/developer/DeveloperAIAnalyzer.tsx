@@ -73,11 +73,11 @@ function PricePerSqftChart({ text }: { text: string }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Price Per Sqft</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${isPositive ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
           {isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
@@ -99,16 +99,16 @@ function PricePerSqftChart({ text }: { text: string }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
+      <div className="flex items-center gap-3 text-xs text-[#5A4A2E] mb-3">
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
-      <p className="text-gray-600 text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
+      <p className="text-[#5A4A2E] text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
     </div>
   );
 }
@@ -142,11 +142,11 @@ function SupplyDemandChart({ text }: { text: string }) {
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Supply vs Demand</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${ratio > 0.9 ? 'bg-emerald-50 text-emerald-700' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'}`}>
           <StatusIcon className="w-3.5 h-3.5" />
@@ -176,12 +176,12 @@ function SupplyDemandChart({ text }: { text: string }) {
         </ResponsiveContainer>
       </div>
       <div className="flex items-center gap-4 mb-4 text-xs">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} /><span className="text-gray-600">Supply (New Units)</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-gray-600">Demand (Absorption)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} /><span className="text-[#5A4A2E]">Supply (New Units)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-[#5A4A2E]">Demand (Absorption)</span></div>
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
     </div>
@@ -209,11 +209,11 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Investment Metrics</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
           <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
@@ -236,12 +236,12 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       </div>
       <div className="flex items-center gap-3 flex-wrap text-xs mb-3">
         {yieldMetrics.map((m) => (
-          <span key={m.name} className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} /><span className="text-gray-600">{m.name}</span></span>
+          <span key={m.name} className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} /><span className="text-[#5A4A2E]">{m.name}</span></span>
         ))}
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
     </div>
@@ -262,29 +262,29 @@ function PortfolioStrengthCard({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Building2 className="w-5 h-5 text-gold" />
-          <h3 className="font-bold text-black text-lg">Portfolio Strength</h3>
+          <h3 className="font-bold text-[#1A1A1A] text-lg">Portfolio Strength</h3>
         </div>
       </div>
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
               <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-black font-semibold text-sm truncate">{dev.name}</p>
-              {dev.projects && <p className="text-gray-600 text-xs mt-0.5 truncate">{dev.projects}</p>}
+              <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
+              {dev.projects && <p className="text-[#5A4A2E] text-xs mt-0.5 truncate">{dev.projects}</p>}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-gray-500 flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#8A7556] flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
       {devEntries.length === 0 && (
-        <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{text}</div>
+        <div className="text-[#5A4A2E] text-sm leading-relaxed whitespace-pre-line">{text}</div>
       )}
     </div>
   );
@@ -322,7 +322,7 @@ function PortfolioDonut({ overview }: { overview: string }) {
       </div>
       <div className="mt-2 space-y-1">
         {data.map(d => (
-          <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-gray-600 justify-center">
+          <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-[#5A4A2E] justify-center">
             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.fill }} />
             {d.name}
           </div>
@@ -449,7 +449,7 @@ export const DeveloperAIAnalyzer = ({
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Developer Intelligence
           </h2>
         </div>
@@ -457,36 +457,36 @@ export const DeveloperAIAnalyzer = ({
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {foundedYear && (
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <CalendarDays className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{foundedYear}</div>
-              <div className="text-gray-600 text-xs mt-1">Founded</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Founded</div>
             </div>
           )}
           {projectCount && (
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Home className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{projectCount}</div>
-              <div className="text-gray-600 text-xs mt-1">Projects</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Projects</div>
             </div>
           )}
           {completedProjects && (
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{completedProjects.toLocaleString()}+</div>
-              <div className="text-gray-600 text-xs mt-1">Units Delivered</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Units Delivered</div>
             </div>
           )}
           {activeProjects && (
-            <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Building2 className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{activeProjects}</div>
-              <div className="text-gray-600 text-xs mt-1">Active Projects</div>
+              <div className="text-[#5A4A2E] text-xs mt-1">Active Projects</div>
             </div>
           )}
         </div>
 
-        <p className="text-gray-600 text-sm mb-6">
+        <p className="text-[#5A4A2E] text-sm mb-6">
           Comprehensive AI analysis for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-sm" />
         </p>
 
@@ -500,8 +500,8 @@ export const DeveloperAIAnalyzer = ({
           </div>
         ) : !analysis && !isAnalyzing ? (
           <div className="text-center py-8 space-y-4">
-            <p className="text-gray-600 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
-            <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
+            <p className="text-[#5A4A2E] text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
+            <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold hover:brightness-110">
               <Brain className="w-4 h-4 mr-2" />
               Analyze {developerName}
             </Button>
@@ -510,7 +510,7 @@ export const DeveloperAIAnalyzer = ({
           <div className="py-8 space-y-6 px-4">
             {hasTimedOut ? (
               <div className="text-center space-y-4">
-                <p className="text-gray-600 text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-[#5A4A2E] text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -523,22 +523,22 @@ export const DeveloperAIAnalyzer = ({
                   <div className="h-4 bg-gold/15 rounded w-56" />
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2 bg-white/60 rounded-2xl p-6 space-y-3">
+                  <div className="lg:col-span-2 bg-[#FDFBF7]/60 rounded-2xl p-6 space-y-3">
                     <div className="h-4 bg-gold/10 rounded w-3/4" />
                     <div className="h-3 bg-gold/10 rounded w-full" />
                     <div className="h-3 bg-gold/10 rounded w-5/6" />
                     <div className="h-3 bg-gold/10 rounded w-2/3" />
                   </div>
-                  <div className="bg-black/80 rounded-2xl p-6 flex flex-col items-center gap-3">
+                  <div className="bg-[#1A1A1A]/80 rounded-2xl p-6 flex flex-col items-center gap-3">
                     <div className="w-24 h-24 rounded-full bg-gold/10" />
                     <div className="h-3 bg-gold/10 rounded w-20" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white/60 rounded-2xl p-6 h-56" />
-                  <div className="bg-white/60 rounded-2xl p-6 h-56" />
+                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 h-56" />
+                  <div className="bg-[#FDFBF7]/60 rounded-2xl p-6 h-56" />
                 </div>
-                <p className="text-gray-600 text-sm text-center">Loading intelligence for {developerName}...</p>
+                <p className="text-[#5A4A2E] text-sm text-center">Loading intelligence for {developerName}...</p>
               </div>
             )}
           </div>
@@ -547,7 +547,7 @@ export const DeveloperAIAnalyzer = ({
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl shadow-sm overflow-hidden">
                   {/* Premium Gradient Header Bar */}
                   <div className="bg-gradient-to-r from-black via-[#1a1a1a] to-black px-6 py-4 flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center">
@@ -555,7 +555,7 @@ export const DeveloperAIAnalyzer = ({
                     </div>
                     <div>
                       <h3 className="font-bold text-gold text-lg">Developer Overview</h3>
-                      <span className="text-gray-600 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-gray-700" /> — Portfolio Profile</span>
+                      <span className="text-[#5A4A2E] text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-[#5A4A2E]" /> — Portfolio Profile</span>
                     </div>
                   </div>
 
@@ -566,8 +566,8 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <CalendarDays className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-black">{foundedYear}</div>
-                            <div className="text-[10px] text-gray-600">Founded</div>
+                            <div className="text-xs font-bold text-[#1A1A1A]">{foundedYear}</div>
+                            <div className="text-[10px] text-[#5A4A2E]">Founded</div>
                           </div>
                         </div>
                       )}
@@ -575,8 +575,8 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-black truncate">{headquarters.split(',')[0]}</div>
-                            <div className="text-[10px] text-gray-600">HQ</div>
+                            <div className="text-xs font-bold text-[#1A1A1A] truncate">{headquarters.split(',')[0]}</div>
+                            <div className="text-[10px] text-[#5A4A2E]">HQ</div>
                           </div>
                         </div>
                       )}
@@ -584,8 +584,8 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <Landmark className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-black">{completedProjects.toLocaleString()}+</div>
-                            <div className="text-[10px] text-gray-600">Units</div>
+                            <div className="text-xs font-bold text-[#1A1A1A]">{completedProjects.toLocaleString()}+</div>
+                            <div className="text-[10px] text-[#5A4A2E]">Units</div>
                           </div>
                         </div>
                       )}
@@ -593,8 +593,8 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <Home className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-black">{activeProjects}</div>
-                            <div className="text-[10px] text-gray-600">Active</div>
+                            <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects}</div>
+                            <div className="text-[10px] text-[#5A4A2E]">Active</div>
                           </div>
                         </div>
                       )}
@@ -602,7 +602,7 @@ export const DeveloperAIAnalyzer = ({
 
                     {/* Overview Text + Portfolio Donut */}
                     <div className="flex gap-6 items-start">
-                      <p className="text-gray-700 text-sm leading-relaxed flex-1">{cleanMarkdown(sections.overview)}</p>
+                      <p className="text-[#5A4A2E] text-sm leading-relaxed flex-1">{cleanMarkdown(sections.overview)}</p>
                       
                       {/* Mini Portfolio Distribution Donut */}
                       <div className="flex-shrink-0 w-36 hidden md:block">
@@ -614,7 +614,7 @@ export const DeveloperAIAnalyzer = ({
               )}
 
               {ratingScore !== null && (
-                <div className="bg-black rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
+                <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-gold/10 rounded-full blur-[60px] pointer-events-none" />
                   <Star className="w-7 h-7 text-gold mb-3 relative z-10" />
                   <div className="relative w-32 h-32 mb-3">
@@ -631,12 +631,12 @@ export const DeveloperAIAnalyzer = ({
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-4xl font-bold text-gold">{ratingScore}</span>
-                      <span className="text-gray-500 text-[10px] font-medium">/10</span>
+                      <span className="text-[#8A7556] text-[10px] font-medium">/10</span>
                     </div>
                   </div>
-                  <div className="text-gray-700 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-[#5A4A2E] text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-gray-600 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-[#5A4A2E] text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
@@ -686,7 +686,7 @@ export const DeveloperAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-gray-600 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-[#5A4A2E] text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

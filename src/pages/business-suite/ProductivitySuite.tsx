@@ -145,15 +145,15 @@ const ChampagneToolCard = ({
   return (
     <a
       href={href}
-      className={`flex flex-col h-full p-5 rounded-2xl bg-white/70 border-2 ${borderColorClass} hover:border-gold/70 hover:shadow-[0_8px_32px_rgba(200,167,102,0.3)] hover:-translate-y-1 transition-all duration-300 group backdrop-blur-sm`}
+      className={`flex flex-col h-full p-5 rounded-2xl bg-[#FDFBF7]/70 border-2 ${borderColorClass} hover:border-gold/70 hover:shadow-[0_8px_32px_rgba(200,167,102,0.3)] hover:-translate-y-1 transition-all duration-300 group backdrop-blur-sm`}
     >
       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
         <Icon className="w-6 h-6 text-white" />
       </div>
-      <h3 className={`text-base font-bold ${colorClass} mb-2 text-gray-900 group-hover:text-gold transition-colors`}>
+      <h3 className={`text-base font-bold ${colorClass} mb-2 text-[#1A1A1A] group-hover:text-gold transition-colors`}>
         {title}
       </h3>
-      <p className="text-sm text-gray-600 leading-relaxed flex-grow">
+      <p className="text-sm text-[#5A4A2E] leading-relaxed flex-grow">
         {description}
       </p>
       <div className="mt-4 text-sm font-semibold text-gold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
@@ -172,26 +172,26 @@ const ProductivitySuite = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-32 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center top, rgba(200,167,102,0.18) 0%, transparent 70%)' }} />
         
         <div className="relative max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-white/60 backdrop-blur-sm mb-6 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-[#FDFBF7]/60 backdrop-blur-sm mb-6 shadow-sm">
             <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-gray-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
+            <span className="text-[#1A1A1A] font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
             Corporate & <span style={{ background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
           </h1>
           
-          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-base md:text-lg text-[#5A4A2E] max-w-2xl mx-auto mb-8">
             Everything you need to create, brand, sign, and manage — stamps, business cards, logos, 
             resumes, cover letters, and more. All in one premium hub.
           </p>
           
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="flex items-center justify-center gap-6 text-sm text-[#5A4A2E]">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-gold rounded-full" />
               {corporateTools.length + productivityTools.length} Tools Included
             </span>
-            <span className="text-gray-600">|</span>
+            <span className="text-[#5A4A2E]">|</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 rounded-full" />
               Free Access
@@ -204,7 +204,7 @@ const ProductivitySuite = () => {
       <div className="max-w-7xl mx-auto px-4 pb-12">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-gray-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">Corporate Identity & Documents</span>
+          <span className="text-xs font-bold text-[#5A4A2E] tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-[#FDFBF7]/50">Corporate Identity & Documents</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -218,7 +218,7 @@ const ProductivitySuite = () => {
       <div className="max-w-7xl mx-auto px-4 pb-20">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-          <span className="text-xs font-bold text-gray-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-cyan-400/40 bg-white/50">Productivity</span>
+          <span className="text-xs font-bold text-[#5A4A2E] tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-cyan-400/40 bg-[#FDFBF7]/50">Productivity</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">

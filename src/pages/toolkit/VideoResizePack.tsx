@@ -548,7 +548,7 @@ const VideoResizePack = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Hero Section */}
       <section className="relative py-16 md:py-24">
         <div className="absolute inset-0 bg-gradient-to-b from-gold/5 to-transparent" />
@@ -576,14 +576,14 @@ const VideoResizePack = () => {
               <TabsList className="w-full max-w-md mx-auto grid grid-cols-2 bg-jj-layer-2 p-1 rounded-xl">
                 <TabsTrigger 
                   value="resize" 
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black rounded-lg"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] rounded-lg"
                 >
                   <LayoutGrid className="h-4 w-4 mr-2" />
                   Multi-Format Export
                 </TabsTrigger>
                 <TabsTrigger 
                   value="smart-reframe"
-                  className="data-[state=active]:bg-gold data-[state=active]:text-black rounded-lg"
+                  className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] rounded-lg"
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Smart Reframe AI
@@ -628,7 +628,7 @@ const VideoResizePack = () => {
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gray-500"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-[#8A7556]"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
@@ -640,7 +640,7 @@ const VideoResizePack = () => {
                       <div className="flex flex-col md:flex-row gap-6">
                         {/* Video Preview */}
                         <div className="flex-1">
-                          <div className="relative aspect-video bg-black/50 rounded-lg overflow-hidden">
+                          <div className="relative aspect-video bg-[#1A1A1A]/50 rounded-lg overflow-hidden">
                             <video
                               src={uploadedVideo.url}
                               className="w-full h-full object-contain"
@@ -651,7 +651,7 @@ const VideoResizePack = () => {
                         
                         {/* Video Info */}
                         <div className="md:w-72 space-y-4">
-                          <div className="p-4 bg-black/30 rounded-lg space-y-3">
+                          <div className="p-4 bg-[#1A1A1A]/30 rounded-lg space-y-3">
                             <div className="flex items-center gap-2 text-gold">
                               <FileVideo className="h-5 w-5" />
                               <span className="font-medium truncate">{uploadedVideo.name}</span>
@@ -795,7 +795,7 @@ const VideoResizePack = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                className="border-white/20 text-white/70 hover:bg-white/5"
+                                className="border-white/20 text-white/70 hover:bg-[#FDFBF7]/5"
                                 onClick={() => setSelectedFormats([])}
                               >
                                 Clear
@@ -837,7 +837,7 @@ const VideoResizePack = () => {
                           </div>
 
                           {/* Process Button */}
-                          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-black/30 rounded-xl">
+                          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-[#1A1A1A]/30 rounded-xl">
                             <div className="text-center sm:text-left">
                               <p className="text-white font-medium">
                                 {selectedFormats.length} format{selectedFormats.length !== 1 ? "s" : ""} selected
@@ -846,7 +846,7 @@ const VideoResizePack = () => {
                             </div>
                             <Button 
                               size="lg"
-                              className="bg-gold hover:bg-gold/90 text-black font-semibold px-8"
+                              className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold px-8"
                               onClick={startProcessing}
                               disabled={isProcessing || selectedFormats.length === 0}
                             >
@@ -892,7 +892,7 @@ const VideoResizePack = () => {
                             </div>
                             {hasCompletedJobs && (
                               <Button 
-                                className="bg-gold hover:bg-gold/90 text-black font-semibold"
+                                className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
                                 onClick={downloadAllAsZip}
                               >
                                 <Package className="h-4 w-4 mr-2" />
@@ -908,9 +908,9 @@ const VideoResizePack = () => {
                               return (
                                 <div 
                                   key={job.id}
-                                  className="flex items-center gap-4 p-4 bg-black/30 rounded-xl"
+                                  className="flex items-center gap-4 p-4 bg-[#1A1A1A]/30 rounded-xl"
                                 >
-                                  <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+                                  <div className="w-10 h-10 rounded-lg bg-[#FDFBF7]/5 flex items-center justify-center">
                                     {format?.icon}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -957,7 +957,7 @@ const VideoResizePack = () => {
                                         <Button 
                                           size="sm" 
                                           variant="outline"
-                                          className="border-white/20 text-white/70 hover:bg-white/5"
+                                          className="border-white/20 text-white/70 hover:bg-[#FDFBF7]/5"
                                         >
                                           <RefreshCw className="h-4 w-4 mr-1" />
                                           Retry
@@ -1014,7 +1014,7 @@ const VideoResizePack = () => {
                           </div>
                         ) : (
                           <>
-                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-gray-500"}`} />
+                            <Upload className={`h-12 w-12 mx-auto mb-4 ${dragActive ? "text-gold" : "text-[#8A7556]"}`} />
                             <p className="text-lg font-medium text-white mb-2">
                               {dragActive ? "Drop your video here" : "Drag & drop your video"}
                             </p>
@@ -1028,7 +1028,7 @@ const VideoResizePack = () => {
                         <div className="flex-1">
                           <div 
                             ref={cropContainerRef}
-                            className="relative aspect-video bg-black/50 rounded-lg overflow-hidden cursor-crosshair"
+                            className="relative aspect-video bg-[#1A1A1A]/50 rounded-lg overflow-hidden cursor-crosshair"
                             onMouseMove={handleCropMouseMove}
                             onMouseUp={handleCropMouseUp}
                             onMouseLeave={handleCropMouseUp}
@@ -1046,11 +1046,11 @@ const VideoResizePack = () => {
                                 {/* Darkened areas outside crop */}
                                 <div className="absolute inset-0 pointer-events-none">
                                   <div 
-                                    className="absolute bg-black/60"
+                                    className="absolute bg-[#1A1A1A]/60"
                                     style={{ top: 0, left: 0, right: 0, height: `${cropWindow.y}%` }}
                                   />
                                   <div 
-                                    className="absolute bg-black/60"
+                                    className="absolute bg-[#1A1A1A]/60"
                                     style={{ 
                                       top: `${cropWindow.y + cropWindow.height}%`, 
                                       left: 0, 
@@ -1059,7 +1059,7 @@ const VideoResizePack = () => {
                                     }}
                                   />
                                   <div 
-                                    className="absolute bg-black/60"
+                                    className="absolute bg-[#1A1A1A]/60"
                                     style={{ 
                                       top: `${cropWindow.y}%`, 
                                       left: 0, 
@@ -1068,7 +1068,7 @@ const VideoResizePack = () => {
                                     }}
                                   />
                                   <div 
-                                    className="absolute bg-black/60"
+                                    className="absolute bg-[#1A1A1A]/60"
                                     style={{ 
                                       top: `${cropWindow.y}%`, 
                                       right: 0, 
@@ -1116,7 +1116,7 @@ const VideoResizePack = () => {
                           
                           {/* Shot Timeline */}
                           {detectedShots.length > 0 && (
-                            <div className="mt-4 p-3 bg-black/30 rounded-lg">
+                            <div className="mt-4 p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center justify-between mb-2">
                                 <p className="text-sm text-white/70">
                                   <Scissors className="h-4 w-4 inline mr-1" />
@@ -1143,7 +1143,7 @@ const VideoResizePack = () => {
                                         : "border-white/10 hover:border-gold/30"
                                     }`}
                                   >
-                                    <div className="w-16 h-10 bg-white/10 rounded flex items-center justify-center text-xs text-white/70">
+                                    <div className="w-16 h-10 bg-[#FDFBF7]/10 rounded flex items-center justify-center text-xs text-white/70">
                                       Shot {idx + 1}
                                     </div>
                                     <p className="text-xs text-white/90 mt-1">
@@ -1158,7 +1158,7 @@ const VideoResizePack = () => {
 
                         {/* Video Info & Controls */}
                         <div className="lg:w-80 space-y-4">
-                          <div className="p-4 bg-black/30 rounded-lg space-y-3">
+                          <div className="p-4 bg-[#1A1A1A]/30 rounded-lg space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2 text-gold">
                                 <FileVideo className="h-5 w-5" />
@@ -1188,7 +1188,7 @@ const VideoResizePack = () => {
                           {/* Detect Shots Button */}
                           {detectedShots.length === 0 && (
                             <Button 
-                              className="w-full bg-gold hover:bg-gold/90 text-black font-semibold"
+                              className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
                               onClick={detectShots}
                               disabled={isDetectingShots}
                             >
@@ -1268,7 +1268,7 @@ const VideoResizePack = () => {
                               value={reframeSettings.trackingMode} 
                               onValueChange={(v) => setReframeSettings(prev => ({ ...prev, trackingMode: v as SmartReframeSettings["trackingMode"] }))}
                             >
-                              <SelectTrigger className="w-full bg-black/30 border-gold/30 text-white">
+                              <SelectTrigger className="w-full bg-[#1A1A1A]/30 border-gold/30 text-white">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -1322,7 +1322,7 @@ const VideoResizePack = () => {
 
                           {/* Toggle Options */}
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
+                            <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
                                 <User className="h-4 w-4 text-gold" />
                                 <span className="text-sm text-white">Keep Headroom</span>
@@ -1332,7 +1332,7 @@ const VideoResizePack = () => {
                                 onCheckedChange={(v) => setReframeSettings(prev => ({ ...prev, keepHeadroom: v }))}
                               />
                             </div>
-                            <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
+                            <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
                                 <Grid3X3 className="h-4 w-4 text-gold" />
                                 <span className="text-sm text-white">Safe Area Guides</span>
@@ -1342,7 +1342,7 @@ const VideoResizePack = () => {
                                 onCheckedChange={(v) => setReframeSettings(prev => ({ ...prev, showSafeArea: v }))}
                               />
                             </div>
-                            <div className="flex items-center justify-between p-3 bg-black/30 rounded-lg">
+                            <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
                               <div className="flex items-center gap-2">
                                 <Move className="h-4 w-4 text-gold" />
                                 <span className="text-sm text-white">Smooth Transitions</span>
@@ -1378,7 +1378,7 @@ const VideoResizePack = () => {
                           </div>
                         </CardHeader>
                         <CardContent>
-                          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-black/30 rounded-xl">
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-[#1A1A1A]/30 rounded-xl">
                             <div>
                               <p className="text-white font-medium">
                                 Ready to export {reframeSettings.targetRatio} version
@@ -1397,7 +1397,7 @@ const VideoResizePack = () => {
                                 All Sizes Pack
                               </Button>
                               <Button 
-                                className="bg-gold hover:bg-gold/90 text-black font-semibold"
+                                className="bg-gold hover:bg-gold/90 text-[#1A1A1A] font-semibold"
                                 onClick={startSmartReframe}
                                 disabled={isProcessing}
                               >
@@ -1422,7 +1422,7 @@ const VideoResizePack = () => {
                               {jobs.map((job) => (
                                 <div 
                                   key={job.id}
-                                  className="flex items-center gap-4 p-4 bg-black/20 rounded-lg"
+                                  className="flex items-center gap-4 p-4 bg-[#1A1A1A]/20 rounded-lg"
                                 >
                                   <div className="w-10 h-10 rounded-lg bg-gold/20 flex items-center justify-center">
                                     <Target className="h-5 w-5 text-gold" />
@@ -1442,7 +1442,7 @@ const VideoResizePack = () => {
                                   {job.status === "completed" && (
                                     <Button 
                                       size="sm" 
-                                      className="bg-gold hover:bg-gold/90 text-black"
+                                      className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                                       onClick={() => downloadOutput(job)}
                                     >
                                       <Download className="h-4 w-4 mr-1" />
@@ -1489,7 +1489,7 @@ const VideoResizePack = () => {
                   desc: "Drag crop windows on keyframes. Full control when you need it."
                 },
               ].map((feature, idx) => (
-                <Card key={idx} className="bg-black/50 border-gold/20">
+                <Card key={idx} className="bg-[#1A1A1A]/50 border-gold/20">
                   <CardContent className="pt-6 text-center">
                     <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gold/20 text-gold mb-4">
                       {feature.icon}

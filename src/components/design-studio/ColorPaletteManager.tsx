@@ -236,12 +236,12 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-gold hover:bg-gold/90 text-black">
+            <Button size="sm" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-1" />
               Create
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-gray-800 max-w-lg">
+          <DialogContent className="bg-zinc-900 border-[#1A1A1A] max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white">Create Color Palette</DialogTitle>
             </DialogHeader>
@@ -252,7 +252,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteName}
                   onChange={(e) => setNewPaletteName(e.target.value)}
                   placeholder="e.g., Luxury Property Campaign"
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteDescription}
                   onChange={(e) => setNewPaletteDescription(e.target.value)}
                   placeholder="Optional description"
-                  className="bg-zinc-800 border-gray-700 text-white mt-1"
+                  className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
                 />
               </div>
               
@@ -269,7 +269,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label className="text-white/70">Colors</Label>
-                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-gray-800">
+                  <Button size="sm" variant="ghost" onClick={addColorToNewPalette} className="text-gold hover:text-[#1A1A1A]">
                     <Plus className="w-4 h-4 mr-1" />
                     Add Color
                   </Button>
@@ -287,12 +287,12 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                         value={color.name}
                         onChange={(e) => updateColorInNewPalette(index, 'name', e.target.value)}
                         placeholder="Color name"
-                        className="flex-1 bg-zinc-800 border-gray-700 text-white text-sm"
+                        className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white text-sm"
                       />
                       <Input
                         value={color.hex}
                         onChange={(e) => updateColorInNewPalette(index, 'hex', e.target.value)}
-                        className="w-24 bg-zinc-800 border-gray-700 text-white text-sm font-mono"
+                        className="w-24 bg-zinc-800 border-[#1A1A1A] text-white text-sm font-mono"
                       />
                       {newPaletteColors.length > 2 && (
                         <Button size="icon" variant="ghost" onClick={() => removeColorFromNewPalette(index)} className="text-red-400 hover:text-red-300">
@@ -322,7 +322,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               <Button
                 onClick={handleCreatePalette}
                 disabled={isCreating || !newPaletteName.trim()}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
+                className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold"
               >
                 {isCreating ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -348,7 +348,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               style={{ backgroundColor: color.hex, border: color.hex === '#FFFFFF' ? '1px solid #333' : 'none' }}
               title={`${color.name}: ${color.hex}`}
             >
-              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/50 rounded">
+              <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-[#1A1A1A]/50 rounded">
                 <Copy className="w-3 h-3 text-white" />
               </span>
             </button>
@@ -363,9 +363,9 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
         </div>
       ) : palettes.length === 0 ? (
         <div className="text-center py-6">
-          <FolderOpen className="w-10 h-10 text-gray-600 mx-auto mb-2" />
+          <FolderOpen className="w-10 h-10 text-[#5A4A2E] mx-auto mb-2" />
           <p className="text-white/90 text-sm">No custom palettes yet</p>
-          <p className="text-gray-600 text-xs">Create your first palette above</p>
+          <p className="text-[#5A4A2E] text-xs">Create your first palette above</p>
         </div>
       ) : (
         <ScrollArea className="h-[250px]">
@@ -378,7 +378,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                 className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedPaletteId === palette.id
                     ? 'border-gold bg-gold/10'
-                    : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
+                    : 'border-[#1A1A1A] bg-zinc-800/50 hover:border-[#1A1A1A]'
                 }`}
                 onClick={() => onSelectPalette?.(palette)}
               >

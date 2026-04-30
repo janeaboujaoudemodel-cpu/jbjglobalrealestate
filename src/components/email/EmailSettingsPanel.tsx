@@ -111,7 +111,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
         <p className="text-sm text-muted-foreground mb-2">
           Resend API is active for all company email addresses (@jbj.ae). Emails are sent through verified domain with full deliverability.
         </p>
-        <div className="flex items-center gap-2 bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
+        <div className="flex items-center gap-2 bg-[#FDFBF7]/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
           <Zap className="w-4 h-4 text-emerald-500" />
           <span className="text-xs text-muted-foreground">Domain verified: <strong className="text-foreground">jbj.ae</strong></span>
         </div>
@@ -186,7 +186,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
 
         {personalKeyConnected && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2 bg-white/70 rounded-lg border border-emerald-200 px-3 py-2">
+            <div className="flex items-center gap-2 bg-[#FDFBF7]/70 rounded-lg border border-emerald-200 px-3 py-2">
               <Shield className="w-4 h-4 text-emerald-500" />
               <span className="text-xs text-muted-foreground">
                 API key securely stored · Full delivery tracking enabled

@@ -47,18 +47,18 @@ export const PreFooterSeparator = ({
           {/* Pearl Card - Single inner layer on champagne section */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
             {badgeText && (
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
                 <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
                 {badgeText}
               </div>
             )}
 
             <h2 
-              className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
+              className="text-[#1A1A1A] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
             >
               {title}
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-5 sm:mb-8 leading-relaxed">
+            <p className="text-[#5A4A2E] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-5 sm:mb-8 leading-relaxed">
               {subtitle}
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">
@@ -80,16 +80,16 @@ export const PreFooterSeparator = ({
                   <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
                   <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                   <span className="relative flex items-center gap-1">
-                    <span className="text-black group-hover:text-gold transition-colors">{primaryText.split(' ')[0]}</span>
-                    <span className="text-gold group-hover:text-black transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
+                    <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{primaryText.split(' ')[0]}</span>
+                    <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">{primaryText.split(' ').slice(1).join(' ') || ''}</span>
                   </span>
-                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-gold transition-colors relative z-10" />
+                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-gold transition-colors relative z-10" />
                 </button>
               </Link>
               {/* Secondary Button - Transparent with black border */}
               <Link to={secondaryLink} className="w-full sm:w-auto">
                 <button 
-                  className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 bg-transparent border-2 border-black text-black hover:bg-black hover:text-white"
+                  className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
                 >
                   {secondaryText}
                   <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

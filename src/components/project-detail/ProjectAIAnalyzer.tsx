@@ -220,12 +220,12 @@ export const ProjectAIAnalyzer = ({
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-3 mb-4">
             <Brain className="w-6 h-6 text-gold" />
-            <h2 className="text-2xl font-bold text-black">JBJ AI Project Intelligence</h2>
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">JBJ AI Project Intelligence</h2>
           </div>
-          <div className="bg-white/70 border border-gold/20 rounded-xl p-8 text-center">
+          <div className="bg-[#FDFBF7]/70 border border-gold/20 rounded-xl p-8 text-center">
             <Shield className="w-10 h-10 text-red-400 mx-auto mb-3" />
             <p className="text-red-600 font-medium">Insufficient Data for Analysis</p>
-            <p className="text-black/80 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
+            <p className="text-[#1A1A1A]/80 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
           </div>
         </div>
       </section>
@@ -237,12 +237,12 @@ export const ProjectAIAnalyzer = ({
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
             JBJ AI Project Intelligence
           </h2>
         </div>
 
-        <p className="text-black/80 text-sm mb-6 font-medium">
+        <p className="text-[#1A1A1A]/80 text-sm mb-6 font-medium">
           Comprehensive AI analysis for <span className="font-semibold text-gold">{projectName}</span>
           {developer && (
             <> by {developerSlug ? (
@@ -286,12 +286,12 @@ export const ProjectAIAnalyzer = ({
                   }}
                 />
                 <div className="text-center space-y-2">
-                  <p className="text-sm font-medium text-black/80">
+                  <p className="text-sm font-medium text-[#1A1A1A]/80">
                     JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
                   </p>
-                  <p className="text-xs text-black/70">Pulling market data, price trends & investment signals…</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Pulling market data, price trends & investment signals…</p>
                 </div>
-                <div className="w-48 h-px overflow-hidden rounded-full bg-gray-200">
+                <div className="w-48 h-px overflow-hidden rounded-full bg-[#EFE6D6]">
                   <div
                     className="h-full bg-gradient-to-r from-transparent via-gold to-transparent"
                     style={{ animation: "shimmer-slide 1.8s ease-in-out infinite", width: "60%" }}
@@ -315,13 +315,13 @@ export const ProjectAIAnalyzer = ({
 
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="lg:col-span-2 bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="w-5 h-5 text-gold" />
-                  <h3 className="font-bold text-black text-lg">Area Overview</h3>
+                  <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
-                  <p className="text-black/90 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                  <p className="text-[#1A1A1A]/90 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
                 ) : (
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
@@ -353,10 +353,10 @@ export const ProjectAIAnalyzer = ({
             {/* Row 2: Price Per Sqft (with chart) + Supply vs Demand (with progress) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Price Per Sqft */}
-              <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-bold text-black text-lg">Price Per Sqft</h3>
+                  <h3 className="font-bold text-[#1A1A1A] text-lg">Price Per Sqft</h3>
                   {yoyChange !== null && (
                     <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
                       yoyChange >= 0 ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-600"
@@ -371,9 +371,9 @@ export const ProjectAIAnalyzer = ({
                     {/* Large price stat */}
                     <div className="mb-4">
                       <div className="text-3xl font-bold text-emerald-600">
-                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black">/sqft</span>
+                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-[#1A1A1A]">/sqft</span>
                       </div>
-                      <div className="text-xs text-black/90 font-semibold mt-0.5">{areaName} average</div>
+                      <div className="text-xs text-[#1A1A1A]/90 font-semibold mt-0.5">{areaName} average</div>
                     </div>
 
                     {/* Bar chart */}
@@ -398,23 +398,23 @@ export const ProjectAIAnalyzer = ({
 
                     {/* Detail text */}
                     {sections?.pricePerSqft && (
-                      <p className="text-black/90 text-xs mt-3 leading-relaxed line-clamp-3">
+                      <p className="text-[#1A1A1A]/90 text-xs mt-3 leading-relaxed line-clamp-3">
                         {cleanMarkdown(sections.pricePerSqft)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.pricePerSqft ? cleanMarkdown(sections.pricePerSqft) : <span className="text-red-600 font-medium">Issue: Price data not available.</span>}
                   </div>
                 )}
               </div>
 
               {/* Supply vs Demand */}
-              <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="w-5 h-5 text-blue-600" />
-                  <h3 className="font-bold text-black text-lg">Supply vs Demand</h3>
+                  <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
                 </div>
 
                 {absorptionRate !== null ? (
@@ -422,7 +422,7 @@ export const ProjectAIAnalyzer = ({
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
                         <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
-                        <span className="text-sm text-black font-semibold mb-0.5">absorption rate</span>
+                        <span className="text-sm text-[#1A1A1A] font-semibold mb-0.5">absorption rate</span>
                       </div>
                       <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
                         <div
@@ -430,19 +430,19 @@ export const ProjectAIAnalyzer = ({
                           style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-black/90 font-semibold mt-1">
+                      <div className="flex justify-between text-[10px] text-[#1A1A1A]/90 font-semibold mt-1">
                         <span>Low Demand</span>
                         <span>High Demand</span>
                       </div>
                     </div>
                     {sections?.supplyDemand && (
-                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4 mt-2">
+                      <p className="text-[#1A1A1A]/90 text-xs leading-relaxed line-clamp-4 mt-2">
                         {cleanMarkdown(sections.supplyDemand)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.supplyDemand ? cleanMarkdown(sections.supplyDemand) : <span className="text-red-600 font-medium">Issue: Supply/demand data not available.</span>}
                   </div>
                 )}
@@ -452,10 +452,10 @@ export const ProjectAIAnalyzer = ({
             {/* Row 3: Investment Metrics (stat pills) + Developer Landscape */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Investment Metrics */}
-              <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <Shield className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-bold text-black text-lg">Investment Metrics</h3>
+                  <h3 className="font-bold text-[#1A1A1A] text-lg">Investment Metrics</h3>
                 </div>
 
                 {(rentalYield !== null || appreciation !== null) ? (
@@ -475,26 +475,26 @@ export const ProjectAIAnalyzer = ({
                       )}
                     </div>
                     {sections?.investment && (
-                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4">
+                      <p className="text-[#1A1A1A]/90 text-xs leading-relaxed line-clamp-4">
                         {cleanMarkdown(sections.investment)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.investment ? cleanMarkdown(sections.investment) : <span className="text-red-600 font-medium">Issue: Investment data not available.</span>}
                   </div>
                 )}
               </div>
 
               {/* Developer Landscape */}
-              <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
+              <div className="bg-[#FDFBF7] border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="w-5 h-5 text-gold" />
-                  <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
+                  <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
                 </div>
                 {sections?.developers ? (
-                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
                     {cleanMarkdown(sections.developers)}
                   </div>
                 ) : (
@@ -514,7 +514,7 @@ export const ProjectAIAnalyzer = ({
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2.5 border border-emerald-200">
+                      <li key={i} className="flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-emerald-200">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
                         <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
@@ -534,7 +534,7 @@ export const ProjectAIAnalyzer = ({
                 {consList.length > 0 ? (
                   <ul className="space-y-2">
                     {consList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 bg-white rounded-lg px-3 py-2 border border-red-200">
+                      <li key={i} className="flex items-start gap-2 bg-[#FDFBF7] rounded-lg px-3 py-2 border border-red-200">
                         <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
                         <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
@@ -547,7 +547,7 @@ export const ProjectAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-black/90 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/90 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.

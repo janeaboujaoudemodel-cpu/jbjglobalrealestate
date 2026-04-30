@@ -55,7 +55,7 @@ const Dashboard = () => {
   // Show loading state
   if (authLoading || roleLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -74,7 +74,7 @@ const Dashboard = () => {
   // If we reach here, user has a role but hasn't been redirected yet
   // Show loading while redirect happens
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
       <Loader2 className="w-8 h-8 text-gold animate-spin" />
     </div>
   );

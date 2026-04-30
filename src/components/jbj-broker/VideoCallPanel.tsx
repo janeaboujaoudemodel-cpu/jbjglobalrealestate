@@ -101,7 +101,7 @@ export function VideoCallPanel({
 
   return (
     <>
-      <Card className="bg-zinc-900 border-gray-800">
+      <Card className="bg-zinc-900 border-[#1A1A1A]">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export function VideoCallPanel({
               </div>
               <div>
                 <CardTitle className="text-white">Video Call Center</CardTitle>
-                <p className="text-gray-600 text-sm mt-1">
+                <p className="text-[#5A4A2E] text-sm mt-1">
                   Voice and video calls with leads
                 </p>
               </div>
@@ -118,7 +118,7 @@ export function VideoCallPanel({
             <Badge 
               className={isCallActive 
                 ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
-                : "bg-gray-500/20 text-gray-600 border-gray-500/30"
+                : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30"
               }
             >
               {isCallActive ? "In Call" : "Available"}
@@ -147,33 +147,33 @@ export function VideoCallPanel({
           </div>
 
           {/* Call Stats */}
-          <div className="grid grid-cols-3 gap-3 pt-4 border-t border-gray-800">
+          <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#1A1A1A]">
             <div className="text-center">
               <div className="text-2xl font-bold text-white">12</div>
-              <div className="text-xs text-gray-600">Calls Today</div>
+              <div className="text-xs text-[#5A4A2E]">Calls Today</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-gold">8:45</div>
-              <div className="text-xs text-gray-600">Avg Duration</div>
+              <div className="text-xs text-[#5A4A2E]">Avg Duration</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-emerald-400">85%</div>
-              <div className="text-xs text-gray-600">Answer Rate</div>
+              <div className="text-xs text-[#5A4A2E]">Answer Rate</div>
             </div>
           </div>
 
           {/* Integration Status */}
-          <div className="p-3 rounded-lg bg-zinc-800/50 border border-gray-700">
+          <div className="p-3 rounded-lg bg-zinc-800/50 border border-[#1A1A1A]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-sm text-gray-600">Twilio Integration</span>
+                <span className="text-sm text-[#5A4A2E]">Twilio Integration</span>
               </div>
               <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
                 Setup Required
               </Badge>
             </div>
-            <p className="text-xs text-gray-600 mt-2">
+            <p className="text-xs text-[#5A4A2E] mt-2">
               Connect your Twilio account for live voice and video calling
             </p>
           </div>
@@ -182,7 +182,7 @@ export function VideoCallPanel({
 
       {/* Active Call Dialog */}
       <Dialog open={callDialogOpen} onOpenChange={(open) => !open && endCall()}>
-        <DialogContent className="bg-zinc-900 border-gray-700 text-white max-w-2xl">
+        <DialogContent className="bg-zinc-900 border-[#1A1A1A] text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
@@ -196,20 +196,20 @@ export function VideoCallPanel({
               <div className="absolute inset-0 flex items-center justify-center">
                 {isVideoEnabled ? (
                   <div className="text-center">
-                    <Users className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-600">Video feed will appear here</p>
+                    <Users className="h-16 w-16 text-[#5A4A2E] mx-auto mb-4" />
+                    <p className="text-[#5A4A2E]">Video feed will appear here</p>
                   </div>
                 ) : (
                   <div className="text-center">
-                    <VideoOff className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-600">Camera is disabled</p>
+                    <VideoOff className="h-16 w-16 text-[#5A4A2E] mx-auto mb-4" />
+                    <p className="text-[#5A4A2E]">Camera is disabled</p>
                   </div>
                 )}
               </div>
               
               {/* Call Info Overlay */}
               <div className="absolute top-4 left-4 flex items-center gap-3">
-                <div className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm">
+                <div className="px-3 py-1 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm">
                   <span className="text-white font-medium">{leadName || "Unknown"}</span>
                 </div>
               </div>
@@ -221,9 +221,9 @@ export function VideoCallPanel({
               </div>
               
               {/* Self Preview */}
-              <div className="absolute bottom-4 right-4 w-32 h-24 bg-zinc-700 rounded-lg border-2 border-gray-600 overflow-hidden">
+              <div className="absolute bottom-4 right-4 w-32 h-24 bg-zinc-700 rounded-lg border-2 border-[#1A1A1A] overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-xs text-gray-600">You</span>
+                  <span className="text-xs text-[#5A4A2E]">You</span>
                 </div>
               </div>
             </div>
@@ -236,7 +236,7 @@ export function VideoCallPanel({
                 onClick={toggleAudio}
                 className={`h-14 w-14 rounded-full ${
                   isAudioEnabled 
-                    ? "bg-zinc-800 border-gray-700 text-white hover:bg-gray-700" 
+                    ? "bg-zinc-800 border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
                     : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
                 }`}
               >
@@ -249,7 +249,7 @@ export function VideoCallPanel({
                 onClick={toggleVideo}
                 className={`h-14 w-14 rounded-full ${
                   isVideoEnabled 
-                    ? "bg-zinc-800 border-gray-700 text-white hover:bg-gray-700" 
+                    ? "bg-zinc-800 border-[#1A1A1A] text-white hover:bg-[#1A1A1A]" 
                     : "bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
                 }`}
               >
@@ -263,7 +263,7 @@ export function VideoCallPanel({
                 className={`h-14 w-14 rounded-full ${
                   isScreenSharing 
                     ? "bg-blue-500/20 border-blue-500/30 text-blue-400" 
-                    : "bg-zinc-800 border-gray-700 text-white hover:bg-gray-700"
+                    : "bg-zinc-800 border-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
                 }`}
               >
                 <MonitorUp className="h-6 w-6" />

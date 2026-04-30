@@ -63,7 +63,7 @@ const SOURCE_COLORS: Record<string, string> = {
   'executive_assistant': 'bg-gold/20 text-gold',
   'video_meeting': 'bg-red-100 text-red-700',
   'ai_broker': 'bg-cyan-100 text-cyan-700',
-  'default': 'bg-gray-100 text-gray-700'
+  'default': 'bg-[#F7F2EA] text-[#5A4A2E]'
 };
 
 export function ChatHistoryAdmin() {
@@ -155,16 +155,16 @@ export function ChatHistoryAdmin() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
             <MessageSquare className="w-6 h-6 text-gold" />
             Chat History Monitor
           </h2>
-          <p className="text-black/60 text-sm">Review all user and broker conversations</p>
+          <p className="text-[#1A1A1A]/60 text-sm">Review all user and broker conversations</p>
         </div>
         <Button 
           onClick={fetchChats} 
           variant="outline" 
-          className="border-gold/30 text-black hover:bg-gold/10"
+          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh
@@ -175,25 +175,25 @@ export function ChatHistoryAdmin() {
       <div className="grid grid-cols-4 gap-4">
         <Card className="jj-card-inner">
           <CardContent className="p-4">
-            <p className="text-xs text-black/60">Total Messages</p>
-            <p className="text-2xl font-bold text-black">{chats.length}</p>
+            <p className="text-xs text-[#1A1A1A]/60">Total Messages</p>
+            <p className="text-2xl font-bold text-[#1A1A1A]">{chats.length}</p>
           </CardContent>
         </Card>
         <Card className="jj-card-inner border-red-200">
           <CardContent className="p-4">
-            <p className="text-xs text-black/60">Flagged</p>
+            <p className="text-xs text-[#1A1A1A]/60">Flagged</p>
             <p className="text-2xl font-bold text-red-600">{chats.filter(c => c.is_flagged).length}</p>
           </CardContent>
         </Card>
         <Card className="jj-card-inner border-blue-200">
           <CardContent className="p-4">
-            <p className="text-xs text-black/60">Sessions</p>
+            <p className="text-xs text-[#1A1A1A]/60">Sessions</p>
             <p className="text-2xl font-bold text-blue-600">{sessions.size}</p>
           </CardContent>
         </Card>
         <Card className="jj-card-inner border-green-200">
           <CardContent className="p-4">
-            <p className="text-xs text-black/60">Sources</p>
+            <p className="text-xs text-[#1A1A1A]/60">Sources</p>
             <p className="text-2xl font-bold text-green-600">{uniqueSources.length}</p>
           </CardContent>
         </Card>
@@ -202,20 +202,20 @@ export function ChatHistoryAdmin() {
       {/* Filters */}
       <div className="flex flex-wrap gap-4 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/40" />
           <Input
             placeholder="Search messages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-white border-gold/20 text-black"
+            className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
           />
         </div>
         
         <Select value={sourceFilter} onValueChange={setSourceFilter}>
-          <SelectTrigger className="w-[180px] bg-white border-gold/20 text-black">
+          <SelectTrigger className="w-[180px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]">
             <SelectValue placeholder="All Sources" />
           </SelectTrigger>
-          <SelectContent className="bg-white border-gold/20">
+          <SelectContent className="bg-[#FDFBF7] border-gold/20">
             <SelectItem value="all">All Sources</SelectItem>
             {uniqueSources.map(source => (
               <SelectItem key={source} value={source}>
@@ -229,13 +229,13 @@ export function ChatHistoryAdmin() {
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="w-[180px] bg-white border-gold/20 text-black"
+          className="w-[180px] bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
         />
 
         <Button
           variant={flaggedOnly ? "default" : "outline"}
           onClick={() => setFlaggedOnly(!flaggedOnly)}
-          className={flaggedOnly ? "bg-red-500 hover:bg-red-600" : "border-gold/30 text-black/70"}
+          className={flaggedOnly ? "bg-red-500 hover:bg-red-600" : "border-gold/30 text-[#1A1A1A]/70"}
         >
           <Flag className="w-4 h-4 mr-2" />
           {flaggedOnly ? 'Flagged Only' : 'Show Flagged'}
@@ -269,10 +269,10 @@ export function ChatHistoryAdmin() {
                           <User className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                          <p className="text-black font-medium">
+                          <p className="text-[#1A1A1A] font-medium">
                             {firstChat.user_name || firstChat.user_email || 'Anonymous'}
                           </p>
-                          <p className="text-xs text-black/60">
+                          <p className="text-xs text-[#1A1A1A]/60">
                             {format(new Date(firstChat.created_at), 'MMM d, yyyy h:mm a')}
                           </p>
                         </div>
@@ -287,7 +287,7 @@ export function ChatHistoryAdmin() {
                             Flagged
                           </Badge>
                         )}
-                        <Badge variant="outline" className="text-black/60 border-gold/30">
+                        <Badge variant="outline" className="text-[#1A1A1A]/60 border-gold/30">
                           {sessionChats.length} msgs
                         </Badge>
                       </div>
@@ -305,7 +305,7 @@ export function ChatHistoryAdmin() {
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs text-black/50">{chat.role}</span>
+                            <span className="text-xs text-[#1A1A1A]/50">{chat.role}</span>
                             <div className="flex items-center gap-2">
                               {chat.is_flagged && (
                                 <span className="text-xs text-red-600 flex items-center gap-1">
@@ -323,15 +323,15 @@ export function ChatHistoryAdmin() {
                                   setShowFlagDialog(true);
                                 }}
                               >
-                                <Flag className="w-3 h-3 text-black/40" />
+                                <Flag className="w-3 h-3 text-[#1A1A1A]/40" />
                               </Button>
                             </div>
                           </div>
-                          <p className="text-sm text-black/80 line-clamp-2">{chat.message}</p>
+                          <p className="text-sm text-[#1A1A1A]/80 line-clamp-2">{chat.message}</p>
                         </div>
                       ))}
                       {sessionChats.length > 4 && (
-                        <p className="text-xs text-black/40 text-center">
+                        <p className="text-xs text-[#1A1A1A]/40 text-center">
                           +{sessionChats.length - 4} more messages
                         </p>
                       )}
@@ -343,8 +343,8 @@ export function ChatHistoryAdmin() {
 
             {filteredSessions.length === 0 && (
               <div className="text-center py-12">
-                <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-black/50">No chat history found</p>
+                <MessageSquare className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                <p className="text-[#1A1A1A]/50">No chat history found</p>
               </div>
             )}
           </div>
@@ -355,7 +355,7 @@ export function ChatHistoryAdmin() {
       <Dialog open={showFlagDialog} onOpenChange={setShowFlagDialog}>
         <DialogContent className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30">
           <DialogHeader>
-            <DialogTitle className="text-black flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Flag className="w-5 h-5 text-red-500" />
               Flag Chat for Review
             </DialogTitle>
@@ -363,18 +363,18 @@ export function ChatHistoryAdmin() {
           
           {selectedChat && (
             <div className="space-y-4">
-              <div className="p-3 bg-white/50 rounded-lg border border-gold/20">
-                <p className="text-xs text-black/50 mb-1">Message:</p>
-                <p className="text-black text-sm">{selectedChat.message}</p>
+              <div className="p-3 bg-[#FDFBF7]/50 rounded-lg border border-gold/20">
+                <p className="text-xs text-[#1A1A1A]/50 mb-1">Message:</p>
+                <p className="text-[#1A1A1A] text-sm">{selectedChat.message}</p>
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm text-black/60">Reason for flagging:</label>
+                <label className="text-sm text-[#1A1A1A]/60">Reason for flagging:</label>
                 <Textarea
                   value={flagReason}
                   onChange={(e) => setFlagReason(e.target.value)}
                   placeholder="e.g., Wrong information provided, inappropriate response, misleading content..."
-                  className="bg-white border-gold/20 text-black"
+                  className="bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]"
                 />
               </div>
             </div>

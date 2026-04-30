@@ -309,7 +309,7 @@ const VideoBuilder = () => {
               </CardHeader>
               <CardContent>
                 <div 
-                  className={`bg-black rounded-lg overflow-hidden relative ${
+                  className={`bg-[#1A1A1A] rounded-lg overflow-hidden relative ${
                     project.format === "9:16" ? "aspect-[9/16]" : 
                     project.format === "1:1" ? "aspect-square" : "aspect-video"
                   }`}

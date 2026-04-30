@@ -259,7 +259,7 @@ const Services = () => {
             </PremiumHeroButton>
             <Link 
               to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-lg hover:bg-[#FDFBF7]/10 transition-colors"
             >
               <MessageSquare className="w-5 h-5" />
               Contact Support
@@ -269,7 +269,7 @@ const Services = () => {
       </section>
 
       {/* Service Cards Grid */}
-      <section id="services-grid" className="py-20 bg-black">
+      <section id="services-grid" className="py-20 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -282,10 +282,10 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Service Library
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
                 Select a Service
               </h2>
-              <p className="text-black/70 max-w-2xl mx-auto">
+              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                 Select a service to view the full process, requirements, and timelines.
               </p>
             </motion.div>
@@ -299,19 +299,19 @@ const Services = () => {
                         <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
                           <service.icon className="w-6 h-6" />
                         </div>
-                        <h3 className="text-black font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
+                        <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2 group-hover:text-gold transition-colors">
                           {service.title}
                         </h3>
-                        <p className="text-black/70 text-sm mb-4 flex-1">
+                        <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
                           {service.description}
                         </p>
                         
                         {/* Includes list */}
-                        <div className="bg-black/5 rounded-lg p-3 mb-4">
-                          <p className="text-xs text-black/50 uppercase tracking-wider mb-2 font-medium">Includes</p>
+                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4">
+                          <p className="text-xs text-[#1A1A1A]/50 uppercase tracking-wider mb-2 font-medium">Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-xs text-black/80">
+                              <li key={idx} className="flex items-start gap-2 text-xs text-[#1A1A1A]/80">
                                 <CheckCircle className="w-3 h-3 text-gold flex-shrink-0 mt-0.5" />
                                 <span>{item}</span>
                               </li>
@@ -322,7 +322,7 @@ const Services = () => {
                         {/* Partner note if applicable */}
                         {service.note && (
                           <div className="bg-gold/10 rounded-lg p-2 mb-4 border border-gold/20">
-                            <p className="text-xs text-black/60 italic">
+                            <p className="text-xs text-[#1A1A1A]/60 italic">
                               {service.note}
                             </p>
                           </div>
@@ -343,7 +343,7 @@ const Services = () => {
       </section>
 
       {/* Service Request Strip */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -355,10 +355,10 @@ const Services = () => {
             <Card className="jj-card-inner max-w-4xl mx-auto">
               <CardContent className="p-8 text-center">
                 <motion.div variants={fadeInUp}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#1A1A1A]">
                     Not sure which service you need?
                   </h2>
-                  <p className="text-black/70 max-w-xl mx-auto mb-6">
+                  <p className="text-[#1A1A1A]/70 max-w-xl mx-auto mb-6">
                     Send one request and our team will route it to the right department.
                   </p>
                   <div className="flex flex-wrap justify-center gap-4">
@@ -382,7 +382,7 @@ const Services = () => {
       </section>
 
       {/* Service Scope Clarification */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -395,7 +395,7 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Service Scope
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
                 How Our Services Work
               </h2>
             </motion.div>
@@ -406,7 +406,7 @@ const Services = () => {
             >
               <Card className="jj-card-inner">
                 <CardContent className="p-8">
-                  <p className="text-black/80 text-lg mb-8 text-center">
+                  <p className="text-[#1A1A1A]/80 text-lg mb-8 text-center">
                     JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell, 
                     and rent properties in Dubai and the UAE.
                   </p>
@@ -414,13 +414,13 @@ const Services = () => {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Our role includes */}
                     <div>
-                      <h3 className="text-black font-semibold text-lg mb-4 flex items-center gap-2">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-gold" />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-black/70">
+                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                             <span className="text-gold">•</span>
                             <span>{item}</span>
                           </li>
@@ -430,13 +430,13 @@ const Services = () => {
                     
                     {/* We do not provide */}
                     <div>
-                      <h3 className="text-black font-semibold text-lg mb-4 flex items-center gap-2">
+                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
                         <AlertCircle className="w-5 h-5 text-white/90" />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-black/70">
+                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                             <span className="text-white/70">•</span>
                             <span>{item}</span>
                           </li>
@@ -446,7 +446,7 @@ const Services = () => {
                   </div>
                   
                   <div className="mt-8 pt-6 border-t border-gold/20 text-center">
-                    <p className="text-black/60 text-sm">
+                    <p className="text-[#1A1A1A]/60 text-sm">
                       Where regulated services are required, we introduce independent licensed partners. 
                       Clients contract directly with those partners.
                     </p>
@@ -459,7 +459,7 @@ const Services = () => {
       </section>
 
       {/* Footer Disclaimer */}
-      <section className="bg-black py-8 border-t border-gray-800">
+      <section className="bg-[#1A1A1A] py-8 border-t border-[#1A1A1A]">
         <div className="container mx-auto px-4 text-center">
           <p className="text-white/90 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided 

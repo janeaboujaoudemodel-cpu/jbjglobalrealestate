@@ -287,7 +287,7 @@ const Whiteboard = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
       {/* Header */}
-      <div className="border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+      <div className="border-b border-[#1A1A1A] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Palette className="w-6 h-6 text-cyan-500" />
           <Input
@@ -306,7 +306,7 @@ const Whiteboard = () => {
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}>
             <ZoomOut className="w-4 h-4" />
           </Button>
-          <span className="text-sm text-gray-600 w-12 text-center">{Math.round(zoom * 100)}%</span>
+          <span className="text-sm text-[#5A4A2E] w-12 text-center">{Math.round(zoom * 100)}%</span>
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.min(2, z + 0.1))}>
             <ZoomIn className="w-4 h-4" />
           </Button>
@@ -322,7 +322,7 @@ const Whiteboard = () => {
 
       <div className="flex flex-1">
         {/* Toolbar */}
-        <div className="w-16 border-r border-gray-800 p-2 flex flex-col gap-2">
+        <div className="w-16 border-r border-[#1A1A1A] p-2 flex flex-col gap-2">
           {tools.map((t) => (
             <Button
               key={t.id}
@@ -335,7 +335,7 @@ const Whiteboard = () => {
             </Button>
           ))}
           
-          <div className="border-t border-gray-700 my-2 pt-2">
+          <div className="border-t border-[#1A1A1A] my-2 pt-2">
             <div className="flex flex-wrap gap-1 justify-center">
               {colorOptions.map((c) => (
                 <button

@@ -38,7 +38,7 @@ export default function DocumentTypographyControls({ settings, onChange }: Props
   const set = (partial: Partial<TypographySettings>) => onChange({ ...settings, ...partial });
 
   return (
-    <div className="bg-white rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
+    <div className="bg-[#FDFBF7] rounded-xl border border-[hsl(var(--border))] p-4 space-y-3">
       <div className="flex items-center gap-2">
         <Type size={12} className="text-[hsl(var(--gold))]" />
         <span className="text-xs font-bold text-[hsl(var(--foreground))]">Typography</span>
@@ -50,7 +50,7 @@ export default function DocumentTypographyControls({ settings, onChange }: Props
         <select
           value={settings.fontFamily}
           onChange={e => set({ fontFamily: e.target.value })}
-          className="w-full h-8 text-xs border border-[hsl(var(--border))] rounded-lg px-2 bg-white text-[hsl(var(--foreground))]"
+          className="w-full h-8 text-xs border border-[hsl(var(--border))] rounded-lg px-2 bg-[#FDFBF7] text-[hsl(var(--foreground))]"
         >
           {FONTS.map(f => (
             <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>

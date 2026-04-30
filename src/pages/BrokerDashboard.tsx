@@ -56,7 +56,7 @@ export default function BrokerDashboard() {
 
   if (authLoading || profileLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
       </div>
     );
@@ -261,7 +261,7 @@ export default function BrokerDashboard() {
                 <Link key={index} to={action.href}>
                   <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
                     <CardContent className="p-4 text-center">
-                      <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/10 transition-colors">
+                      <div className="w-12 h-12 bg-[#1A1A1A] border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/10 transition-colors">
                         <action.icon className="w-6 h-6 text-gold" />
                       </div>
                       <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-gold transition-colors">
@@ -369,7 +369,7 @@ export default function BrokerDashboard() {
                   <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
                     <CardContent className="p-5">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 bg-black border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">
+                        <div className="w-10 h-10 bg-[#1A1A1A] border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">
                           <link.icon className="w-5 h-5 text-gold" />
                         </div>
                         <div className="flex-1 min-w-0">

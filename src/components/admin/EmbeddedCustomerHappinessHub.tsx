@@ -271,7 +271,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       case "in_progress":
         return <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/40"><Clock className="w-3 h-3 mr-1" />In Progress</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/40">{status}</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/40">{status}</Badge>;
     }
   };
 
@@ -281,7 +281,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-gray-600"}`}
+            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-[#5A4A2E]"}`}
           />
         ))}
       </div>
@@ -293,7 +293,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       {/* Stats Overview - Color-Coded + Clickable */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card 
-          className="bg-white border-2 border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          className="bg-[#FDFBF7] border-2 border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/20 transition-all duration-300 cursor-pointer active:scale-95"
           onClick={() => {}}
         >
           <CardContent className="p-4">
@@ -302,14 +302,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Ticket className="w-5 h-5 text-emerald-500" />
               </div>
               <div>
-                <p className="text-xs text-gray-600">Support Tickets</p>
-                <p className="text-xl font-bold text-black">View Tab</p>
+                <p className="text-xs text-[#5A4A2E]">Support Tickets</p>
+                <p className="text-xl font-bold text-[#1A1A1A]">View Tab</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-pink-500/60 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          className="bg-[#FDFBF7] border-2 border-pink-500/60 hover:shadow-lg hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer active:scale-95"
           onClick={() => {}}
         >
           <CardContent className="p-4">
@@ -318,14 +318,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <MessageSquareHeart className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <p className="text-xs text-gray-600">Pending Reviews</p>
-                <p className="text-xl font-bold text-black">{pendingReviews}</p>
+                <p className="text-xs text-[#5A4A2E]">Pending Reviews</p>
+                <p className="text-xl font-bold text-[#1A1A1A]">{pendingReviews}</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          className="bg-[#FDFBF7] border-2 border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 cursor-pointer active:scale-95"
           onClick={() => {}}
         >
           <CardContent className="p-4">
@@ -334,14 +334,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <AlertCircle className="w-5 h-5 text-red-500" />
               </div>
               <div>
-                <p className="text-xs text-gray-600">Open Issues</p>
-                <p className="text-xl font-bold text-black">{openIssues}</p>
+                <p className="text-xs text-[#5A4A2E]">Open Issues</p>
+                <p className="text-xl font-bold text-[#1A1A1A]">{openIssues}</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer active:scale-95"
+          className="bg-[#FDFBF7] border-2 border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer active:scale-95"
           onClick={() => {}}
         >
           <CardContent className="p-4">
@@ -350,8 +350,8 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Lightbulb className="w-5 h-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-xs text-gray-600">Pending Ideas</p>
-                <p className="text-xl font-bold text-black">{pendingIdeas}</p>
+                <p className="text-xs text-[#5A4A2E]">Pending Ideas</p>
+                <p className="text-xl font-bold text-[#1A1A1A]">{pendingIdeas}</p>
               </div>
             </div>
           </CardContent>
@@ -360,24 +360,24 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Sub-Tabs */}
       <Tabs defaultValue="tickets" className="space-y-4">
-        <TabsList className="bg-white/80 border-2 border-gold/30 p-1">
-          <TabsTrigger value="tickets" className="tab-trigger-champagne text-black">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30 p-1">
+          <TabsTrigger value="tickets" className="tab-trigger-champagne text-[#1A1A1A]">
             <Ticket className="w-4 h-4 mr-2" />
             Tickets
           </TabsTrigger>
-          <TabsTrigger value="surveys" className="tab-trigger-champagne text-black">
+          <TabsTrigger value="surveys" className="tab-trigger-champagne text-[#1A1A1A]">
             <ClipboardCheck className="w-4 h-4 mr-2" />
             Surveys
           </TabsTrigger>
-          <TabsTrigger value="reviews" className="tab-trigger-champagne text-black">
+          <TabsTrigger value="reviews" className="tab-trigger-champagne text-[#1A1A1A]">
             <MessageSquareHeart className="w-4 h-4 mr-2" />
             Reviews ({pendingReviews})
           </TabsTrigger>
-          <TabsTrigger value="issues" className="tab-trigger-champagne text-black">
+          <TabsTrigger value="issues" className="tab-trigger-champagne text-[#1A1A1A]">
             <AlertCircle className="w-4 h-4 mr-2" />
             Issues ({openIssues})
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="tab-trigger-champagne text-black">
+          <TabsTrigger value="ideas" className="tab-trigger-champagne text-[#1A1A1A]">
             <Lightbulb className="w-4 h-4 mr-2" />
             Ideas ({pendingIdeas})
           </TabsTrigger>
@@ -395,10 +395,10 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Reviews Tab - With Bulk Actions */}
         <TabsContent value="reviews">
-          <Card className="bg-white border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
             <CardHeader>
               <div className="flex items-center justify-between flex-wrap gap-3">
-                <CardTitle className="text-black flex items-center gap-2">
+                <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                   <MessageSquareHeart className="w-5 h-5 text-pink-500" />
                   Customer Reviews ({filteredReviews.length})
                 </CardTitle>
@@ -409,7 +409,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       key={f}
                       size="sm"
                       variant={reviewFilter === f ? "default" : "outline"}
-                      className={reviewFilter === f ? "bg-gold text-black" : "border-gold/30"}
+                      className={reviewFilter === f ? "bg-gold text-[#1A1A1A]" : "border-gold/30"}
                       onClick={() => { setReviewFilter(f); setSelectedReviewIds(new Set()); }}
                     >
                       {f === "all" ? "All" : f === "pending_approval" ? "Pending" : f === "approved" ? "Approved" : "Rejected"}
@@ -420,7 +420,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               {/* Bulk Action Bar */}
               {selectedReviewIds.size > 0 && (
                 <div className="flex items-center gap-2 mt-3 p-3 bg-gold/10 rounded-lg border border-gold/30">
-                  <span className="text-sm font-semibold text-black">{selectedReviewIds.size} selected</span>
+                  <span className="text-sm font-semibold text-[#1A1A1A]">{selectedReviewIds.size} selected</span>
                   <Button size="sm" className="bg-emerald-500 hover:bg-emerald-600 text-white" onClick={() => bulkReviewMutation.mutate({ ids: Array.from(selectedReviewIds), action: "approve" })} disabled={bulkReviewMutation.isPending}>
                     <ThumbsUp className="w-3 h-3 mr-1" /> Approve All
                   </Button>
@@ -462,36 +462,36 @@ export const EmbeddedCustomerHappinessHub = () => {
                             type="checkbox"
                             checked={selectedReviewIds.has(review.id)}
                             onChange={() => toggleReviewSelect(review.id)}
-                            className="mt-1 h-4 w-4 rounded border-gray-300 text-gold focus:ring-gold"
+                            className="mt-1 h-4 w-4 rounded border-[#B89555]/30 text-gold focus:ring-gold"
                           />
                           {/* Content */}
                           <div className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
                             <div className="flex items-center gap-3 mb-1 flex-wrap">
-                              <span className="font-semibold text-black">{review.full_name}</span>
+                              <span className="font-semibold text-[#1A1A1A]">{review.full_name}</span>
                               {renderStars(review.rating)}
                               {getStatusBadge(review.status)}
-                              {review.is_anonymous && <Badge className="bg-gray-100 text-gray-600 border-gray-300 text-xs">Anonymous</Badge>}
+                              {review.is_anonymous && <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30 text-xs">Anonymous</Badge>}
                               {review.feature_key && <Badge className="bg-blue-50 text-blue-600 border-blue-200 text-xs">{review.feature_key}</Badge>}
                             </div>
-                            <p className="text-sm text-gray-600 line-clamp-2">{review.review_text}</p>
+                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{review.review_text}</p>
                             {review.improve_text && (
-                              <p className="text-xs text-gray-600 mt-1 italic">Suggestion: {review.improve_text}</p>
+                              <p className="text-xs text-[#5A4A2E] mt-1 italic">Suggestion: {review.improve_text}</p>
                             )}
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-600">
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
                               <span>{review.service_type}</span>
                               <span>•</span>
                               <span>{new Date(review.created_at).toLocaleDateString()}</span>
                               {review.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-gold hover:text-black" onClick={() => setSelectedReview(review)}>
+                          <Button variant="ghost" size="sm" className="text-gold hover:text-[#1A1A1A]" onClick={() => setSelectedReview(review)}>
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
                     ))}
                     {filteredReviews.length === 0 && (
-                      <p className="text-center text-gray-600 py-8">No reviews match this filter</p>
+                      <p className="text-center text-[#5A4A2E] py-8">No reviews match this filter</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -502,9 +502,9 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Issues Tab */}
         <TabsContent value="issues">
-          <Card className="bg-white border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-red-500" />
                 Issue Reports
               </CardTitle>
@@ -527,12 +527,12 @@ export const EmbeddedCustomerHappinessHub = () => {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <span className="font-semibold text-black">{issue.user_name}</span>
-                              <Badge className="bg-gray-100 text-gray-700 border-gray-300">{issue.issue_category}</Badge>
+                              <span className="font-semibold text-[#1A1A1A]">{issue.user_name}</span>
+                              <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30">{issue.issue_category}</Badge>
                               {getStatusBadge(issue.status)}
                             </div>
-                            <p className="text-sm text-gray-600 line-clamp-2">{issue.issue_description}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-600">
+                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{issue.issue_description}</p>
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
                               <span>{issue.tool_name}</span>
                               <span>•</span>
                               <span>{new Date(issue.created_at).toLocaleDateString()}</span>
@@ -542,7 +542,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {(!issues || issues.length === 0) && (
-                      <p className="text-center text-gray-600 py-8">No issue reports yet</p>
+                      <p className="text-center text-[#5A4A2E] py-8">No issue reports yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -553,9 +553,9 @@ export const EmbeddedCustomerHappinessHub = () => {
 
         {/* Ideas Tab */}
         <TabsContent value="ideas">
-          <Card className="bg-white border-2 border-gold/30">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30">
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-purple-500" />
                 Idea Submissions
               </CardTitle>
@@ -579,7 +579,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <span className="font-semibold text-black">
+                              <span className="font-semibold text-[#1A1A1A]">
                                 {idea.is_anonymous ? "Anonymous" : idea.full_name}
                               </span>
                               {idea.idea_category && (
@@ -600,22 +600,22 @@ export const EmbeddedCustomerHappinessHub = () => {
                               )}
                             </div>
                             {idea.idea_title && (
-                              <p className="font-medium text-black mb-1">{idea.idea_title}</p>
+                              <p className="font-medium text-[#1A1A1A] mb-1">{idea.idea_title}</p>
                             )}
-                            <p className="text-sm text-gray-600 line-clamp-2">{idea.idea}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-600">
+                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{idea.idea}</p>
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
                               <span>{new Date(idea.created_at).toLocaleDateString()}</span>
                               {idea.email && <span>{idea.email}</span>}
                             </div>
                           </div>
-                          <Button variant="ghost" size="sm" className="text-gold hover:text-black">
+                          <Button variant="ghost" size="sm" className="text-gold hover:text-[#1A1A1A]">
                             <Eye className="w-4 h-4" />
                           </Button>
                         </div>
                       </div>
                     ))}
                     {(!ideas || ideas.length === 0) && (
-                      <p className="text-center text-gray-600 py-8">No ideas submitted yet</p>
+                      <p className="text-center text-[#5A4A2E] py-8">No ideas submitted yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -627,40 +627,40 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Review Details Dialog */}
       <Dialog open={!!selectedReview} onOpenChange={() => setSelectedReview(null)}>
-        <DialogContent className="max-w-lg bg-white border-2 border-gold/30">
+        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-gold/30">
           <DialogHeader>
-            <DialogTitle className="text-black">Review Details</DialogTitle>
+            <DialogTitle className="text-[#1A1A1A]">Review Details</DialogTitle>
           </DialogHeader>
           {selectedReview && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-semibold text-black">{selectedReview.full_name}</p>
-                  <p className="text-sm text-gray-600">{selectedReview.email}</p>
-                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-gray-100 text-gray-600 border-gray-300 text-xs">Anonymous</Badge>}
+                  <p className="font-semibold text-[#1A1A1A]">{selectedReview.full_name}</p>
+                  <p className="text-sm text-[#5A4A2E]">{selectedReview.email}</p>
+                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30 text-xs">Anonymous</Badge>}
                 </div>
                 <div className="text-right">
                   {renderStars(selectedReview.rating)}
-                  <p className="text-xs text-gray-600 mt-1">{selectedReview.service_type}</p>
+                  <p className="text-xs text-[#5A4A2E] mt-1">{selectedReview.service_type}</p>
                   {selectedReview.feature_key && (
                     <Badge className="mt-1 bg-blue-50 text-blue-600 border-blue-200 text-xs">{selectedReview.feature_key}</Badge>
                   )}
                 </div>
               </div>
 
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-black">{selectedReview.review_text}</p>
+              <div className="p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
+                <p className="text-[#1A1A1A]">{selectedReview.review_text}</p>
               </div>
 
               {selectedReview.improve_text && (
                 <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-gray-600 mb-1">Improvement suggestion</p>
-                  <p className="text-sm text-black">{selectedReview.improve_text}</p>
+                  <p className="text-xs text-[#5A4A2E] mb-1">Improvement suggestion</p>
+                  <p className="text-sm text-[#1A1A1A]">{selectedReview.improve_text}</p>
                 </div>
               )}
 
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm text-gray-600">Would recommend:</span>
+                <span className="text-sm text-[#5A4A2E]">Would recommend:</span>
                 <Badge className="bg-gold/20 text-gold border-gold/40">{selectedReview.would_recommend}</Badge>
                 {selectedReview.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
               </div>
@@ -669,12 +669,12 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {/* Action buttons for any non-approved status */}
               <div>
-                <label className="text-sm text-gray-600 mb-2 block">Admin Notes (optional)</label>
+                <label className="text-sm text-[#5A4A2E] mb-2 block">Admin Notes (optional)</label>
                 <Textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
                   placeholder="Add any notes about this review..."
-                  className="bg-white border-gold/30"
+                  className="bg-[#FDFBF7] border-gold/30"
                 />
               </div>
               <div className="flex gap-3">
@@ -707,9 +707,9 @@ export const EmbeddedCustomerHappinessHub = () => {
 
       {/* Idea Details Dialog */}
       <Dialog open={!!selectedIdea} onOpenChange={() => setSelectedIdea(null)}>
-        <DialogContent className="max-w-lg bg-white border-2 border-gold/30">
+        <DialogContent className="max-w-lg bg-[#FDFBF7] border-2 border-gold/30">
           <DialogHeader>
-            <DialogTitle className="text-black flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-purple-500" />
               Idea Details
             </DialogTitle>
@@ -717,8 +717,8 @@ export const EmbeddedCustomerHappinessHub = () => {
           {selectedIdea && (
             <div className="space-y-4">
               <div>
-                <p className="font-semibold text-black">{selectedIdea.is_anonymous ? "Anonymous" : selectedIdea.full_name}</p>
-                {selectedIdea.email && <p className="text-sm text-gray-600">{selectedIdea.email}</p>}
+                <p className="font-semibold text-[#1A1A1A]">{selectedIdea.is_anonymous ? "Anonymous" : selectedIdea.full_name}</p>
+                {selectedIdea.email && <p className="text-sm text-[#5A4A2E]">{selectedIdea.email}</p>}
                 {selectedIdea.idea_category && (
                   <Badge className="mt-2 bg-purple-100 text-purple-700 border-purple-300">{selectedIdea.idea_category}</Badge>
                 )}
@@ -726,32 +726,32 @@ export const EmbeddedCustomerHappinessHub = () => {
               
               {selectedIdea.idea_title && (
                 <div>
-                  <p className="text-xs text-gray-600 mb-1">Title</p>
-                  <p className="font-medium text-black">{selectedIdea.idea_title}</p>
+                  <p className="text-xs text-[#5A4A2E] mb-1">Title</p>
+                  <p className="font-medium text-[#1A1A1A]">{selectedIdea.idea_title}</p>
                 </div>
               )}
               
               <div>
-                <p className="text-xs text-gray-600 mb-1">Idea</p>
-                <p className="text-black bg-gray-50 p-3 rounded-lg">{selectedIdea.idea}</p>
+                <p className="text-xs text-[#5A4A2E] mb-1">Idea</p>
+                <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg">{selectedIdea.idea}</p>
               </div>
               
               {selectedIdea.expected_benefit && (
                 <div>
-                  <p className="text-xs text-gray-600 mb-1">Expected Benefit</p>
-                  <p className="text-black bg-gray-50 p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
+                  <p className="text-xs text-[#5A4A2E] mb-1">Expected Benefit</p>
+                  <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
                 </div>
               )}
 
               {selectedIdea.status === "pending" && (
                 <>
                   <div>
-                    <p className="text-xs text-gray-600 mb-1">Admin Notes</p>
+                    <p className="text-xs text-[#5A4A2E] mb-1">Admin Notes</p>
                     <Textarea
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}
                       placeholder="Add notes about this idea..."
-                      className="bg-gray-50 border-gold/30 text-black"
+                      className="bg-[#F7F2EA] border-gold/30 text-[#1A1A1A]"
                     />
                   </div>
                   <div className="flex gap-3">

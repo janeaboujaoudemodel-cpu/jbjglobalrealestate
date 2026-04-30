@@ -218,8 +218,8 @@ export default function GlobalRecommendationsHub() {
     switch (urgency) {
       case "immediate": return "bg-red-100 text-red-700";
       case "high": return "bg-orange-100 text-orange-700";
-      case "normal": return "bg-gray-100 text-gray-700";
-      default: return "bg-gray-50 text-gray-600";
+      case "normal": return "bg-[#F7F2EA] text-[#5A4A2E]";
+      default: return "bg-[#F7F2EA] text-[#5A4A2E]";
     }
   };
 
@@ -232,10 +232,10 @@ export default function GlobalRecommendationsHub() {
             <Target className="h-6 w-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-black">
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">
               Global Recommendations
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-[#5A4A2E] text-sm">
               Cross-platform AI recommendations with preview & apply
             </p>
           </div>
@@ -256,7 +256,7 @@ export default function GlobalRecommendationsHub() {
             size="sm"
             onClick={refreshData}
             disabled={isProcessing}
-            className="bg-white text-black border-2 border-gold/30 hover:bg-black hover:text-gold"
+            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-gold/30 hover:bg-[#1A1A1A] hover:text-gold"
           >
             <RotateCcw className={`h-4 w-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
             Refresh
@@ -267,12 +267,12 @@ export default function GlobalRecommendationsHub() {
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
           <Input
             placeholder="Search recommendations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-white border-gold/20 focus:border-gold/50 text-black"
+            className="pl-10 bg-[#FDFBF7] border-gold/20 focus:border-gold/50 text-[#1A1A1A]"
           />
         </div>
         <div className="flex gap-2">
@@ -283,8 +283,8 @@ export default function GlobalRecommendationsHub() {
               onClick={() => setActiveStatus(status)}
             className={`capitalize ${
                 activeStatus === status
-                  ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
-                  : "bg-white text-gray-600 border border-gold/20 hover:border-gold/40"
+                  ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+                  : "bg-[#FDFBF7] text-[#5A4A2E] border border-gold/20 hover:border-gold/40"
               }`}
             >
               {status}
@@ -301,8 +301,8 @@ export default function GlobalRecommendationsHub() {
             onClick={() => setActiveSource(section.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
-                ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
-                : "bg-white border border-gold/20 text-gray-600 hover:border-gold/40"
+                ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+                : "bg-[#FDFBF7] border border-gold/20 text-[#5A4A2E] hover:border-gold/40"
             }`}
           >
             <section.icon className="w-4 h-4" />
@@ -319,13 +319,13 @@ export default function GlobalRecommendationsHub() {
       {/* Recommendations List */}
       <div className="space-y-3">
         {filteredRecs.length === 0 ? (
-          <Card className="bg-white border-gold/20">
+          <Card className="bg-[#FDFBF7] border-gold/20">
             <CardContent className="flex flex-col items-center justify-center py-16">
               <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gold/10 border border-gold/25">
-                <CheckCircle className="w-8 h-8 text-gray-500" />
+                <CheckCircle className="w-8 h-8 text-[#8A7556]" />
               </div>
-              <h3 className="text-lg font-bold text-black mb-1">No recommendations</h3>
-              <p className="text-gray-600 text-sm">
+              <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No recommendations</h3>
+              <p className="text-[#5A4A2E] text-sm">
                 {activeStatus === "pending" ? "All caught up! No pending recommendations." : `No ${activeStatus} recommendations found.`}
               </p>
             </CardContent>
@@ -334,7 +334,7 @@ export default function GlobalRecommendationsHub() {
           filteredRecs.map(rec => (
             <Card
               key={rec.id}
-              className={`bg-white border-gold/20 transition-all hover:border-gold/40 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)] ${
+              className={`bg-[#FDFBF7] border-gold/20 transition-all hover:border-gold/40 hover:shadow-[0_4px_20px_rgba(201,168,76,0.1)] ${
                 rec.status !== "pending" ? "opacity-70" : ""
               }`}
             >
@@ -354,7 +354,7 @@ export default function GlobalRecommendationsHub() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h3 className="font-semibold text-black text-sm">{rec.title}</h3>
+                      <h3 className="font-semibold text-[#1A1A1A] text-sm">{rec.title}</h3>
                       <Badge variant="outline" className={`text-[10px] ${getImpactBadgeClass(rec.impact)}`}>
                         {rec.impact}
                       </Badge>
@@ -362,10 +362,10 @@ export default function GlobalRecommendationsHub() {
                         {rec.urgency}
                       </Badge>
                     </div>
-                    <p className="text-xs text-gray-600 mb-2">{rec.description}</p>
+                    <p className="text-xs text-[#5A4A2E] mb-2">{rec.description}</p>
 
                     {/* Source badge */}
-                    <div className="flex items-center gap-3 text-[11px] text-gray-600">
+                    <div className="flex items-center gap-3 text-[11px] text-[#5A4A2E]">
                       <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20">
                         <Building2 className="w-3 h-3" />
                         {rec.sourcePage}
@@ -381,8 +381,8 @@ export default function GlobalRecommendationsHub() {
                     </div>
 
                     {/* Suggested action */}
-                    <div className="mt-3 p-2.5 bg-gray-50 rounded-lg border border-gray-100">
-                      <p className="text-xs text-black">
+                    <div className="mt-3 p-2.5 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
+                      <p className="text-xs text-[#1A1A1A]">
                         <span className="font-medium text-gold">Suggested:</span>{" "}
                         {rec.suggestedAction}
                       </p>
@@ -396,7 +396,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handlePreview(rec)}
-                          className="bg-white text-black border border-gold/30 hover:bg-gold/10 text-xs"
+                          className="bg-[#FDFBF7] text-[#1A1A1A] border border-gold/30 hover:bg-gold/10 text-xs"
                         >
                           <Eye className="w-3.5 h-3.5 mr-1" />
                           Preview
@@ -412,7 +412,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handleSnooze(rec)}
-                          className="bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 text-xs"
+                          className="bg-[#FDFBF7] text-[#5A4A2E] border border-[#B89555]/30 hover:bg-[#F7F2EA] text-xs"
                         >
                           <Timer className="w-3.5 h-3.5 mr-1" />
                           Snooze
@@ -420,7 +420,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handleDismiss(rec)}
-                          className="bg-white text-red-500 border border-red-200 hover:bg-red-50 text-xs"
+                          className="bg-[#FDFBF7] text-red-500 border border-red-200 hover:bg-red-50 text-xs"
                         >
                           <ThumbsDown className="w-3.5 h-3.5 mr-1" />
                           Dismiss
@@ -431,14 +431,14 @@ export default function GlobalRecommendationsHub() {
                       <Button
                         size="sm"
                         onClick={() => handleRevert(rec)}
-                        className="bg-white text-orange-600 border border-orange-200 hover:bg-orange-50 text-xs"
+                        className="bg-[#FDFBF7] text-orange-600 border border-orange-200 hover:bg-orange-50 text-xs"
                       >
                         <Undo2 className="w-3.5 h-3.5 mr-1" />
                         Revert
                       </Button>
                     )}
                     {rec.status === "reverted" && (
-                      <Badge className="bg-gray-100 text-gray-600 text-xs">Reverted</Badge>
+                      <Badge className="bg-[#F7F2EA] text-[#5A4A2E] text-xs">Reverted</Badge>
                     )}
                   </div>
                 </div>
@@ -452,11 +452,11 @@ export default function GlobalRecommendationsHub() {
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Eye className="w-5 h-5 text-gold" />
               Recommendation Preview
             </DialogTitle>
-            <DialogDescription className="text-gray-600">
+            <DialogDescription className="text-[#5A4A2E]">
               Review the impact before applying this recommendation
             </DialogDescription>
           </DialogHeader>
@@ -465,7 +465,7 @@ export default function GlobalRecommendationsHub() {
             <div className="space-y-4 mt-2">
               {/* Title & Source */}
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-bold text-black">{selectedRec.title}</h3>
+                <h3 className="font-bold text-[#1A1A1A]">{selectedRec.title}</h3>
                 <Badge variant="outline" className={getImpactBadgeClass(selectedRec.impact)}>
                   {selectedRec.impact} impact
                 </Badge>
@@ -477,13 +477,13 @@ export default function GlobalRecommendationsHub() {
               {/* Before / After Preview */}
               {selectedRec.previewData && (
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-white rounded-xl border border-red-200">
+                  <div className="p-4 bg-[#FDFBF7] rounded-xl border border-red-200">
                     <p className="text-[10px] uppercase tracking-wider text-red-500 font-semibold mb-2">Before (Current)</p>
-                    <p className="text-sm text-black">{selectedRec.previewData.before}</p>
+                    <p className="text-sm text-[#1A1A1A]">{selectedRec.previewData.before}</p>
                   </div>
-                  <div className="p-4 bg-white rounded-xl border border-green-200">
+                  <div className="p-4 bg-[#FDFBF7] rounded-xl border border-green-200">
                     <p className="text-[10px] uppercase tracking-wider text-green-600 font-semibold mb-2">After (Improved)</p>
-                    <p className="text-sm text-black">{selectedRec.previewData.after}</p>
+                    <p className="text-sm text-[#1A1A1A]">{selectedRec.previewData.after}</p>
                   </div>
                 </div>
               )}
@@ -514,9 +514,9 @@ export default function GlobalRecommendationsHub() {
               )}
 
               {/* Action */}
-              <div className="p-3 bg-white rounded-lg border border-gold/20">
+              <div className="p-3 bg-[#FDFBF7] rounded-lg border border-gold/20">
                 <p className="text-xs font-semibold text-gold mb-1">Suggested Action</p>
-                <p className="text-sm text-black">{selectedRec.suggestedAction}</p>
+                <p className="text-sm text-[#1A1A1A]">{selectedRec.suggestedAction}</p>
               </div>
 
               {/* Buttons */}
@@ -524,14 +524,14 @@ export default function GlobalRecommendationsHub() {
                 <Button
                   variant="ghost"
                   onClick={() => setPreviewOpen(false)}
-                  className="text-gray-600"
+                  className="text-[#5A4A2E]"
                 >
                   Cancel
                 </Button>
                 <div className="flex gap-2">
                   <Button
                     onClick={() => handleDismiss(selectedRec)}
-                    className="bg-white text-red-500 border border-red-200 hover:bg-red-50"
+                    className="bg-[#FDFBF7] text-red-500 border border-red-200 hover:bg-red-50"
                   >
                     <ThumbsDown className="w-4 h-4 mr-2" />
                     Dismiss

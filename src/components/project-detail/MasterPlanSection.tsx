@@ -63,7 +63,7 @@ export default function MasterPlanSection({
           />
           <button
             onClick={handleMaximize}
-            className="absolute top-3 right-3 w-10 h-10 rounded-lg bg-black/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/80 transition-all opacity-0 group-hover:opacity-100"
+            className="absolute top-3 right-3 w-10 h-10 rounded-lg bg-[#1A1A1A]/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#1A1A1A]/80 transition-all opacity-0 group-hover:opacity-100"
             aria-label="View full size"
           >
             <Maximize className="w-5 h-5" />

@@ -72,7 +72,7 @@ const CVDetailModal = ({
       case 'analyzed': return 'bg-purple-600';
       case 'rejected': return 'bg-red-600';
       case 'on_hold': return 'bg-orange-600';
-      default: return 'bg-gray-600';
+      default: return 'bg-[#1A1A1A]';
     }
   };
 

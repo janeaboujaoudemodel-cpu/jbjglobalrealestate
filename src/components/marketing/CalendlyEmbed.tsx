@@ -57,7 +57,7 @@ export const CalendlyEmbed = ({
   return (
     <button
       onClick={openCalendly}
-      className={`inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-black font-semibold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-gold/20 ${className}`}
+      className={`inline-flex items-center gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-gold/20 ${className}`}
     >
       <Calendar className="w-5 h-5" />
       <span>Book a Consultation</span>

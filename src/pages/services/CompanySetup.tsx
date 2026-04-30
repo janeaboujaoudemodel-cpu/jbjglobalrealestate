@@ -122,7 +122,7 @@ const CompanySetup = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Building className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -154,13 +154,13 @@ const CompanySetup = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* WHY THIS MATTERS FOR INVESTORS */}
-      <section className="bg-black py-14">
+      <section className="bg-[#1A1A1A] py-14">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -171,13 +171,13 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Why This Matters for Investors
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-[#5A4A2E] text-lg leading-relaxed">
                 Some investors structure ownership, operations, or tenancy through corporate entities. This page provides a clean pathway to get set up correctly with licensed professionals.
               </p>
             </motion.div>
@@ -186,7 +186,7 @@ const CompanySetup = () => {
       </section>
 
       {/* WHAT WE PROVIDE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -196,7 +196,7 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What We Provide
@@ -205,8 +205,8 @@ const CompanySetup = () => {
               <motion.div variants={fadeInUp} className="jj-card-inner">
                 <ul className="space-y-4">
                   {whatWeProvide.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-4 text-gray-700">
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                    <li key={idx} className="flex items-start gap-4 text-[#5A4A2E]">
+                      <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
                       <span className="pt-2">{item.text}</span>
@@ -220,7 +220,7 @@ const CompanySetup = () => {
       </section>
 
       {/* TYPICAL STEPS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -230,7 +230,7 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Typical Steps
@@ -245,13 +245,13 @@ const CompanySetup = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0" />
-                          <span className="font-semibold text-black">{step.title}</span>
+                          <span className="font-semibold text-[#1A1A1A]">{step.title}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -264,7 +264,7 @@ const CompanySetup = () => {
       </section>
 
       {/* TYPICAL DOCUMENTS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -275,7 +275,7 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Typical Documents (May Vary)
@@ -283,7 +283,7 @@ const CompanySetup = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-gray-700">
+                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
                     <FolderOpen className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -295,7 +295,7 @@ const CompanySetup = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -306,7 +306,7 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -319,13 +319,13 @@ const CompanySetup = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
                       <div className="flex items-center gap-3">
                         <HelpCircle className="w-5 h-5 text-gold shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 pl-8">
+                    <AccordionContent className="text-[#5A4A2E] pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -337,7 +337,7 @@ const CompanySetup = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -348,12 +348,12 @@ const CompanySetup = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Start company setup with a clear workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
               Submit your intent and timeline to receive a structured checklist and next steps.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

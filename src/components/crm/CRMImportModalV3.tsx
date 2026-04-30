@@ -1012,7 +1012,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 setSourceGroup(val);
                 if (val !== 'custom') setCustomSourceLabel('');
               }}
-              className="w-full h-11 px-3 rounded-md border border-gray-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
               style={{ backgroundColor: '#09090b', color: '#ffffff' }}
             >
               <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
@@ -1187,7 +1187,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                       <select
                         value={selectedBrokerId}
                         onChange={(e) => setSelectedBrokerId(e.target.value)}
-                        className="w-full h-11 px-3 rounded-md border border-gray-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                        className="w-full h-11 px-3 rounded-md border border-[#1A1A1A] bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                         style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                         disabled={loadingBrokers}
                       >
@@ -1253,7 +1253,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </Button>
               <Button 
                 onClick={handleContinueWithBroker} 
-                className="flex-1 bg-gold text-black hover:bg-gold/90"
+                className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
                 disabled={registerUnderBroker && !selectedBrokerId}
               >
                 Continue
@@ -1304,10 +1304,10 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-lg font-bold text-amber-400">{analyzedData.flagged.length}</p>
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
-              <div className="p-3 bg-gray-500/10 border border-gray-500/30 rounded-lg text-center">
-                <AlertCircle className="h-5 w-5 text-gray-600 mx-auto mb-1" />
-                <p className="text-lg font-bold text-gray-600">{analyzedData.skipped.length}</p>
-                <p className="text-xs text-gray-600">Duplicates</p>
+              <div className="p-3 bg-[#B89555]/10 border border-[#B89555]/30/30 rounded-lg text-center">
+                <AlertCircle className="h-5 w-5 text-[#5A4A2E] mx-auto mb-1" />
+                <p className="text-lg font-bold text-[#5A4A2E]">{analyzedData.skipped.length}</p>
+                <p className="text-xs text-[#5A4A2E]">Duplicates</p>
               </div>
             </div>
 
@@ -1424,7 +1424,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </Button>
               <Button 
                 onClick={processImport} 
-                className="flex-1 bg-gold text-black hover:bg-gold/90"
+                className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
               >
                 Import {analyzedData.valid.length} Contacts
               </Button>
@@ -1467,9 +1467,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-xl font-bold text-amber-400">{result.flagged}</p>
                   <p className="text-xs text-amber-300">Flagged</p>
                 </div>
-                <div className="p-3 bg-gray-500/10 rounded-lg">
-                  <p className="text-xl font-bold text-gray-600">{result.duplicates}</p>
-                  <p className="text-xs text-gray-600">Skipped</p>
+                <div className="p-3 bg-[#B89555]/10 rounded-lg">
+                  <p className="text-xl font-bold text-[#5A4A2E]">{result.duplicates}</p>
+                  <p className="text-xs text-[#5A4A2E]">Skipped</p>
                 </div>
               </div>
             </div>
@@ -1502,7 +1502,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
               </div>
             )}
 
-            <Button onClick={handleComplete} className="w-full bg-gold text-black hover:bg-gold/90">
+            <Button onClick={handleComplete} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90">
               Done
             </Button>
           </div>

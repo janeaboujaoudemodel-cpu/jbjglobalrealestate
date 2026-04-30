@@ -107,10 +107,10 @@ const OwnerCreativeSuite = () => {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-5 py-1.5 mb-5">
               <Sparkles className="w-4 h-4 text-[#8A7356]" />
-              <span className="text-black text-sm font-semibold tracking-wide">Owner Creative Suite</span>
+              <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide">Owner Creative Suite</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-3">Creative Suite</h1>
-            <p className="text-gray-600 text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-3">Creative Suite</h1>
+            <p className="text-[#5A4A2E] text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ const OwnerCreativeSuite = () => {
             <button
               key={tool.href}
               onClick={() => navigate(tool.href)}
-              className="group text-left bg-white/80 hover:bg-white border border-gold/20 hover:border-gold/40 rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-0.5"
+              className="group text-left bg-[#FDFBF7]/80 hover:bg-[#FDFBF7] border border-gold/20 hover:border-gold/40 rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-0.5"
             >
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center flex-shrink-0`}>
@@ -130,10 +130,10 @@ const OwnerCreativeSuite = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-black text-sm">{tool.title}</h3>
+                    <h3 className="font-bold text-[#1A1A1A] text-sm">{tool.title}</h3>
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8A7356]">{tool.badge}</span>
                   </div>
-                  <p className="text-xs text-gray-600 leading-relaxed">{tool.description}</p>
+                  <p className="text-xs text-[#5A4A2E] leading-relaxed">{tool.description}</p>
                 </div>
               </div>
               <div className="flex justify-end mt-3">

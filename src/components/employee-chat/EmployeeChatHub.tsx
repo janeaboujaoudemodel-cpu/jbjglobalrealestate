@@ -145,7 +145,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
 
   return (
     <div className={cn(
-      "flex h-[calc(100vh-280px)] min-h-[500px] bg-white rounded-xl border border-[#B89555]/20 overflow-hidden shadow-sm",
+      "flex h-[calc(100vh-280px)] min-h-[500px] bg-[#FDFBF7] rounded-xl border border-[#B89555]/20 overflow-hidden shadow-sm",
       className
     )}>
       {/* Employee List Sidebar */}
@@ -157,7 +157,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         <div className="p-4 border-b border-[#B89555]/10">
           <div className="flex items-center gap-2 mb-3">
             <MessageCircle className="h-5 w-5 text-[#B89555]" />
-            <h2 className="font-semibold text-black">Team Chat</h2>
+            <h2 className="font-semibold text-[#1A1A1A]">Team Chat</h2>
             <Badge variant="outline" className="ml-auto text-xs border-[#B89555]/30 text-[#B89555]">
               {filteredEmployees.length}
             </Badge>
@@ -165,12 +165,12 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
           
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/40" />
             <Input
               placeholder="Search team members..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-[#FDFBF7] border-[#B89555]/20 text-black placeholder:text-black/40 focus-visible:ring-[#B89555]/30"
+              className="pl-9 bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus-visible:ring-[#B89555]/30"
             />
           </div>
         </div>
@@ -186,7 +186,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                 "text-xs shrink-0 rounded-full px-3",
                 selectedDepartment === null 
                   ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#957539]" 
-                  : "text-black/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
+                  : "text-[#1A1A1A]/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
               )}
             >
               <Users className="h-3 w-3 mr-1" />
@@ -204,7 +204,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                     "text-xs shrink-0 rounded-full px-3 whitespace-nowrap",
                     selectedDepartment === dept 
                       ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#957539]" 
-                      : "text-black/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
+                      : "text-[#1A1A1A]/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
                   )}
                 >
                   {dept} ({count})
@@ -218,7 +218,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         <ScrollArea className="flex-1">
           <div className="p-2 space-y-0.5">
             {filteredEmployees.length === 0 && (
-              <div className="text-center py-8 text-black/40">
+              <div className="text-center py-8 text-[#1A1A1A]/40">
                 <Users className="h-8 w-8 mx-auto mb-2 opacity-40" />
                 <p className="text-sm">No team members found</p>
               </div>
@@ -252,8 +252,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm text-black truncate">{employee.name}</p>
-                    <p className="text-xs text-black/50 truncate">{employee.role}</p>
+                    <p className="font-medium text-sm text-[#1A1A1A] truncate">{employee.name}</p>
+                    <p className="text-xs text-[#1A1A1A]/50 truncate">{employee.role}</p>
                   </div>
                   
                   {status?.is_typing && (
@@ -278,7 +278,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         {selectedEmployeeData ? (
           <>
             {/* Chat Header */}
-            <div className="p-3 sm:p-4 border-b border-[#B89555]/10 bg-white/80 backdrop-blur-sm flex items-center gap-3">
+            <div className="p-3 sm:p-4 border-b border-[#B89555]/10 bg-[#FDFBF7]/80 backdrop-blur-sm flex items-center gap-3">
               {/* Back button on mobile */}
               <Button
                 variant="ghost"
@@ -286,7 +286,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                 onClick={handleBackToList}
                 className="md:hidden shrink-0 h-8 w-8 hover:bg-[#B89555]/10"
               >
-                <ArrowLeft className="h-4 w-4 text-black" />
+                <ArrowLeft className="h-4 w-4 text-[#1A1A1A]" />
               </Button>
 
               <div className="relative shrink-0">
@@ -303,8 +303,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               </div>
               
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-black text-sm truncate">{selectedEmployeeData.name}</h3>
-                <div className="flex items-center gap-1.5 text-xs text-black/50">
+                <h3 className="font-semibold text-[#1A1A1A] text-sm truncate">{selectedEmployeeData.name}</h3>
+                <div className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/50">
                   <span className="truncate">{selectedEmployeeData.role}</span>
                   <Circle className="h-1 w-1 fill-current shrink-0" />
                   <span className="shrink-0">{getStatusText(selectedEmployee!)}</span>
@@ -312,18 +312,18 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               </div>
               
               <div className="flex items-center gap-1">
-                <Badge variant="outline" className="text-[10px] border-[#B89555]/20 text-black/60 hidden sm:flex">
+                <Badge variant="outline" className="text-[10px] border-[#B89555]/20 text-[#1A1A1A]/60 hidden sm:flex">
                   <Building2 className="h-3 w-3 mr-1" />
                   {selectedEmployeeData.department}
                 </Badge>
                 <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
-                  <Phone className="h-4 w-4 text-black/60" />
+                  <Phone className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
-                  <Video className="h-4 w-4 text-black/60" />
+                  <Video className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
                 <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10">
-                  <MoreVertical className="h-4 w-4 text-black/60" />
+                  <MoreVertical className="h-4 w-4 text-[#1A1A1A]/60" />
                 </Button>
               </div>
             </div>
@@ -332,11 +332,11 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             <ScrollArea className="flex-1 p-3 sm:p-4">
               <div className="space-y-3">
                 {messages.length === 0 && !loading && (
-                  <div className="text-center py-12 text-black/40">
+                  <div className="text-center py-12 text-[#1A1A1A]/40">
                     <div className="h-16 w-16 rounded-full bg-[#B89555]/10 flex items-center justify-center mx-auto mb-3">
                       <MessageCircle className="h-8 w-8 text-[#B89555]/50" />
                     </div>
-                    <p className="font-medium text-black/60">No messages yet</p>
+                    <p className="font-medium text-[#1A1A1A]/60">No messages yet</p>
                     <p className="text-sm mt-1">Start a conversation with {selectedEmployeeData.name}</p>
                   </div>
                 )}
@@ -370,12 +370,12 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                           "rounded-2xl px-3.5 py-2.5 select-text cursor-text",
                           isUser 
                             ? "bg-gradient-to-br from-[#B89555] to-[#A68444] text-white rounded-tr-md shadow-md" 
-                            : "bg-white text-black border border-[#B89555]/15 rounded-tl-md shadow-sm"
+                            : "bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/15 rounded-tl-md shadow-sm"
                         )}>
                           <p className="text-sm whitespace-pre-wrap select-text leading-relaxed">{msg.message}</p>
                           <p className={cn(
                             "text-[10px] mt-1 select-none",
-                            isUser ? "text-white/70" : "text-black/40"
+                            isUser ? "text-white/70" : "text-[#1A1A1A]/40"
                           )}>
                             {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
@@ -388,7 +388,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                               toast.success(t('chat.messageCopied') || 'Message copied');
                             }}
                             className={cn(
-                              "text-[10px] text-black/30 hover:text-[#B89555] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#B89555]/5",
+                              "text-[10px] text-[#1A1A1A]/30 hover:text-[#B89555] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#B89555]/5",
                               isUser ? "mr-1" : "ml-1"
                             )}
                           >
@@ -411,7 +411,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                         {selectedEmployeeData.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-white border border-[#B89555]/15 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+                    <div className="bg-[#FDFBF7] border border-[#B89555]/15 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
                       <div className="flex gap-1 items-center h-4">
                         <span className="h-2 w-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="h-2 w-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -426,10 +426,10 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             </ScrollArea>
 
             {/* Message Input */}
-            <div className="p-3 sm:p-4 border-t border-[#B89555]/10 bg-white/80 backdrop-blur-sm">
+            <div className="p-3 sm:p-4 border-t border-[#B89555]/10 bg-[#FDFBF7]/80 backdrop-blur-sm">
               <div className="flex items-end gap-2">
                 <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#B89555]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
-                  <Paperclip className="h-4 w-4 text-black/40" />
+                  <Paperclip className="h-4 w-4 text-[#1A1A1A]/40" />
                 </Button>
                 <div className="flex-1 relative">
                   <Input
@@ -437,10 +437,10 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    className="bg-[#FDFBF7] border-[#B89555]/20 text-black placeholder:text-black/40 pr-10 focus-visible:ring-[#B89555]/30"
+                    className="bg-[#FDFBF7] border-[#B89555]/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 pr-10 focus-visible:ring-[#B89555]/30"
                   />
                   <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover:bg-[#B89555]/10 hidden sm:flex">
-                    <Smile className="h-4 w-4 text-black/40" />
+                    <Smile className="h-4 w-4 text-[#1A1A1A]/40" />
                   </Button>
                 </div>
                 <Button 
@@ -475,7 +475,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               )}
 
               <div className="flex items-center justify-between mt-1.5 px-1">
-                <p className="text-[10px] text-black/30 px-1">
+                <p className="text-[10px] text-[#1A1A1A]/30 px-1">
                   Press Enter to send · AI-powered responses · Encrypted
                 </p>
                 {/* Cross-channel toggle — shared component */}
@@ -490,13 +490,13 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-black/40">
+          <div className="flex-1 flex items-center justify-center text-[#1A1A1A]/40">
             <div className="text-center">
               <div className="h-20 w-20 rounded-full bg-[#B89555]/10 flex items-center justify-center mx-auto mb-4">
                 <Users className="h-10 w-10 text-[#B89555]/40" />
               </div>
-              <h3 className="font-semibold text-black/60 text-lg">Select a Team Member</h3>
-              <p className="text-sm mt-1 text-black/40">Choose someone from the list to start chatting</p>
+              <h3 className="font-semibold text-[#1A1A1A]/60 text-lg">Select a Team Member</h3>
+              <p className="text-sm mt-1 text-[#1A1A1A]/40">Choose someone from the list to start chatting</p>
             </div>
           </div>
         )}

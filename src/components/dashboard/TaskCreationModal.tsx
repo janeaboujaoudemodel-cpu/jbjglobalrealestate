@@ -338,8 +338,8 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="p-6 pb-4 border-b border-gold/20">
-          <DialogTitle className="text-xl font-bold text-black flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center">
+          <DialogTitle className="text-xl font-bold text-[#1A1A1A] flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
               <Plus className="w-5 h-5 text-gold" />
             </div>
             Create New Task
@@ -349,12 +349,12 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
         <div className="p-6 space-y-5">
           {/* Title */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black">Task Title *</Label>
+            <Label className="text-sm font-semibold text-[#1A1A1A]">Task Title *</Label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What needs to be done?"
-              className="h-11 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
+              className="h-11 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
               autoFocus
             />
           </div>
@@ -362,7 +362,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
           {/* Description with voice */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-sm font-semibold text-black">Description</Label>
+              <Label className="text-sm font-semibold text-[#1A1A1A]">Description</Label>
               <Button
                 type="button"
                 size="sm"
@@ -383,14 +383,14 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add details, notes, or instructions..."
-              className="min-h-[100px] bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600 resize-y"
+              className="min-h-[100px] bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E] resize-y"
             />
           </div>
 
           {/* Priority & Category row */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+              <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                 <Flag className="w-3.5 h-3.5 text-gold" /> Priority
               </Label>
               <div className="flex flex-wrap gap-1.5">
@@ -403,7 +403,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                       "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                       priority === p.value
                         ? cn(p.color, "ring-1 ring-offset-1 ring-gold/40")
-                        : "bg-white/60 border-gold/20 text-gray-600 hover:border-gold/40"
+                        : "bg-[#FDFBF7]/60 border-gold/20 text-[#5A4A2E] hover:border-gold/40"
                     )}
                   >
                     {p.label}
@@ -413,13 +413,13 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+              <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                 <FolderOpen className="w-3.5 h-3.5 text-gold" /> Category
               </Label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 rounded-lg border border-gold/30 bg-white/80 text-black text-sm px-3 focus:outline-none focus:border-gold"
+                className="w-full h-10 rounded-lg border border-gold/30 bg-[#FDFBF7]/80 text-[#1A1A1A] text-sm px-3 focus:outline-none focus:border-gold"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -431,7 +431,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
           {/* Due Date — Smart Input + Calendar */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+              <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                 <CalendarIcon className="w-3.5 h-3.5 text-gold" /> Due Date
               </Label>
               <div className="flex gap-2">
@@ -441,7 +441,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   onBlur={handleDateBlur}
                   onKeyDown={(e) => { if (e.key === "Enter") handleDateBlur(); }}
                   placeholder="DD/MM/YYYY"
-                  className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600 flex-1"
+                  className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E] flex-1"
                 />
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
@@ -465,26 +465,26 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 </Popover>
               </div>
               {dueDate && (
-                <p className="text-xs text-gray-700">Saved: {formatDateDisplay(dueDate)}</p>
+                <p className="text-xs text-[#5A4A2E]">Saved: {formatDateDisplay(dueDate)}</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+              <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-gold" /> Client Contact
               </Label>
               <Input
                 value={clientContact}
                 onChange={(e) => setClientContact(e.target.value)}
                 placeholder="+971 50 123 4567"
-                className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
+                className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
               />
             </div>
           </div>
 
           {/* CRM Lead Section */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+            <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
               <Users className="w-3.5 h-3.5 text-gold" /> Link to Lead
             </Label>
             <div className="flex gap-2 mb-2">
@@ -503,8 +503,8 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                     leadMode === mode
-                      ? "bg-gold/20 border-gold text-black"
-                      : "bg-white/60 border-gold/20 text-gray-600 hover:border-gold/40"
+                      ? "bg-gold/20 border-gold text-[#1A1A1A]"
+                      : "bg-[#FDFBF7]/60 border-gold/20 text-[#5A4A2E] hover:border-gold/40"
                   )}
                 >
                   {mode === "none" ? "No Lead" : mode === "select" ? "Select Lead" : "Add New Lead"}
@@ -515,25 +515,25 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             {leadMode === "select" && (
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
                   <Input
                     value={leadSearch}
                     onChange={(e) => setLeadSearch(e.target.value)}
                     placeholder="Search by name, phone, or email..."
-                    className="h-10 pl-9 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
+                    className="h-10 pl-9 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
                   />
                 </div>
                 {selectedLeadId && (
                   <div className="flex items-center gap-2 px-3 py-2 bg-gold/10 border border-gold/30 rounded-lg">
                     <Users className="w-4 h-4 text-gold" />
-                    <span className="text-sm text-black font-medium">{selectedLeadName}</span>
+                    <span className="text-sm text-[#1A1A1A] font-medium">{selectedLeadName}</span>
                     <button type="button" onClick={() => { setSelectedLeadId(null); setSelectedLeadName(""); }} className="ml-auto">
-                      <X className="w-3.5 h-3.5 text-gray-600 hover:text-red-500" />
+                      <X className="w-3.5 h-3.5 text-[#5A4A2E] hover:text-red-500" />
                     </button>
                   </div>
                 )}
                 {leadResults.length > 0 && !selectedLeadId && (
-                  <div className="border border-gold/20 rounded-lg bg-white/90 max-h-[160px] overflow-y-auto">
+                  <div className="border border-gold/20 rounded-lg bg-[#FDFBF7]/90 max-h-[160px] overflow-y-auto">
                     {leadResults.map((lead) => (
                       <button
                         key={lead.id}
@@ -546,38 +546,38 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gold/10 border-b border-gold/10 last:border-0 text-sm"
                       >
-                        <span className="font-medium text-black">{lead.full_name || "—"}</span>
-                        {lead.phone_raw && <span className="text-gray-600 ml-2">{lead.phone_raw}</span>}
-                        {lead.email_normalized && <span className="text-gray-600 ml-2 text-xs">{lead.email_normalized}</span>}
+                        <span className="font-medium text-[#1A1A1A]">{lead.full_name || "—"}</span>
+                        {lead.phone_raw && <span className="text-[#5A4A2E] ml-2">{lead.phone_raw}</span>}
+                        {lead.email_normalized && <span className="text-[#5A4A2E] ml-2 text-xs">{lead.email_normalized}</span>}
                       </button>
                     ))}
                   </div>
                 )}
-                {leadSearching && <p className="text-xs text-gray-600">Searching...</p>}
+                {leadSearching && <p className="text-xs text-[#5A4A2E]">Searching...</p>}
               </div>
             )}
 
             {leadMode === "new" && (
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs text-gray-600">Lead Name *</Label>
+                  <Label className="text-xs text-[#5A4A2E]">Lead Name *</Label>
                   <Input
                     value={newLeadName}
                     onChange={(e) => setNewLeadName(e.target.value)}
                     placeholder="Full name"
-                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-600 text-sm"
+                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] text-sm"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs text-gray-600">Phone</Label>
+                  <Label className="text-xs text-[#5A4A2E]">Phone</Label>
                   <Input
                     value={newLeadPhone}
                     onChange={(e) => setNewLeadPhone(e.target.value)}
                     placeholder="+971 50 123 4567"
-                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-600 text-sm"
+                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] text-sm"
                   />
                 </div>
-                <p className="col-span-2 text-xs text-gray-700 flex items-center gap-1">
+                <p className="col-span-2 text-xs text-[#5A4A2E] flex items-center gap-1">
                   <UserPlus className="w-3 h-3" /> This lead will be added to your CRM under "Manual — Task Source"
                 </p>
               </div>
@@ -586,20 +586,20 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
 
           {/* Reference URL */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+            <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
               <Link2 className="w-3.5 h-3.5 text-gold" /> Reference URL
             </Label>
             <Input
               value={referenceUrl}
               onChange={(e) => setReferenceUrl(e.target.value)}
               placeholder="https://..."
-              className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
+              className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
             />
           </div>
 
           {/* File Upload */}
           <div className="space-y-2">
-            <Label className="text-sm font-semibold text-black flex items-center gap-1.5">
+            <Label className="text-sm font-semibold text-[#1A1A1A] flex items-center gap-1.5">
               <Upload className="w-3.5 h-3.5 text-gold" /> Attachments
             </Label>
             <div
@@ -620,8 +620,8 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   <span className="text-sm">Uploading...</span>
                 </div>
               ) : (
-                <div className="text-gray-600 text-sm">
-                  <Upload className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                <div className="text-[#5A4A2E] text-sm">
+                  <Upload className="w-5 h-5 mx-auto mb-1 text-[#5A4A2E]" />
                   Click to upload documents (PDF, images, spreadsheets)
                 </div>
               )}
@@ -633,10 +633,10 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 {attachments.map((att, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-2 px-3 py-2 bg-white/80 border border-gold/20 rounded-lg"
+                    className="flex items-center gap-2 px-3 py-2 bg-[#FDFBF7]/80 border border-gold/20 rounded-lg"
                   >
                     <FileText className="w-4 h-4 text-gold shrink-0" />
-                    <span className="text-xs text-black truncate flex-1">{att.name}</span>
+                    <span className="text-xs text-[#1A1A1A] truncate flex-1">{att.name}</span>
                     <button
                       type="button"
                       onClick={() => removeAttachment(i)}
@@ -657,14 +657,14 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             type="button"
             variant="outline"
             onClick={() => { resetForm(); onOpenChange(false); }}
-            className="border-gold/30 text-black hover:bg-gold/5"
+            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/5"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={!title.trim() || isSubmitting}
-            className="bg-gradient-to-r from-gold via-gold to-gold/90 hover:from-gold/90 hover:to-gold text-black font-bold px-8 shadow-lg disabled:opacity-50"
+            className="bg-gradient-to-r from-gold via-gold to-gold/90 hover:from-gold/90 hover:to-gold text-[#1A1A1A] font-bold px-8 shadow-lg disabled:opacity-50"
           >
             {isSubmitting ? (
               <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Creating...</>

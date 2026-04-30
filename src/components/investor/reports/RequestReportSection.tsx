@@ -18,7 +18,7 @@ export default function RequestReportSection() {
               <h3 className="text-xl font-semibold mb-3">
                 Need a Specific Report?
               </h3>
-              <p className="text-gray-600 mb-6 max-w-lg">
+              <p className="text-[#5A4A2E] mb-6 max-w-lg">
                 If you require a specific area analysis, asset comparison, or briefing not currently 
                 available, you may request a custom report through our advisory team. Custom reports 
                 are tailored to your investment interests and requirements.

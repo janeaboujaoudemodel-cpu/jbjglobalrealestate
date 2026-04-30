@@ -104,25 +104,25 @@ const DeveloperPortalCTA = () => {
   // Investor mode — show investor opportunities instead
   if (isInvestorMode && !isDeveloperMode) {
     return (
-      <section className="py-12 md:py-16 bg-white">
+      <section className="py-12 md:py-16 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-1 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1 text-center">
               Investor Opportunities
             </h2>
-            <p className="text-gray-600 text-sm mb-8 text-center">
+            <p className="text-[#5A4A2E] text-sm mb-8 text-center">
               Explore tools, insights, and exclusive access designed for smart investors.
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {investorShortcuts.map((action) => (
                 <Link key={action.label} to={action.href}>
-                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 group-hover:bg-gray-800 transition-all">
+                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA] transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
+                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#1A1A1A] transition-all">
                       <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
                     </div>
-                    <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
+                    <span className="text-[#5A4A2E] text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}
@@ -134,13 +134,13 @@ const DeveloperPortalCTA = () => {
   }
 
   return (
-    <section className="py-12 md:py-16 bg-white">
+    <section className="py-12 md:py-16 bg-[#FDFBF7]">
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-1 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1 text-center">
             Developer Center
           </h2>
-          <p className="text-gray-600 text-sm mb-8 text-center">
+          <p className="text-[#5A4A2E] text-sm mb-8 text-center">
             {showShortcuts
               ? "Your developer tools and shortcuts are ready."
               : showCongrats
@@ -150,17 +150,17 @@ const DeveloperPortalCTA = () => {
 
           {showCongrats && (
             <div className="max-w-md mx-auto text-center">
-              <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
-                <CheckCircle2 className="w-14 h-14 text-black mx-auto mb-4" />
-                <h3 className="text-black text-lg font-bold mb-2">
+              <div className="p-8 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
+                <CheckCircle2 className="w-14 h-14 text-[#1A1A1A] mx-auto mb-4" />
+                <h3 className="text-[#1A1A1A] text-lg font-bold mb-2">
                   Congratulations, your developer access is approved.
                 </h3>
-                <p className="text-gray-600 text-sm mb-6">
+                <p className="text-[#5A4A2E] text-sm mb-6">
                   You now have full access to submit projects, manage events, and connect with our broker network.
                 </p>
                 <Button
                   onClick={handleStartNow}
-                  className="bg-black text-white font-bold px-8 py-3 text-sm hover:bg-gray-800 transition-all"
+                  className="bg-[#1A1A1A] text-white font-bold px-8 py-3 text-sm hover:bg-[#1A1A1A] transition-all"
                 >
                   <Rocket className="w-4 h-4 mr-2" />
                   Start Now
@@ -174,12 +174,12 @@ const DeveloperPortalCTA = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {shortcuts.map((action) => (
                 <Link key={action.label} to={action.href}>
-                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 group-hover:bg-gray-800 transition-all">
+                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA] transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
+                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-[#1A1A1A] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#1A1A1A] transition-all">
                       <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
                     </div>
-                    <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
+                    <span className="text-[#5A4A2E] text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}
@@ -188,13 +188,13 @@ const DeveloperPortalCTA = () => {
 
           {isPending && (
             <div className="max-w-md mx-auto text-center">
-              <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
-                <Clock className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-black text-lg font-bold mb-2">Application Under Review</h3>
-                <p className="text-gray-600 text-sm mb-4">
+              <div className="p-8 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
+                <Clock className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                <h3 className="text-[#1A1A1A] text-lg font-bold mb-2">Application Under Review</h3>
+                <p className="text-[#5A4A2E] text-sm mb-4">
                   Your developer registration is being reviewed by our team. We'll notify you once it's approved.
                 </p>
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-300 text-black text-xs uppercase tracking-wider font-semibold">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A] text-xs uppercase tracking-wider font-semibold">
                   <Clock className="w-3.5 h-3.5" />
                   {status === "under_review" ? "Under Review" : "Pending"}
                 </span>
@@ -204,14 +204,14 @@ const DeveloperPortalCTA = () => {
 
           {isRejected && (
             <div className="max-w-md mx-auto text-center">
-              <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
-                <XCircle className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-black text-lg font-bold mb-2">Application Not Approved</h3>
-                <p className="text-gray-600 text-sm mb-4">
+              <div className="p-8 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
+                <XCircle className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                <h3 className="text-[#1A1A1A] text-lg font-bold mb-2">Application Not Approved</h3>
+                <p className="text-[#5A4A2E] text-sm mb-4">
                   Unfortunately your registration was not approved. Please contact us for more information.
                 </p>
                 <Link to="/contact">
-                  <Button variant="secondary" className="border-gray-300 text-black hover:bg-gray-100">
+                  <Button variant="secondary" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]">
                     Contact Support
                   </Button>
                 </Link>
@@ -223,17 +223,17 @@ const DeveloperPortalCTA = () => {
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                 {devBenefits.map((b, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200">
-                    <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="w-4 h-4 text-black" />
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
+                    <div className="w-8 h-8 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" />
                     </div>
-                    <span className="text-black text-sm">{b.label}</span>
+                    <span className="text-[#1A1A1A] text-sm">{b.label}</span>
                   </div>
                 ))}
               </div>
               <div className="text-center">
                 <Link to={user ? "/developer-hub" : "/auth?redirect=/developer-hub"}>
-                  <Button className="bg-black text-white font-bold px-8 py-3 text-sm hover:bg-gray-800 transition-all">
+                  <Button className="bg-[#1A1A1A] text-white font-bold px-8 py-3 text-sm hover:bg-[#1A1A1A] transition-all">
                     <UserCheck className="w-4 h-4 mr-2" />
                     Register Now as Developer or Sales Representative
                     <ArrowRight className="w-4 h-4 ml-2" />

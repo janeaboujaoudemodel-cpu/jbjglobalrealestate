@@ -26,8 +26,8 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
   const [contact, setContact] = useState("Team");
   const r = rec.data;
 
-  if (rec.isLoading) return <div className="p-8 bg-white min-h-screen">Loading…</div>;
-  if (!r) return <div className="p-8 bg-white min-h-screen">Not found</div>;
+  if (rec.isLoading) return <div className="p-8 bg-[#FDFBF7] min-h-screen">Loading…</div>;
+  if (!r) return <div className="p-8 bg-[#FDFBF7] min-h-screen">Not found</div>;
 
   const recipient = type === "developer" ? r.registration_email : r.outreach_email;
   const backTo = type === "developer" ? "/owner/uae-registry/developers" : "/owner/uae-registry/brokerages";
@@ -48,7 +48,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
 
   return (
     <OwnerGuard>
-      <div className="min-h-screen bg-white px-6 py-8 max-w-6xl mx-auto">
+      <div className="min-h-screen bg-[#FDFBF7] px-6 py-8 max-w-6xl mx-auto">
         <Link to={backTo} className="inline-flex items-center gap-1 text-sm mb-4" style={{ color: "#000" }}>
           <ArrowLeft className="h-4 w-4" />Back
         </Link>
@@ -56,14 +56,14 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
           <h1 className="text-2xl font-bold" style={{ color: "#000" }}>{r.brand_name}</h1>
           <p className="text-sm" style={{ color: "#374151" }}>{r.legal_company_name} · {r.emirate_section}</p>
           <div className="flex flex-wrap gap-2 mt-2">
-            <Badge variant="outline" className="border-black text-black">{r.outreach_status}</Badge>
-            <Badge variant="outline" className="border-black text-black">{r.verification_status}</Badge>
-            <Badge variant="outline" className="border-black text-black">Priority: {type === "developer" ? r.developer_priority : r.brokerage_priority}</Badge>
+            <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]">{r.outreach_status}</Badge>
+            <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]">{r.verification_status}</Badge>
+            <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]">Priority: {type === "developer" ? r.developer_priority : r.brokerage_priority}</Badge>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <Card className="p-5 bg-white border-gray-200">
+          <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30">
             <h2 className="font-semibold mb-3" style={{ color: "#000" }}>Outreach</h2>
             <div className="space-y-3 text-sm">
               <div><span style={{ color: "#6b7280" }}>Recipient:</span> <strong style={{ color: "#000" }}>{recipient ?? "— add registration email —"}</strong></div>
@@ -80,7 +80,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => handleSend(true)}>Test send</Button>
-                <Button className="bg-black text-white hover:bg-gray-800" onClick={() => handleSend(false)} disabled={!r.test_email_completed}>
+                <Button className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]" onClick={() => handleSend(false)} disabled={!r.test_email_completed}>
                   <Send className="h-4 w-4 mr-1" />Send registration
                 </Button>
               </div>
@@ -95,11 +95,11 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
             </div>
           </Card>
 
-          <Card className="p-5 bg-white border-gray-200">
+          <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30">
             <h2 className="font-semibold mb-3" style={{ color: "#000" }}>Sources ({sources.data?.length ?? 0})</h2>
             <div className="space-y-2 mb-3 max-h-48 overflow-auto">
               {sources.data?.map((s: any) => (
-                <div key={s.id} className="text-xs p-2 bg-gray-50 rounded">
+                <div key={s.id} className="text-xs p-2 bg-[#F7F2EA] rounded">
                   <div style={{ color: "#000" }} className="font-medium">{s.source_name}</div>
                   <a href={s.source_url} target="_blank" rel="noreferrer" className="underline" style={{ color: "#374151" }}>{s.source_url}</a>
                   <div style={{ color: "#6b7280" }}>Fields: {(s.fields_verified ?? []).join(", ") || "—"}</div>
@@ -122,11 +122,11 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
             </div>
           </Card>
 
-          <Card className="p-5 bg-white border-gray-200 lg:col-span-2">
+          <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30 lg:col-span-2">
             <h2 className="font-semibold mb-3" style={{ color: "#000" }}>Communication history</h2>
             <div className="space-y-2 max-h-96 overflow-auto">
               {log.data?.map((l: any) => (
-                <div key={l.id} className="p-3 bg-gray-50 rounded border border-gray-200">
+                <div key={l.id} className="p-3 bg-[#F7F2EA] rounded border border-[#B89555]/30">
                   <div className="flex justify-between text-xs" style={{ color: "#6b7280" }}>
                     <span>{l.channel} · {l.direction} · {l.language}</span>
                     <span>{new Date(l.occurred_at).toLocaleString()}</span>

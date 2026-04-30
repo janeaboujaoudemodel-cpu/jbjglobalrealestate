@@ -147,7 +147,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
           {/* 4 + 4 Grid Layout — connected sections with dividers */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             {/* Row 1 */}
-            <div className="lg:border-r lg:border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30">
               <MegaMenuSection icon={Newspaper} title="News & Updates">
                 {newsLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -155,7 +155,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="lg:border-r lg:border-gray-200 border-t lg:border-t-0 border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30 border-t lg:border-t-0 border-[#B89555]/30">
               <MegaMenuSection icon={BarChart3} title="Market Intelligence">
                 {intelligenceLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -163,7 +163,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="lg:border-r lg:border-gray-200 border-t lg:border-t-0 border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30 border-t lg:border-t-0 border-[#B89555]/30">
               <MegaMenuSection icon={BookOpen} title="Guides">
                 {guidesLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -171,7 +171,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="border-t lg:border-t-0 border-gray-200">
+            <div className="border-t lg:border-t-0 border-[#B89555]/30">
               <MegaMenuSection icon={Briefcase} title="Services">
                 {servicesLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -180,7 +180,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
             </div>
             
             {/* Row 2 — top border for row separation */}
-            <div className="lg:border-r lg:border-gray-200 border-t border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30 border-t border-[#B89555]/30">
               <MegaMenuSection icon={Sparkles} title="Business Suites">
                 {businessSuitesLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -188,7 +188,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="lg:border-r lg:border-gray-200 border-t border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30 border-t border-[#B89555]/30">
               <MegaMenuSection icon={LayoutDashboard} title={getModeTitle()}>
                 {modeLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -196,7 +196,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="lg:border-r lg:border-gray-200 border-t border-gray-200">
+            <div className="lg:border-r lg:border-[#B89555]/30 border-t border-[#B89555]/30">
               <MegaMenuSection icon={Building2} title="Company">
                 {companyLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -204,7 +204,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
               </MegaMenuSection>
             </div>
             
-            <div className="border-t border-gray-200">
+            <div className="border-t border-[#B89555]/30">
               <MegaMenuSection icon={Shield} title="Legal">
                 {legalLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />

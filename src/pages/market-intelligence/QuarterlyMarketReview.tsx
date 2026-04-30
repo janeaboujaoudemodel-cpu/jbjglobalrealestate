@@ -143,7 +143,7 @@ const QuarterlyMarketReview = () => {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-gold hover:underline">
@@ -157,7 +157,7 @@ const QuarterlyMarketReview = () => {
   const getChangeIndicator = (change: number) => {
     if (change > 0) return <span className="text-emerald-600">+{change}%</span>;
     if (change < 0) return <span className="text-red-600">{change}%</span>;
-    return <span className="text-gray-600">0%</span>;
+    return <span className="text-[#5A4A2E]">0%</span>;
   };
 
   const getSupplyDemandColor = (status: string) => {
@@ -165,7 +165,7 @@ const QuarterlyMarketReview = () => {
       case "balanced": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
       case "supply_pressure": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
       case "demand_pressure": return "bg-blue-500/20 text-blue-600 border-blue-500/30";
-      default: return "bg-gray-500/20 text-gray-600 border-gray-500/30";
+      default: return "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30";
     }
   };
 
@@ -189,7 +189,7 @@ const QuarterlyMarketReview = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-[#5A4A2E] hover:text-[#1A1A1A] mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -200,10 +200,10 @@ const QuarterlyMarketReview = () => {
                 <Badge className="mb-3 bg-gold/20 text-gold border-gold/30">
                   QUARTERLY MARKET REVIEW
                 </Badge>
-                <h1 className="text-3xl md:text-4xl font-bold text-black">
+                <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
                   {data.period}
                 </h1>
-                <p className="text-gray-600 mt-2 flex items-center gap-2">
+                <p className="text-[#5A4A2E] mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -229,10 +229,10 @@ const QuarterlyMarketReview = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
-                <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
+                <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 leading-relaxed">{data.executiveSummary}</p>
+                <p className="text-[#5A4A2E] leading-relaxed">{data.executiveSummary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -245,62 +245,62 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.2 }}
             className="mb-8"
           >
-            <h2 className="text-xl font-bold text-black mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-gold" />
               Segment Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
                     <Building className="w-4 h-4" />
                     BUY Segment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-black">
+                    <span className="text-2xl font-bold text-[#1A1A1A]">
                       {data.buySegment.transactions.toLocaleString()}
                     </span>
                     {getChangeIndicator(data.buySegment.change)}
                   </div>
-                  <p className="text-xs text-gray-600">{data.buySegment.insight}</p>
+                  <p className="text-xs text-[#5A4A2E]">{data.buySegment.insight}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
                     <Home className="w-4 h-4" />
                     SELL Segment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-black">
+                    <span className="text-2xl font-bold text-[#1A1A1A]">
                       {data.sellSegment.transactions.toLocaleString()}
                     </span>
                     {getChangeIndicator(data.sellSegment.change)}
                   </div>
-                  <p className="text-xs text-gray-600">{data.sellSegment.insight}</p>
+                  <p className="text-xs text-[#5A4A2E]">{data.sellSegment.insight}</p>
                 </CardContent>
               </Card>
 
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
                     <Key className="w-4 h-4" />
                     RENT Segment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-2xl font-bold text-black">
+                    <span className="text-2xl font-bold text-[#1A1A1A]">
                       {data.rentSegment.transactions.toLocaleString()}
                     </span>
                     {getChangeIndicator(data.rentSegment.change)}
                   </div>
-                  <p className="text-xs text-gray-600">{data.rentSegment.insight}</p>
+                  <p className="text-xs text-[#5A4A2E]">{data.rentSegment.insight}</p>
                 </CardContent>
               </Card>
             </div>
@@ -316,7 +316,7 @@ const QuarterlyMarketReview = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
-                <CardTitle className="text-lg text-black flex items-center gap-2">
+                <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
                   <Activity className="w-5 h-5 text-gold" />
                   Supply-Demand Balance
                 </CardTitle>
@@ -327,7 +327,7 @@ const QuarterlyMarketReview = () => {
                     {data.supplyDemand.status.replace("_", " ").toUpperCase()}
                   </Badge>
                 </div>
-                <p className="text-gray-700">{data.supplyDemand.description}</p>
+                <p className="text-[#5A4A2E]">{data.supplyDemand.description}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -340,7 +340,7 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.4 }}
             className="mb-8"
           >
-            <h2 className="text-xl font-bold text-black mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-[#1A1A1A] mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-gold" />
               Area Analysis
             </h2>
@@ -348,19 +348,19 @@ const QuarterlyMarketReview = () => {
               {data.areaAnalysis.map((area, index) => (
                 <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                   <CardContent className="pt-4">
-                    <h3 className="text-lg font-semibold text-black mb-3">{area.name}</h3>
+                    <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">{area.name}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <p className="text-gray-600 mb-1">BUY Activity</p>
-                        <p className="text-gray-700">{area.buyActivity}</p>
+                        <p className="text-[#5A4A2E] mb-1">BUY Activity</p>
+                        <p className="text-[#5A4A2E]">{area.buyActivity}</p>
                       </div>
                       <div>
-                        <p className="text-gray-600 mb-1">RENT Activity</p>
-                        <p className="text-gray-700">{area.rentActivity}</p>
+                        <p className="text-[#5A4A2E] mb-1">RENT Activity</p>
+                        <p className="text-[#5A4A2E]">{area.rentActivity}</p>
                       </div>
                       <div>
-                        <p className="text-gray-600 mb-1">Outlook</p>
-                        <p className="text-gray-700">{area.outlook}</p>
+                        <p className="text-[#5A4A2E] mb-1">Outlook</p>
+                        <p className="text-[#5A4A2E]">{area.outlook}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -378,12 +378,12 @@ const QuarterlyMarketReview = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
-                <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
+                <p className="text-sm text-[#5A4A2E] mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-gray-600">
+                <div className="flex flex-wrap gap-4 text-xs text-[#5A4A2E]">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Quarterly</span>
@@ -393,7 +393,7 @@ const QuarterlyMarketReview = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-[#5A4A2E]">
                     JBJ GLOBAL REAL ESTATE
                     <FounderContent>
                       <> • Jane Bou Jaoude, Founder & CEO</>

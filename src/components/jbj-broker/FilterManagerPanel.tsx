@@ -148,8 +148,8 @@ export function FilterManagerPanel() {
           <Info className="h-5 w-5" />
         </div>
         <div>
-          <h4 className="font-semibold text-black mb-1">What is the Filter Manager?</h4>
-          <p className="text-sm text-black/70">
+          <h4 className="font-semibold text-[#1A1A1A] mb-1">What is the Filter Manager?</h4>
+          <p className="text-sm text-[#1A1A1A]/70">
             The Filter Manager controls which words or phrases are restricted in broker communications. 
             You can <strong>block</strong> keywords (message won't send), <strong>warn</strong> (alert but allow), 
             or <strong>replace</strong> them with approved alternatives. Use this to maintain compliance and brand standards.
@@ -164,8 +164,8 @@ export function FilterManagerPanel() {
             <Shield className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-black">Message Filters</h3>
-            <p className="text-sm text-black/60">{filters.length} filters configured</p>
+            <h3 className="text-lg font-semibold text-[#1A1A1A]">Message Filters</h3>
+            <p className="text-sm text-[#1A1A1A]/60">{filters.length} filters configured</p>
           </div>
         </div>
         <Button variant="primary" onClick={() => setAddDialogOpen(true)}>
@@ -176,7 +176,7 @@ export function FilterManagerPanel() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/50" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
         <Input
           placeholder="Search filters..."
           value={searchQuery}
@@ -200,9 +200,9 @@ export function FilterManagerPanel() {
                 filter.filter_type === "warn" ? "text-amber-600" : "text-blue-600"
               }`} />
               <div>
-                <p className="text-black font-medium">{filter.keyword}</p>
+                <p className="text-[#1A1A1A] font-medium">{filter.keyword}</p>
                 {filter.replacement_text && (
-                  <p className="text-black/60 text-sm">
+                  <p className="text-[#1A1A1A]/60 text-sm">
                     Replace with: "{filter.replacement_text}"
                   </p>
                 )}
@@ -214,7 +214,7 @@ export function FilterManagerPanel() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleToggleActive(filter.id, filter.is_active)}
-                className={filter.is_active ? "text-emerald-600" : "text-black/50"}
+                className={filter.is_active ? "text-emerald-600" : "text-[#1A1A1A]/50"}
               >
                 {filter.is_active ? "Active" : "Inactive"}
               </Button>
@@ -231,7 +231,7 @@ export function FilterManagerPanel() {
         ))}
 
         {filteredFilters.length === 0 && !loading && (
-          <div className="jj-card-inner text-center py-8 text-black/60">
+          <div className="jj-card-inner text-center py-8 text-[#1A1A1A]/60">
             {searchQuery ? "No filters match your search" : "No filters configured. Add your first filter above."}
           </div>
         )}
@@ -241,11 +241,11 @@ export function FilterManagerPanel() {
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
         <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <DialogHeader>
-            <DialogTitle className="text-black">Add New Filter</DialogTitle>
+            <DialogTitle className="text-[#1A1A1A]">Add New Filter</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Keyword to Filter</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Keyword to Filter</label>
               <Input
                 value={newKeyword}
                 onChange={(e) => setNewKeyword(e.target.value)}
@@ -253,7 +253,7 @@ export function FilterManagerPanel() {
               />
             </div>
             <div>
-              <label className="text-sm text-black/70 mb-2 block">Filter Type</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Filter Type</label>
               <Select value={newFilterType} onValueChange={setNewFilterType}>
                 <SelectTrigger>
                   <SelectValue />
@@ -267,7 +267,7 @@ export function FilterManagerPanel() {
             </div>
             {newFilterType === "replace" && (
               <div>
-                <label className="text-sm text-black/70 mb-2 block">Replacement Text</label>
+                <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Replacement Text</label>
                 <Input
                   value={newReplacement}
                   onChange={(e) => setNewReplacement(e.target.value)}

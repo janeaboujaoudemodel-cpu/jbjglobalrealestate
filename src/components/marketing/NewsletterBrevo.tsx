@@ -166,7 +166,7 @@ export const NewsletterBrevo = ({
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-600 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold/50 focus:ring-gold/20 h-12"
               disabled={isSubmitting}
             />
             <Input
@@ -174,7 +174,7 @@ export const NewsletterBrevo = ({
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-600 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold/50 focus:ring-gold/20 h-12"
               required
               disabled={isSubmitting}
             />
@@ -182,7 +182,7 @@ export const NewsletterBrevo = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold hover:bg-gold-light text-black font-semibold h-12 text-base"
+            className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold h-12 text-base"
           >
             {isSubmitting ? (
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -215,14 +215,14 @@ export const NewsletterBrevo = ({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-600 focus:border-gold/50 focus:ring-gold/20"
+          className="bg-zinc-900/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold/50 focus:ring-gold/20"
           required
           disabled={isSubmitting}
         />
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gold hover:bg-gold-light text-black font-semibold"
+          className="w-full bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold"
         >
           {isSubmitting ? (
             <Loader2 className="w-4 h-4 animate-spin mr-2" />

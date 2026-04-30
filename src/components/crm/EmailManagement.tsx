@@ -362,21 +362,21 @@ Generated on: ${new Date().toLocaleDateString()}
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3">
-        <Card className="bg-white border-crm-border">
+        <Card className="bg-[#FDFBF7] border-crm-border">
           <CardContent className="p-4 text-center">
             <Mail className="h-5 w-5 text-gold mx-auto mb-1" />
             <p className="text-2xl font-bold text-crm-text">{activeCount}</p>
             <p className="text-xs text-crm-text-muted">Active Accounts</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-crm-border">
+        <Card className="bg-[#FDFBF7] border-crm-border">
           <CardContent className="p-4 text-center">
             <AlertTriangle className="h-5 w-5 text-yellow-500 mx-auto mb-1" />
             <p className="text-2xl font-bold text-crm-text">{suspendedCount}</p>
             <p className="text-xs text-crm-text-muted">Suspended</p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-crm-border">
+        <Card className="bg-[#FDFBF7] border-crm-border">
           <CardContent className="p-4 text-center">
             <Users className="h-5 w-5 text-blue-500 mx-auto mb-1" />
             <p className="text-2xl font-bold text-crm-text">{availableMembers.length}</p>
@@ -392,7 +392,7 @@ Generated on: ${new Date().toLocaleDateString()}
           placeholder="Search by name, email, or department..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted"
+          className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted"
         />
       </div>
 
@@ -400,14 +400,14 @@ Generated on: ${new Date().toLocaleDateString()}
       <ScrollArea className="h-[500px]">
         <div className="space-y-3">
           {loading ? (
-            <Card className="bg-white border-crm-border">
+            <Card className="bg-[#FDFBF7] border-crm-border">
               <CardContent className="py-12 text-center">
                 <RefreshCw className="h-8 w-8 animate-spin text-gold mx-auto mb-3" />
                 <p className="text-crm-text-muted">Loading email accounts...</p>
               </CardContent>
             </Card>
           ) : filteredEmails.length === 0 ? (
-            <Card className="bg-white border-crm-border">
+            <Card className="bg-[#FDFBF7] border-crm-border">
               <CardContent className="py-12 text-center">
                 <Mail className="h-12 w-12 text-crm-text-muted/30 mx-auto mb-4" />
                 <p className="text-crm-text-muted font-medium">No email accounts yet</p>
@@ -420,7 +420,7 @@ Generated on: ${new Date().toLocaleDateString()}
             filteredEmails.map((email) => (
               <Card
                 key={email.id}
-                className="bg-white border-crm-border hover:border-gold/40 transition-all"
+                className="bg-[#FDFBF7] border-crm-border hover:border-gold/40 transition-all"
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
@@ -540,7 +540,7 @@ Generated on: ${new Date().toLocaleDateString()}
 
       {/* Create Email Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="max-w-lg bg-white">
+        <DialogContent className="max-w-lg bg-[#FDFBF7]">
           <DialogHeader>
             <DialogTitle className="text-crm-text flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -564,10 +564,10 @@ Generated on: ${new Date().toLocaleDateString()}
                     if (member) handleSelectMember(member);
                   }}
                 >
-                  <SelectTrigger className="bg-white border-crm-border text-crm-text">
+                  <SelectTrigger className="bg-[#FDFBF7] border-crm-border text-crm-text">
                     <SelectValue placeholder="Choose from team..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="bg-[#FDFBF7]">
                     {availableMembers.map((m) => (
                       <SelectItem key={m.id} value={m.id}>
                         {m.name} — {m.department}
@@ -588,7 +588,7 @@ Generated on: ${new Date().toLocaleDateString()}
                     setNewPrefix(generatePrefix(e.target.value));
                   }}
                   placeholder="Jane Doe"
-                  className="bg-white border-crm-border text-crm-text"
+                  className="bg-[#FDFBF7] border-crm-border text-crm-text"
                 />
               </div>
               <div>
@@ -597,7 +597,7 @@ Generated on: ${new Date().toLocaleDateString()}
                   value={newDepartment}
                   onChange={(e) => setNewDepartment(e.target.value)}
                   placeholder="Sales"
-                  className="bg-white border-crm-border text-crm-text"
+                  className="bg-[#FDFBF7] border-crm-border text-crm-text"
                 />
               </div>
             </div>
@@ -608,7 +608,7 @@ Generated on: ${new Date().toLocaleDateString()}
                 value={newPosition}
                 onChange={(e) => setNewPosition(e.target.value)}
                 placeholder="Senior Broker"
-                className="bg-white border-crm-border text-crm-text"
+                className="bg-[#FDFBF7] border-crm-border text-crm-text"
               />
             </div>
 
@@ -622,7 +622,7 @@ Generated on: ${new Date().toLocaleDateString()}
                     setNewPrefix(e.target.value.toLowerCase().replace(/[^a-z0-9.]/g, ''))
                   }
                   placeholder="firstname.lastname"
-                  className="bg-white border-crm-border text-crm-text"
+                  className="bg-[#FDFBF7] border-crm-border text-crm-text"
                 />
                 <span className="text-crm-text font-medium shrink-0">@{DOMAIN}</span>
               </div>
@@ -646,7 +646,7 @@ Generated on: ${new Date().toLocaleDateString()}
                 <Input
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="bg-white border-crm-border text-crm-text font-mono"
+                  className="bg-[#FDFBF7] border-crm-border text-crm-text font-mono"
                 />
                 <CopyButton text={newPassword} field="new-pass" />
               </div>
@@ -659,10 +659,10 @@ Generated on: ${new Date().toLocaleDateString()}
                 value={String(newQuota)}
                 onValueChange={(v) => setNewQuota(Number(v))}
               >
-                <SelectTrigger className="bg-white border-crm-border text-crm-text">
+                <SelectTrigger className="bg-[#FDFBF7] border-crm-border text-crm-text">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white">
+                <SelectContent className="bg-[#FDFBF7]">
                   <SelectItem value="512">512 MB</SelectItem>
                   <SelectItem value="1024">1 GB</SelectItem>
                   <SelectItem value="2048">2 GB</SelectItem>
@@ -703,7 +703,7 @@ Generated on: ${new Date().toLocaleDateString()}
 
       {/* Credentials Card Dialog */}
       <Dialog open={showCredentialsDialog} onOpenChange={setShowCredentialsDialog}>
-        <DialogContent className="max-w-md bg-white">
+        <DialogContent className="max-w-md bg-[#FDFBF7]">
           <DialogHeader>
             <DialogTitle className="text-crm-text flex items-center gap-2">
               <Check className="h-5 w-5 text-green-500" />
@@ -750,7 +750,7 @@ Generated on: ${new Date().toLocaleDateString()}
               </Card>
 
               {/* Server Settings */}
-              <Card className="bg-white border-crm-border">
+              <Card className="bg-[#FDFBF7] border-crm-border">
                 <CardHeader className="pb-2 pt-3 px-4">
                   <CardTitle className="text-sm text-crm-text flex items-center gap-2">
                     <Server className="h-4 w-4 text-gold" />
@@ -802,7 +802,7 @@ Generated on: ${new Date().toLocaleDateString()}
 
       {/* Reset Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent className="max-w-sm bg-white">
+        <DialogContent className="max-w-sm bg-[#FDFBF7]">
           <DialogHeader>
             <DialogTitle className="text-crm-text flex items-center gap-2">
               <Key className="h-5 w-5 text-blue-500" />
@@ -831,7 +831,7 @@ Generated on: ${new Date().toLocaleDateString()}
                 <Input
                   value={resetPassword}
                   onChange={(e) => setResetPassword(e.target.value)}
-                  className="bg-white border-crm-border text-crm-text font-mono"
+                  className="bg-[#FDFBF7] border-crm-border text-crm-text font-mono"
                 />
                 <CopyButton text={resetPassword} field="reset-pass" />
               </div>

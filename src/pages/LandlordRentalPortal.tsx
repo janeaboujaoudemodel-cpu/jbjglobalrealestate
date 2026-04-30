@@ -94,14 +94,14 @@ export default function LandlordRentalPortal() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { label: string; className: string }> = {
-      draft: { label: 'Draft', className: 'bg-gray-100 text-gray-700' },
+      draft: { label: 'Draft', className: 'bg-[#F7F2EA] text-[#5A4A2E]' },
       pending_review: { label: 'Pending Review', className: 'bg-amber-100 text-amber-700' },
       admin_approved: { label: 'Admin Approved', className: 'bg-blue-100 text-blue-700' },
       assistant_approved: { label: 'Executive Approved', className: 'bg-purple-100 text-purple-700' },
       founder_approved: { label: 'CEO Approved', className: 'bg-green-100 text-green-700' },
       live: { label: 'Live', className: 'bg-green-500 text-white' },
       rejected: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
-      withdrawn: { label: 'Withdrawn', className: 'bg-gray-100 text-gray-600' },
+      withdrawn: { label: 'Withdrawn', className: 'bg-[#F7F2EA] text-[#5A4A2E]' },
     };
     const config = statusConfig[status] || statusConfig.draft;
     return <Badge className={config.className}>{config.label}</Badge>;
@@ -139,7 +139,7 @@ export default function LandlordRentalPortal() {
               <Button
                 size="lg"
                 onClick={() => isAuthenticated ? setActiveTab('list-property') : navigate('/auth?redirect=/landlord-portal?tab=list-property')}
-                className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90 shadow-lg shadow-gold/20 h-14 px-8 text-lg"
+                className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90 shadow-lg shadow-gold/20 h-14 px-8 text-lg"
               >
                 <Sparkles className="mr-2 h-5 w-5" />
                 List Your Property
@@ -169,13 +169,13 @@ export default function LandlordRentalPortal() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="icon-tile h-full bg-white/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
+                <Card className="icon-tile h-full bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mb-4">
                       <benefit.icon className="h-6 w-6 text-gold" />
                     </div>
-                    <h3 className="font-semibold mb-2 text-black">{benefit.title}</h3>
-                    <p className="text-sm text-gray-600">{benefit.description}</p>
+                    <h3 className="font-semibold mb-2 text-[#1A1A1A]">{benefit.title}</h3>
+                    <p className="text-sm text-[#5A4A2E]">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -188,18 +188,18 @@ export default function LandlordRentalPortal() {
       <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-white/60 border border-gold/30 mb-8">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+            <TabsList className="bg-[#FDFBF7]/60 border border-gold/30 mb-8">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="guide" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="guide" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
                 Landlord Guide
               </TabsTrigger>
-              <TabsTrigger value="list-property" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+              <TabsTrigger value="list-property" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
                 List Property
               </TabsTrigger>
               {isAuthenticated && (
-                <TabsTrigger value="my-listings" className="data-[state=active]:bg-gold data-[state=active]:text-black">
+                <TabsTrigger value="my-listings" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A]">
                   My Listings
                   {listings.length > 0 && (
                     <Badge variant="secondary" className="ml-2 bg-zinc-700">
@@ -213,10 +213,10 @@ export default function LandlordRentalPortal() {
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-black">Why List With Us?</CardTitle>
-                    <CardDescription className="text-gray-600">
+                    <CardTitle className="text-[#1A1A1A]">Why List With Us?</CardTitle>
+                    <CardDescription className="text-[#5A4A2E]">
                       JBJ Global Real Estate offers unparalleled exposure and service
                     </CardDescription>
                   </CardHeader>
@@ -231,16 +231,16 @@ export default function LandlordRentalPortal() {
                     ].map((item, index) => (
                       <div key={index} className="flex items-center gap-3">
                         <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        <span className="text-black">{item}</span>
+                        <span className="text-[#1A1A1A]">{item}</span>
                       </div>
                     ))}
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-black">Approval Process</CardTitle>
-                    <CardDescription className="text-gray-600">
+                    <CardTitle className="text-[#1A1A1A]">Approval Process</CardTitle>
+                    <CardDescription className="text-[#5A4A2E]">
                       Our quality assurance workflow
                     </CardDescription>
                   </CardHeader>
@@ -248,12 +248,12 @@ export default function LandlordRentalPortal() {
                     <div className="space-y-4">
                       {LANDLORD_GUIDE_STEPS.map((step, index) => (
                         <div key={step.step} className="flex gap-4">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-black font-semibold text-sm">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-[#1A1A1A] font-semibold text-sm">
                             {step.step}
                           </div>
                           <div>
-                            <h4 className="font-medium text-black">{step.title}</h4>
-                            <p className="text-sm text-gray-600">{step.description}</p>
+                            <h4 className="font-medium text-[#1A1A1A]">{step.title}</h4>
+                            <p className="text-sm text-[#5A4A2E]">{step.description}</p>
                           </div>
                         </div>
                       ))}
@@ -266,7 +266,7 @@ export default function LandlordRentalPortal() {
                 <Button
                   size="lg"
                   onClick={() => isAuthenticated ? setActiveTab('list-property') : navigate('/auth?redirect=/landlord-portal?tab=list-property')}
-                  className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90 h-14 px-8"
+                  className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90 h-14 px-8"
                 >
                   Start Listing Your Property
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -276,10 +276,10 @@ export default function LandlordRentalPortal() {
 
             {/* Guide Tab */}
             <TabsContent value="guide" className="space-y-8">
-              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-black">Complete Landlord Guide</CardTitle>
-                  <CardDescription className="text-gray-600">
+                  <CardTitle className="text-[#1A1A1A]">Complete Landlord Guide</CardTitle>
+                  <CardDescription className="text-[#5A4A2E]">
                     Everything you need to know about listing your rental property
                   </CardDescription>
                 </CardHeader>
@@ -296,12 +296,12 @@ export default function LandlordRentalPortal() {
                         <div className="absolute left-4 top-12 bottom-0 w-0.5 bg-gold/20" />
                       )}
                       <div className="flex gap-6">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-black font-bold z-10">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-champagne flex items-center justify-center flex-shrink-0 text-[#1A1A1A] font-bold z-10">
                           {step.step}
                         </div>
                         <div className="flex-1 pb-8">
-                          <h3 className="text-lg font-semibold text-black mb-2">{step.title}</h3>
-                          <p className="text-gray-600">{step.description}</p>
+                          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{step.title}</h3>
+                          <p className="text-[#5A4A2E]">{step.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -313,7 +313,7 @@ export default function LandlordRentalPortal() {
                 <Button
                   size="lg"
                   onClick={() => isAuthenticated ? setActiveTab('list-property') : navigate('/auth?redirect=/landlord-portal?tab=list-property')}
-                  className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90 h-14 px-8"
+                  className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90 h-14 px-8"
                 >
                   Ready to List? Start Now
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -324,28 +324,28 @@ export default function LandlordRentalPortal() {
             {/* List Property Tab */}
             <TabsContent value="list-property">
               {!isAuthenticated ? (
-              <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+              <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardContent className="py-12 text-center">
                     <Building2 className="h-16 w-16 text-gold mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-black mb-2">
+                    <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                       Sign In to List Your Property
                     </h3>
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-[#5A4A2E] mb-6">
                       Create an account or sign in to submit your rental listing
                     </p>
                     <Button
                       onClick={() => navigate('/auth?redirect=/landlord-portal?tab=list-property')}
-                      className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90"
+                      className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90"
                     >
                       Sign In / Register
                     </Button>
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-black">Submit Your Rental Listing</CardTitle>
-                    <CardDescription className="text-gray-600">
+                    <CardTitle className="text-[#1A1A1A]">Submit Your Rental Listing</CardTitle>
+                    <CardDescription className="text-[#5A4A2E]">
                       Complete the form below to list your property for rent
                     </CardDescription>
                   </CardHeader>
@@ -362,21 +362,21 @@ export default function LandlordRentalPortal() {
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
-                    <p className="text-gray-600 mt-4">Loading your listings...</p>
+                    <p className="text-[#5A4A2E] mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
-                  <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                  <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                     <CardContent className="py-12 text-center">
-                      <Home className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-black mb-2">
+                      <Home className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                         No Listings Yet
                       </h3>
-                      <p className="text-gray-600 mb-6">
+                      <p className="text-[#5A4A2E] mb-6">
                         You haven't submitted any rental listings yet
                       </p>
                       <Button
                         onClick={() => setActiveTab('list-property')}
-                        className="bg-gradient-to-r from-gold to-champagne text-black hover:opacity-90"
+                        className="bg-gradient-to-r from-gold to-champagne text-[#1A1A1A] hover:opacity-90"
                       >
                         Create Your First Listing
                       </Button>
@@ -387,17 +387,17 @@ export default function LandlordRentalPortal() {
                     {listings.map((listing) => {
                       const approvalStatus = getApprovalStatus(listing);
                       return (
-                        <Card key={listing.id} className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
+                        <Card key={listing.id} className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                           <CardContent className="p-6">
                             <div className="flex flex-col lg:flex-row gap-6">
                               {/* Listing Info */}
                               <div className="flex-1">
                                 <div className="flex items-start justify-between mb-4">
                                   <div>
-                                    <h3 className="text-lg font-semibold text-black">
+                                    <h3 className="text-lg font-semibold text-[#1A1A1A]">
                                       {listing.property_title}
                                     </h3>
-                                    <p className="text-gray-600 text-sm">
+                                    <p className="text-[#5A4A2E] text-sm">
                                       {listing.community}, {listing.emirate}
                                     </p>
                                   </div>
@@ -406,20 +406,20 @@ export default function LandlordRentalPortal() {
                                 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                   <div>
-                                    <p className="text-xs text-gray-600">Type</p>
-                                    <p className="text-black capitalize">{listing.property_type}</p>
+                                    <p className="text-xs text-[#5A4A2E]">Type</p>
+                                    <p className="text-[#1A1A1A] capitalize">{listing.property_type}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-gray-600">Bedrooms</p>
-                                    <p className="text-black">{listing.bedrooms || 'N/A'}</p>
+                                    <p className="text-xs text-[#5A4A2E]">Bedrooms</p>
+                                    <p className="text-[#1A1A1A]">{listing.bedrooms || 'N/A'}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-gray-600">Annual Rent</p>
-                                    <p className="text-black">AED {listing.annual_rent?.toLocaleString()}</p>
+                                    <p className="text-xs text-[#5A4A2E]">Annual Rent</p>
+                                    <p className="text-[#1A1A1A]">AED {listing.annual_rent?.toLocaleString()}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-gray-600">Submitted</p>
-                                    <p className="text-black">{format(new Date(listing.created_at), 'PP')}</p>
+                                    <p className="text-xs text-[#5A4A2E]">Submitted</p>
+                                    <p className="text-[#1A1A1A]">{format(new Date(listing.created_at), 'PP')}</p>
                                   </div>
                                 </div>
 

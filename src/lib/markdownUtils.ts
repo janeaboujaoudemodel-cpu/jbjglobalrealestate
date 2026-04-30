@@ -44,7 +44,7 @@ function convertMarkdownTables(text: string): string {
       
       let tableHtml = '<table class="w-full border-collapse my-6 text-sm"><thead><tr>';
       for (const h of headers) {
-        tableHtml += `<th class="bg-champagne-light/50 text-left p-3 text-xs font-semibold uppercase tracking-wider text-gray-600 border border-gold/20">${h}</th>`;
+        tableHtml += `<th class="bg-champagne-light/50 text-left p-3 text-xs font-semibold uppercase tracking-wider text-[#5A4A2E] border border-gold/20">${h}</th>`;
       }
       tableHtml += '</tr></thead><tbody>';
 

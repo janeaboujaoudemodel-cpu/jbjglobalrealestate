@@ -238,15 +238,15 @@ export function PartnershipsDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Total Applications", value: stats.total, color: "text-black" },
+          { label: "Total Applications", value: stats.total, color: "text-[#1A1A1A]" },
           { label: "Pending Review", value: stats.pending, color: "text-amber-600" },
           { label: "Approved Partners", value: stats.approved, color: "text-green-600" },
           { label: "Rejected", value: stats.rejected, color: "text-red-500" },
         ].map(s => (
-          <Card key={s.label} className="bg-white/80 border-[#B89555]/30">
+          <Card key={s.label} className="bg-[#FDFBF7]/80 border-[#B89555]/30">
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-black">{s.value}</p>
-              <p className="text-xs text-gray-600">{s.label}</p>
+              <p className="text-2xl font-bold text-[#1A1A1A]">{s.value}</p>
+              <p className="text-xs text-[#5A4A2E]">{s.label}</p>
             </CardContent>
           </Card>
         ))}
@@ -255,7 +255,7 @@ export function PartnershipsDashboard() {
       {/* Filter & Refresh */}
       <div className="flex items-center gap-3">
         <Select value={filterStage} onValueChange={setFilterStage}>
-          <SelectTrigger className="w-[200px] border-[#B89555]/30 text-black">
+          <SelectTrigger className="w-[200px] border-[#B89555]/30 text-[#1A1A1A]">
             <SelectValue placeholder="Filter by stage" />
           </SelectTrigger>
           <SelectContent>
@@ -265,7 +265,7 @@ export function PartnershipsDashboard() {
             ))}
           </SelectContent>
         </Select>
-        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-[#B89555]/30 text-black">
+        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-[#B89555]/30 text-[#1A1A1A]">
           <RefreshCw className="w-4 h-4 mr-1" /> Refresh
         </Button>
       </div>
@@ -274,8 +274,8 @@ export function PartnershipsDashboard() {
       {loading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#B89555]" /></div>
       ) : filtered.length === 0 ? (
-        <Card className="bg-white/80 border-[#B89555]/20">
-          <CardContent className="p-12 text-center text-gray-600">No partnership applications found.</CardContent>
+        <Card className="bg-[#FDFBF7]/80 border-[#B89555]/20">
+          <CardContent className="p-12 text-center text-[#5A4A2E]">No partnership applications found.</CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -283,16 +283,16 @@ export function PartnershipsDashboard() {
             const stageInfo = STAGE_CONFIG[app.stage];
             const StageIcon = stageInfo.icon;
             return (
-              <Card key={app.id} className="bg-white/80 border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); setMessageMode("action"); setMessageText(""); }}>
+              <Card key={app.id} className="bg-[#FDFBF7]/80 border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); setMessageMode("action"); setMessageText(""); }}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <Building2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
-                        <h3 className="font-bold text-black truncate">{app.company_name}</h3>
+                        <h3 className="font-bold text-[#1A1A1A] truncate">{app.company_name}</h3>
                       </div>
-                      <p className="text-sm text-gray-600">{app.contact_person} · {app.position} · {app.partnership_type}</p>
-                      <p className="text-xs text-gray-600 mt-1">{new Date(app.created_at).toLocaleDateString()}</p>
+                      <p className="text-sm text-[#5A4A2E]">{app.contact_person} · {app.position} · {app.partnership_type}</p>
+                      <p className="text-xs text-[#5A4A2E] mt-1">{new Date(app.created_at).toLocaleDateString()}</p>
                     </div>
                     <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold ${stageInfo.color}`}>
                       <StageIcon className="w-3.5 h-3.5" />
@@ -315,7 +315,7 @@ export function PartnershipsDashboard() {
             return (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-xl text-black">{selectedApp.company_name}</DialogTitle>
+                  <DialogTitle className="text-xl text-[#1A1A1A]">{selectedApp.company_name}</DialogTitle>
                   <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold w-fit ${stageInfo.color}`}>
                     <stageInfo.icon className="w-3.5 h-3.5" />
                     {stageInfo.label}
@@ -325,13 +325,13 @@ export function PartnershipsDashboard() {
                 <div className="space-y-4 mt-4">
                   {/* Contact Info */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div><span className="text-gray-600">Contact:</span> <span className="text-black font-medium">{selectedApp.contact_person}</span></div>
-                    <div><span className="text-gray-600">Position:</span> <span className="text-black font-medium">{selectedApp.position}</span></div>
-                    <div><span className="text-gray-600">Email:</span> <span className="text-black font-medium">{selectedApp.email}</span></div>
-                    <div><span className="text-gray-600">Phone:</span> <span className="text-black font-medium">{selectedApp.phone}</span></div>
-                    <div><span className="text-gray-600">Country:</span> <span className="text-black font-medium">{selectedApp.country}</span></div>
-                    <div><span className="text-gray-600">Type:</span> <span className="text-black font-medium">{selectedApp.partnership_type}</span></div>
-                    {selectedApp.portfolio_size && <div><span className="text-gray-600">Portfolio:</span> <span className="text-black font-medium">{selectedApp.portfolio_size}</span></div>}
+                    <div><span className="text-[#5A4A2E]">Contact:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.contact_person}</span></div>
+                    <div><span className="text-[#5A4A2E]">Position:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.position}</span></div>
+                    <div><span className="text-[#5A4A2E]">Email:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.email}</span></div>
+                    <div><span className="text-[#5A4A2E]">Phone:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.phone}</span></div>
+                    <div><span className="text-[#5A4A2E]">Country:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.country}</span></div>
+                    <div><span className="text-[#5A4A2E]">Type:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.partnership_type}</span></div>
+                    {selectedApp.portfolio_size && <div><span className="text-[#5A4A2E]">Portfolio:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.portfolio_size}</span></div>}
                   </div>
 
                   {/* Links */}
@@ -351,15 +351,15 @@ export function PartnershipsDashboard() {
                   {/* Company Profile */}
                   {selectedApp.company_profile && (
                     <div>
-                      <p className="text-xs text-gray-600 uppercase tracking-wider mb-1">Company Profile</p>
-                      <p className="text-sm text-black bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
+                      <p className="text-xs text-[#5A4A2E] uppercase tracking-wider mb-1">Company Profile</p>
+                      <p className="text-sm text-[#1A1A1A] bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
                     </div>
                   )}
 
                   {/* Proposal */}
                   <div>
-                    <p className="text-xs text-gray-600 uppercase tracking-wider mb-1">Proposal</p>
-                    <p className="text-sm text-black bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
+                    <p className="text-xs text-[#5A4A2E] uppercase tracking-wider mb-1">Proposal</p>
+                    <p className="text-sm text-[#1A1A1A] bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
                   </div>
 
                   {/* Existing Notes */}
@@ -395,7 +395,7 @@ export function PartnershipsDashboard() {
                         variant={messageMode === "action" ? "default" : "outline"}
                         size="sm"
                         onClick={() => setMessageMode("action")}
-                        className={messageMode === "action" ? "bg-[#B89555] text-black" : "border-[#B89555]/30 text-black"}
+                        className={messageMode === "action" ? "bg-[#B89555] text-[#1A1A1A]" : "border-[#B89555]/30 text-[#1A1A1A]"}
                       >
                         <UserCheck className="w-3.5 h-3.5 mr-1" /> Actions
                       </Button>
@@ -430,7 +430,7 @@ export function PartnershipsDashboard() {
                           <Button
                             onClick={() => updateStage(selectedApp.id, action.next, action.noteField, notes)}
                             disabled={updating}
-                            className="flex-1 bg-gradient-to-r from-[#B89555] to-amber-600 text-black font-semibold"
+                            className="flex-1 bg-gradient-to-r from-[#B89555] to-amber-600 text-[#1A1A1A] font-semibold"
                           >
                             {updating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserCheck className="w-4 h-4 mr-2" />}
                             {action.label}

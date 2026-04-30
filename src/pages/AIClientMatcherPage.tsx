@@ -188,7 +188,7 @@ export default function AIClientMatcherPage() {
                     variant={locations.includes(area) ? "default" : "outline"}
                     className={`cursor-pointer ${
                       locations.includes(area) 
-                        ? "bg-purple-500 text-black hover:bg-purple-400" 
+                        ? "bg-purple-500 text-[#1A1A1A] hover:bg-purple-400" 
                         : "border-purple-500/30 text-white/85 hover:bg-purple-500/20"
                     }`}
                     onClick={() => toggleLocation(area)}
@@ -209,7 +209,7 @@ export default function AIClientMatcherPage() {
                     variant={propertyTypes.includes(type) ? "default" : "outline"}
                     className={`cursor-pointer ${
                       propertyTypes.includes(type) 
-                        ? "bg-purple-500 text-black hover:bg-purple-400" 
+                        ? "bg-purple-500 text-[#1A1A1A] hover:bg-purple-400" 
                         : "border-purple-500/30 text-white/85 hover:bg-purple-500/20"
                     }`}
                     onClick={() => togglePropertyType(type)}
@@ -296,7 +296,7 @@ export default function AIClientMatcherPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-purple-500 hover:bg-purple-600 text-black font-semibold"
+              className="w-full bg-purple-500 hover:bg-purple-600 text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>
@@ -335,7 +335,7 @@ export default function AIClientMatcherPage() {
                   {result.clientProfile.priorityFactors && (
                     <div className="flex flex-wrap gap-2">
                       {result.clientProfile.priorityFactors.map((factor, i) => (
-                        <Badge key={i} variant="outline" className="border-gray-600 text-white/85">
+                        <Badge key={i} variant="outline" className="border-[#1A1A1A] text-white/85">
                           {factor}
                         </Badge>
                       ))}
@@ -360,7 +360,7 @@ export default function AIClientMatcherPage() {
                       <div key={i} className="bg-zinc-800/50 rounded-lg p-4 border border-purple-500/20">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="text-white font-semibold">{area.area}</h4>
-                          <Badge className="bg-purple-500 text-black">{area.matchScore}% Match</Badge>
+                          <Badge className="bg-purple-500 text-[#1A1A1A]">{area.matchScore}% Match</Badge>
                         </div>
                         <p className="text-white/70 text-sm mb-2">{area.reason}</p>
                         <p className="text-purple-300 text-sm">{area.priceRange}</p>

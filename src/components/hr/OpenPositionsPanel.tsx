@@ -127,7 +127,7 @@ export function OpenPositionsPanel() {
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-gold hover:bg-gold/90 text-black">
+            <Button className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               <Plus className="h-4 w-4 mr-2" />
               Add Position
             </Button>
@@ -210,7 +210,7 @@ export function OpenPositionsPanel() {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-gold hover:bg-gold/90 text-black">
+                <Button type="submit" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                   Create Position
                 </Button>
               </div>

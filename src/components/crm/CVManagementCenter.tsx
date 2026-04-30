@@ -206,7 +206,7 @@ const CVManagementCenter = () => {
       rejected: 'Rejected',
       hired: 'Hired',
     };
-    return <Badge className={styles[status] || 'bg-gray-100 text-gray-700'}>{labels[status] || status}</Badge>;
+    return <Badge className={styles[status] || 'bg-[#F7F2EA] text-[#5A4A2E]'}>{labels[status] || status}</Badge>;
   };
 
   const getCategoryBadge = (category: string) => {
@@ -256,7 +256,7 @@ const CVManagementCenter = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-white border-crm-border shadow-sm">
+      <Card className="bg-[#FDFBF7] border-crm-border shadow-sm">
         <CardHeader className="pb-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
@@ -279,7 +279,7 @@ const CVManagementCenter = () => {
       {/* Counter Cards - Auto-updating */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card 
-          className={`bg-white border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'collected' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'collected' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-crm-border'}`}
           onClick={() => setCategoryFilter(categoryFilter === 'collected' ? 'all' : 'collected')}
         >
           <CardContent className="p-4 text-center">
@@ -289,7 +289,7 @@ const CVManagementCenter = () => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'pending' ? 'border-amber-500 ring-2 ring-amber-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'pending' ? 'border-amber-500 ring-2 ring-amber-200' : 'border-crm-border'}`}
           onClick={() => setCategoryFilter(categoryFilter === 'pending' ? 'all' : 'pending')}
         >
           <CardContent className="p-4 text-center">
@@ -299,7 +299,7 @@ const CVManagementCenter = () => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'flagged' ? 'border-yellow-500 ring-2 ring-yellow-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'flagged' ? 'border-yellow-500 ring-2 ring-yellow-200' : 'border-crm-border'}`}
           onClick={() => setCategoryFilter(categoryFilter === 'flagged' ? 'all' : 'flagged')}
         >
           <CardContent className="p-4 text-center">
@@ -309,7 +309,7 @@ const CVManagementCenter = () => {
           </CardContent>
         </Card>
         <Card 
-          className={`bg-white border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'rejected' ? 'border-red-500 ring-2 ring-red-200' : 'border-crm-border'}`}
+          className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${categoryFilter === 'rejected' ? 'border-red-500 ring-2 ring-red-200' : 'border-crm-border'}`}
           onClick={() => setCategoryFilter(categoryFilter === 'rejected' ? 'all' : 'rejected')}
         >
           <CardContent className="p-4 text-center">
@@ -321,7 +321,7 @@ const CVManagementCenter = () => {
       </div>
 
       {/* Filters */}
-      <Card className="bg-white border-crm-border shadow-sm">
+      <Card className="bg-[#FDFBF7] border-crm-border shadow-sm">
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[250px]">
@@ -330,13 +330,13 @@ const CVManagementCenter = () => {
                 placeholder="Search by name, position, language, skills..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-2 focus:ring-gold/30 focus:border-gold"
               />
             </div>
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-4 py-2 bg-white border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
             >
               <option value="all">All Categories</option>
               <option value="collected">Collected</option>
@@ -347,7 +347,7 @@ const CVManagementCenter = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 bg-white border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending Review</option>
@@ -359,7 +359,7 @@ const CVManagementCenter = () => {
             <select
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value)}
-              className="px-4 py-2 bg-white border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
+              className="px-4 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text text-sm font-medium focus:ring-2 focus:ring-gold/30 focus:border-gold transition-all"
             >
               <option value="all">All Gender</option>
               <option value="male">Male</option>
@@ -399,23 +399,23 @@ const CVManagementCenter = () => {
                   {/* Details Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Email</p>
+                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Email</p>
                       <p className="text-white font-medium">{cv.email}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
+                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
                       <p className="text-white font-medium">{cv.phone || '—'}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
+                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
                       <p className="text-white font-medium">{cv.experience}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Education</p>
+                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Education</p>
                       <p className="text-white font-medium">{cv.education}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
+                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
                       <p className="text-white font-medium">{cv.uploadDate}</p>
                     </div>
                   </div>
@@ -430,12 +430,12 @@ const CVManagementCenter = () => {
                       Ranking: {cv.ranking}/10
                     </Badge>
                     {cv.languages && cv.languages.length > 0 && (
-                      <Badge variant="outline" className="text-gray-600 border-gray-600">
+                      <Badge variant="outline" className="text-[#5A4A2E] border-[#1A1A1A]">
                         Languages: {cv.languages.join(', ')}
                       </Badge>
                     )}
                     {cv.gender && (
-                      <Badge variant="outline" className="text-gray-600 border-gray-600 capitalize">
+                      <Badge variant="outline" className="text-[#5A4A2E] border-[#1A1A1A] capitalize">
                         <User className="h-3 w-3 mr-1" />
                         {cv.gender}
                       </Badge>
@@ -447,7 +447,7 @@ const CVManagementCenter = () => {
                 <div className="flex flex-col gap-2 min-w-[160px]">
                   <Button 
                     size="sm" 
-                    className="bg-white border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
+                    className="bg-[#FDFBF7] border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
                     onClick={() => handleViewCV(cv)}
                   >
                     <FileText className="h-4 w-4" />
@@ -455,7 +455,7 @@ const CVManagementCenter = () => {
                   </Button>
                   <Button 
                     size="sm" 
-                    className="bg-white border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
+                    className="bg-[#FDFBF7] border border-gold text-crm-text hover:bg-gold hover:text-white font-semibold transition-all duration-200 gap-2"
                     onClick={() => handleContact(cv)}
                   >
                     <Mail className="h-4 w-4" />
@@ -476,7 +476,7 @@ const CVManagementCenter = () => {
         ))}
         
         {getFilteredCVs().length === 0 && (
-          <Card className="bg-white border-crm-border">
+          <Card className="bg-[#FDFBF7] border-crm-border">
             <CardContent className="py-16 text-center">
               <FileText className="h-16 w-16 mx-auto mb-4 text-crm-text-muted opacity-40" />
               <p className="text-crm-text-muted text-lg">No CVs found matching your criteria</p>
@@ -488,7 +488,7 @@ const CVManagementCenter = () => {
 
       {/* Schedule Interview Modal */}
       <Dialog open={showScheduleModal} onOpenChange={setShowScheduleModal}>
-        <DialogContent className="bg-white border-crm-border text-crm-text max-w-md">
+        <DialogContent className="bg-[#FDFBF7] border-crm-border text-crm-text max-w-md">
           <DialogHeader>
             <DialogTitle className="text-crm-text font-bold text-lg flex items-center gap-2">
               <Calendar className="h-5 w-5 text-gold" />
@@ -517,7 +517,7 @@ const CVManagementCenter = () => {
                     type="date" 
                     value={interviewDate}
                     onChange={(e) => setInterviewDate(e.target.value)}
-                    className="mt-1 bg-white border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
+                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
                   />
                 </div>
                 <div>
@@ -526,7 +526,7 @@ const CVManagementCenter = () => {
                     type="time" 
                     value={interviewTime}
                     onChange={(e) => setInterviewTime(e.target.value)}
-                    className="mt-1 bg-white border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
+                    className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text focus:ring-gold/30 focus:border-gold"
                   />
                 </div>
               </div>
@@ -536,7 +536,7 @@ const CVManagementCenter = () => {
                 <select
                   value={hrAssigned}
                   onChange={(e) => setHrAssigned(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 bg-white border border-crm-border rounded-lg text-crm-text focus:ring-2 focus:ring-gold/30 focus:border-gold"
+                  className="w-full mt-1 px-3 py-2 bg-[#FDFBF7] border border-crm-border rounded-lg text-crm-text focus:ring-2 focus:ring-gold/30 focus:border-gold"
                 >
                   <option value="">Select HR Member</option>
                   <option value="david">David Carter - Head of Recruitment</option>
@@ -551,7 +551,7 @@ const CVManagementCenter = () => {
                   value={interviewNotes}
                   onChange={(e) => setInterviewNotes(e.target.value)}
                   placeholder="Interview notes, preparation reminders..."
-                  className="mt-1 bg-white border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-gold/30 focus:border-gold min-h-[80px]"
+                  className="mt-1 bg-[#FDFBF7] border-crm-border text-crm-text placeholder:text-crm-text-muted focus:ring-gold/30 focus:border-gold min-h-[80px]"
                 />
               </div>
             </div>

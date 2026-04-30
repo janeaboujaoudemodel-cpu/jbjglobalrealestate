@@ -42,7 +42,7 @@ const AuditorForcePasswordChange = ({
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center p-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6">
@@ -64,7 +64,7 @@ const AuditorForcePasswordChange = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password (min 8 characters)"
-              className="pl-10 pr-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600"
+              className="pl-10 pr-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               required
               minLength={8}
             />
@@ -84,7 +84,7 @@ const AuditorForcePasswordChange = ({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
-              className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600"
+              className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
               required
             />
           </div>
@@ -92,13 +92,13 @@ const AuditorForcePasswordChange = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gold hover:bg-gold/90 text-black font-bold"
+            className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold"
           >
             {isSubmitting ? "Changing Password..." : "Set New Password & Continue"}
           </Button>
         </form>
 
-        <p className="text-gray-600 text-xs text-center mt-6">
+        <p className="text-[#5A4A2E] text-xs text-center mt-6">
           Read-Only Audit Access • You can view all pages but cannot make changes
         </p>
       </div>

@@ -156,7 +156,7 @@ export default function AISocialMediaPage() {
                       variant={platform === p.value ? "default" : "outline"}
                       className={`cursor-pointer flex items-center gap-1 ${
                         platform === p.value 
-                          ? "bg-pink-500 text-black hover:bg-pink-400" 
+                          ? "bg-pink-500 text-[#1A1A1A] hover:bg-pink-400" 
                           : "border-pink-500/30 text-white/85 hover:bg-pink-500/20"
                       }`}
                       onClick={() => setPlatform(p.value)}
@@ -265,7 +265,7 @@ export default function AISocialMediaPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-pink-500 hover:bg-pink-600 text-black font-semibold"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>

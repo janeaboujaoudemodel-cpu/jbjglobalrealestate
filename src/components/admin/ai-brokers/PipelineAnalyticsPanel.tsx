@@ -193,46 +193,46 @@ export function PipelineAnalyticsPanel() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Users className="h-4 w-4" />
               <span className="text-sm">Total Leads</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalStats.totalLeads.toLocaleString()}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Target className="h-4 w-4" />
               <span className="text-sm">Total Conversions</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalStats.totalConversions.toLocaleString()}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
               <span className="text-sm">Avg Conversion Rate</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalStats.avgConversionRate.toFixed(1)}%
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Clock className="h-4 w-4 text-blue-500" />
               <span className="text-sm">SLA Compliance</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalStats.overallSLACompliance.toFixed(0)}%
             </p>
           </CardContent>
@@ -242,30 +242,30 @@ export function PipelineAnalyticsPanel() {
       {/* Pipeline Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {pipelineStats.map((pipeline) => (
-          <Card key={pipeline.pipeline} className="bg-white border-2 border-gold/30">
+          <Card key={pipeline.pipeline} className="bg-[#FDFBF7] border-2 border-gold/30">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <pipeline.icon className={`h-5 w-5 ${pipeline.color}`} />
-                <span className="text-black">{pipeline.label}</span>
+                <span className="text-[#1A1A1A]">{pipeline.label}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Lead Count & Conversion */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-black/60 text-xs uppercase tracking-wider mb-1">Leads</p>
-                  <p className="text-black text-xl font-bold">{pipeline.leadCount}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-1">Leads</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{pipeline.leadCount}</p>
                 </div>
                 <div>
-                  <p className="text-black/60 text-xs uppercase tracking-wider mb-1">Converted</p>
-                  <p className="text-black text-xl font-bold">{pipeline.convertedCount}</p>
+                  <p className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-1">Converted</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold">{pipeline.convertedCount}</p>
                 </div>
               </div>
 
               {/* Conversion Rate Progress */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-black/60 text-sm">Conversion Rate</span>
+                  <span className="text-[#1A1A1A]/60 text-sm">Conversion Rate</span>
                   <span className={`text-sm font-medium ${
                     pipeline.conversionRate >= 20 ? 'text-emerald-500' : 
                     pipeline.conversionRate >= 10 ? 'text-amber-500' : 'text-red-500'
@@ -275,14 +275,14 @@ export function PipelineAnalyticsPanel() {
                 </div>
                 <Progress 
                   value={pipeline.conversionRate} 
-                  className="h-2 bg-gray-200"
+                  className="h-2 bg-[#EFE6D6]"
                 />
               </div>
 
               {/* SLA Compliance */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-black/60 text-sm">SLA Compliance</span>
+                  <span className="text-[#1A1A1A]/60 text-sm">SLA Compliance</span>
                   <Badge variant={pipeline.slaComplianceRate >= 90 ? "default" : "destructive"} 
                     className={pipeline.slaComplianceRate >= 90 ? "bg-emerald-100 text-emerald-700" : ""}>
                     {pipeline.slaComplianceRate}%
@@ -290,23 +290,23 @@ export function PipelineAnalyticsPanel() {
                 </div>
                 <Progress 
                   value={pipeline.slaComplianceRate} 
-                  className="h-2 bg-gray-200"
+                  className="h-2 bg-[#EFE6D6]"
                 />
               </div>
 
               {/* Top Brokers */}
               {pipeline.brokerPerformance.length > 0 && (
                 <div className="pt-2 border-t border-gold/20">
-                  <p className="text-black/60 text-xs uppercase tracking-wider mb-2">Top Performers</p>
+                  <p className="text-[#1A1A1A]/60 text-xs uppercase tracking-wider mb-2">Top Performers</p>
                   <div className="space-y-2">
                     {pipeline.brokerPerformance
                       .sort((a, b) => b.conversions - a.conversions)
                       .slice(0, 3)
                       .map((broker) => (
                         <div key={broker.brokerId} className="flex items-center justify-between text-sm">
-                          <span className="text-black truncate max-w-[120px]">{broker.brokerName}</span>
+                          <span className="text-[#1A1A1A] truncate max-w-[120px]">{broker.brokerName}</span>
                           <div className="flex items-center gap-2">
-                            <span className="text-black/40">{broker.leads} leads</span>
+                            <span className="text-[#1A1A1A]/40">{broker.leads} leads</span>
                             <Badge variant="outline" className="border-gold/30 text-emerald-600">
                               {broker.conversions} won
                             </Badge>
@@ -322,21 +322,21 @@ export function PipelineAnalyticsPanel() {
       </div>
 
       {/* Pipeline Intent Legend */}
-      <Card className="bg-white border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
         <CardContent className="p-4">
           <div className="flex items-center gap-6 text-sm flex-wrap">
-            <span className="text-black/60">Intent Classification:</span>
+            <span className="text-[#1A1A1A]/60">Intent Classification:</span>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-emerald-500" />
-              <span className="text-black">Buy = Investment, Purchase, Off-plan</span>
+              <span className="text-[#1A1A1A]">Buy = Investment, Purchase, Off-plan</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-blue-500" />
-              <span className="text-black">Sell = Listing for sale, Valuation</span>
+              <span className="text-[#1A1A1A]">Sell = Listing for sale, Valuation</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-amber-500" />
-              <span className="text-black">Rent = Tenant or Landlord rental</span>
+              <span className="text-[#1A1A1A]">Rent = Tenant or Landlord rental</span>
             </div>
           </div>
         </CardContent>

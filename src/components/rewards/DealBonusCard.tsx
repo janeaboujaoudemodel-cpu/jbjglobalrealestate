@@ -39,7 +39,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
 
   if (isLoading) {
     return (
-      <Card className={cn("bg-black/40 border-gold/20 backdrop-blur-sm", className)}>
+      <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm", className)}>
         <CardContent className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-gold animate-spin" />
         </CardContent>
@@ -48,7 +48,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
   }
 
   return (
-    <Card className={cn("bg-black/40 border-gold/20 backdrop-blur-sm", className)}>
+    <Card className={cn("bg-[#1A1A1A]/40 border-gold/20 backdrop-blur-sm", className)}>
       <CardHeader className="pb-4">
         <CardTitle className="text-xl text-white flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
@@ -74,7 +74,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                 "p-4 rounded-xl border transition-all duration-300",
                 eligibility.eligible && !eligibility.claimed
                   ? "border-gold/50 bg-gold/5"
-                  : "border-white/10 bg-white/5"
+                  : "border-white/10 bg-[#FDFBF7]/5"
               )}
             >
               <div className="flex items-start justify-between gap-4">
@@ -125,8 +125,8 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                     onClick={() => handleClaim(threshold)}
                     className={cn(
                       eligibility.eligible
-                        ? "bg-gold hover:bg-gold/90 text-black"
-                        : "bg-white/10 text-white/90"
+                        ? "bg-gold hover:bg-gold/90 text-[#1A1A1A]"
+                        : "bg-[#FDFBF7]/10 text-white/90"
                     )}
                   >
                     {claimingId === threshold.id ? (
@@ -149,7 +149,7 @@ export function DealBonusCard({ className }: DealBonusCardProps) {
                   </div>
                   <Progress 
                     value={eligibility.progress} 
-                    className="h-2 bg-white/10"
+                    className="h-2 bg-[#FDFBF7]/10"
                   />
                   <p className="text-xs text-white/85 mt-1">
                     {eligibility.pointsNeeded.toLocaleString()} more deal points needed

@@ -110,12 +110,12 @@ export function QuickActions() {
               onClick={() => navigate(action.href)}
               className="flex items-center gap-3 rounded-xl border border-border bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] p-3.5 hover:border-gold/40 hover:shadow-md transition-all text-left w-full h-[72px]"
             >
-              <div className="w-10 h-10 rounded-lg bg-white/60 border border-gold/30 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-[#FDFBF7]/60 border border-gold/30 flex items-center justify-center shrink-0">
                 <action.icon className={`h-5 w-5 ${action.color}`} />
               </div>
               <div className="min-w-0 flex-1">
-                <span className="text-sm font-semibold text-black leading-tight block">{action.label}</span>
-                <span className="text-[11px] text-black/60 leading-snug block">{action.description}</span>
+                <span className="text-sm font-semibold text-[#1A1A1A] leading-tight block">{action.label}</span>
+                <span className="text-[11px] text-[#1A1A1A]/60 leading-snug block">{action.description}</span>
               </div>
             </button>
           ))}

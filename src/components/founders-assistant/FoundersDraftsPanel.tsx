@@ -145,9 +145,9 @@ const FoundersDraftsPanel: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
       {/* Drafts List - White Pearl Theme */}
-      <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-1">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-1">
         <CardHeader className="pb-3">
-          <CardTitle className="text-black text-lg flex items-center gap-2">
+          <CardTitle className="text-[#1A1A1A] text-lg flex items-center gap-2">
             <FileEdit className="w-5 h-5 text-gold" />
             Work in Progress
           </CardTitle>
@@ -157,9 +157,9 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="space-y-2 p-4 pt-0">
               {drafts.length === 0 ? (
                 <div className="text-center py-8">
-                  <FileEdit className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">No drafts yet</p>
-                  <p className="text-sm text-gray-600 mt-1">Ask Amanda to draft messages for you</p>
+                  <FileEdit className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                  <p className="text-[#5A4A2E]">No drafts yet</p>
+                  <p className="text-sm text-[#5A4A2E] mt-1">Ask Amanda to draft messages for you</p>
                 </div>
               ) : (
                 drafts.map((draft) => (
@@ -170,7 +170,7 @@ const FoundersDraftsPanel: React.FC = () => {
                     className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
                       selectedDraft?.id === draft.id 
                         ? 'bg-gold/10 border-gold/40' 
-                        : 'bg-white border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
+                        : 'bg-[#FDFBF7] border-gold/20 hover:border-gold/40 hover:shadow-[0_4px_15px_rgba(200,167,102,0.1)]'
                     }`}
                     onClick={() => handleSelectDraft(draft)}
                   >
@@ -179,7 +179,7 @@ const FoundersDraftsPanel: React.FC = () => {
                         <Badge className={draftTypeColors[draft.draft_type]}>
                           {draftTypeIcons[draft.draft_type]}
                         </Badge>
-                        <span className="text-sm font-medium text-black capitalize">
+                        <span className="text-sm font-medium text-[#1A1A1A] capitalize">
                           {draft.draft_type}
                         </span>
                       </div>
@@ -188,17 +188,17 @@ const FoundersDraftsPanel: React.FC = () => {
                         className={`text-xs border ${
                           draft.status === 'sent' 
                             ? 'border-green-200 text-green-600 bg-green-50' 
-                            : 'border-gold/30 text-gray-600 bg-gray-50'
+                            : 'border-gold/30 text-[#5A4A2E] bg-[#F7F2EA]'
                         }`}
                       >
                         {draft.status === 'sent' ? 'Sent' : 'Draft'}
                       </Badge>
                     </div>
                     {draft.subject && (
-                      <p className="text-sm text-gray-600 mt-2 truncate">{draft.subject}</p>
+                      <p className="text-sm text-[#5A4A2E] mt-2 truncate">{draft.subject}</p>
                     )}
-                    <p className="text-xs text-gray-600 mt-2 line-clamp-2">{draft.content}</p>
-                    <div className="flex items-center gap-1 mt-2 text-xs text-gray-600">
+                    <p className="text-xs text-[#5A4A2E] mt-2 line-clamp-2">{draft.content}</p>
+                    <div className="flex items-center gap-1 mt-2 text-xs text-[#5A4A2E]">
                       <Clock className="w-3 h-3" />
                       {format(new Date(draft.created_at), 'MMM d, h:mm a')}
                     </div>
@@ -211,9 +211,9 @@ const FoundersDraftsPanel: React.FC = () => {
       </Card>
 
       {/* Draft Editor - White Pearl Theme */}
-      <Card className="bg-white border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-2">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)] lg:col-span-2">
         <CardHeader className="pb-3">
-          <CardTitle className="text-black text-lg flex items-center justify-between">
+          <CardTitle className="text-[#1A1A1A] text-lg flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Edit className="w-5 h-5 text-gold" />
               {selectedDraft ? 'Edit Draft' : 'Select a Draft'}
@@ -253,18 +253,18 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="space-y-4">
               {selectedDraft.subject && (
                 <div>
-                  <label className="text-xs text-gray-600 mb-1 block">Subject</label>
-                  <p className="text-black bg-gray-50 p-3 rounded-lg border-2 border-gold/20">
+                  <label className="text-xs text-[#5A4A2E] mb-1 block">Subject</label>
+                  <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg border-2 border-gold/20">
                     {selectedDraft.subject}
                   </p>
                 </div>
               )}
               <div>
-                <label className="text-xs text-gray-600 mb-1 block">Content</label>
+                <label className="text-xs text-[#5A4A2E] mb-1 block">Content</label>
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
-                  className="min-h-[300px] bg-white border-2 border-gold/30 text-black resize-none placeholder:text-gray-600"
+                  className="min-h-[300px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] resize-none placeholder:text-[#5A4A2E]"
                   placeholder="Draft content..."
                 />
               </div>
@@ -272,9 +272,9 @@ const FoundersDraftsPanel: React.FC = () => {
           ) : (
             <div className="flex items-center justify-center h-[350px] text-center">
               <div>
-                <FileEdit className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Select a draft to edit</p>
-                <p className="text-sm text-gray-600 mt-1">Or ask Amanda to create a new one</p>
+                <FileEdit className="w-16 h-16 text-[#8A7556] mx-auto mb-4" />
+                <p className="text-[#5A4A2E]">Select a draft to edit</p>
+                <p className="text-sm text-[#5A4A2E] mt-1">Or ask Amanda to create a new one</p>
               </div>
             </div>
           )}

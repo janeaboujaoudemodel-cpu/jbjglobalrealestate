@@ -102,7 +102,7 @@ const GoldenVisaGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <SEOHead
         title="UAE Golden Visa — Long-Term Residency Program | JBJ Global Real Estate"
         description="Complete guide to the UAE Golden Visa. Eligibility categories, application process, required documentation, and residency advisory. Official UAE regulations."
@@ -134,7 +134,7 @@ const GoldenVisaGuide = () => {
               Secure 5 or 10-Year Renewable Residency in the United Arab Emirates
             </p>
 
-            <div className="max-w-3xl mx-auto text-left bg-white/80 border border-[#C8A766]/20 rounded-2xl p-6 md:p-8 mb-8 backdrop-blur-sm">
+            <div className="max-w-3xl mx-auto text-left bg-[#FDFBF7]/80 border border-[#C8A766]/20 rounded-2xl p-6 md:p-8 mb-8 backdrop-blur-sm">
               <p className="text-[#3D3D3D] leading-relaxed mb-4">
                 The UAE Golden Visa is a long-term residence program introduced in 2019 by the Government of the United Arab Emirates. It grants eligible foreign nationals renewable residency for 5 or 10 years without the requirement of a national sponsor.
               </p>
@@ -208,7 +208,7 @@ const GoldenVisaGuide = () => {
                 <button
                   key={section.id}
                   onClick={() => scrollTo(section.id)}
-                  className="flex items-center gap-3 p-4 bg-white border border-[#C8A766]/15 rounded-xl hover:border-[#C8A766]/40 hover:shadow-md hover:shadow-[#C8A766]/10 transition-all text-left group"
+                  className="flex items-center gap-3 p-4 bg-[#FDFBF7] border border-[#C8A766]/15 rounded-xl hover:border-[#C8A766]/40 hover:shadow-md hover:shadow-[#C8A766]/10 transition-all text-left group"
                 >
                   <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 flex items-center justify-center text-[#C8A766] text-sm font-semibold flex-shrink-0">
                     {idx + 1}
@@ -281,7 +281,7 @@ const GoldenVisaGuide = () => {
       <Section id="benefits" ivory>
         <SectionHeader icon={Heart} title="Core" gold="Benefits" />
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-white border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Residency & Freedom</h3>
             <ul className="space-y-2">
               <CheckItem>Long-term renewable residency</CheckItem>
@@ -291,7 +291,7 @@ const GoldenVisaGuide = () => {
               <CheckItem>Stable residency planning</CheckItem>
             </ul>
           </div>
-          <div className="bg-white border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Access & Sponsorship</h3>
             <ul className="space-y-2">
               <CheckItem>Family sponsorship</CheckItem>
@@ -346,7 +346,7 @@ const GoldenVisaGuide = () => {
           <CheckItem>Property may be mortgaged subject to specific compliance conditions</CheckItem>
           <CheckItem>Investment must remain active to maintain residency eligibility</CheckItem>
         </ul>
-        <div className="p-5 bg-white border-l-4 border-[#C8A766] rounded-r-xl">
+        <div className="p-5 bg-[#FDFBF7] border-l-4 border-[#C8A766] rounded-r-xl">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-[#C8A766] flex-shrink-0 mt-0.5" />
             <p className="text-[#3D3D3D] text-sm">
@@ -377,7 +377,7 @@ const GoldenVisaGuide = () => {
         <p className="text-[#3D3D3D] leading-relaxed mb-4">Eligible categories include (subject to official criteria):</p>
         <div className="grid sm:grid-cols-2 gap-3 mb-6">
           {["Doctors & Medical Specialists", "Engineers", "Scientists & Researchers", "Executive Directors", "Skilled Professionals", "Creative Talents"].map(role => (
-            <div key={role} className="flex items-center gap-3 p-3 bg-white border border-[#C8A766]/15 rounded-lg">
+            <div key={role} className="flex items-center gap-3 p-3 bg-[#FDFBF7] border border-[#C8A766]/15 rounded-lg">
               <CheckCircle2 className="w-4 h-4 text-[#C8A766] flex-shrink-0" />
               <span className="text-sm text-[#3D3D3D]">{role}</span>
             </div>
@@ -412,7 +412,7 @@ const GoldenVisaGuide = () => {
       <Section id="documents" ivory>
         <SectionHeader icon={Clipboard} title="Required" gold="Documentation" />
         <div className="space-y-6">
-          <div className="bg-white border border-[#C8A766]/20 rounded-xl p-6">
+          <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
             <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">General Documents</h3>
             <ul className="space-y-2">
               <CheckItem>Passport copy</CheckItem>
@@ -423,7 +423,7 @@ const GoldenVisaGuide = () => {
             </ul>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white border border-[#C8A766]/20 rounded-xl p-6">
+            <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
               <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Investor Pathway</h3>
               <ul className="space-y-2">
                 <CheckItem>Title deed</CheckItem>
@@ -431,7 +431,7 @@ const GoldenVisaGuide = () => {
                 <CheckItem>Bank letter (if applicable)</CheckItem>
               </ul>
             </div>
-            <div className="bg-white border border-[#C8A766]/20 rounded-xl p-6">
+            <div className="bg-[#FDFBF7] border border-[#C8A766]/20 rounded-xl p-6">
               <h3 className="font-serif font-semibold text-[#1A1A1A] mb-4">Professional Pathway</h3>
               <ul className="space-y-2">
                 <CheckItem>Academic certificates</CheckItem>
@@ -518,7 +518,7 @@ const GoldenVisaGuide = () => {
             { q: "Are mortgaged properties accepted?", a: "Financed properties may be accepted if they meet regulatory conditions set by the relevant authorities." },
             { q: "Who issues the Golden Visa?", a: "The UAE government through ICP (Federal Authority for Identity, Citizenship, Customs & Port Security) and GDRFA (General Directorate of Residency and Foreigners Affairs)." },
           ].map((faq, idx) => (
-            <AccordionItem key={idx} value={`faq-${idx}`} className="border border-[#C8A766]/20 rounded-xl overflow-hidden bg-white">
+            <AccordionItem key={idx} value={`faq-${idx}`} className="border border-[#C8A766]/20 rounded-xl overflow-hidden bg-[#FDFBF7]">
               <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-[#FAF6EE] transition-colors">
                 <span className="font-medium text-[#1A1A1A]">{faq.q}</span>
               </AccordionTrigger>
@@ -546,7 +546,7 @@ const GoldenVisaGuide = () => {
                 value={formData.fullName}
                 onChange={e => setFormData(p => ({ ...p, fullName: e.target.value }))}
                 placeholder="Enter your full name"
-                className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
                 required
               />
             </div>
@@ -557,7 +557,7 @@ const GoldenVisaGuide = () => {
                 value={formData.email}
                 onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
                 required
               />
             </div>
@@ -567,7 +567,7 @@ const GoldenVisaGuide = () => {
                 value={formData.phone}
                 onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
               />
             </div>
             <div>
@@ -576,13 +576,13 @@ const GoldenVisaGuide = () => {
                 value={formData.country}
                 onChange={e => setFormData(p => ({ ...p, country: e.target.value }))}
                 placeholder="Current country"
-                className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#3D3D3D] mb-1.5">Category Interested In</label>
               <Select value={formData.category} onValueChange={v => setFormData(p => ({ ...p, category: v }))}>
-                <SelectTrigger className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]">
+                <SelectTrigger className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -600,7 +600,7 @@ const GoldenVisaGuide = () => {
                 value={formData.budget}
                 onChange={e => setFormData(p => ({ ...p, budget: e.target.value }))}
                 placeholder="e.g. AED 2,000,000"
-                className="bg-white border-[#C8A766]/20 focus:border-[#C8A766]"
+                className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766]"
               />
             </div>
           </div>
@@ -610,7 +610,7 @@ const GoldenVisaGuide = () => {
               value={formData.notes}
               onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
               placeholder="Any additional information..."
-              className="bg-white border-[#C8A766]/20 focus:border-[#C8A766] min-h-[100px]"
+              className="bg-[#FDFBF7] border-[#C8A766]/20 focus:border-[#C8A766] min-h-[100px]"
             />
           </div>
           <Button
@@ -630,7 +630,7 @@ const GoldenVisaGuide = () => {
       <section className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6] to-[#ECE2D2]">
         <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#C8A766]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
-            <div className="w-16 h-16 bg-black border border-[#C8A766]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 bg-[#1A1A1A] border border-[#C8A766]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Phone className="w-8 h-8 text-[#C8A766]" />
             </div>
             <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A] mb-3">

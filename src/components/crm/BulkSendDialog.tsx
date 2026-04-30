@@ -25,13 +25,13 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_PILL: Record<string, string> = {
-  not_started: "bg-gray-200 text-black border-gray-300",
+  not_started: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30",
   pending_application: "bg-amber-100 text-amber-900 border-amber-300",
   documents_required: "bg-orange-100 text-orange-900 border-orange-300",
   under_review: "bg-blue-100 text-blue-900 border-blue-300",
   registered: "bg-emerald-100 text-emerald-900 border-emerald-300",
   rejected: "bg-red-100 text-red-900 border-red-300",
-  expired: "bg-zinc-200 text-black border-zinc-300",
+  expired: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
 };
 
 interface Developer {
@@ -158,9 +158,9 @@ export const BulkSendDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
-      <DialogContent className="max-w-[1500px] w-[97vw] bg-white max-h-[94vh] overflow-y-auto">
+      <DialogContent className="max-w-[1500px] w-[97vw] bg-[#FDFBF7] max-h-[94vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-black flex items-center gap-2">
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
             Send Registration Email
             {template?.locked_at ? (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
@@ -178,7 +178,7 @@ export const BulkSendDialog = ({
           <div className="space-y-4 min-w-0">
           {/* Variant */}
           <div>
-            <Label className="text-xs text-black">Email variant</Label>
+            <Label className="text-xs text-[#1A1A1A]">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
               {(Object.keys(VARIANT_LABELS) as RegistrationVariant[]).map((v) => (
                 <button
@@ -187,7 +187,7 @@ export const BulkSendDialog = ({
                   onClick={() => setVariant(v)}
                   disabled={running}
                   className={`text-xs px-3 py-2 rounded-lg border-2 text-left transition ${
-                    variant === v ? "bg-black text-white border-black" : "bg-white text-black border-black/10 hover:border-black/30"
+                    variant === v ? "bg-[#1A1A1A] text-white border-[#1A1A1A]" : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/10 hover:border-[#1A1A1A]/30"
                   }`}
                 >
                   {VARIANT_LABELS[v]}
@@ -197,8 +197,8 @@ export const BulkSendDialog = ({
           </div>
 
           {/* Test send (left col) */}
-          <div className="border border-black/10 rounded-xl p-3 bg-[#FAF5EA]">
-            <div className="flex items-center gap-2 text-xs text-black mb-2">
+          <div className="border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FAF5EA]">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A] mb-2">
               <FlaskConical className="w-4 h-4" /> <strong>Step 1 — Send test to yourself first</strong>
             </div>
             <div className="flex gap-2">
@@ -210,47 +210,47 @@ export const BulkSendDialog = ({
           </div>
 
           {/* Broadcast config (left col) */}
-          <div className="space-y-2 border border-black/10 rounded-xl p-3 bg-white">
-            <div className="text-xs text-black"><strong>Step 2 — Broadcast</strong></div>
-            <div className="flex items-center justify-between text-sm text-black">
+          <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
+            <div className="text-xs text-[#1A1A1A]"><strong>Step 2 — Broadcast</strong></div>
+            <div className="flex items-center justify-between text-sm text-[#1A1A1A]">
               <span>Selected developers</span>
               <span className="font-bold">{selected.length}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-black flex items-center gap-2">
+              <span className="text-[#1A1A1A] flex items-center gap-2">
                 <Switch checked={skipRecent} onCheckedChange={setSkipRecent} disabled={running} />
                 Skip developers contacted in last 7 days
               </span>
               {skipped > 0 && <span className="text-amber-700 text-xs flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{skipped} skipped</span>}
             </div>
-            <div className="flex items-center justify-between text-sm pt-2 border-t border-black/10">
-              <span className="text-black font-semibold">Will send to</span>
+            <div className="flex items-center justify-between text-sm pt-2 border-t border-[#1A1A1A]/10">
+              <span className="text-[#1A1A1A] font-semibold">Will send to</span>
               <span className="font-bold text-emerald-700">{targets.length}</span>
             </div>
           </div>
 
           {/* Status breakdown of eligible recipients */}
-          <div className="space-y-2 border border-black/10 rounded-xl p-3 bg-white">
-            <div className="flex items-center gap-2 text-xs text-black">
+          <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
               <ListChecks className="w-4 h-4" /><strong>Recipient breakdown</strong>
             </div>
             {statusBreakdown.length === 0 ? (
-              <div className="text-xs text-gray-500 py-1">No eligible recipients to send to.</div>
+              <div className="text-xs text-[#8A7556] py-1">No eligible recipients to send to.</div>
             ) : (
               <div className="space-y-1.5">
                 {statusBreakdown.map(([s, n]) => (
                   <div key={s} className="flex items-center justify-between text-xs">
-                    <span className={`px-2 py-0.5 rounded-full border font-semibold ${STATUS_PILL[s] || "bg-gray-100 text-black border-gray-300"}`}>
+                    <span className={`px-2 py-0.5 rounded-full border font-semibold ${STATUS_PILL[s] || "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/30"}`}>
                       {STATUS_LABEL[s] || s}
                     </span>
-                    <span className="font-bold text-black">{n}</span>
+                    <span className="font-bold text-[#1A1A1A]">{n}</span>
                   </div>
                 ))}
               </div>
             )}
             {(skipBreakdown.noEmail > 0 || skipBreakdown.recent > 0) && (
-              <div className="pt-2 mt-2 border-t border-black/10 space-y-1 text-xs text-gray-700">
-                <div className="font-semibold text-black mb-0.5">Skipped:</div>
+              <div className="pt-2 mt-2 border-t border-[#1A1A1A]/10 space-y-1 text-xs text-[#5A4A2E]">
+                <div className="font-semibold text-[#1A1A1A] mb-0.5">Skipped:</div>
                 {skipBreakdown.noEmail > 0 && (
                   <div className="flex justify-between"><span>Missing email</span><span className="font-bold">{skipBreakdown.noEmail}</span></div>
                 )}
@@ -265,9 +265,9 @@ export const BulkSendDialog = ({
         {/* RIGHT COLUMN */}
         <div className="space-y-4 min-w-0">
           {/* Email Preview */}
-          <div className="border border-black/10 rounded-xl bg-white overflow-hidden">
-            <div className="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-[#FAF5EA]">
-              <div className="flex items-center gap-2 text-xs text-black">
+          <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A]/10 bg-[#FAF5EA]">
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
                 <Eye className="w-4 h-4" /><strong>Email preview</strong>
               </div>
               <div className="flex items-center gap-2">
@@ -288,17 +288,17 @@ export const BulkSendDialog = ({
             </div>
             {showPreview && (
               <>
-                <div className="px-3 py-2 text-xs border-b border-black/10 bg-white">
-                  <div className="text-black"><strong>Subject:</strong> {previewSubject}</div>
-                  <div className="text-gray-600 mt-0.5">
-                    <strong className="text-black">To:</strong> {previewDev?.developer_email || "—"} · <strong className="text-black">Variant:</strong> {VARIANT_LABELS[variant]}
+                <div className="px-3 py-2 text-xs border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
+                  <div className="text-[#1A1A1A]"><strong>Subject:</strong> {previewSubject}</div>
+                  <div className="text-[#5A4A2E] mt-0.5">
+                    <strong className="text-[#1A1A1A]">To:</strong> {previewDev?.developer_email || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
                   </div>
                 </div>
                 <iframe
                   title="email-preview"
                   srcDoc={previewHtml}
                   sandbox=""
-                  className="block w-full h-[78vh] min-h-[640px] bg-white rounded-b-xl border-0"
+                  className="block w-full h-[78vh] min-h-[640px] bg-[#FDFBF7] rounded-b-xl border-0"
                 />
               </>
             )}
@@ -306,8 +306,8 @@ export const BulkSendDialog = ({
 
           {/* Per-recipient progress */}
           {(running || Object.keys(statuses).length > 0) && (
-            <div className="border border-black/10 rounded-xl bg-white">
-              <div className="px-3 py-2 border-b border-black/10 text-xs text-black bg-[#FAF5EA]">
+            <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7]">
+              <div className="px-3 py-2 border-b border-[#1A1A1A]/10 text-xs text-[#1A1A1A] bg-[#FAF5EA]">
                 <strong>Live send progress</strong>
               </div>
               <div className="max-h-[260px] overflow-y-auto divide-y divide-black/5">
@@ -318,18 +318,18 @@ export const BulkSendDialog = ({
                     s === "ok" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> :
                     s === "fail" ? <XCircle className="w-4 h-4 text-red-600" /> :
                     s === "sending" ? <Clock className="w-4 h-4 text-amber-600 animate-pulse" /> :
-                    <Clock className="w-4 h-4 text-gray-400" />;
+                    <Clock className="w-4 h-4 text-[#8A7556]" />;
                   return (
                     <div key={t.id} className="flex items-center justify-between px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         {icon}
-                        <span className="font-semibold text-black truncate">{t.developer_name}</span>
-                        <span className="text-gray-500 truncate">{t.developer_email}</span>
+                        <span className="font-semibold text-[#1A1A1A] truncate">{t.developer_name}</span>
+                        <span className="text-[#8A7556] truncate">{t.developer_email}</span>
                       </div>
                       <span className={`uppercase tracking-wider font-bold ${
                         s === "ok" ? "text-emerald-700" :
                         s === "fail" ? "text-red-700" :
-                        s === "sending" ? "text-amber-700" : "text-gray-500"
+                        s === "sending" ? "text-amber-700" : "text-[#8A7556]"
                       }`}>
                         {s === "ok" ? "sent" : s === "fail" ? (err || "failed") : s}
                       </span>
@@ -343,7 +343,7 @@ export const BulkSendDialog = ({
         </div>
 
         {reviewing && !running && (
-          <div className="mt-3 border-2 border-amber-400 bg-amber-50 rounded-xl p-3 text-sm text-black">
+          <div className="mt-3 border-2 border-amber-400 bg-amber-50 rounded-xl p-3 text-sm text-[#1A1A1A]">
             <div className="flex items-start gap-2">
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
@@ -375,7 +375,7 @@ export const BulkSendDialog = ({
               Back
             </Button>
           )}
-          <Button onClick={sendAll} disabled={running || !targets.length} className="bg-black text-white hover:bg-gray-800">
+          <Button onClick={sendAll} disabled={running || !targets.length} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
             <Send className="w-3 h-3 mr-1" />
             {running ? "Sending…" : reviewing ? `Confirm & send to ${targets.length}` : `Review & send (${targets.length})`}
           </Button>

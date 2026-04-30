@@ -87,10 +87,10 @@ const getSaleStatusBadge = (status?: string | null) => {
   }
   // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
   if (normalizedStatus.includes('announced')) {
-    return { label: 'Announced', className: 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/40' };
+    return { label: 'Announced', className: 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#C8A766]/40' };
   }
   if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
-    return { label: 'Presale', className: 'bg-amber-500 text-black' };
+    return { label: 'Presale', className: 'bg-amber-500 text-[#1A1A1A]' };
   }
   
   return null;
@@ -230,7 +230,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
                   "border border-gold/70 text-gold " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-gold hover:text-black hover:border-gold"
+                  "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
                 }
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -242,7 +242,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
                   "border border-gold/70 text-gold " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-gold hover:text-black hover:border-gold"
+                  "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
                 }
               >
                 <ChevronRight className="w-4 h-4" />
@@ -298,14 +298,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
           {/* Project Name - Gold */}
-          <h4 className="text-gold text-lg font-bold mb-1 break-words leading-tight line-clamp-2 group-hover:text-black transition-colors">
+          <h4 className="text-gold text-lg font-bold mb-1 break-words leading-tight line-clamp-2 group-hover:text-[#1A1A1A] transition-colors">
             {project.name}
           </h4>
           
           {/* Location with icon */}
           {project.location && (
             <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-2">
-              <MapPin className="w-3.5 h-3.5 text-gray-700 flex-shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-[#5A4A2E] flex-shrink-0" />
               <span className="truncate">{project.location}</span>
             </div>
           )}
@@ -343,7 +343,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <span className="font-medium">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
-              <span className="text-gray-500">|</span>
+              <span className="text-[#8A7556]">|</span>
             )}
             {getSizeText() && (
               <span>{getSizeText()}</span>
@@ -353,7 +353,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Description with ...more link - Shorter */}
           <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2 overflow-hidden">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-gold font-bold hover:text-gray-700 cursor-pointer ml-1">
+            <span className="text-gold font-bold hover:text-[#5A4A2E] cursor-pointer ml-1">
               ...more
             </span>
           </p>

@@ -267,7 +267,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               </div>
             ) : (
               <>
-                <Upload className="w-5 h-5 mx-auto text-gray-600 mb-1" />
+                <Upload className="w-5 h-5 mx-auto text-[#5A4A2E] mb-1" />
                 <p className="text-xs font-medium text-foreground">Click to upload</p>
                 <p className="text-[10px] text-muted-foreground mt-0.5">JPG, PNG, or PDF</p>
               </>
@@ -528,7 +528,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
                 id="agree-terms"
                 checked={agreedToTerms}
                 onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
-                className="mt-0.5 border-gold data-[state=checked]:bg-gold data-[state=checked]:text-black"
+                className="mt-0.5 border-gold data-[state=checked]:bg-gold data-[state=checked]:text-[#1A1A1A]"
               />
               <label htmlFor="agree-terms" className="text-xs text-foreground cursor-pointer leading-relaxed">
                 I have read and agree to the <strong>Terms & Conditions</strong>, <strong>Usage Rights</strong>, and <strong>Important Notice</strong> of {COMPANY_FULL_NAME}. 

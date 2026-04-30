@@ -258,7 +258,7 @@ const JobOfferManager = () => {
               <TabsTrigger 
                 key={dept} 
                 value={dept}
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border-gold/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
               >
                 {dept}
                 {getOffersByDepartment(dept).length > 0 && (
@@ -370,7 +370,7 @@ const JobOfferManager = () => {
                           href={offer.document_url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm text-gold hover:text-gray-800 mt-2"
+                          className="inline-flex items-center gap-2 text-sm text-gold hover:text-[#1A1A1A] mt-2"
                         >
                           <FileText className="w-4 h-4" />
                           View Document

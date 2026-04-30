@@ -143,11 +143,11 @@ const VerificationRequests = () => {
     <div className="p-4 sm:p-6 space-y-6 max-w-6xl">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-black flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-2">
             <ShieldCheck className="w-6 h-6 text-gold" />
             Verification Requests
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-[#5A4A2E] mt-1">
             Review and approve user identity verifications
           </p>
         </div>
@@ -169,7 +169,7 @@ const VerificationRequests = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
                 filter === f
                   ? "bg-gold/20 text-gold border border-gold/30"
-                  : "bg-gray-100 text-gray-600 border border-transparent hover:bg-gray-200"
+                  : "bg-[#F7F2EA] text-[#5A4A2E] border border-transparent hover:bg-[#EFE6D6]"
               }`}
             >
               {f}
@@ -177,7 +177,7 @@ const VerificationRequests = () => {
           ))}
         </div>
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -193,7 +193,7 @@ const VerificationRequests = () => {
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-gray-600">
+        <div className="text-center py-12 text-[#5A4A2E]">
           <ShieldCheck className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>No {filter === "all" ? "" : filter} verification requests</p>
         </div>
@@ -201,7 +201,7 @@ const VerificationRequests = () => {
         <div className="rounded-xl border border-gold/10 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] text-black">
+              <thead className="bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] text-[#1A1A1A]">
                 <tr>
                   <th className="text-left px-4 py-3 font-semibold">Name</th>
                   <th className="text-left px-4 py-3 font-semibold">Status</th>
@@ -210,14 +210,14 @@ const VerificationRequests = () => {
                   <th className="text-right px-4 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
+              <tbody className="divide-y divide-[#B89555]/20 bg-[#FDFBF7]">
                 {filtered.map((v) => (
                   <tr key={v.id} className="hover:bg-gold/5 transition-colors">
-                    <td className="px-4 py-3 font-medium text-black">{v.full_name || "—"}</td>
+                    <td className="px-4 py-3 font-medium text-[#1A1A1A]">{v.full_name || "—"}</td>
                     <td className="px-4 py-3">
                       <Badge className={statusColors[v.status] || ""}>{v.status}</Badge>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className="px-4 py-3 text-[#5A4A2E]">
                       {new Date(v.submitted_at).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3">
@@ -291,7 +291,7 @@ const VerificationRequests = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
-            <label className="text-sm font-medium text-black">Reason for rejection</label>
+            <label className="text-sm font-medium text-[#1A1A1A]">Reason for rejection</label>
             <Input
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}

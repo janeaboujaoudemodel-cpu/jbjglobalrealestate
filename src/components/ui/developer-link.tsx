@@ -34,7 +34,7 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   if (!slug) {
     return (
       <span ref={ref} className={cn("text-muted-foreground", className)}>
-        {showPrefix && <span className="text-black">by </span>}
+        {showPrefix && <span className="text-[#1A1A1A]">by </span>}
         <span className="font-semibold text-gold">
           {name}
         </span>
@@ -44,7 +44,7 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
 
   return (
     <span ref={ref} className={cn("text-muted-foreground", className)}>
-      {showPrefix && <span className="text-black">by </span>}
+      {showPrefix && <span className="text-[#1A1A1A]">by </span>}
       <Link 
         to={`/developer/${slug}`}
         onClick={handleClick}

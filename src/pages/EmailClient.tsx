@@ -409,9 +409,9 @@ const EmailClient = () => {
                 Compose
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-2xl">
+            <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 max-w-2xl">
               <DialogHeader>
-                <DialogTitle className="text-black flex items-center gap-2">
+                <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
                   <Mail className="w-5 h-5 text-[#B89555]" />
                   New Message
                 </DialogTitle>
@@ -419,29 +419,29 @@ const EmailClient = () => {
               <div className="space-y-4">
                 {/* Send As — Sender Identity Selector */}
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-black/60 whitespace-nowrap w-16 font-medium">Send As:</span>
+                  <span className="text-sm text-[#1A1A1A]/60 whitespace-nowrap w-16 font-medium">Send As:</span>
                   <Select value={composeSender} onValueChange={setComposeSender}>
                     <SelectTrigger className="flex-1 border-[#B89555]/30 bg-[#FDFBF7]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-[#B89555]/30">
-                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider">Company Email (@jbj.ae)</div>
+                    <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">Company Email (@jbj.ae)</div>
                       {SENDER_IDENTITIES.filter(s => s.account === 'company').map(s => (
                         <SelectItem key={s.id} value={s.id}>
                           <span className="flex items-center gap-2">
                             {s.icon}
-                            <span className="text-black">{s.name}</span>
-                            <span className="text-black/40 text-xs">— {s.title}</span>
+                            <span className="text-[#1A1A1A]">{s.name}</span>
+                            <span className="text-[#1A1A1A]/40 text-xs">— {s.title}</span>
                           </span>
                         </SelectItem>
                       ))}
-                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider border-t border-[#B89555]/10 mt-1">Personal Email</div>
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider border-t border-[#B89555]/10 mt-1">Personal Email</div>
                       {SENDER_IDENTITIES.filter(s => s.account === 'personal').map(s => (
                         <SelectItem key={s.id} value={s.id}>
                           <span className="flex items-center gap-2">
                             {s.icon}
-                            <span className="text-black">{s.label}</span>
-                            <span className="text-black/40 text-xs">({s.email})</span>
+                            <span className="text-[#1A1A1A]">{s.label}</span>
+                            <span className="text-[#1A1A1A]/40 text-xs">({s.email})</span>
                           </span>
                         </SelectItem>
                       ))}
@@ -453,7 +453,7 @@ const EmailClient = () => {
                 <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-[#B89555]" />
-                    <span className="text-sm text-black">Send via Resend API</span>
+                    <span className="text-sm text-[#1A1A1A]">Send via Resend API</span>
                   </div>
                   <Switch checked={sendViaResend} onCheckedChange={setSendViaResend} />
                 </div>
@@ -498,8 +498,8 @@ const EmailClient = () => {
 
                 {/* Signature info + persona consistency badge */}
                 <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg p-3">
-                  <p className="text-xs text-black/60 mb-1">Sending as: <strong className="text-black">{currentSender.name}</strong></p>
-                  <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
+                  <p className="text-xs text-[#1A1A1A]/60 mb-1">Sending as: <strong className="text-[#1A1A1A]">{currentSender.name}</strong></p>
+                  <p className="text-[10px] text-[#1A1A1A]/40">{currentSender.title} · {currentSender.email}</p>
                   {attachments.some(a => ['stamp', 'signature', 'letterhead'].includes(a.type)) && (
                     <p className="text-[10px] text-[#B89555] mt-1.5 font-medium flex items-center gap-1">
                       <Shield className="w-3 h-3" />
@@ -523,7 +523,7 @@ const EmailClient = () => {
 
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#B89555]/10" onClick={() => setShowAttachPicker(true)}>
+                    <Button variant="ghost" size="sm" className="text-[#1A1A1A]/60 hover:bg-[#B89555]/10" onClick={() => setShowAttachPicker(true)}>
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
                     </Button>
                     <Button variant="ghost" size="sm" className="text-[#B89555] hover:bg-[#B89555]/10" onClick={() => setShowAttachPicker(true)}>
@@ -594,9 +594,9 @@ const EmailClient = () => {
 
           {/* ── Approve & Send — Final Preview Modal ── */}
           <Dialog open={approvePreviewOpen} onOpenChange={setApprovePreviewOpen}>
-            <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
+            <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="text-black flex items-center gap-2">
+                <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
                   <CheckCheck className="w-5 h-5 text-[#B89555]" />
                   Approve & Send — Final Preview
                 </DialogTitle>
@@ -606,7 +606,7 @@ const EmailClient = () => {
                 <div className="flex items-center gap-3 flex-wrap">
                   <Badge className={cn(
                     "text-xs px-2 py-0.5",
-                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-gray-100 text-gray-600 border-gray-300"
+                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30"
                   )}>
                     {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
                   </Badge>
@@ -623,18 +623,18 @@ const EmailClient = () => {
                 {/* Full email preview */}
                 <div className="border-2 border-[#B89555]/20 rounded-xl overflow-hidden">
                   <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] px-6 py-4 border-b border-[#B89555]/15">
-                    <p className="text-sm text-black/60">From: <strong className="text-black">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
-                    <p className="text-sm text-black/60">To: <strong className="text-black">{newEmail.to}</strong></p>
-                    <p className="text-sm text-black/60">Subject: <strong className="text-black">{newEmail.subject}</strong></p>
+                    <p className="text-sm text-[#1A1A1A]/60">From: <strong className="text-[#1A1A1A]">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
+                    <p className="text-sm text-[#1A1A1A]/60">To: <strong className="text-[#1A1A1A]">{newEmail.to}</strong></p>
+                    <p className="text-sm text-[#1A1A1A]/60">Subject: <strong className="text-[#1A1A1A]">{newEmail.subject}</strong></p>
                   </div>
-                  <div className="px-6 py-5 bg-white">
-                    <div className="whitespace-pre-wrap text-black leading-relaxed min-h-[120px]">
+                  <div className="px-6 py-5 bg-[#FDFBF7]">
+                    <div className="whitespace-pre-wrap text-[#1A1A1A] leading-relaxed min-h-[120px]">
                       {newEmail.body}
                     </div>
                     {/* Attached assets preview in Approve & Send */}
                     {attachments.length > 0 && (
                       <div className="mt-4 pt-3 border-t border-[#B89555]/10">
-                        <p className="text-xs text-black/40 mb-2 uppercase tracking-wider font-medium">Attachments</p>
+                        <p className="text-xs text-[#1A1A1A]/40 mb-2 uppercase tracking-wider font-medium">Attachments</p>
                         <div className="flex flex-wrap gap-3">
                           {attachments.map(att => {
                             const isImage = att.mimeType?.startsWith('image/') || ['stamp', 'signature', 'logo', 'letterhead', 'business_card', 'email_signature'].includes(att.type);
@@ -645,7 +645,7 @@ const EmailClient = () => {
                                 ) : (
                                   <FileText className="w-5 h-5 text-[#B89555]" />
                                 )}
-                                <span className="text-xs text-black font-medium">{att.name}</span>
+                                <span className="text-xs text-[#1A1A1A] font-medium">{att.name}</span>
                               </div>
                             );
                           })}
@@ -655,11 +655,11 @@ const EmailClient = () => {
                   </div>
                   {/* Dynamic Signature Block per Persona */}
                   <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#B89555]/15">
-                    <p className="text-sm text-black/70 mb-2">Best regards,</p>
+                    <p className="text-sm text-[#1A1A1A]/70 mb-2">Best regards,</p>
                     {signatureLines.map((line, i) => (
                       <p key={i} className={cn(
                         "text-sm",
-                        i === 0 ? "font-semibold text-black" : "text-black/50 text-xs",
+                        i === 0 ? "font-semibold text-[#1A1A1A]" : "text-[#1A1A1A]/50 text-xs",
                         line.includes("@") && "text-[#B89555] mt-0.5"
                       )}>
                         {line}
@@ -684,12 +684,12 @@ const EmailClient = () => {
           </Dialog>
 
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/30" />
             <Input
               placeholder="Search emails..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9 text-sm bg-white border-[#B89555]/20 focus-visible:ring-[#B89555]/30"
+              className="pl-9 h-9 text-sm bg-[#FDFBF7] border-[#B89555]/20 focus-visible:ring-[#B89555]/30"
             />
           </div>
         </div>
@@ -717,8 +717,8 @@ const EmailClient = () => {
               className={cn(
                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm mb-0.5 transition-colors",
                 activeFolder === folder.id
-                  ? "bg-[#B89555]/15 text-black font-medium"
-                  : "text-black/60 hover:bg-[#B89555]/5 hover:text-black"
+                  ? "bg-[#B89555]/15 text-[#1A1A1A] font-medium"
+                  : "text-[#1A1A1A]/60 hover:bg-[#B89555]/5 hover:text-[#1A1A1A]"
               )}
               onClick={() => { setActiveFolder(folder.id); setSelectedEmail(null); setCurrentPage(1); }}
             >
@@ -733,12 +733,12 @@ const EmailClient = () => {
           ))}
 
           <div className="mt-4 mb-2 px-3">
-            <span className="text-[10px] font-semibold text-black/40 uppercase tracking-wider">Labels</span>
+            <span className="text-[10px] font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">Labels</span>
           </div>
           {labels.map((label) => (
             <button
               key={label.name}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-black/60 hover:bg-[#B89555]/5 hover:text-black"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-[#1A1A1A]/60 hover:bg-[#B89555]/5 hover:text-[#1A1A1A]"
             >
               <div className={cn("w-2.5 h-2.5 rounded-full", label.color)} />
               <span className="capitalize">{label.name}</span>
@@ -750,7 +750,7 @@ const EmailClient = () => {
         <div className="p-2 border-t border-[#B89555]/15 space-y-1">
           <Button
             variant="ghost"
-            className="w-full justify-start text-sm text-black/60 hover:bg-[#B89555]/10 hover:text-black"
+            className="w-full justify-start text-sm text-[#1A1A1A]/60 hover:bg-[#B89555]/10 hover:text-[#1A1A1A]"
             onClick={() => setShowProductivity(!showProductivity)}
           >
             <BarChart3 className="w-4 h-4 mr-2" />
@@ -758,7 +758,7 @@ const EmailClient = () => {
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start text-sm text-black/60 hover:bg-[#B89555]/10 hover:text-black"
+            className="w-full justify-start text-sm text-[#1A1A1A]/60 hover:bg-[#B89555]/10 hover:text-[#1A1A1A]"
             onClick={() => setShowEmailSettings(true)}
           >
             <Settings className="w-4 h-4 mr-2" />
@@ -769,9 +769,9 @@ const EmailClient = () => {
 
       {/* Email Settings Dialog */}
       <Dialog open={showEmailSettings} onOpenChange={setShowEmailSettings}>
-        <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-black flex items-center gap-2">
+            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Settings className="w-5 h-5 text-[#B89555]" />
               Email Settings & API Integration
             </DialogTitle>
@@ -801,14 +801,14 @@ const EmailClient = () => {
       {/* Email List */}
       <div className="w-[340px] border-r border-[#B89555]/15 flex flex-col bg-[#FDFBF7]">
         {/* Toolbar */}
-        <div className="px-3 py-2 border-b border-[#B89555]/15 flex items-center justify-between gap-2 bg-white/80">
+        <div className="px-3 py-2 border-b border-[#B89555]/15 flex items-center justify-between gap-2 bg-[#FDFBF7]/80">
           <div className="flex items-center gap-2">
             <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#B89555]/30" />
             {selectedIds.size > 0 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-[#1A1A1A]/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-[#1A1A1A]/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-[#1A1A1A]/60" /></Button>
                 <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" title="Star selected" onClick={() => {
                   setEmails(emails.map(e => selectedIds.has(e.id) ? { ...e, starred: true } : e));
                   toast.success(`${selectedIds.size} email(s) starred`);
@@ -827,16 +827,16 @@ const EmailClient = () => {
                   }
                   toast.success("Analysis complete");
                 }}><Sparkles className="w-3.5 h-3.5 text-[#B89555]" /></Button>
-                <span className="text-[10px] text-black/40">{selectedIds.size} selected</span>
+                <span className="text-[10px] text-[#1A1A1A]/40">{selectedIds.size} selected</span>
               </>
             )}
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10"><RefreshCw className="w-3.5 h-3.5 text-black/60" /></Button>
+            <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10"><RefreshCw className="w-3.5 h-3.5 text-[#1A1A1A]/60" /></Button>
             {totalPages > 1 && (
               <>
                 <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}><ChevronLeft className="w-3.5 h-3.5" /></Button>
-                <span className="text-[10px] text-black/40">{currentPage}/{totalPages}</span>
+                <span className="text-[10px] text-[#1A1A1A]/40">{currentPage}/{totalPages}</span>
                 <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}><ChevronRight className="w-3.5 h-3.5" /></Button>
               </>
             )}
@@ -846,7 +846,7 @@ const EmailClient = () => {
         {/* Emails */}
         <ScrollArea className="flex-1">
           {paginatedEmails.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-black/40">
+            <div className="flex flex-col items-center justify-center h-48 text-[#1A1A1A]/40">
               <Mail className="w-10 h-10 mb-2 opacity-40" />
               <p className="text-sm">No emails</p>
             </div>
@@ -869,26 +869,26 @@ const EmailClient = () => {
                 />
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleStar(email.id); }}
-                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-[#B89555]" : "text-black/20 hover:text-black/40")}
+                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-[#B89555]" : "text-[#1A1A1A]/20 hover:text-[#1A1A1A]/40")}
                 >
                   <Star className="w-3.5 h-3.5" fill={email.starred ? "currentColor" : "none"} />
                 </button>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
-                    <span className={cn("text-sm truncate text-black", !email.read && "font-semibold")}>{email.from}</span>
-                    <span className="text-[10px] text-black/40 flex-shrink-0 ml-2">{formatDate(email.date)}</span>
+                    <span className={cn("text-sm truncate text-[#1A1A1A]", !email.read && "font-semibold")}>{email.from}</span>
+                    <span className="text-[10px] text-[#1A1A1A]/40 flex-shrink-0 ml-2">{formatDate(email.date)}</span>
                   </div>
-                  <p className={cn("text-sm truncate", !email.read ? "text-black" : "text-black/60")}>{email.subject}</p>
-                  <p className="text-[11px] text-black/40 truncate mt-0.5">{email.body.substring(0, 80)}…</p>
+                  <p className={cn("text-sm truncate", !email.read ? "text-[#1A1A1A]" : "text-[#1A1A1A]/60")}>{email.subject}</p>
+                  <p className="text-[11px] text-[#1A1A1A]/40 truncate mt-0.5">{email.body.substring(0, 80)}…</p>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     {email.account === "company" ? (
                       <Badge variant="outline" className="text-[9px] h-4 px-1 border-[#B89555]/30 text-[#B89555]"><Building2 className="w-2.5 h-2.5 mr-0.5" />Company</Badge>
                     ) : (
                       <Badge variant="outline" className="text-[9px] h-4 px-1 border-emerald-300 text-emerald-600"><User className="w-2.5 h-2.5 mr-0.5" />Personal</Badge>
                     )}
-                    {email.hasAttachment && <Paperclip className="w-3 h-3 text-black/40" />}
+                    {email.hasAttachment && <Paperclip className="w-3 h-3 text-[#1A1A1A]/40" />}
                     {email.labels.map((l) => (
-                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize border-[#B89555]/20 text-black/50">{l}</Badge>
+                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize border-[#B89555]/20 text-[#1A1A1A]/50">{l}</Badge>
                     ))}
                   </div>
                 </div>
@@ -899,17 +899,17 @@ const EmailClient = () => {
       </div>
 
       {/* Email View */}
-      <div className="flex-1 flex flex-col bg-white">
+      <div className="flex-1 flex flex-col bg-[#FDFBF7]">
         {selectedEmail ? (
           <>
             {/* Email Header */}
             <div className="p-5 border-b border-[#B89555]/15">
               <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-semibold text-black">{selectedEmail.subject}</h2>
+                <h2 className="text-lg font-semibold text-[#1A1A1A]">{selectedEmail.subject}</h2>
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToArchive([selectedEmail.id])}><Archive className="w-4 h-4 text-black/60" /></Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToTrash([selectedEmail.id])}><Trash2 className="w-4 h-4 text-black/60" /></Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10"><MoreVertical className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToArchive([selectedEmail.id])}><Archive className="w-4 h-4 text-[#1A1A1A]/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToTrash([selectedEmail.id])}><Trash2 className="w-4 h-4 text-[#1A1A1A]/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10"><MoreVertical className="w-4 h-4 text-[#1A1A1A]/60" /></Button>
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -921,17 +921,17 @@ const EmailClient = () => {
                     {selectedEmail.from[0]}
                   </div>
                   <div>
-                    <p className="font-medium text-black">{selectedEmail.from}</p>
-                    <p className="text-sm text-black/50">{selectedEmail.fromEmail}</p>
+                    <p className="font-medium text-[#1A1A1A]">{selectedEmail.from}</p>
+                    <p className="text-sm text-[#1A1A1A]/50">{selectedEmail.fromEmail}</p>
                   </div>
                 </div>
-                <span className="text-sm text-black/40">{new Date(selectedEmail.date).toLocaleString()}</span>
+                <span className="text-sm text-[#1A1A1A]/40">{new Date(selectedEmail.date).toLocaleString()}</span>
               </div>
             </div>
 
             {/* Email Body + AI Panel */}
             <ScrollArea className="flex-1 p-6">
-              <div className="whitespace-pre-wrap text-black leading-relaxed max-w-3xl">
+              <div className="whitespace-pre-wrap text-[#1A1A1A] leading-relaxed max-w-3xl">
                 {selectedEmail.body}
               </div>
 
@@ -951,13 +951,13 @@ const EmailClient = () => {
 
             {/* Actions — Reply / Reply All / Forward / Calendar / Notes / Draft with Amanda */}
             <div className="p-4 border-t border-[#B89555]/15 flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("reply")}>
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/10" onClick={() => openReply("reply")}>
                 <Reply className="w-4 h-4 mr-1.5" /> Reply
               </Button>
-              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("replyAll")}>
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/10" onClick={() => openReply("replyAll")}>
                 <ReplyAll className="w-4 h-4 mr-1.5" /> Reply All
               </Button>
-              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("forward")}>
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#B89555]/10" onClick={() => openReply("forward")}>
                 <Forward className="w-4 h-4 mr-1.5" /> Forward
               </Button>
               <QuickCalendarWidget compact source="email" prefillTitle={selectedEmail.subject} />
@@ -975,9 +975,9 @@ const EmailClient = () => {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-black/40">
+          <div className="flex-1 flex flex-col items-center justify-center text-[#1A1A1A]/40">
             <Mail className="w-16 h-16 mb-4 opacity-30" />
-            <p className="text-lg font-medium text-black/60">Select an email to read</p>
+            <p className="text-lg font-medium text-[#1A1A1A]/60">Select an email to read</p>
             <p className="text-sm mt-1">
               {unreadCount > 0 ? `${unreadCount} unread message${unreadCount > 1 ? 's' : ''}` : "All caught up"}
             </p>

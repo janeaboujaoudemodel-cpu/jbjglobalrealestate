@@ -61,8 +61,8 @@ const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon:
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border-red-200", icon: <XCircle className="w-3 h-3" /> },
-  expired: { label: "Expired", color: "bg-gray-100 text-gray-600 border-gray-200", icon: <Clock className="w-3 h-3" /> },
-  voided: { label: "Voided", color: "bg-gray-100 text-gray-600 border-gray-200", icon: <XCircle className="w-3 h-3" /> },
+  expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30", icon: <Clock className="w-3 h-3" /> },
+  voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30", icon: <XCircle className="w-3 h-3" /> },
 };
 
 export default function ESignatureDashboard() {
@@ -204,7 +204,7 @@ export default function ESignatureDashboard() {
                     <p className="text-sm text-muted-foreground">Total</p>
                     <p className="text-2xl font-bold text-foreground">{envelopes?.length || 0}</p>
                   </div>
-                  <FileSignature className="w-8 h-8 text-gray-500" />
+                  <FileSignature className="w-8 h-8 text-[#8A7556]" />
                 </div>
               </CardContent>
             </Card>
@@ -263,7 +263,7 @@ export default function ESignatureDashboard() {
                 placeholder="Search envelopes or recipients..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white/80 border-gold/20 focus:border-gold"
+                className="pl-10 bg-[#FDFBF7]/80 border-gold/20 focus:border-gold"
               />
             </div>
           </div>

@@ -48,7 +48,7 @@ export default function PortfolioDocumentsVault({ documentCounts }: PortfolioDoc
                 key={category.label}
                 className="p-4 bg-muted/30 rounded-lg text-center hover:bg-muted/50 transition-colors cursor-pointer"
               >
-                <category.icon className="w-8 h-8 mx-auto text-black mb-2" />
+                <category.icon className="w-8 h-8 mx-auto text-[#1A1A1A] mb-2" />
                 <p className="text-2xl font-bold text-foreground">{category.count}</p>
                 <p className="text-xs text-muted-foreground">{category.label}</p>
               </div>

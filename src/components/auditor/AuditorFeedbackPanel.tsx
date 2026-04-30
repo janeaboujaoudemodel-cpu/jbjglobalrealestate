@@ -158,16 +158,16 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
   return (
     <div
       id="auditor-feedback-panel"
-      className="fixed inset-0 z-[10002] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[10002] flex items-center justify-center bg-[#1A1A1A]/60 backdrop-blur-sm"
     >
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-gold/40 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gold/30">
-          <h2 className="text-lg font-bold text-black flex items-center gap-2">
+          <h2 className="text-lg font-bold text-[#1A1A1A] flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-gold" />
             Send Feedback to Jane
           </h2>
-          <button onClick={onClose} className="text-black/50 hover:text-black">
+          <button onClick={onClose} className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -185,7 +185,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               className={`flex-1 py-3 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors ${
                 activeTab === tab.key
                   ? "text-gold border-b-2 border-gold bg-gold/5"
-                  : "text-black/50 hover:text-black"
+                  : "text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
               }`}
             >
               <tab.icon className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                 onClick={captureScreenshot}
                 disabled={isCapturing}
                 variant="outline"
-                className="w-full border-gold/40 text-black hover:bg-gold/10"
+                className="w-full border-gold/40 text-[#1A1A1A] hover:bg-gold/10"
               >
                 <Camera className="w-4 h-4 mr-2" />
                 {isCapturing ? "Capturing..." : screenshotUrl ? "Retake Screenshot" : "Capture Screenshot"}
@@ -228,7 +228,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                 value={taskTitle}
                 onChange={(e) => setTaskTitle(e.target.value)}
                 placeholder="Task title (e.g., Fix homepage hero image)"
-                className="bg-white/80 border-gold/40 text-black"
+                className="bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A]"
               />
               <Textarea
                 value={taskDescription}
@@ -251,7 +251,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
 
           {/* Prompt field (all tabs) */}
           <div>
-            <label className="text-xs font-semibold text-black/60 mb-1 block">
+            <label className="text-xs font-semibold text-[#1A1A1A]/60 mb-1 block">
               Prompt / Instructions (Jane can copy this)
             </label>
             <div className="relative">
@@ -267,7 +267,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
                     navigator.clipboard.writeText(promptText);
                     toast.success("Prompt copied!");
                   }}
-                  className="absolute top-2 right-2 text-gold hover:text-black"
+                  className="absolute top-2 right-2 text-gold hover:text-[#1A1A1A]"
                   title="Copy prompt"
                 >
                   <Copy className="w-4 h-4" />
@@ -283,7 +283,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
               variant="outline"
               size="sm"
               onClick={isRecording ? stopRecording : startRecording}
-              className={`border-gold/40 ${isRecording ? "text-red-600 border-red-400 bg-red-50" : "text-black"}`}
+              className={`border-gold/40 ${isRecording ? "text-red-600 border-red-400 bg-red-50" : "text-[#1A1A1A]"}`}
             >
               {isRecording ? <MicOff className="w-4 h-4 mr-1" /> : <Mic className="w-4 h-4 mr-1" />}
               {isRecording ? "Stop Recording" : "Record Voice"}
@@ -297,7 +297,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
           <Button
             onClick={handleSend}
             disabled={isSending || (!noteText && !taskTitle && !promptText && !screenshotBlob && !voiceBlob)}
-            className="w-full bg-gold hover:bg-gold/90 text-black font-bold"
+            className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold"
           >
             <Send className="w-4 h-4 mr-2" />
             {isSending ? "Sending..." : "Send to Jane"}

@@ -165,12 +165,12 @@ const FAQ = () => {
               className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Search className="w-4 h-4 mr-2 text-black" />
+              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]" />
               <span className="text-gold font-semibold">Browse FAQs</span>
             </Button>
             <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/contact">
-                <Phone className="w-4 h-4 mr-2 text-black" />
+                <Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                 <span className="text-gold font-semibold">Ask Our Team</span>
               </Link>
             </Button>
@@ -187,9 +187,9 @@ const FAQ = () => {
       </div>
 
       {/* FAQ Content with Sticky TOC Above */}
-      <section id="faq-content" className="bg-black relative">
+      <section id="faq-content" className="bg-[#1A1A1A] relative">
         {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
-        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-black/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-[#1A1A1A]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
           <FAQTableOfContents categories={categories} title="FAQ Quick Access" sticky={true} />
         </div>
 
@@ -199,7 +199,7 @@ const FAQ = () => {
             <section
               key={categoryIndex}
               id={`category-${categoryIndex}`}
-              className="py-12 md:py-16 bg-black scroll-mt-40"
+              className="py-12 md:py-16 bg-[#1A1A1A] scroll-mt-40"
             >
               <div className="jj-layer-2">
                 <motion.div
@@ -213,7 +213,7 @@ const FAQ = () => {
                     <div className="w-12 h-12 jj-icon-box-active rounded-xl">
                       <category.icon className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{category.title}</h2>
                   </motion.div>
 
                   {/* Questions (Layer 3 cards) */}
@@ -226,10 +226,10 @@ const FAQ = () => {
                             data-accordion-item={`${categoryIndex}-${faqIndex}`}
                             className="jj-card-inner p-0 overflow-hidden data-[state=open]:border-gold transition-all"
                           >
-                            <AccordionTrigger className="px-6 py-5 text-black text-left hover:text-gold hover:no-underline text-base font-medium">
+                            <AccordionTrigger className="px-6 py-5 text-[#1A1A1A] text-left hover:text-gold hover:no-underline text-base font-medium">
                               {faq.question}
                             </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-5 text-gray-700 leading-relaxed">
+                            <AccordionContent className="px-6 pb-5 text-[#5A4A2E] leading-relaxed">
                               {faq.answer}
                             </AccordionContent>
                           </AccordionItem>
@@ -245,7 +245,7 @@ const FAQ = () => {
       </section>
 
       {/* Still Have Questions */}
-      <section className="py-16 bg-black">
+      <section className="py-16 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -256,8 +256,8 @@ const FAQ = () => {
             <div className="w-14 h-14 jj-icon-box-active rounded-xl mx-auto mb-4">
               <Shield className="w-7 h-7" />
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Still Have Questions?</h2>
-            <p className="text-gray-700 mb-8 max-w-xl mx-auto leading-relaxed">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">Still Have Questions?</h2>
+            <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto leading-relaxed">
               Our team is here to help. Whether you're exploring options or ready to proceed, we’re happy to provide guidance tailored to your situation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -276,18 +276,18 @@ const FAQ = () => {
       </section>
 
       {/* Guide Navigation - Active Champagne Layer */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <GuideNavigation current="/faq" guides={GUIDE_LINKS} />
         </div>
       </section>
 
       {/* Disclaimer - Premium champagne background */}
-      <section className="py-10 bg-black border-t border-gold/20">
+      <section className="py-10 bg-[#1A1A1A] border-t border-gold/20">
         <div className="jj-layer-2">
           <div className="jj-card-inner max-w-4xl mx-auto">
-            <p className="text-center text-gray-700 text-sm leading-relaxed">
-              <span className="text-black font-semibold">Disclaimer:</span> This FAQ is provided for general informational purposes only. It does not constitute legal, financial, or professional advice. Regulations and requirements may change. Consult qualified professionals for advice specific to your situation.
+            <p className="text-center text-[#5A4A2E] text-sm leading-relaxed">
+              <span className="text-[#1A1A1A] font-semibold">Disclaimer:</span> This FAQ is provided for general informational purposes only. It does not constitute legal, financial, or professional advice. Regulations and requirements may change. Consult qualified professionals for advice specific to your situation.
             </p>
           </div>
         </div>

@@ -199,14 +199,14 @@ export default function OwnerAgenda() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="flex items-center justify-between flex-wrap gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
               <div className="flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                   <Calendar className="h-6 w-6 text-gold" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-black">Daily Agenda</h1>
-                  <p className="text-gray-600 text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+                  <h1 className="text-2xl font-bold text-[#1A1A1A]">Daily Agenda</h1>
+                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
                 </div>
               </div>
               
@@ -262,7 +262,7 @@ export default function OwnerAgenda() {
 
           {/* Main Content */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid grid-cols-4 mb-6 bg-white/80 border-2 border-gold/20">
+            <TabsList className="grid grid-cols-4 mb-6 bg-[#FDFBF7]/80 border-2 border-gold/20">
               <TabsTrigger value="today" className="relative">
                 Today
                 {(overdueTasks.length + todayTasks.length) > 0 && (
@@ -280,7 +280,7 @@ export default function OwnerAgenda() {
             <TabsContent value="today">
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Overdue Tasks */}
-                <Card className="border-2 border-red-200 bg-white/90">
+                <Card className="border-2 border-red-200 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2 text-red-600">
                       <AlertTriangle className="h-5 w-5" />
@@ -310,7 +310,7 @@ export default function OwnerAgenda() {
                 </Card>
 
                 {/* Today's Tasks */}
-                <Card className="border-2 border-gold/20 bg-white/90">
+                <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Clock className="h-5 w-5 text-gold" />
@@ -322,7 +322,7 @@ export default function OwnerAgenda() {
                       {loadingTasks ? (
                         <TasksSkeleton />
                       ) : todayTasks.length === 0 ? (
-                        <EmptyState icon={<Calendar className="h-8 w-8 text-gray-600" />} message="No tasks due today" />
+                        <EmptyState icon={<Calendar className="h-8 w-8 text-[#5A4A2E]" />} message="No tasks due today" />
                       ) : (
                         <div className="space-y-2">
                           {todayTasks.map(task => (
@@ -342,7 +342,7 @@ export default function OwnerAgenda() {
 
             {/* Messages Tab */}
             <TabsContent value="messages">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -377,7 +377,7 @@ export default function OwnerAgenda() {
 
             {/* Leads Tab */}
             <TabsContent value="leads">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
@@ -397,7 +397,7 @@ export default function OwnerAgenda() {
                     {loadingLeads ? (
                       <LeadsSkeleton />
                     ) : leadsNeedingAction.length === 0 ? (
-                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-gray-600" />} message="No leads need immediate action" />
+                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-[#5A4A2E]" />} message="No leads need immediate action" />
                     ) : (
                       <div className="space-y-2">
                         {leadsNeedingAction.map(lead => (
@@ -412,7 +412,7 @@ export default function OwnerAgenda() {
 
             {/* All Tasks Tab */}
             <TabsContent value="all">
-              <Card className="border-2 border-gold/20 bg-white/90">
+              <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <CheckSquare className="h-5 w-5 text-gold" />
@@ -463,7 +463,7 @@ function SummaryCard({
   variant?: 'default' | 'danger' | 'warning' | 'info' | 'success';
 }) {
   const variants = {
-    default: "border-gold/30 bg-white",
+    default: "border-gold/30 bg-[#FDFBF7]",
     danger: "border-red-500/30 bg-red-50",
     warning: "border-yellow-500/30 bg-yellow-50",
     info: "border-blue-500/30 bg-blue-50",
@@ -483,10 +483,10 @@ function SummaryCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-600">{label}</p>
-            <p className="text-xl font-bold text-black">{value}</p>
+            <p className="text-xs text-[#5A4A2E]">{label}</p>
+            <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
           </div>
-          <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
+          <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
             {icon}
           </div>
         </div>
@@ -507,24 +507,24 @@ function TaskItem({
   showDate?: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-lg border ${isOverdue ? 'bg-red-50 border-red-200' : 'bg-white border-gold/20'}`}>
+    <div className={`flex items-center gap-3 p-3 rounded-lg border ${isOverdue ? 'bg-red-50 border-red-200' : 'bg-[#FDFBF7] border-gold/20'}`}>
       <button
         onClick={onComplete}
         className="w-5 h-5 rounded border-2 border-gold hover:bg-gold/20 transition-colors flex-shrink-0"
       />
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm text-black truncate">{task.title}</p>
+        <p className="font-medium text-sm text-[#1A1A1A] truncate">{task.title}</p>
         {task.lead?.full_name && (
-          <p className="text-xs text-gray-600">Lead: {task.lead.full_name}</p>
+          <p className="text-xs text-[#5A4A2E]">Lead: {task.lead.full_name}</p>
         )}
         {showDate && task.due_at && (
-          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-gray-600'}`}>
+          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-[#5A4A2E]'}`}>
             {format(new Date(task.due_at), 'MMM d, h:mm a')}
           </p>
         )}
       </div>
       {task.priority && (
-        <Badge variant="outline" className={`text-xs ${task.priority === 'high' ? 'border-red-300 text-red-600' : 'border-gray-300'}`}>
+        <Badge variant="outline" className={`text-xs ${task.priority === 'high' ? 'border-red-300 text-red-600' : 'border-[#B89555]/30'}`}>
           {task.priority}
         </Badge>
       )}
@@ -543,22 +543,22 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
 
   return (
     <div 
-      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-colors"
+      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-gray-100 text-gray-600'}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-[#F7F2EA] text-[#5A4A2E]'}`}>
         <MessageSquare className="h-4 w-4" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm text-black truncate">
+        <p className="font-medium text-sm text-[#1A1A1A] truncate">
           {thread.contact_name || thread.contact_identifier}
         </p>
-        <p className="text-xs text-gray-600 truncate">{thread.last_message_preview}</p>
+        <p className="text-xs text-[#5A4A2E] truncate">{thread.last_message_preview}</p>
       </div>
       {thread.unread_count > 0 && (
-        <Badge className="bg-gold text-black text-xs">{thread.unread_count}</Badge>
+        <Badge className="bg-gold text-[#1A1A1A] text-xs">{thread.unread_count}</Badge>
       )}
-      <ChevronRight className="h-4 w-4 text-gray-600" />
+      <ChevronRight className="h-4 w-4 text-[#5A4A2E]" />
     </div>
   );
 }
@@ -566,15 +566,15 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
 function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) {
   return (
     <div 
-      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-colors"
+      className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
       <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
         <span className="text-gold font-semibold text-sm">{lead.full_name.charAt(0).toUpperCase()}</span>
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-sm text-black truncate">{lead.full_name}</p>
-        <div className="flex items-center gap-2 text-xs text-gray-600">
+        <p className="font-medium text-sm text-[#1A1A1A] truncate">{lead.full_name}</p>
+        <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
           {lead.email_lower && <span className="truncate">{lead.email_lower}</span>}
           {lead.phone_e164 && <span>{lead.phone_e164}</span>}
         </div>
@@ -582,7 +582,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
       <Badge variant="outline" className="text-xs border-gold/30">
         {lead.pipeline_stage || 'new'}
       </Badge>
-      <ChevronRight className="h-4 w-4 text-gray-600" />
+      <ChevronRight className="h-4 w-4 text-[#5A4A2E]" />
     </div>
   );
 }
@@ -591,7 +591,7 @@ function EmptyState({ icon, message }: { icon: React.ReactNode; message: string 
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       {icon}
-      <p className="text-gray-600 text-sm mt-2">{message}</p>
+      <p className="text-[#5A4A2E] text-sm mt-2">{message}</p>
     </div>
   );
 }
@@ -600,7 +600,7 @@ function TasksSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-14 bg-gray-100" />
+        <Skeleton key={i} className="h-14 bg-[#F7F2EA]" />
       ))}
     </div>
   );
@@ -610,7 +610,7 @@ function ThreadsSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-16 bg-gray-100" />
+        <Skeleton key={i} className="h-16 bg-[#F7F2EA]" />
       ))}
     </div>
   );
@@ -620,7 +620,7 @@ function LeadsSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-14 bg-gray-100" />
+        <Skeleton key={i} className="h-14 bg-[#F7F2EA]" />
       ))}
     </div>
   );

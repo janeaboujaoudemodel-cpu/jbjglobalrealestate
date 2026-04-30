@@ -7,8 +7,8 @@ export function CompetitorTrackingPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-black">Competitor Intelligence</h2>
-          <p className="text-gray-600 text-sm">Track competitor hiring and market movements</p>
+          <h2 className="text-2xl font-bold text-[#1A1A1A]">Competitor Intelligence</h2>
+          <p className="text-[#5A4A2E] text-sm">Track competitor hiring and market movements</p>
         </div>
       </div>
 
@@ -18,8 +18,8 @@ export function CompetitorTrackingPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Competitors Tracked</p>
-                <p className="text-2xl font-bold text-black">12</p>
+                <p className="text-[#5A4A2E] text-xs">Competitors Tracked</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">12</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
                 <Building2 className="h-5 w-5 text-gold" />
@@ -31,7 +31,7 @@ export function CompetitorTrackingPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Open Positions</p>
+                <p className="text-[#5A4A2E] text-xs">Open Positions</p>
                 <p className="text-2xl font-bold text-amber-600">47</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
@@ -44,7 +44,7 @@ export function CompetitorTrackingPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">New Hires (30d)</p>
+                <p className="text-[#5A4A2E] text-xs">New Hires (30d)</p>
                 <p className="text-2xl font-bold text-emerald-600">23</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
@@ -57,7 +57,7 @@ export function CompetitorTrackingPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Market Alerts</p>
+                <p className="text-[#5A4A2E] text-xs">Market Alerts</p>
                 <p className="text-2xl font-bold text-red-600">5</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
@@ -71,7 +71,7 @@ export function CompetitorTrackingPanel() {
       {/* Main Content - Premium Theme */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-black">
+          <CardTitle className="flex items-center gap-2 text-[#1A1A1A]">
             <Building2 className="h-5 w-5 text-gold" />
             Competitor Tracking Coming Soon
           </CardTitle>
@@ -81,8 +81,8 @@ export function CompetitorTrackingPanel() {
             <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gold/10 flex items-center justify-center">
               <Building2 className="h-10 w-10 text-gold" />
             </div>
-            <h3 className="text-lg font-semibold text-black mb-2">Competitive Intelligence Dashboard</h3>
-            <p className="text-gray-600 max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">Competitive Intelligence Dashboard</h3>
+            <p className="text-[#5A4A2E] max-w-md mx-auto">
               This feature will allow you to track competitor companies, monitor their 
               hiring activities, and receive alerts when key talent becomes available 
               in the UAE real estate market.

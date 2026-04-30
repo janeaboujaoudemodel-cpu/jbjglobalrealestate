@@ -344,7 +344,7 @@ export default function LeadAssignModal({
               <Button
                 onClick={handleConfirmAssign}
                 disabled={assigning}
-                className="bg-gold text-black hover:bg-gold/90"
+                className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
               >
                 {assigning ? (
                   "Assigning..."

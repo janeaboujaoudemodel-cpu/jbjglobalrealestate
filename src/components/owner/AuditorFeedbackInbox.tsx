@@ -48,10 +48,10 @@ const AuditorFeedbackInbox = ({ onClose }: { onClose?: () => void }) => {
             className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gold/10 transition-colors"
           >
             <MessageSquare className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-            <span className="text-xs text-black truncate flex-1">
+            <span className="text-xs text-[#1A1A1A] truncate flex-1">
               {f.note_text?.substring(0, 40) || f.prompt_text?.substring(0, 40) || "New feedback"}
             </span>
-            <span className="text-[10px] text-black/40 flex-shrink-0">
+            <span className="text-[10px] text-[#1A1A1A]/40 flex-shrink-0">
               {new Date(f.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
             </span>
           </Link>

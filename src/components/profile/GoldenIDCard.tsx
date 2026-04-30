@@ -148,7 +148,7 @@ export function GoldenIDCard() {
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-black font-bold text-lg shadow-lg">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-[#1A1A1A] font-bold text-lg shadow-lg">
               {getInitials()}
             </div>
             <div>

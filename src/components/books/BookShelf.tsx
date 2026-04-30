@@ -19,7 +19,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
   return (
     <>
       <div>
-        <h2 className="text-xl font-bold text-black mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[#1A1A1A] mb-6 flex items-center gap-2">
           <BookOpen className="w-5 h-5 text-gold" />
           {title}
         </h2>
@@ -35,14 +35,14 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
             >
               {/* 3D Book with spine, pages edge, and perspective */}
               <div className="relative flex-shrink-0" style={{ perspective: '1200px' }}>
-                <div className="absolute -bottom-2 left-2 right-2 h-4 bg-black/20 blur-lg rounded-full" />
+                <div className="absolute -bottom-2 left-2 right-2 h-4 bg-[#1A1A1A]/20 blur-lg rounded-full" />
                 <div
                   className="relative w-24 h-36 md:w-32 md:h-44 transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
                   style={{ transformStyle: 'preserve-3d' }}
                 >
                   {/* Front cover */}
                   <div
-                    className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-black"
+                    className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-[#1A1A1A]"
                     style={{
                       transform: 'translateZ(1px)',
                       backfaceVisibility: 'hidden',
@@ -61,7 +61,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                   {/* 3D pages edge removed to prevent white divider cutting the cover art */}
                 </div>
               </div>
-              <p className="text-xs text-black/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
+              <p className="text-xs text-[#1A1A1A]/70 text-center font-medium group-hover:text-gold transition-colors leading-tight">
                 {book.title}
               </p>
             </motion.button>
@@ -92,13 +92,13 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                 <BookCoverFace book={selectedBook} size="modal" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-xl font-bold text-black mb-1">{selectedBook.title}</h3>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-1">{selectedBook.title}</h3>
                 <p className="text-gold text-sm capitalize font-semibold">{selectedBook.category}</p>
-                <p className="text-black/40 text-xs mt-2">
+                <p className="text-[#1A1A1A]/40 text-xs mt-2">
                   {selectedBook.tableOfContents.length} chapters
                 </p>
               </div>
-              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-black transition-colors">
+              <button onClick={() => setSelectedBook(null)} className="text-gold hover:text-[#1A1A1A] transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -117,17 +117,17 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
                       navigate(directHref || `${selectedBook.href}#chapter-${index + 1}`);
                     }}
                   >
-                    <span className="w-8 h-8 rounded-lg bg-black border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
+                    <span className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-gold/30 flex items-center justify-center text-gold text-sm font-medium flex-shrink-0">
                       {index + 1}
                     </span>
-                    <span className="text-black/80 text-sm flex-1">{item.title}</span>
+                    <span className="text-[#1A1A1A]/80 text-sm flex-1">{item.title}</span>
                     {item.duration && (
-                      <span className="flex items-center gap-1 text-black/40 text-xs flex-shrink-0">
+                      <span className="flex items-center gap-1 text-[#1A1A1A]/40 text-xs flex-shrink-0">
                         <Clock className="w-3 h-3" />
                         {item.duration}
                       </span>
                     )}
-                    <ChevronRight className="w-4 h-4 text-black/20 group-hover:text-gold transition-colors flex-shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-[#1A1A1A]/20 group-hover:text-gold transition-colors flex-shrink-0" />
                   </button>
                 ))}
               </div>
@@ -136,7 +136,7 @@ export function BookShelf({ books, title = 'Books, Guides & Intelligence' }: Boo
             {/* Footer */}
             <div className="p-6 border-t border-gold/20">
               <Button
-                className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
+                className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-[#1A1A1A] font-bold py-3 rounded-xl"
                 style={{
                   boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)',
                 }}

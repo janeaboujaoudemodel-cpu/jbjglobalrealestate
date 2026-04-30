@@ -172,7 +172,7 @@ const NotificationsPreview = () => {
             onClick={() => setActiveTab('unread')}
             className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5 ${
               activeTab === 'unread'
-                ? 'bg-white text-foreground shadow-sm'
+                ? 'bg-[#FDFBF7] text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -188,7 +188,7 @@ const NotificationsPreview = () => {
             onClick={() => setActiveTab('read')}
             className={`flex-1 text-xs font-semibold py-1.5 px-3 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5 ${
               activeTab === 'read'
-                ? 'bg-white text-foreground shadow-sm'
+                ? 'bg-[#FDFBF7] text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >

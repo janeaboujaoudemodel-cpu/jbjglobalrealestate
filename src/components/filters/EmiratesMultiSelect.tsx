@@ -77,7 +77,7 @@ export function EmiratesMultiSelect({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-white/90 border-gold/30 text-black hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -91,7 +91,7 @@ export function EmiratesMultiSelect({
       <PopoverContent 
         className={cn(
           "w-[260px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-white border-gold/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
         )}
         align="start"
       >
@@ -103,8 +103,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-gray-600 hover:bg-[#2a2a2a]"
-                  : "text-black/50 hover:bg-champagne-light"
+                  ? "text-[#5A4A2E] hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A]/50 hover:bg-champagne-light"
               )}
             >
               <span>UAE Emirates</span>
@@ -131,13 +131,13 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-gray-600" : "border-gold/40",
+                      isDark ? "border-[#1A1A1A]" : "border-gold/40",
                       isSelected && "bg-gold border-gold"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-black" />}
+                      {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
                     </div>
                     
-                    <span className={isDark ? "text-white" : "text-black"}>
+                    <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
                       {emirate.label}
                     </span>
                   </button>
@@ -149,7 +149,7 @@ export function EmiratesMultiSelect({
           {/* Divider */}
           <div className={cn(
             "mx-3 border-t",
-            isDark ? "border-gray-700" : "border-gold/20"
+            isDark ? "border-[#1A1A1A]" : "border-gold/20"
           )} />
           
           {/* International Section */}
@@ -159,8 +159,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-gray-600 hover:bg-[#2a2a2a]"
-                  : "text-black/50 hover:bg-champagne-light"
+                  ? "text-[#5A4A2E] hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A]/50 hover:bg-champagne-light"
               )}
             >
               <span>International</span>
@@ -187,13 +187,13 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-gray-600" : "border-gold/40",
+                      isDark ? "border-[#1A1A1A]" : "border-gold/40",
                       isSelected && "bg-gold border-gold"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-black" />}
+                      {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
                     </div>
                     
-                    <span className={isDark ? "text-white" : "text-black"}>
+                    <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
                       {location.label}
                     </span>
                   </button>
@@ -206,11 +206,11 @@ export function EmiratesMultiSelect({
         {/* Footer */}
         <div className={cn(
           "p-2 border-t flex items-center justify-between",
-          isDark ? "border-gray-700 bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
+          isDark ? "border-[#1A1A1A] bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
         )}>
           <span className={cn(
             "text-xs",
-            isDark ? "text-gray-600" : "text-black/60"
+            isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"
           )}>
             {selectedCount} selected
           </span>
@@ -221,8 +221,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "text-xs px-2 py-1 rounded transition-colors",
                 isDark 
-                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-black/60 hover:text-black hover:bg-champagne"
+                  ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne"
               )}
             >
               Clear

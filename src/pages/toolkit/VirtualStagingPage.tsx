@@ -392,7 +392,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                       <Button
                         onClick={generateStaging}
                         disabled={processing}
-                        className="flex-1 bg-gold text-black hover:bg-gold/90"
+                        className="flex-1 bg-gold text-[#1A1A1A] hover:bg-gold/90"
                       >
                         {processing ? (
                           <>

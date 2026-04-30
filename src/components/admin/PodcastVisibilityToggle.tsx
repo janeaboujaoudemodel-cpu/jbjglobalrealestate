@@ -78,12 +78,12 @@ export const PodcastVisibilityToggle = () => {
       <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
               <Mic className="w-5 h-5 text-gold" />
             </div>
             <div>
-              <CardTitle className="text-black text-lg">JBJ Podcast Visibility</CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardTitle className="text-[#1A1A1A] text-lg">JBJ Podcast Visibility</CardTitle>
+              <CardDescription className="text-[#5A4A2E]">
                 Control podcast section visibility on homepage
               </CardDescription>
             </div>
@@ -91,7 +91,7 @@ export const PodcastVisibilityToggle = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Current Status */}
-          <div className="flex items-center justify-between p-4 rounded-xl bg-white/50 border border-gold/20">
+          <div className="flex items-center justify-between p-4 rounded-xl bg-[#FDFBF7]/50 border border-gold/20">
             <div className="flex items-center gap-3">
               {isPodcastVisible ? (
                 <Eye className="w-5 h-5 text-green-600" />
@@ -99,10 +99,10 @@ export const PodcastVisibilityToggle = () => {
                 <EyeOff className="w-5 h-5 text-amber-600" />
               )}
               <div>
-                <p className="font-medium text-black">
+                <p className="font-medium text-[#1A1A1A]">
                   {isPodcastVisible ? "Visible to Public" : "Hidden - Owner Only"}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#5A4A2E]">
                   {isPodcastVisible 
                     ? "All visitors can see the JBJ Podcast section" 
                     : "Only the Owner can see the podcast section"
@@ -158,9 +158,9 @@ export const PodcastVisibilityToggle = () => {
 
       {/* Confirmation Dialog */}
       <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
-        <AlertDialogContent className="bg-white border-gold/30">
+        <AlertDialogContent className="bg-[#FDFBF7] border-gold/30">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-black">
+            <AlertDialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               {pendingValue ? (
                 <>
                   <Eye className="w-5 h-5 text-green-600" />
@@ -173,7 +173,7 @@ export const PodcastVisibilityToggle = () => {
                 </>
               )}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-600">
+            <AlertDialogDescription className="text-[#5A4A2E]">
               {pendingValue ? (
                 <>
                   This will make the <strong>JBJ Podcast section visible</strong> to all website visitors:
@@ -199,7 +199,7 @@ export const PodcastVisibilityToggle = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancel} className="border-gray-300">
+            <AlertDialogCancel onClick={handleCancel} className="border-[#B89555]/30">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

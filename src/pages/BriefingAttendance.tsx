@@ -386,7 +386,7 @@ const BriefingAttendance = () => {
                   {cameraActive ? (
                     <div className="relative rounded-xl overflow-hidden">
                       <video ref={videoRef} className="w-full rounded-xl" autoPlay playsInline muted />
-                      <Button onClick={capturePhoto} className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black shadow-lg hover:bg-gray-100 rounded-full w-16 h-16">
+                      <Button onClick={capturePhoto} className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#FDFBF7] text-[#1A1A1A] shadow-lg hover:bg-[#F7F2EA] rounded-full w-16 h-16">
                         <Camera className="w-8 h-8" />
                       </Button>
                     </div>

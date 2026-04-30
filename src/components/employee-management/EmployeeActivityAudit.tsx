@@ -139,10 +139,10 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">Total Employees</p>
-                <p className="text-2xl font-bold text-black">{summaries.length}</p>
+                <p className="text-xs text-[#5A4A2E]">Total Employees</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{summaries.length}</p>
               </div>
-              <Users className="w-8 h-8 text-gray-500" />
+              <Users className="w-8 h-8 text-[#8A7556]" />
             </div>
           </CardContent>
         </Card>
@@ -150,7 +150,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">High Performers</p>
+                <p className="text-xs text-[#5A4A2E]">High Performers</p>
                 <p className="text-2xl font-bold text-green-600">
                   {summaries.filter(s => s.avg_activity_score >= 80).length}
                 </p>
@@ -163,7 +163,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">Needs Attention</p>
+                <p className="text-xs text-[#5A4A2E]">Needs Attention</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {summaries.filter(s => s.avg_activity_score < 60).length}
                 </p>
@@ -176,7 +176,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-600">Avg Score</p>
+                <p className="text-xs text-[#5A4A2E]">Avg Score</p>
                 <p className="text-2xl font-bold text-blue-600">
                   {Math.round(summaries.reduce((a, b) => a + b.avg_activity_score, 0) / summaries.length || 0)}%
                 </p>
@@ -193,11 +193,11 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
         <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <Eye className="w-5 h-5 text-gold" />
                 Employee Activity Scores
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-[#5A4A2E]">
                 Real-time performance monitoring
               </CardDescription>
             </div>
@@ -218,13 +218,13 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                     className={`w-full text-left p-4 rounded-lg border transition-all ${
                       selectedEmployee === emp.user_id 
                         ? 'bg-gold/20 border-gold' 
-                        : 'bg-white/50 border-gold/20 hover:border-gold/40'
+                        : 'bg-[#FDFBF7]/50 border-gold/20 hover:border-gold/40'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <p className="font-medium text-black">{emp.full_name}</p>
-                        <p className="text-xs text-gray-600">{emp.department}</p>
+                        <p className="font-medium text-[#1A1A1A]">{emp.full_name}</p>
+                        <p className="text-xs text-[#5A4A2E]">{emp.department}</p>
                       </div>
                       <span className={`text-2xl font-bold ${getScoreColor(emp.avg_activity_score)}`}>
                         {emp.avg_activity_score}%
@@ -234,7 +234,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                       value={emp.avg_activity_score} 
                       className="h-2"
                     />
-                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-600">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {emp.total_hours}h
@@ -258,7 +258,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
         {/* Detail Panel */}
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <CardHeader>
-            <CardTitle className="text-black text-sm flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] text-sm flex items-center gap-2">
               <Activity className="w-4 h-4 text-gold" />
               {selectedSummary ? selectedSummary.full_name : 'Select Employee'}
             </CardTitle>
@@ -268,38 +268,38 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
               <div className="space-y-4">
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/50 rounded-lg p-3 border border-gold/20">
-                    <p className="text-xs text-gray-600">Sessions</p>
-                    <p className="text-lg font-bold text-black">{selectedSummary.total_sessions}</p>
+                  <div className="bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/20">
+                    <p className="text-xs text-[#5A4A2E]">Sessions</p>
+                    <p className="text-lg font-bold text-[#1A1A1A]">{selectedSummary.total_sessions}</p>
                   </div>
-                  <div className="bg-white/50 rounded-lg p-3 border border-gold/20">
-                    <p className="text-xs text-gray-600">Hours</p>
-                    <p className="text-lg font-bold text-black">{selectedSummary.total_hours}</p>
+                  <div className="bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/20">
+                    <p className="text-xs text-[#5A4A2E]">Hours</p>
+                    <p className="text-lg font-bold text-[#1A1A1A]">{selectedSummary.total_hours}</p>
                   </div>
-                  <div className="bg-white/50 rounded-lg p-3 border border-gold/20">
-                    <p className="text-xs text-gray-600">Leads</p>
-                    <p className="text-lg font-bold text-black">{selectedSummary.total_leads}</p>
+                  <div className="bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/20">
+                    <p className="text-xs text-[#5A4A2E]">Leads</p>
+                    <p className="text-lg font-bold text-[#1A1A1A]">{selectedSummary.total_leads}</p>
                   </div>
-                  <div className="bg-white/50 rounded-lg p-3 border border-gold/20">
-                    <p className="text-xs text-gray-600">Calls</p>
-                    <p className="text-lg font-bold text-black">{selectedSummary.total_calls}</p>
+                  <div className="bg-[#FDFBF7]/50 rounded-lg p-3 border border-gold/20">
+                    <p className="text-xs text-[#5A4A2E]">Calls</p>
+                    <p className="text-lg font-bold text-[#1A1A1A]">{selectedSummary.total_calls}</p>
                   </div>
                 </div>
 
                 {/* Activity Score Breakdown */}
-                <div className="bg-white/50 rounded-lg p-4 border border-gold/20">
-                  <p className="text-sm font-medium text-black mb-3">Performance Metrics</p>
+                <div className="bg-[#FDFBF7]/50 rounded-lg p-4 border border-gold/20">
+                  <p className="text-sm font-medium text-[#1A1A1A] mb-3">Performance Metrics</p>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-600">Engagement</span>
-                      <span className="font-medium text-black">High</span>
+                      <span className="text-[#5A4A2E]">Engagement</span>
+                      <span className="font-medium text-[#1A1A1A]">High</span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-600">Response Time</span>
+                      <span className="text-[#5A4A2E]">Response Time</span>
                       <span className="font-medium text-green-600">Fast</span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-600">Lead Conversion</span>
+                      <span className="text-[#5A4A2E]">Lead Conversion</span>
                       <span className="font-medium text-amber-600">Average</span>
                     </div>
                   </div>
@@ -307,16 +307,16 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
 
                 {/* Recent Sessions */}
                 <div>
-                  <p className="text-sm font-medium text-black mb-2">Recent Sessions</p>
+                  <p className="text-sm font-medium text-[#1A1A1A] mb-2">Recent Sessions</p>
                   <ScrollArea className="h-[150px]">
                     <div className="space-y-2">
                       {activityRecords.slice(0, 5).map((record) => (
                         <div 
                           key={record.id}
-                          className="text-xs bg-white/50 rounded p-2 border border-gold/20"
+                          className="text-xs bg-[#FDFBF7]/50 rounded p-2 border border-gold/20"
                         >
                           <div className="flex justify-between">
-                            <span className="text-gray-600">
+                            <span className="text-[#5A4A2E]">
                               {record.login_at ? format(new Date(record.login_at), 'MMM d, HH:mm') : 'N/A'}
                             </span>
                             <Badge className="text-[10px] bg-gold/20 text-gold border-gold/30">
@@ -326,7 +326,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                         </div>
                       ))}
                       {activityRecords.length === 0 && (
-                        <p className="text-xs text-gray-600 text-center py-4">No sessions recorded</p>
+                        <p className="text-xs text-[#5A4A2E] text-center py-4">No sessions recorded</p>
                       )}
                     </div>
                   </ScrollArea>
@@ -334,8 +334,8 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
               </div>
             ) : (
               <div className="text-center py-12">
-                <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-sm text-gray-600">Select an employee to view details</p>
+                <Eye className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                <p className="text-sm text-[#5A4A2E]">Select an employee to view details</p>
               </div>
             )}
           </CardContent>

@@ -234,7 +234,7 @@ const Automations = () => {
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="sm" className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10" onClick={() => navigate(-1)}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
@@ -244,12 +244,12 @@ const Automations = () => {
                 <Zap className="h-5 w-5 text-gold" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-black">Smart Automations</h1>
-                <p className="text-xs text-gray-600">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
+                <h1 className="text-xl font-bold text-[#1A1A1A]">Smart Automations</h1>
+                <p className="text-xs text-[#5A4A2E]">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
-          <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 shadow-lg shadow-gold/20">
+          <Button className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110 shadow-lg shadow-gold/20">
             <Plus className="h-4 w-4 mr-2" />
             Create Rule
           </Button>
@@ -272,30 +272,30 @@ const Automations = () => {
                     <div className={`p-3 rounded-xl border transition-all ${
                       rule.isActive 
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
-                        : 'bg-gray-100 border-gray-200'
+                        : 'bg-[#F7F2EA] border-[#B89555]/30'
                     }`}>
-                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-gray-600'}`} />
+                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-black">{rule.name}</h3>
+                        <h3 className="font-semibold text-[#1A1A1A]">{rule.name}</h3>
                         {rule.adminOnly && (
                           <Badge variant="outline" className="text-xs border-amber-500/30 text-amber-600 bg-amber-50">
                             Admin Only
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 mt-0.5">{rule.description}</p>
+                      <p className="text-sm text-[#5A4A2E] mt-0.5">{rule.description}</p>
                       <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-gray-600">
-                          <strong className="text-black">Trigger:</strong> {rule.trigger}
+                        <span className="text-xs text-[#5A4A2E]">
+                          <strong className="text-[#1A1A1A]">Trigger:</strong> {rule.trigger}
                         </span>
-                        <span className="text-xs text-gray-600">
-                          <strong className="text-black">Action:</strong> {rule.action}
+                        <span className="text-xs text-[#5A4A2E]">
+                          <strong className="text-[#1A1A1A]">Action:</strong> {rule.action}
                         </span>
                         {rule.frequency && (
-                          <span className="text-xs text-gray-600">
-                            <strong className="text-black">Frequency:</strong> {rule.frequency}
+                          <span className="text-xs text-[#5A4A2E]">
+                            <strong className="text-[#1A1A1A]">Frequency:</strong> {rule.frequency}
                           </span>
                         )}
                       </div>
@@ -305,7 +305,7 @@ const Automations = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-gray-600 hover:text-gold hover:bg-gold/10"
+                      className="text-[#5A4A2E] hover:text-gold hover:bg-gold/10"
                       onClick={() => toast.info(`Settings for "${rule.name}" - Configuration panel coming soon`)}
                     >
                       <Settings className="h-4 w-4" />
@@ -326,11 +326,11 @@ const Automations = () => {
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
-                <Shield className="h-6 w-6 text-black" />
+                <Shield className="h-6 w-6 text-[#1A1A1A]" />
               </div>
               <div>
-                <h3 className="font-semibold text-black">About Smart Automations</h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <h3 className="font-semibold text-[#1A1A1A]">About Smart Automations</h3>
+                <p className="text-sm text-[#5A4A2E] mt-1">
                   Automations run in the background to help Jane Bou Jaoude work more efficiently. 
                   All automation triggers are approval-based by default. 
                   AI may suggest workflows but will NOT auto-activate without explicit Owner approval.

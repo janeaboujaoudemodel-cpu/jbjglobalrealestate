@@ -271,9 +271,9 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-black flex items-center gap-3">
+          <DialogTitle className="text-2xl font-bold text-[#1A1A1A] flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
               <UserCheck className="w-5 h-5 text-gold" />
             </div>
@@ -289,11 +289,11 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 {photoPreview ? (
                   <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <Camera className="w-12 h-12 text-gray-600" />
+                  <Camera className="w-12 h-12 text-[#5A4A2E]" />
                 )}
               </div>
               <label className="absolute bottom-0 right-0 w-10 h-10 bg-gold rounded-full flex items-center justify-center cursor-pointer hover:bg-gold/90 transition-colors">
-                <Upload className="w-5 h-5 text-black" />
+                <Upload className="w-5 h-5 text-[#1A1A1A]" />
                 <input
                   type="file"
                   accept="image/*"
@@ -307,7 +307,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Personal Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <User className="w-4 h-4 text-gold" />
                 Full Name *
               </Label>
@@ -315,13 +315,13 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.fullName}
                 onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
                 placeholder="Enter full name"
-                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+                className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <Mail className="w-4 h-4 text-gold" />
                 Email (Auto-generated if empty)
               </Label>
@@ -330,12 +330,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="name@jbj.ae"
-                className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold"
+                className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold"
               />
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <Phone className="w-4 h-4 text-gold" />
                 Phone Number
               </Label>
@@ -347,7 +347,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <Globe className="w-4 h-4 text-gold" />
                 Nationality *
               </Label>
@@ -361,7 +361,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
           {/* Languages */}
           <div className="space-y-2">
-            <Label className="text-black font-medium flex items-center gap-2">
+            <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
               <Languages className="w-4 h-4 text-gold" />
               Languages Spoken
             </Label>
@@ -374,7 +374,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
           {/* Position Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-gold" />
                 Job Title *
               </Label>
@@ -389,7 +389,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-gold" />
                 Department *
               </Label>
@@ -404,7 +404,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-gold" />
                 CRM Role
               </Label>
@@ -419,7 +419,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-black font-medium flex items-center gap-2">
+              <Label className="text-[#1A1A1A] font-medium flex items-center gap-2">
                 <User className="w-4 h-4 text-gold" />
                 Reports To
               </Label>
@@ -436,12 +436,12 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
           {/* Notes */}
           <div className="space-y-2">
-            <Label className="text-black font-medium">Additional Notes</Label>
+            <Label className="text-[#1A1A1A] font-medium">Additional Notes</Label>
             <Textarea
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Any additional information about the new joiner..."
-              className="bg-white border-2 border-gold/30 text-black placeholder:text-black/40 focus:border-gold min-h-[100px]"
+              className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:border-gold min-h-[100px]"
             />
           </div>
 
@@ -451,14 +451,14 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-2 border-gold/30 text-black hover:bg-gold/10 hover:border-gold"
+              className="border-2 border-gold/30 text-[#1A1A1A] hover:bg-gold/10 hover:border-gold"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-gold text-black hover:bg-gold/90"
+              className="bg-gold text-[#1A1A1A] hover:bg-gold/90"
             >
               {isSubmitting ? (
                 <>

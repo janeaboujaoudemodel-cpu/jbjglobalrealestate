@@ -52,7 +52,7 @@ function CenteredAudioPreview({ src, label, onRemove }: { src: string | null; la
   return (
     <div className="mx-auto max-w-xl w-full">
       <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-gold/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
-        {label && <p className="text-xs text-gray-700 font-medium mb-3 tracking-wider uppercase">{label}</p>}
+        {label && <p className="text-xs text-[#5A4A2E] font-medium mb-3 tracking-wider uppercase">{label}</p>}
         <audio controls src={src} className="w-full [&::-webkit-media-controls-panel]:bg-transparent" />
         {onRemove && (
           <Button variant="ghost" size="sm" onClick={onRemove} className="mt-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 text-xs">
@@ -110,7 +110,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/90 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
-          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600 min-h-[60px]" rows={3} />
+          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E] min-h-[60px]" rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-white/70 text-xs">Tone</Label>
@@ -129,7 +129,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
               className="bg-[#1a1708] border-gold/20 text-white h-8 text-xs" />
           </div>
         </div>
-        <Button onClick={generate} disabled={loading} className="w-full bg-gold text-black hover:bg-gold/90 h-8 text-xs font-semibold">
+        <Button onClick={generate} disabled={loading} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 h-8 text-xs font-semibold">
           {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <Wand2 className="w-3.5 h-3.5 mr-1" />}
           Generate Script
         </Button>
@@ -265,8 +265,8 @@ function VoiceStudioPanel() {
               <div className="relative">
                 <Textarea value={script} onChange={e => setScript(e.target.value.slice(0, 5000))}
                   placeholder="Type or generate your script..."
-                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600 min-h-[150px]" rows={6} />
-                <span className="absolute bottom-2 right-3 text-[10px] text-gray-600">{script.length}/5000</span>
+                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E] min-h-[150px]" rows={6} />
+                <span className="absolute bottom-2 right-3 text-[10px] text-[#5A4A2E]">{script.length}/5000</span>
               </div>
 
               {script && (
@@ -293,7 +293,7 @@ function VoiceStudioPanel() {
                 onRemove={() => { if (generatedUrl) URL.revokeObjectURL(generatedUrl); setGeneratedUrl(null); }} />
 
               {generatedUrl && (
-                <Button onClick={downloadAudio} className="w-full bg-gold text-black hover:bg-gold/90 font-semibold">
+                <Button onClick={downloadAudio} className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
                   <Download className="w-4 h-4 mr-2" /> Download {outputFormat.toUpperCase()}
                 </Button>
               )}
@@ -411,13 +411,13 @@ function VoiceStudioPanel() {
 
               {isOwner ? (
                 <Button onClick={generateWithElevenLabs} disabled={generating || !script.trim()}
-                  className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-black font-bold hover:brightness-110 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                  className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-[#1A1A1A] font-bold hover:brightness-110 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
                   {generating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Crown className="w-4 h-4 mr-2" />}
                   Generate with ElevenLabs
                 </Button>
               ) : (
                 <Button onClick={previewVoice} disabled={!script.trim()}
-                  className="w-full bg-gold text-black hover:bg-gold/90 font-semibold">
+                  className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
                   <Play className="w-4 h-4 mr-2" /> Generate Voice
                 </Button>
               )}
@@ -501,7 +501,7 @@ function VoiceToTextPanel() {
         <CardContent className="space-y-4">
           <div className="flex gap-3 flex-wrap">
             <Button onClick={isRecording ? stopRecording : startRecording}
-              className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-black hover:bg-gold/90'}>
+              className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-[#1A1A1A] hover:bg-gold/90'}>
               {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop Recording</> : <><Mic className="w-4 h-4 mr-2" />Record Audio</>}
             </Button>
             <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="border-gold/30 text-gold hover:bg-gold/10">
@@ -524,7 +524,7 @@ function VoiceToTextPanel() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={transcribe} disabled={!audioFile || processing} className="bg-gold text-black hover:bg-gold/90 font-semibold">
+            <Button onClick={transcribe} disabled={!audioFile || processing} className="bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
               {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Transcribe'}
             </Button>
           </div>
@@ -622,7 +622,7 @@ function AudioEnhancePanel() {
                 }`}>
                 <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/90'}`} />
                 <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
-                <p className="text-[10px] text-gray-600 mt-0.5">{m.desc}</p>
+                <p className="text-[10px] text-[#5A4A2E] mt-0.5">{m.desc}</p>
               </button>
             ))}
           </div>
@@ -647,7 +647,7 @@ function AudioEnhancePanel() {
           )}
 
           <Button onClick={enhanceAudio} disabled={processing || !audioFile}
-            className="w-full bg-gold text-black hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+            className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
             {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Processing...</> : <><Sparkles className="w-4 h-4 mr-2" />Enhance Audio</>}
           </Button>
 
@@ -810,7 +810,7 @@ function AudioEffectsPanel() {
 
           {audioFile && (
             <Button onClick={applyEffects} disabled={processing}
-              className="w-full bg-gold text-black hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+              className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
               {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Applying...</> : <><Waves className="w-4 h-4 mr-2" />Apply Effects</>}
             </Button>
           )}
@@ -934,7 +934,7 @@ function VoiceCloningPanel() {
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 1: Record Voice Samples</Label>
             <div className="flex gap-2 flex-wrap">
               <Button onClick={isRecording ? stopRecording : startRecording}
-                className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-black hover:bg-gold/90'}>
+                className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-[#1A1A1A] hover:bg-gold/90'}>
                 {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop</> : <><Mic className="w-4 h-4 mr-2" />Record Sample</>}
               </Button>
               <span className="text-xs text-white/90 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
@@ -951,9 +951,9 @@ function VoiceCloningPanel() {
           <div className="space-y-3">
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
             <Input value={voiceName} onChange={e => setVoiceName(e.target.value)} placeholder="Voice name..."
-              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600" />
+              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E]" />
             <Button onClick={cloneVoice} disabled={cloning || recordings.length === 0}
-              className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-black font-bold hover:brightness-110">
+              className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-[#1A1A1A] font-bold hover:brightness-110">
               {cloning ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Cloning...</> : <><MicVocal className="w-4 h-4 mr-2" />Clone Voice</>}
             </Button>
           </div>
@@ -964,9 +964,9 @@ function VoiceCloningPanel() {
               <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
               <p className="text-[10px] text-emerald-400">✓ Voice ID: {clonedVoiceId}</p>
               <Textarea value={ttsText} onChange={e => setTtsText(e.target.value)} placeholder="Enter text to speak..."
-                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600" rows={3} />
+                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E]" rows={3} />
               <Button onClick={generateTTS} disabled={ttsGenerating || !ttsText.trim()}
-                className="w-full bg-gold text-black hover:bg-gold/90 font-semibold">
+                className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
                 {ttsGenerating ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Generating...</> : <><Play className="w-4 h-4 mr-2" />Generate</>}
               </Button>
               <CenteredAudioPreview src={ttsUrl} label="Cloned Voice Output" />
@@ -1063,7 +1063,7 @@ function AudioTranslationPanel() {
           </div>
 
           <Button onClick={translateAudio} disabled={!audioFile || processing}
-            className="w-full bg-gold text-black hover:bg-gold/90 font-semibold max-w-xl mx-auto">
+            className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold max-w-xl mx-auto">
             {processing ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Translating...</> : 'Translate Audio'}
           </Button>
 

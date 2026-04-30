@@ -103,7 +103,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({ value, onC
           <SelectItem
             key={nat.value}
             value={nat.value}
-            className="text-black hover:bg-gold/20 focus:bg-gold/20"
+            className="text-[#1A1A1A] hover:bg-gold/20 focus:bg-gold/20"
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">{nat.flag}</span>

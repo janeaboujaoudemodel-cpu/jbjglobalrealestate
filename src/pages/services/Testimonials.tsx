@@ -211,17 +211,17 @@ const Testimonials = () => {
     <motion.div key={index} variants={fadeInUp}>
       <Card className="jj-card-inner h-full">
         <CardContent className="p-6">
-          <Quote className="w-8 h-8 text-gray-400 mb-4" />
-          <p className="text-gray-700 mb-6 italic">
+          <Quote className="w-8 h-8 text-[#8A7556] mb-4" />
+          <p className="text-[#5A4A2E] mb-6 italic">
             "{testimonial.content}"
           </p>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center">
                 <User className="w-5 h-5 text-gold" />
               </div>
               <div>
-                <p className="font-semibold text-black">{testimonial.name}</p>
+                <p className="font-semibold text-[#1A1A1A]">{testimonial.name}</p>
                 <p className="text-sm text-white/90">{testimonial.role} • {testimonial.location}</p>
               </div>
             </div>
@@ -246,14 +246,14 @@ const Testimonials = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <Star className="w-12 h-12 text-gray-600" />
+                <Star className="w-12 h-12 text-[#5A4A2E]" />
               </div>
-              <p className="text-gray-600 text-sm tracking-widest uppercase">Client Stories</p>
+              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">Client Stories</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -271,7 +271,7 @@ const Testimonials = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Star className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -303,13 +303,13 @@ const Testimonials = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* FEATURED TESTIMONIALS INTRO */}
-      <section id="featured" className="bg-black py-20">
+      <section id="featured" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -319,14 +319,14 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Featured Testimonials
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-gray-600 text-center max-w-3xl mx-auto mb-12"
+              className="text-[#5A4A2E] text-center max-w-3xl mx-auto mb-12"
             >
               A selection of verified client experiences across buying, selling, rentals, and advisory support. Testimonials may be anonymized upon request.
             </motion.p>
@@ -337,31 +337,31 @@ const Testimonials = () => {
                 <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent mb-8">
                   <TabsTrigger 
                     value="buyers" 
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Buyers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="sellers"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Sellers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="investors"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Investors
                   </TabsTrigger>
                   <TabsTrigger 
                     value="landlords"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Landlords
                   </TabsTrigger>
                   <TabsTrigger 
                     value="partners"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Brokers & Partners
                   </TabsTrigger>
@@ -403,7 +403,7 @@ const Testimonials = () => {
       </section>
 
       {/* VIDEO TESTIMONIALS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -413,14 +413,14 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-6"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Video Testimonials
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-gray-600 text-center max-w-2xl mx-auto mb-12"
+              className="text-[#5A4A2E] text-center max-w-2xl mx-auto mb-12"
             >
               Video testimonials appear here.
             </motion.p>
@@ -428,15 +428,15 @@ const Testimonials = () => {
               {videoTestimonials.map((video, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <Card className="jj-card-inner overflow-hidden">
-                    <div className="aspect-video bg-gray-200 flex items-center justify-center">
+                    <div className="aspect-video bg-[#EFE6D6] flex items-center justify-center">
                       <div className="text-center">
                         <Video className="w-12 h-12 text-gold mx-auto mb-2" />
                         <p className="text-sm text-white/90">Video Coming Soon</p>
                       </div>
                     </div>
                     <CardContent className="p-4">
-                      <h3 className="font-semibold text-black">{video.title}</h3>
-                      <p className="text-sm text-gray-600">{video.client}</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">{video.title}</h3>
+                      <p className="text-sm text-[#5A4A2E]">{video.client}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -447,7 +447,7 @@ const Testimonials = () => {
       </section>
 
       {/* SUBMIT TESTIMONIAL FORM */}
-      <section id="submit-testimonial" className="bg-black py-20">
+      <section id="submit-testimonial" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -458,7 +458,7 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Submit a Testimonial
@@ -468,7 +468,7 @@ const Testimonials = () => {
                 <CardContent className="p-6">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-black">Full Name (optional if anonymized)</Label>
+                      <Label htmlFor="name" className="text-[#1A1A1A]">Full Name (optional if anonymized)</Label>
                       <Input
                         id="name"
                         value={formData.name}
@@ -478,7 +478,7 @@ const Testimonials = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-black">Email (required for verification, not public) *</Label>
+                      <Label htmlFor="email" className="text-[#1A1A1A]">Email (required for verification, not public) *</Label>
                       <Input
                         id="email"
                         type="email"
@@ -490,7 +490,7 @@ const Testimonials = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="serviceType" className="text-black">Service Type</Label>
+                      <Label htmlFor="serviceType" className="text-[#1A1A1A]">Service Type</Label>
                       <Select
                         value={formData.serviceType}
                         onValueChange={(value) => setFormData({ ...formData, serviceType: value })}
@@ -509,7 +509,7 @@ const Testimonials = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="testimonial" className="text-black">Testimonial *</Label>
+                      <Label htmlFor="testimonial" className="text-[#1A1A1A]">Testimonial *</Label>
                       <Textarea
                         id="testimonial"
                         value={formData.testimonial}
@@ -521,7 +521,7 @@ const Testimonials = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="rating" className="text-black">Rating (optional)</Label>
+                      <Label htmlFor="rating" className="text-[#1A1A1A]">Rating (optional)</Label>
                       <Select
                         value={formData.rating}
                         onValueChange={(value) => setFormData({ ...formData, rating: value })}
@@ -539,7 +539,7 @@ const Testimonials = () => {
                       </Select>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 rounded-xl bg-black/5 border border-gold/20">
+                    <div className="flex items-start gap-3 p-4 rounded-xl bg-[#1A1A1A]/5 border border-gold/20">
                       <Checkbox
                         id="consent"
                         checked={formData.consentToPublish}
@@ -547,7 +547,7 @@ const Testimonials = () => {
                           setFormData({ ...formData, consentToPublish: checked as boolean })
                         }
                       />
-                      <Label htmlFor="consent" className="text-sm text-gray-700 leading-relaxed">
+                      <Label htmlFor="consent" className="text-sm text-[#5A4A2E] leading-relaxed">
                         I confirm this testimonial reflects my genuine experience and I allow JBJ Global Real Estate to publish it on the website. I understand personal details can be anonymized upon request. *
                       </Label>
                     </div>
@@ -565,7 +565,7 @@ const Testimonials = () => {
       </section>
 
       {/* PRIVACY & PUBLISHING STANDARD */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -576,18 +576,18 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Privacy & Publishing Standard
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center shrink-0">
+                <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
                   <Lock className="w-7 h-7 text-gold" />
                 </div>
                 <div>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-[#5A4A2E] leading-relaxed">
                     We verify submissions for authenticity and remove sensitive data. If you request anonymization, your testimonial can be published without identifying details.
                   </p>
                 </div>
@@ -598,7 +598,7 @@ const Testimonials = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -609,7 +609,7 @@ const Testimonials = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -623,9 +623,9 @@ const Testimonials = () => {
                     className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
-                      <span className="text-black font-medium">{faq.question}</span>
+                      <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-gray-600">
+                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -637,7 +637,7 @@ const Testimonials = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -649,12 +649,12 @@ const Testimonials = () => {
             <div className="jj-card-inner border-2 border-gold/30">
               <Star className="w-12 h-12 text-gold mx-auto mb-6" />
               <h2
-                className="text-3xl md:text-4xl font-bold text-black mb-4"
+                className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
                 Share Your Experience
               </h2>
-              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
                 Submit a testimonial and help future clients choose with confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

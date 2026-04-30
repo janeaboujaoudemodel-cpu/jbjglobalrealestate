@@ -105,16 +105,16 @@ const Partners = () => {
                 </button>
               </motion.div>
 
-              <motion.h1 variants={fadeIn} className="text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-6 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h1 variants={fadeIn} className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-6 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Strategic Partnerships with{" "}
                 <span className="text-gold">JBJ Global Real Estate</span>
               </motion.h1>
 
-              <motion.p variants={fadeIn} className="text-lg md:text-xl text-gray-600 mb-4 leading-relaxed max-w-3xl mx-auto" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.p variants={fadeIn} className="text-lg md:text-xl text-[#5A4A2E] mb-4 leading-relaxed max-w-3xl mx-auto" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Build with Us. Scale with Us. Lead with Us.
               </motion.p>
 
-              <motion.p variants={fadeIn} className="text-base text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto">
+              <motion.p variants={fadeIn} className="text-base text-[#5A4A2E] mb-10 leading-relaxed max-w-3xl mx-auto">
                 We collaborate with developers, investors, private offices, brokers, legal firms, hospitality brands, and global institutions to create long-term value and high-performance real estate ecosystems.
               </motion.p>
 
@@ -143,16 +143,16 @@ const Partners = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-5xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Why Collaborate with <span className="text-gold">JBJ</span>
               </motion.h2>
 
-              <motion.p variants={fadeIn} className="text-center text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              <motion.p variants={fadeIn} className="text-center text-[#5A4A2E] mb-12 max-w-3xl mx-auto leading-relaxed">
                 JBJ Global Real Estate operates at the intersection of luxury advisory, structured real estate execution, digital innovation, and international client networks. Our partnership model is designed to create scalable, compliant, and measurable growth.
               </motion.p>
 
               <motion.div variants={fadeIn} className="jj-card-inner p-8 md:p-10">
-                <h3 className="text-xl font-bold text-black mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <h3 className="text-xl font-bold text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
                   What Makes Us <span className="text-gold">Different</span>
                 </h3>
                 <div className="grid md:grid-cols-2 gap-3">
@@ -167,12 +167,12 @@ const Partners = () => {
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm">{item}</span>
+                      <span className="text-[#5A4A2E] text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
                 <div className="mt-8 pt-6 border-t border-gold/20">
-                  <p className="text-gray-600 italic text-sm">We do not offer generic collaborations. <span className="text-gold font-semibold not-italic">We build structured alliances.</span></p>
+                  <p className="text-[#5A4A2E] italic text-sm">We do not offer generic collaborations. <span className="text-gold font-semibold not-italic">We build structured alliances.</span></p>
                 </div>
               </motion.div>
             </motion.div>
@@ -185,7 +185,7 @@ const Partners = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-6xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Our Partnership <span className="text-gold">Structures</span>
               </motion.h2>
 
@@ -196,14 +196,14 @@ const Partners = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-lg flex-shrink-0">
                         <cat.icon className="w-6 h-6" />
                       </div>
-                      <h3 className="text-lg font-bold text-black">{cat.title}</h3>
+                      <h3 className="text-lg font-bold text-[#1A1A1A]">{cat.title}</h3>
                     </div>
 
                     <div className="mb-5">
                       <p className="text-xs uppercase tracking-wider text-gold font-semibold mb-2">For</p>
                       <div className="flex flex-wrap gap-2">
                         {cat.forList.map((f) => (
-                          <span key={f} className="text-xs bg-gold/10 border border-gold/30 text-gray-700 rounded-full px-3 py-1">{f}</span>
+                          <span key={f} className="text-xs bg-gold/10 border border-gold/30 text-[#5A4A2E] rounded-full px-3 py-1">{f}</span>
                         ))}
                       </div>
                     </div>
@@ -212,7 +212,7 @@ const Partners = () => {
                       <p className="text-xs uppercase tracking-wider text-gold font-semibold mb-2">Scope</p>
                       <ul className="space-y-1.5">
                         {cat.scope.map((s) => (
-                          <li key={s} className="flex items-start gap-2 text-sm text-gray-600">
+                          <li key={s} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
                             <CheckCircle className="w-3.5 h-3.5 text-gold mt-0.5 flex-shrink-0" />
                             {s}
                           </li>
@@ -232,7 +232,7 @@ const Partners = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-12" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Our Structured Partnership <span className="text-gold">Process</span>
               </motion.h2>
 
@@ -249,10 +249,10 @@ const Partners = () => {
                       </div>
 
                       <div className="jj-card-inner p-5 md:p-6">
-                        <h3 className="text-lg font-bold text-black mb-3">{step.title}</h3>
+                        <h3 className="text-lg font-bold text-[#1A1A1A] mb-3">{step.title}</h3>
                         <ul className="space-y-1.5">
                           {step.items.map((item) => (
-                            <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
+                            <li key={item} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
                               <CheckCircle className="w-3.5 h-3.5 text-gold mt-0.5 flex-shrink-0" />
                               {item}
                             </li>
@@ -278,12 +278,12 @@ const Partners = () => {
                   <Shield className="w-6 h-6" />
                 </div>
               </motion.div>
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-black mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Governance & Regulatory <span className="text-gold">Integrity</span>
               </motion.h2>
 
               <motion.div variants={fadeIn} className="jj-card-inner p-8 md:p-10 text-left">
-                <p className="text-gray-600 mb-6">All partnerships operate within:</p>
+                <p className="text-[#5A4A2E] mb-6">All partnerships operate within:</p>
                 <div className="grid md:grid-cols-2 gap-3">
                   {[
                     "UAE real estate regulatory framework",
@@ -294,11 +294,11 @@ const Partners = () => {
                   ].map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <Shield className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm">{item}</span>
+                      <span className="text-[#5A4A2E] text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 text-gray-600 italic text-sm">We prioritize structured, ethical, and <span className="text-gold font-semibold not-italic">compliant growth.</span></p>
+                <p className="mt-6 text-[#5A4A2E] italic text-sm">We prioritize structured, ethical, and <span className="text-gold font-semibold not-italic">compliant growth.</span></p>
               </motion.div>
             </motion.div>
           </div>
@@ -310,7 +310,7 @@ const Partners = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-10" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-10" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Ideal Partnership <span className="text-gold">Profiles</span>
               </motion.h2>
 
@@ -324,7 +324,7 @@ const Partners = () => {
                 ].map((profile, i) => (
                   <div key={i} className="jj-card-inner p-5 text-center">
                     <Users className="w-6 h-6 text-gold mx-auto mb-3" />
-                    <p className="text-sm text-gray-700 font-medium">{profile}</p>
+                    <p className="text-sm text-[#5A4A2E] font-medium">{profile}</p>
                   </div>
                 ))}
               </motion.div>
@@ -344,21 +344,21 @@ const Partners = () => {
                   <Globe className="w-6 h-6" />
                 </div>
               </motion.div>
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
                 International <span className="text-gold">Collaboration</span>
               </motion.h2>
-              <motion.p variants={fadeIn} className="text-gray-600 mb-10">We collaborate across:</motion.p>
+              <motion.p variants={fadeIn} className="text-[#5A4A2E] mb-10">We collaborate across:</motion.p>
 
               <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-3 mb-10">
                 {REGIONS.map((r) => (
-                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm">{r}</span>
+                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm">{r}</span>
                 ))}
               </motion.div>
 
               <motion.div variants={fadeIn} className="space-y-1">
-                <p className="text-gray-600">Our network is <span className="text-gold font-semibold">international.</span></p>
-                <p className="text-gray-600">Our execution is <span className="text-gold font-semibold">local.</span></p>
-                <p className="text-gray-600">Our positioning is <span className="text-gold font-semibold">premium.</span></p>
+                <p className="text-[#5A4A2E]">Our network is <span className="text-gold font-semibold">international.</span></p>
+                <p className="text-[#5A4A2E]">Our execution is <span className="text-gold font-semibold">local.</span></p>
+                <p className="text-[#5A4A2E]">Our positioning is <span className="text-gold font-semibold">premium.</span></p>
               </motion.div>
             </motion.div>
           </div>
@@ -370,10 +370,10 @@ const Partners = () => {
         <section id="partner-application" className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-3xl mx-auto">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Partner <span className="text-gold">Portal</span>
               </motion.h2>
-              <motion.p variants={fadeIn} className="text-center text-gray-600 mb-10">
+              <motion.p variants={fadeIn} className="text-center text-[#5A4A2E] mb-10">
                 Apply for partnership, submit your proposal, and track your application status in real-time.
               </motion.p>
 
@@ -390,10 +390,10 @@ const Partners = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-3xl mx-auto text-center">
-              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-black mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Let's Build Strategic <span className="text-gold">Growth Together</span>
               </motion.h2>
-              <motion.div variants={fadeIn} className="space-y-3 text-gray-600 mb-8">
+              <motion.div variants={fadeIn} className="space-y-3 text-[#5A4A2E] mb-8">
                 <p>At JBJ Global Real Estate, partnerships are not transactional.</p>
                 <p>They are <span className="text-gold font-semibold">strategic, structured, and long-term.</span></p>
                 <p>If you are aligned with excellence, compliance, and scale — we invite you to connect.</p>

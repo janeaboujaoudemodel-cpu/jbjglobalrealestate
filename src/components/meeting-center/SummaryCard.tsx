@@ -43,7 +43,7 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
   const Icon = config.icon;
 
   return (
-    <div className={`bg-white/90 border-2 ${config.borderColor} hover:border-opacity-60 rounded-xl transition-colors shadow-sm`}>
+    <div className={`bg-[#FDFBF7]/90 border-2 ${config.borderColor} hover:border-opacity-60 rounded-xl transition-colors shadow-sm`}>
       {/* Header - always visible */}
       <div className="p-4 md:p-6">
         <div className="flex items-start justify-between gap-4 mb-3">
@@ -52,11 +52,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
               <Icon className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-black flex items-center gap-2">
-                <User className="w-4 h-4 text-gray-600" />
+              <h3 className="font-semibold text-[#1A1A1A] flex items-center gap-2">
+                <User className="w-4 h-4 text-[#5A4A2E]" />
                 {item.clientName}
               </h3>
-              <p className="text-sm text-gray-600 flex items-center gap-1">
+              <p className="text-sm text-[#5A4A2E] flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {new Date(item.date).toLocaleDateString('en-US', { 
                   weekday: 'short', 
@@ -73,11 +73,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
           </span>
         </div>
 
-        <p className="text-gray-700 line-clamp-2">{item.summary}</p>
+        <p className="text-[#5A4A2E] line-clamp-2">{item.summary}</p>
 
         {/* Action Items Preview */}
         {item.actionItems.length > 0 && (
-          <div className="mt-3 flex items-center gap-2 text-sm text-gray-600">
+          <div className="mt-3 flex items-center gap-2 text-sm text-[#5A4A2E]">
             <ArrowRight className="w-3 h-3" />
             <span>{item.actionItems.length} action item{item.actionItems.length !== 1 ? 's' : ''}</span>
           </div>
@@ -91,7 +91,7 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
             <Button
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-black bg-[#F7F1E6]/50 hover:bg-[#ECE2D2]/60 hover:text-black rounded-none font-medium"
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-[#1A1A1A] bg-[#F7F1E6]/50 hover:bg-[#ECE2D2]/60 hover:text-[#1A1A1A] rounded-none font-medium"
             >
               {isExpanded ? (
                 <>
@@ -111,17 +111,17 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
             <div className="p-4 md:p-6 pt-4 space-y-4 bg-[#FDFBF7]">
               {/* Full Summary */}
               <div>
-                <h4 className="text-sm font-medium text-gray-600 mb-2">Summary</h4>
-                <p className="text-gray-800">{item.summary}</p>
+                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2">Summary</h4>
+                <p className="text-[#1A1A1A]">{item.summary}</p>
               </div>
 
               {/* Action Items */}
               {item.actionItems.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Action Items</h4>
+                  <h4 className="text-sm font-medium text-[#5A4A2E] mb-2">Action Items</h4>
                   <ul className="space-y-1">
                     {item.actionItems.map((action, i) => (
-                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                      <li key={i} className="text-sm text-[#5A4A2E] flex items-start gap-2">
                         <ArrowRight className={`w-3 h-3 ${config.textColor} mt-1 flex-shrink-0`} />
                         {action}
                       </li>
@@ -133,8 +133,8 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
               {/* Voice AI specific data */}
               {item.type === 'voice-ai' && item.rawData?.duration_seconds && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Call Duration</h4>
-                  <p className="text-gray-800">
+                  <h4 className="text-sm font-medium text-[#5A4A2E] mb-2">Call Duration</h4>
+                  <p className="text-[#1A1A1A]">
                     {Math.floor(Number(item.rawData.duration_seconds) / 60)} min {Number(item.rawData.duration_seconds) % 60} sec
                   </p>
                 </div>

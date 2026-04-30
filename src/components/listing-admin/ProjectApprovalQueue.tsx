@@ -1046,7 +1046,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   size="sm"
                   variant="outline"
                   onClick={selectAll}
-                  className="border-gray-300 text-gray-700"
+                  className="border-[#B89555]/30 text-[#5A4A2E]"
                 >
                   {selectedIds.size === imports.length ? "Deselect All" : "Select All"}
                 </Button>
@@ -1396,7 +1396,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 return validImages.length > 0 ? (
                 <>
                 <div className="relative">
-                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                  <div className="aspect-video bg-[#F7F2EA] rounded-lg overflow-hidden">
                     <img
                       src={validImages[safeIndex]?.url}
                       alt={selectedImport.name}
@@ -1413,7 +1413,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       <Button
                         variant="outline"
                         size="icon"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#FDFBF7]/80"
                         onClick={() => setCurrentImageIndex(i => 
                           i === 0 ? validImages.length - 1 : i - 1
                         )}
@@ -1423,7 +1423,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       <Button
                         variant="outline"
                         size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#FDFBF7]/80"
                         onClick={() => setCurrentImageIndex(i => 
                           i === validImages.length - 1 ? 0 : i + 1
                         )}
@@ -1480,9 +1480,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div className="space-y-3">
                   {selectedImport.developer_name && (
                     <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-gray-600" />
+                      <Building2 className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Developer:</span>{' '}
+                        <span className="text-[#5A4A2E]">Developer:</span>{' '}
                         <span className="font-medium">{selectedImport.developer_name}</span>
                       </span>
                     </div>
@@ -1490,9 +1490,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   
                   {selectedImport.location && (
                     <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-600" />
+                      <MapPin className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Location:</span>{' '}
+                        <span className="text-[#5A4A2E]">Location:</span>{' '}
                         <span className="font-medium">{selectedImport.location}</span>
                       </span>
                     </div>
@@ -1500,9 +1500,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {selectedImport.handover_date && (
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-600" />
+                      <Calendar className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Handover:</span>{' '}
+                        <span className="text-[#5A4A2E]">Handover:</span>{' '}
                         <span className="font-medium">{selectedImport.handover_date}</span>
                       </span>
                     </div>
@@ -1510,9 +1510,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {(selectedImport.bedrooms_min || selectedImport.bedrooms_max) && (
                     <div className="flex items-center gap-2">
-                      <Bed className="h-4 w-4 text-gray-600" />
+                      <Bed className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Bedrooms:</span>{' '}
+                        <span className="text-[#5A4A2E]">Bedrooms:</span>{' '}
                         <span className="font-medium">
                           {selectedImport.bedrooms_min === selectedImport.bedrooms_max
                             ? selectedImport.bedrooms_min
@@ -1526,9 +1526,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div className="space-y-3">
                   {selectedImport.price_from && (
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-gray-600" />
+                      <DollarSign className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Price From:</span>{' '}
+                        <span className="text-[#5A4A2E]">Price From:</span>{' '}
                         <span className="font-medium">{formatPrice(selectedImport.price_from)}</span>
                       </span>
                     </div>
@@ -1536,9 +1536,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {selectedImport.size_min && (
                     <div className="flex items-center gap-2">
-                      <Ruler className="h-4 w-4 text-gray-600" />
+                      <Ruler className="h-4 w-4 text-[#5A4A2E]" />
                       <span className="text-sm">
-                        <span className="text-gray-600">Size:</span>{' '}
+                        <span className="text-[#5A4A2E]">Size:</span>{' '}
                         <span className="font-medium">
                           {selectedImport.size_min?.toLocaleString()} - {selectedImport.size_max?.toLocaleString()} sq ft
                         </span>
@@ -1563,7 +1563,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               {selectedImport.description && (
                 <div>
                   <h4 className="font-medium mb-2">Description</h4>
-                  <p className="text-sm text-gray-600 line-clamp-4">
+                  <p className="text-sm text-[#5A4A2E] line-clamp-4">
                     {sanitizeForDisplay(selectedImport.description)}
                   </p>
                 </div>
@@ -1572,7 +1572,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               {selectedImport.payment_plan && (
                 <div>
                   <h4 className="font-medium mb-2">Payment Plan</h4>
-                  <p className="text-sm text-gray-600">{selectedImport.payment_plan}</p>
+                  <p className="text-sm text-[#5A4A2E]">{selectedImport.payment_plan}</p>
                 </div>
               )}
 
@@ -1590,9 +1590,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         href={doc.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors text-sm"
+                        className="flex items-center gap-2 px-3 py-2 bg-[#F7F2EA] rounded hover:bg-[#EFE6D6] transition-colors text-sm"
                       >
-                        <FileText className="h-4 w-4 text-gray-600" />
+                        <FileText className="h-4 w-4 text-[#5A4A2E]" />
                         {doc.name || doc.type}
                       </a>
                     ))}

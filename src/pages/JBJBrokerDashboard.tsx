@@ -139,7 +139,7 @@ export default function JBJBrokerDashboard() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
@@ -153,13 +153,13 @@ export default function JBJBrokerDashboard() {
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
               <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-                <Users className="w-5 h-5 text-black" />
+                <Users className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
-                <h1 className="text-black text-xl font-bold tracking-wide">
+                <h1 className="text-[#1A1A1A] text-xl font-bold tracking-wide">
                   My Leads
                 </h1>
-                <p className="text-gray-600 text-sm">
+                <p className="text-[#5A4A2E] text-sm">
                   Manage and contact your assigned leads
                 </p>
               </div>
@@ -206,15 +206,15 @@ export default function JBJBrokerDashboard() {
       <main className="px-4 py-6">
         {/* Stats Cards */}
         <div className="grid grid-cols-4 gap-4 mb-6">
-          <Card className="bg-white border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
-                  <Users className="h-5 w-5 text-black" />
+                  <Users className="h-5 w-5 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <p className="text-gray-600 text-xs">Total Leads</p>
-                  <p className="text-2xl font-bold text-black">
+                  <p className="text-[#5A4A2E] text-xs">Total Leads</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.totalLeads}
                   </p>
                 </div>
@@ -222,15 +222,15 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-gray-600 text-xs">Contacted Today</p>
-                  <p className="text-2xl font-bold text-black">
+                  <p className="text-[#5A4A2E] text-xs">Contacted Today</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.contactedToday}
                   </p>
                 </div>
@@ -238,15 +238,15 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <Clock className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <p className="text-gray-600 text-xs">Pending Follow-up</p>
-                  <p className="text-2xl font-bold text-black">
+                  <p className="text-[#5A4A2E] text-xs">Pending Follow-up</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.pendingFollowUp}
                   </p>
                 </div>
@@ -254,15 +254,15 @@ export default function JBJBrokerDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white border border-gold/20 shadow-sm">
+          <Card className="bg-[#FDFBF7] border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <AlertCircle className="h-5 w-5 text-gold" />
                 </div>
                 <div>
-                  <p className="text-gray-600 text-xs">Converted</p>
-                  <p className="text-2xl font-bold text-black">
+                  <p className="text-[#5A4A2E] text-xs">Converted</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.converted}
                   </p>
                 </div>
@@ -274,7 +274,7 @@ export default function JBJBrokerDashboard() {
         {/* Search */}
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
             <Input
               placeholder="Search leads..."
               value={searchQuery}
@@ -322,11 +322,11 @@ export default function JBJBrokerDashboard() {
 
           {filteredLeads.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-              <Users className="h-16 w-16 text-gray-600 mb-4" />
-              <h3 className="text-black text-lg font-medium mb-2">
+              <Users className="h-16 w-16 text-[#5A4A2E] mb-4" />
+              <h3 className="text-[#1A1A1A] text-lg font-medium mb-2">
                 No Leads Found
               </h3>
-              <p className="text-gray-600">
+              <p className="text-[#5A4A2E]">
                 {searchQuery
                   ? "Try adjusting your search or filters"
                   : "No leads assigned to you yet"}

@@ -203,7 +203,7 @@ const AdminRoleManagement = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center pt-28">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center pt-28">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -219,19 +219,19 @@ const AdminRoleManagement = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate(-1)}
-              className="text-black hover:text-gold hover:bg-gold/10"
+              className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-                <Shield className="w-5 h-5 text-black" />
+                <Shield className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
-                <h1 className="text-black text-xl font-bold">
+                <h1 className="text-[#1A1A1A] text-xl font-bold">
                   Role Management
                 </h1>
-                <span className="text-gray-600 text-sm">Assign and revoke admin roles</span>
+                <span className="text-[#5A4A2E] text-sm">Assign and revoke admin roles</span>
               </div>
             </div>
           </div>
@@ -243,28 +243,28 @@ const AdminRoleManagement = () => {
           {/* Add New Role */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <UserPlus className="w-5 h-5 text-gold" />
                 Add New Role
               </CardTitle>
-              <CardDescription className="text-gray-600">
+              <CardDescription className="text-[#5A4A2E]">
                 Grant administrative access to users
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-black">User Email</Label>
+                <Label className="text-[#1A1A1A]">User Email</Label>
                 <Input
                   value={newUserEmail}
                   onChange={(e) => setNewUserEmail(e.target.value)}
                   placeholder="user@example.com"
-                  className="bg-white border-gold/40 text-black mt-1"
+                  className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] mt-1"
                 />
               </div>
               <div>
-                <Label className="text-black">Role</Label>
+                <Label className="text-[#1A1A1A]">Role</Label>
                 <Select value={newUserRole} onValueChange={setNewUserRole}>
-                  <SelectTrigger className="bg-white border-gold/40 text-black mt-1">
+                  <SelectTrigger className="bg-[#FDFBF7] border-gold/40 text-[#1A1A1A] mt-1">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -272,7 +272,7 @@ const AdminRoleManagement = () => {
                       <SelectItem key={role.value} value={role.value}>
                         <div className="flex flex-col">
                           <span>{role.label}</span>
-                          <span className="text-xs text-gray-600">{role.description}</span>
+                          <span className="text-xs text-[#5A4A2E]">{role.description}</span>
                         </div>
                       </SelectItem>
                     ))}
@@ -282,7 +282,7 @@ const AdminRoleManagement = () => {
               <Button
                 onClick={handleAddRole}
                 disabled={isAdding}
-                className="w-full bg-black text-white hover:bg-gray-800"
+                className="w-full bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
               >
                 {isAdding ? (
                   <>
@@ -302,26 +302,26 @@ const AdminRoleManagement = () => {
           {/* Role Statistics */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
             <CardHeader>
-              <CardTitle className="text-black flex items-center gap-2">
+              <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                 <Users className="w-5 h-5 text-gold" />
                 Role Statistics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-lg border border-gold/20">
+                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
                   <div className="flex items-center gap-2 mb-2">
                     <Crown className="w-5 h-5 text-gold" />
-                    <span className="text-gray-600 text-sm">System Roles</span>
+                    <span className="text-[#5A4A2E] text-sm">System Roles</span>
                   </div>
-                  <p className="text-black text-2xl font-bold">{userRoles.length}</p>
+                  <p className="text-[#1A1A1A] text-2xl font-bold">{userRoles.length}</p>
                 </div>
-                <div className="p-4 bg-white rounded-lg border border-gold/20">
+                <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
                   <div className="flex items-center gap-2 mb-2">
                     <Building2 className="w-5 h-5 text-gold" />
-                    <span className="text-gray-600 text-sm">Listing Admins</span>
+                    <span className="text-[#5A4A2E] text-sm">Listing Admins</span>
                   </div>
-                  <p className="text-black text-2xl font-bold">{listingAdmins.length}</p>
+                  <p className="text-[#1A1A1A] text-2xl font-bold">{listingAdmins.length}</p>
                 </div>
               </div>
             </CardContent>
@@ -331,7 +331,7 @@ const AdminRoleManagement = () => {
         {/* System Roles Table */}
         <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
           <CardHeader>
-            <CardTitle className="text-black flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Crown className="w-5 h-5 text-gold" />
               System Roles (Admin/Owner)
             </CardTitle>
@@ -340,24 +340,24 @@ const AdminRoleManagement = () => {
             <Table>
               <TableHeader>
                 <TableRow className="border-gold/20">
-                  <TableHead className="text-black">User ID</TableHead>
-                  <TableHead className="text-black">Role</TableHead>
-                  <TableHead className="text-black">Created</TableHead>
-                  <TableHead className="text-black text-right">Actions</TableHead>
+                  <TableHead className="text-[#1A1A1A]">User ID</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Role</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Created</TableHead>
+                  <TableHead className="text-[#1A1A1A] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {userRoles.map((role) => (
                   <TableRow key={role.id} className="border-gold/20">
-                    <TableCell className="text-gray-700 font-mono text-sm">
+                    <TableCell className="text-[#5A4A2E] font-mono text-sm">
                       {role.user_id.slice(0, 8)}...
                     </TableCell>
                     <TableCell>
-                      <Badge className={role.role === "owner" ? "bg-gold text-black" : "bg-black text-white"}>
+                      <Badge className={role.role === "owner" ? "bg-gold text-[#1A1A1A]" : "bg-[#1A1A1A] text-white"}>
                         {role.role}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-600">
+                    <TableCell className="text-[#5A4A2E]">
                       {new Date(role.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
@@ -390,7 +390,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {userRoles.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-gray-600 py-8">
+                    <TableCell colSpan={4} className="text-center text-[#5A4A2E] py-8">
                       No system roles configured
                     </TableCell>
                   </TableRow>
@@ -403,7 +403,7 @@ const AdminRoleManagement = () => {
         {/* Listing Admins Table */}
         <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
           <CardHeader>
-            <CardTitle className="text-black flex items-center gap-2">
+            <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
               <Building2 className="w-5 h-5 text-gold" />
               Listing Administrators
             </CardTitle>
@@ -412,32 +412,32 @@ const AdminRoleManagement = () => {
             <Table>
               <TableHeader>
                 <TableRow className="border-gold/20">
-                  <TableHead className="text-black">Name</TableHead>
-                  <TableHead className="text-black">Email</TableHead>
-                  <TableHead className="text-black">Status</TableHead>
-                  <TableHead className="text-black">Created</TableHead>
-                  <TableHead className="text-black text-right">Actions</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Name</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Email</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Status</TableHead>
+                  <TableHead className="text-[#1A1A1A]">Created</TableHead>
+                  <TableHead className="text-[#1A1A1A] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {listingAdmins.map((admin) => (
                   <TableRow key={admin.id} className="border-gold/20">
-                    <TableCell className="text-black font-medium">
+                    <TableCell className="text-[#1A1A1A] font-medium">
                       {admin.display_name}
                     </TableCell>
-                    <TableCell className="text-gray-600">
+                    <TableCell className="text-[#5A4A2E]">
                       {admin.email}
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={admin.is_active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600"}
+                        className={admin.is_active ? "bg-green-100 text-green-800" : "bg-[#F7F2EA] text-[#5A4A2E]"}
                         onClick={() => toggleListingAdminStatus(admin.id, admin.is_active)}
                         style={{ cursor: "pointer" }}
                       >
                         {admin.is_active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-600">
+                    <TableCell className="text-[#5A4A2E]">
                       {new Date(admin.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
@@ -470,7 +470,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {listingAdmins.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-gray-600 py-8">
+                    <TableCell colSpan={5} className="text-center text-[#5A4A2E] py-8">
                       No listing admins configured
                     </TableCell>
                   </TableRow>

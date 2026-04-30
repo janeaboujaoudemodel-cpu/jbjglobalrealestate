@@ -142,7 +142,7 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Main Content with TOC Sidebar */}
-      <div className="pt-16 pb-16 bg-black">
+      <div className="pt-16 pb-16 bg-[#1A1A1A]">
         {/* Fixed TOC Sidebar */}
         <div className="hidden lg:block">
           <MarketIntelligenceTableOfContents 
@@ -172,10 +172,10 @@ const MarketReportsPage = () => {
                 >
                   Market Reports
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-4">
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-4">
                   Market Reports consolidate officially published government data into structured summaries that explain what has already occurred in the Dubai real estate market. These reports are factual, historical, and descriptive. They do not contain predictions, targets, or guarantees.
                 </p>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-[#5A4A2E] leading-relaxed">
                   All figures and statements are derived from Dubai Land Department (DLD) and RERA-recognized sources only.
                 </p>
               </SectionWrapper>
@@ -189,16 +189,16 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>Purpose</span>{" "}
-                  <span className="text-black">of Market Reports</span>
+                  <span className="text-[#1A1A1A]">of Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">Market Reports exist to:</p>
-                <ul className="space-y-3 text-black">
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports exist to:</p>
+                <ul className="space-y-3 text-[#1A1A1A]">
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Summarize registered market activity</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Present verified transaction trends</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Explain rental and ownership behavior</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide regulatory context for decisions</span></li>
                 </ul>
-                <p className="text-gray-700 leading-relaxed mt-6">They are designed to help readers understand market movement, not to speculate on outcomes.</p>
+                <p className="text-[#5A4A2E] leading-relaxed mt-6">They are designed to help readers understand market movement, not to speculate on outcomes.</p>
               </SectionWrapper>
 
               {/* Data Sources Section */}
@@ -210,28 +210,28 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>Data</span>{" "}
-                  <span className="text-black">Sources Used in Market Reports</span>
+                  <span className="text-[#1A1A1A]">Sources Used in Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">Every Market Report is compiled using the following official sources:</p>
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Every Market Report is compiled using the following official sources:</p>
                 <div className="space-y-4">
-                  <a href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
+                  <a href="https://dubailand.gov.ae/en/open-data/real-estate-data/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Open Data</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/open-data/research/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
+                  <a href="https://dubailand.gov.ae/en/open-data/research/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">Dubai Land Department – Research & Market Studies</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/eservices/rental-index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
+                  <a href="https://dubailand.gov.ae/en/eservices/rental-index/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Rental Index</span>
                   </a>
-                  <a href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-black hover:text-gold transition-colors group">
+                  <a href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#1A1A1A] hover:text-gold transition-colors group">
                     <ExternalLink className="w-5 h-5 text-gold group-hover:scale-110 transition-transform" />
                     <span className="font-medium">RERA Service Charge Index</span>
                   </a>
                 </div>
-                <p className="text-gray-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">No private dashboards, promotional statistics, or third-party estimations are used.</p>
+                <p className="text-[#5A4A2E] leading-relaxed mt-6 pt-4 border-t border-gold/30">No private dashboards, promotional statistics, or third-party estimations are used.</p>
               </SectionWrapper>
 
               {/* Report Structure Section */}
@@ -243,29 +243,29 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>What</span>{" "}
-                  <span className="text-black">a Market Report Covers</span>
+                  <span className="text-[#1A1A1A]">a Market Report Covers</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">Each report follows the same fixed structure:</p>
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Each report follows the same fixed structure:</p>
                 <div className="space-y-6">
                   <div className="border-l-4 border-gold pl-6">
-                    <h3 className="text-xl font-bold text-black mb-2">1. Transaction Volume Overview</h3>
-                    <p className="text-gray-700">Summary of registered sales transactions during the reporting period, including volume and value ranges as recorded by DLD.</p>
+                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">1. Transaction Volume Overview</h3>
+                    <p className="text-[#5A4A2E]">Summary of registered sales transactions during the reporting period, including volume and value ranges as recorded by DLD.</p>
                   </div>
                   <div className="border-l-4 border-gold pl-6">
-                    <h3 className="text-xl font-bold text-black mb-2">2. Rental Market Activity</h3>
-                    <p className="text-gray-700">Overview of registered tenancy contracts, rental ranges, and compliance with official rental index benchmarks.</p>
+                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">2. Rental Market Activity</h3>
+                    <p className="text-[#5A4A2E]">Overview of registered tenancy contracts, rental ranges, and compliance with official rental index benchmarks.</p>
                   </div>
                   <div className="border-l-4 border-gold pl-6">
-                    <h3 className="text-xl font-bold text-black mb-2">3. Property Type Distribution</h3>
-                    <p className="text-gray-700">Breakdown of activity across apartments, villas, townhouses, and commercial units based on registered classifications.</p>
+                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">3. Property Type Distribution</h3>
+                    <p className="text-[#5A4A2E]">Breakdown of activity across apartments, villas, townhouses, and commercial units based on registered classifications.</p>
                   </div>
                   <div className="border-l-4 border-gold pl-6">
-                    <h3 className="text-xl font-bold text-black mb-2">4. Area-Level Highlights</h3>
-                    <p className="text-gray-700">Identification of areas with notable transaction concentration or rental activity, based solely on recorded data.</p>
+                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">4. Area-Level Highlights</h3>
+                    <p className="text-[#5A4A2E]">Identification of areas with notable transaction concentration or rental activity, based solely on recorded data.</p>
                   </div>
                   <div className="border-l-4 border-gold pl-6">
-                    <h3 className="text-xl font-bold text-black mb-2">5. Ownership Cost Context</h3>
-                    <p className="text-gray-700">Reference to approved service charges and their role in total ownership cost during the period.</p>
+                    <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">5. Ownership Cost Context</h3>
+                    <p className="text-[#5A4A2E]">Reference to approved service charges and their role in total ownership cost during the period.</p>
                   </div>
                 </div>
               </SectionWrapper>
@@ -279,17 +279,17 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>What</span>{" "}
-                  <span className="text-black">Market Reports Do Not Include</span>
+                  <span className="text-[#1A1A1A]">Market Reports Do Not Include</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">Market Reports do not:</p>
-                <ul className="space-y-3 text-black">
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports do not:</p>
+                <ul className="space-y-3 text-[#1A1A1A]">
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Forecast prices or rents</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Assign performance scores</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Rank developers or projects</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide investment guarantees</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Suggest expected returns</span></li>
                 </ul>
-                <p className="text-gray-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">Any interpretation remains grounded in past and current registered activity only.</p>
+                <p className="text-[#5A4A2E] leading-relaxed mt-6 pt-4 border-t border-gold/30">Any interpretation remains grounded in past and current registered activity only.</p>
               </SectionWrapper>
 
               {/* Reporting Frequency Section */}
@@ -301,10 +301,10 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>Reporting</span>{" "}
-                  <span className="text-black">Frequency</span>
+                  <span className="text-[#1A1A1A]">Frequency</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">Market Reports are issued based on data availability and official publication cycles. Updates align with:</p>
-                <ul className="space-y-3 text-black">
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">Market Reports are issued based on data availability and official publication cycles. Updates align with:</p>
+                <ul className="space-y-3 text-[#1A1A1A]">
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Monthly or quarterly DLD releases</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Official research publications</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Regulatory updates impacting the sector</span></li>
@@ -320,17 +320,17 @@ const MarketReportsPage = () => {
                     WebkitTextFillColor: "transparent",
                     filter: "drop-shadow(0 2px 4px rgba(200,167,102,0.3))"
                   }}>How</span>{" "}
-                  <span className="text-black">JBJ Global Real Estate Uses Market Reports</span>
+                  <span className="text-[#1A1A1A]">JBJ Global Real Estate Uses Market Reports</span>
                 </h2>
-                <p className="text-black text-lg leading-relaxed mb-6">JBJ Global Real Estate uses Market Reports to:</p>
-                <ul className="space-y-3 text-black">
+                <p className="text-[#1A1A1A] text-lg leading-relaxed mb-6">JBJ Global Real Estate uses Market Reports to:</p>
+                <ul className="space-y-3 text-[#1A1A1A]">
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Support factual market explanations</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Provide context during advisory discussions</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Align property selection with verified market behavior</span></li>
                   <li className="flex items-start gap-3"><span className="text-gold mt-1">•</span><span>Maintain compliance with UAE real estate regulations</span></li>
                 </ul>
-                <p className="text-gray-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">All guidance references published data rather than assumptions.</p>
-                <p className="text-gray-600 leading-relaxed mt-4 text-sm italic">Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.</p>
+                <p className="text-[#5A4A2E] leading-relaxed mt-6 pt-4 border-t border-gold/30">All guidance references published data rather than assumptions.</p>
+                <p className="text-[#5A4A2E] leading-relaxed mt-4 text-sm italic">Market Reports are supported by Methodology & Sources, which explain how data is selected, validated, and presented.</p>
               </SectionWrapper>
 
               {/* Featured Reports Section */}
@@ -360,7 +360,7 @@ const MarketReportsPage = () => {
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-white/90 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-white/90 text-xs bg-[#1A1A1A]/5 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 
@@ -374,11 +374,11 @@ const MarketReportsPage = () => {
                           >
                             {report.title}
                           </h3>
-                          <p className="text-black font-medium text-sm mb-3">{report.subtitle}</p>
-                          <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
+                          <p className="text-[#1A1A1A] font-medium text-sm mb-3">{report.subtitle}</p>
+                          <p className="text-[#5A4A2E] text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
                           <div className="flex items-center justify-between pt-4 border-t border-gold/30">
-                            <div className="flex items-center gap-2 text-gray-600 text-xs">
+                            <div className="flex items-center gap-2 text-[#5A4A2E] text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>
@@ -429,12 +429,12 @@ const MarketReportsPage = () => {
                           >
                             Monthly Snapshots
                           </h3>
-                          <p className="text-gray-600 text-sm">Quick monthly market overviews</p>
+                          <p className="text-[#5A4A2E] text-sm">Quick monthly market overviews</p>
                         </div>
                       </div>
-                      <p className="text-gray-700 text-sm mb-4">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
+                      <p className="text-[#5A4A2E] text-sm mb-4">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
                       <select 
-                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
                         value={selectedMonthlyDownload || ''}
                         onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
                       >
@@ -470,12 +470,12 @@ const MarketReportsPage = () => {
                           >
                             Quarterly Reviews
                           </h3>
-                          <p className="text-gray-600 text-sm">In-depth quarterly analysis</p>
+                          <p className="text-[#5A4A2E] text-sm">In-depth quarterly analysis</p>
                         </div>
                       </div>
-                      <p className="text-gray-700 text-sm mb-4">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
+                      <p className="text-[#5A4A2E] text-sm mb-4">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
                       <select 
-                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-black bg-white mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
+                        className="w-full p-3 border-2 border-gold/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-gold focus:ring-1 focus:ring-gold"
                         value={selectedQuarterlyDownload || ''}
                         onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
                       >
@@ -508,7 +508,7 @@ const MarketReportsPage = () => {
                       Source:
                     </span>
                     {" "}
-                    <span className="text-black font-medium">Dubai Government Open Data</span>
+                    <span className="text-[#1A1A1A] font-medium">Dubai Government Open Data</span>
                   </p>
                 </div>
               </SectionWrapper>
@@ -522,7 +522,7 @@ const MarketReportsPage = () => {
                       <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
                       
                       <div className="relative z-10">
-                        <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center mx-auto mb-5">
+                        <div className="w-14 h-14 rounded-xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-5">
                           <FileText className="w-7 h-7 text-gold" />
                         </div>
                         <h3 
@@ -536,7 +536,7 @@ const MarketReportsPage = () => {
                         >
                           Need a Custom Report?
                         </h3>
-                        <p className="text-gray-700 mb-6 max-w-lg mx-auto leading-relaxed">
+                        <p className="text-[#5A4A2E] mb-6 max-w-lg mx-auto leading-relaxed">
                           Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
                         </p>
                         <Link to="/contact">
@@ -568,7 +568,7 @@ const MarketReportsPage = () => {
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
               </div>
-              <p className="text-gray-700 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              <p className="text-[#5A4A2E] text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
           </div>
         </div>

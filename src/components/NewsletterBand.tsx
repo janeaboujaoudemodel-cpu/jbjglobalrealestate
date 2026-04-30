@@ -11,13 +11,13 @@ interface NewsletterBandProps {
 
 const NewsletterBand = ({ className = "" }: NewsletterBandProps) => {
   return (
-     <section className={`py-12 md:py-16 bg-gray-50 ${className}`}>
-       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+     <section className={`py-12 md:py-16 bg-[#F7F2EA] ${className}`}>
+       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 shadow-sm p-6 md:p-8">
         {/* Premium Title */}
-        <h3 className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em] text-black">
+        <h3 className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em] text-[#1A1A1A]">
           ✦ Stay in the Loop ✦
         </h3>
-        <p className="text-center text-gray-600 text-sm md:text-base mb-6 max-w-xl mx-auto">
+        <p className="text-center text-[#5A4A2E] text-sm md:text-base mb-6 max-w-xl mx-auto">
           Be the first to access new listings, market updates, and personalized brokerage guidance.
         </p>
         <div className="max-w-lg mx-auto">

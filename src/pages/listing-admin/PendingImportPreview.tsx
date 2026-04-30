@@ -545,7 +545,7 @@ const PendingImportPreview = () => {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
-          <h1 className="text-black text-2xl mb-4">Access Denied</h1>
+          <h1 className="text-[#1A1A1A] text-2xl mb-4">Access Denied</h1>
           <Link to="/" className="text-gold hover:underline">
             Go Home
           </Link>
@@ -558,7 +558,7 @@ const PendingImportPreview = () => {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
-          <h1 className="text-black text-2xl mb-4">Project not found</h1>
+          <h1 className="text-[#1A1A1A] text-2xl mb-4">Project not found</h1>
           <Link to="/listing-admin" className="text-gold hover:underline">
             Back to Listing Admin
           </Link>

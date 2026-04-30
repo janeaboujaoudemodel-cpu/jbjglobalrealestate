@@ -144,7 +144,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
           <Button
             onClick={generateSignatures}
             disabled={isGenerating || !name.trim()}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             {isGenerating ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -181,7 +181,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedId === sig.id
                     ? 'ring-2 ring-gold border-gold'
-                    : 'hover:border-gray-300'
+                    : 'hover:border-[#B89555]/30'
                 }`}
                 onClick={() => handleSelectSignature(sig)}
               >
@@ -192,7 +192,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
                     </div>
                   )}
                   <div 
-                    className="text-3xl py-4 text-gray-800"
+                    className="text-3xl py-4 text-[#1A1A1A]"
                     style={{ fontFamily: sig.fontFamily }}
                   >
                     {name}
@@ -208,7 +208,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
             <Button
               onClick={handleSaveSignature}
               disabled={isSaving}
-              className="w-full bg-black hover:bg-gray-900 text-gold"
+              className="w-full bg-[#1A1A1A] hover:bg-[#1A1A1A] text-gold"
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

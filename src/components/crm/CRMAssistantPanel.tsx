@@ -472,41 +472,41 @@ ${COMPANY_CONTACTS.email}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl bg-white border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
+      <DialogContent className="sm:max-w-2xl bg-[#FDFBF7] border-2 border-gold/30 shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
         <DialogHeader>
-          <DialogTitle className="text-black flex items-center gap-3">
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-3">
             <div className="relative">
               {/* GLOBAL IMAGE RULE - LOCKED (FINAL): max zoom, crop from bottom */}
               <img 
                 src={ASSISTANT_IDENTITY.avatar} 
                 alt={ASSISTANT_IDENTITY.name}
-                className="w-10 h-10 rounded-full border-2 border-gold bg-white"
+                className="w-10 h-10 rounded-full border-2 border-gold bg-[#FDFBF7]"
                 style={{ objectFit: "cover", objectPosition: "center 15%" }}
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />
             </div>
             <div>
-              <span className="text-lg font-bold text-black">{ASSISTANT_IDENTITY.name}</span>
-              <p className="text-xs text-gray-600 font-normal">{ASSISTANT_IDENTITY.title}</p>
+              <span className="text-lg font-bold text-[#1A1A1A]">{ASSISTANT_IDENTITY.name}</span>
+              <p className="text-xs text-[#5A4A2E] font-normal">{ASSISTANT_IDENTITY.title}</p>
             </div>
           </DialogTitle>
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-gray-50 border-2 border-gold/20 grid grid-cols-4">
-            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+          <TabsList className="w-full bg-[#F7F2EA] border-2 border-gold/20 grid grid-cols-4">
+            <TabsTrigger value="assistant" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <Sparkles className="h-4 w-4 mr-1" />
               Assistant
             </TabsTrigger>
-            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="tasks" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <ListTodo className="h-4 w-4 mr-1" />
               Tasks ({tasks.filter(t => !t.completed).length})
             </TabsTrigger>
-            <TabsTrigger value="employees" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="employees" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <Users className="h-4 w-4 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
+            <TabsTrigger value="drafts" className="data-[state=active]:bg-gold data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]">
               <FileText className="h-4 w-4 mr-1" />
               Drafts ({drafts.length})
             </TabsTrigger>

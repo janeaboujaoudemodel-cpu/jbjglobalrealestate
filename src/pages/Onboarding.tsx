@@ -212,7 +212,7 @@ export default function Onboarding() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );
@@ -221,13 +221,13 @@ export default function Onboarding() {
   // No application yet - 3-Layer System
   if (!application) {
     return (
-      <div className="min-h-screen bg-black py-16">
+      <div className="min-h-screen bg-[#1A1A1A] py-16">
         <div className="jj-layer-2">
           <div className="max-w-lg mx-auto">
             <div className="jj-layer-active rounded-2xl p-6">
               <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
-                <h2 className="text-2xl font-bold text-black mb-4">No Application Found</h2>
-                <p className="text-gray-600 mb-6">You haven't submitted an application yet.</p>
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">No Application Found</h2>
+                <p className="text-[#5A4A2E] mb-6">You haven't submitted an application yet.</p>
                 <Button asChild variant="primary">
                   <Link to="/join">Apply Now</Link>
                 </Button>
@@ -242,7 +242,7 @@ export default function Onboarding() {
   // Pending or Rejected status - 3-Layer System
   if (application.status === "pending" || application.status === "rejected") {
     return (
-      <div className="min-h-screen bg-black py-16">
+      <div className="min-h-screen bg-[#1A1A1A] py-16">
         <div className="jj-layer-2">
           <div className="max-w-lg mx-auto">
             <div className="jj-layer-active rounded-2xl p-6">
@@ -252,13 +252,13 @@ export default function Onboarding() {
                 ) : (
                   <XCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
                 )}
-                <h2 className="text-2xl font-bold text-black mb-4">
+                <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">
                   {application.status === "pending" ? "Application Under Review" : "Application Not Approved"}
                 </h2>
                 <div className="mt-2 mb-6">{getStatusBadge(application.status)}</div>
                 {application.status === "pending" ? (
                   <>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-[#5A4A2E] mb-4">
                       Thank you for your application, {application.full_name}. Our team is reviewing your submission and will get back to you soon.
                     </p>
                     <p className="text-sm text-white/90">
@@ -267,13 +267,13 @@ export default function Onboarding() {
                   </>
                 ) : (
                   <>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-[#5A4A2E] mb-4">
                       Unfortunately, your application was not approved at this time.
                     </p>
                     {application.rejection_reason && (
                       <div className="jj-card-inner border border-gold/20 p-4 rounded-lg text-left mb-4">
-                        <p className="text-sm font-medium text-black mb-1">Reason:</p>
-                        <p className="text-sm text-gray-600">{application.rejection_reason}</p>
+                        <p className="text-sm font-medium text-[#1A1A1A] mb-1">Reason:</p>
+                        <p className="text-sm text-[#5A4A2E]">{application.rejection_reason}</p>
                       </div>
                     )}
                     <p className="text-sm text-white/90">
@@ -301,14 +301,14 @@ export default function Onboarding() {
   const realEstateModules = modules.filter((m) => m.track === "real_estate_basics");
 
   return (
-    <div className="min-h-screen bg-black py-8">
+    <div className="min-h-screen bg-[#1A1A1A] py-8">
       <div className="jj-layer-2">
         {/* Header */}
         <div className="jj-layer-active rounded-2xl p-6 md:p-8 mb-6">
-          <h1 className="text-3xl font-bold text-black mb-2">
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
             Welcome, <span className="text-gold">{application.full_name}!</span>
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[#5A4A2E]">
             Complete your training modules and quizzes to become a certified broker partner.
           </p>
           <div className="mt-2">{getStatusBadge(application.status)}</div>
@@ -320,9 +320,9 @@ export default function Onboarding() {
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
-                <Building2 className="h-5 w-5 text-black" />
+                <Building2 className="h-5 w-5 text-[#1A1A1A]" />
               </div>
-              <span className="text-sm font-medium text-gray-600">Company Knowledge</span>
+              <span className="text-sm font-medium text-[#5A4A2E]">Company Knowledge</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {companyProgress.avgScore.toFixed(0)}%
@@ -337,9 +337,9 @@ export default function Onboarding() {
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
-                <Briefcase className="h-5 w-5 text-black" />
+                <Briefcase className="h-5 w-5 text-[#1A1A1A]" />
               </div>
-              <span className="text-sm font-medium text-gray-600">Real Estate Basics</span>
+              <span className="text-sm font-medium text-[#5A4A2E]">Real Estate Basics</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {realEstateProgress.avgScore.toFixed(0)}%
@@ -354,9 +354,9 @@ export default function Onboarding() {
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
-                <Trophy className="h-5 w-5 text-black" />
+                <Trophy className="h-5 w-5 text-[#1A1A1A]" />
               </div>
-              <span className="text-sm font-medium text-gray-600">Combined Score</span>
+              <span className="text-sm font-medium text-[#5A4A2E]">Combined Score</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {combinedAvg.toFixed(0)}%
@@ -372,11 +372,11 @@ export default function Onboarding() {
         <div className="jj-layer-active rounded-2xl p-6 md:p-8">
           <Tabs defaultValue="company" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2 bg-champagne border border-gold/30">
-              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-gold">
+              <TabsTrigger value="company" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold">
                 <Building2 className="h-4 w-4" />
                 Company Knowledge
               </TabsTrigger>
-              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-gold">
+              <TabsTrigger value="realestate" className="flex items-center gap-2 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold">
                 <Briefcase className="h-4 w-4" />
                 Real Estate
               </TabsTrigger>
@@ -386,7 +386,7 @@ export default function Onboarding() {
               {companyModules.length === 0 ? (
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
                   <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
-                  <p className="text-gray-600">No modules available yet. Check back soon!</p>
+                  <p className="text-[#5A4A2E]">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 companyModules.map((module) => {
@@ -405,9 +405,9 @@ export default function Onboarding() {
                             )}
                           </div>
                           <div>
-                            <h3 className="font-medium text-black">{module.title}</h3>
+                            <h3 className="font-medium text-[#1A1A1A]">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-[#5A4A2E]">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.company + "% to pass)"}
                               </p>
@@ -416,7 +416,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-gray-800">
+                        <Button asChild variant="ghost" className="text-gold hover:text-[#1A1A1A]">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />
@@ -433,7 +433,7 @@ export default function Onboarding() {
               {realEstateModules.length === 0 ? (
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
                   <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
-                  <p className="text-gray-600">No modules available yet. Check back soon!</p>
+                  <p className="text-[#5A4A2E]">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 realEstateModules.map((module) => {
@@ -452,9 +452,9 @@ export default function Onboarding() {
                             )}
                           </div>
                           <div>
-                            <h3 className="font-medium text-black">{module.title}</h3>
+                            <h3 className="font-medium text-[#1A1A1A]">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-[#5A4A2E]">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.realEstate + "% to pass)"}
                               </p>
@@ -463,7 +463,7 @@ export default function Onboarding() {
                             )}
                           </div>
                         </div>
-                        <Button asChild variant="ghost" className="text-gold hover:text-gray-800">
+                        <Button asChild variant="ghost" className="text-gold hover:text-[#1A1A1A]">
                           <Link to={`/onboarding/module/${module.id}`}>
                             {bestAttempt ? "Review" : "Start"}
                             <ChevronRight className="h-4 w-4 ml-1" />
@@ -483,8 +483,8 @@ export default function Onboarding() {
           <div className="jj-layer-active rounded-2xl p-6 md:p-8 mt-6">
             <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
               <GraduationCap className="h-16 w-16 text-gold mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-black mb-2">Congratulations!</h3>
-              <p className="text-gray-600 mb-6">You have completed your training and earned your certificate.</p>
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-2">Congratulations!</h3>
+              <p className="text-[#5A4A2E] mb-6">You have completed your training and earned your certificate.</p>
               <CertificateGenerator isEligible={true} existingCertificate={certificate} />
             </div>
           </div>

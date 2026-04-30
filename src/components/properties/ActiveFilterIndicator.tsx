@@ -66,12 +66,12 @@ export function ActiveFilterIndicator({
       aria-live="polite"
       aria-label="Active filters"
     >
-      <span className="text-xs uppercase tracking-[0.18em] font-semibold text-black/60">
+      <span className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/60">
         Active filters:
       </span>
 
       {txLabel && (
-        <span className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-black text-white text-xs font-medium">
+        <span className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-[#1A1A1A] text-white text-xs font-medium">
           <ShoppingBag className="w-3 h-3" aria-hidden />
           {txLabel}
         </span>
@@ -81,12 +81,12 @@ export function ActiveFilterIndicator({
         <button
           type="button"
           onClick={onClearStatus}
-          className="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full bg-white border border-black/15 text-black text-xs font-medium hover:border-black/40 transition-colors"
+          className="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full bg-[#FDFBF7] border border-[#1A1A1A]/15 text-[#1A1A1A] text-xs font-medium hover:border-[#1A1A1A]/40 transition-colors"
           aria-label={`Clear status filter: ${statusLabel}`}
         >
           <Layers className="w-3 h-3" aria-hidden />
           {statusLabel}
-          <span className="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-black/5 group-hover:bg-black/15 transition-colors">
+          <span className="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#1A1A1A]/5 group-hover:bg-[#1A1A1A]/15 transition-colors">
             <X className="w-2.5 h-2.5" aria-hidden />
           </span>
         </button>
@@ -96,12 +96,12 @@ export function ActiveFilterIndicator({
         <button
           type="button"
           onClick={onClearType}
-          className="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full bg-white border border-black/15 text-black text-xs font-medium hover:border-black/40 transition-colors"
+          className="group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full bg-[#FDFBF7] border border-[#1A1A1A]/15 text-[#1A1A1A] text-xs font-medium hover:border-[#1A1A1A]/40 transition-colors"
           aria-label={`Clear category filter: ${typeLabel}`}
         >
           <Tag className="w-3 h-3" aria-hidden />
           {typeLabel}
-          <span className="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-black/5 group-hover:bg-black/15 transition-colors">
+          <span className="ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#1A1A1A]/5 group-hover:bg-[#1A1A1A]/15 transition-colors">
             <X className="w-2.5 h-2.5" aria-hidden />
           </span>
         </button>
@@ -111,7 +111,7 @@ export function ActiveFilterIndicator({
         type="button"
         variant="ghost"
         size="sm"
-        className="h-7 px-2 text-xs text-black/70 hover:text-black hover:bg-black/5"
+        className="h-7 px-2 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5"
         onClick={onClearAll}
       >
         Clear all

@@ -249,7 +249,7 @@ export default function ReferralAdmin() {
 
             {/* Search Tab */}
             <TabsContent value="search" className="space-y-6">
-              <Card className="bg-white border-2 border-gold/40">
+              <Card className="bg-[#FDFBF7] border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Search className="w-5 h-5 text-gold" />
@@ -319,7 +319,7 @@ export default function ReferralAdmin() {
                         {codeUsages.map((usage) => (
                           <div
                             key={usage.id}
-                            className="p-3 bg-white rounded-lg border border-border text-sm"
+                            className="p-3 bg-[#FDFBF7] rounded-lg border border-border text-sm"
                           >
                             <div className="flex items-start justify-between">
                               <div>
@@ -347,7 +347,7 @@ export default function ReferralAdmin() {
 
             {/* Partners Tab */}
             <TabsContent value="partners" className="space-y-6">
-              <Card className="bg-white border-2 border-gold/40">
+              <Card className="bg-[#FDFBF7] border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-gold" />

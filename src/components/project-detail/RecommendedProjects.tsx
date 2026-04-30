@@ -120,11 +120,11 @@ export default function RecommendedProjects({
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Sparkles className="w-6 h-6 text-gold" />
-            <h2 className="text-2xl md:text-3xl font-bold text-black">Recommended Projects</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">Recommended Projects</h2>
           </div>
           <Link
             to="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-black font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-[#1A1A1A] font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
@@ -182,7 +182,7 @@ export default function RecommendedProjects({
                         {saleStatus}
                       </span>
                     </div>
-                    <span className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
+                    <span className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
                       Recommended
                     </span>
                   </div>
@@ -210,7 +210,7 @@ export default function RecommendedProjects({
 
                 {/* Content — flex-col flex-1 so it fills remaining card height */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-lg font-semibold text-black group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors whitespace-normal break-words leading-tight mb-1">
                     {project.name}
                   </h3>
 
@@ -231,7 +231,7 @@ export default function RecommendedProjects({
 
                   {/* Description */}
                   {shortDescription && (
-                    <p className="text-gray-600 text-xs leading-relaxed mt-2 line-clamp-2">
+                    <p className="text-[#5A4A2E] text-xs leading-relaxed mt-2 line-clamp-2">
                       {shortDescription}
                     </p>
                   )}

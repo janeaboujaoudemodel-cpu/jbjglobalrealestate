@@ -153,8 +153,8 @@ export function AIBrokersDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-black text-2xl font-bold">Admin Assistant</h1>
-          <p className="text-black/60 text-sm">
+          <h1 className="text-[#1A1A1A] text-2xl font-bold">Admin Assistant</h1>
+          <p className="text-[#1A1A1A]/60 text-sm">
             Manage your virtual sales team
           </p>
         </div>
@@ -162,7 +162,7 @@ export function AIBrokersDashboard() {
           variant="outline"
           onClick={handleRefresh}
           disabled={refreshing}
-          className="border-gold/30 text-black hover:bg-gold/10"
+          className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
         >
           <RefreshCw
             className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
@@ -173,79 +173,79 @@ export function AIBrokersDashboard() {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Users className="h-4 w-4 text-gold" />
               <span className="text-sm">Active Brokers</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {activeBrokers}
-              <span className="text-black/40 text-sm font-normal">
+              <span className="text-[#1A1A1A]/40 text-sm font-normal">
                 /{brokers.length}
               </span>
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <Users className="h-4 w-4 text-gold" />
               <span className="text-sm">Total Leads Handled</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalLeads.toLocaleString()}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <BarChart3 className="h-4 w-4 text-gold" />
               <span className="text-sm">Total Conversions</span>
             </div>
-            <p className="text-black text-2xl font-bold">
+            <p className="text-[#1A1A1A] text-2xl font-bold">
               {totalConversions.toLocaleString()}
             </p>
           </CardContent>
         </Card>
-        <Card className="bg-white border-2 border-gold/30">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30">
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-black/60 mb-1">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/60 mb-1">
               <BarChart3 className="h-4 w-4 text-emerald-500" />
               <span className="text-sm">Avg Conversion Rate</span>
             </div>
-            <p className="text-black text-2xl font-bold">{avgConversionRate}%</p>
+            <p className="text-[#1A1A1A] text-2xl font-bold">{avgConversionRate}%</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue="brokers" className="space-y-6">
-        <TabsList className="bg-white/80 border-2 border-gold/30">
+        <TabsList className="bg-[#FDFBF7]/80 border-2 border-gold/30">
           <TabsTrigger
             value="brokers"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]"
           >
             Brokers
           </TabsTrigger>
           <TabsTrigger
             value="pipelines"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]"
           >
             <PieChart className="h-4 w-4 mr-2" />
             Pipeline Analytics
           </TabsTrigger>
           <TabsTrigger
             value="assignment"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]"
           >
             <Settings className="h-4 w-4 mr-2" />
             Lead Assignment
           </TabsTrigger>
           <TabsTrigger
             value="filters"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-[#1A1A1A] text-[#1A1A1A]"
           >
             <Shield className="h-4 w-4 mr-2" />
             Message Filters
@@ -254,13 +254,13 @@ export function AIBrokersDashboard() {
 
         <TabsContent value="brokers" className="space-y-6">
           {brokers.length === 0 ? (
-            <Card className="bg-white border-2 border-gold/30 border-dashed">
+            <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
               <CardContent className="flex flex-col items-center justify-center py-16">
-                <Users className="h-16 w-16 text-gray-500 mb-4" />
-                <h3 className="text-black text-lg font-medium mb-2">
+                <Users className="h-16 w-16 text-[#8A7556] mb-4" />
+                <h3 className="text-[#1A1A1A] text-lg font-medium mb-2">
                   No Brokers Configured
                 </h3>
-                <p className="text-black/60 text-center max-w-md">
+                <p className="text-[#1A1A1A]/60 text-center max-w-md">
                   Brokers haven't been set up yet. They will appear here once
                   configured in the database.
                 </p>

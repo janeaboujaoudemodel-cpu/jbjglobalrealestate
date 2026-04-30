@@ -105,7 +105,7 @@ export function BeforeAfterSplitOverlay({
           className="absolute bottom-3 pointer-events-none select-none"
           style={{ left: `min(${splitX / 2}%, calc(${splitX}% - 60px))` }}
         >
-          <span className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-[#1A1A1A]/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
             Before
           </span>
         </div>
@@ -140,7 +140,7 @@ export function BeforeAfterSplitOverlay({
           className="absolute bottom-3 pointer-events-none select-none"
           style={{ left: `calc(${splitX}% + 8px)` }}
         >
-          <span className="text-[10px] font-bold tracking-widest uppercase text-amber-300/90 bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-amber-300/90 bg-[#1A1A1A]/50 px-2 py-0.5 rounded-full backdrop-blur-sm">
             After
           </span>
         </div>

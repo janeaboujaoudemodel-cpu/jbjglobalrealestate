@@ -73,7 +73,7 @@ export default function ApiAccess() {
           <h2 className="text-xl font-bold mb-4">Contact the Team</h2>
           <p className="text-muted-foreground mb-6">For API access requests, partnership inquiries, or data licensing:</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="mailto:contact@jbj.ae" className="inline-flex items-center gap-2 px-6 py-3 bg-gold hover:bg-gold/90 text-black rounded-xl font-semibold transition-colors">
+            <a href="mailto:contact@jbj.ae" className="inline-flex items-center gap-2 px-6 py-3 bg-gold hover:bg-gold/90 text-[#1A1A1A] rounded-xl font-semibold transition-colors">
               <Mail className="w-4 h-4" /> contact@jbj.ae
             </a>
             <a href="tel:+971565911000" className="inline-flex items-center gap-2 px-6 py-3 border border-gold/30 hover:bg-gold/10 text-foreground rounded-xl font-semibold transition-colors">

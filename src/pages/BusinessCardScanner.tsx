@@ -512,11 +512,11 @@ const BusinessCardScanner = () => {
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-gray-600 text-white/85 hover:bg-gray-800">
+                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]">
                     <Download className="h-4 w-4" />
                     Export CSV
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-gray-600 text-white/85 hover:bg-gray-800">
+                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]">
                     <FileSpreadsheet className="h-4 w-4" />
                     Export Excel
                   </Button>

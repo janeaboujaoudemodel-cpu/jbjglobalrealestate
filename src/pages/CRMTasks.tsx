@@ -41,7 +41,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-gray-500/20 text-gray-600 border-gray-500/30",
+  general: "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -226,21 +226,21 @@ const CRMTasks = () => {
           }`}
         >
           {task.status === 'done' && (
-            <CheckCircle2 className="w-4 h-4 text-black" />
+            <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" />
           )}
         </button>
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className={`font-medium text-black ${
-              task.status === 'done' ? 'line-through text-gray-600' : ''
+            <span className={`font-medium text-[#1A1A1A] ${
+              task.status === 'done' ? 'line-through text-[#5A4A2E]' : ''
             }`}>
               {task.title}
             </span>
           </div>
           
           {task.description && (
-            <p className="text-sm text-gray-600 mb-2">{task.description}</p>
+            <p className="text-sm text-[#5A4A2E] mb-2">{task.description}</p>
           )}
           
           <div className="flex items-center gap-2 flex-wrap">
@@ -253,7 +253,7 @@ const CRMTasks = () => {
               {task.priority}
             </Badge>
             {task.due_date && (
-              <span className="text-xs text-gray-600 flex items-center gap-1">
+              <span className="text-xs text-[#5A4A2E] flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {format(new Date(task.due_date), 'MMM d, yyyy')}
               </span>
@@ -263,7 +263,7 @@ const CRMTasks = () => {
         
         <button
           onClick={() => deleteTask(task.id)}
-          className="text-gray-600 hover:text-red-500 transition-colors p-1"
+          className="text-[#5A4A2E] hover:text-red-500 transition-colors p-1"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -274,11 +274,11 @@ const CRMTasks = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header */}
-      <header className="border-b border-gold/20 bg-white/80 backdrop-blur-md sticky top-0 lg:top-[48px] z-50">
+      <header className="border-b border-gold/20 bg-[#FDFBF7]/80 backdrop-blur-md sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-black">
+              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
@@ -289,41 +289,41 @@ const CRMTasks = () => {
                 <ListTodo className="h-5 w-5 text-gold" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-black">My Tasks</h1>
-                <p className="text-xs text-gray-600">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
+                <h1 className="text-xl font-bold text-[#1A1A1A]">My Tasks</h1>
+                <p className="text-xs text-[#5A4A2E]">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
               </div>
             </div>
           </div>
           
           <Dialog open={isAddingTask} onOpenChange={setIsAddingTask}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110 shadow-lg shadow-gold/20">
+              <Button className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110 shadow-lg shadow-gold/20">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Task
               </Button>
             </DialogTrigger>
             <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
               <DialogHeader>
-                <DialogTitle className="text-black">Add New Task</DialogTitle>
+                <DialogTitle className="text-[#1A1A1A]">Add New Task</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <Input
                   placeholder="Task title..."
                   value={newTask.title}
                   onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                  className="border-gray-300 focus:border-gold"
+                  className="border-[#B89555]/30 focus:border-gold"
                 />
                 <Textarea
                   placeholder="Description (optional)..."
                   value={newTask.description}
                   onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                  className="border-gray-300 focus:border-gold"
+                  className="border-[#B89555]/30 focus:border-gold"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <select
                     value={newTask.category}
                     onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                    className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    className="h-10 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                   >
                     <option value="general">General</option>
                     <option value="integration">Integration</option>
@@ -336,7 +336,7 @@ const CRMTasks = () => {
                   <select
                     value={newTask.priority}
                     onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                    className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    className="h-10 px-3 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] text-[#1A1A1A] font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -348,9 +348,9 @@ const CRMTasks = () => {
                   type="date"
                   value={newTask.due_date}
                   onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                  className="border-gray-300 focus:border-gold"
+                  className="border-[#B89555]/30 focus:border-gold"
                 />
-                <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
+                <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-semibold hover:brightness-110">
                   Add Task
                 </Button>
               </div>
@@ -364,7 +364,7 @@ const CRMTasks = () => {
         {/* Filters */}
         <div className="flex items-center gap-4 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
             <Input
               placeholder="Search tasks..."
               value={searchQuery}
@@ -385,8 +385,8 @@ const CRMTasks = () => {
                 size="sm"
                 onClick={() => setFilterStatus(status.key)}
                 className={filterStatus === status.key 
-                  ? "bg-gold text-black" 
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-gray-700 hover:border-gold"
+                  ? "bg-gold text-[#1A1A1A]" 
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#5A4A2E] hover:border-gold"
                 }
               >
                 {status.label}
@@ -401,8 +401,8 @@ const CRMTasks = () => {
             <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="h-8 w-8 text-gold" />
             </div>
-            <p className="text-black font-medium text-lg">No tasks found</p>
-            <p className="text-gray-600 mt-1">
+            <p className="text-[#1A1A1A] font-medium text-lg">No tasks found</p>
+            <p className="text-[#5A4A2E] mt-1">
               {searchQuery || filterStatus !== 'all' 
                 ? "Try adjusting your filters" 
                 : "Add your first task to get started"}
@@ -414,9 +414,9 @@ const CRMTasks = () => {
             {todoTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <Circle className="w-4 h-4 text-gray-600" />
-                  <h2 className="text-lg font-semibold text-black">To Do</h2>
-                  <Badge className="bg-gray-100 text-gray-600">{todoTasks.length}</Badge>
+                  <Circle className="w-4 h-4 text-[#5A4A2E]" />
+                  <h2 className="text-lg font-semibold text-[#1A1A1A]">To Do</h2>
+                  <Badge className="bg-[#F7F2EA] text-[#5A4A2E]">{todoTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
                   {todoTasks.map(task => (
@@ -431,7 +431,7 @@ const CRMTasks = () => {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4 text-blue-500" />
-                  <h2 className="text-lg font-semibold text-black">In Progress</h2>
+                  <h2 className="text-lg font-semibold text-[#1A1A1A]">In Progress</h2>
                   <Badge className="bg-blue-100 text-blue-600">{inProgressTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
@@ -447,7 +447,7 @@ const CRMTasks = () => {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  <h2 className="text-lg font-semibold text-black">Done</h2>
+                  <h2 className="text-lg font-semibold text-[#1A1A1A]">Done</h2>
                   <Badge className="bg-green-100 text-green-600">{doneTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">

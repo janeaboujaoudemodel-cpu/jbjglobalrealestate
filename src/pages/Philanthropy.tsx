@@ -83,19 +83,19 @@ const Philanthropy = () => {
         <div className="jj-layer-2">
           <div className="max-w-3xl mx-auto text-center">
             <div className="jj-card-inner rounded-2xl p-12">
-              <div className="w-16 h-16 rounded-2xl bg-black flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-6">
                 <Heart className="w-8 h-8 text-gold" />
               </div>
-              <h2 className="text-black text-2xl md:text-3xl font-bold mb-4">
+              <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4">
                 Content <span className="text-gold">Coming Soon</span>
               </h2>
-              <p className="text-gray-600 mb-8">
+              <p className="text-[#5A4A2E] mb-8">
                 We're currently preparing detailed information about our philanthropic initiatives 
                 and community involvement programs. Check back soon to learn more about how 
                 JBJ Global Real Estate is making a difference.
               </p>
               <Link to="/contact">
-                <Button className="bg-black hover:bg-black/90 text-gold px-8 py-6">
+                <Button className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-gold px-8 py-6">
                   Contact Us to Learn More
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

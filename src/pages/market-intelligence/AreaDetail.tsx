@@ -23,7 +23,7 @@ const MarketAreaDetail = () => {
 
   if (!area) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-white text-2xl font-bold mb-4">Area Not Found</h1>
           <Link to="/market-intelligence/areas">
@@ -44,7 +44,7 @@ const MarketAreaDetail = () => {
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30 text-lg px-4 py-1">Neutral</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30 text-lg px-4 py-1">Neutral</Badge>;
     }
   };
 
@@ -128,7 +128,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Metrics - 3-layer system with proper gutters */}
-      <section className="pt-16 py-12 bg-black">
+      <section className="pt-16 py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="jj-card-inner">
@@ -137,7 +137,7 @@ const MarketAreaDetail = () => {
                   <BarChart3 className="w-6 h-6" />
                 </div>
                 <p className="text-white/90 text-sm mb-1">Price Index</p>
-                <p className="text-black text-3xl font-bold">{area.priceIndex}</p>
+                <p className="text-[#1A1A1A] text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
             <Card className="jj-card-inner">
@@ -146,7 +146,7 @@ const MarketAreaDetail = () => {
                   <Home className="w-6 h-6" />
                 </div>
                 <p className="text-white/90 text-sm mb-1">Rental Index</p>
-                <p className="text-black text-3xl font-bold">{area.rentalIndex}</p>
+                <p className="text-[#1A1A1A] text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
             <Card className="jj-card-inner">
@@ -155,7 +155,7 @@ const MarketAreaDetail = () => {
                   <Users className="w-6 h-6" />
                 </div>
                 <p className="text-white/90 text-sm mb-1">Demand Score</p>
-                <p className="text-black text-3xl font-bold">{area.demandScore}%</p>
+                <p className="text-[#1A1A1A] text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
             <Card className="jj-card-inner">
@@ -164,7 +164,7 @@ const MarketAreaDetail = () => {
                   <Building2 className="w-6 h-6" />
                 </div>
                 <p className="text-white/90 text-sm mb-1">Supply Score</p>
-                <p className="text-black text-3xl font-bold">{area.supplyScore}%</p>
+                <p className="text-[#1A1A1A] text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>
           </div>
@@ -172,7 +172,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* AI Explanation - 3-layer system */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <Card className="jj-card-inner max-w-4xl mx-auto">
             <CardHeader>
@@ -180,17 +180,17 @@ const MarketAreaDetail = () => {
                 <div className="w-10 h-10 jj-icon-box-active rounded-xl">
                   <Info className="w-5 h-5" />
                 </div>
-                <CardTitle className="text-black">Why This Area Performs This Way</CardTitle>
+                <CardTitle className="text-[#1A1A1A]">Why This Area Performs This Way</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
               <div className="prose max-w-none">
                 {generateExplanation().split('\n\n').map((para, i) => {
                   // Security: Sanitize before rendering with dangerouslySetInnerHTML
-                  const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-black">$1</strong>');
+                  const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#1A1A1A]">$1</strong>');
                   const sanitizedHtml = sanitizeMarkdownHtml(htmlContent);
                   return (
-                    <p key={i} className="text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+                    <p key={i} className="text-[#5A4A2E] mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
                   );
                 })}
               </div>
@@ -200,18 +200,18 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Highlights - 3-layer system */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
-          <h2 className="text-black text-2xl font-bold mb-8 text-center">
+          <h2 className="text-[#1A1A1A] text-2xl font-bold mb-8 text-center">
             <span className="text-gold">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
             {area.highlights.map((highlight, i) => (
               <div key={i} className="jj-card-inner p-4 flex items-start gap-4">
                 <div className="w-8 h-8 jj-icon-box-active rounded-lg shrink-0">
-                  <span className="text-black font-bold text-sm">{i + 1}</span>
+                  <span className="text-[#1A1A1A] font-bold text-sm">{i + 1}</span>
                 </div>
-                <p className="text-gray-700">{highlight}</p>
+                <p className="text-[#5A4A2E]">{highlight}</p>
               </div>
             ))}
           </div>
@@ -219,11 +219,11 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* CTA - 3-layer system */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
           <div className="max-w-2xl mx-auto text-center jj-card-inner p-8">
-            <h3 className="text-black text-xl font-bold mb-4">Interested in {area.area}?</h3>
-            <p className="text-gray-600 mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
+            <h3 className="text-[#1A1A1A] text-xl font-bold mb-4">Interested in {area.area}?</h3>
+            <p className="text-[#5A4A2E] mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
                 <Button variant="primary">
@@ -241,9 +241,9 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Internal Links - 3-layer system */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         <div className="jj-layer-2">
-          <h3 className="text-black text-xl font-bold mb-6 text-center">
+          <h3 className="text-[#1A1A1A] text-xl font-bold mb-6 text-center">
             <span className="text-gold">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
@@ -290,7 +290,7 @@ const MarketAreaDetail = () => {
                   <Shield className="w-4 h-4" />
                 </div>
               </div>
-              <p className="text-gray-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              <p className="text-[#5A4A2E] text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
           </div>
         </div>

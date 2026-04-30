@@ -120,11 +120,11 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
   return (
     <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20 shadow-lg">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
+        <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
           <Share2 className="w-5 h-5 text-gold" />
           Send Project to Another Tool
         </CardTitle>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-[#5A4A2E]">
           Continue your project workflow with our connected creative tools
         </p>
       </CardHeader>
@@ -138,25 +138,25 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
               transition={{ delay: index * 0.1 }}
             >
               <Link to={tool.path}>
-                <div className="group flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
+                <div className="group flex items-center gap-4 p-4 rounded-xl bg-[#FDFBF7] border border-[#B89555]/30 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
                     <tool.icon className="w-6 h-6 text-white" />
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-black group-hover:text-gold transition-colors">
+                      <h3 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">
                         {tool.name}
                       </h3>
                       <Sparkles className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <p className="text-sm text-gray-600 truncate">{tool.description}</p>
+                    <p className="text-sm text-[#5A4A2E] truncate">{tool.description}</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {tool.capabilities.slice(0, 2).map((cap) => (
                         <Badge 
                           key={cap} 
                           variant="outline" 
-                          className="text-xs bg-gray-50 border-gray-200 text-gray-600"
+                          className="text-xs bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E]"
                         >
                           {cap}
                         </Badge>
@@ -164,7 +164,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
                     </div>
                   </div>
                   
-                  <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-[#5A4A2E] group-hover:text-gold group-hover:translate-x-1 transition-all" />
                 </div>
               </Link>
             </motion.div>

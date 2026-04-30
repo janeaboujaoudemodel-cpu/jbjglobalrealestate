@@ -107,7 +107,7 @@ const Concierge = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
         </div>
@@ -122,7 +122,7 @@ const Concierge = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Sparkles className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -153,7 +153,7 @@ const Concierge = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="mt-12 max-w-xl mx-auto"
             >
-              <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-black/50 backdrop-blur-sm aspect-video">
+              <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-[#1A1A1A]/50 backdrop-blur-sm aspect-video">
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4 border border-gold/40">
                     <Play className="w-6 h-6 text-gold ml-1" />
@@ -172,13 +172,13 @@ const Concierge = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* WHAT CONCIERGE MEANS HERE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -189,13 +189,13 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               What Concierge Means Here
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner text-center">
-              <p className="text-gray-700 text-lg leading-relaxed">
+              <p className="text-[#5A4A2E] text-lg leading-relaxed">
                 Concierge support is designed for clients who want smoother execution—less chasing, more structure, and clearer outcomes.
               </p>
             </motion.div>
@@ -204,7 +204,7 @@ const Concierge = () => {
       </section>
 
       {/* EXAMPLES OF CONCIERGE REQUESTS */}
-      <section id="example-requests" className="bg-black py-20">
+      <section id="example-requests" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -215,7 +215,7 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Examples of Concierge Requests
@@ -225,10 +225,10 @@ const Concierge = () => {
                 <motion.div key={index} variants={fadeInUp}>
                   <div className="jj-card-inner">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <span className="text-gray-700 pt-2">{item.text}</span>
+                      <span className="text-[#5A4A2E] pt-2">{item.text}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -239,7 +239,7 @@ const Concierge = () => {
       </section>
 
       {/* HOW REQUESTS ARE HANDLED */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -249,7 +249,7 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               How Requests Are Handled
@@ -264,13 +264,13 @@ const Concierge = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0" />
-                          <span className="font-semibold text-black">{step.title}</span>
+                          <span className="font-semibold text-[#1A1A1A]">{step.title}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -283,7 +283,7 @@ const Concierge = () => {
       </section>
 
       {/* SERVICE STANDARDS */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -294,7 +294,7 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Service Standards
@@ -302,7 +302,7 @@ const Concierge = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {serviceStandards.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-gray-700">
+                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -314,7 +314,7 @@ const Concierge = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -325,7 +325,7 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -338,13 +338,13 @@ const Concierge = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
                       <div className="flex items-center gap-3">
                         <HelpCircle className="w-5 h-5 text-gold shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 pl-8">
+                    <AccordionContent className="text-[#5A4A2E] pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -356,7 +356,7 @@ const Concierge = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -367,12 +367,12 @@ const Concierge = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Let us handle the coordination
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
               Submit one request and we'll structure the execution plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

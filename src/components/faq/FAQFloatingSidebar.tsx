@@ -103,8 +103,8 @@ export const FAQFloatingSidebar = ({
                   <HelpCircle className="w-4 h-4 text-gold" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-black text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-gray-600 text-xs leading-relaxed">
+                  <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
+                  <p className="text-[#5A4A2E] text-xs leading-relaxed">
                     Click any category to jump directly to that section. The active category is highlighted in gold.
                   </p>
                 </div>
@@ -131,20 +131,20 @@ export const FAQFloatingSidebar = ({
         className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
       >
         {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
           <div className="flex items-center gap-2">
             <List className="w-5 h-5 text-gold" />
-            <h3 className="text-black font-semibold text-sm">{title}</h3>
+            <h3 className="text-[#1A1A1A] font-semibold text-sm">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-[#F7F2EA] hover:bg-gold/10 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-gray-600" />
+              <ChevronDown className="w-4 h-4 text-[#5A4A2E]" />
             ) : (
-              <ChevronUp className="w-4 h-4 text-gray-600" />
+              <ChevronUp className="w-4 h-4 text-[#5A4A2E]" />
             )}
           </button>
         </div>
@@ -166,27 +166,27 @@ export const FAQFloatingSidebar = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-gold/40"
+                      : "text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <span className={cn(
                     "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium flex-shrink-0",
                     activeId === `category-${index}`
-                      ? "bg-black text-gold"
+                      ? "bg-[#1A1A1A] text-gold"
                       : "bg-gold/10 text-gold"
                   )}>
                     {index + 1}
                   </span>
                   {category.icon && <category.icon className={cn(
                     "w-3.5 h-3.5 flex-shrink-0",
-                    activeId === `category-${index}` ? "text-black" : "text-gold"
+                    activeId === `category-${index}` ? "text-[#1A1A1A]" : "text-gold"
                   )} />}
                   <span className="flex-1 truncate text-xs">{category.title}</span>
                   <span className={cn(
                     "text-[10px] px-1.5 py-0.5 rounded-full",
                     activeId === `category-${index}`
-                      ? "bg-black/10 text-black"
+                      ? "bg-[#1A1A1A]/10 text-[#1A1A1A]"
                       : "bg-gold/10 text-gold"
                   )}>
                     {category.questions.length}

@@ -129,7 +129,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-fuchsia-600 px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-[#FDFBF7]/20 flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -142,7 +142,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
           <div className="flex items-center gap-1">
             <button
               onClick={() => setIsMaximized(!isMaximized)}
-              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-[#FDFBF7]/20 rounded-lg transition-colors"
             >
               {isMaximized ? (
                 <Minimize2 className="w-4 h-4 text-white" />
@@ -152,7 +152,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
             </button>
             <button
               onClick={() => setIsExpanded(false)}
-              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-[#FDFBF7]/20 rounded-lg transition-colors"
             >
               <X className="w-4 h-4 text-white" />
             </button>
@@ -169,7 +169,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.role === 'user' 
-                    ? 'bg-gold text-black' 
+                    ? 'bg-gold text-[#1A1A1A]' 
                     : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20'
                 }`}>
                   {message.role === 'user' ? (
@@ -181,8 +181,8 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-br-md'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-bl-md'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-gold/30 shadow-md rounded-br-md'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/20 shadow-sm rounded-bl-md'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap select-text">{message.content}</p>
                   </div>
@@ -192,7 +192,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                       await navigator.clipboard.writeText(message.content);
                       toast.success(t('chat.messageCopied') || 'Message copied');
                     }}
-                    className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                    className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                       message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                     }`}
                   >
@@ -220,7 +220,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/20 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                    <span className="text-black/60 text-sm">Thinking...</span>
+                    <span className="text-[#1A1A1A]/60 text-sm">Thinking...</span>
                   </div>
                 </div>
               </div>
@@ -230,14 +230,14 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
 
         {/* Suggested Questions */}
         {messages.length <= 1 && (
-          <div className="px-4 py-2 border-t border-gray-800">
-            <p className="text-xs text-gray-600 mb-2">Try asking:</p>
+          <div className="px-4 py-2 border-t border-[#1A1A1A]">
+            <p className="text-xs text-[#5A4A2E] mb-2">Try asking:</p>
             <div className="flex flex-wrap gap-1.5">
               {suggestedQuestions.map((q, i) => (
                 <button
                   key={i}
                   onClick={() => setInput(q)}
-                  className="text-xs bg-zinc-800 hover:bg-gray-700 text-white/85 px-2.5 py-1 rounded-full transition-colors"
+                  className="text-xs bg-zinc-800 hover:bg-[#1A1A1A] text-white/85 px-2.5 py-1 rounded-full transition-colors"
                 >
                   {q}
                 </button>
@@ -247,14 +247,14 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
         )}
 
         {/* Input */}
-        <div className="p-4 border-t border-gray-800 bg-zinc-900/50">
+        <div className="p-4 border-t border-[#1A1A1A] bg-zinc-900/50">
           <div className="flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask about the training..."
-              className="flex-1 bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 focus:border-purple-500"
+              className="flex-1 bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-purple-500"
               disabled={isLoading}
             />
             <Button

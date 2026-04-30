@@ -505,7 +505,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
             <button
               onClick={handleUrlImport}
               disabled={!urlInput.trim() || scraping}
-              className="px-2.5 py-1.5 rounded-md bg-amber-500 text-black text-xs font-bold hover:bg-amber-400 disabled:opacity-40 transition-all whitespace-nowrap"
+              className="px-2.5 py-1.5 rounded-md bg-amber-500 text-[#1A1A1A] text-xs font-bold hover:bg-amber-400 disabled:opacity-40 transition-all whitespace-nowrap"
             >
               {scraping ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Import'}
             </button>
@@ -600,12 +600,12 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                         </div>
                       )}
                       {proj.is_featured && (
-                        <div className="absolute top-1 left-1 bg-amber-500/90 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-sm">
+                        <div className="absolute top-1 left-1 bg-amber-500/90 text-[#1A1A1A] text-[9px] font-bold px-1.5 py-0.5 rounded-sm">
                           Featured
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all flex items-center justify-center">
-                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-black transition-all">
+                      <div className="absolute inset-0 bg-[#1A1A1A]/0 group-hover:bg-[#1A1A1A]/50 transition-all flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-bold bg-amber-500 text-[#1A1A1A] transition-all">
                           <Sparkles className="w-3 h-3" />
                           Generate Ad
                         </div>
@@ -833,7 +833,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-400 text-black text-sm font-bold hover:from-amber-400 hover:to-amber-300 disabled:opacity-60 transition-all shadow-lg shadow-amber-500/20"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-400 text-[#1A1A1A] text-sm font-bold hover:from-amber-400 hover:to-amber-300 disabled:opacity-60 transition-all shadow-lg shadow-amber-500/20"
           >
             {generating ? (
               <>

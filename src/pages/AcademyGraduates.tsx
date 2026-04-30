@@ -118,10 +118,10 @@ export default function AcademyGraduates() {
               <GraduationCap className="w-4 h-4 mr-2" />
               Certified Professionals
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-4">
               JBJ Academy <span className="text-gold">Graduates</span>
             </h1>
-            <p className="text-black/60 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/60 max-w-2xl mx-auto">
               Our certified brokers have completed rigorous training in real estate fundamentals, market knowledge, and professional sales techniques.
             </p>
           </div>
@@ -130,9 +130,9 @@ export default function AcademyGraduates() {
         {/* Certificate Lookup */}
         <section className="pb-12">
           <div className="max-w-2xl mx-auto px-4">
-            <Card className="border-2 border-gold/30 bg-white/90">
+            <Card className="border-2 border-gold/30 bg-[#FDFBF7]/90">
               <CardContent className="p-6">
-                <h3 className="font-semibold text-black mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-[#1A1A1A] mb-3 flex items-center gap-2">
                   <Shield className="w-5 h-5 text-gold" />
                   Verify a Certificate
                 </h3>
@@ -144,7 +144,7 @@ export default function AcademyGraduates() {
                     onKeyDown={(e) => e.key === "Enter" && handleLookup()}
                     className="border-gold/20"
                   />
-                  <Button onClick={handleLookup} disabled={lookupLoading} className="bg-gold text-black hover:bg-gold/90">
+                  <Button onClick={handleLookup} disabled={lookupLoading} className="bg-gold text-[#1A1A1A] hover:bg-gold/90">
                     {lookupLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                   </Button>
                 </div>
@@ -165,9 +165,9 @@ export default function AcademyGraduates() {
                         <Badge className="bg-emerald-500 text-white"><CheckCircle className="w-3 h-3 mr-1" /> ACTIVE</Badge>
                       )}
                     </div>
-                    <p className="font-semibold text-black">{lookupResult.full_name}</p>
-                    <p className="text-sm text-black/60">Track: {lookupResult.track} · Score: {lookupResult.combined_score}%</p>
-                    <p className="text-xs text-black/40 mt-1">
+                    <p className="font-semibold text-[#1A1A1A]">{lookupResult.full_name}</p>
+                    <p className="text-sm text-[#1A1A1A]/60">Track: {lookupResult.track} · Score: {lookupResult.combined_score}%</p>
+                    <p className="text-xs text-[#1A1A1A]/40 mt-1">
                       Issued {new Date(lookupResult.issued_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                     </p>
                     <Button asChild size="sm" variant="outline" className="mt-2 border-gold/40 text-gold text-xs">
@@ -186,9 +186,9 @@ export default function AcademyGraduates() {
         <section className="pb-16">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
-              <h2 className="text-2xl font-bold text-black">All Graduates</h2>
+              <h2 className="text-2xl font-bold text-[#1A1A1A]">All Graduates</h2>
               <div className="relative w-full max-w-xs">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/30" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/30" />
                 <Input
                   placeholder="Search by name or certificate #"
                   value={searchQuery}
@@ -203,10 +203,10 @@ export default function AcademyGraduates() {
                 <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto" />
               </div>
             ) : filteredCerts.length === 0 ? (
-              <Card className="border-gold/20 bg-white/80">
+              <Card className="border-gold/20 bg-[#FDFBF7]/80">
                 <CardContent className="p-8 text-center">
-                  <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-black/50">
+                  <GraduationCap className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+                  <p className="text-[#1A1A1A]/50">
                     {searchQuery ? "No graduates match your search." : "No graduates yet. Complete the certification program to be the first!"}
                   </p>
                 </CardContent>
@@ -221,20 +221,20 @@ export default function AcademyGraduates() {
                 {filteredCerts.map((cert) => (
                   <motion.div key={cert.id} variants={fadeInUp}>
                     <Link to={`/verify-certificate/${cert.verification_token}`}>
-                      <Card className="border border-gold/20 bg-white/90 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 transition-all h-full group">
+                      <Card className="border border-gold/20 bg-[#FDFBF7]/90 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/5 transition-all h-full group">
                         <CardContent className="p-5 text-center">
                           <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/20 transition-colors">
                             <Award className="w-7 h-7 text-gold" />
                           </div>
-                          <h3 className="font-semibold text-black text-sm">{cert.full_name.split(" ")[0]}</h3>
-                          <p className="text-black/40 text-xs mt-1">{cert.track}</p>
+                          <h3 className="font-semibold text-[#1A1A1A] text-sm">{cert.full_name.split(" ")[0]}</h3>
+                          <p className="text-[#1A1A1A]/40 text-xs mt-1">{cert.track}</p>
                           <div className="flex items-center justify-center gap-1.5 mt-2">
-                            <Hash className="w-3 h-3 text-gray-600" />
-                            <span className="text-xs text-gray-800 font-mono">{cert.certificate_number}</span>
+                            <Hash className="w-3 h-3 text-[#5A4A2E]" />
+                            <span className="text-xs text-[#1A1A1A] font-mono">{cert.certificate_number}</span>
                           </div>
                           <div className="flex items-center justify-center gap-1.5 mt-1.5">
-                            <Calendar className="w-3 h-3 text-black/30" />
-                            <span className="text-xs text-black/40">
+                            <Calendar className="w-3 h-3 text-[#1A1A1A]/30" />
+                            <span className="text-xs text-[#1A1A1A]/40">
                               {new Date(cert.issued_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                             </span>
                           </div>
@@ -263,7 +263,7 @@ export default function AcademyGraduates() {
         </section>
 
         <div className="text-center pb-12">
-          <Button asChild variant="ghost" className="text-black/50">
+          <Button asChild variant="ghost" className="text-[#1A1A1A]/50">
             <Link to="/jbj-academy">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to JBJ Academy
             </Link>

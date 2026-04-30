@@ -265,7 +265,7 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
         const isArc = seg.type === 'arc-text' || seg.type === 'location';
 
         return (
-          <div key={seg.id} className="border border-[hsl(var(--border))] rounded-lg overflow-hidden bg-white">
+          <div key={seg.id} className="border border-[hsl(var(--border))] rounded-lg overflow-hidden bg-[#FDFBF7]">
             {/* Segment header — Level 1 (hidden in hierarchy mode since parent collapsible handles it) */}
             {!isHierarchyMode && (
               <button
@@ -320,7 +320,7 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
                           onChange={e => setEditValue(e.target.value)}
                           onKeyDown={e => { if (e.key === 'Enter') commitEdit(el.index); if (e.key === 'Escape') setEditingIndex(null); }}
                           autoFocus
-                          className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-white text-black font-mono"
+                          className="flex-1 text-[10px] px-2 py-1 border border-[hsl(var(--gold)/0.5)] rounded bg-[#FDFBF7] text-[#1A1A1A] font-mono"
                         />
                         <button onClick={() => commitEdit(el.index)} className="p-1 rounded hover:bg-green-50 text-green-600"><Check size={11}/></button>
                         <button onClick={() => setEditingIndex(null)} className="p-1 rounded hover:bg-[hsl(var(--muted))]"><X size={11}/></button>
@@ -333,7 +333,7 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
                             {el.content.split('').map((ch, ci) => (
                               <div
                                 key={ci}
-                                className="w-7 h-7 flex items-center justify-center text-[11px] font-mono border border-[hsl(var(--gold)/0.3)] rounded bg-white text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] hover:border-[hsl(var(--gold))] cursor-default transition-all"
+                                className="w-7 h-7 flex items-center justify-center text-[11px] font-mono border border-[hsl(var(--gold)/0.3)] rounded bg-[#FDFBF7] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] hover:border-[hsl(var(--gold))] cursor-default transition-all"
                                 title={`Character ${ci + 1}: "${ch}"`}
                               >
                                 {ch}
@@ -366,7 +366,7 @@ export function StampTextEditor({ svgSource, onSvgChange, onSaveVersion, onAiAct
                                     {word.split('').map((ch, ci) => (
                                       <span
                                         key={ci}
-                                        className="w-5 h-5 flex items-center justify-center text-[9px] font-mono border border-[hsl(var(--gold)/0.3)] rounded bg-white text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] cursor-default transition-all"
+                                        className="w-5 h-5 flex items-center justify-center text-[9px] font-mono border border-[hsl(var(--gold)/0.3)] rounded bg-[#FDFBF7] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--gold)/0.1)] cursor-default transition-all"
                                         title={`Character ${ci + 1}: ${ch}`}
                                       >
                                         {ch}

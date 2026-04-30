@@ -79,15 +79,15 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Methodology</span>{" "}
-                    <span className="text-black">& Sources</span>
+                    <span className="text-[#1A1A1A]">& Sources</span>
                   </h2>
                 </div>
                 
                 <div className="prose prose-neutral max-w-none">
-                  <p className="text-black leading-relaxed">
+                  <p className="text-[#1A1A1A] leading-relaxed">
                     This section explains how market data is selected, verified, and presented across JBJ Global Real Estate's Market Intelligence pages. The objective is transparency, consistency, and regulatory alignment.
                   </p>
-                  <p className="text-gray-700 leading-relaxed mt-4">
+                  <p className="text-[#5A4A2E] leading-relaxed mt-4">
                     All methodology is fixed and repeatable. The same standards apply to every market overview, area intelligence page, and market report.
                   </p>
                 </div>
@@ -108,15 +108,15 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Data</span>{" "}
-                    <span className="text-black">Selection Principles</span>
+                    <span className="text-[#1A1A1A]">Selection Principles</span>
                   </h2>
                 </div>
                 
                 <div className="space-y-4">
-                  <p className="text-black leading-relaxed">
+                  <p className="text-[#1A1A1A] leading-relaxed">
                     Only official, government-published or regulator-recognized data is used. Data is selected based on the following criteria:
                   </p>
-                  <ul className="space-y-3 text-black">
+                  <ul className="space-y-3 text-[#1A1A1A]">
                     <li className="flex items-start gap-3">
                       <span className="text-gold mt-1">•</span>
                       <span>Public availability</span>
@@ -134,7 +134,7 @@ const Methodology = () => {
                       <span>Clear scope and definition</span>
                     </li>
                   </ul>
-                  <p className="text-gray-700 leading-relaxed mt-4 pt-4 border-t border-gold/30">
+                  <p className="text-[#5A4A2E] leading-relaxed mt-4 pt-4 border-t border-gold/30">
                     No assumptions, estimates, or third-party projections are included.
                   </p>
                 </div>
@@ -155,19 +155,19 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Primary</span>{" "}
-                    <span className="text-black">Official Sources</span>
+                    <span className="text-[#1A1A1A]">Official Sources</span>
                   </h2>
                 </div>
                 
-                <div className="bg-white/80 rounded-lg border-2 border-gold/50 p-6">
-                  <p className="text-black text-sm mb-6">
+                <div className="bg-[#FDFBF7]/80 rounded-lg border-2 border-gold/50 p-6">
+                  <p className="text-[#1A1A1A] text-sm mb-6">
                     All market intelligence content is derived exclusively from the following sources:
                   </p>
                   
                   <div className="space-y-5">
                     <div className="border-l-4 border-gold pl-4">
-                      <h3 className="font-semibold text-black">Dubai Land Department (DLD) – Open Data</h3>
-                      <p className="text-gray-600 text-sm mt-1">Registered sales transactions, rental contracts, and property records</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">Dubai Land Department (DLD) – Open Data</h3>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Registered sales transactions, rental contracts, and property records</p>
                       <a 
                         href="https://dubailand.gov.ae/en/open-data/real-estate-data/" 
                         target="_blank" 
@@ -179,8 +179,8 @@ const Methodology = () => {
                     </div>
                     
                     <div className="border-l-4 border-gold pl-4">
-                      <h3 className="font-semibold text-black">Dubai Land Department – Research & Reports</h3>
-                      <p className="text-gray-600 text-sm mt-1">Official market studies and sector publications</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">Dubai Land Department – Research & Reports</h3>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Official market studies and sector publications</p>
                       <a 
                         href="https://dubailand.gov.ae/en/open-data/research/" 
                         target="_blank" 
@@ -192,8 +192,8 @@ const Methodology = () => {
                     </div>
                     
                     <div className="border-l-4 border-gold pl-4">
-                      <h3 className="font-semibold text-black">RERA Rental Index</h3>
-                      <p className="text-gray-600 text-sm mt-1">Legally recognized rental benchmarks and adjustment limits</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">RERA Rental Index</h3>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Legally recognized rental benchmarks and adjustment limits</p>
                       <a 
                         href="https://dubailand.gov.ae/en/eservices/rental-index/" 
                         target="_blank" 
@@ -205,8 +205,8 @@ const Methodology = () => {
                     </div>
                     
                     <div className="border-l-4 border-gold pl-4">
-                      <h3 className="font-semibold text-black">RERA Service Charge Index</h3>
-                      <p className="text-gray-600 text-sm mt-1">Approved annual service charges by project</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">RERA Service Charge Index</h3>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Approved annual service charges by project</p>
                       <a 
                         href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" 
                         target="_blank" 
@@ -218,8 +218,8 @@ const Methodology = () => {
                     </div>
                     
                     <div className="border-l-4 border-gold pl-4">
-                      <h3 className="font-semibold text-black">Dubai Government Strategic Publications</h3>
-                      <p className="text-gray-600 text-sm mt-1">Economic frameworks and development agendas</p>
+                      <h3 className="font-semibold text-[#1A1A1A]">Dubai Government Strategic Publications</h3>
+                      <p className="text-[#5A4A2E] text-sm mt-1">Economic frameworks and development agendas</p>
                       <a 
                         href="https://www.protocol.dubai.ae/en/" 
                         target="_blank" 
@@ -231,7 +231,7 @@ const Methodology = () => {
                     </div>
                   </div>
                   
-                  <p className="text-gray-600 text-xs mt-6 pt-4 border-t border-gold/30">
+                  <p className="text-[#5A4A2E] text-xs mt-6 pt-4 border-t border-gold/30">
                     No data is sourced from private platforms, promotional materials, or unofficial aggregators.
                   </p>
                 </div>
@@ -252,33 +252,33 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Data</span>{" "}
-                    <span className="text-black">Validation Process</span>
+                    <span className="text-[#1A1A1A]">Validation Process</span>
                   </h2>
                 </div>
                 
                 <div className="space-y-4">
-                  <p className="text-black leading-relaxed mb-4">
+                  <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Before inclusion, data is:
                   </p>
                   <ol className="space-y-4">
                     <li className="flex items-start gap-4">
                       <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">1</span>
-                      <span className="text-black pt-1">Cross-checked against its original government source</span>
+                      <span className="text-[#1A1A1A] pt-1">Cross-checked against its original government source</span>
                     </li>
                     <li className="flex items-start gap-4">
                       <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">2</span>
-                      <span className="text-black pt-1">Verified for publication date and scope</span>
+                      <span className="text-[#1A1A1A] pt-1">Verified for publication date and scope</span>
                     </li>
                     <li className="flex items-start gap-4">
                       <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">3</span>
-                      <span className="text-black pt-1">Reviewed for consistency with regulatory definitions</span>
+                      <span className="text-[#1A1A1A] pt-1">Reviewed for consistency with regulatory definitions</span>
                     </li>
                     <li className="flex items-start gap-4">
                       <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/20 text-gold font-bold flex items-center justify-center text-sm">4</span>
-                      <span className="text-black pt-1">Used exactly as published, without reinterpretation</span>
+                      <span className="text-[#1A1A1A] pt-1">Used exactly as published, without reinterpretation</span>
                     </li>
                   </ol>
-                  <p className="text-gray-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">
+                  <p className="text-[#5A4A2E] leading-relaxed mt-6 pt-4 border-t border-gold/30">
                     If data cannot be verified from an official source, it is excluded.
                   </p>
                 </div>
@@ -299,15 +299,15 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Presentation</span>{" "}
-                    <span className="text-black">Standards</span>
+                    <span className="text-[#1A1A1A]">Standards</span>
                   </h2>
                 </div>
                 
                 <div className="bg-red-50 border-2 border-red-300 rounded-lg p-6">
-                  <p className="text-black leading-relaxed mb-4">
+                  <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Market intelligence content follows these fixed rules:
                   </p>
-                  <ul className="space-y-3 text-black">
+                  <ul className="space-y-3 text-[#1A1A1A]">
                     <li className="flex items-start gap-3">
                       <span className="text-gold mt-1">•</span>
                       <span>Historical and descriptive language only</span>
@@ -325,7 +325,7 @@ const Methodology = () => {
                       <span>No guaranteed outcomes or implied returns</span>
                     </li>
                   </ul>
-                  <p className="text-gray-700 leading-relaxed mt-4 pt-4 border-t border-red-200">
+                  <p className="text-[#5A4A2E] leading-relaxed mt-4 pt-4 border-t border-red-200">
                     Charts, summaries, and explanations reflect recorded activity, not future expectations.
                   </p>
                 </div>
@@ -346,15 +346,15 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Update</span>{" "}
-                    <span className="text-black">Frequency</span>
+                    <span className="text-[#1A1A1A]">Frequency</span>
                   </h2>
                 </div>
                 
                 <div className="space-y-6">
-                  <p className="text-black leading-relaxed">
+                  <p className="text-[#1A1A1A] leading-relaxed">
                     Market Intelligence pages are reviewed and updated based on:
                   </p>
-                  <ul className="space-y-3 text-black">
+                  <ul className="space-y-3 text-[#1A1A1A]">
                     <li className="flex items-start gap-3">
                       <span className="text-gold mt-1">•</span>
                       <span>New official data releases</span>
@@ -369,9 +369,9 @@ const Methodology = () => {
                     </li>
                   </ul>
                   
-                  <div className="bg-white/80 rounded-lg border-2 border-gold/50 p-6 mt-6">
-                    <h3 className="font-semibold text-black mb-4">Typical review cycles:</h3>
-                    <ul className="space-y-3 text-black">
+                  <div className="bg-[#FDFBF7]/80 rounded-lg border-2 border-gold/50 p-6 mt-6">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-4">Typical review cycles:</h3>
+                    <ul className="space-y-3 text-[#1A1A1A]">
                       <li className="flex items-start gap-3">
                         <span className="text-gold mt-1">•</span>
                         <span><strong>Market Overview:</strong> quarterly</span>
@@ -404,18 +404,18 @@ const Methodology = () => {
                   </div>
                   <h2 className="text-2xl font-bold">
                     <span className="text-gold">Compliance</span>{" "}
-                    <span className="text-black">& Use of Information</span>
+                    <span className="text-[#1A1A1A]">& Use of Information</span>
                   </h2>
                 </div>
                 
                 <div className="space-y-4">
-                  <p className="text-black leading-relaxed">
+                  <p className="text-[#1A1A1A] leading-relaxed">
                     Market intelligence content is provided for informational and educational purposes within the scope of licensed real estate brokerage activity. It supports informed decision-making without replacing client judgment or regulatory processes.
                   </p>
-                  <p className="text-black leading-relaxed">
+                  <p className="text-[#1A1A1A] leading-relaxed">
                     JBJ Global Real Estate maintains full alignment with UAE real estate laws and data publication standards.
                   </p>
-                  <p className="text-gray-600 leading-relaxed mt-6 pt-4 border-t border-gold/30 italic">
+                  <p className="text-[#5A4A2E] leading-relaxed mt-6 pt-4 border-t border-gold/30 italic">
                     This methodology applies uniformly across all Market Intelligence content and is locked unless official data standards change.
                   </p>
                 </div>

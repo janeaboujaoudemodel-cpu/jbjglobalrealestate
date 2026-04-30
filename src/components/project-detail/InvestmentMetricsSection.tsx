@@ -29,7 +29,7 @@ export default function InvestmentMetricsSection({
     : null;
 
   return (
-    <div className="jj-card-inner bg-gradient-to-br from-card via-card to-emerald-50/30 border-2 border-black/10">
+    <div className="jj-card-inner bg-gradient-to-br from-card via-card to-emerald-50/30 border-2 border-[#1A1A1A]/10">
       <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
         <TrendingUp className="w-5 h-5 text-emerald-600" />
         Investment Potential
@@ -42,9 +42,9 @@ export default function InvestmentMetricsSection({
             <div className="w-12 h-12 rounded-full bg-emerald-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-emerald-200">
               <TrendingUp className="w-6 h-6 text-emerald-500" />
             </div>
-            <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Estimated ROI</p>
+            <p className="text-xs text-[#1A1A1A] font-medium uppercase tracking-wider mb-1">Estimated ROI</p>
             <p className="text-2xl font-bold text-emerald-600">{roiEstimate}%</p>
-            <p className="text-xs text-black/80 font-medium mt-1">Capital appreciation</p>
+            <p className="text-xs text-[#1A1A1A]/80 font-medium mt-1">Capital appreciation</p>
           </div>
         )}
 
@@ -54,9 +54,9 @@ export default function InvestmentMetricsSection({
             <div className="w-12 h-12 rounded-full bg-blue-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-blue-200">
               <Percent className="w-6 h-6 text-blue-500" />
             </div>
-            <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Rental Yield</p>
+            <p className="text-xs text-[#1A1A1A] font-medium uppercase tracking-wider mb-1">Rental Yield</p>
             <p className="text-2xl font-bold text-blue-600">{rentalYieldEstimate}%</p>
-            <p className="text-xs text-black/80 font-medium mt-1">Annual returns</p>
+            <p className="text-xs text-[#1A1A1A]/80 font-medium mt-1">Annual returns</p>
           </div>
         )}
 
@@ -66,15 +66,15 @@ export default function InvestmentMetricsSection({
             <div className="w-12 h-12 rounded-full bg-purple-500/20 mx-auto mb-3 flex items-center justify-center ring-4 ring-purple-200">
               <PiggyBank className="w-6 h-6 text-purple-500" />
             </div>
-            <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Est. Annual Rental</p>
+            <p className="text-xs text-[#1A1A1A] font-medium uppercase tracking-wider mb-1">Est. Annual Rental</p>
             <p className="text-2xl font-bold text-price-orange">AED {estimatedAnnualRental.toLocaleString()}</p>
-            <p className="text-xs text-black/80 font-medium mt-1">Projected income</p>
+            <p className="text-xs text-[#1A1A1A]/80 font-medium mt-1">Projected income</p>
           </div>
         )}
       </div>
 
       {/* Disclaimer */}
-      <p className="text-xs text-black/80 text-center mt-4 italic">
+      <p className="text-xs text-[#1A1A1A]/80 text-center mt-4 italic">
         * Investment metrics are estimates based on market analysis. Actual returns may vary. 
         Past performance is not indicative of future results.
       </p>

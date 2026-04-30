@@ -106,17 +106,17 @@ const ClientMarketContext = ({
   }
 
   return (
-    <Card className="bg-white border-2 border-gold/30 shadow-lg">
+    <Card className="bg-[#FDFBF7] border-2 border-gold/30 shadow-lg">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-medium text-black flex items-center gap-2">
+          <CardTitle className="text-base font-medium text-[#1A1A1A] flex items-center gap-2">
             Market Context
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
             <Info className="w-4 h-4 text-gold" />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-xs bg-zinc-800 border-gray-700">
+                <TooltipContent className="max-w-xs bg-zinc-800 border-[#1A1A1A]">
                   <p className="text-xs text-white">
                     Insights based on aggregated official data. Provided for informational purposes only.
                   </p>
@@ -124,7 +124,7 @@ const ClientMarketContext = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs text-[#5A4A2E] bg-[#F7F2EA] px-2 py-1 rounded-full">
             <Clock className="w-3 h-3 text-gold" />
             <span className="font-medium">Updated {lastUpdated}</span>
           </div>
@@ -133,20 +133,20 @@ const ClientMarketContext = ({
       <CardContent className="space-y-4">
         {/* Trend & Demand Summary */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
+          <div className="flex items-center gap-2 bg-[#F7F2EA] px-3 py-2 rounded-lg">
             {getTrendIcon()}
-            <span className="text-sm text-black font-medium">{getTrendLabel()}</span>
+            <span className="text-sm text-[#1A1A1A] font-medium">{getTrendLabel()}</span>
           </div>
           {getDemandBadge()}
         </div>
 
         {/* Plain-English Context */}
-        <p className="text-sm text-gray-600 leading-relaxed">
+        <p className="text-sm text-[#5A4A2E] leading-relaxed">
           {getContextNarrative()}
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-gray-600 border-t border-gray-200 pt-3">
+        <p className="text-[10px] text-[#5A4A2E] border-t border-[#B89555]/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

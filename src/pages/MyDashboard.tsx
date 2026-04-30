@@ -134,7 +134,7 @@ function UsefulLinksCard() {
               style={{ perspective: '1000px' }}
             >
               {/* Book shadow */}
-              <div className="absolute -bottom-2 left-2 right-2 h-4 bg-black/30 blur-lg rounded-full group-hover:blur-xl group-hover:bg-[#C8A766]/20 transition-all" />
+              <div className="absolute -bottom-2 left-2 right-2 h-4 bg-[#1A1A1A]/30 blur-lg rounded-full group-hover:blur-xl group-hover:bg-[#C8A766]/20 transition-all" />
 
               <div
                 className="relative w-full h-full border border-[#C8A766]/30 shadow-[4px_4px_15px_rgba(0,0,0,0.4)] group-hover:shadow-[8px_8px_35px_rgba(200,167,102,0.35)] transition-all duration-500 transform-gpu rounded-r-md overflow-hidden"
@@ -287,7 +287,7 @@ const MyDashboard = () => {
           <div className="container mx-auto px-4 py-6 max-w-7xl">
             {/* Dashboard Title + Badge */}
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h1 className="text-2xl md:text-3xl font-bold text-black">
+              <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
                 My <span className="text-gold">Dashboard</span>
               </h1>
               {isCombinedMode ? (
@@ -385,7 +385,7 @@ const MyDashboard = () => {
                     <p className="text-sm text-muted-foreground mb-4">
                       Access your suite of AI-powered professional tools — design studio, video builder, copywriter, and more.
                     </p>
-                    <Button asChild className="w-full bg-gradient-to-r from-gold/90 to-gold hover:from-gold hover:to-gold/90 text-black font-semibold shadow-lg">
+                    <Button asChild className="w-full bg-gradient-to-r from-gold/90 to-gold hover:from-gold hover:to-gold/90 text-[#1A1A1A] font-semibold shadow-lg">
                       <Link to="/toolkit">
                         <Sparkles className="w-4 h-4 mr-2" />
                         Explore All AI Tools

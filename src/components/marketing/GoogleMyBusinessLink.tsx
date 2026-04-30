@@ -20,7 +20,7 @@ export const GoogleMyBusinessLink = ({
         href={GMB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-2 bg-white text-black font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition-all shadow-lg ${className}`}
+        className={`inline-flex items-center gap-2 bg-[#FDFBF7] text-[#1A1A1A] font-semibold px-6 py-3 rounded-xl hover:bg-[#F7F2EA] transition-all shadow-lg ${className}`}
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
           <path

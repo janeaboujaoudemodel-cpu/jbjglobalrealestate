@@ -89,7 +89,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    <div className="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                    <div className="absolute bottom-1.5 right-1.5 w-7 h-7 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm flex items-center justify-center">
                       <Icon className="w-3.5 h-3.5 text-gold" />
                     </div>
                     {/* Hidden fallback icon shown on image error */}

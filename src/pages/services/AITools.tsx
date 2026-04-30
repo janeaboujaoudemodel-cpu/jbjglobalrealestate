@@ -130,7 +130,7 @@ const AITools = () => {
 
       {/* HERO SECTION */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-[#1A1A1A]">
           {/* Video placeholder - Tools Built for Clarity */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
@@ -146,7 +146,7 @@ const AITools = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-black/30 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-gold/40 bg-[#1A1A1A]/30 backdrop-blur-md">
               <Brain className="w-4 h-4 text-gold" />
               <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">
                 Services
@@ -178,13 +178,13 @@ const AITools = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-gray-600 text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
 
       {/* TOOLS LIBRARY */}
-      <section id="tools-library" className="bg-black py-20">
+      <section id="tools-library" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -194,12 +194,12 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Tools Library
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center max-w-3xl mx-auto mb-12">
               Select a tool below. Each tool is designed to help you structure decisions, compare options, and understand trade-offs—without relying on vague assumptions.
             </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -208,13 +208,13 @@ const AITools = () => {
                   <Link to={tool.link}>
                     <Card className="jj-card-inner hover:border-gold transition-all group h-full">
                       <CardContent className="p-6">
-                        <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                           <tool.icon className="w-6 h-6 text-gold" />
                         </div>
-                        <h3 className="font-semibold text-black text-lg mb-2 group-hover:text-gold transition-colors">
+                        <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2 group-hover:text-gold transition-colors">
                           {tool.title}
                         </h3>
-                        <p className="text-sm text-gray-600 mb-4">
+                        <p className="text-sm text-[#5A4A2E] mb-4">
                           {tool.description}
                         </p>
                         <div className="flex items-center gap-1 text-gold text-sm font-medium">
@@ -232,7 +232,7 @@ const AITools = () => {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how-it-works" className="bg-black py-20">
+      <section id="how-it-works" className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -242,7 +242,7 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               How It Works
@@ -257,13 +257,13 @@ const AITools = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-6"
                     >
-                      <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center shrink-0 z-10 border-2 border-gold">
+                      <div className="w-12 h-12 rounded-full bg-[#1A1A1A] flex items-center justify-center shrink-0 z-10 border-2 border-gold">
                         <span className="text-gold font-bold">{step.step}</span>
                       </div>
                       <div className="flex-1 jj-card-inner !p-4">
                         <div className="flex items-center gap-4">
                           <step.icon className="w-6 h-6 text-gold shrink-0" />
-                          <span className="font-semibold text-black">{step.title}</span>
+                          <span className="font-semibold text-[#1A1A1A]">{step.title}</span>
                         </div>
                       </div>
                     </motion.div>
@@ -276,7 +276,7 @@ const AITools = () => {
       </section>
 
       {/* TRANSPARENCY & RESPONSIBLE USE */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -287,7 +287,7 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-8"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Transparency & Responsible Use
@@ -295,7 +295,7 @@ const AITools = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <Shield className="w-8 h-8 text-gold shrink-0" />
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-[#5A4A2E] text-lg leading-relaxed">
                   Outputs are generated from available inputs and structured logic. Where official datasets are referenced in the platform, sources are shown inside the relevant report modules.
                 </p>
               </div>
@@ -305,7 +305,7 @@ const AITools = () => {
       </section>
 
       {/* FAQ */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -316,7 +316,7 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black text-center mb-12"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-12"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Frequently Asked Questions
@@ -329,13 +329,13 @@ const AITools = () => {
                     value={`item-${index}`}
                     className="jj-card-inner border-none"
                   >
-                    <AccordionTrigger className="text-left text-black hover:text-gold">
+                    <AccordionTrigger className="text-left text-[#1A1A1A] hover:text-gold">
                       <div className="flex items-center gap-3">
                         <HelpCircle className="w-5 h-5 text-gold shrink-0" />
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-gray-600 pl-8">
+                    <AccordionContent className="text-[#5A4A2E] pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -347,7 +347,7 @@ const AITools = () => {
       </section>
 
       {/* CTA BLOCK */}
-      <section className="bg-black py-20">
+      <section className="bg-[#1A1A1A] py-20">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -358,12 +358,12 @@ const AITools = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="text-3xl md:text-4xl font-bold text-black mb-4"
+              className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
               Use tools built for clarity
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
               Open the library, select a tool, and structure your decision in minutes.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

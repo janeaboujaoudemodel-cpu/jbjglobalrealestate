@@ -44,7 +44,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
             />
           </div>
 
-          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-10">
+          <div className="lg:col-span-6 lg:border-l lg:border-[#B89555]/30 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {/* Column 1: Dashboard & Tools */}
               <div className="relative flex flex-col">

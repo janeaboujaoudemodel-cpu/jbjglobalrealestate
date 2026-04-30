@@ -141,7 +141,7 @@ const viewOptions = [
 // LOCKED blue theme classes — never use gold hover on evaluator cards
 const blueCard = "hover:border-blue-400/60 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] hover:scale-[1.01] transition-all duration-300";
 const blueCardPrimary = `bg-blue-900/20 border-blue-500/30 ${blueCard}`;
-const blueCardSecondary = `bg-zinc-900/50 border-gray-800 ${blueCard}`;
+const blueCardSecondary = `bg-zinc-900/50 border-[#1A1A1A] ${blueCard}`;
 
 const PropertyEvaluator = () => {
   const [property, setProperty] = useState<PropertyDetails>(defaultProperty);
@@ -335,16 +335,16 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-zinc-900 border border-blue-500/30 mb-8">
-            <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-white/70">
+            <TabsTrigger value="property" className="data-[state=active]:bg-blue-500 data-[state=active]:text-[#1A1A1A] text-white/70">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-white/70">
+            <TabsTrigger value="modifications" className="data-[state=active]:bg-blue-500 data-[state=active]:text-[#1A1A1A] text-white/70">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-white/70">
+            <TabsTrigger value="owner" className="data-[state=active]:bg-blue-500 data-[state=active]:text-[#1A1A1A] text-white/70">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-blue-500 data-[state=active]:text-black text-white/70">
+            <TabsTrigger value="results" disabled={!evaluation} className="data-[state=active]:bg-blue-500 data-[state=active]:text-[#1A1A1A] text-white/70">
               Results
             </TabsTrigger>
           </TabsList>
@@ -373,7 +373,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.buildingName}
                         onChange={(e) => updateProperty('buildingName', e.target.value)}
                         placeholder="e.g., Burj Vista Tower 1"
-                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-[#5A4A2E] hover:border-blue-500/50 focus:border-blue-400"
                       />
                       <p className="text-xs text-white/90">Official building name as registered</p>
                     </div>
@@ -386,7 +386,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.unitNumber}
                         onChange={(e) => updateProperty('unitNumber', e.target.value)}
                         placeholder="e.g., 1505 or 15-A"
-                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-[#5A4A2E] hover:border-blue-500/50 focus:border-blue-400"
                       />
                       <p className="text-xs text-white/90">As shown on title deed</p>
                     </div>
@@ -396,17 +396,17 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     <div className="space-y-1">
                       <Label className="text-white/70 flex items-center gap-1">
                         Community <span className="text-blue-400">*</span>
-                        <Search className="w-3 h-3 text-gray-600" />
+                        <Search className="w-3 h-3 text-[#5A4A2E]" />
                       </Label>
                       <div className="relative">
                         <Input
                           value={communitySearch}
                           onChange={(e) => setCommunitySearch(e.target.value)}
                           placeholder="Search community..."
-                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 mb-1"
+                          className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] mb-1"
                         />
                         {communitySearch && (
-                          <div className="absolute z-50 w-full max-h-48 overflow-y-auto bg-zinc-800 border border-gray-700 rounded-md shadow-xl">
+                          <div className="absolute z-50 w-full max-h-48 overflow-y-auto bg-zinc-800 border border-[#1A1A1A] rounded-md shadow-xl">
                             {filteredCommunities.length > 0 ? (
                               filteredCommunities.map(c => (
                                 <button
@@ -438,7 +438,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.subCommunity}
                         onChange={(e) => updateProperty('subCommunity', e.target.value)}
                         placeholder="e.g., Tower 2, Phase 1"
-                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                        className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
                       />
                     </div>
                   </div>
@@ -447,10 +447,10 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     <div>
                       <Label className="text-white/70">Property Type</Label>
                       <Select value={property.propertyType} onValueChange={(v: any) => updateProperty('propertyType', v)}>
-                        <SelectTrigger className="bg-zinc-800 border-gray-700 text-white">
+                        <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-zinc-800 border-gray-700">
+                        <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
                           <SelectItem value="studio" className="text-white">Studio</SelectItem>
                           <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                           <SelectItem value="penthouse" className="text-white">Penthouse</SelectItem>
@@ -465,7 +465,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.developer}
                         onChange={(e) => updateProperty('developer', e.target.value)}
                         placeholder="e.g., Emaar, DAMAC, Sobha"
-                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
+                        className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
                       />
                     </div>
                   </div>
@@ -485,7 +485,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
                             property.views.includes(view)
                               ? 'bg-blue-500 border-blue-500 text-white font-medium'
-                              : 'border-gray-700 text-white/70 hover:border-blue-500/50 hover:text-blue-400'
+                              : 'border-[#1A1A1A] text-white/70 hover:border-blue-500/50 hover:text-blue-400'
                           }`}
                         >
                           {view}
@@ -511,15 +511,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <Label className="text-white/70 text-sm">Bedrooms</Label>
-                      <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Bathrooms</Label>
-                      <Input type="number" value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Parking</Label>
-                      <Input type="number" value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                   </div>
 
@@ -528,43 +528,43 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                       <Label className="text-white/70 text-sm flex items-center gap-1">
                         Internal Size (sq ft) <span className="text-blue-400">*</span>
                       </Label>
-                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1200" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
+                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1200" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Balcony (sq ft)</Label>
-                      <Input type="number" value={property.balconySize || ''} onChange={(e) => updateProperty('balconySize', parseInt(e.target.value) || 0)} placeholder="e.g., 100" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
+                      <Input type="number" value={property.balconySize || ''} onChange={(e) => updateProperty('balconySize', parseInt(e.target.value) || 0)} placeholder="e.g., 100" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-white/70 text-sm">Carpet Area (sq ft)</Label>
-                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Floor Level</Label>
-                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label className="text-white/70 text-sm">Service Charge (AED/sq ft)</Label>
-                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Handover Year</Label>
-                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} className="bg-zinc-800 border-gray-700 text-white" />
+                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} className="bg-zinc-800 border-[#1A1A1A] text-white" />
                     </div>
                   </div>
 
                   <div>
                     <Label className="text-white/70 text-sm">Furnished Status</Label>
                     <Select value={property.furnishedStatus} onValueChange={(v: any) => updateProperty('furnishedStatus', v)}>
-                      <SelectTrigger className="bg-zinc-800 border-gray-700 text-white">
+                      <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-zinc-800 border-gray-700">
+                      <SelectContent className="bg-zinc-800 border-[#1A1A1A]">
                         <SelectItem value="unfurnished" className="text-white">Unfurnished</SelectItem>
                         <SelectItem value="semi-furnished" className="text-white">Semi-Furnished</SelectItem>
                         <SelectItem value="furnished" className="text-white">Fully Furnished</SelectItem>
@@ -596,14 +596,14 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                   <input ref={photoInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handlePhotoUpload(e, 'property')} />
                   <div className="flex flex-wrap gap-4">
                     {property.propertyPhotos.map((photo, i) => (
-                      <div key={i} className="relative w-28 h-28 rounded-lg overflow-hidden group border border-gray-700">
+                      <div key={i} className="relative w-28 h-28 rounded-lg overflow-hidden group border border-[#1A1A1A]">
                         <img src={photo} alt={`Property ${i + 1}`} className="w-full h-full object-cover" />
                         <button onClick={() => removePhoto(i, 'property')} className="absolute inset-0 bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <span className="text-white text-xs font-medium">Remove</span>
                         </button>
                       </div>
                     ))}
-                    <button onClick={() => photoInputRef.current?.click()} className="w-28 h-28 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
+                    <button onClick={() => photoInputRef.current?.click()} className="w-28 h-28 border-2 border-dashed border-[#1A1A1A] rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
                       <Camera className="w-6 h-6 text-white/90 group-hover:text-blue-400 mb-1" />
                       <span className="text-xs text-white/90 group-hover:text-blue-400">Add Photos</span>
                     </button>
@@ -655,7 +655,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     className="grid md:grid-cols-2 gap-4"
                   >
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'stock' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700 hover:border-blue-400/40'
+                      property.hasModifications === 'stock' ? 'border-blue-500 bg-blue-500/10' : 'border-[#1A1A1A] hover:border-blue-400/40'
                     }`}>
                       <RadioGroupItem value="stock" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -672,7 +672,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     </label>
 
                     <label className={`relative flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                      property.hasModifications === 'modified' ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700 hover:border-blue-400/40'
+                      property.hasModifications === 'modified' ? 'border-blue-500 bg-blue-500/10' : 'border-[#1A1A1A] hover:border-blue-400/40'
                     }`}>
                       <RadioGroupItem value="modified" className="sr-only" />
                       <div className="flex items-center gap-3 mb-2">
@@ -726,7 +726,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                               key={type.value}
                               onClick={() => updateProperty('modificationType', type.value)}
                               className={`p-3 rounded-lg border text-left transition-all ${
-                                property.modificationType === type.value ? 'border-blue-500 bg-blue-500/10' : 'border-gray-700 hover:border-blue-400/40'
+                                property.modificationType === type.value ? 'border-blue-500 bg-blue-500/10' : 'border-[#1A1A1A] hover:border-blue-400/40'
                               }`}
                             >
                               <type.icon className={`w-5 h-5 mb-2 ${property.modificationType === type.value ? 'text-blue-400' : 'text-white/70'}`} />
@@ -743,7 +743,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           value={property.renovations}
                           onChange={(e) => updateProperty('renovations', e.target.value)}
                           placeholder="e.g., Full kitchen renovation with imported Italian marble countertops..."
-                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[120px] mt-2"
+                          className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[120px] mt-2"
                         />
                       </div>
 
@@ -752,7 +752,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           <DollarSign className="w-4 h-4" />
                           Total Investment Made (AED)
                         </Label>
-                        <Input type="number" value={property.renovationCost || ''} onChange={(e) => updateProperty('renovationCost', parseInt(e.target.value) || 0)} placeholder="e.g., 150000" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 mt-2" />
+                        <Input type="number" value={property.renovationCost || ''} onChange={(e) => updateProperty('renovationCost', parseInt(e.target.value) || 0)} placeholder="e.g., 150000" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] mt-2" />
                         <p className="text-xs text-white/90 mt-1">Include all costs: materials, labor, permits, and professional fees</p>
                       </div>
 
@@ -762,14 +762,14 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         <input ref={renovationPhotoRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handlePhotoUpload(e, 'renovation')} />
                         <div className="flex flex-wrap gap-4">
                           {property.renovationPhotos.map((photo, i) => (
-                            <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden group border border-gray-700">
+                            <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden group border border-[#1A1A1A]">
                               <img src={photo} alt={`Renovation ${i + 1}`} className="w-full h-full object-cover" />
                               <button onClick={() => removePhoto(i, 'renovation')} className="absolute inset-0 bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span className="text-white text-xs">Remove</span>
                               </button>
                             </div>
                           ))}
-                          <button onClick={() => renovationPhotoRef.current?.click()} className="w-24 h-24 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
+                          <button onClick={() => renovationPhotoRef.current?.click()} className="w-24 h-24 border-2 border-dashed border-[#1A1A1A] rounded-lg flex flex-col items-center justify-center hover:border-blue-400/50 transition-colors group">
                             <Upload className="w-5 h-5 text-white/90 group-hover:text-blue-400 mb-1" />
                             <span className="text-xs text-white/90 group-hover:text-blue-400">Add</span>
                           </button>
@@ -791,7 +791,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
             </div>
 
             <div className="flex justify-center gap-4 mt-8">
-              <Button onClick={() => setActiveTab('property')} variant="outline" className="border-gray-700">← Back</Button>
+              <Button onClick={() => setActiveTab('property')} variant="outline" className="border-[#1A1A1A]">← Back</Button>
               <Button onClick={() => setActiveTab('owner')} className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-8">
                 Next: Owner Information <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
@@ -811,15 +811,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
               <CardContent className="space-y-4">
                 <div>
                   <Label className="text-white/70">Full Name <span className="text-blue-400">*</span></Label>
-                  <Input value={property.ownerName} onChange={(e) => updateProperty('ownerName', e.target.value)} placeholder="John Smith" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
+                  <Input value={property.ownerName} onChange={(e) => updateProperty('ownerName', e.target.value)} placeholder="John Smith" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]" />
                 </div>
                 <div>
                   <Label className="text-white/70">Email <span className="text-blue-400">*</span></Label>
-                  <Input type="email" value={property.ownerEmail} onChange={(e) => updateProperty('ownerEmail', e.target.value)} placeholder="john@email.com" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
+                  <Input type="email" value={property.ownerEmail} onChange={(e) => updateProperty('ownerEmail', e.target.value)} placeholder="john@email.com" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]" />
                 </div>
                 <div>
                   <Label className="text-white/70">Phone <span className="text-blue-400">*</span></Label>
-                  <Input value={property.ownerPhone} onChange={(e) => updateProperty('ownerPhone', e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
+                  <Input value={property.ownerPhone} onChange={(e) => updateProperty('ownerPhone', e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]" />
                 </div>
                 <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg mt-6">
                   <div className="flex items-start gap-3">
@@ -834,7 +834,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
             </Card>
 
             <div className="flex justify-center gap-4 mt-8">
-              <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-gray-700">← Back</Button>
+              <Button onClick={() => setActiveTab('modifications')} variant="outline" className="border-[#1A1A1A]">← Back</Button>
               <Button onClick={evaluateProperty} disabled={isEvaluating} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium px-8">
                 {isEvaluating ? (
                   <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Evaluating Property...</>
@@ -855,9 +855,9 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                     <p className="text-blue-400 text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
                     <div className="flex items-center justify-center gap-3 mb-2">
                       <span className="text-2xl text-price-orange/80">AED {evaluation.estimatedValue.low.toLocaleString()}</span>
-                      <span className="text-gray-600">—</span>
+                      <span className="text-[#5A4A2E]">—</span>
                       <span className="text-5xl font-bold text-price-orange">AED {evaluation.estimatedValue.mid.toLocaleString()}</span>
-                      <span className="text-gray-600">—</span>
+                      <span className="text-[#5A4A2E]">—</span>
                       <span className="text-2xl text-price-orange/80">AED {evaluation.estimatedValue.high.toLocaleString()}</span>
                     </div>
                     <p className="text-white/70">
@@ -914,7 +914,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         <span className="text-green-400">+AED {evaluation.premiums.furnishedPremium.toLocaleString()}</span>
                       </div>
                       {evaluation.premiums.renovationValue > 0 && (
-                        <div className="flex justify-between pt-2 border-t border-gray-800">
+                        <div className="flex justify-between pt-2 border-t border-[#1A1A1A]">
                           <span className="text-white/70">Modification Value</span>
                           <span className="text-blue-400 font-medium">+AED {evaluation.premiums.renovationValue.toLocaleString()}</span>
                         </div>
@@ -959,7 +959,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                 </Card>
 
                 {/* Disclaimer */}
-                <div className="max-w-4xl mx-auto p-4 bg-zinc-900/50 border border-gray-800 rounded-lg">
+                <div className="max-w-4xl mx-auto p-4 bg-zinc-900/50 border border-[#1A1A1A] rounded-lg">
                   <p className="text-xs text-white/90 text-center">{evaluation.disclaimer}</p>
                 </div>
 

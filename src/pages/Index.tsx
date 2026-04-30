@@ -75,7 +75,7 @@ const VerificationBanner = lazy(() => import("@/components/verification/Verifica
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+    <div className="w-8 h-8 border-2 border-[#B89555]/30 border-t-transparent rounded-full animate-spin" />
   </div>
 ));
 SectionLoader.displayName = "SectionLoader";
@@ -169,8 +169,8 @@ const Index = () => {
               className="absolute inset-0 z-[1] pointer-events-none"
             >
               {/* Gold accent orbs only — no logo to avoid overlapping headline on mobile */}
-              <div className="absolute top-1/4 left-10 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
-              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-white/5 rounded-full blur-[120px]" />
+              <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#FDFBF7]/5 rounded-full blur-[100px]" />
+              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-[#FDFBF7]/5 rounded-full blur-[120px]" />
             </div>
           )}
 
@@ -253,7 +253,7 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300 min-h-[58px] sm:min-h-[44px]"
+                  className="group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/70 sm:border-white/30 bg-[#1A1A1A]/60 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-medium hover:bg-[#FDFBF7]/15 hover:border-white/70 hover:text-white transition-all duration-300 min-h-[58px] sm:min-h-[44px]"
                 >
                   <action.icon className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
                   <span className="whitespace-normal break-words leading-tight text-center">{action.label}</span>
@@ -269,7 +269,7 @@ const Index = () => {
               {pillars.map((pillar, i) => (
                 <div
                   key={pillar.title}
-                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
+                  className="bg-[#1A1A1A]/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
                 >
                   <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white mx-auto mb-1.5" />
                   <h3 className="text-[11px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
@@ -474,18 +474,18 @@ const Index = () => {
 
       <section className="py-8 md:py-10">
         <div className="jj-layer-2">
-          <div className="bg-gray-50 border border-gray-200 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-gray-600 text-xs text-center mt-4">
+              <p className="text-[#5A4A2E] text-xs text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
                 <Link to="/mortgage-calculator">
-                  <Button size="lg" className="gap-2 px-8 py-5 text-base bg-black text-white hover:bg-gray-800">
+                  <Button size="lg" className="gap-2 px-8 py-5 text-base bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
                     <Sparkles className="w-5 h-5" />
                     <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
                     <ArrowUpRight className="w-5 h-5" />
@@ -493,8 +493,8 @@ const Index = () => {
                 </Link>
                 
                 <Link to="/partners/mortgage">
-                  <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-gray-300 text-black hover:bg-gray-100">
-                    <Users className="w-5 h-5 text-gray-600" />
+                  <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]">
+                    <Users className="w-5 h-5 text-[#5A4A2E]" />
                     <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
                     <ArrowUpRight className="w-5 h-5" />
                   </Button>

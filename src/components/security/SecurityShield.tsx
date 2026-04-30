@@ -195,7 +195,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
 
   if (isBlocked) {
     return (
-      <div className="fixed inset-0 z-[99999] bg-black flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[99999] bg-[#1A1A1A] flex items-center justify-center p-4">
         <div className="max-w-3xl w-full bg-zinc-900 border-2 border-red-600 rounded-xl p-8 text-center">
           <div className="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-red-500" />
@@ -243,7 +243,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
               This incident has been logged and may be reported to UAE authorities for investigation.
             </p>
             
-            <div className="bg-zinc-800 rounded-lg p-4 mt-4 border border-gray-700">
+            <div className="bg-zinc-800 rounded-lg p-4 mt-4 border border-[#1A1A1A]">
               <p className="text-xs text-white/70 flex items-center gap-2 mb-2">
                 <Lock className="w-4 h-4" />
                 <strong>Recorded Evidence:</strong>
@@ -264,12 +264,12 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
           
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-gold text-black font-semibold rounded-lg hover:bg-gold/90 transition-colors"
+            className="px-6 py-3 bg-gold text-[#1A1A1A] font-semibold rounded-lg hover:bg-gold/90 transition-colors"
           >
             I Understand - Reload Page
           </button>
           
-          <p className="text-xs text-gray-600 mt-4">
+          <p className="text-xs text-[#5A4A2E] mt-4">
             If you believe this is an error, contact legal@jbj.ae with Incident ID: {violation?.incidentId}
           </p>
         </div>

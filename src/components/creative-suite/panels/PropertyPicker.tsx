@@ -66,7 +66,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
               className="pl-10 bg-slate-800 border-slate-700 text-white"
             />
           </div>
-          <Button type="submit" className="bg-gold hover:bg-gold/90 text-black">
+          <Button type="submit" className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
             Search
           </Button>
         </form>

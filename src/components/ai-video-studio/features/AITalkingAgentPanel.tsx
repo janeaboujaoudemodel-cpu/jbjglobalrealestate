@@ -419,7 +419,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
                 onClick={() => setSelectedDuration(d.value)}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                   selectedDuration === d.value
-                    ? "bg-amber-500 text-black border-amber-500"
+                    ? "bg-amber-500 text-[#1A1A1A] border-amber-500"
                     : "bg-slate-800 text-slate-300 border-slate-600 hover:border-slate-400"
                 }`}
               >
@@ -459,7 +459,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
         <Button
           onClick={handleGenerate}
           disabled={isGenerating || !prompt.trim()}
-          className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold gap-2"
+          className="w-full bg-amber-500 hover:bg-amber-400 text-[#1A1A1A] font-bold gap-2"
         >
           {isGenerating ? (
             <><Loader2 className="w-4 h-4 animate-spin" /> Generating narration…</>
@@ -494,7 +494,7 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
           <div className="rounded-xl border border-amber-500/30 bg-slate-800/80 overflow-hidden">
             {/* Header */}
             <div className={`p-3 bg-gradient-to-r ${selectedCharacter.color} opacity-90 flex items-center gap-3`}>
-              <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-[#FDFBF7]/20 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
                 {selectedCharacter.avatar}
               </div>
               <div className="flex-1 min-w-0">
@@ -504,13 +504,13 @@ export function AITalkingAgentPanel({ onAddToTimeline, onAIVoiceGenerated }: AIT
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button onClick={handlePlayPause}
                   disabled={voiceEngine === "premium" && !premiumAudioUrl}
-                  className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all disabled:opacity-40">
+                  className="w-9 h-9 rounded-full bg-[#FDFBF7]/20 hover:bg-[#FDFBF7]/30 flex items-center justify-center transition-all disabled:opacity-40">
                   {isPlaying
                     ? <Pause className="w-4 h-4 text-white" />
                     : <Play className="w-4 h-4 text-white ml-0.5" />}
                 </button>
                 <button onClick={handleDownload}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all">
+                  className="w-8 h-8 rounded-full bg-[#FDFBF7]/10 hover:bg-[#FDFBF7]/20 flex items-center justify-center transition-all">
                   <Download className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>

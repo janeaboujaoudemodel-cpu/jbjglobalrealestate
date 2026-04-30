@@ -127,9 +127,9 @@ export default function LeadMessageGenerator({ lead }: Props) {
   };
 
   return (
-    <Card className="bg-white border border-black/10">
+    <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10">
       <CardHeader className="pb-3">
-        <CardTitle className="text-black text-base flex items-center gap-2">
+        <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
           <Sparkles className="w-4 h-4" />
           AI Message Generator
         </CardTitle>
@@ -140,7 +140,7 @@ export default function LeadMessageGenerator({ lead }: Props) {
             <Label className="text-xs">Message Type</Label>
             <Select value={messageType} onValueChange={setMessageType}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-white z-[200]">
+              <SelectContent className="bg-[#FDFBF7] z-[200]">
                 {MESSAGE_TYPES.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -149,7 +149,7 @@ export default function LeadMessageGenerator({ lead }: Props) {
             <Label className="text-xs">Channel</Label>
             <Select value={channel} onValueChange={(v) => setChannel(v as any)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-white z-[200]">
+              <SelectContent className="bg-[#FDFBF7] z-[200]">
                 {CHANNELS.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -158,7 +158,7 @@ export default function LeadMessageGenerator({ lead }: Props) {
             <Label className="text-xs">Language</Label>
             <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-white z-[200]">
+              <SelectContent className="bg-[#FDFBF7] z-[200]">
                 {LANGUAGES.map((l) => <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>)}
               </SelectContent>
             </Select>
@@ -167,7 +167,7 @@ export default function LeadMessageGenerator({ lead }: Props) {
             <Label className="text-xs">Tone</Label>
             <Select value={tone} onValueChange={setTone}>
               <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent className="bg-white z-[200]">
+              <SelectContent className="bg-[#FDFBF7] z-[200]">
                 {TONES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
               </SelectContent>
             </Select>

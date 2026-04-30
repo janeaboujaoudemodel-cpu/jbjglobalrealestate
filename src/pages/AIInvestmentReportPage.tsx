@@ -191,7 +191,7 @@ export default function AIInvestmentReportPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-black font-semibold"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-[#1A1A1A] font-semibold"
             >
               {loading ? (
                 <>

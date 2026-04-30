@@ -46,12 +46,12 @@ const ToolCard: React.FC<ToolCardProps> = ({
     }`}
   >
     {isNew && (
-      <span className="absolute -top-2 -right-2 bg-gold text-black text-xs font-bold px-2 py-0.5 rounded-full">
+      <span className="absolute -top-2 -right-2 bg-gold text-[#1A1A1A] text-xs font-bold px-2 py-0.5 rounded-full">
         NEW
       </span>
     )}
     {isFlagship && (
-      <span className="absolute -top-2 -right-2 bg-gradient-to-r from-gold to-amber-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+      <span className="absolute -top-2 -right-2 bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
         <Sparkles className="h-3 w-3" />
         FLAGSHIP
       </span>

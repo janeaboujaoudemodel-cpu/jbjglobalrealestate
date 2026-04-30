@@ -312,7 +312,7 @@ const Snagging = () => {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/40 bg-white/60 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full mb-6 border border-[#C8A766]/40 bg-[#FDFBF7]/60 backdrop-blur-sm">
               <ClipboardCheck className="w-4 h-4 text-[#C8A766]" />
               <span className="text-[#C8A766] font-semibold text-xs uppercase tracking-[0.2em]">
                 Property Advisory
@@ -365,7 +365,7 @@ const Snagging = () => {
       <Section>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
           <SectionTitle>What Is Snagging?</SectionTitle>
-          <motion.div variants={fadeInUp} className="mt-8 bg-white/80 rounded-2xl border border-[#C8A766]/20 p-8">
+          <motion.div variants={fadeInUp} className="mt-8 bg-[#FDFBF7]/80 rounded-2xl border border-[#C8A766]/20 p-8">
             <p className="text-[#1a1a1a]/80 leading-relaxed mb-6">
               Snagging is a professional inspection conducted before property handover to identify construction defects, finishing inconsistencies, mechanical issues, and contractual deviations.
             </p>
@@ -390,7 +390,7 @@ const Snagging = () => {
           <SectionTitle>Why Professional Inspection Is Essential</SectionTitle>
           <div className="grid md:grid-cols-2 gap-8 mt-10 max-w-5xl mx-auto">
             {/* Without */}
-            <motion.div variants={fadeInUp} className="bg-white rounded-2xl border border-red-200/60 p-8">
+            <motion.div variants={fadeInUp} className="bg-[#FDFBF7] rounded-2xl border border-red-200/60 p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
                   <XCircle className="w-5 h-5 text-red-400" />
@@ -407,7 +407,7 @@ const Snagging = () => {
               </ul>
             </motion.div>
             {/* With */}
-            <motion.div variants={fadeInUp} className="bg-white rounded-2xl border border-[#C8A766]/30 p-8">
+            <motion.div variants={fadeInUp} className="bg-[#FDFBF7] rounded-2xl border border-[#C8A766]/30 p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-full bg-[#C8A766]/10 flex items-center justify-center">
                   <Shield className="w-5 h-5 text-[#C8A766]" />
@@ -438,7 +438,7 @@ const Snagging = () => {
               <motion.div
                 key={idx}
                 variants={fadeInUp}
-                className="bg-white rounded-2xl border border-[#C8A766]/20 p-6 hover:shadow-lg hover:shadow-[#C8A766]/10 transition-shadow"
+                className="bg-[#FDFBF7] rounded-2xl border border-[#C8A766]/20 p-6 hover:shadow-lg hover:shadow-[#C8A766]/10 transition-shadow"
               >
                 <div className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center">
                   <area.icon className="w-6 h-6 text-[#C8A766]" />
@@ -464,7 +464,7 @@ const Snagging = () => {
       <Section ivory>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
           <SectionTitle>Inspection Report Format</SectionTitle>
-          <motion.div variants={fadeInUp} className="mt-8 bg-white/80 rounded-2xl border border-[#C8A766]/20 p-8">
+          <motion.div variants={fadeInUp} className="mt-8 bg-[#FDFBF7]/80 rounded-2xl border border-[#C8A766]/20 p-8">
             <p className="text-[#1a1a1a]/70 mb-6">
               Clients receive a professional digital inspection report including:
             </p>
@@ -501,7 +501,7 @@ const Snagging = () => {
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0 z-10 border-2 border-[#C8A766]/40">
                       <span className="text-[#C8A766] font-bold text-sm">{s.step}</span>
                     </div>
-                    <div className="flex-1 bg-white rounded-xl border border-[#C8A766]/20 p-4 flex items-center gap-3">
+                    <div className="flex-1 bg-[#FDFBF7] rounded-xl border border-[#C8A766]/20 p-4 flex items-center gap-3">
                       <s.icon className="w-5 h-5 text-[#C8A766] shrink-0" />
                       <span className="font-semibold text-[#1a1a1a] text-sm">{s.title}</span>
                     </div>
@@ -524,7 +524,7 @@ const Snagging = () => {
               <motion.div
                 key={i}
                 variants={fadeInUp}
-                className="bg-white rounded-xl border border-[#C8A766]/20 p-5 flex items-center gap-4"
+                className="bg-[#FDFBF7] rounded-xl border border-[#C8A766]/20 p-5 flex items-center gap-4"
               >
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0">
                   <w.icon className="w-5 h-5 text-[#C8A766]" />
@@ -547,7 +547,7 @@ const Snagging = () => {
               <motion.div
                 key={i}
                 variants={fadeInUp}
-                className="bg-white rounded-2xl border border-[#C8A766]/20 p-6"
+                className="bg-[#FDFBF7] rounded-2xl border border-[#C8A766]/20 p-6"
               >
                 <h3 className="font-bold text-[#1a1a1a] mb-2">{t.title}</h3>
                 <p className="text-sm text-[#1a1a1a]/60">{t.desc}</p>
@@ -563,7 +563,7 @@ const Snagging = () => {
       <Section ivory>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="max-w-4xl mx-auto">
           <SectionTitle>Risk Mitigation & Legal Protection</SectionTitle>
-          <motion.div variants={fadeInUp} className="mt-8 bg-white/80 rounded-2xl border-l-4 border-l-[#C8A766] border border-[#C8A766]/20 p-8">
+          <motion.div variants={fadeInUp} className="mt-8 bg-[#FDFBF7]/80 rounded-2xl border-l-4 border-l-[#C8A766] border border-[#C8A766]/20 p-8">
             <p className="text-[#1a1a1a]/70 leading-relaxed mb-4">
               Professional snagging documentation reduces disputes and provides evidence in case of warranty claims or legal disagreement regarding construction defects.
             </p>
@@ -594,7 +594,7 @@ const Snagging = () => {
           <motion.form
             variants={fadeInUp}
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-[#C8A766]/20 p-6 md:p-8 space-y-5"
+            className="bg-[#FDFBF7] rounded-2xl border border-[#C8A766]/20 p-6 md:p-8 space-y-5"
           >
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
@@ -774,7 +774,7 @@ const Snagging = () => {
                 <AccordionItem
                   key={i}
                   value={`faq-${i}`}
-                  className="bg-white rounded-xl border border-[#C8A766]/20 px-6 overflow-hidden"
+                  className="bg-[#FDFBF7] rounded-xl border border-[#C8A766]/20 px-6 overflow-hidden"
                 >
                   <AccordionTrigger className="text-[#1a1a1a] font-semibold text-left py-5 hover:no-underline">
                     {faq.q}
@@ -805,7 +805,7 @@ const Snagging = () => {
               <motion.div
                 key={i}
                 variants={fadeInUp}
-                className="bg-white rounded-xl border border-[#C8A766]/20 p-6 flex items-start gap-4"
+                className="bg-[#FDFBF7] rounded-xl border border-[#C8A766]/20 p-6 flex items-start gap-4"
               >
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0">
                   <t.icon className="w-5 h-5 text-[#C8A766]" />

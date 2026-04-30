@@ -124,14 +124,14 @@ export default function AdminCategories() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-neutral-600">
-            <span className="font-semibold text-black">{filtered.length}</span> of {rows.length} {label.toLowerCase()}
+            <span className="font-semibold text-[#1A1A1A]">{filtered.length}</span> of {rows.length} {label.toLowerCase()}
           </p>
           <Button variant="outline" size="sm" onClick={() => exportCsv(filtered, label.toLowerCase())}>
             <Download className="w-4 h-4 mr-2" /> Export CSV
           </Button>
         </div>
 
-        <div className="overflow-x-auto bg-white border border-neutral-200 rounded-xl">
+        <div className="overflow-x-auto bg-[#FDFBF7] border border-neutral-200 rounded-xl">
           <table className="w-full text-sm">
             <thead className="bg-neutral-50 text-neutral-600 text-left">
               <tr>
@@ -150,7 +150,7 @@ export default function AdminCategories() {
               ) : (
                 filtered.map((r) => (
                   <tr key={r.user_id} className="border-t border-neutral-100 hover:bg-neutral-50">
-                    <td className="px-4 py-3 text-black font-medium">{r.full_name || "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-medium">{r.full_name || "—"}</td>
                     <td className="px-4 py-3 text-neutral-700">
                       <div className="flex flex-col gap-0.5">
                         {r.email && <span className="flex items-center gap-1.5"><Mail className="w-3 h-3" />{r.email}</span>}
@@ -173,11 +173,11 @@ export default function AdminCategories() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-10 px-4">
+    <div className="min-h-screen bg-[#FDFBF7] py-10 px-4">
       <SEOHead title="User Categories | Admin" description="Manage investors, brokers, and developers" />
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black">User Categories</h1>
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">User Categories</h1>
           <p className="text-neutral-600 text-sm mt-1">All registered users grouped by category</p>
         </div>
 
@@ -214,12 +214,12 @@ export default function AdminCategories() {
 
 function StatCard({ icon: Icon, label, count }: { icon: typeof TrendingUp; label: string; count: number }) {
   return (
-    <div className="bg-white border border-neutral-200 rounded-2xl p-5">
+    <div className="bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-5">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm text-neutral-600">{label}</span>
-        <Icon className="w-5 h-5 text-black" />
+        <Icon className="w-5 h-5 text-[#1A1A1A]" />
       </div>
-      <div className="text-3xl font-bold text-black">{count}</div>
+      <div className="text-3xl font-bold text-[#1A1A1A]">{count}</div>
     </div>
   );
 }

@@ -116,7 +116,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-center mb-8"
           >
-            <Badge className="bg-gradient-to-r from-gold via-gold-light to-gold text-black px-6 py-2 text-sm font-semibold shadow-xl shadow-gold/30">
+            <Badge className="bg-gradient-to-r from-gold via-gold-light to-gold text-[#1A1A1A] px-6 py-2 text-sm font-semibold shadow-xl shadow-gold/30">
               <Crown className="h-4 w-4 mr-2" />
               Exclusive for JBJ Brokers
             </Badge>
@@ -171,10 +171,10 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   transition={{ delay: 0.5 }}
                   className="absolute top-4 left-4 flex flex-col gap-2"
                 >
-                  <Badge className="bg-black/80 text-white border-white/20">
+                  <Badge className="bg-[#1A1A1A]/80 text-white border-white/20">
                     <Wand2 className="h-3 w-3 mr-1" /> AI Auto-Edit
                   </Badge>
-                  <Badge className="bg-black/80 text-white border-white/20">
+                  <Badge className="bg-[#1A1A1A]/80 text-white border-white/20">
                     <Mic className="h-3 w-3 mr-1" /> Voice Synthesis
                   </Badge>
                 </motion.div>
@@ -185,10 +185,10 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   transition={{ delay: 0.6 }}
                   className="absolute top-4 right-4 flex flex-col gap-2"
                 >
-                  <Badge className="bg-black/80 text-white border-white/20">
+                  <Badge className="bg-[#1A1A1A]/80 text-white border-white/20">
                     <Music className="h-3 w-3 mr-1" /> AI Music
                   </Badge>
-                  <Badge className="bg-black/80 text-white border-white/20">
+                  <Badge className="bg-[#1A1A1A]/80 text-white border-white/20">
                     <Languages className="h-3 w-3 mr-1" /> Multi-Language
                   </Badge>
                 </motion.div>
@@ -208,7 +208,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
               </div>
 
               {/* Mock timeline */}
-              <div className="p-4 border-t border-white/10 bg-black/50">
+              <div className="p-4 border-t border-white/10 bg-[#1A1A1A]/50">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="h-8 flex-1 bg-gradient-to-r from-primary/40 via-gold/30 to-primary/40 rounded" />
                 </div>
@@ -260,7 +260,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                 description: "Export in 16:9, 9:16, or 1:1 formats ready for social media and listings"
               }
             ].map((feature, index) => (
-              <Card key={index} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
+              <Card key={index} className="bg-[#FDFBF7]/5 border-white/10 backdrop-blur-sm hover:bg-[#FDFBF7]/10 transition-colors">
                 <CardContent className="p-6">
                   <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary/20 to-gold/20 flex items-center justify-center mb-4">
                     <feature.icon className="h-6 w-6 text-primary" />
@@ -299,7 +299,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                   <Button
                     size="lg"
                     onClick={() => navigate("/hr-agent")}
-                    className="bg-gradient-to-r from-gold via-gold-light to-gold text-black hover:opacity-90 shadow-lg shadow-gold/30 gap-2"
+                    className="bg-gradient-to-r from-gold via-gold-light to-gold text-[#1A1A1A] hover:opacity-90 shadow-lg shadow-gold/30 gap-2"
                   >
                     <Star className="h-5 w-5" />
                     Join the Circle Now
@@ -311,7 +311,7 @@ const VideoBuilderAccessGate = ({ children }: VideoBuilderAccessGateProps) => {
                       size="lg"
                       variant="outline"
                       onClick={() => navigate("/auth")}
-                      className="border-white/20 text-white hover:bg-white/10"
+                      className="border-white/20 text-white hover:bg-[#FDFBF7]/10"
                     >
                       Already a Member? Sign In
                     </Button>

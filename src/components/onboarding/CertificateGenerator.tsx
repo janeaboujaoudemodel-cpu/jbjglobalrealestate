@@ -391,7 +391,7 @@ export function CertificateGenerator({
             <Button 
               onClick={downloadPDF} 
               disabled={downloading}
-              className="flex-1 bg-gold hover:bg-gold/90 text-black"
+              className="flex-1 bg-gold hover:bg-gold/90 text-[#1A1A1A]"
             >
               {downloading ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -431,7 +431,7 @@ export function CertificateGenerator({
           <Button 
             onClick={generateCertificate}
             disabled={generating}
-            className="bg-gold hover:bg-gold/90 text-black"
+            className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
           >
             {generating ? (
               <>

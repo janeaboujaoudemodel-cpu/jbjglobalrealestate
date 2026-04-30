@@ -33,7 +33,7 @@ export function StampCanvasControls({
   };
 
   return (
-    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 px-2 py-1 rounded-full bg-white/90 backdrop-blur-sm border border-[hsl(var(--border))] shadow-lg">
+    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1 px-2 py-1 rounded-full bg-[#FDFBF7]/90 backdrop-blur-sm border border-[hsl(var(--border))] shadow-lg">
       <button
         onClick={zoomOut}
         disabled={zoom <= 50}

@@ -569,11 +569,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           className={`flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
             isFullyTransparent
               ? isActiveCheck?.() 
-                ? 'text-black bg-transparent' 
-                : 'text-white hover:text-gray-900 bg-transparent'
+                ? 'text-[#1A1A1A] bg-transparent' 
+                : 'text-white hover:text-[#1A1A1A] bg-transparent'
               : isActiveCheck?.() 
-                ? 'text-black bg-gray-200' 
-                : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                ? 'text-[#1A1A1A] bg-[#EFE6D6]' 
+                : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
           }`}
           style={{ letterSpacing: '0.01em' }}
         >
@@ -584,7 +584,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <DropdownMenuContent 
         align="center" 
         sideOffset={16}
-        className="bg-white border border-gray-200 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
+        className="bg-[#FDFBF7] border border-[#B89555]/30 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
         }}
@@ -596,20 +596,20 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               return (
                 <p
                   key={`section-${link.section}-${idx}`}
-                  className={`px-4 text-[10px] uppercase tracking-[0.18em] font-bold text-black/50 ${idx === 0 ? 'pt-1 pb-1' : 'pt-3 pb-1'}`}
+                  className={`px-4 text-[10px] uppercase tracking-[0.18em] font-bold text-[#1A1A1A]/50 ${idx === 0 ? 'pt-1 pb-1' : 'pt-3 pb-1'}`}
                 >
                   {link.section}
                 </p>
               );
             }
             return (
-              <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gray-50 rounded-xl">
-                <Link to={link.href} className="flex items-center gap-4 text-gray-800 hover:text-black hover:bg-gray-50 py-2.5 px-4 transition-all w-full group rounded-xl">
+              <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-[#F7F2EA] rounded-xl">
+                <Link to={link.href} className="flex items-center gap-4 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA] py-2.5 px-4 transition-all w-full group rounded-xl">
                   <div
-                    className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center transition-all group-hover:bg-gray-200 group-hover:border-gray-300"
+                    className="w-9 h-9 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center transition-all group-hover:bg-[#EFE6D6] group-hover:border-[#B89555]/30"
                     style={{ boxShadow: '0 2px 4px -2px rgba(0,0,0,0.06)' }}
                   >
-                    <link.icon className="w-4 h-4 text-black transition-colors" />
+                    <link.icon className="w-4 h-4 text-[#1A1A1A] transition-colors" />
                   </div>
                   <span className="font-semibold text-sm">{link.label}</span>
                 </Link>
@@ -740,7 +740,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className={cn(
                   "inline-flex h-10 w-10 items-center justify-center border-0 appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full",
                   isFullyTransparent
-                    ? "bg-white/90 shadow-md"
+                    ? "bg-[#FDFBF7]/90 shadow-md"
                     : "bg-transparent"
                 )}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
@@ -748,9 +748,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
-                  <span className="text-black text-2xl font-light">✕</span>
+                  <span className="text-[#1A1A1A] text-2xl font-light">✕</span>
                 ) : (
-                  <Menu className="w-6 h-6 text-black transition-colors" />
+                  <Menu className="w-6 h-6 text-[#1A1A1A] transition-colors" />
                 )}
               </button>
             </div>
@@ -764,7 +764,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             >
               {/* Backdrop */}
               <div 
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
                 onClick={() => setMobileMenuOpen(false)}
               />
               {/* Menu Panel */}
@@ -773,24 +773,24 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 style={{ background: '#FFFFFF' }}
               >
                 {/* Quick Actions Row */}
-                <div className="flex items-center justify-evenly px-4 py-3 border-b border-gray-200">
+                <div className="flex items-center justify-evenly px-4 py-3 border-b border-[#B89555]/30">
                   <button
-                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gray-900 py-2 w-16 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchInitialQuery("");
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-5 h-5 text-black" />
+                    <Search className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[9px] font-medium text-center">Search</span>
                   </button>
                   <Link
                     to={user ? "/my-account" : authHref}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gray-900 py-2 w-16 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors"
                   >
-                    <User className="w-5 h-5 text-black" />
+                    <User className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[9px] font-medium text-center">{user ? "Account" : "Sign In"}</span>
                   </Link>
                   <LanguageSwitcher variant="mobile" />
@@ -799,254 +799,254 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* My Shortcuts */}
                 <div className="px-4 pt-4 pb-2">
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-black mb-2">My Shortcuts</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#1A1A1A] mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <Cpu className="w-4 h-4 text-gray-700" />AI Tools Hub
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Cpu className="w-4 h-4 text-[#5A4A2E]" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <ClipboardCheck className="w-4 h-4 text-gray-600" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <ClipboardCheck className="w-4 h-4 text-[#5A4A2E]" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <GraduationCap className="w-4 h-4 text-gray-600" />Careers
+                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <GraduationCap className="w-4 h-4 text-[#5A4A2E]" />Careers
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <Home className="w-4 h-4 text-gray-600" />Resale Properties
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Home className="w-4 h-4 text-[#5A4A2E]" />Resale Properties
                     </Link>
-                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <Heart className="w-4 h-4 text-gray-600" />My Favorites
+                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Heart className="w-4 h-4 text-[#5A4A2E]" />My Favorites
                     </Link>
-                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <LayoutDashboard className="w-4 h-4 text-gray-600" />My Dashboard
+                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <LayoutDashboard className="w-4 h-4 text-[#5A4A2E]" />My Dashboard
                     </Link>
-                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <CalendarClock className="w-4 h-4 text-gray-600" />AI Calendar
+                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <CalendarClock className="w-4 h-4 text-[#5A4A2E]" />AI Calendar
                     </Link>
-                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <Sparkles className="w-4 h-4 text-gray-600" />AI Home Finder
+                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Sparkles className="w-4 h-4 text-[#5A4A2E]" />AI Home Finder
                     </Link>
-                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
-                      <Calculator className="w-4 h-4 text-gray-600" />Property Evaluator
+                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Calculator className="w-4 h-4 text-[#5A4A2E]" />Property Evaluator
                     </Link>
                   </div>
                 </div>
 
-                <div className="h-px bg-gray-200 mx-4" />
+                <div className="h-px bg-[#EFE6D6] mx-4" />
 
                 {/* Accordion Sections */}
                 <nav className="flex flex-col px-4 py-2">
                   {/* PROPERTIES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Properties</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileBuyLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Sell</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Sell</p>
                         {mobileSellLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Rent</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Rent</p>
                         {mobileRentLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Developers</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Developers</p>
                         {mobileDeveloperLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Areas</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Areas</p>
                         {mobileAreaLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <Link to="/map" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                          <MapPin className="w-4 h-4 text-black" />Property Map
+                        <Link to="/map" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                          <MapPin className="w-4 h-4 text-[#1A1A1A]" />Property Map
                         </Link>
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* TOOLS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Tools</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileToolkitLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* INSIGHTS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Insights</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileResourceLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* GUIDES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Guides</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileGuideLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* SERVICES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Services</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {servicesLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Partners</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Partners</p>
                         {mobilePartnerLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* COMPANY */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Company</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileMoreLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* MY ACCOUNT */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>My Account</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {user ? (
                           <>
-                            <div className="flex items-center gap-3 px-3 py-2 bg-gray-100 rounded-lg mb-1">
+                            <div className="flex items-center gap-3 px-3 py-2 bg-[#F7F2EA] rounded-lg mb-1">
                               <UserAvatarPremium size="sm" />
                               <div className="min-w-0">
-                                <p className="text-[10px] text-black/50 uppercase tracking-wider">Signed in as</p>
-                                <p className="text-sm font-medium text-black truncate">{accountDisplayName}</p>
+                                <p className="text-[10px] text-[#1A1A1A]/50 uppercase tracking-wider">Signed in as</p>
+                                <p className="text-sm font-medium text-[#1A1A1A] truncate">{accountDisplayName}</p>
                               </div>
                             </div>
-                            <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                              <Home className="w-4 h-4 text-black" />My Dashboard
+                            <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                              <Home className="w-4 h-4 text-[#1A1A1A]" />My Dashboard
                             </Link>
-                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                              <User className="w-4 h-4 text-black" />My Profile
+                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                              <User className="w-4 h-4 text-[#1A1A1A]" />My Profile
                             </Link>
                             {(isOwner || hasCRMAccess) && (
                               <>
-                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Owner Shortcuts</p>
-                                <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                                  <Sparkles className="w-4 h-4 text-black" />My Assistant
+                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-[#1A1A1A]/60">Owner Shortcuts</p>
+                                <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                  <Sparkles className="w-4 h-4 text-[#1A1A1A]" />My Assistant
                                 </Link>
-                                <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                                  <Briefcase className="w-4 h-4 text-black" />Employee Hub
+                                <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                  <Briefcase className="w-4 h-4 text-[#1A1A1A]" />Employee Hub
                                 </Link>
-                                <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                                  <Users className="w-4 h-4 text-black" />CRM Dashboard
+                                <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                  <Users className="w-4 h-4 text-[#1A1A1A]" />CRM Dashboard
                                 </Link>
                                 {isOwner && (
-                                  <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                                    <Settings className="w-4 h-4 text-black" />Owner Panel
+                                  <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                                    <Settings className="w-4 h-4 text-[#1A1A1A]" />Owner Panel
                                   </Link>
                                 )}
                               </>
                             )}
                           </>
                         ) : (
-                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-gray-100 rounded-lg transition-colors">
-                            <User className="w-4 h-4 text-black" />{t('nav.signIn')}
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A] font-medium hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <User className="w-4 h-4 text-[#1A1A1A]" />{t('nav.signIn')}
                           </Link>
                         )}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gray-200 my-1" />
+                  <div className="h-px bg-[#EFE6D6] my-1" />
 
                   {/* LEGAL & TRUST */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
                       <span>Legal & Trust</span>
-                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
                         {mobileLegalLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-black" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
                           </Link>
                         ))}
                       </div>
@@ -1056,53 +1056,53 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Bottom Section */}
                 <div className="px-4 pb-6">
-                  <div className="h-px bg-gray-200 mb-3" />
+                  <div className="h-px bg-[#EFE6D6] mb-3" />
 
                   {/* Sign In/Out */}
                   {user ? (
                     <button
                       onClick={() => { signOut(); setMobileMenuOpen(false); }}
-                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-red-600 hover:bg-red-50 transition-colors w-full text-left rounded-lg border border-red-500/30 hover:border-red-500/50"
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-red-600 hover:bg-red-50 transition-colors w-full text-left rounded-lg border border-red-500/30 hover:border-red-500/50"
                     >
                       <LogOut className="w-4 h-4 text-red-500" />{t('nav.signOut')}
                     </button>
                   ) : (
-                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black font-medium hover:bg-gray-100 rounded-lg transition-colors">
-                      <User className="w-4 h-4 text-black" />{t('nav.signIn')}
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A] font-medium hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                      <User className="w-4 h-4 text-[#1A1A1A]" />{t('nav.signIn')}
                     </Link>
                   )}
 
                   {/* App Navigation Guide */}
                   <button
                     onClick={() => setShowWalkthrough(true)}
-                    className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors w-full text-left"
+                    className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors w-full text-left"
                   >
-                    <HelpCircle className="w-4 h-4 text-black" />App & Navigation Guide
+                    <HelpCircle className="w-4 h-4 text-[#1A1A1A]" />App & Navigation Guide
                   </button>
 
                   {/* Sitemap */}
-                  <Link to="/sitemap" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                    <MapPin className="w-4 h-4 text-black" />Sitemap
+                  <Link to="/sitemap" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                    <MapPin className="w-4 h-4 text-[#1A1A1A]" />Sitemap
                   </Link>
 
                   {/* Favorites */}
-                  <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                    <Heart className="w-4 h-4 text-black" />Favorites
+                  <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                    <Heart className="w-4 h-4 text-[#1A1A1A]" />Favorites
                     {totalCount > 0 && (
-                      <span className="ml-auto bg-gray-200 text-black text-xs font-medium px-2 py-0.5 rounded-full">{totalCount}</span>
+                      <span className="ml-auto bg-[#EFE6D6] text-[#1A1A1A] text-xs font-medium px-2 py-0.5 rounded-full">{totalCount}</span>
                     )}
                   </Link>
 
                   {/* My Profile & Settings */}
-                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                    <User className="w-4 h-4 text-black" />My Profile
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                    <User className="w-4 h-4 text-[#1A1A1A]" />My Profile
                   </Link>
-                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
-                    <Settings className="w-4 h-4 text-black" />Settings
+                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
+                    <Settings className="w-4 h-4 text-[#1A1A1A]" />Settings
                   </Link>
 
                   {/* Gold Divider */}
-                  <div className="h-px bg-gray-200 my-3" />
+                  <div className="h-px bg-[#EFE6D6] my-3" />
 
                   {/* Contact Support & Create Ticket — stacked */}
                   <div className="space-y-1.5 px-3">
@@ -1117,43 +1117,43 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Mobile Menu Walkthrough Modal */}
                 {showWalkthrough && (
-                  <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-black/70 p-4">
+                  <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-[#1A1A1A]/70 p-4">
                     <div 
-                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-gray-300 shadow-2xl"
+                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-[#B89555]/30 shadow-2xl"
                       style={{ background: '#FFFFFF' }}
                     >
                       <button
                         onClick={() => setShowWalkthrough(false)}
-                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
+                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#EFE6D6] transition-colors"
                       >
-                        <span className="text-gray-600 text-xl">×</span>
+                        <span className="text-[#5A4A2E] text-xl">×</span>
                       </button>
                       <div className="flex justify-center mb-4">
                         <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
                       </div>
-                      <h3 className="text-black font-bold text-xl text-center mb-3">
+                      <h3 className="text-[#1A1A1A] font-bold text-xl text-center mb-3">
                         Welcome to JBJ Global Real Estate
                       </h3>
-                      <p className="text-gray-600 text-sm text-center mb-6 leading-relaxed">
+                      <p className="text-[#5A4A2E] text-sm text-center mb-6 leading-relaxed">
                         Navigate our platform with ease. Use the menu sections above to explore properties, services, guides, and more.
                       </p>
                       <div className="space-y-3 mb-6">
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">1</span>
-                          <span className="text-gray-700"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
+                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">1</span>
+                          <span className="text-[#5A4A2E]"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">2</span>
-                          <span className="text-gray-700"><strong>Services</strong> – Explore our brokerage services</span>
+                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">2</span>
+                          <span className="text-[#5A4A2E]"><strong>Services</strong> – Explore our brokerage services</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">3</span>
-                          <span className="text-gray-700"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
+                          <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">3</span>
+                          <span className="text-[#5A4A2E]"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
                         </div>
                       </div>
                       <button
                         onClick={() => { setShowWalkthrough(false); localStorage.setItem('jj_mobile_walkthrough_done', 'true'); }}
-                        className="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-900 transition-colors"
+                        className="w-full py-3 bg-[#1A1A1A] text-white font-semibold rounded-xl hover:bg-[#1A1A1A] transition-colors"
                       >
                         Got it!
                       </button>
@@ -1176,7 +1176,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-3 lg:px-5 xl:px-7 py-2 lg:py-2.5 transition-all duration-300",
                   isFullyTransparent
                     ? 'bg-transparent border-transparent max-w-full'
-                    : 'border-2 border border-gray-200 w-full max-w-[900px]'
+                    : 'border-2 border border-[#B89555]/30 w-full max-w-[900px]'
                 )}
                 style={!isFullyTransparent ? {
                   background: 'rgba(255,255,255,0.95)',
@@ -1189,8 +1189,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('buy')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'buy' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'buy' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'buy' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'buy' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Buy
@@ -1204,8 +1204,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('sell')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'sell' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'sell' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'sell' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'sell' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Sell
@@ -1219,8 +1219,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('rent')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'rent' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'rent' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'rent' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'rent' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Rent
@@ -1234,8 +1234,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('projects')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'projects' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'projects' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'projects' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'projects' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Projects
@@ -1249,8 +1249,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('areas')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'areas' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'areas' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'areas' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'areas' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Areas
@@ -1264,8 +1264,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('developers')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'developers' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'developers' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'developers' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'developers' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Developers
@@ -1279,8 +1279,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('insights')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'insights' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'insights' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
+                      ? activeMegaMenu === 'insights' ? 'text-[#1A1A1A]' : 'text-white hover:text-[#1A1A1A]'
+                      : activeMegaMenu === 'insights' ? 'text-[#1A1A1A] bg-[#EFE6D6]' : 'text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]'
                   }`}
                 >
                   Insights
@@ -1294,7 +1294,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <>
                   {/* Backdrop blur overlay - matches utility menus */}
                   <div 
-                    className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+                    className="fixed inset-0 z-40 bg-[#1A1A1A]/40 backdrop-blur-sm"
                     style={{ top: 'var(--header-height, 128px)' }}
                     onClick={closeMegaMenu}
                   />
@@ -1328,7 +1328,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               className={`flex items-center gap-0.5 px-3 py-2 rounded-full shrink-0 transition-all duration-300 ${
                 isFullyTransparent 
                   ? 'bg-transparent border-transparent' 
-                  : 'border border-gray-300'
+                  : 'border border-[#B89555]/30'
               }`}
               style={!isFullyTransparent ? {
                 background: 'rgba(255,255,255,0.95)',
@@ -1339,11 +1339,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <button
                 onPointerEnter={() => handleMegaMenuEnter('search')}
                 onClick={() => handleMegaMenuClick('search')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
                 aria-label="Search"
               >
                 <Search 
-                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'search' ? '!text-black' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'search' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
@@ -1355,11 +1355,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <button
                 onPointerEnter={() => handleMegaMenuEnter('language')}
                 onClick={() => handleMegaMenuClick('language')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10"
                 aria-label="Language"
               >
                 <Globe 
-                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'language' ? '!text-black' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
@@ -1383,11 +1383,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <button
                 onPointerEnter={() => handleMegaMenuEnter('account')}
                 onClick={() => handleMegaMenuClick('account')}
-                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-white/10 relative"
+                className="w-9 h-9 flex items-center justify-center transition-all duration-300 group rounded-lg hover:bg-[#FDFBF7]/10 relative"
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
               >
                 <User 
-                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'account' ? '!text-black' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'account' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (
@@ -1404,7 +1404,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             <>
               {/* Backdrop only - click to close */}
               <div 
-                className="fixed inset-0 z-[9997] bg-black/40 backdrop-blur-sm"
+                className="fixed inset-0 z-[9997] bg-[#1A1A1A]/40 backdrop-blur-sm"
                 style={{ top: 'var(--header-height, 128px)' }}
                 onClick={(e) => {
                   const target = e.target as HTMLElement;
@@ -1437,7 +1437,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     style={{ background: '#FFFFFF' }}
                   >
                     {/* Gold border overlay */}
-                    <div className="absolute inset-0 rounded-xl border border-gray-200 pointer-events-none z-10" />
+                    <div className="absolute inset-0 rounded-xl border border-[#B89555]/30 pointer-events-none z-10" />
                     <div className="p-4">
                       <GlobalSearchModal
                         isOpen={true}
@@ -1447,7 +1447,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       />
                     </div>
                     {/* Bottom accent bar */}
-                    <div className="h-[1px] bg-gray-200" />
+                    <div className="h-[1px] bg-[#EFE6D6]" />
                   </div>
                 )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}

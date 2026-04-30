@@ -261,7 +261,7 @@ export default function ReferralOnboarding() {
             <h1 className="text-2xl md:text-3xl font-bold mb-2">
               <span className="text-gold">Join the Referral Circle</span>
             </h1>
-            <p className="text-black font-semibold text-lg">
+            <p className="text-[#1A1A1A] font-semibold text-lg">
               Earn 5% or 2.5% Commission
             </p>
           </div>
@@ -290,10 +290,10 @@ export default function ReferralOnboarding() {
                     {currentStep > step.id ? (
                       <CheckCircle className="w-5 h-5 text-gold" />
                     ) : (
-                      <step.icon className={`w-5 h-5 ${currentStep >= step.id ? 'text-black' : 'text-muted-foreground'}`} />
+                      <step.icon className={`w-5 h-5 ${currentStep >= step.id ? 'text-[#1A1A1A]' : 'text-muted-foreground'}`} />
                     )}
                   </div>
-                  <span className={`text-xs font-medium hidden sm:block ${currentStep >= step.id ? 'text-black' : 'text-muted-foreground'}`}>{step.title}</span>
+                  <span className={`text-xs font-medium hidden sm:block ${currentStep >= step.id ? 'text-[#1A1A1A]' : 'text-muted-foreground'}`}>{step.title}</span>
                   <span className="text-xs text-muted-foreground hidden sm:block">{step.description}</span>
                 </div>
               ))}
@@ -301,7 +301,7 @@ export default function ReferralOnboarding() {
           </div>
 
           {/* Form Card - White background with gold border */}
-          <Card className="bg-white border-2 border-gold/40 shadow-lg">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/40 shadow-lg">
             <CardContent className="p-6 md:p-8">
               <AnimatePresence mode="wait">
                 {/* Step 1: Basic Info */}

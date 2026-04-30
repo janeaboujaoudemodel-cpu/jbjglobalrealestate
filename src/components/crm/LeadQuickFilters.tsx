@@ -26,7 +26,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "all", 
     label: "All Leads", 
     icon: Inbox, 
-    color: "text-black",
+    color: "text-[#1A1A1A]",
     bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: [] 
   },
@@ -34,7 +34,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "new", 
     label: "New", 
     icon: Star, 
-    color: "text-black",
+    color: "text-[#1A1A1A]",
     bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["new"] 
   },
@@ -50,7 +50,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     id: "followup", 
     label: "Follow-up", 
     icon: Clock, 
-    color: "text-black",
+    color: "text-[#1A1A1A]",
     bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["no_answer", "callback", "followup"] 
   },
@@ -114,7 +114,7 @@ const LeadQuickFilters = ({ activeFilter, onChange, counts = {} }: LeadQuickFilt
                 variant="secondary" 
                 className={cn(
                   "ml-2 text-xs font-bold",
-                  isActive ? "bg-gold text-black" : "bg-gold/20 text-black"
+                  isActive ? "bg-gold text-[#1A1A1A]" : "bg-gold/20 text-[#1A1A1A]"
                 )}
               >
                 {count}

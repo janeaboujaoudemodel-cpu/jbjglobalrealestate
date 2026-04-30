@@ -64,7 +64,7 @@ export function EscalationAlertButton({
               ? 'bg-red-100 border border-red-400/50 animate-pulse hover:bg-red-200'
               : pendingEscalations.length > 0
               ? 'bg-amber-100 border border-amber-400/50 hover:bg-amber-200'
-              : 'bg-white border-2 border-[#B89555]/30 hover:border-[#B89555]/50'
+              : 'bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50'
           }`}
         >
           <Zap className={`h-5 w-5 ${
@@ -82,7 +82,7 @@ export function EscalationAlertButton({
       </PopoverTrigger>
 
       <PopoverContent 
-        className="w-96 p-0 bg-white border-2 border-[#B89555]/30 shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
+        className="w-96 p-0 bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
         align="end"
         sideOffset={16}
       >
@@ -90,7 +90,7 @@ export function EscalationAlertButton({
         <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] rounded-t-md">
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-[#B89555]" />
-            <span className="font-semibold text-black">Escalations</span>
+            <span className="font-semibold text-[#1A1A1A]">Escalations</span>
             {pendingEscalations.length > 0 && (
               <Badge 
                 className={`${criticalEscalations.length > 0 ? 'bg-red-500 text-white' : 'bg-amber-500 text-white'} border-0`}
@@ -106,8 +106,8 @@ export function EscalationAlertButton({
           {pendingEscalations.length === 0 ? (
             <div className="p-8 text-center">
               <CheckCircle className="h-12 w-12 text-green-500/40 mx-auto mb-3" />
-              <p className="text-gray-600 font-medium">No pending escalations</p>
-              <p className="text-sm text-gray-600">All systems running smoothly</p>
+              <p className="text-[#5A4A2E] font-medium">No pending escalations</p>
+              <p className="text-sm text-[#5A4A2E]">All systems running smoothly</p>
             </div>
           ) : (
             <div className="divide-y divide-[#B89555]/10">
@@ -130,7 +130,7 @@ export function EscalationAlertButton({
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-black truncate">
+                        <span className="font-medium text-[#1A1A1A] truncate">
                           {event.senderName}
                         </span>
                         <Badge className="bg-[#B89555]/10 text-[#B89555] border-[#B89555]/30 text-[10px]">
@@ -138,12 +138,12 @@ export function EscalationAlertButton({
                         </Badge>
                       </div>
                       
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                      <p className="text-sm text-[#5A4A2E] line-clamp-2 mb-2">
                         "{event.originalMessage}"
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-600 flex items-center gap-1">
+                        <span className="text-xs text-[#5A4A2E] flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {formatDistanceToNow(event.triggeredAt, { addSuffix: true })}
                         </span>

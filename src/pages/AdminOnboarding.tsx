@@ -695,7 +695,7 @@ export default function AdminOnboarding() {
                   resetModuleForm();
                   setShowModuleDialog(true);
                 }}
-                className="bg-gold hover:bg-gold/90 text-black"
+                className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Module
@@ -771,7 +771,7 @@ export default function AdminOnboarding() {
                   resetQuestionForm();
                   setShowQuestionDialog(true);
                 }}
-                className="bg-gold hover:bg-gold/90 text-black"
+                className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                 disabled={!selectedModuleForQuestion}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -884,7 +884,7 @@ export default function AdminOnboarding() {
                 <Button 
                   onClick={handleSaveThresholds} 
                   disabled={processing}
-                  className="bg-gold hover:bg-gold/90 text-black"
+                  className="bg-gold hover:bg-gold/90 text-[#1A1A1A]"
                 >
                   {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                   Save Thresholds
@@ -1068,7 +1068,7 @@ export default function AdminOnboarding() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowModuleDialog(false)}>Cancel</Button>
-              <Button onClick={handleSaveModule} disabled={processing} className="bg-gold hover:bg-gold/90 text-black">
+              <Button onClick={handleSaveModule} disabled={processing} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                 {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                 Save Module
               </Button>
@@ -1147,7 +1147,7 @@ export default function AdminOnboarding() {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowQuestionDialog(false)}>Cancel</Button>
-              <Button onClick={handleSaveQuestion} disabled={processing} className="bg-gold hover:bg-gold/90 text-black">
+              <Button onClick={handleSaveQuestion} disabled={processing} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
                 {processing ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                 Save Question
               </Button>

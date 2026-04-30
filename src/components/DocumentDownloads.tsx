@@ -139,7 +139,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
                 onClick={() => handleDownload(doc)}
                 className="w-full flex items-center gap-3 p-4 rounded-xl bg-card transition-colors group border border-gold/30 hover:border-gold/60"
               >
-                <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
                   <span className="text-gold">{getDocumentIcon(type)}</span>
                 </div>
                 <div className="flex-1 min-w-0 text-left">

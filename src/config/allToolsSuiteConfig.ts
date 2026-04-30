@@ -197,11 +197,11 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
 
 // Section color mappings
 export const sectionColors: Record<string, { active: string; inactive: string; border: string }> = {
-  sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-gray-500 hover:text-sky-400', border: 'border-sky-400' },
-  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-gray-500 hover:text-emerald-400', border: 'border-emerald-400' },
-  indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-gray-500 hover:text-indigo-400', border: 'border-indigo-400' },
-  amber: { active: 'text-amber-400 bg-amber-500/10', inactive: 'text-gray-500 hover:text-amber-400', border: 'border-amber-400' },
-  lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-gray-500 hover:text-lime-400', border: 'border-lime-400' },
-  violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-gray-500 hover:text-violet-400', border: 'border-violet-400' },
-  fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-gray-500 hover:text-fuchsia-400', border: 'border-fuchsia-400' },
+  sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-[#8A7556] hover:text-sky-400', border: 'border-sky-400' },
+  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-[#8A7556] hover:text-emerald-400', border: 'border-emerald-400' },
+  indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-[#8A7556] hover:text-indigo-400', border: 'border-indigo-400' },
+  amber: { active: 'text-amber-400 bg-amber-500/10', inactive: 'text-[#8A7556] hover:text-amber-400', border: 'border-amber-400' },
+  lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-[#8A7556] hover:text-lime-400', border: 'border-lime-400' },
+  violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-[#8A7556] hover:text-violet-400', border: 'border-violet-400' },
+  fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-[#8A7556] hover:text-fuchsia-400', border: 'border-fuchsia-400' },
 };

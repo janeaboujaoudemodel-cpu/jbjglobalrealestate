@@ -247,7 +247,7 @@ END:VCARD`;
       value: "Dubai, United Arab Emirates",
       action: null,
       iconColor: "text-gold",
-      titleColor: "text-black",
+      titleColor: "text-[#1A1A1A]",
       valueColor: "text-gold",
       clickable: false,
     },
@@ -257,7 +257,7 @@ END:VCARD`;
       value: "+971-5659-11000",
       action: 'phone-actions',
       iconColor: "text-gold",
-      titleColor: "text-black",
+      titleColor: "text-[#1A1A1A]",
       valueColor: "text-gold hover:underline",
       clickable: true,
     },
@@ -267,7 +267,7 @@ END:VCARD`;
       value: CONTACT_INFO.email,
       action: getEmailUrl(),
       iconColor: "text-gold",
-      titleColor: "text-black",
+      titleColor: "text-[#1A1A1A]",
       valueColor: "text-gold hover:underline",
       clickable: true,
     },
@@ -277,7 +277,7 @@ END:VCARD`;
       value: "Mon–Sun | 9AM–9PM UAE",
       action: null,
       iconColor: "text-gold",
-      titleColor: "text-black",
+      titleColor: "text-[#1A1A1A]",
       valueColor: "text-gold",
       clickable: false,
     },
@@ -311,7 +311,7 @@ END:VCARD`;
       </section>
 
       {/* Contact Cards - 3-Layer System with thin black contour */}
-      <section className="py-10 bg-black">
+      <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Champagne Layer */}
@@ -326,13 +326,13 @@ END:VCARD`;
                     else if (card.action === "meeting") setMeetingModalOpen(true);
                     else if (card.action && card.clickable) window.location.href = card.action;
                   }}
-                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 transition-all duration-300 hover:border-black hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
+                  className={`group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 transition-all duration-300 hover:border-[#1A1A1A] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 hover:scale-[1.02] ${card.clickable ? "cursor-pointer" : ""}`}
                 >
-                  <div className="w-10 h-10 bg-transparent border-2 border-gold/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-black group-hover:bg-gold/10 group-hover:scale-110">
-                    <card.icon className="w-5 h-5 text-gold transition-all duration-300 group-hover:text-black" />
+                  <div className="w-10 h-10 bg-transparent border-2 border-gold/50 rounded-lg flex items-center justify-center mb-3 transition-all duration-300 group-hover:border-[#1A1A1A] group-hover:bg-gold/10 group-hover:scale-110">
+                    <card.icon className="w-5 h-5 text-gold transition-all duration-300 group-hover:text-[#1A1A1A]" />
                   </div>
-                  <h3 className="font-semibold text-sm mb-1 text-black transition-colors">{card.title}</h3>
-                  <p className="text-sm text-gold transition-colors group-hover:text-black/80">{card.value}</p>
+                  <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A] transition-colors">{card.title}</h3>
+                  <p className="text-sm text-gold transition-colors group-hover:text-[#1A1A1A]/80">{card.value}</p>
                 </div>
               ))}
             </div>
@@ -341,7 +341,7 @@ END:VCARD`;
       </section>
 
       {/* Consultation Form Section - Form IS the 3rd layer (directly on active champagne, no extra pearl wrapper) */}
-      <section className="py-16 md:py-20 bg-black">
+      <section className="py-16 md:py-20 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 md:p-6">
           {/* Form IS the 3rd layer - champagne pearl styling */}
@@ -352,18 +352,18 @@ END:VCARD`;
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
                   Thank You for Your Inquiry
                 </h2>
-                <p className="text-gray-600 text-lg mb-6">
+                <p className="text-[#5A4A2E] text-lg mb-6">
                   We have received your consultation request and will be in touch soon.
                 </p>
                 <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-6 text-left max-w-md mx-auto">
                   <h3 className="text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
                   <div className="space-y-2 text-sm">
-                    <p className="text-black"><span className="text-gray-600">Phone:</span> {CONTACT_INFO.phone}</p>
-                    <p className="text-black"><span className="text-gray-600">Email:</span> {CONTACT_INFO.email}</p>
-                    <p className="text-black"><span className="text-gray-600">WhatsApp:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-[#1A1A1A]"><span className="text-[#5A4A2E]">Phone:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-[#1A1A1A]"><span className="text-[#5A4A2E]">Email:</span> {CONTACT_INFO.email}</p>
+                    <p className="text-[#1A1A1A]"><span className="text-[#5A4A2E]">WhatsApp:</span> {CONTACT_INFO.phone}</p>
                   </div>
                 </div>
                 <Button 
@@ -378,13 +378,13 @@ END:VCARD`;
               /* Form */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
                 <div className="text-center mb-8">
-                  <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-14 h-14 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-7 h-7 text-gold" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
+                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                     Request a Consultation
                   </h2>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-[#5A4A2E] text-sm">
                     If you would like to speak with our team regarding buying, selling, renting, investment guidance, market intelligence, or partner introductions, request a consultation through this form. Consultations focus on real estate brokerage guidance and structured introductions within our licensed scope.
                   </p>
                 </div>
@@ -398,7 +398,7 @@ END:VCARD`;
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-black text-sm font-medium">Full Name *</FormLabel>
+                            <FormLabel className="text-[#1A1A1A] text-sm font-medium">Full Name *</FormLabel>
                             <FormControl>
                                <Input 
                                 {...field} 
@@ -417,7 +417,7 @@ END:VCARD`;
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-black text-sm font-medium">Email Address *</FormLabel>
+                              <FormLabel className="text-[#1A1A1A] text-sm font-medium">Email Address *</FormLabel>
                               <FormControl>
                                 <Input 
                                   {...field} 
@@ -444,7 +444,7 @@ END:VCARD`;
                             
                             return (
                               <FormItem>
-                                <FormLabel className="text-gray-700 text-sm font-medium">Phone Number *</FormLabel>
+                                <FormLabel className="text-[#5A4A2E] text-sm font-medium">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
                                     <PhoneInput
@@ -477,7 +477,7 @@ END:VCARD`;
                           name="nationality"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-gray-700 text-sm font-medium">Nationality *</FormLabel>
+                              <FormLabel className="text-[#5A4A2E] text-sm font-medium">Nationality *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -498,7 +498,7 @@ END:VCARD`;
                           name="language"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-gray-700 text-sm font-medium">Preferred Language *</FormLabel>
+                              <FormLabel className="text-[#5A4A2E] text-sm font-medium">Preferred Language *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -520,7 +520,7 @@ END:VCARD`;
                         name="currentLocation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 text-sm font-medium">Current Location (Country & City) *</FormLabel>
+                            <FormLabel className="text-[#5A4A2E] text-sm font-medium">Current Location (Country & City) *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
@@ -535,7 +535,7 @@ END:VCARD`;
                     </div>
 
                     {/* Service Selection */}
-                    <div className="h-px bg-gray-200 my-6" />
+                    <div className="h-px bg-[#EFE6D6] my-6" />
                     
                     <div className="space-y-4">
                       <FormField
@@ -543,16 +543,16 @@ END:VCARD`;
                         name="serviceNeeded"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 text-sm font-medium">Service Needed *</FormLabel>
+                            <FormLabel className="text-[#5A4A2E] text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
+                                <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                    <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
                                 {SERVICE_OPTIONS.map((option) => (
-                                  <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
+                                  <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                     {option.label}
                                   </SelectItem>
                                 ))}
@@ -569,16 +569,16 @@ END:VCARD`;
                           name="budgetRange"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-gray-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
+                              <FormLabel className="text-[#5A4A2E] text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
+                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                   {BUDGET_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
+                                    <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -593,16 +593,16 @@ END:VCARD`;
                           name="timeline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-gray-700 text-sm font-medium">Timeline (Optional)</FormLabel>
+                              <FormLabel className="text-[#5A4A2E] text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
+                                   <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
                                   {TIMELINE_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
+                                    <SelectItem key={option.value} value={option.value} className="text-[#1A1A1A] hover:bg-[#F7F2EA]">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -619,7 +619,7 @@ END:VCARD`;
                         name="referralCode"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 text-sm font-medium">Referral Code (Optional)</FormLabel>
+                            <FormLabel className="text-[#5A4A2E] text-sm font-medium">Referral Code (Optional)</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
@@ -641,7 +641,7 @@ END:VCARD`;
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 text-sm font-medium">Additional Message (Optional)</FormLabel>
+                            <FormLabel className="text-[#5A4A2E] text-sm font-medium">Additional Message (Optional)</FormLabel>
                             <FormControl>
                               <Textarea 
                                 {...field} 
@@ -656,7 +656,7 @@ END:VCARD`;
                     </div>
 
                     {/* Checkboxes */}
-                    <div className="h-px bg-gray-200 my-6" />
+                    <div className="h-px bg-[#EFE6D6] my-6" />
 
                     <div className="space-y-4">
                       <FormField
@@ -668,11 +668,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
                                 I confirm the information provided is accurate. *
                               </FormLabel>
                               <FormMessage className="text-red-500 text-xs" />
@@ -690,11 +690,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
                                 I agree to the{" "}
                                 <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
                                 {" "}and{" "}
@@ -715,11 +715,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-[#B89555]/30 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
                                 I would like to receive updates and market insights. (Optional)
                               </FormLabel>
                             </div>
@@ -756,9 +756,9 @@ END:VCARD`;
                           </>
                         ) : (
                           <>
-                            <Send className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                            <span className="text-black group-hover:text-gold transition-colors">Start Your</span>
-                            <span className="text-gold group-hover:text-black transition-colors">Inquiry</span>
+                            <Send className="w-5 h-5 text-gold group-hover:text-[#1A1A1A] transition-colors" />
+                            <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">Start Your</span>
+                            <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Inquiry</span>
                           </>
                         )}
                       </span>
@@ -776,14 +776,14 @@ END:VCARD`;
 
       {/* Direct Contact CTAs - "Prefer to Reach Us Directly" - Cards ARE the 3rd layer (on active champagne) */}
       {/* Direct Contact Section */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-3">
-            <span className="text-black">Prefer to Reach Us</span>{" "}
+            <span className="text-[#1A1A1A]">Prefer to Reach Us</span>{" "}
             <span className="text-gold">Directly?</span>
           </h2>
-          <p className="text-center text-gray-600 text-sm mb-6 max-w-2xl mx-auto">
+          <p className="text-center text-[#5A4A2E] text-sm mb-6 max-w-2xl mx-auto">
             For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
           </p>
           {/* Cards are the 3rd layer - champagne pearl styling */}
@@ -799,7 +799,7 @@ END:VCARD`;
                 <MessageCircle className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <h3 className="text-black font-semibold mb-0.5">
+                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
                   WhatsApp
                 </h3>
                 <p className="text-gold text-sm">+971-5659-11000</p>
@@ -815,7 +815,7 @@ END:VCARD`;
                 <Phone className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-black font-semibold mb-0.5">
+                <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
                   Call Us
                 </h3>
                 <p className="text-gold text-sm">+971-5659-11000</p>
@@ -826,22 +826,22 @@ END:VCARD`;
       </section>
 
       {/* Important Notice - 3-Layer System */}
-      <section className="py-10 bg-black">
+      <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
                   <Shield className="w-5 h-5 text-gold" />
                 </div>
-                <h3 className="text-black font-semibold text-lg">
+                <h3 className="text-[#1A1A1A] font-semibold text-lg">
                   <span className="text-gold">Important</span> Notice
                 </h3>
               </div>
               
-              <p className="text-gray-700 text-sm leading-relaxed">
+              <p className="text-[#5A4A2E] text-sm leading-relaxed">
                 JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling, and renting properties. We do not provide legal, mortgage, or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
               </p>
             </div>
@@ -850,19 +850,19 @@ END:VCARD`;
       </section>
 
       {/* Appointments Section - 3-Layer System */}
-      <section className="py-10 bg-black">
+      <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-10 h-10 bg-[#1A1A1A] rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-5 h-5 text-gold" />
               </div>
-              <h3 className="text-black font-semibold text-lg mb-2">
+              <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">
                 Appointments
               </h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
+              <p className="text-[#5A4A2E] text-sm leading-relaxed">
                 If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
               </p>
             </div>
@@ -871,13 +871,13 @@ END:VCARD`;
       </section>
 
       {/* Closing Statement - 3-Layer System */}
-      <section className="py-10 bg-black">
+      <section className="py-10 bg-[#1A1A1A]">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-3">
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
-              <p className="text-gray-700 text-base leading-relaxed">
+              <p className="text-[#5A4A2E] text-base leading-relaxed">
                 At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.
               </p>
             </div>
@@ -887,9 +887,9 @@ END:VCARD`;
 
       {/* Phone Actions Dialog */}
       <Dialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
-        <DialogContent className="max-w-sm bg-white border-gray-200">
+        <DialogContent className="max-w-sm bg-[#FDFBF7] border-[#B89555]/30">
           <DialogHeader>
-            <DialogTitle className="text-black text-lg font-semibold">Contact Options</DialogTitle>
+            <DialogTitle className="text-[#1A1A1A] text-lg font-semibold">Contact Options</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 pt-2">
             <Button 
@@ -909,7 +909,7 @@ END:VCARD`;
             <Button 
               onClick={() => handlePhoneAction('save')}
               variant="outline"
-              className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50 justify-start gap-3"
+              className="w-full h-12 border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA] justify-start gap-3"
             >
               <Download className="w-5 h-5" />
               Save Contact
@@ -917,7 +917,7 @@ END:VCARD`;
             <Button 
               onClick={() => handlePhoneAction('share')}
               variant="outline"
-              className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50 justify-start gap-3"
+              className="w-full h-12 border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA] justify-start gap-3"
             >
               <Share2 className="w-5 h-5" />
               Share Contact

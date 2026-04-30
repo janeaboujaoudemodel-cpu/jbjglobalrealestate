@@ -61,7 +61,7 @@ export const FounderPhilosophySection = () => {
                   <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
                     Jane Bou Jaoude
                   </Link>
-                  <p className="text-gray-700 text-sm">Founder &amp; CEO</p>
+                  <p className="text-[#5A4A2E] text-sm">Founder &amp; CEO</p>
                 </div>
               </div>
               
@@ -76,9 +76,9 @@ export const FounderPhilosophySection = () => {
                   boxShadow: '0 4px 20px rgba(200,167,102,0.3)',
                 }}
               >
-                <User className="w-5 h-5 sm:w-6 sm:h-6 text-black/80" />
+                <User className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]/80" />
                 <span className="tracking-wide">Learn More About the Founder</span>
-                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-black/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A]/80 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </motion.div>
 
@@ -87,21 +87,21 @@ export const FounderPhilosophySection = () => {
               <div>
                 <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
+                  <span className="text-[#1A1A1A]">A Founder-Led</span> <span className="text-gold">Vision</span>
                 </h2>
               </div>
               
               {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
               <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] rounded-2xl p-6 md:p-8 border border-gold/30">
-                <p className="text-gray-800 text-base leading-relaxed mb-4">
+                <p className="text-[#1A1A1A] text-base leading-relaxed mb-4">
                   <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
                 </p>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-[#5A4A2E] text-sm leading-relaxed">
                   Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
                 </p>
               </div>
               
-              <p className="text-gray-700 text-xs">
+              <p className="text-[#5A4A2E] text-xs">
                 Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
               </p>
             </motion.div>

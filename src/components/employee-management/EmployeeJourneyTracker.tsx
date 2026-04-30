@@ -91,7 +91,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       case 'department_change': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
       case 'probation_passed': return 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30';
       case 'warning_issued': return 'bg-red-500/20 text-red-700 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-700 border-gray-500/30';
+      default: return 'bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30';
     }
   };
 
@@ -107,7 +107,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       {/* Employee List */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader>
-          <CardTitle className="text-black text-sm flex items-center gap-2">
+          <CardTitle className="text-[#1A1A1A] text-sm flex items-center gap-2">
             <Activity className="w-4 h-4 text-gold" />
             Select Employee
           </CardTitle>
@@ -122,11 +122,11 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                   className={`w-full text-left p-3 rounded-lg border transition-all ${
                     selectedEmployee === emp.user_id 
                       ? 'bg-gold/20 border-gold' 
-                      : 'bg-white/50 border-gold/20 hover:border-gold/40'
+                      : 'bg-[#FDFBF7]/50 border-gold/20 hover:border-gold/40'
                   }`}
                 >
-                  <p className="font-medium text-black text-sm">{emp.display_name}</p>
-                  <p className="text-xs text-gray-600">{emp.job_title} • {emp.department}</p>
+                  <p className="font-medium text-[#1A1A1A] text-sm">{emp.display_name}</p>
+                  <p className="text-xs text-[#5A4A2E]">{emp.job_title} • {emp.department}</p>
                 </button>
               ))}
             </div>
@@ -137,7 +137,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       {/* Journey Timeline */}
       <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader>
-          <CardTitle className="text-black flex items-center gap-2">
+          <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
             <Calendar className="w-5 h-5 text-gold" />
             {selectedEmp ? `${selectedEmp.display_name}'s Journey` : 'Employee Journey'}
           </CardTitle>
@@ -145,9 +145,9 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
         <CardContent>
           {events.length === 0 ? (
             <div className="text-center py-12">
-              <Activity className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No journey events recorded yet</p>
-              <p className="text-xs text-gray-600 mt-1">Events will appear as the employee progresses</p>
+              <Activity className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+              <p className="text-[#5A4A2E]">No journey events recorded yet</p>
+              <p className="text-xs text-[#5A4A2E] mt-1">Events will appear as the employee progresses</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -159,9 +159,9 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                   {events.map((event, idx) => (
                     <div key={event.id} className="relative">
                       {/* Timeline dot */}
-                      <div className={`absolute -left-5 w-4 h-4 rounded-full border-2 ${getEventColor(event.event_type)} bg-white`} />
+                      <div className={`absolute -left-5 w-4 h-4 rounded-full border-2 ${getEventColor(event.event_type)} bg-[#FDFBF7]`} />
                       
-                      <div className="bg-white/50 border border-gold/20 rounded-lg p-4">
+                      <div className="bg-[#FDFBF7]/50 border border-gold/20 rounded-lg p-4">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             {getEventIcon(event.event_type)}
@@ -169,7 +169,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                               {event.event_type.replace(/_/g, ' ')}
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-1 text-xs text-gray-600">
+                          <div className="flex items-center gap-1 text-xs text-[#5A4A2E]">
                             <Clock className="w-3 h-3" />
                             {format(new Date(event.created_at), 'MMM d, yyyy')}
                           </div>
@@ -177,14 +177,14 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                         
                         {event.previous_value && event.new_value && (
                           <div className="flex items-center gap-2 text-sm mt-2">
-                            <span className="text-gray-600">{JSON.stringify(event.previous_value)}</span>
+                            <span className="text-[#5A4A2E]">{JSON.stringify(event.previous_value)}</span>
                             <ArrowRight className="w-4 h-4 text-gold" />
-                            <span className="text-black font-medium">{JSON.stringify(event.new_value)}</span>
+                            <span className="text-[#1A1A1A] font-medium">{JSON.stringify(event.new_value)}</span>
                           </div>
                         )}
                         
                         {event.notes && (
-                          <p className="text-sm text-gray-600 mt-2">{event.notes}</p>
+                          <p className="text-sm text-[#5A4A2E] mt-2">{event.notes}</p>
                         )}
                       </div>
                     </div>

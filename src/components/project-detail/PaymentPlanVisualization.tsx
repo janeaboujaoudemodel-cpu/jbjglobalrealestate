@@ -173,19 +173,19 @@ export default function PaymentPlanVisualization({
   const total = bookingPct + constructionPct + handoverPct;
 
   return (
-    <div className="rounded-2xl bg-white border border-gray-200 p-6 md:p-8 shadow-sm">
-      <h3 className="text-h3-sm font-medium text-black flex items-center gap-2 mb-6">
-        <CreditCard className="w-5 h-5 text-black" />
+    <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-6 md:p-8 shadow-sm">
+      <h3 className="text-h3-sm font-medium text-[#1A1A1A] flex items-center gap-2 mb-6">
+        <CreditCard className="w-5 h-5 text-[#1A1A1A]" />
         Payment Plan
       </h3>
 
       <Tabs defaultValue="installment" className="w-full">
-        <TabsList className="w-full mb-6 bg-gray-100 border border-gray-200">
-          <TabsTrigger value="installment" className="flex-1 text-gray-600 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm">
+        <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30">
+          <TabsTrigger value="installment" className="flex-1 text-[#5A4A2E] data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {paymentPlan && `(${paymentPlan})`}
           </TabsTrigger>
-          <TabsTrigger value="full" className="flex-1 text-gray-600 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gray-300 data-[state=active]:shadow-sm">
+          <TabsTrigger value="full" className="flex-1 text-[#5A4A2E] data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>
@@ -193,27 +193,27 @@ export default function PaymentPlanVisualization({
 
         {/* Full Payment Tab */}
         <TabsContent value="full">
-          <div className="p-6 rounded-xl border border-gray-200 bg-gray-50 text-center">
-            <div className="w-16 h-16 rounded-full bg-black/10 flex items-center justify-center mx-auto mb-4 ring-4 ring-black/5">
-              <Wallet className="w-8 h-8 text-black" />
+          <div className="p-6 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] text-center">
+            <div className="w-16 h-16 rounded-full bg-[#1A1A1A]/10 flex items-center justify-center mx-auto mb-4 ring-4 ring-black/5">
+              <Wallet className="w-8 h-8 text-[#1A1A1A]" />
             </div>
-            <p className="text-2xl font-bold text-black mb-2">100%</p>
-            <p className="text-sm text-gray-600">Pay full amount upfront</p>
-            <p className="text-xs text-gray-500 mt-2">Contact us for special discounts on full payment</p>
+            <p className="text-2xl font-bold text-[#1A1A1A] mb-2">100%</p>
+            <p className="text-sm text-[#5A4A2E]">Pay full amount upfront</p>
+            <p className="text-xs text-[#8A7556] mt-2">Contact us for special discounts on full payment</p>
           </div>
         </TabsContent>
 
         {/* Installment Tab */}
         <TabsContent value="installment">
           {paymentPlan && (
-            <div className="mb-6 p-5 rounded-xl border border-gray-200 bg-gray-50">
+            <div className="mb-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-black/10 flex items-center justify-center ring-4 ring-black/5">
-                  <Percent className="w-7 h-7 text-black" />
+                <div className="w-14 h-14 rounded-full bg-[#1A1A1A]/10 flex items-center justify-center ring-4 ring-black/5">
+                  <Percent className="w-7 h-7 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-black">{paymentPlan}</p>
-                  <p className="text-sm text-gray-600">Flexible Payment Structure</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{paymentPlan}</p>
+                  <p className="text-sm text-[#5A4A2E]">Flexible Payment Structure</p>
                 </div>
               </div>
               
@@ -231,7 +231,7 @@ export default function PaymentPlanVisualization({
           {/* Visual Timeline with Progress Bar */}
           {total > 0 && (
             <div className="mb-8">
-              <div className="h-6 rounded-full bg-gray-100 overflow-hidden flex shadow-inner relative">
+              <div className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
                 {bookingPct > 0 && (
                   <div 
                     className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all flex items-center justify-center"
@@ -264,16 +264,16 @@ export default function PaymentPlanVisualization({
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-gray-600 text-center">On Booking</span>
+                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-amber-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-gray-600 text-center">During Construction</span>
+                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">During Construction</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-gray-600 text-center">
-                      On Handover{handoverDate && <><br /><span className="text-black font-medium">{handoverDate}</span></>}
+                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">
+                      On Handover{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}
                     </span>
                   </div>
                 </div>
@@ -287,7 +287,7 @@ export default function PaymentPlanVisualization({
               {milestones.map((milestone, idx) => (
                 <div 
                   key={idx}
-                  className={cn("p-5 rounded-xl border border-gray-200 bg-white hover:border-gray-300 hover:shadow-md transition-all text-center", milestone.lightBg)}
+                  className={cn("p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:border-[#B89555]/30 hover:shadow-md transition-all text-center", milestone.lightBg)}
                 >
                   <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4", milestone.lightBg, milestone.ringColor)}>
                     <span className={cn("text-xl font-bold", milestone.color)}>
@@ -295,7 +295,7 @@ export default function PaymentPlanVisualization({
                     </span>
                   </div>
                   <milestone.icon className={cn("w-5 h-5 mx-auto mb-2", milestone.color)} />
-                  <p className="text-sm font-medium text-gray-700">{milestone.label}</p>
+                  <p className="text-sm font-medium text-[#5A4A2E]">{milestone.label}</p>
                 </div>
               ))}
             </div>
@@ -303,10 +303,10 @@ export default function PaymentPlanVisualization({
 
           {/* Detailed Payment Structure Card */}
           {isDetailedBreakdown && detailedMilestones.length >= 2 && (
-            <div className="mt-6 p-5 rounded-xl border border-gray-200 bg-white">
+            <div className="mt-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7]">
               <div className="flex items-center gap-2 mb-4">
-                <List className="w-5 h-5 text-black" />
-                <h4 className="font-semibold text-black">Detailed Payment Structure</h4>
+                <List className="w-5 h-5 text-[#1A1A1A]" />
+                <h4 className="font-semibold text-[#1A1A1A]">Detailed Payment Structure</h4>
               </div>
               <div className="space-y-0">
                 {detailedMilestones.map((step, idx) => {
@@ -316,7 +316,7 @@ export default function PaymentPlanVisualization({
                     <div 
                       key={idx}
                       className={cn(
-                        "flex items-center gap-3 px-4 py-3 border-b border-gray-100 last:border-b-0",
+                        "flex items-center gap-3 px-4 py-3 border-b border-[#B89555]/30 last:border-b-0",
                         isFirst && "bg-emerald-50/50",
                         isLast && "bg-blue-50/50",
                       )}
@@ -330,9 +330,9 @@ export default function PaymentPlanVisualization({
                         {idx + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-black truncate">{step.milestone}</p>
+                        <p className="text-sm font-medium text-[#1A1A1A] truncate">{step.milestone}</p>
                         {step.timing && (
-                          <p className="text-xs text-gray-500">{step.timing}</p>
+                          <p className="text-xs text-[#8A7556]">{step.timing}</p>
                         )}
                       </div>
                       <div className={cn(
@@ -347,9 +347,9 @@ export default function PaymentPlanVisualization({
                   );
                 })}
               </div>
-              <div className="mt-3 pt-3 border-t border-gray-200 flex items-center justify-between px-4">
-                <span className="text-sm font-semibold text-black">Total</span>
-                <span className="text-sm font-bold text-black">
+              <div className="mt-3 pt-3 border-t border-[#B89555]/30 flex items-center justify-between px-4">
+                <span className="text-sm font-semibold text-[#1A1A1A]">Total</span>
+                <span className="text-sm font-bold text-[#1A1A1A]">
                   {detailedMilestones.reduce((s, m) => s + m.percentage, 0)}%
                 </span>
               </div>
@@ -357,18 +357,18 @@ export default function PaymentPlanVisualization({
           )}
 
           {milestones.length === 0 && !paymentPlan && (
-            <div className="p-8 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 text-center">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-5 ring-4 ring-gray-200">
-                <CreditCard className="w-10 h-10 text-black" />
+            <div className="p-8 rounded-xl border-2 border-dashed border-[#B89555]/30 bg-[#F7F2EA] text-center">
+              <div className="w-20 h-20 rounded-full bg-[#F7F2EA] flex items-center justify-center mx-auto mb-5 ring-4 ring-[#B89555]/30">
+                <CreditCard className="w-10 h-10 text-[#1A1A1A]" />
               </div>
-              <p className="text-xl font-semibold text-black mb-2">Interested in {projectName}?</p>
-              <p className="text-sm text-gray-600 mb-6 max-w-md mx-auto">
+              <p className="text-xl font-semibold text-[#1A1A1A] mb-2">Interested in {projectName}?</p>
+              <p className="text-sm text-[#5A4A2E] mb-6 max-w-md mx-auto">
                 Register your interest to learn more about {projectName}. Our team will provide you with the latest details.
               </p>
               {onRegisterInterest && (
                 <button
                   onClick={onRegisterInterest}
-                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-black text-white font-semibold text-sm shadow-lg hover:bg-gray-800 hover:-translate-y-0.5 transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-[#1A1A1A] text-white font-semibold text-sm shadow-lg hover:bg-[#1A1A1A] hover:-translate-y-0.5 transition-all"
                 >
                   <CreditCard className="w-4 h-4" />
                   Register Your Interest
@@ -378,7 +378,7 @@ export default function PaymentPlanVisualization({
           )}
 
           {handoverDate && (
-            <p className="mt-6 text-sm text-gray-500 italic text-center">
+            <p className="mt-6 text-sm text-[#8A7556] italic text-center">
               Benefit from extended payment terms until {handoverDate} handover
             </p>
           )}

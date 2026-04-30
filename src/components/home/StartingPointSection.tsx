@@ -56,19 +56,19 @@ const StartingPointSection = () => {
   const activeCards = activeTab === 'audience' ? audienceCards : activeTab === 'services' ? serviceCards : professionalCards;
 
   return (
-    <section className="bg-white">
+    <section className="bg-[#FDFBF7]">
       <div className="jj-layer-2">
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
-          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gray-100 border border-gray-300 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-700" />
-            <span className="text-gray-900">{t('hero.findStartingPoint')}</span>
+          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
+            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#5A4A2E]" />
+            <span className="text-[#1A1A1A]">{t('hero.findStartingPoint')}</span>
           </span>
         </div>
 
         {/* Tab navigation */}
         <div className="flex justify-center mb-6 md:mb-8">
-          <div className="inline-flex bg-gray-100 border border-gray-200 rounded-full p-1 gap-1">
+          <div className="inline-flex bg-[#F7F2EA] border border-[#B89555]/30 rounded-full p-1 gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
@@ -76,8 +76,8 @@ const StartingPointSection = () => {
                 className={cn(
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 border",
                   activeTab === tab.key
-                    ? "bg-white text-gray-900 border-gray-300 shadow-sm font-bold"
-                    : "bg-transparent text-gray-600 border-transparent hover:bg-white/60 hover:text-gray-900"
+                    ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 shadow-sm font-bold"
+                    : "bg-transparent text-[#5A4A2E] border-transparent hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A]"
                 )}
               >
                 {tab.label}
@@ -91,18 +91,18 @@ const StartingPointSection = () => {
           {activeCards.map((card) => (
             <Link key={card.to + card.label} to={card.to} className="group">
               <div className={cn(
-                "bg-white border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
-                "border-gray-200 hover:border-gray-400",
+                "bg-[#FDFBF7] border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
+                "border-[#B89555]/30 hover:border-[#B89555]/30",
                 "hover:shadow-lg hover:-translate-y-1.5",
                 "shadow-sm",
               )}>
                 <div className="relative flex flex-col items-center gap-2 md:gap-3 w-full">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-gray-100 border border-gray-200">
-                    <card.icon className="w-7 h-7 text-gray-800" strokeWidth={1.5} />
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-[#F7F2EA] border border-[#B89555]/30">
+                    <card.icon className="w-7 h-7 text-[#1A1A1A]" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
-                    <h4 className="text-gray-900 group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-gray-500 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <h4 className="text-[#1A1A1A] group-hover:text-[#5A4A2E] text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <p className="text-[#8A7556] text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>

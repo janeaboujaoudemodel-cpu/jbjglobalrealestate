@@ -381,7 +381,7 @@ const BusinessCardCamera = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`flex items-center gap-2 p-3 rounded-lg bg-zinc-900/50 border border-gray-800 ${getStatusColor()}`}
+            className={`flex items-center gap-2 p-3 rounded-lg bg-zinc-900/50 border border-[#1A1A1A] ${getStatusColor()}`}
           >
             {getStatusIcon()}
             <span className="text-sm font-medium">{statusMessage}</span>
@@ -410,7 +410,7 @@ const BusinessCardCamera = ({
             {/* Premium camera icon */}
             <div className="relative">
               <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold to-gold/50 flex items-center justify-center shadow-xl shadow-gold/30">
-                <Camera className="h-12 w-12 text-black" />
+                <Camera className="h-12 w-12 text-[#1A1A1A]" />
               </div>
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
@@ -432,7 +432,7 @@ const BusinessCardCamera = ({
                 <p className="text-red-400 text-sm max-w-xs">{cameraError}</p>
                 <Button 
                   onClick={startCamera} 
-                  className="gap-2 bg-gold hover:bg-gold-light text-black font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
+                  className="gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
                 >
                   <Camera className="h-5 w-5" />
                   Grant Camera Access
@@ -445,7 +445,7 @@ const BusinessCardCamera = ({
               <div className="text-center space-y-4">
                 <Button 
                   onClick={startCamera} 
-                  className="gap-2 bg-gold hover:bg-gold-light text-black font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
+                  className="gap-2 bg-gold hover:bg-gold-light text-[#1A1A1A] font-bold px-8 py-6 text-lg rounded-xl shadow-lg shadow-gold/30 transition-all hover:scale-105"
                 >
                   <Camera className="h-5 w-5" />
                   Open Camera
@@ -484,7 +484,7 @@ const BusinessCardCamera = ({
               {/* Center guide area */}
               <div className="absolute inset-8 border-2 border-dashed border-gold/40 rounded-xl">
                 <div className="absolute top-3 left-3 right-3">
-                  <div className="bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
+                  <div className="bg-[#1A1A1A]/60 backdrop-blur-sm rounded-lg px-3 py-2 text-center">
                     <span className="text-white/90 text-xs font-medium">
                       📍 Position business card within this frame
                     </span>
@@ -504,8 +504,8 @@ const BusinessCardCamera = ({
             </div>
             
             {/* Auto-detect indicator */}
-            <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1.5">
-              <div className={`w-2 h-2 rounded-full ${autoDetectEnabled ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
+            <div className="absolute top-4 right-4 flex items-center gap-2 bg-[#1A1A1A]/70 backdrop-blur-sm rounded-full px-3 py-1.5">
+              <div className={`w-2 h-2 rounded-full ${autoDetectEnabled ? 'bg-green-500 animate-pulse' : 'bg-[#B89555]'}`} />
               <span className="text-xs text-white font-medium">
                 {autoDetectEnabled ? 'Auto-Detect ON' : 'Manual Mode'}
               </span>
@@ -535,7 +535,7 @@ const BusinessCardCamera = ({
           
           <Button 
             size="lg" 
-            className="gap-2 px-10 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-black font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-105"
+            className="gap-2 px-10 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-[#1A1A1A] font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-105"
             onClick={captureImage}
             disabled={isProcessing}
           >
@@ -590,7 +590,7 @@ const BusinessCardCamera = ({
                 className="flex-shrink-0 w-28 h-20 rounded-lg overflow-hidden border-2 border-gold/30 shadow-lg shadow-gold/10 relative group"
               >
                 <img src={img} alt={`Card ${index + 1}`} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="absolute inset-0 bg-[#1A1A1A]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <span className="text-white text-xs font-bold">Card {index + 1}</span>
                 </div>
               </motion.div>
@@ -598,7 +598,7 @@ const BusinessCardCamera = ({
           </div>
           
           <Button 
-            className="w-full gap-3 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-black font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-[1.02]"
+            className="w-full gap-3 py-6 bg-gradient-to-r from-gold to-gold-light hover:from-gold-light hover:to-gold text-[#1A1A1A] font-bold text-lg rounded-xl shadow-xl shadow-gold/30 transition-all hover:scale-[1.02]"
             onClick={processImages}
             disabled={isProcessing}
           >

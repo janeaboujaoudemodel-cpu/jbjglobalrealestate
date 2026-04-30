@@ -260,7 +260,7 @@ const AIROICalculatorPremium = () => {
               {/* Key Metrics */}
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {response.roi && (
-                  <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                  <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Total ROI</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.roi}%</p>
                     <p className="text-white/90 text-xs mt-1">over {formData.holdingPeriod} years</p>
@@ -274,7 +274,7 @@ const AIROICalculatorPremium = () => {
                   </div>
                 )}
                 {response.appreciation && (
-                  <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
+                  <div className="bg-[#1A1A1A]/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
                     <p className="text-white/70 text-sm mb-2">Est. Appreciation</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.appreciation}%</p>
                     <p className="text-white/90 text-xs mt-1">projected growth</p>
@@ -343,7 +343,7 @@ const AIROICalculatorPremium = () => {
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-gray-700 rounded-2xl p-6">
+            <div className="bg-zinc-800/50 border border-[#1A1A1A] rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>

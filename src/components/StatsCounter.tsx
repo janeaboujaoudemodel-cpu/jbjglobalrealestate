@@ -126,13 +126,13 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
         
         {/* Counter Value */}
         <div 
-          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-black mb-1 min-w-[80px]"
+          className="text-2xl md:text-3xl lg:text-4xl font-semibold text-[#1A1A1A] mb-1 min-w-[80px]"
         >
           {formattedValue}
         </div>
         
         {/* Label */}
-        <div className="text-gray-600 text-xs md:text-sm font-medium">
+        <div className="text-[#5A4A2E] text-xs md:text-sm font-medium">
           {getTranslatedLabel()}
         </div>
       </div>
@@ -170,9 +170,9 @@ const StatsCounter = () => {
           <div className="text-center mb-10">
             <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
               <span className="text-gold">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
-              <span className="text-black"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
+              <span className="text-[#1A1A1A]"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
             </span>
-            <p className="text-gray-700 text-sm">{t('founder.experience', 'Founder experience')}</p>
+            <p className="text-[#5A4A2E] text-sm">{t('founder.experience', 'Founder experience')}</p>
           </div>
           
           {/* Stats Grid - Pearl Cards inside Champagne Layer */}

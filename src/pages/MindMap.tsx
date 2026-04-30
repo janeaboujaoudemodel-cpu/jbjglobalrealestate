@@ -309,7 +309,7 @@ const MindMap = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
       {/* Header */}
-      <div className="border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+      <div className="border-b border-[#1A1A1A] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <GitBranch className="w-6 h-6 text-violet-500" />
           <Input
@@ -338,7 +338,7 @@ const MindMap = () => {
 
       <div className="flex flex-1">
         {/* Toolbar */}
-        <div className="w-64 border-r border-gray-800 p-4">
+        <div className="w-64 border-r border-[#1A1A1A] p-4">
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-semibold text-white/70 mb-3">Actions</h3>

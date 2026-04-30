@@ -26,7 +26,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         <h4 className="text-gold text-xl font-bold mb-2">
           {t('chat.welcomeTitle', 'Chat with our team')} 👋
         </h4>
-        <p className="text-black text-sm font-medium">{t('chat.welcomeSubtitle', 'Talk directly with our experts')}</p>
+        <p className="text-[#1A1A1A] text-sm font-medium">{t('chat.welcomeSubtitle', 'Talk directly with our experts')}</p>
       </div>
 
       {/* Action buttons - full width, centered */}
@@ -37,11 +37,11 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           className="w-full p-4 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-[#FDFBF7] border border-gold/30 flex items-center justify-center shadow-sm">
               <MessageCircle className="w-6 h-6 text-gold" />
             </div>
             <div className="text-left">
-              <h5 className="text-black text-base font-bold mb-0.5">💬 {t('chat.chatWithTeam', 'Chat with our team')}</h5>
+              <h5 className="text-[#1A1A1A] text-base font-bold mb-0.5">💬 {t('chat.chatWithTeam', 'Chat with our team')}</h5>
               <p className="text-gold text-sm font-medium">⚡ {t('chat.quickAnswers', 'Quick answers • Available 24/7')}</p>
             </div>
           </div>
@@ -57,7 +57,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           className="w-full p-4 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group block shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-[#FDFBF7] border border-gold/30 flex items-center justify-center shadow-sm">
               <MessageCircle className="w-6 h-6 text-green-500" />
             </div>
             <div className="text-left">
@@ -69,11 +69,11 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
       </div>
 
       {/* Tip at BOTTOM now */}
-      <div className="w-full mt-auto px-4 py-3 bg-white/80 rounded-lg border border-gold/30">
+      <div className="w-full mt-auto px-4 py-3 bg-[#FDFBF7]/80 rounded-lg border border-gold/30">
         <p className="text-sm flex flex-wrap items-center justify-center gap-1">
           <span className="text-gold">💡</span>
-          <span className="text-black font-bold">{t('chat.tip', 'Tip:')}</span>
-          <span className="text-gray-700">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
+          <span className="text-[#1A1A1A] font-bold">{t('chat.tip', 'Tip:')}</span>
+          <span className="text-[#5A4A2E]">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
         </p>
       </div>
     </div>

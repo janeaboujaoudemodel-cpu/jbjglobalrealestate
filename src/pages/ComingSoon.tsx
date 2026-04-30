@@ -49,7 +49,7 @@ const ComingSoon = () => {
 
   return (
     <>
-      <div className={`min-h-screen bg-black flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`}>
+      <div className={`min-h-screen bg-[#1A1A1A] flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden ${isRTL ? 'rtl' : 'ltr'}`}>
         {/* Language Switcher - Top Right */}
         <div className="absolute top-4 right-4 z-50">
           <LanguageSwitcher variant="default" />
@@ -127,7 +127,7 @@ const ComingSoon = () => {
             {/* Crown Icon */}
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-[#FDFBF7] flex items-center justify-center">
                   <Crown className="w-10 h-10 text-gold" />
                 </div>
                 <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-gold animate-pulse" />

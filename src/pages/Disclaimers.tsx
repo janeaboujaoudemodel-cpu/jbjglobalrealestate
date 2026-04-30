@@ -70,7 +70,7 @@ const Disclaimers = () => {
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Disclaimer & Professional Scope</h1>
             <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensed Real Estate Brokerage Transparency</p>
-            <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">JBJ Global Real Estate operates as a licensed real estate brokerage within the United Arab Emirates. This page outlines the professional scope of services, regulatory clarifications, and user responsibilities associated with our platform and advisory services.</p>
+            <p className="text-[#5A4A2E] leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">JBJ Global Real Estate operates as a licensed real estate brokerage within the United Arab Emirates. This page outlines the professional scope of services, regulatory clarifications, and user responsibilities associated with our platform and advisory services.</p>
           </div>
         </section>
 
@@ -89,7 +89,7 @@ const Disclaimers = () => {
                     className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeSection === item.id
                         ? "text-[#C8A766] font-semibold border-l-2 border-[#C8A766] bg-[#C8A766]/5"
-                        : "text-gray-600 hover:text-gray-600 border-l-2 border-transparent"
+                        : "text-[#5A4A2E] hover:text-[#5A4A2E] border-l-2 border-transparent"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -110,7 +110,7 @@ const Disclaimers = () => {
                   className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${
                     activeSection === item.id
                       ? "bg-[#C8A766]/20 text-[#C8A766] border border-[#C8A766]/40"
-                      : "text-gray-600 hover:text-gray-600"
+                      : "text-[#5A4A2E] hover:text-[#5A4A2E]"
                   }`}
                 >
                   {item.label}
@@ -125,13 +125,13 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Building2 className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 01</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensed Brokerage Scope</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 01</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensed Brokerage Scope</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate is authorized to conduct the following activities under its UAE commercial license:</p>
                   <BulletList items={["Buying and selling real estate","Leasing and rental brokerage","Property acquisition advisory","Real estate investment analysis within brokerage scope","Market research and pricing analysis","Developer project consulting","Portfolio advisory related to property assets"]} />
                   <p>All advisory services provided relate strictly to property and real estate transactions within the framework of applicable UAE regulations.</p>
-                  <p className="text-gray-800 font-medium">We are legally permitted to provide real estate investment advisory as part of licensed brokerage services.</p>
+                  <p className="text-[#1A1A1A] font-medium">We are legally permitted to provide real estate investment advisory as part of licensed brokerage services.</p>
                 </div>
               </CCard>
             </div>
@@ -140,9 +140,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Scale className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 02</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Scope Boundaries</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 02</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Scope Boundaries</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate does not provide:</p>
                   <BulletList items={["Legal representation services","Immigration law representation","Certified tax consultancy","Corporate structuring advice","Independent financial planning outside property scope"]} />
                   <p>Where required, clients may engage licensed legal advisors, tax consultants, or government-approved entities for specialized services.</p>
@@ -156,9 +156,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><BarChart3 className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 03</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Data & Market Information</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 03</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Data & Market Information</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>Property pricing, availability, rental yield projections, and investment analytics are based on developer data, market statistics, government publications, and internal analytical tools.</p>
                   <p>While reasonable care is taken to ensure accuracy:</p>
                   <BulletList items={["Prices may change without notice","Availability may vary","Market conditions fluctuate","Projected returns are not guaranteed outcomes"]} />
@@ -171,12 +171,12 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Globe className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 04</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Residency & Golden Visa Information</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 04</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Residency & Golden Visa Information</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>Information provided regarding UAE Golden Visa or residency eligibility is based on publicly available government guidelines.</p>
                   <p>Final approval, eligibility, and processing decisions remain exclusively under the authority of relevant UAE government entities.</p>
-                  <p className="text-gray-800 font-medium">JBJ Global Real Estate does not issue visas nor guarantee residency approval.</p>
+                  <p className="text-[#1A1A1A] font-medium">JBJ Global Real Estate does not issue visas nor guarantee residency approval.</p>
                 </div>
               </CCard>
             </div>
@@ -187,9 +187,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Cpu className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 05</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Digital & AI Advisory Tools</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 05</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Digital & AI Advisory Tools</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>AI-powered tools provided on this platform offer analytical insights, forecasts, and data modeling for real estate evaluation. These tools:</p>
                   <BulletList items={["Provide predictive insights","Do not guarantee investment outcomes","Support decision-making","Do not replace professional consultation"]} />
                   <p>Users are responsible for validating outputs before executing financial commitments.</p>
@@ -201,9 +201,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ExternalLink className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 06</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>External Platforms & References</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 06</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>External Platforms & References</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>The platform may reference third-party data sources, developers, or external property platforms. JBJ Global Real Estate is not responsible for:</p>
                   <BulletList items={["Third-party platform content","External website policies","Developer operational decisions","Construction delays","Changes in external terms"]} />
                 </div>
@@ -216,9 +216,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 07</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Liability Clarification</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 07</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Liability Clarification</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate shall not be held liable for:</p>
                   <BulletList items={["Market fluctuations","Developer timeline changes","Investment performance outcomes","Financing approvals","Government processing delays"]} />
                   <p>Real estate transactions inherently carry market risks.</p>
@@ -230,9 +230,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><UserCheck className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 08</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Client Responsibility</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 08</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Client Responsibility</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>By using this platform, users acknowledge:</p>
                   <BulletList items={["Responsibility for independent verification","Understanding of market risk","Acceptance of advisory nature of projections","Commitment to due diligence"]} />
                 </div>
@@ -243,9 +243,9 @@ const Disclaimers = () => {
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#C8A766]" /></div>
-                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 09</span><h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Regulatory Position</h2></div>
+                  <div><span className="text-xs font-semibold text-[#C8A766] tracking-widest uppercase">Section 09</span><h2 className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Regulatory Position</h2></div>
                 </div>
-                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-[#5A4A2E] leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate operates in compliance with UAE real estate regulations and conducts brokerage activities within licensed scope.</p>
                   <p>This disclaimer ensures transparency and regulatory clarity.</p>
                 </div>
@@ -255,11 +255,11 @@ const Disclaimers = () => {
             {/* Footer */}
             <GoldDivider />
             <div className="text-center pt-4">
-              <p className="text-xs text-gray-600 max-w-2xl mx-auto leading-relaxed mb-4">This Disclaimer may be updated periodically to reflect regulatory developments and operational changes.</p>
-              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-xs text-[#5A4A2E] max-w-2xl mx-auto leading-relaxed mb-4">This Disclaimer may be updated periodically to reflect regulatory developments and operational changes.</p>
+              <p className="text-[#5A4A2E] text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-gray-600">|</span>
+                <span className="text-[#5A4A2E]">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

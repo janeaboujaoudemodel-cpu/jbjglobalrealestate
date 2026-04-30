@@ -39,8 +39,8 @@ export const ListingDetailCTA = ({
   };
 
   return (
-    <div className={`bg-white border-2 border-gray-200 rounded-xl p-5 shadow-lg ${className}`}>
-      <h4 className="text-lg font-semibold text-black mb-4">
+    <div className={`bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-lg ${className}`}>
+      <h4 className="text-lg font-semibold text-[#1A1A1A] mb-4">
         Interested in this property?
       </h4>
       
@@ -58,7 +58,7 @@ export const ListingDetailCTA = ({
         <Button
           onClick={handleCallClick}
           variant="outline"
-          className="w-full h-12 border-2 border-black text-black hover:bg-black hover:text-white font-semibold"
+          className="w-full h-12 border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white font-semibold"
         >
           <Phone className="w-5 h-5 mr-2" />
           Call {CONTACT_INFO.phone}
@@ -78,9 +78,9 @@ export const ListingDetailCTA = ({
       </div>
 
       {/* Email fallback */}
-      <p className="text-center text-sm text-gray-600 mt-4">
+      <p className="text-center text-sm text-[#5A4A2E] mt-4">
         Or email us at{' '}
-        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-black font-medium hover:underline">
+        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-[#1A1A1A] font-medium hover:underline">
           {CONTACT_INFO.email}
         </a>
       </p>

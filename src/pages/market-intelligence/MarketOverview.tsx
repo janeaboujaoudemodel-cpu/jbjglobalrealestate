@@ -35,7 +35,7 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
       className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? 'text-center' : ''}`}
     >
       <span className="text-gold mr-2">{firstWord}</span>
-      <span className="text-black font-bold">{restWords}</span>
+      <span className="text-[#1A1A1A] font-bold">{restWords}</span>
     </h2>
   );
 };
@@ -73,10 +73,10 @@ const ContentSection = ({
             </div>
             <h2 className="text-2xl md:text-3xl font-bold">
               <span className="text-gold">{firstWord}</span>
-              <span className="text-black ml-2">{restWords}</span>
+              <span className="text-[#1A1A1A] ml-2">{restWords}</span>
             </h2>
           </div>
-          <div className="text-gray-700 leading-relaxed space-y-4">
+          <div className="text-[#5A4A2E] leading-relaxed space-y-4">
             {children}
           </div>
           {links && links.length > 0 && (
@@ -174,7 +174,7 @@ const MarketOverview = () => {
       />
 
       {/* Main Content - Full width edge-to-edge with 3-layer system */}
-      <div className="pt-16 pb-16 bg-black">
+      <div className="pt-16 pb-16 bg-[#1A1A1A]">
         {/* Introduction Section */}
         <section id="introduction" className="scroll-mt-32 jj-section-champagne py-12 mb-8">
           <div className="px-4 md:px-8 lg:px-16 xl:pr-80">
@@ -185,10 +185,10 @@ const MarketOverview = () => {
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold">
                   <span className="text-gold">About</span>
-                  <span className="text-black ml-2">This Page</span>
+                  <span className="text-[#1A1A1A] ml-2">This Page</span>
                 </h2>
               </div>
-              <div className="text-gray-700 leading-relaxed">
+              <div className="text-[#5A4A2E] leading-relaxed">
                 <p>
                   This page is descriptive, not predictive. It explains how the market works today and how official data should be read.
                 </p>
@@ -207,10 +207,10 @@ const MarketOverview = () => {
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold">
                   <span className="text-gold">Market</span>
-                  <span className="text-black ml-2">Structure & Regulation</span>
+                  <span className="text-[#1A1A1A] ml-2">Structure & Regulation</span>
                 </h2>
               </div>
-              <div className="text-gray-700 leading-relaxed space-y-4">
+              <div className="text-[#5A4A2E] leading-relaxed space-y-4">
                 <p>
                   All real estate transactions, rental registrations, and ownership records in Dubai are governed and recorded by the Dubai Land Department (DLD). Regulatory oversight, rent controls, service charge approvals, and brokerage licensing fall under RERA.
                 </p>
@@ -317,8 +317,8 @@ const MarketOverview = () => {
           <p className="mt-4">
             We do not base guidance on unverified dashboards, social media claims, or guaranteed-return statements. Market interpretation is grounded in officially published information and location-specific evaluation.
           </p>
-          <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
-            <p className="text-sm text-gray-600 italic">
+          <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
+            <p className="text-sm text-[#5A4A2E] italic">
               This Market Overview serves as the foundation for deeper analysis in Area Intelligence, where performance is examined at a location and project level using the same official sources.
             </p>
           </div>
@@ -343,7 +343,7 @@ const MarketOverview = () => {
                       <p className="text-lg font-semibold mb-2 text-gold">
                         {stat.label}
                       </p>
-                      <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
+                      <p className="text-[#1A1A1A] text-3xl font-bold mb-2">{stat.value}</p>
                       <div className="flex items-center justify-center gap-2">
                         {getTrendIcon(stat.change)}
                         <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-white/70'}`}>
@@ -361,9 +361,9 @@ const MarketOverview = () => {
               <p className="text-lg">
                 <span className="font-semibold text-xl text-gold">Source:</span>
                 {" "}
-                <span className="text-black font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
+                <span className="text-[#1A1A1A] font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
               </p>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-[#5A4A2E] text-sm mt-1">
                 Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
               </p>
             </div>
@@ -384,17 +384,17 @@ const MarketOverview = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
-                    <p className="text-gray-600 text-xs">Transactions</p>
+                    <p className="text-[#1A1A1A] text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
+                    <p className="text-[#5A4A2E] text-xs">Transactions</p>
                     <div className="mt-3 pt-3 border-t border-gold/20">
-                      <p className="text-gray-700 text-sm">AED {quarter.avgPrice}/sqft</p>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                      <p className="text-[#5A4A2E] text-sm">AED {quarter.avgPrice}/sqft</p>
+                      <div className="w-full bg-[#EFE6D6] rounded-full h-1.5 mt-2">
                         <div 
                           className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
                           style={{ width: `${quarter.index}%` }}
                         />
                       </div>
-                      <p className="text-gray-600 text-xs mt-1">Index: {quarter.index}</p>
+                      <p className="text-[#5A4A2E] text-xs mt-1">Index: {quarter.index}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -421,10 +421,10 @@ const MarketOverview = () => {
                     <p className="text-2xl font-bold mb-1 text-gold">
                       {type.type}
                     </p>
-                    <p className="text-black text-sm">{type.volume.toLocaleString()} transactions</p>
+                    <p className="text-[#1A1A1A] text-sm">{type.volume.toLocaleString()} transactions</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-black font-bold text-lg">AED {type.avgPrice}/sqft</p>
+                    <p className="text-[#1A1A1A] font-bold text-lg">AED {type.avgPrice}/sqft</p>
                     <div className="flex items-center gap-1 justify-end">
                       {getTrendIcon(type.change)}
                       <span className={`text-sm font-medium ${type.change > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
@@ -450,7 +450,7 @@ const MarketOverview = () => {
                   <Database className="w-5 h-5 text-gold" />
                   <Shield className="w-5 h-5 text-gold" />
                 </div>
-                <p className="text-gray-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+                <p className="text-[#5A4A2E] text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
               </div>
             </div>
           </div>

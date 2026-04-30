@@ -91,15 +91,15 @@ export const TemplateEditorDialog = ({
       {/* Near-fullscreen so the email preview is fully readable without horizontal scrolling */}
       <DialogContent
         className="
-          bg-white text-black
+          bg-[#FDFBF7] text-[#1A1A1A]
           p-0 gap-0
           w-[96vw] sm:max-w-[96vw]
           h-[94vh] max-h-[94vh]
           flex flex-col overflow-hidden
         "
       >
-        <DialogHeader className="px-6 pt-5 pb-3 border-b border-black/10">
-          <DialogTitle className="flex items-center gap-3 text-black">
+        <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#1A1A1A]/10">
+          <DialogTitle className="flex items-center gap-3 text-[#1A1A1A]">
             <span className="text-base font-semibold">Email Template</span>
             {isLocked && (
               <span className="text-xs font-medium text-amber-700 flex items-center gap-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
@@ -110,14 +110,14 @@ export const TemplateEditorDialog = ({
         </DialogHeader>
 
         {/* Variant + preview toggle row */}
-        <div className="flex flex-wrap items-center gap-2 px-6 py-3 border-b border-black/10 bg-white">
+        <div className="flex flex-wrap items-center gap-2 px-6 py-3 border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
           {(Object.keys(VARIANT_LABELS) as RegistrationVariant[]).map((v) => (
             <Button
               key={v}
               variant={variant === v ? "default" : "outline"}
               size="sm"
               onClick={() => setVariant(v)}
-              className={variant === v ? "bg-black text-white hover:bg-gray-800" : "text-black"}
+              className={variant === v ? "bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]" : "text-[#1A1A1A]"}
             >
               {VARIANT_LABELS[v]}
             </Button>
@@ -127,7 +127,7 @@ export const TemplateEditorDialog = ({
             variant="outline"
             size="sm"
             onClick={() => setShowPreview((p) => !p)}
-            className="text-black"
+            className="text-[#1A1A1A]"
           >
             <Eye className="w-3 h-3 mr-1" />{showPreview ? "Hide" : "Show"} Preview
           </Button>
@@ -141,58 +141,58 @@ export const TemplateEditorDialog = ({
           `}
         >
           {/* Editor column */}
-          <div className="min-h-0 overflow-y-auto px-6 py-4 space-y-4 border-r border-black/10">
+          <div className="min-h-0 overflow-y-auto px-6 py-4 space-y-4 border-r border-[#1A1A1A]/10">
             <div>
-              <Label className="text-xs text-black">Subject</Label>
+              <Label className="text-xs text-[#1A1A1A]">Subject</Label>
               <Input
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 disabled={isLocked}
-                className="bg-white text-black"
+                className="bg-[#FDFBF7] text-[#1A1A1A]"
               />
             </div>
             <div>
-              <Label className="text-xs text-black">
+              <Label className="text-xs text-[#1A1A1A]">
                 HTML body — use{" "}
-                <code className="bg-gray-100 px-1">{`{{developer_name}}`}</code> and{" "}
-                <code className="bg-gray-100 px-1">{`{{drive_url}}`}</code> placeholders
+                <code className="bg-[#F7F2EA] px-1">{`{{developer_name}}`}</code> and{" "}
+                <code className="bg-[#F7F2EA] px-1">{`{{drive_url}}`}</code> placeholders
               </Label>
               <Textarea
                 value={html}
                 onChange={(e) => setHtml(e.target.value)}
                 disabled={isLocked}
                 rows={18}
-                className="font-mono text-xs bg-white text-black"
+                className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
               />
             </div>
 
             {/* Send test panel */}
-            <div className="rounded-xl border border-black/10 bg-gray-50 p-4 space-y-3">
+            <div className="rounded-xl border border-[#1A1A1A]/10 bg-[#F7F2EA] p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Send className="w-4 h-4 text-black" />
-                <h4 className="text-sm font-semibold text-black">Send a test to your inbox</h4>
+                <Send className="w-4 h-4 text-[#1A1A1A]" />
+                <h4 className="text-sm font-semibold text-[#1A1A1A]">Send a test to your inbox</h4>
               </div>
-              <p className="text-xs text-gray-700">
+              <p className="text-xs text-[#5A4A2E]">
                 Sends the live template (placeholders filled in) to the address below. The subject is prefixed with <span className="font-mono">[TEST]</span> and nothing is logged against any developer record.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-xs text-black">Send to</Label>
+                  <Label className="text-xs text-[#1A1A1A]">Send to</Label>
                   <Input
                     type="email"
                     value={testEmail}
                     onChange={(e) => setTestEmail(e.target.value)}
                     placeholder="you@yourdomain.com"
-                    className="bg-white text-black"
+                    className="bg-[#FDFBF7] text-[#1A1A1A]"
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-black">Sample developer name</Label>
+                  <Label className="text-xs text-[#1A1A1A]">Sample developer name</Label>
                   <Input
                     value={testDeveloperName}
                     onChange={(e) => setTestDeveloperName(e.target.value)}
                     placeholder="Sample Developer Co."
-                    className="bg-white text-black"
+                    className="bg-[#FDFBF7] text-[#1A1A1A]"
                   />
                 </div>
               </div>
@@ -200,7 +200,7 @@ export const TemplateEditorDialog = ({
                 <Button
                   onClick={handleSendTest}
                   disabled={sendTest.isPending}
-                  className="bg-black text-white hover:bg-gray-800"
+                  className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
                 >
                   {sendTest.isPending ? (
                     <><Loader2 className="w-3 h-3 mr-1 animate-spin" /> Sending…</>
@@ -215,22 +215,22 @@ export const TemplateEditorDialog = ({
           {/* Preview column — iframe fills remaining height */}
           {showPreview && (
             <div className="min-h-0 flex flex-col bg-[#FAF5EA]">
-              <div className="text-[10px] uppercase tracking-wider text-gray-700 px-4 py-2 bg-white border-b border-black/10 truncate">
+              <div className="text-[10px] uppercase tracking-wider text-[#5A4A2E] px-4 py-2 bg-[#FDFBF7] border-b border-[#1A1A1A]/10 truncate">
                 Preview · {VARIANT_LABELS[variant]} · Subject:{" "}
-                <span className="normal-case font-medium text-black">{subject || "—"}</span>
+                <span className="normal-case font-medium text-[#1A1A1A]">{subject || "—"}</span>
               </div>
               <iframe
                 title="Email preview"
                 srcDoc={previewHtml}
-                className="flex-1 w-full bg-white"
+                className="flex-1 w-full bg-[#FDFBF7]"
                 sandbox=""
               />
             </div>
           )}
         </div>
 
-        <DialogFooter className="px-6 py-3 border-t border-black/10 gap-2 bg-white">
-          <Button variant="outline" onClick={() => onOpenChange(false)} className="text-black">
+        <DialogFooter className="px-6 py-3 border-t border-[#1A1A1A]/10 gap-2 bg-[#FDFBF7]">
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="text-[#1A1A1A]">
             Close
           </Button>
           {!isLocked && (
@@ -244,7 +244,7 @@ export const TemplateEditorDialog = ({
                 <Lock className="w-3 h-3 mr-1" /> Lock template
               </Button>
               <Button
-                className="bg-black text-white hover:bg-gray-800"
+                className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
                 onClick={() => upsert.mutate({ variant, subject, html })}
                 disabled={upsert.isPending}
               >

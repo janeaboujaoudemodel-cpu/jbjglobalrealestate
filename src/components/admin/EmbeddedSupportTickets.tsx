@@ -152,14 +152,14 @@ export function EmbeddedSupportTickets() {
       {/* Stats - Make all cards clickable */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card 
-          className="bg-white border-2 border-gold/30 cursor-pointer hover:border-gold/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-gold/30 cursor-pointer hover:border-gold/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "all" }))}
         >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Total Tickets</p>
-                <p className="text-2xl font-bold text-black">{ticketCounts.total}</p>
+                <p className="text-[#5A4A2E] text-xs">Total Tickets</p>
+                <p className="text-2xl font-bold text-[#1A1A1A]">{ticketCounts.total}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
                 <Ticket className="w-5 h-5 text-gold" />
@@ -168,13 +168,13 @@ export function EmbeddedSupportTickets() {
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-yellow-500/30 cursor-pointer hover:border-yellow-500/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-yellow-500/30 cursor-pointer hover:border-yellow-500/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "open" }))}
         >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Open</p>
+                <p className="text-[#5A4A2E] text-xs">Open</p>
                 <p className="text-2xl font-bold text-yellow-600">{ticketCounts.open}</p>
               </div>
               <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
@@ -184,13 +184,13 @@ export function EmbeddedSupportTickets() {
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-blue-500/30 cursor-pointer hover:border-blue-500/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-blue-500/30 cursor-pointer hover:border-blue-500/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "in_progress" }))}
         >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">In Progress</p>
+                <p className="text-[#5A4A2E] text-xs">In Progress</p>
                 <p className="text-2xl font-bold text-blue-600">{ticketCounts.inProgress}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -200,13 +200,13 @@ export function EmbeddedSupportTickets() {
           </CardContent>
         </Card>
         <Card 
-          className="bg-white border-2 border-green-500/30 cursor-pointer hover:border-green-500/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-green-500/30 cursor-pointer hover:border-green-500/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "resolved" }))}
         >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Resolved</p>
+                <p className="text-[#5A4A2E] text-xs">Resolved</p>
                 <p className="text-2xl font-bold text-green-600">{ticketCounts.resolved}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -217,13 +217,13 @@ export function EmbeddedSupportTickets() {
         </Card>
         {/* Reopened Tickets Card - Always visible */}
         <Card 
-          className="bg-white border-2 border-orange-500/30 cursor-pointer hover:border-orange-500/60 active:scale-95 transition-all"
+          className="bg-[#FDFBF7] border-2 border-orange-500/30 cursor-pointer hover:border-orange-500/60 active:scale-95 transition-all"
           onClick={() => setFilters(prev => ({ ...prev, status: "reopened" }))}
         >
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-xs">Reopened</p>
+                <p className="text-[#5A4A2E] text-xs">Reopened</p>
                 <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
               </div>
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
@@ -235,22 +235,22 @@ export function EmbeddedSupportTickets() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-white border-2 border-gold/30">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
               <input
                 type="text"
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-gray-700" />
+              <Filter className="w-4 h-4 text-[#5A4A2E]" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
@@ -343,11 +343,11 @@ export function EmbeddedSupportTickets() {
       <div className="flex gap-6 min-h-[500px]">
         {/* Ticket List */}
         <div className="flex-1 min-w-0">
-          <Card className="bg-white border-2 border-gold/30 h-full">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30 h-full">
             {isLoading ? (
               <CardContent className="p-6 space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <Skeleton key={i} className="h-16 w-full bg-gray-200" />
+                  <Skeleton key={i} className="h-16 w-full bg-[#EFE6D6]" />
                 ))}
               </CardContent>
             ) : error ? (
@@ -356,7 +356,7 @@ export function EmbeddedSupportTickets() {
                 <p className="text-red-600 font-medium">Failed to load tickets</p>
                 <Button
                   onClick={() => refetch()}
-                  className="mt-4 bg-gold text-black hover:bg-gold/90"
+                  className="mt-4 bg-gold text-[#1A1A1A] hover:bg-gold/90"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry
@@ -382,7 +382,7 @@ export function EmbeddedSupportTickets() {
                       <TableHead className="text-gold font-semibold text-xs whitespace-nowrap min-w-[90px]">
                         <button
                           onClick={() => setSortAscending(!sortAscending)}
-                          className="flex items-center gap-1 hover:text-black transition-colors"
+                          className="flex items-center gap-1 hover:text-[#1A1A1A] transition-colors"
                         >
                           Created
                           <ArrowUpDown className="w-3 h-3" />
@@ -418,21 +418,21 @@ export function EmbeddedSupportTickets() {
                               className="border-gold/50"
                             />
                           </TableCell>
-                          <TableCell className="font-mono text-xs font-semibold text-black whitespace-nowrap">
+                          <TableCell className="font-mono text-xs font-semibold text-[#1A1A1A] whitespace-nowrap">
                             {ticket.ticket_number}
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
                             <div>
-                              <p className="font-medium text-black text-xs truncate max-w-[150px]">
+                              <p className="font-medium text-[#1A1A1A] text-xs truncate max-w-[150px]">
                                 {ticket.full_name}
                               </p>
-                              <p className="text-gray-600 text-[10px] truncate max-w-[150px]">
+                              <p className="text-[#5A4A2E] text-[10px] truncate max-w-[150px]">
                                 {ticket.email}
                               </p>
                             </div>
                           </TableCell>
                           <TableCell className="max-w-[200px]">
-                            <p className="truncate text-black text-xs">
+                            <p className="truncate text-[#1A1A1A] text-xs">
                               {ticket.subject}
                             </p>
                           </TableCell>
@@ -455,7 +455,7 @@ export function EmbeddedSupportTickets() {
                               {status.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-gray-700 text-xs whitespace-nowrap">
+                          <TableCell className="text-[#5A4A2E] text-xs whitespace-nowrap">
                             {format(new Date(ticket.created_at), "MMM d, HH:mm")}
                           </TableCell>
                         </TableRow>
@@ -466,9 +466,9 @@ export function EmbeddedSupportTickets() {
               </div>
             ) : (
               <CardContent className="p-12 text-center">
-                <Ticket className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-700 font-medium">No tickets found</p>
-                <p className="text-gray-500 text-sm mt-1">
+                <Ticket className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+                <p className="text-[#5A4A2E] font-medium">No tickets found</p>
+                <p className="text-[#8A7556] text-sm mt-1">
                   Try adjusting your filters
                 </p>
               </CardContent>

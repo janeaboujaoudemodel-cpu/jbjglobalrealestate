@@ -226,11 +226,11 @@ export const IPBlocklistDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h2 className="text-black text-xl font-semibold flex items-center gap-2">
+          <h2 className="text-[#1A1A1A] text-xl font-semibold flex items-center gap-2">
             <ShieldBan className="w-5 h-5 text-red-500" />
             IP Blocklist
           </h2>
-          <p className="text-black/60 text-sm mt-1">
+          <p className="text-[#1A1A1A]/60 text-sm mt-1">
             Manage permanently blocked IP addresses
           </p>
         </div>
@@ -241,7 +241,7 @@ export const IPBlocklistDashboard = () => {
             onClick={() => setIsLive(!isLive)}
             className={isLive 
               ? "bg-emerald-600 hover:bg-emerald-700 text-white" 
-              : "border-gold/30 text-black hover:bg-gold/10"
+              : "border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
             }
           >
             <Radio className={`w-4 h-4 mr-2 ${isLive ? "animate-pulse" : ""}`} />
@@ -252,7 +252,7 @@ export const IPBlocklistDashboard = () => {
             size="sm"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="border-gold/30 text-black hover:bg-gold/10"
+            className="border-gold/30 text-[#1A1A1A] hover:bg-gold/10"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Refresh
@@ -266,14 +266,14 @@ export const IPBlocklistDashboard = () => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-black">
+                <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
                   <ShieldBan className="w-5 h-5 text-red-500" />
                   Block IP Address
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label className="text-black">IP Address</Label>
+                  <Label className="text-[#1A1A1A]">IP Address</Label>
                   <Input
                     placeholder="e.g., 192.168.1.1"
                     value={newIP}
@@ -281,18 +281,18 @@ export const IPBlocklistDashboard = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-black">Reason (optional)</Label>
+                  <Label className="text-[#1A1A1A]">Reason (optional)</Label>
                   <Textarea
                     placeholder="Why is this IP being blocked?"
                     value={newReason}
                     onChange={(e) => setNewReason(e.target.value)}
-                    className="bg-white border-2 border-gold/30 text-black"
+                    className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]"
                   />
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <Label className="text-black">Permanent Block</Label>
-                    <p className="text-black/40 text-xs">
+                    <Label className="text-[#1A1A1A]">Permanent Block</Label>
+                    <p className="text-[#1A1A1A]/40 text-xs">
                       {isPermanent ? "This IP will be blocked forever" : "Block will expire automatically"}
                     </p>
                   </div>
@@ -303,7 +303,7 @@ export const IPBlocklistDashboard = () => {
                 </div>
                 {!isPermanent && (
                   <div className="space-y-2">
-                    <Label className="text-black">Expires in (days)</Label>
+                    <Label className="text-[#1A1A1A]">Expires in (days)</Label>
                     <Input
                       type="number"
                       min="1"
@@ -328,33 +328,33 @@ export const IPBlocklistDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <ShieldBan className="w-5 h-5 text-red-500" />
-            <span className="text-black/60">Total Blocked</span>
+            <span className="text-[#1A1A1A]/60">Total Blocked</span>
           </div>
-          <p className="text-black text-3xl font-bold">{blockedIPs.length}</p>
+          <p className="text-[#1A1A1A] text-3xl font-bold">{blockedIPs.length}</p>
         </Card>
-        <Card className="bg-white border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <AlertTriangle className="w-5 h-5 text-amber-500" />
-            <span className="text-black/60">Permanent Blocks</span>
+            <span className="text-[#1A1A1A]/60">Permanent Blocks</span>
           </div>
-          <p className="text-black text-3xl font-bold">{permanentBlocks}</p>
+          <p className="text-[#1A1A1A] text-3xl font-bold">{permanentBlocks}</p>
         </Card>
-        <Card className="bg-white border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Clock className="w-5 h-5 text-blue-500" />
-            <span className="text-black/60">Temporary Blocks</span>
+            <span className="text-[#1A1A1A]/60">Temporary Blocks</span>
           </div>
-          <p className="text-black text-3xl font-bold">{temporaryBlocks}</p>
+          <p className="text-[#1A1A1A] text-3xl font-bold">{temporaryBlocks}</p>
         </Card>
-        <Card className="bg-white border-2 border-gold/30 p-6">
+        <Card className="bg-[#FDFBF7] border-2 border-gold/30 p-6">
           <div className="flex items-center gap-3 mb-2">
             <Plus className="w-5 h-5 text-emerald-500" />
-            <span className="text-black/60">Blocked Today</span>
+            <span className="text-[#1A1A1A]/60">Blocked Today</span>
           </div>
-          <p className="text-black text-3xl font-bold">{recentBlocks}</p>
+          <p className="text-[#1A1A1A] text-3xl font-bold">{recentBlocks}</p>
         </Card>
       </div>
 
@@ -370,9 +370,9 @@ export const IPBlocklistDashboard = () => {
       </div>
 
       {/* Blocklist Table */}
-      <Card className="bg-white border-2 border-gold/30 overflow-hidden">
+      <Card className="bg-[#FDFBF7] border-2 border-gold/30 overflow-hidden">
         <div className="p-4 border-b border-gold/20">
-          <h3 className="text-black font-medium">Blocked IP Addresses</h3>
+          <h3 className="text-[#1A1A1A] font-medium">Blocked IP Addresses</h3>
         </div>
         
         {loading ? (
@@ -381,9 +381,9 @@ export const IPBlocklistDashboard = () => {
           </div>
         ) : filteredIPs.length === 0 ? (
           <div className="text-center py-12">
-            <ShieldBan className="w-12 h-12 text-gray-500 mx-auto mb-3" />
-            <p className="text-black/60">No blocked IPs found</p>
-            <p className="text-black/40 text-sm mt-1">
+            <ShieldBan className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+            <p className="text-[#1A1A1A]/60">No blocked IPs found</p>
+            <p className="text-[#1A1A1A]/40 text-sm mt-1">
               Add IPs to the blocklist to prevent malicious access
             </p>
           </div>
@@ -392,12 +392,12 @@ export const IPBlocklistDashboard = () => {
             <table className="w-full">
               <thead className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] sticky top-0">
                 <tr>
-                  <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">IP Address</th>
-                  <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">Reason</th>
-                  <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">Status</th>
-                  <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">Blocked At</th>
-                  <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">Attempts</th>
-                  <th className="text-right text-black/60 font-medium px-6 py-3 text-sm">Actions</th>
+                  <th className="text-left text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">IP Address</th>
+                  <th className="text-left text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">Reason</th>
+                  <th className="text-left text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">Status</th>
+                  <th className="text-left text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">Blocked At</th>
+                  <th className="text-left text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">Attempts</th>
+                  <th className="text-right text-[#1A1A1A]/60 font-medium px-6 py-3 text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -408,7 +408,7 @@ export const IPBlocklistDashboard = () => {
                         {entry.ip_address}
                       </code>
                     </td>
-                    <td className="px-6 py-4 text-black text-sm max-w-48 truncate">
+                    <td className="px-6 py-4 text-[#1A1A1A] text-sm max-w-48 truncate">
                       {entry.reason || "—"}
                     </td>
                     <td className="px-6 py-4">
@@ -426,15 +426,15 @@ export const IPBlocklistDashboard = () => {
                         </Badge>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-black/60 text-sm">
+                    <td className="px-6 py-4 text-[#1A1A1A]/60 text-sm">
                       <div className="flex flex-col">
                         <span>{format(new Date(entry.blocked_at), "MMM d, HH:mm")}</span>
-                        <span className="text-black/40 text-xs">
+                        <span className="text-[#1A1A1A]/40 text-xs">
                           {formatDistanceToNow(new Date(entry.blocked_at), { addSuffix: true })}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-black">
+                    <td className="px-6 py-4 text-[#1A1A1A]">
                       {entry.block_count}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -442,7 +442,7 @@ export const IPBlocklistDashboard = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemoveIP(entry.id, entry.ip_address)}
-                        className="text-black/60 hover:text-red-500"
+                        className="text-[#1A1A1A]/60 hover:text-red-500"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

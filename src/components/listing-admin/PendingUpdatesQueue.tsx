@@ -309,7 +309,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
               size="sm"
               onClick={handleApproveAll}
               disabled={batchProcessing}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/40 hover:border-gold/60"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/40 hover:border-gold/60"
             >
               <Check className="h-4 w-4 mr-1" />
               Approve All ({newProjects.length})
@@ -380,9 +380,9 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
             {/* Migration Log */}
             {migrationLog.length > 0 && (
-              <div className="bg-zinc-950 border border-gray-800 rounded-xl overflow-hidden">
-                <div className="px-4 py-2 border-b border-gray-800">
-                  <span className="text-gray-600 text-xs font-semibold">Migration Log</span>
+              <div className="bg-zinc-950 border border-[#1A1A1A] rounded-xl overflow-hidden">
+                <div className="px-4 py-2 border-b border-[#1A1A1A]">
+                  <span className="text-[#5A4A2E] text-xs font-semibold">Migration Log</span>
                 </div>
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
                   {migrationLog.map((line, i) => (
@@ -391,7 +391,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
                       line.includes("[START]") ? "text-yellow-300" :
                       line.includes("[WARN]") ? "text-amber-400" :
-                      "text-gray-600"
+                      "text-[#5A4A2E]"
                     }`}>{line}</div>
                   ))}
                 </div>
@@ -401,7 +401,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* New Project Discoveries */}
             {newProjects.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[#5A4A2E] mb-3 flex items-center gap-2">
                   <Building className="h-4 w-4 text-gold" />
                   New Project Discoveries
                   <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
@@ -415,7 +415,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       return (
                         <div
                           key={update.id}
-                          className="border-2 border-gold/30 rounded-xl bg-white overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.3)] hover:scale-[1.01] transition-all duration-300"
+                          className="border-2 border-gold/30 rounded-xl bg-[#FDFBF7] overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.3)] hover:scale-[1.01] transition-all duration-300"
                         >
                           {/* Image / Placeholder - full card style */}
                           <div className="relative aspect-[4/3] bg-gradient-to-br from-muted via-muted/80 to-muted/60">
@@ -521,33 +521,33 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* Field Updates (if any) */}
             {fieldUpdates.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                <h3 className="text-sm font-semibold text-[#5A4A2E] mb-3">
                   Field Updates
-                  <Badge className="ml-2 bg-gray-100 text-gray-600 text-xs">{fieldUpdates.length}</Badge>
+                  <Badge className="ml-2 bg-[#F7F2EA] text-[#5A4A2E] text-xs">{fieldUpdates.length}</Badge>
                 </h3>
                 <ScrollArea className="h-[300px] pr-2">
                   <div className="space-y-3">
                     {fieldUpdates.map((update) => (
-                      <div key={update.id} className="border border-gold/20 rounded-lg p-4 bg-white/50">
+                      <div key={update.id} className="border border-gold/20 rounded-lg p-4 bg-[#FDFBF7]/50">
                         <div className="flex items-start justify-between mb-2">
-                          <span className="font-medium text-gray-900 text-sm">
+                          <span className="font-medium text-[#1A1A1A] text-sm">
                             {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                           </span>
-                          <div className="flex items-center gap-1 text-xs text-gray-600">
+                          <div className="flex items-center gap-1 text-xs text-[#5A4A2E]">
                             <Clock className="h-3 w-3" />
                             {format(new Date(update.created_at), "MMM d, h:mm a")}
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <p className="text-[10px] text-gray-600 mb-1">Current</p>
-                            <div className="bg-white border border-gray-200 rounded p-2 text-xs text-gray-900">
-                              {update.current_value || <span className="text-gray-600 italic">Empty</span>}
+                            <p className="text-[10px] text-[#5A4A2E] mb-1">Current</p>
+                            <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded p-2 text-xs text-[#1A1A1A]">
+                              {update.current_value || <span className="text-[#5A4A2E] italic">Empty</span>}
                             </div>
                           </div>
                           <div>
-                            <p className="text-[10px] text-gray-600 mb-1">Proposed</p>
-                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-gray-900">
+                            <p className="text-[10px] text-[#5A4A2E] mb-1">Proposed</p>
+                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-[#1A1A1A]">
                               {update.proposed_value}
                             </div>
                           </div>

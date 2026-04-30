@@ -79,22 +79,22 @@ const TrustBar = () => {
           <div 
             className={`flex items-center gap-2 md:gap-3 px-3 py-2 md:px-5 md:py-3 rounded-xl transition-all duration-300 cursor-default h-full overflow-hidden ${
               item.highlight 
-                ? 'bg-white border-2 border-gray-300 shadow-md' 
-                : 'bg-white border border-gray-200 hover:border-gray-300 shadow-sm'
+                ? 'bg-[#FDFBF7] border-2 border-[#B89555]/30 shadow-md' 
+                : 'bg-[#FDFBF7] border border-[#B89555]/30 hover:border-[#B89555]/30 shadow-sm'
             }`}
           >
             {/* Icon */}
-            <div className="jj-icon-keep w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 bg-black shadow-sm">
+            <div className="jj-icon-keep w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 bg-[#1A1A1A] shadow-sm">
               <item.icon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-white" style={{ color: '#fff' }} />
             </div>
             
             {/* Text content */}
             <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-xs md:text-[15px] font-bold tracking-wide leading-tight text-black transition-colors duration-300 break-words">
+              <span className="text-xs md:text-[15px] font-bold tracking-wide leading-tight text-[#1A1A1A] transition-colors duration-300 break-words">
                 {item.text}
               </span>
               {item.subtext && (
-                <span className="text-[10px] md:text-xs text-gray-600 font-medium tracking-wide transition-colors duration-300 break-words">
+                <span className="text-[10px] md:text-xs text-[#5A4A2E] font-medium tracking-wide transition-colors duration-300 break-words">
                   {item.subtext}
                 </span>
               )}

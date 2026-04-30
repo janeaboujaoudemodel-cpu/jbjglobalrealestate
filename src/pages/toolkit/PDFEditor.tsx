@@ -19,7 +19,7 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
   const ed = usePDFEditor();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FDFBF7]">
       <input ref={ed.fileInputRef} type="file" accept=".pdf" multiple onChange={ed.handleFileUpload} className="hidden" />
 
       {!embedded && (
@@ -235,9 +235,9 @@ export default function PDFEditor({ embedded = false }: PDFEditorProps) {
               {ed.signatureMode && (
                 <div className="rounded-2xl p-6" style={{ background: G.bg, border: `1px solid ${G.border}` }}>
                   <h3 className="text-lg font-semibold text-white mb-4">Draw Signature</h3>
-                  <div className="bg-white rounded-xl p-2 mb-4">
+                  <div className="bg-[#FDFBF7] rounded-xl p-2 mb-4">
                     <canvas ref={ed.signatureCanvasRef} width={400} height={150}
-                      className="rounded cursor-crosshair w-full border border-gray-200"
+                      className="rounded cursor-crosshair w-full border border-[#B89555]/30"
                       onMouseDown={ed.startDrawing} onMouseMove={ed.draw} onMouseUp={ed.stopDrawing} onMouseLeave={ed.stopDrawing} />
                   </div>
                   <div className="flex gap-2">

@@ -150,7 +150,7 @@ const DeveloperPartnersMarquee = () => {
 
       <div className="w-full">
         <div className="py-5 md:py-6 px-4 mb-2 md:mb-3">
-          <p className="text-center text-black text-sm md:text-base font-light tracking-wide">
+          <p className="text-center text-[#1A1A1A] text-sm md:text-base font-light tracking-wide">
             {language === "ar" ? "شراكة مع المطورين الرائدين في دبي" : "Partners with Dubai's leading developers"}
           </p>
         </div>

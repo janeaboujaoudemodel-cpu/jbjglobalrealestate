@@ -37,7 +37,7 @@ const OwnerIntegrationsPage = () => {
       case 'connected':
         return <Badge className="bg-green-100 text-green-700 border-green-200"><Check className="w-3 h-3 mr-1" />Connected</Badge>;
       case 'not_connected':
-        return <Badge className="bg-gray-100 text-gray-600 border-gray-200"><X className="w-3 h-3 mr-1" />Not Connected</Badge>;
+        return <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30"><X className="w-3 h-3 mr-1" />Not Connected</Badge>;
       case 'error':
         return <Badge className="bg-red-100 text-red-700 border-red-200"><AlertTriangle className="w-3 h-3 mr-1" />Error</Badge>;
       case 'draft':
@@ -56,8 +56,8 @@ const OwnerIntegrationsPage = () => {
                 <Plug className="w-6 h-6 text-[#B89555]" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-black">Integration Status</h1>
-                <p className="text-gray-600">Multi-channel integration dashboard</p>
+                <h1 className="text-2xl font-bold text-[#1A1A1A]">Integration Status</h1>
+                <p className="text-[#5A4A2E]">Multi-channel integration dashboard</p>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ const OwnerIntegrationsPage = () => {
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-amber-700">Integration Status Notice</h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-[#5A4A2E] mt-1">
                   All integrations are currently in <strong>Draft / Not Active</strong> status. 
                   No external connections have been configured. These will be activated once 
                   API credentials and OAuth flows are set up.
@@ -82,7 +82,7 @@ const OwnerIntegrationsPage = () => {
           {/* Integration Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {integrations.map((integration) => (
-              <Card key={integration.id} className="bg-white/70 border-[#B89555]/20">
+              <Card key={integration.id} className="bg-[#FDFBF7]/70 border-[#B89555]/20">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ const OwnerIntegrationsPage = () => {
                         <integration.icon className="w-5 h-5 text-[#B89555]" />
                       </div>
                       <div>
-                        <CardTitle className="text-black text-lg">{integration.name}</CardTitle>
+                        <CardTitle className="text-[#1A1A1A] text-lg">{integration.name}</CardTitle>
                         <CardDescription className="text-xs mt-1">{integration.description}</CardDescription>
                       </div>
                     </div>
@@ -98,34 +98,34 @@ const OwnerIntegrationsPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Status</span>
+                    <span className="text-sm text-[#5A4A2E]">Status</span>
                     {getStatusBadge(integration.status)}
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Auth Method</span>
-                    <span className="text-sm text-gray-600">{integration.authMethod || 'Not configured'}</span>
+                    <span className="text-sm text-[#5A4A2E]">Auth Method</span>
+                    <span className="text-sm text-[#5A4A2E]">{integration.authMethod || 'Not configured'}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Last Sync</span>
-                    <span className="text-sm text-gray-600">{integration.lastSync || 'Never'}</span>
+                    <span className="text-sm text-[#5A4A2E]">Last Sync</span>
+                    <span className="text-sm text-[#5A4A2E]">{integration.lastSync || 'Never'}</span>
                   </div>
                   <div className="pt-3 border-t border-[#B89555]/10">
                     <div className="flex gap-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-600">Can Send:</span>
-                        {integration.canSend ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-gray-600" />}
+                        <span className="text-xs text-[#5A4A2E]">Can Send:</span>
+                        {integration.canSend ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-[#5A4A2E]" />}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-600">Can Receive:</span>
-                        {integration.canReceive ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-gray-600" />}
+                        <span className="text-xs text-[#5A4A2E]">Can Receive:</span>
+                        {integration.canReceive ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-[#5A4A2E]" />}
                       </div>
                     </div>
                   </div>
                   <div className="pt-3 flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-gray-600 hover:text-black hover:bg-[#B89555]/10" disabled>
+                    <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#B89555]/10" disabled>
                       <Settings className="w-4 h-4 mr-1" />Configure
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#B89555]/30 text-gray-600 hover:text-black hover:bg-[#B89555]/10" disabled>
+                    <Button variant="outline" size="sm" className="border-[#B89555]/30 text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#B89555]/10" disabled>
                       <RefreshCw className="w-4 h-4" />
                     </Button>
                   </div>
@@ -135,20 +135,20 @@ const OwnerIntegrationsPage = () => {
           </div>
 
           {/* Legend */}
-          <div className="mt-8 p-4 rounded-lg bg-white/70 border border-[#B89555]/20">
-            <h3 className="text-sm font-semibold text-black mb-3">Status Legend</h3>
+          <div className="mt-8 p-4 rounded-lg bg-[#FDFBF7]/70 border border-[#B89555]/20">
+            <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Status Legend</h3>
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 border-green-200">Connected</Badge>
-                <span className="text-gray-600">= Fully operational</span>
+                <span className="text-[#5A4A2E]">= Fully operational</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-amber-100 text-amber-700 border-amber-200">Draft / Not Active</Badge>
-                <span className="text-gray-600">= Not yet configured</span>
+                <span className="text-[#5A4A2E]">= Not yet configured</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-red-100 text-red-700 border-red-200">Error</Badge>
-                <span className="text-gray-600">= Connection issue</span>
+                <span className="text-[#5A4A2E]">= Connection issue</span>
               </div>
             </div>
           </div>

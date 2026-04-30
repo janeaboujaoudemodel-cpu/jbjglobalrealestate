@@ -81,10 +81,10 @@ interface SaveDialogData {
 }
 
 // Shared champagne-gold input class
-const goldInput = "bg-white/80 border-2 border-gold/30 text-black placeholder:text-black/40 rounded-xl focus:border-gold focus:ring-gold/20";
-const goldSelect = "bg-white/80 border-2 border-gold/30 text-black rounded-xl";
+const goldInput = "bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 rounded-xl focus:border-gold focus:ring-gold/20";
+const goldSelect = "bg-[#FDFBF7]/80 border-2 border-gold/30 text-[#1A1A1A] rounded-xl";
 const goldSelectContent = "bg-[#FDFBF7] border-2 border-gold/30 rounded-xl";
-const goldSelectItem = "text-black hover:bg-gold/10 focus:bg-gold/15 focus:text-black rounded-lg";
+const goldSelectItem = "text-[#1A1A1A] hover:bg-gold/10 focus:bg-gold/15 focus:text-[#1A1A1A] rounded-lg";
 
 export function ScriptLibrary({
   onLoadScript,
@@ -263,7 +263,7 @@ export function ScriptLibrary({
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/40" />
           <Input
             placeholder="Search scripts, projects, tags…"
             value={searchQuery}
@@ -296,7 +296,7 @@ export function ScriptLibrary({
         <Button
           onClick={openSaveDialog}
           disabled={!currentScript.trim()}
-          className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold shrink-0 rounded-xl border-2 border-gold"
+          className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold shrink-0 rounded-xl border-2 border-gold"
           size="sm"
         >
           <Plus className="h-4 w-4 mr-1.5" />
@@ -305,13 +305,13 @@ export function ScriptLibrary({
       </div>
 
       {/* Script count */}
-      <p className="text-black/50 text-xs">
+      <p className="text-[#1A1A1A]/50 text-xs">
         {filtered.length} of {scripts.length} scripts
       </p>
 
       {/* Loading */}
       {isLoading && (
-        <div className="flex items-center justify-center py-16 gap-3 text-black/40">
+        <div className="flex items-center justify-center py-16 gap-3 text-[#1A1A1A]/40">
           <Loader2 className="h-5 w-5 animate-spin text-gold" />
           <span className="text-sm">Loading library…</span>
         </div>
@@ -324,8 +324,8 @@ export function ScriptLibrary({
             <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center">
               <BookOpen className="h-6 w-6 text-gold" />
             </div>
-            <h3 className="text-black font-medium">No saved scripts yet</h3>
-            <p className="text-black/50 text-sm max-w-xs">
+            <h3 className="text-[#1A1A1A] font-medium">No saved scripts yet</h3>
+            <p className="text-[#1A1A1A]/50 text-sm max-w-xs">
               Write a script in the Studio, then click "Save Current Script" to store it here for reuse.
             </p>
           </CardContent>
@@ -334,7 +334,7 @@ export function ScriptLibrary({
 
       {/* No results from filter */}
       {!isLoading && scripts.length > 0 && filtered.length === 0 && (
-        <p className="text-center text-black/50 text-sm py-8">No scripts match your search.</p>
+        <p className="text-center text-[#1A1A1A]/50 text-sm py-8">No scripts match your search.</p>
       )}
 
       {/* Script grid */}
@@ -348,11 +348,11 @@ export function ScriptLibrary({
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-black font-semibold text-sm truncate">{s.title}</h3>
+                    <h3 className="text-[#1A1A1A] font-semibold text-sm truncate">{s.title}</h3>
                     {s.project_name && (
                       <div className="flex items-center gap-1 mt-0.5">
-                        <Building2 className="h-3 w-3 text-black/40 shrink-0" />
-                        <span className="text-black/60 text-xs truncate">{s.project_name}</span>
+                        <Building2 className="h-3 w-3 text-[#1A1A1A]/40 shrink-0" />
+                        <span className="text-[#1A1A1A]/60 text-xs truncate">{s.project_name}</span>
                       </div>
                     )}
                   </div>
@@ -360,21 +360,21 @@ export function ScriptLibrary({
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                     <button
                       onClick={() => handleCopy(s)}
-                      className="p-1.5 rounded-lg hover:bg-gold/10 text-black/40 hover:text-black transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-gold/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                       title="Copy script"
                     >
                       {copiedId === s.id ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
                     </button>
                     <button
                       onClick={() => openEditDialog(s)}
-                      className="p-1.5 rounded-lg hover:bg-gold/10 text-black/40 hover:text-black transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-gold/10 text-[#1A1A1A]/40 hover:text-[#1A1A1A] transition-colors"
                       title="Edit script"
                     >
                       <Edit3 className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => setDeletingId(s.id)}
-                      className="p-1.5 rounded-lg hover:bg-red-50 text-black/40 hover:text-red-600 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-red-50 text-[#1A1A1A]/40 hover:text-red-600 transition-colors"
                       title="Delete script"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -384,15 +384,15 @@ export function ScriptLibrary({
 
                 {/* Badges row */}
                 <div className="flex flex-wrap gap-1.5 mt-2">
-                  <Badge className="text-[10px] bg-gold/15 text-black border border-gold/30 px-1.5 py-0.5">
+                  <Badge className="text-[10px] bg-gold/15 text-[#1A1A1A] border border-gold/30 px-1.5 py-0.5">
                     <Globe className="h-2.5 w-2.5 mr-1" />
                     {getLangDisplay(s.language)}
                   </Badge>
-                  <Badge className="text-[10px] bg-gold/10 text-black/70 border border-gold/20 px-1.5 py-0.5">
+                  <Badge className="text-[10px] bg-gold/10 text-[#1A1A1A]/70 border border-gold/20 px-1.5 py-0.5">
                     {s.tone.charAt(0).toUpperCase() + s.tone.slice(1)}
                   </Badge>
                   {s.voice_name && (
-                    <Badge className="text-[10px] bg-gold/10 text-black/70 border border-gold/20 px-1.5 py-0.5">
+                    <Badge className="text-[10px] bg-gold/10 text-[#1A1A1A]/70 border border-gold/20 px-1.5 py-0.5">
                       <Mic className="h-2.5 w-2.5 mr-1" />
                       {s.voice_name}
                     </Badge>
@@ -402,7 +402,7 @@ export function ScriptLibrary({
 
               <CardContent className="flex-1 flex flex-col gap-3 pt-0">
                 {/* Script preview */}
-                <p className="text-black/60 text-xs leading-relaxed line-clamp-3 bg-white/60 rounded-xl p-3 border-2 border-gold/15">
+                <p className="text-[#1A1A1A]/60 text-xs leading-relaxed line-clamp-3 bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-gold/15">
                   {s.script}
                 </p>
 
@@ -410,7 +410,7 @@ export function ScriptLibrary({
                 {s.tags?.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {s.tags.map(tag => (
-                      <span key={tag} className="text-[10px] bg-gold/10 text-black/50 border border-gold/20 rounded-lg px-1.5 py-0.5">
+                      <span key={tag} className="text-[10px] bg-gold/10 text-[#1A1A1A]/50 border border-gold/20 rounded-lg px-1.5 py-0.5">
                         #{tag}
                       </span>
                     ))}
@@ -419,7 +419,7 @@ export function ScriptLibrary({
 
                 {/* Footer */}
                 <div className="flex items-center justify-between mt-auto pt-2 border-t-2 border-gold/15">
-                  <div className="flex items-center gap-3 text-[10px] text-black/40">
+                  <div className="flex items-center gap-3 text-[10px] text-[#1A1A1A]/40">
                     <span className="flex items-center gap-1">
                       <FileText className="h-3 w-3" />
                       {s.word_count ?? "—"} words
@@ -433,7 +433,7 @@ export function ScriptLibrary({
                     <Button
                       size="sm"
                       onClick={() => { onLoadScript(s.script); toast.success(`"${s.title}" loaded into editor`); }}
-                      className="h-7 text-xs bg-gradient-to-r from-gold to-amber-500 text-black font-semibold px-3 rounded-xl border border-gold"
+                      className="h-7 text-xs bg-gradient-to-r from-gold to-amber-500 text-[#1A1A1A] font-semibold px-3 rounded-xl border border-gold"
                     >
                       Load
                     </Button>
@@ -447,9 +447,9 @@ export function ScriptLibrary({
 
       {/* ── Save Dialog ── */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-black sm:max-w-lg rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-lg rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <BookOpen className="h-5 w-5 text-gold" />
               Save Script to Library
             </DialogTitle>
@@ -457,7 +457,7 @@ export function ScriptLibrary({
 
           <div className="space-y-4 mt-2">
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Title *</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Title *</Label>
               <Input
                 placeholder="e.g. Marina Tower Luxury Voiceover"
                 value={saveData.title}
@@ -466,7 +466,7 @@ export function ScriptLibrary({
               />
             </div>
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Project Name</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Project Name</Label>
               <Input
                 placeholder="e.g. Binghatti Hills, Palm Jumeirah Tower…"
                 value={saveData.project_name}
@@ -476,7 +476,7 @@ export function ScriptLibrary({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-black/60 text-xs mb-1.5 block">Language</Label>
+                <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Language</Label>
                 <Select value={saveData.language} onValueChange={v => setSaveData(p => ({ ...p, language: v }))}>
                   <SelectTrigger className={goldSelect}>
                     <SelectValue />
@@ -489,7 +489,7 @@ export function ScriptLibrary({
                 </Select>
               </div>
               <div>
-                <Label className="text-black/60 text-xs mb-1.5 block">Tone</Label>
+                <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Tone</Label>
                 <Select value={saveData.tone} onValueChange={v => setSaveData(p => ({ ...p, tone: v }))}>
                   <SelectTrigger className={goldSelect}>
                     <SelectValue />
@@ -503,7 +503,7 @@ export function ScriptLibrary({
               </div>
             </div>
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Tags (comma-separated)</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Tags (comma-separated)</Label>
               <Input
                 placeholder="e.g. luxury, arabic, off-plan"
                 value={saveData.tags}
@@ -513,21 +513,21 @@ export function ScriptLibrary({
             </div>
             {/* Script preview */}
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Script Preview</Label>
-              <p className="text-black/60 text-xs bg-white/60 rounded-xl p-3 border-2 border-gold/20 line-clamp-3">
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Script Preview</Label>
+              <p className="text-[#1A1A1A]/60 text-xs bg-[#FDFBF7]/60 rounded-xl p-3 border-2 border-gold/20 line-clamp-3">
                 {currentScript || "No script entered."}
               </p>
             </div>
           </div>
 
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setShowSaveDialog(false)} className="border-2 border-gold/30 text-black/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setShowSaveDialog(false)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
               Cancel
             </Button>
             <Button
               onClick={handleSave}
               disabled={isSaving || !saveData.title.trim()}
-              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold rounded-xl border-2 border-gold"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-gold"
             >
               {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : <><BookOpen className="h-4 w-4 mr-2" />Save Script</>}
             </Button>
@@ -537,9 +537,9 @@ export function ScriptLibrary({
 
       {/* ── Edit Dialog ── */}
       <Dialog open={!!editingScript} onOpenChange={() => setEditingScript(null)}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-black sm:max-w-2xl rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-2xl rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black">
+            <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
               <Edit3 className="h-5 w-5 text-gold" />
               Edit Script
             </DialogTitle>
@@ -547,7 +547,7 @@ export function ScriptLibrary({
 
           <div className="space-y-4 mt-2">
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Title</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Title</Label>
               <Input
                 value={editTitle}
                 onChange={e => setEditTitle(e.target.value)}
@@ -555,7 +555,7 @@ export function ScriptLibrary({
               />
             </div>
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Project Name</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Project Name</Label>
               <Input
                 value={editProjectName}
                 onChange={e => setEditProjectName(e.target.value)}
@@ -565,7 +565,7 @@ export function ScriptLibrary({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-black/60 text-xs mb-1.5 block">Language</Label>
+                <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Language</Label>
                 <Select value={editLanguage} onValueChange={setEditLanguage}>
                   <SelectTrigger className={goldSelect}>
                     <SelectValue />
@@ -578,7 +578,7 @@ export function ScriptLibrary({
                 </Select>
               </div>
               <div>
-                <Label className="text-black/60 text-xs mb-1.5 block">Tone</Label>
+                <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Tone</Label>
                 <Select value={editTone} onValueChange={setEditTone}>
                   <SelectTrigger className={goldSelect}>
                     <SelectValue />
@@ -592,24 +592,24 @@ export function ScriptLibrary({
               </div>
             </div>
             <div>
-              <Label className="text-black/60 text-xs mb-1.5 block">Script</Label>
+              <Label className="text-[#1A1A1A]/60 text-xs mb-1.5 block">Script</Label>
               <Textarea
                 value={editText}
                 onChange={e => setEditText(e.target.value.slice(0, 5000))}
                 className={`min-h-[180px] resize-none text-sm ${goldInput}`}
               />
-              <p className="text-xs text-black/40 mt-1">{editText.length.toLocaleString()} / 5,000</p>
+              <p className="text-xs text-[#1A1A1A]/40 mt-1">{editText.length.toLocaleString()} / 5,000</p>
             </div>
           </div>
 
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setEditingScript(null)} className="border-2 border-gold/30 text-black/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setEditingScript(null)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
               <X className="h-4 w-4 mr-1.5" />Cancel
             </Button>
             <Button
               onClick={handleUpdate}
               disabled={isUpdating || !editTitle.trim()}
-              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-black font-semibold rounded-xl border-2 border-gold"
+              className="bg-gradient-to-r from-gold to-amber-500 hover:from-gold/90 hover:to-amber-500/90 text-[#1A1A1A] font-semibold rounded-xl border-2 border-gold"
             >
               {isUpdating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : <><Check className="h-4 w-4 mr-2" />Save Changes</>}
             </Button>
@@ -619,16 +619,16 @@ export function ScriptLibrary({
 
       {/* ── Delete Confirm Dialog ── */}
       <Dialog open={!!deletingId} onOpenChange={() => setDeletingId(null)}>
-        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-black sm:max-w-sm rounded-2xl">
+        <DialogContent className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] sm:max-w-sm rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
               <Trash2 className="h-5 w-5" />
               Delete Script?
             </DialogTitle>
           </DialogHeader>
-          <p className="text-black/60 text-sm mt-2">This action cannot be undone. The script will be permanently deleted.</p>
+          <p className="text-[#1A1A1A]/60 text-sm mt-2">This action cannot be undone. The script will be permanently deleted.</p>
           <DialogFooter className="gap-2 mt-4">
-            <Button variant="outline" onClick={() => setDeletingId(null)} className="border-2 border-gold/30 text-black/60 hover:bg-gold/10 rounded-xl">
+            <Button variant="outline" onClick={() => setDeletingId(null)} className="border-2 border-gold/30 text-[#1A1A1A]/60 hover:bg-gold/10 rounded-xl">
               Cancel
             </Button>
             <Button

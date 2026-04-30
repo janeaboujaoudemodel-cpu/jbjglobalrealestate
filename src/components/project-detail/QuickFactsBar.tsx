@@ -97,7 +97,7 @@ export default function QuickFactsBar({
           >
             <fact.icon className="w-4 h-4 text-gold flex-shrink-0" />
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-wider text-black/80 font-medium leading-none">{fact.label}</span>
+              <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/80 font-medium leading-none">{fact.label}</span>
               <span className="text-sm font-medium text-foreground">{fact.value}</span>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function QuickFactsBar({
         {updatedAt && (
           <>
             <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-black/70 font-medium">
+            <div className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 font-medium">
               <Clock className="w-3.5 h-3.5" />
               <span>Updated: {formatDate(updatedAt)}</span>
             </div>

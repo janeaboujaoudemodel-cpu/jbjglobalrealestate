@@ -75,7 +75,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {isMobile ? (
-          <button className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors">
+          <button className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-gold py-2 w-16 transition-colors">
             <DollarSign className="w-5 h-5" />
             <span className="text-[9px] font-medium text-center">Currency</span>
           </button>
@@ -98,7 +98,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
         <div className="px-4 py-3 border-b border-gold/20">
-          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">Select Currency</p>
+          <p className="text-xs font-semibold text-[#1A1A1A]/60 uppercase tracking-wider">Select Currency</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
           {SUPPORTED_CURRENCIES.map((curr) => (
@@ -114,11 +114,11 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
               <span className="flex items-center gap-3">
                 <span className="text-lg">{curr.flag}</span>
                 <span className={`text-sm font-semibold ${
-                  currency === curr.code ? 'text-gold' : 'text-black'
+                  currency === curr.code ? 'text-gold' : 'text-[#1A1A1A]'
                 }`}>{curr.name}</span>
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-black/50 text-sm">{curr.symbol}</span>
+                <span className="text-[#1A1A1A]/50 text-sm">{curr.symbol}</span>
                 {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
               </span>
             </DropdownMenuItem>

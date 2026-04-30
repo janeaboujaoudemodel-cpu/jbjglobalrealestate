@@ -88,7 +88,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 z-[10001]"
+            className="fixed inset-0 bg-[#1A1A1A]/60 z-[10001]"
             onClick={handleSkip}
           />
 
@@ -141,7 +141,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                   onClick={handleSkip}
                   className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
                 >
-                  <X className="w-4 h-4 text-gray-600" />
+                  <X className="w-4 h-4 text-[#5A4A2E]" />
                 </button>
 
                 {/* Step indicator */}
@@ -161,11 +161,11 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                 </div>
 
                 {/* Content */}
-                <h4 className="text-black font-bold text-sm mb-1 flex items-center gap-2">
+                <h4 className="text-[#1A1A1A] font-bold text-sm mb-1 flex items-center gap-2">
                   <ArrowRight className="w-4 h-4 text-gold" />
                   {step.label}
                 </h4>
-                <p className="text-gray-600 text-xs mb-4">
+                <p className="text-[#5A4A2E] text-xs mb-4">
                   {step.description}
                 </p>
 
@@ -180,7 +180,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                   <Button
                     onClick={handleNext}
                     size="sm"
-                    className="bg-black hover:bg-black/90 text-gold text-xs px-4"
+                    className="bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-gold text-xs px-4"
                   >
                     {isLastStep ? 'Done' : 'Next'}
                     <ChevronRight className="w-3 h-3 ml-1" />

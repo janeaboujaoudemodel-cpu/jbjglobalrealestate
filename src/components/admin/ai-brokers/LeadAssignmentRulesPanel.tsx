@@ -172,8 +172,8 @@ export function LeadAssignmentRulesPanel() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-black text-xl font-semibold">Lead Assignment Rules</h2>
-          <p className="text-black/60 text-sm mt-1">
+          <h2 className="text-[#1A1A1A] text-xl font-semibold">Lead Assignment Rules</h2>
+          <p className="text-[#1A1A1A]/60 text-sm mt-1">
             Configure how leads are automatically assigned to AI brokers
           </p>
         </div>
@@ -189,7 +189,7 @@ export function LeadAssignmentRulesPanel() {
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-black">
+              <DialogTitle className="text-[#1A1A1A]">
                 {editingRule ? "Edit Rule" : "Create Assignment Rule"}
               </DialogTitle>
             </DialogHeader>
@@ -210,20 +210,20 @@ export function LeadAssignmentRulesPanel() {
         {rules.map((rule, index) => (
           <Card
             key={rule.id}
-            className={`bg-white border-2 border-gold/30 ${
+            className={`bg-[#FDFBF7] border-2 border-gold/30 ${
               !rule.is_active ? "opacity-60" : ""
             }`}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-black/40">
+                <div className="flex items-center gap-2 text-[#1A1A1A]/40">
                   <GripVertical className="h-4 w-4" />
                   <span className="text-sm font-medium">#{rule.priority}</span>
                 </div>
 
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-black font-medium">{rule.name}</h3>
+                    <h3 className="text-[#1A1A1A] font-medium">{rule.name}</h3>
                     <Badge
                       variant="outline"
                       className={`text-xs ${
@@ -238,11 +238,11 @@ export function LeadAssignmentRulesPanel() {
                     </Badge>
                   </div>
                   {rule.description && (
-                    <p className="text-black/60 text-sm mt-1">
+                    <p className="text-[#1A1A1A]/60 text-sm mt-1">
                       {rule.description}
                     </p>
                   )}
-                  <div className="flex items-center gap-4 mt-2 text-sm text-black/40">
+                  <div className="flex items-center gap-4 mt-2 text-sm text-[#1A1A1A]/40">
                     {rule.assigned_broker_id && (
                       <span className="flex items-center gap-1">
                         <Users className="h-3 w-3" />
@@ -279,7 +279,7 @@ export function LeadAssignmentRulesPanel() {
                       setEditingRule(rule);
                       setIsDialogOpen(true);
                     }}
-                    className="text-black/60 hover:text-black"
+                    className="text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -287,7 +287,7 @@ export function LeadAssignmentRulesPanel() {
                     variant="ghost"
                     size="icon"
                     onClick={() => handleDeleteRule(rule.id)}
-                    className="text-black/60 hover:text-red-500"
+                    className="text-[#1A1A1A]/60 hover:text-red-500"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -298,10 +298,10 @@ export function LeadAssignmentRulesPanel() {
         ))}
 
         {rules.length === 0 && (
-          <Card className="bg-white border-2 border-gold/30 border-dashed">
+          <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Users className="h-12 w-12 text-gold mb-4" />
-              <p className="text-black/60 text-center">
+              <p className="text-[#1A1A1A]/60 text-center">
                 No assignment rules configured.
                 <br />
                 Create a rule to automatically assign leads to AI brokers.
@@ -335,7 +335,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
   return (
     <div className="space-y-4 mt-4">
       <div>
-        <Label className="text-black">Rule Name</Label>
+        <Label className="text-[#1A1A1A]">Rule Name</Label>
         <Input
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -345,7 +345,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
       </div>
 
       <div>
-        <Label className="text-black">Description</Label>
+        <Label className="text-[#1A1A1A]">Description</Label>
         <Input
           value={formData.description}
           onChange={(e) =>
@@ -358,7 +358,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label className="text-black">Priority</Label>
+          <Label className="text-[#1A1A1A]">Priority</Label>
           <Input
             type="number"
             value={formData.priority}
@@ -370,7 +370,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
           />
         </div>
         <div>
-          <Label className="text-black">Max Leads/Day</Label>
+          <Label className="text-[#1A1A1A]">Max Leads/Day</Label>
           <Input
             type="number"
             value={formData.max_leads_per_day}
@@ -386,7 +386,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
       </div>
 
       <div>
-        <Label className="text-black">Assignment Method</Label>
+        <Label className="text-[#1A1A1A]">Assignment Method</Label>
         <Select
           value={formData.assignment_method}
           onValueChange={(value) =>
@@ -406,7 +406,7 @@ function RuleForm({ rule, brokers, onSave, onCancel }: RuleFormProps) {
 
       {formData.assignment_method === "specific" && (
         <div>
-          <Label className="text-black">Assign To</Label>
+          <Label className="text-[#1A1A1A]">Assign To</Label>
           <Select
             value={formData.assigned_broker_id}
             onValueChange={(value) =>

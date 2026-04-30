@@ -269,7 +269,7 @@ export default function TrainingManagement() {
         </div>
         <Button
           onClick={() => setShowAssignDialog(true)}
-          className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-black font-semibold"
+          className="bg-gradient-to-r from-gold to-amber-600 hover:from-amber-600 hover:to-gold text-[#1A1A1A] font-semibold"
         >
           <UserPlus className="h-4 w-4 mr-2" />
           Assign Training
@@ -285,7 +285,7 @@ export default function TrainingManagement() {
           return (
             <Card
               key={program.id}
-              className={`bg-white border cursor-pointer transition-all duration-200 hover:shadow-md ${activeProgram === program.id ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
+              className={`bg-[#FDFBF7] border cursor-pointer transition-all duration-200 hover:shadow-md ${activeProgram === program.id ? 'border-gold ring-2 ring-gold/20' : 'border-crm-border'}`}
               onClick={() => setActiveProgram(program.id)}
             >
               <CardHeader className="pb-3">
@@ -320,7 +320,7 @@ export default function TrainingManagement() {
 
       {/* Books in selected program */}
       {activeProgram && (
-        <Card className="bg-white border-crm-border">
+        <Card className="bg-[#FDFBF7] border-crm-border">
           <CardHeader>
             <CardTitle className="text-crm-text text-base flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-gold" />
@@ -360,7 +360,7 @@ export default function TrainingManagement() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {sectionBooks.map(book => (
-                          <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-gray-50/50">
+                          <div key={book.id} className="flex items-center gap-3 p-3 rounded-lg border border-crm-border bg-[#F7F2EA]/50">
                             <div className="w-8 h-8 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center flex-shrink-0">
                               <span className="text-gold text-xs font-bold">{book.book_number}</span>
                             </div>
@@ -381,7 +381,7 @@ export default function TrainingManagement() {
       )}
 
       {/* Assignments Table */}
-      <Card className="bg-white border-crm-border">
+      <Card className="bg-[#FDFBF7] border-crm-border">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-crm-text text-base flex items-center gap-2">
@@ -394,7 +394,7 @@ export default function TrainingManagement() {
                 placeholder="Search by name or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white border-crm-border text-crm-text text-sm"
+                className="pl-10 bg-[#FDFBF7] border-crm-border text-crm-text text-sm"
               />
             </div>
           </div>
@@ -411,7 +411,7 @@ export default function TrainingManagement() {
               {filteredAssignments.map(assignment => {
                 const program = programs.find(p => p.id === assignment.program_id);
                 return (
-                  <div key={assignment.id} className="flex items-center justify-between p-4 rounded-lg border border-crm-border bg-gray-50/30 hover:bg-gray-50 transition-colors">
+                  <div key={assignment.id} className="flex items-center justify-between p-4 rounded-lg border border-crm-border bg-[#F7F2EA]/30 hover:bg-[#F7F2EA] transition-colors">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center">
                         <GraduationCap className="h-5 w-5 text-gold" />
@@ -484,7 +484,7 @@ export default function TrainingManagement() {
             <div>
               <label className="text-sm font-medium text-crm-text mb-1.5 block">Applicant</label>
               <Select value={selectedUser} onValueChange={setSelectedUser}>
-                <SelectTrigger className="bg-white border-crm-border">
+                <SelectTrigger className="bg-[#FDFBF7] border-crm-border">
                   <SelectValue placeholder="Select accepted applicant..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -502,7 +502,7 @@ export default function TrainingManagement() {
             <div>
               <label className="text-sm font-medium text-crm-text mb-1.5 block">Training Program</label>
               <Select value={selectedProgram} onValueChange={setSelectedProgram}>
-                <SelectTrigger className="bg-white border-crm-border">
+                <SelectTrigger className="bg-[#FDFBF7] border-crm-border">
                   <SelectValue placeholder="Select program..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -520,14 +520,14 @@ export default function TrainingManagement() {
                 value={assignNotes}
                 onChange={(e) => setAssignNotes(e.target.value)}
                 placeholder="Any special instructions..."
-                className="bg-white border-crm-border resize-none"
+                className="bg-[#FDFBF7] border-crm-border resize-none"
                 rows={3}
               />
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAssignDialog(false)}>Cancel</Button>
-            <Button onClick={handleAssignUser} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleAssignUser} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               Assign Training
             </Button>
           </DialogFooter>
@@ -585,7 +585,7 @@ export default function TrainingManagement() {
                       {sectionBooks.map(book => (
                         <label
                           key={book.id}
-                          className="flex items-center gap-3 p-3 rounded-lg border border-crm-border hover:bg-gray-50 cursor-pointer transition-colors"
+                          className="flex items-center gap-3 p-3 rounded-lg border border-crm-border hover:bg-[#F7F2EA] cursor-pointer transition-colors"
                         >
                           <Checkbox
                             checked={selectedBooks.has(book.id)}
@@ -620,7 +620,7 @@ export default function TrainingManagement() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowBooksDialog(false)}>Cancel</Button>
-            <Button onClick={handleSaveBooks} className="bg-gold hover:bg-gold/90 text-black">
+            <Button onClick={handleSaveBooks} className="bg-gold hover:bg-gold/90 text-[#1A1A1A]">
               Save Books
             </Button>
           </DialogFooter>

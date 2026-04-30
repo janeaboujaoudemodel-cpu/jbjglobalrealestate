@@ -83,7 +83,7 @@ const InvestorHub = () => {
   const openTickets = supportTickets.filter(t => t.status === 'open' || t.status === 'in_progress').length;
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-[#1A1A1A]">
       {/* Hero */}
       <div className="relative py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-900/20 via-black to-purple-900/15" />
@@ -199,7 +199,7 @@ const InvestorHub = () => {
                 <button
                   key={tool.title}
                   onClick={() => navigate(tool.href)}
-                  className="bg-zinc-900/60 border border-gray-800 rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
+                  className="bg-zinc-900/60 border border-[#1A1A1A] rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
@@ -223,11 +223,11 @@ const InvestorHub = () => {
               <Ticket className="w-5 h-5 text-fuchsia-400" />
               Support Tickets
             </h2>
-            <Card className="bg-zinc-900/60 border border-gray-800">
+            <Card className="bg-zinc-900/60 border border-[#1A1A1A]">
               <CardContent className="p-6">
                 {supportTickets.length === 0 ? (
                   <div className="text-center py-8">
-                    <Ticket className="w-8 h-8 text-gray-600 mx-auto mb-3" />
+                    <Ticket className="w-8 h-8 text-[#5A4A2E] mx-auto mb-3" />
                     <p className="text-white/90">No support tickets</p>
                     <Button
                       className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
@@ -252,7 +252,7 @@ const InvestorHub = () => {
                       <button
                         key={ticket.id}
                         onClick={() => navigate(`/support?ticket=${ticket.id}`)}
-                        className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-gray-800 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-[#1A1A1A] transition-colors text-left"
                       >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
@@ -289,7 +289,7 @@ const InvestorHub = () => {
                   { label: 'SPA / Contracts', icon: FileText },
                   { label: 'Other Documents', icon: Award },
                 ].map(doc => (
-                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-gray-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
+                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-[#1A1A1A]/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
                     <p className="text-xs text-white/70">{doc.label}</p>
                   </div>

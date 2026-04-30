@@ -75,10 +75,10 @@ const QRCodeGenerator = () => {
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-4">
               <QrCode className="w-4 h-4 text-[#8A7356]" />
-              <span className="text-black text-sm font-medium">QR Code Generator</span>
+              <span className="text-[#1A1A1A] text-sm font-medium">QR Code Generator</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">QR Code Generator</h1>
-            <p className="text-gray-600">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">QR Code Generator</h1>
+            <p className="text-[#5A4A2E]">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
           </div>
         </div>
       </div>
@@ -87,24 +87,24 @@ const QRCodeGenerator = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Controls */}
           <div className="space-y-6">
-            <div className="bg-white/80 border border-gold/20 rounded-xl p-6 space-y-5">
+            <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-6 space-y-5">
               <div>
-                <Label className="font-semibold text-black">QR Type</Label>
+                <Label className="font-semibold text-[#1A1A1A]">QR Type</Label>
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {QR_TYPES.map(t => (
                     <button key={t.id} onClick={() => { setQrType(t.id); setQrData(""); }}
-                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-black text-white border-black' : 'bg-white text-gray-700 border-gold/30 hover:bg-gold/10'}`}>
+                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#5A4A2E] border-gold/30 hover:bg-gold/10'}`}>
                       <t.icon className="h-3.5 w-3.5" />{t.label}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <Label className="font-semibold text-black">{currentType.label} Data</Label>
+                <Label className="font-semibold text-[#1A1A1A]">{currentType.label} Data</Label>
                 <Input value={qrData} onChange={(e) => setQrData(e.target.value)} placeholder={currentType.placeholder} className="mt-1" />
               </div>
               <div>
-                <Label className="font-semibold text-black">Size</Label>
+                <Label className="font-semibold text-[#1A1A1A]">Size</Label>
                 <Select value={String(qrSize)} onValueChange={(v) => setQrSize(Number(v))}>
                   <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
                   <SelectContent>{QR_SIZES.map(s => <SelectItem key={s} value={String(s)}>{s}×{s}px</SelectItem>)}</SelectContent>
@@ -112,14 +112,14 @@ const QRCodeGenerator = () => {
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <Label className="font-semibold text-black">Foreground</Label>
+                  <Label className="font-semibold text-[#1A1A1A]">Foreground</Label>
                   <div className="flex gap-2 mt-1 items-center">
                     <input type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} className="w-10 h-10 rounded border cursor-pointer" />
                     <span className="text-xs text-muted-foreground">{fgColor}</span>
                   </div>
                 </div>
                 <div className="flex-1">
-                  <Label className="font-semibold text-black">Background</Label>
+                  <Label className="font-semibold text-[#1A1A1A]">Background</Label>
                   <div className="flex gap-2 mt-1 items-center">
                     <input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="w-10 h-10 rounded border cursor-pointer" />
                     <span className="text-xs text-muted-foreground">{bgColor}</span>
@@ -131,7 +131,7 @@ const QRCodeGenerator = () => {
 
           {/* Preview */}
           <div className="space-y-4">
-            <div className="bg-white border border-gold/20 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
+            <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-8 flex flex-col items-center justify-center min-h-[400px]">
               {qrData ? (
                 <img src={qrUrl} alt="QR Code" className="max-w-full" style={{ width: Math.min(qrSize, 400), height: Math.min(qrSize, 400) }} />
               ) : (
@@ -142,7 +142,7 @@ const QRCodeGenerator = () => {
               )}
             </div>
             <div className="flex gap-3">
-              <Button onClick={handleDownload} disabled={!qrData} className="flex-1 bg-black text-white hover:bg-gray-800">
+              <Button onClick={handleDownload} disabled={!qrData} className="flex-1 bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
                 <Download className="h-4 w-4 mr-2" /> Download PNG
               </Button>
               <Button onClick={handleCopy} disabled={!qrData} variant="outline" className="flex-1 border-gold/30">

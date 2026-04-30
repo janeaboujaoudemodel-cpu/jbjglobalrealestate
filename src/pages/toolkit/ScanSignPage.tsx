@@ -455,7 +455,7 @@ export default function ScanSignPage() {
   const selectedPage = pages[selectedPageIndex];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FDFBF7]">
 
       {/* ── Header — Emerald Green ── */}
       <div className="border-b border-emerald-100 bg-gradient-to-b from-emerald-50/60 to-white">
@@ -622,7 +622,7 @@ export default function ScanSignPage() {
                     }`}>
                     <img src={page.imageData} alt={`Page ${index + 1}`} className="w-full h-14 object-cover"
                       style={{ transform: `rotate(${page.rotation}deg)`, filter: `brightness(${page.brightness}%) contrast(${page.contrast}%)` }} />
-                    <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between bg-black/60">
+                    <div className="absolute bottom-0 left-0 right-0 px-1 py-0.5 flex items-center justify-between bg-[#1A1A1A]/60">
                       <span className="text-white text-[9px] font-bold">{index + 1}</span>
                       {signatures.some(s => s.pageIndex === index) && <Pen className="w-2.5 h-2.5 text-emerald-400" />}
                     </div>
@@ -719,7 +719,7 @@ export default function ScanSignPage() {
               <PanelTitle icon={Pen}>Signature</PanelTitle>
               {isDrawingSignature ? (
                 <div className="space-y-3">
-                  <div className="rounded-xl overflow-hidden bg-white border-2 border-emerald-200">
+                  <div className="rounded-xl overflow-hidden bg-[#FDFBF7] border-2 border-emerald-200">
                     <canvas ref={signatureCanvasRef} width={560} height={150} className="w-full cursor-crosshair touch-none" style={{ display: "block" }} />
                   </div>
                   <p className="text-[10px] text-center text-stone-400">Draw your signature using mouse or finger</p>
