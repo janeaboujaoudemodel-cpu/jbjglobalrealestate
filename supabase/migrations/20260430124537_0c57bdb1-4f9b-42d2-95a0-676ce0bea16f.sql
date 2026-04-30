@@ -1,0 +1,1 @@
+ALTER VIEW public.signed_contracts_index SET (security_invoker = on);
