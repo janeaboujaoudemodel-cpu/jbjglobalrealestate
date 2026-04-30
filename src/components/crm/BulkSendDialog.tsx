@@ -156,17 +156,40 @@ export const BulkSendDialog = ({
   }, [targets, selected, previewDevId]);
 
   const previewDev = selected.find((d) => d.id === previewDevId) || selected[0];
+
+  // Substitution map used to render preview HTML/subject for the selected recipient.
+  const previewVars = useMemo<Record<string, string>>(() => {
+    const name = getName(previewDev || ({} as Recipient), entityType);
+    const contactName = previewDev?.primary_contact?.name || "Team";
+    const firstName = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
+    return entityType === "brokerage"
+      ? {
+          brokerage_name: name,
+          contact_first_name: firstName(contactName) || "Team",
+          owner_first_name: "Jane",
+          reply_to: "contact@jbj.ae",
+          cc_email: "infoo.jane@gmail.com",
+          from_name: "JBJ Global Real Estate",
+        }
+      : {
+          developer_name: name,
+        };
+  }, [previewDev, entityType]);
+
+  const renderPreview = (s: string) =>
+    s.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
-    const name = previewDev?.developer_name || "{{developer_name}}";
-    return String(template.html).replace(/\{\{developer_name\}\}/g, name);
-  }, [template, previewDev]);
+    return renderPreview(String(template.html));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template, previewVars]);
 
   const previewSubject = useMemo(() => {
     if (!template?.subject) return "";
-    const name = previewDev?.developer_name || "{{developer_name}}";
-    return String(template.subject).replace(/\{\{developer_name\}\}/g, name);
-  }, [template, previewDev]);
+    return renderPreview(String(template.subject));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template, previewVars]);
 
   const sendTest = async () => {
     const recipient = useCustomTestEmail ? testEmail : defaultTestEmail;
@@ -174,11 +197,19 @@ export const BulkSendDialog = ({
       toast.error("No valid registered email — set one in Owner Settings or use a custom address");
       return;
     }
-    await send.mutateAsync({
-      variant,
-      testRecipient: recipient,
-      testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
-    });
+    if (entityType === "brokerage") {
+      await sendBrk.mutateAsync({
+        variant: variant as BrokerageVariant,
+        testRecipient: recipient,
+        testBrokerageName: previewDev?.company_name || targets[0]?.company_name || selected[0]?.company_name,
+      });
+    } else {
+      await sendDev.mutateAsync({
+        variant: variant as RegistrationVariant,
+        testRecipient: recipient,
+        testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
+      });
+    }
   };
 
   const sendAll = async () => {
@@ -195,7 +226,11 @@ export const BulkSendDialog = ({
       const t = targets[i];
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
-        await send.mutateAsync({ developerId: t.id, variant, silent: true });
+        if (entityType === "brokerage") {
+          await sendBrk.mutateAsync({ brokerageId: t.id, variant: variant as BrokerageVariant, silent: true });
+        } else {
+          await sendDev.mutateAsync({ developerId: t.id, variant: variant as RegistrationVariant, silent: true });
+        }
         ok++;
         setStatuses((p) => ({ ...p, [t.id]: { status: "ok" } }));
       } catch (e: any) {
