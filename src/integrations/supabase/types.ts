@@ -24215,6 +24215,252 @@ export type Database = {
         }
         Relationships: []
       }
+      uae_brk_registry: {
+        Row: {
+          active_developer_relationships: Json
+          assigned_team_member: string | null
+          brand_name: string
+          brokerage_priority: Database["public"]["Enums"]["uae_company_priority"]
+          brokerage_ref: string
+          created_at: string
+          created_by: string | null
+          emirate_section: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at: string | null
+          id: string
+          last_email_sent_at: string | null
+          last_reply_received_at: string | null
+          last_response_summary: string | null
+          last_verified_date: string | null
+          legal_company_name: string
+          license_number: string | null
+          main_email_addresses: Json
+          main_phone_numbers: Json
+          next_follow_up_date: string | null
+          notes: string | null
+          number_of_follow_ups_sent: number
+          office_locations: Json
+          outreach_contact_person: string | null
+          outreach_email: string | null
+          outreach_phone: string | null
+          outreach_status: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts: Json
+          registration_completed_date: string | null
+          regulator_or_authority: string | null
+          required_next_action: string | null
+          rera_orn_or_broker_number: string | null
+          service_categories: string[]
+          test_email_completed: boolean
+          updated_at: string
+          verification_status: Database["public"]["Enums"]["uae_verification_status"]
+          website: string | null
+        }
+        Insert: {
+          active_developer_relationships?: Json
+          assigned_team_member?: string | null
+          brand_name: string
+          brokerage_priority?: Database["public"]["Enums"]["uae_company_priority"]
+          brokerage_ref: string
+          created_at?: string
+          created_by?: string | null
+          emirate_section: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at?: string | null
+          id?: string
+          last_email_sent_at?: string | null
+          last_reply_received_at?: string | null
+          last_response_summary?: string | null
+          last_verified_date?: string | null
+          legal_company_name: string
+          license_number?: string | null
+          main_email_addresses?: Json
+          main_phone_numbers?: Json
+          next_follow_up_date?: string | null
+          notes?: string | null
+          number_of_follow_ups_sent?: number
+          office_locations?: Json
+          outreach_contact_person?: string | null
+          outreach_email?: string | null
+          outreach_phone?: string | null
+          outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts?: Json
+          registration_completed_date?: string | null
+          regulator_or_authority?: string | null
+          required_next_action?: string | null
+          rera_orn_or_broker_number?: string | null
+          service_categories?: string[]
+          test_email_completed?: boolean
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["uae_verification_status"]
+          website?: string | null
+        }
+        Update: {
+          active_developer_relationships?: Json
+          assigned_team_member?: string | null
+          brand_name?: string
+          brokerage_priority?: Database["public"]["Enums"]["uae_company_priority"]
+          brokerage_ref?: string
+          created_at?: string
+          created_by?: string | null
+          emirate_section?: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at?: string | null
+          id?: string
+          last_email_sent_at?: string | null
+          last_reply_received_at?: string | null
+          last_response_summary?: string | null
+          last_verified_date?: string | null
+          legal_company_name?: string
+          license_number?: string | null
+          main_email_addresses?: Json
+          main_phone_numbers?: Json
+          next_follow_up_date?: string | null
+          notes?: string | null
+          number_of_follow_ups_sent?: number
+          office_locations?: Json
+          outreach_contact_person?: string | null
+          outreach_email?: string | null
+          outreach_phone?: string | null
+          outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts?: Json
+          registration_completed_date?: string | null
+          regulator_or_authority?: string | null
+          required_next_action?: string | null
+          rera_orn_or_broker_number?: string | null
+          service_categories?: string[]
+          test_email_completed?: boolean
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["uae_verification_status"]
+          website?: string | null
+        }
+        Relationships: []
+      }
+      uae_dev_registry: {
+        Row: {
+          assigned_team_member: string | null
+          brand_name: string
+          broker_registration_process: string | null
+          company_type: Database["public"]["Enums"]["uae_developer_company_type"]
+          created_at: string
+          created_by: string | null
+          developer_priority: Database["public"]["Enums"]["uae_company_priority"]
+          developer_ref: string
+          emirate_section: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at: string | null
+          founded_year: number | null
+          headquarters_address: string | null
+          id: string
+          international_projects: Json
+          last_email_sent_at: string | null
+          last_reply_received_at: string | null
+          last_response_summary: string | null
+          last_verified_date: string | null
+          legal_company_name: string
+          main_email_addresses: Json
+          main_phone_numbers: Json
+          master_developer_evidence: string | null
+          master_developer_status: Database["public"]["Enums"]["uae_master_developer_status"]
+          next_follow_up_date: string | null
+          notes: string | null
+          number_of_follow_ups_sent: number
+          office_locations: Json
+          outreach_status: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts: Json
+          public_registration_identifiers: Json
+          registration_completed_date: string | null
+          registration_email: string | null
+          registration_page_url: string | null
+          required_documents_for_registration: string[]
+          required_next_action: string | null
+          test_email_completed: boolean
+          uae_projects: Json
+          updated_at: string
+          verification_status: Database["public"]["Enums"]["uae_verification_status"]
+          website: string | null
+        }
+        Insert: {
+          assigned_team_member?: string | null
+          brand_name: string
+          broker_registration_process?: string | null
+          company_type?: Database["public"]["Enums"]["uae_developer_company_type"]
+          created_at?: string
+          created_by?: string | null
+          developer_priority?: Database["public"]["Enums"]["uae_company_priority"]
+          developer_ref: string
+          emirate_section: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at?: string | null
+          founded_year?: number | null
+          headquarters_address?: string | null
+          id?: string
+          international_projects?: Json
+          last_email_sent_at?: string | null
+          last_reply_received_at?: string | null
+          last_response_summary?: string | null
+          last_verified_date?: string | null
+          legal_company_name: string
+          main_email_addresses?: Json
+          main_phone_numbers?: Json
+          master_developer_evidence?: string | null
+          master_developer_status?: Database["public"]["Enums"]["uae_master_developer_status"]
+          next_follow_up_date?: string | null
+          notes?: string | null
+          number_of_follow_ups_sent?: number
+          office_locations?: Json
+          outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts?: Json
+          public_registration_identifiers?: Json
+          registration_completed_date?: string | null
+          registration_email?: string | null
+          registration_page_url?: string | null
+          required_documents_for_registration?: string[]
+          required_next_action?: string | null
+          test_email_completed?: boolean
+          uae_projects?: Json
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["uae_verification_status"]
+          website?: string | null
+        }
+        Update: {
+          assigned_team_member?: string | null
+          brand_name?: string
+          broker_registration_process?: string | null
+          company_type?: Database["public"]["Enums"]["uae_developer_company_type"]
+          created_at?: string
+          created_by?: string | null
+          developer_priority?: Database["public"]["Enums"]["uae_company_priority"]
+          developer_ref?: string
+          emirate_section?: Database["public"]["Enums"]["uae_emirate"]
+          first_email_sent_at?: string | null
+          founded_year?: number | null
+          headquarters_address?: string | null
+          id?: string
+          international_projects?: Json
+          last_email_sent_at?: string | null
+          last_reply_received_at?: string | null
+          last_response_summary?: string | null
+          last_verified_date?: string | null
+          legal_company_name?: string
+          main_email_addresses?: Json
+          main_phone_numbers?: Json
+          master_developer_evidence?: string | null
+          master_developer_status?: Database["public"]["Enums"]["uae_master_developer_status"]
+          next_follow_up_date?: string | null
+          notes?: string | null
+          number_of_follow_ups_sent?: number
+          office_locations?: Json
+          outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          public_key_contacts?: Json
+          public_registration_identifiers?: Json
+          registration_completed_date?: string | null
+          registration_email?: string | null
+          registration_page_url?: string | null
+          required_documents_for_registration?: string[]
+          required_next_action?: string | null
+          test_email_completed?: boolean
+          uae_projects?: Json
+          updated_at?: string
+          verification_status?: Database["public"]["Enums"]["uae_verification_status"]
+          website?: string | null
+        }
+        Relationships: []
+      }
       uae_developers: {
         Row: {
           created_at: string
@@ -24265,6 +24511,241 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      uae_registry_attachments: {
+        Row: {
+          brokerage_id: string | null
+          created_at: string
+          created_by: string | null
+          developer_id: string | null
+          file_name: string
+          file_size_bytes: number | null
+          id: string
+          log_id: string | null
+          mime_type: string | null
+          sent_date: string | null
+          sent_to: string | null
+          storage_path: string | null
+        }
+        Insert: {
+          brokerage_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          developer_id?: string | null
+          file_name: string
+          file_size_bytes?: number | null
+          id?: string
+          log_id?: string | null
+          mime_type?: string | null
+          sent_date?: string | null
+          sent_to?: string | null
+          storage_path?: string | null
+        }
+        Update: {
+          brokerage_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          developer_id?: string | null
+          file_name?: string
+          file_size_bytes?: number | null
+          id?: string
+          log_id?: string | null
+          mime_type?: string | null
+          sent_date?: string | null
+          sent_to?: string | null
+          storage_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uae_registry_attachments_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "uae_brk_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uae_registry_attachments_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_dev_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uae_registry_attachments_log_id_fkey"
+            columns: ["log_id"]
+            isOneToOne: false
+            referencedRelation: "uae_registry_log"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      uae_registry_log: {
+        Row: {
+          added_by: string | null
+          ai_extracted: Json | null
+          brokerage_id: string | null
+          channel: string
+          created_at: string
+          developer_id: string | null
+          direction: string
+          email_message_id: string | null
+          email_thread_id: string | null
+          full_message: string | null
+          id: string
+          language: string | null
+          occurred_at: string
+          summary: string
+        }
+        Insert: {
+          added_by?: string | null
+          ai_extracted?: Json | null
+          brokerage_id?: string | null
+          channel: string
+          created_at?: string
+          developer_id?: string | null
+          direction: string
+          email_message_id?: string | null
+          email_thread_id?: string | null
+          full_message?: string | null
+          id?: string
+          language?: string | null
+          occurred_at?: string
+          summary: string
+        }
+        Update: {
+          added_by?: string | null
+          ai_extracted?: Json | null
+          brokerage_id?: string | null
+          channel?: string
+          created_at?: string
+          developer_id?: string | null
+          direction?: string
+          email_message_id?: string | null
+          email_thread_id?: string | null
+          full_message?: string | null
+          id?: string
+          language?: string | null
+          occurred_at?: string
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uae_registry_log_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "uae_brk_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uae_registry_log_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_dev_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      uae_registry_settings: {
+        Row: {
+          bulk_send_cap: number
+          bulk_send_delay_ms: number
+          follow_up_days_final: number
+          follow_up_days_first: number
+          follow_up_days_second: number
+          forbidden_senders: string[]
+          id: number
+          no_response_days: number
+          sender_display_name: string
+          sender_email: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bulk_send_cap?: number
+          bulk_send_delay_ms?: number
+          follow_up_days_final?: number
+          follow_up_days_first?: number
+          follow_up_days_second?: number
+          forbidden_senders?: string[]
+          id?: number
+          no_response_days?: number
+          sender_display_name?: string
+          sender_email?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bulk_send_cap?: number
+          bulk_send_delay_ms?: number
+          follow_up_days_final?: number
+          follow_up_days_first?: number
+          follow_up_days_second?: number
+          forbidden_senders?: string[]
+          id?: number
+          no_response_days?: number
+          sender_display_name?: string
+          sender_email?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      uae_registry_sources: {
+        Row: {
+          added_by: string | null
+          brokerage_id: string | null
+          created_at: string
+          date_checked: string
+          developer_id: string | null
+          fields_verified: string[]
+          id: string
+          priority_tier: number
+          snippet: string | null
+          source_name: string
+          source_url: string
+        }
+        Insert: {
+          added_by?: string | null
+          brokerage_id?: string | null
+          created_at?: string
+          date_checked?: string
+          developer_id?: string | null
+          fields_verified?: string[]
+          id?: string
+          priority_tier?: number
+          snippet?: string | null
+          source_name: string
+          source_url: string
+        }
+        Update: {
+          added_by?: string | null
+          brokerage_id?: string | null
+          created_at?: string
+          date_checked?: string
+          developer_id?: string | null
+          fields_verified?: string[]
+          id?: string
+          priority_tier?: number
+          snippet?: string | null
+          source_name?: string
+          source_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uae_registry_sources_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "uae_brk_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "uae_registry_sources_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_dev_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_activity_log: {
         Row: {
@@ -29330,6 +29811,39 @@ export type Database = {
         | "policy_violation"
         | "lockdown_triggered"
       security_severity: "info" | "low" | "medium" | "high" | "critical"
+      uae_company_priority: "High" | "Medium" | "Low" | "Unknown"
+      uae_developer_company_type:
+        | "Private Developer"
+        | "Government Developer"
+        | "Semi-Government Developer"
+        | "Master Developer"
+        | "Holding Company"
+        | "Development Arm"
+        | "Unknown"
+      uae_emirate:
+        | "Abu Dhabi"
+        | "Dubai"
+        | "Sharjah"
+        | "Ajman"
+        | "Ras Al Khaimah"
+        | "Fujairah"
+        | "Umm Al Quwain"
+      uae_master_developer_status: "Yes" | "No" | "Unverified"
+      uae_outreach_status:
+        | "Not Contacted"
+        | "Test Sent"
+        | "Contacted"
+        | "Replied"
+        | "Follow-up Needed"
+        | "Documents Requested"
+        | "Documents Sent"
+        | "Registered"
+        | "Declined"
+        | "No Response"
+      uae_verification_status:
+        | "Verified"
+        | "Partially Verified"
+        | "Not Verified"
       user_mode: "client" | "broker"
       vip_category:
         | "government_official"
@@ -29833,6 +30347,43 @@ export const Constants = {
         "lockdown_triggered",
       ],
       security_severity: ["info", "low", "medium", "high", "critical"],
+      uae_company_priority: ["High", "Medium", "Low", "Unknown"],
+      uae_developer_company_type: [
+        "Private Developer",
+        "Government Developer",
+        "Semi-Government Developer",
+        "Master Developer",
+        "Holding Company",
+        "Development Arm",
+        "Unknown",
+      ],
+      uae_emirate: [
+        "Abu Dhabi",
+        "Dubai",
+        "Sharjah",
+        "Ajman",
+        "Ras Al Khaimah",
+        "Fujairah",
+        "Umm Al Quwain",
+      ],
+      uae_master_developer_status: ["Yes", "No", "Unverified"],
+      uae_outreach_status: [
+        "Not Contacted",
+        "Test Sent",
+        "Contacted",
+        "Replied",
+        "Follow-up Needed",
+        "Documents Requested",
+        "Documents Sent",
+        "Registered",
+        "Declined",
+        "No Response",
+      ],
+      uae_verification_status: [
+        "Verified",
+        "Partially Verified",
+        "Not Verified",
+      ],
       user_mode: ["client", "broker"],
       vip_category: [
         "government_official",

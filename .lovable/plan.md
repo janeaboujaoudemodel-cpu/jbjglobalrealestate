@@ -1,103 +1,101 @@
-## Site-Wide Contrast Verification & Remediation
 
-### Audit Findings
+# UAE Developers + Brokerages Registration CRM
 
-A repository-wide scan reveals the same faded patterns Market Intelligence had still live across the rest of the site:
+A fully integrated, owner-only outreach engine for registering JBJ Global Real Estate with every UAE developer and brokerage, organized by emirate, with verified sources, locked sender (CONTACT@JBJ.AE), automated follow-ups, and reply intelligence.
 
-| Pattern | Files affected | Severity |
-|---|---|---|
-| `text-gold/30` … `text-gold/70` (low-opacity gold text on white/light) | **99 files** (~194 occurrences) | High — fails WCAG AA |
-| `text-white/30` … `text-white/70` (faded white on dark) | **238 files** | Medium — borderline AA |
-| `bg-black` parent + `text-black` child (inverted contrast bug like Market Intel) | ~20 files | Critical — invisible text |
-| Faded gold on non-button decorative icons (`text-gold/30`, `/50`, `/60`) | High concentration in services/, toolkit/, support/ | Medium |
+## Scope
 
-The `jj-card-inner` class itself is **not** the culprit — its definition in `index.css` resolves to `background:#FFFFFF` with a gray border. The bug is content placed *outside* the card on a `bg-black` section, plus widespread faded `text-gold/XX` and `text-white/XX` decorative labels.
+1. Two new owner-only datasets (Developers + Brokerages) with full schema parity to your spec.
+2. Shared outreach state machine (Not Contacted → Registered).
+3. Locked sender: only `CONTACT@JBJ.AE`. Hard block on `janeaboujaoudemodel@gmail.com` and any other sender.
+4. Bilingual email templates (English + Arabic) with attachment support.
+5. Automated follow-up scheduler (D+2, D+5, D+10, mark No Response D+14).
+6. Reply ingestion + AI summarization → updates record, extracts requested docs, drafts response.
+7. Owner dashboard with 7-emirate tabs, priority filters, source verification UI.
+8. Strict validation: no guessing, source URL required per record/contact/license/project.
 
-### Fix Strategy (Three Tiers)
+## Database (new migrations)
 
 ```text
-TIER 1 — Critical contrast bugs (invisible/illegible text)
-   └─ bg-black sections containing text-black headings
-   └─ Same Market Intel pattern repeated in services/, FAQ, Founder, Awards, Guides
-
-TIER 2 — Faded gold decorative text (fails WCAG AA)
-   └─ Replace text-gold/30…/70 with high-contrast tokens
-   └─ Heading eyebrows → text-muted-foreground or solid #6B7280
-   └─ Empty-state icons → text-gold (full) or text-muted
-
-TIER 3 — Faded white over dark (borderline)
-   └─ text-white/30…/60 → text-white/85 or text-white (full)
-   └─ Trust-badge / metadata rows on hero sections
+public.uae_developers
+public.uae_brokerages
+public.uae_outreach_log          (communication_history rows)
+public.uae_outreach_attachments  (attachments_sent rows)
+public.uae_outreach_sources      (per-field source URLs)
+public.uae_outreach_settings     (locked sender, follow-up cadence, blocklist)
 ```
 
-### Implementation Plan
+- Enums: `uae_emirate`, `outreach_status`, `verification_status`, `company_priority`, `developer_company_type`.
+- All tables: `owner_id` column + RLS — only the owner role (`has_role(auth.uid(),'owner')`) can SELECT/INSERT/UPDATE/DELETE. No public/broker/visitor access.
+- Unique constraints on `legal_company_name`, `website`, `license_number` (brokerages) for duplicate matching.
+- Validation triggers (not CHECK) for: source URL required when contact/phone/email/project present; `verification_status='Not Verified'` blocks outreach.
+- Indexes on `emirate_section`, `outreach_status`, `next_follow_up_date`, `priority`.
 
-**Step 1 — Fix the critical inverted-contrast pages (Tier 1, ~20 files)**
+## Edge Functions
 
-Apply the same hardening pattern proven on Market Intelligence:
-- Convert `bg-black` section wrappers to `bg-white`/`bg-gray-50` where headings are black
-- Where dark hero is intentional, force headings to `style={{ color: '#FFFFFF' }}`
-- Replace `text-white/60` trust-row metadata with solid white + medium font weight
+1. **`uae-outreach-send`** — sends one email through Lovable Emails infra (transactional). Hard-locks `from = CONTACT@JBJ.AE`; rejects any other sender; refuses send if `verification_status = 'Not Verified'`, recipient email null, or sources missing. Renders EN or AR template, attaches uploaded docs, writes to `uae_outreach_log`, updates record status to `Test Sent` / `Contacted`.
+2. **`uae-outreach-followup-cron`** — scheduled via pg_cron daily. For each record with `outreach_status IN ('Test Sent','Contacted','Follow-up Needed')`:
+   - D+2 → first follow-up
+   - D+5 → second
+   - D+10 → final
+   - D+14 with no reply → mark `No Response`
+3. **`uae-outreach-reply-ingest`** — webhook + scheduled poll on the CONTACT@JBJ.AE inbox. Matches reply by thread id / sender domain / company name; calls `google/gemini-2.5-pro` (Lovable AI) to: summarize, extract requested documents, extract contact person, extract deadline, recommend next action, draft response. Writes to `uae_outreach_log`, updates status to `Replied`.
+4. **`uae-outreach-source-verify`** — on-demand: given a source_url, runs Firecrawl scrape (existing connector pattern) to confirm the field still appears on the official page; flips `verification_status` to `Partially Verified` on conflict and adds a note.
 
-Targets: `Awards.tsx`, `Founder.tsx`, `FAQ.tsx`, `Guides.tsx`, `SellerGuide.tsx`, `Services.tsx`, plus `services/{LawFirm,SellingAdvisory,RentalAdvisory,CustomerHappinessCenter,CurrencyExchange,BuyingAdvisory,FitOut,Testimonials}.tsx`, `market-intelligence/AreaDetail.tsx`, `JBJBrokerAdmin.tsx`, `components/project-detail/MasterPlanSection.tsx`, `components/jbj-broker/BrokerCapacityPanel.tsx`, `components/home/JBJPodcastSection.tsx`, `components/DocumentDownloads.tsx`.
+All functions: `requireOwnerAuth` middleware (existing pattern), CORS, Zod input validation, rate-limited.
 
-**Step 2 — Codemod faded gold across all 99 files (Tier 2)**
+## Frontend (owner-only)
 
-Run a scripted, reviewable replacement:
+New route group under `/owner/uae-registry/`:
+
 ```text
-text-gold/30  → text-gray-400        (decorative low-emphasis)
-text-gold/50  → text-gray-500        (decorative medium)
-text-gold/60  → text-gray-600        (eyebrow labels)
-text-gold/70  → text-gray-700        (subheadings)
-text-gold/80  → text-gray-800        (active text)
-text-gold/90  → text-gray-900        (heading accents)
+/owner/uae-registry                     → Overview (7 emirate tiles, KPIs)
+/owner/uae-registry/developers          → Developers table, filters, bulk actions
+/owner/uae-registry/developers/:id      → Developer detail + outreach timeline
+/owner/uae-registry/brokerages          → Brokerages table
+/owner/uae-registry/brokerages/:id      → Brokerage detail + outreach timeline
+/owner/uae-registry/compose             → Bilingual composer + test-send flow
+/owner/uae-registry/automation          → Follow-up cadence, blocklist, audit
 ```
 
-Exception: keep gold-tinted opacity ONLY where it overlays a fully dark hero video and the gold is brand-mandated (logos, watermarks). Audit flagged occurrences manually:
-- `JBJMeetRoom.tsx:219` — JBJ wordmark watermark on dark video → keep
-- `MeetingAIAssistant.tsx:238` — empty-state Sparkles → switch to `text-gray-400`
+Components reuse existing white-dominant monochrome design tokens, Inter font, `--price-orange` not used here, AI summary cards use the violet AI theme. All gated behind `OwnerGuard` + freshly verified step-up auth (existing `useStepUpAuth`) before any send.
 
-**Step 3 — Tighten faded white-on-dark (Tier 3, top 20 hot files)**
+## Email templates
 
-Focus on the highest-density offenders revealed by audit:
-- `PropertyEvaluator.tsx` (66 hits), `AdminTrainingGuide.tsx` (39), `VideoResizePack.tsx` (37), `VoiceSuite.tsx` (33), `VideoMeeting.tsx` (31), `PropertyMeasurement.tsx` (29), executive dashboards, `OwnerDashboard.tsx`, etc.
+Two HTML templates (EN + AR) added under `supabase/functions/_shared/uae-templates/` with placeholders: `{{contact_person_name}}`, `{{company_name}}`, `{{attachments_list}}`. Body is white (#FFFFFF) per email infra rule. Sender display: "JBJ Global Real Estate <CONTACT@JBJ.AE>".
 
-Replace:
-```text
-text-white/30 → text-white/70  (or solid white if metadata)
-text-white/40 → text-white/80
-text-white/50 → text-white/85
-text-white/60 → text-white/90
-text-white/70 → text-white     (or text-white/95 if intentional fade)
-```
+## Automation & validation rules (enforced server-side)
 
-**Step 4 — Add a static contrast guard**
+- `send_rules.sender_email = 'CONTACT@JBJ.AE'` — hardcoded, not configurable from UI.
+- Forbidden sender list includes `janeaboujaoudemodel@gmail.com` — function returns 403 if attempted.
+- Test send required before bulk send is unlocked per record (flag `test_email_completed`).
+- Bulk send capped at 50/run with 2s delay to respect Lovable Emails queue.
+- Status transitions enforced via DB trigger (only valid forward transitions allowed).
 
-Extend `scripts/contrast/check-white-on-light.mjs` (already present in repo) with a sibling rule that fails CI on:
-- Any `text-gold/[1-7][0-9]?` outside an allowlist
-- Any `bg-black` ancestor with a `text-black` descendant in the same JSX file
+## Source collection workflow
 
-This prevents regression after the sweep.
+- Each record requires at least one row in `uae_outreach_sources` before it can move past `Not Verified`.
+- "Add source" UI runs Firecrawl scrape → shows extracted snippet → owner confirms → saves with `fields_verified[]` and `date_checked`.
+- Priority hierarchy enforced in UI: official site > government registry > LinkedIn/press > portals.
 
-### Technical Details
+## Prerequisites I will set up
 
-- **Why not just edit the global `text-gold` token?** The `text-gold` token is correctly used in many high-contrast contexts (gold over solid black). Only the `/XX` opacity variants degrade contrast. Surgical replacement is required.
-- **Approach for codemod**: a Node script using `ripgrep` + `sed` per-file with a pre-written allowlist (logos, watermarks, intentional video overlays). Each file is reviewed before commit.
-- **Inter font + black-on-white** is the standard per memory `Monochrome Design` and `Typography Monochrome` — fixes align with existing core memory.
-- **No feature removal** — purely color/contrast token swaps. Honors the strict "No Removal" policy.
-- **Testing**: After implementation, run `node scripts/contrast/check-rendered.mjs` and the new gold guard against the dev server to verify zero AA failures.
+- Lovable Emails domain on `jbj.ae` with sender `CONTACT@JBJ.AE` (will trigger setup dialog if not already verified).
+- Firecrawl connector (already documented in stack) — link via standard connectors picker.
+- pg_cron + pg_net for daily follow-up job.
 
-### Estimated Output
+## Out of scope (explicit)
 
-- **~99 component/page files** edited (gold opacity sweep)
-- **~20 critical pages** restructured (Tier 1 inversion bug)
-- **~20 high-density dark pages** tightened (Tier 3)
-- **1 new CI guard script** added to `scripts/contrast/`
+- Bulk import of pre-existing developer/brokerage lists — owner adds records manually or via the source-verification flow. Happy to add CSV import in a follow-up.
+- Sending from any account other than CONTACT@JBJ.AE.
+- Public-facing exposure of any data in this module.
 
-### Out of Scope
+## Deliverables
 
-- Visual redesign of any page (colors only, no layout changes)
-- Refactoring the `jj-card-inner` class itself (it is correct)
-- Touching brand-locked elements: monogram, footer corporate hairline, AI-purple theme, price-orange tokens
+- 6 SQL migrations (tables, enums, RLS, triggers, cron job).
+- 4 edge functions (send, follow-up cron, reply ingest, source verify).
+- 7 new pages + ~15 components under `/owner/uae-registry/`.
+- 2 bilingual email templates (EN, AR).
+- Owner-only nav entry in Executive Command Center.
 
-Approving this plan switches Lovable to default mode and the sweep executes in a single batched implementation.
+Approve and I'll implement in this order: DB + RLS → templates + send function → composer UI → tables/detail pages → follow-up cron → reply ingest → source verification.
