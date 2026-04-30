@@ -30,6 +30,7 @@ import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { prefetchAITool } from "@/utils/aiToolPrefetch";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
