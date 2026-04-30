@@ -5015,6 +5015,7 @@ export type Database = {
           office_location: string | null
           office_map_url: string | null
           outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
+          outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           phone: string | null
@@ -5067,6 +5068,7 @@ export type Database = {
           office_location?: string | null
           office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
+          outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
           phone?: string | null
@@ -5119,6 +5121,7 @@ export type Database = {
           office_location?: string | null
           office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
+          outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
           phone?: string | null
