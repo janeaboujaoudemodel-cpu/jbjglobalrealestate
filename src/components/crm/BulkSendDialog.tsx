@@ -56,11 +56,17 @@ export const BulkSendDialog = ({
   const [variant, setVariant] = useState<RegistrationVariant>("developer_registration");
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
+  const [useCustomTestEmail, setUseCustomTestEmail] = useState(false);
   const [running, setRunning] = useState(false);
   const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
   const [reviewing, setReviewing] = useState(false);
+
+  // Keep testEmail in sync if owner email changes (and they haven't overridden)
+  useEffect(() => {
+    if (!useCustomTestEmail) setTestEmail(defaultTestEmail);
+  }, [defaultTestEmail, useCustomTestEmail]);
 
   const { data: template } = useEmailTemplate(variant);
 
