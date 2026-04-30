@@ -172,16 +172,16 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-6 mt-12"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
-              <Database className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+            <div className="flex items-center gap-2 text-white">
+              <Database className="w-5 h-5" />
               <span className="text-sm font-medium">Government Open Data</span>
             </div>
-            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
-              <Shield className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+            <div className="flex items-center gap-2 text-white">
+              <Shield className="w-5 h-5" />
               <span className="text-sm font-medium">Analytics Only</span>
             </div>
-            <div className="flex items-center gap-2" style={{ color: '#FFFFFF' }}>
-              <BarChart3 className="w-5 h-5" style={{ color: '#FFFFFF' }} />
+            <div className="flex items-center gap-2 text-white">
+              <BarChart3 className="w-5 h-5" />
               <span className="text-sm font-medium">No Listings</span>
             </div>
           </motion.div>
@@ -209,23 +209,17 @@ const MarketIntelligence = () => {
       <DataSourcesPanel />
 
       {/* Compliance Disclaimer */}
-      <section className="py-12" style={{ backgroundColor: '#F9FAFB' }} data-surface="light">
+      <section className="surface-light py-12 bg-muted" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div
-              className="rounded-2xl p-8 text-center"
-              style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB', borderWidth: 1 }}
-            >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4"
-                style={{ backgroundColor: '#000000' }}
-              >
-                <Info className="w-6 h-6" style={{ color: '#ffffff' }} />
+            <div className="rounded-2xl p-8 text-center bg-card border border-border">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 bg-foreground">
+                <Info className="w-6 h-6 text-background" />
               </div>
-              <h3 className="text-xl font-bold mb-4" style={{ color: '#000000' }}>
+              <h3 className="text-xl font-bold mb-4 text-foreground">
                 Compliance & Transparency
               </h3>
-              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#374151' }}>
+              <p className="text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
                 {MARKET_DISCLAIMER}
               </p>
             </div>
