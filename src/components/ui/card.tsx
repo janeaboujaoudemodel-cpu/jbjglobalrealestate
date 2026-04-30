@@ -1,22 +1,48 @@
 import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
 /* ============================================================
  * GLOBAL CARD SYSTEM - JBJ GLOBAL REAL ESTATE
  * Monochrome Design System
+ *
+ * The `surface` variant scopes theme tokens locally so descendants
+ * using semantic classes (text-foreground, text-muted-foreground,
+ * bg-card, border-border, etc.) automatically resolve to legible
+ * colors. Never hardcode `text-gold`/`text-black` on `bg-black` —
+ * use <Card surface="dark"> or <Card surface="light"> instead.
  * ============================================================ */
 
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
-  <div 
-    ref={ref} 
-    className={cn(
-      "rounded-lg border border-border bg-card text-card-foreground transition-all duration-300", 
-      className
-    )} 
-    {...props} 
-  />
-));
+const cardVariants = cva(
+  "rounded-lg border border-border bg-card text-card-foreground transition-all duration-300",
+  {
+    variants: {
+      surface: {
+        default: "",
+        light: "surface-light bg-card text-card-foreground",
+        dark: "surface-dark bg-card text-card-foreground",
+      },
+    },
+    defaultVariants: {
+      surface: "default",
+    },
+  },
+);
+
+export interface CardProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {}
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, surface, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(cardVariants({ surface }), className)}
+      {...props}
+    />
+  ),
+);
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -28,13 +54,13 @@ CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
-    <h3 
-      ref={ref} 
+    <h3
+      ref={ref}
       className={cn(
-        "text-lg md:text-xl font-medium leading-tight tracking-tight text-foreground", 
-        className
-      )} 
-      {...props} 
+        "text-lg md:text-xl font-medium leading-tight tracking-tight text-foreground",
+        className,
+      )}
+      {...props}
     />
   ),
 );
@@ -54,19 +80,15 @@ CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div 
-      ref={ref} 
-      className={cn(
-        "flex items-center p-6 pt-4 border-t border-border/20", 
-        className
-      )} 
-      {...props} 
+    <div
+      ref={ref}
+      className={cn("flex items-center p-6 pt-4 border-t border-border/20", className)}
+      {...props}
     />
   ),
 );
 CardFooter.displayName = "CardFooter";
 
-/* --- Card Meta Component --- */
 const CardMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
     <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
@@ -74,7 +96,6 @@ const CardMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTM
 );
 CardMeta.displayName = "CardMeta";
 
-/* --- Card Detail Component --- */
 const CardDetail = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
     <p ref={ref} className={cn("text-base font-medium text-foreground", className)} {...props} />
@@ -82,4 +103,14 @@ const CardDetail = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<H
 );
 CardDetail.displayName = "CardDetail";
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardMeta, CardDetail };
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardMeta,
+  CardDetail,
+  cardVariants,
+};

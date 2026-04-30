@@ -249,6 +249,48 @@ All colors MUST be HSL.
   }
 }
 
+/* ============================================================
+ * SCOPED CARD SURFACE THEMES
+ * Use .surface-light or .surface-dark on any container to locally
+ * rebind theme tokens. Any descendant using semantic classes
+ * (bg-card, text-foreground, text-muted-foreground, border-border,
+ * bg-muted, etc.) will adapt automatically — eliminating the need
+ * to hardcode `text-gold`/`text-black` on `bg-black` and similar.
+ * ============================================================ */
+@layer base {
+  .surface-light {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 35%;
+    --accent: 0 0% 94%;
+    --accent-foreground: 0 0% 7%;
+    --border: 0 0% 85%;
+    --input: 0 0% 90%;
+    color: hsl(var(--card-foreground));
+  }
+
+  .surface-dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 100%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 14%;
+    --accent-foreground: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 16%;
+    color: hsl(var(--card-foreground));
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
