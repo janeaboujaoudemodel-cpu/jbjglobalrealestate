@@ -333,10 +333,10 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
       </div>
 
       {/* Table */}
-      <div className="border border-border rounded-lg overflow-hidden bg-card/50">
+      <div className="border border-[#B89555]/30 rounded-lg overflow-hidden bg-[#FDFBF7]">
         <Table>
-          <TableHeader className="bg-muted/50">
-            <TableRow className="border-b border-border">
+          <TableHeader className="bg-[#EFE6D6]">
+            <TableRow className="border-b border-[#B89555]/30">
               <TableHead className="text-[#1A1A1A] font-bold w-16">Row</TableHead>
               <TableHead className="text-[#1A1A1A] font-bold">Name</TableHead>
               <TableHead className="text-[#1A1A1A] font-bold">Contact</TableHead>
@@ -371,10 +371,10 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   key={lead.id} 
                   ref={(el) => { if (el) rowRefs.current.set(lead.id, el); }}
                   className={cn(
-                    "border-b border-border/50 cursor-pointer transition-colors",
+                    "border-b border-[#B89555]/20 cursor-pointer transition-colors",
                     highlightedId === lead.id 
                       ? "bg-red-500/20 border-red-500/50 animate-pulse" 
-                      : "hover:bg-muted/30"
+                      : "hover:bg-[#B89555]/10"
                   )}
                   onClick={() => handleRowClick(lead)}
                 >
@@ -533,9 +533,9 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
               {/* Raw Data */}
               {selectedLead.raw_import && (
                 <div>
-                  <label className="text-xs text-muted-foreground">Original Import Data</label>
-                  <div className="bg-muted/30 rounded-lg p-3 mt-1 max-h-32 overflow-auto">
-                    <pre className="text-xs text-muted-foreground">
+                  <label className="text-xs text-[#5A4A2E]">Original Import Data</label>
+                  <div className="bg-[#B89555]/10 rounded-lg p-3 mt-1 max-h-32 overflow-auto border border-[#B89555]/20">
+                    <pre className="text-xs text-[#1A1A1A]">
                       {JSON.stringify(selectedLead.raw_import, null, 2)}
                     </pre>
                   </div>
@@ -578,32 +578,32 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
           {editingLead && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm text-white">Full Name</label>
+                <label className="text-sm text-[#1A1A1A] font-medium">Full Name</label>
                 <Input
                   value={editForm.full_name}
                   onChange={(e) => setEditForm(f => ({ ...f, full_name: e.target.value }))}
-                  className="bg-muted border-border text-white"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-white">Phone</label>
+                <label className="text-sm text-[#1A1A1A] font-medium">Phone</label>
                 <Input
                   value={editForm.phone}
                   onChange={(e) => setEditForm(f => ({ ...f, phone: e.target.value }))}
                   placeholder="+971501234567"
-                  className="bg-muted border-border text-white"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-[#5A4A2E]">
                   Enter full international format (e.g., +971501234567)
                 </p>
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-white">Email</label>
+                <label className="text-sm text-[#1A1A1A] font-medium">Email</label>
                 <Input
                   value={editForm.email}
                   onChange={(e) => setEditForm(f => ({ ...f, email: e.target.value }))}
                   placeholder="example@email.com"
-                  className="bg-muted border-border text-white"
+                  className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
                 />
               </div>
 
