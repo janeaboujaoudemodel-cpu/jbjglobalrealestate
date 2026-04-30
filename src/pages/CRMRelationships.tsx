@@ -664,8 +664,12 @@ const DeveloperRegistryTab = () => {
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
 
-  // Split base data into pools: queue (never contacted) vs history (contacted or registered)
-  const queuePool = useMemo(() => data.filter((r: any) => !r.last_outreach_at && r.status !== "registered"), [data]);
+  // Outreach Queue = every non-registered developer (Not Started, Pending Application,
+  // Documents Required, Under Review, Rejected, Expired). The previous rule used
+  // `!last_outreach_at` which incorrectly hid the 24 Pending Application records as
+  // soon as a first email had been sent. Sent History keeps everything that has
+  // received an email plus all Registered developers.
+  const queuePool = useMemo(() => data.filter((r: any) => r.status !== "registered"), [data]);
   const historyPool = useMemo(() => data.filter((r: any) => !!r.last_outreach_at || r.status === "registered"), [data]);
 
   const filtered = useMemo(() => queuePool.filter((r: any) => {
@@ -723,7 +727,7 @@ const DeveloperRegistryTab = () => {
       return;
     }
     const targets = data.filter((d: any) =>
-      d.developer_email && (d.status === "not_started" || d.status === "documents_required")
+      d.developer_email && d.status !== "registered"
     );
     if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
     if (!confirm(`Send registration email to ${targets.length} developers?`)) return;
@@ -868,7 +872,9 @@ const DeveloperRegistryTab = () => {
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-gray-500">
-          No developers match. Click <b>Pre-fill</b> to seed UAE developers.
+          {data.length === 0
+            ? <>No developers in your registry yet. Click <b>Import all developers</b> or <b>Pre-fill</b> to seed.</>
+            : <>No developers match the current filters. Clear search and status filters to see all {queuePool.length} pending and not-started developers.</>}
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">

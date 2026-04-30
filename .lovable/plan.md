@@ -1,52 +1,30 @@
+I found the issue: the database already has exactly 24 `pending_application` developers and 236 `not_started` developers, but the UI hides the 24 pending developers because the Outreach Queue is currently defined as only records with no `last_outreach_at`. All 24 pending developers have `last_outreach_at`, so they are pushed into Sent History and disappear when you filter Pending Application in the queue.
 
-## Goal
+Plan:
 
-Wire the UAE Registry outreach to send from `CONTACT@JBJ.AE` via Resend (using your already-verified root domain `jbj.ae`), and cleanly disable Lovable Emails so there is no infrastructure overlap.
+1. Fix the Outreach Queue logic in `src/pages/CRMRelationships.tsx`
+   - Change the queue pool from “no last outreach date” to “all non-registered developers”.
+   - This will make the queue show:
+     - 236 Not Started
+     - 24 Pending Application
+     - Total: 260 non-registered developers
+   - The 1 Registered developer will remain outside the queue.
 
-## Why root domain is fine
+2. Fix the email filter so it cannot hide pending developers unexpectedly
+   - Keep “All emails” as the default.
+   - Make “Not sent yet” show only unsent non-registered records.
+   - Make “Email sent” show sent non-registered records, including the 24 Pending Application records.
+   - Keep “Confirmed registered” in history/registered handling, not mixed into the outreach queue.
 
-Resend verifies domains via TXT (SPF) + CNAME/TXT (DKIM) records — never NS. Since you've already verified `jbj.ae` at the root in Resend, sending `from: "JBJ Global Real Estate <CONTACT@JBJ.AE>"` works directly. No subdomain, no NS records, no Lovable delegation required.
+3. Update the empty-state message
+   - Replace “No developers match. Click Pre-fill...” with a clearer message explaining that no developers match the current filters.
+   - This prevents the app from wrongly telling you to use Prefill when records already exist.
 
-The earlier setup was scaffolded against Lovable Emails (which uses NS-delegated subdomains) — that's the system that needs the `notify.jbj.ae` NS records, not Resend. We're abandoning that path entirely.
+4. Protect Prefill / Import from changing what is visible
+   - Ensure the list is always driven by the actual `crm_developer_registry` records, not by whether Prefill was opened or clicked.
+   - Keep Prefill as an optional seeding tool only; it must not be required to see pending applications.
 
-## Steps
+5. Align bulk send eligibility
+   - Include pending application records in the eligible non-registered outreach flow where appropriate, instead of only `not_started` and `documents_required`.
 
-### 1. Capture and remove Lovable Emails delegation
-- Run `email_domain--check_email_domain_status` to capture the exact NS records currently delegated (so you have them on file before they're orphaned).
-- Call `email_domain--toggle_project_emails` with `enabled: false` to disable Lovable Emails.
-- Tell you the exact NS records to remove at your DNS provider (the `notify.jbj.ae NS ns3.lovable.cloud` and `ns4.lovable.cloud` entries). Removing them is optional but recommended for cleanliness — leaving them only delegates an unused subdomain, it does not affect `jbj.ae` root mail.
-
-### 2. Verify Resend connector secrets
-- Confirm `RESEND_API_KEY` and `LOVABLE_API_KEY` are present via `secrets--fetch_secrets`.
-- If `RESEND_API_KEY` is missing, link the Resend connector via `standard_connectors--connect`.
-
-### 3. Confirm `uae-registry-send` is correctly wired
-The edge function at `supabase/functions/uae-registry-send/index.ts` already targets the Resend gateway. Verify:
-- Endpoint: `https://connector-gateway.lovable.dev/resend/emails`
-- Headers: `Authorization: Bearer ${LOVABLE_API_KEY}`, `X-Connection-Api-Key: ${RESEND_API_KEY}`
-- `from: "JBJ Global Real Estate <CONTACT@JBJ.AE>"` (root domain, no subdomain)
-- Hard-block on any sender other than `CONTACT@JBJ.AE` (including the forbidden `janeaboujaoudemodel@gmail.com`)
-- Owner-only auth + verification-status gate retained
-- Logs writes into `uae_registry_log`
-
-If anything still references `send-transactional-email` or `notify.jbj.ae`, replace it.
-
-### 4. Test send
-- Owner triggers a test send from `/owner/uae-registry/...` to your own inbox.
-- Confirm delivery, headers show `From: CONTACT@JBJ.AE`, SPF/DKIM pass via Resend.
-- Verify the row lands in `uae_registry_log` with status `Test Sent`.
-
-### 5. Optional cleanup
-- Decide whether to delete the now-unused Lovable email scaffolding (`send-transactional-email` function, email queue tables) or leave them dormant. Recommendation: leave dormant — they don't cost anything and may be useful later for auth emails.
-
-## Out of scope
-- DNS changes at your registrar (you control those — I'll just tell you which records to remove).
-- Reply-ingestion, Firecrawl source verification, CSV import, sidebar nav entry — still pending your earlier approval as separate follow-ups.
-
-## Deliverables
-- Lovable Emails disabled.
-- `uae-registry-send` confirmed sending via Resend from `CONTACT@JBJ.AE` on root `jbj.ae`.
-- Clear list of NS records you can remove from your DNS provider.
-- Successful test send logged in `uae_registry_log`.
-
-Approve and I'll execute.
+No database migration is required for the visibility bug because the data is already present: `236 not_started`, `24 pending_application`, `1 registered`. The fix is in the frontend filtering/count logic.
