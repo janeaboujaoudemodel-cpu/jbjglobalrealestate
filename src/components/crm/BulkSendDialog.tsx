@@ -64,7 +64,7 @@ interface Recipient {
   // brokerage fields
   company_name?: string;
   email?: string;
-  primary_contact?: { name?: string; email?: string };
+  primary_contact?: any;
   // shared
   last_outreach_at?: string | null;
   status?: string;
