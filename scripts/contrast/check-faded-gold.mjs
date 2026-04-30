@@ -65,6 +65,6 @@ for (const v of violations) {
   console.error(`    ${v.text}`);
 }
 console.error(
-  `\nReplace with text-gray-400…900 or solid text-gold. Add to ALLOWLIST in scripts/contrast/check-faded-gold.mjs only for branded watermarks on dark video.`
+  `\nReplace with text-gray-400…900 or solid text-gold. To allowlist a branded watermark, use the admin page at /admin/faded-gold-allowlist (writes scripts/contrast/faded-gold-allowlist.json).`
 );
 process.exit(1);
