@@ -426,7 +426,7 @@ export const useSendDeveloperRegistration = () => {
 };
 
 /* ---------- Email Templates (locked branded HTML) ---------- */
-export const useEmailTemplate = (variant: RegistrationVariant) =>
+export const useEmailTemplate = (variant: AnyEmailVariant) =>
   useQuery({
     queryKey: ["crm-email-template", variant],
     queryFn: async () => {
