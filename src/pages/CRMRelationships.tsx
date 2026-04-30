@@ -889,8 +889,21 @@ const DeveloperRegistryTab = () => {
       <div className="flex flex-wrap gap-2 items-center bg-white border border-black/10 rounded-xl p-3">
         <div className="text-sm text-black"><strong>{selected.size}</strong> of {filtered.length} selected</div>
         <Button size="sm" variant="outline" onClick={selectAllFiltered}>Select all filtered</Button>
+        <Button size="sm" variant="outline" onClick={selectAllPending} title="Select every developer currently in Pending Application">
+          Select all Pending ({counts["pending_application"] || 0})
+        </Button>
         <Button size="sm" variant="outline" onClick={clearSelection} disabled={!selected.size}>Clear</Button>
         <div className="flex-1" />
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={!selected.size || bulkResetting}
+          onClick={bulkResetToNotStarted}
+          title="Move selected developers back to Not Started so they can be re-emailed"
+        >
+          {bulkResetting ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <RotateCcw className="w-3 h-3 mr-1" />}
+          Reset to Not Started ({selected.size})
+        </Button>
         <Button
           size="sm"
           className="bg-black text-white hover:bg-gray-800"
