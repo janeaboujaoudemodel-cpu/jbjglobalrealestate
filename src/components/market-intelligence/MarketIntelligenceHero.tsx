@@ -57,17 +57,27 @@ export const MarketIntelligenceHero = ({
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         ) : null}
-        {/* Overlay gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/70 to-black" />
       </div>
-      
-      {/* Decorative radial gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1]" />
-      
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1]" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1]" />
-      
+
+      {/* Decorative gold ambience — sits BEHIND the darkening overlays so it never lifts contrast under the headline */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/8 via-transparent to-transparent z-[1] pointer-events-none" />
+      <div className="absolute top-20 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl z-[1] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gold/3 rounded-full blur-3xl z-[1] pointer-events-none" />
+
+      {/* Legibility overlays — composite stack guarantees AA contrast over any frame */}
+      {/* 1. Base vertical anchor: heavier top + bottom, breathable middle so imagery still reads */}
+      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/85 via-black/70 to-black/95 pointer-events-none" />
+      {/* 2. Centered spotlight darkener focused on the text column */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%)',
+        }}
+      />
+      {/* 3. Bottom fade-to-page so the hero blends into the next section */}
+      <div className="absolute inset-x-0 bottom-0 h-1/4 z-[2] bg-gradient-to-b from-transparent to-background pointer-events-none" />
+
       <motion.div 
         className="relative z-10 w-full py-24"
         initial="hidden"
@@ -87,12 +97,17 @@ export const MarketIntelligenceHero = ({
             variants={fadeInUp}
           >
             <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-            <span className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]">{badge}</span>
+            <span
+              className="text-gold font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
+              style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
+            >
+              {badge}
+            </span>
           </motion.button>
           
           {/* Title */}
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
             variants={fadeInUp}
           >
             {title}
@@ -100,7 +115,7 @@ export const MarketIntelligenceHero = ({
           
           {/* Description */}
           <motion.p 
-            className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            className="text-lg md:text-xl text-white/95 font-light leading-relaxed max-w-3xl mx-auto mb-10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
             variants={fadeInUp}
           >
             {description}
