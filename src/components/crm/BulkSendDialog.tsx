@@ -273,7 +273,7 @@ export const BulkSendDialog = ({
           <div>
             <Label className="text-xs text-[#1A1A1A]">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
-              {(Object.keys(VARIANT_LABELS) as RegistrationVariant[]).map((v) => (
+              {(Object.keys(VARIANT_LABELS) as AnyEmailVariant[]).map((v) => (
                 <button
                   key={v}
                   type="button"
