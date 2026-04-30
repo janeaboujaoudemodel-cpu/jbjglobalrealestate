@@ -748,6 +748,49 @@ const DeveloperRegistryTab = () => {
     refetch();
   };
 
+  const selectAllPending = () => {
+    const ids = queuePool
+      .filter((r: any) => r.status === "pending_application")
+      .map((r: any) => r.id);
+    if (!ids.length) {
+      toast.info("No developers in Pending Application");
+      return;
+    }
+    setSelected(new Set(ids));
+    toast.success(`Selected ${ids.length} pending developer${ids.length === 1 ? "" : "s"}`);
+  };
+
+  const bulkResetToNotStarted = async () => {
+    if (!selected.size) return;
+    if (!confirm(`Reset ${selected.size} developer${selected.size === 1 ? "" : "s"} back to Not Started? They'll reappear in the queue ready to send.`)) return;
+    setBulkResetting(true);
+    const t = toast.loading(`Resetting 0 / ${selectedDevs.length}…`);
+    let ok = 0, fail = 0;
+    for (let i = 0; i < selectedDevs.length; i++) {
+      const d = selectedDevs[i];
+      if (d.status === "not_started") {
+        ok++;
+      } else {
+        try {
+          await quickStatus.mutateAsync({
+            entityType: "developer_registry",
+            id: d.id,
+            status: "not_started",
+            previousStatus: d.status,
+          });
+          ok++;
+        } catch {
+          fail++;
+        }
+      }
+      toast.loading(`Resetting ${i + 1} / ${selectedDevs.length}…`, { id: t });
+    }
+    toast.success(`Reset: ${ok} · Failed: ${fail}`, { id: t });
+    setBulkResetting(false);
+    clearSelection();
+    refetch();
+  };
+
   return (
     <div className="space-y-5">
       <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
