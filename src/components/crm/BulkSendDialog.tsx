@@ -125,7 +125,8 @@ export const BulkSendDialog = ({
 
   const sendAll = async () => {
     if (!targets.length) { toast.error("No eligible recipients"); return; }
-    if (!confirm(`Send "${VARIANT_LABELS[variant]}" to ${targets.length} developer(s)?`)) return;
+    if (!reviewing) { setReviewing(true); return; }
+    setReviewing(false);
     setRunning(true);
     const init: Record<string, { status: RowStatus }> = {};
     targets.forEach((t) => { init[t.id] = { status: "queued" }; });
