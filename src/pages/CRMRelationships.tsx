@@ -872,7 +872,9 @@ const DeveloperRegistryTab = () => {
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-gray-500">
-          No developers match. Click <b>Pre-fill</b> to seed UAE developers.
+          {data.length === 0
+            ? <>No developers in your registry yet. Click <b>Import all developers</b> or <b>Pre-fill</b> to seed.</>
+            : <>No developers match the current filters. Clear search and status filters to see all {queuePool.length} pending and not-started developers.</>}
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
