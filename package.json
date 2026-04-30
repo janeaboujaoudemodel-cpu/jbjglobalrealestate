@@ -17,11 +17,17 @@
     "check:contrast:black-on-dark": "node scripts/contrast/check-black-on-dark.mjs",
     "check:contrast:low-opacity": "node scripts/contrast/check-low-opacity-text.mjs",
     "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:white-on-light && npm run check:contrast:black-on-dark && npm run check:contrast:low-opacity && npm run check:contrast:rendered",
+    "check:a11y:static": "node scripts/a11y/check-static-aria.mjs",
+    "check:a11y:aria": "node scripts/a11y/check-aria.mjs",
+    "check:a11y:keyboard": "node scripts/a11y/check-keyboard.mjs",
+    "check:a11y": "npm run check:a11y:static && npm run check:a11y:aria && npm run check:a11y:keyboard",
+    "check:quality": "npm run check:contrast && npm run check:a11y",
     "prepare": "husky || true"
   },
   "lint-staged": {
     "src/index.css": "node scripts/contrast/check-tokens.mjs",
-    "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs"
+    "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs",
+    "src/**/*.{tsx,jsx}": "node scripts/a11y/check-static-aria.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
