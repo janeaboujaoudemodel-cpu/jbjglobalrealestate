@@ -829,10 +829,7 @@ export default function GlobalVerticalNav() {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     const routeActive = isRouteActive(item.href);
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
-    if (isSaturatedColorRow(item)) {
-      // White-on-color tile so it doesn't fight the saturated row background
-      return 'bg-[#FDFBF7]/15 border border-white/45 group-hover:bg-[#FDFBF7]/25 group-hover:border-white/70';
-    }
+    // (Saturated-row override removed — all rows now share the gold tile.)
     if (shouldHighlight) {
       return 'bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/80 shadow-[0_0_0_1px_rgba(217,194,146,0.35)]';
     }
