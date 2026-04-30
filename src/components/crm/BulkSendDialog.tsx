@@ -401,7 +401,7 @@ export const BulkSendDialog = ({
                 <div className="px-3 py-2 text-xs border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
                   <div className="text-[#1A1A1A]"><strong>Subject:</strong> {previewSubject}</div>
                   <div className="text-[#5A4A2E] mt-0.5">
-                    <strong className="text-[#1A1A1A]">To:</strong> {previewDev?.developer_email || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
+                    <strong className="text-[#1A1A1A]">To:</strong> {(previewDev && getEmail(previewDev, entityType)) || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
                   </div>
                 </div>
                 <iframe
