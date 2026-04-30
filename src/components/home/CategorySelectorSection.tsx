@@ -97,11 +97,11 @@ export default function CategorySelectorSection() {
                 whileHover={{ y: -4 }}
                 className="group relative text-left bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
               >
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors">
+                <div className="flex items-center justify-between gap-3 mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors flex-shrink-0">
                     <Icon className="w-6 h-6 text-[#1A1A1A] group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-xs uppercase tracking-wider text-neutral-400 group-hover:text-[#1A1A1A] transition-colors">
+                  <span className="text-xs uppercase tracking-wider text-neutral-400 group-hover:text-[#1A1A1A] transition-colors text-right">
                     {cat.tagline}
                   </span>
                 </div>
@@ -120,9 +120,9 @@ export default function CategorySelectorSection() {
                   ))}
                 </ul>
 
-                <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
+                <div className="flex items-center justify-between w-full pt-4 border-t border-neutral-100">
                   <span className="text-sm font-semibold text-[#1A1A1A]">Continue</span>
-                  <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform flex-shrink-0" />
                 </div>
               </motion.button>
             );
