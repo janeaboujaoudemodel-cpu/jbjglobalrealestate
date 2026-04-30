@@ -727,7 +727,7 @@ const DeveloperRegistryTab = () => {
       return;
     }
     const targets = data.filter((d: any) =>
-      d.developer_email && (d.status === "not_started" || d.status === "documents_required")
+      d.developer_email && d.status !== "registered"
     );
     if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
     if (!confirm(`Send registration email to ${targets.length} developers?`)) return;
