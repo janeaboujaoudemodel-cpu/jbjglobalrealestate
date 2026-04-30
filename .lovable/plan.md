@@ -1,149 +1,131 @@
-# Global Champagne/Gold Theme Rollout
+I found the current issues in the Relationships Hub:
 
-You confirmed: roll out the Owner Command Center palette **everywhere** (public + backend), replace grays with **champagne neutrals**, apply the **gold icon-tile** style to **every icon**, and override the existing locked monochrome rules. This is a large, breaking change to the design system and CI guards. Below is the plan.
+- The database currently has 807 developer registry rows, but only 774 distinct developer names, so duplicates exist.
+- The 24 `pending_application` rows have already been emailed, so the current logic moves them to Sent History. You asked for these to be merged back into Not Started/Outreach Queue, with no duplication.
+- The master developer catalog has 631 visible developers, but the registry has multiple imported aliases like `aldar`, `aldar-properties`, and `developed-by-aldar-properties`, which is why counts and cards drift.
+- Brokerages are empty right now.
+- Developer cards do not show logos and currently use `emirate` as the “Office” display instead of a full clickable office/maps location.
+- Registered developers are intentionally routed to Sent History by the current pool logic, which is why clicking Registered in the queue area can show confusing results.
+- Email preview is iframe-based, but it needs a safer full-width wrapper to prevent the “one character per line” bug.
 
-## What changes
+Plan to fix it:
 
-```
-Owner Command Center palette (single source of truth)
-─────────────────────────────────────────────────────
-Champagne 1 (page bg)     #FDFBF7
-Champagne 2 (surface)     #F7F2EA
-Champagne 3 (raised)      #EFE6D6
-Gold accent (primary)     #B89555
-Gold deep (hover/active)  #A68444
-Hairline / border         #B89555 @ 30% alpha
-Body text (on champagne)  #1A1A1A (true black, WCAG AA)
-Muted text (on champagne) #5A4A2E (warm brown, replaces gray-500/600)
-```
+1. Correct Outreach Queue logic and pending applications
+- Update developer pool rules so `pending_application` is included in the Outreach Queue as requested.
+- Make Not Started count include Pending Application visually, or convert those 24 rows to `not_started` during cleanup so they merge directly.
+- Keep pools mutually exclusive so no developer can appear twice.
+- Add tests for:
+  - pending_application stays in queue even after outreach
+  - registered appears in the registered/history section and remains clickable
+  - duplicate rows are excluded from visible lists
 
-## 1. Owner Command Center padding fix (immediate)
+2. Deduplicate developer registry safely
+- Add a cleanup migration/script that consolidates duplicate developer rows by normalized developer name.
+- Preserve the “best” row per developer using priority:
+  - registered status wins
+  - rows with email/phone/website/office win
+  - rows with outreach history win
+  - newest/most complete row wins as fallback
+- Merge useful fields from duplicates into the keeper row.
+- Remove or archive duplicate rows only after their useful fields are merged.
+- Ensure future imports use normalized slug/name matching so aliases like `damac`, `damac-properties`, and `developed-by-damac-properties` do not create duplicates.
 
-`src/pages/OwnerDashboardOverview.tsx` — the page root `<div class="space-y-8">` butts the H1 against the shell header. Add `pt-6 md:pt-8` to the outer wrapper (line 464) and bump the header block (`mb-4` → `mb-6`). Also audit the shell `<main>` in `src/pages/OwnerDashboardShell.tsx` to ensure `pt-6` exists below the sticky header so this padding rule applies to every Owner sub-route, not just Overview.
+3. Auto-load all developers without needing “Import all developers”
+- Replace the manual-only import workflow with an automatic sync on Developer Registry load for the owner.
+- Keep the manual button as “Sync missing developers” for recovery, but the page should no longer depend on you clicking it.
+- Optimize queries and render flow so status chips respond faster.
 
-## 2. Design tokens — rewrite `src/index.css`
+4. Show complete developer cards
+- Join registry rows to the master `developers` table by slug/name where possible.
+- Display developer logo on every card using `logo_url_processed`, `logo_url_dark`, or `logo_url` fallback.
+- Add visible fields on cards:
+  - logo
+  - developer name
+  - email
+  - phone/contact number
+  - website
+  - emirate
+  - full office/location
+  - Google Maps directions link
+- Update the edit form to include full office/location and map URL fields.
+- If a map URL is missing, generate a Google Maps directions/search link from the office address + developer name.
 
-Repoint the existing CSS variables so every component automatically picks up the new palette without per-file edits:
+5. Add exact office/maps data structure
+- Add columns to developer registry if needed:
+  - `office_location` text
+  - `office_map_url` text
+  - `logo_url` text or derive logo from master catalog
+- Extend enrichment to fill office address and Google Maps link where possible.
+- Use sources in `field_sources` so owner can tell whether data came from master catalog, AI research, website scrape, or manual edit.
 
-```
---background           : 36 50% 98%   /* #FDFBF7 */
---foreground           : 0 0% 10%
---card / --popover     : 36 50% 98%
---secondary / --muted  : 36 40% 94%   /* #F7F2EA */
---accent               : 36 38% 88%   /* #EFE6D6 */
---muted-foreground     : 33 35% 27%   /* warm brown, NOT gray */
---border / --input     : 40 35% 65%   /* #B89555 @ ~50% L */
---ring                 : 40 35% 53%   /* #B89555 */
---primary              : 40 35% 53%   /* gold becomes primary */
---primary-foreground   : 0 0% 100%
---gold / --gold-light / --gold-dark / --gold-muted : restored to real gold values
---sidebar-* tokens     : champagne surfaces + gold accent
-```
+6. Fix registered filter/card wiring
+- Make Registered a first-class visible section/filter rather than a dead queue chip.
+- If the Registered chip is clicked, show the registered cards immediately even if they live in the history/registered pool.
+- Ensure every status card/chip changes the visible list and does not appear unclickable.
 
-`tailwind.config.ts` — remove the comment "Gold mapped to white/grayscale"; gold is gold again.
+7. Fix email preview and test-send flow
+- Update `TemplateEditorDialog` and `BulkSendDialog` so “Send test” is always available before broadcast.
+- Default test recipient to the registered owner email from auth, then fallback to the saved owner test email.
+- Wrap iframe `srcDoc` with a responsive HTML shell:
+  - viewport meta
+  - `box-sizing:border-box`
+  - `table-layout:auto`
+  - `max-width:100%`
+  - `word-break:normal`
+  - `overflow-wrap:break-word`
+- This should stop the vertical one-character-per-line email preview.
+- Keep preview full-height and readable.
 
-This single token swap is what makes the change "global" — it propagates to every `bg-background`, `text-muted-foreground`, `border-border`, shadcn primitive, KPI card, tab, dialog, etc. without touching individual files.
+8. Build brokerage directory and emirate filtering
+- Seed/populate `crm_brokerages` with UAE brokerage firms grouped by emirate.
+- Add brokerage fields if needed:
+  - emirate
+  - office location
+  - Google Maps link
+  - email
+  - phone
+  - website
+  - logo if available
+- Add Emirates filter for both Developers and Brokerages so selecting Umm Al Quwain, Ajman, Dubai, etc. filters to offices in that emirate.
+- Ensure only real developers appear in Developer Registry and only brokerage companies appear in Brokerage section.
 
-## 3. Gray → champagne sweep
+9. Add owner export center with preview and selectable content
+- Add an export dialog that lets you choose:
+  - Developers only
+  - Brokerages only
+  - Both
+  - Selected rows only
+  - Filtered rows only
+  - All rows
+  - Include/exclude columns like logo, office, maps link, phone, email, website, status, emirate, notes
+- Show a preview table before download.
+- Support downloads:
+  - CSV
+  - Excel `.xlsx`
+  - PDF
+  - Google Sheets export via connected Google Sheets gateway if configured
+- Add proper file names like `JBJ-Developer-Brokerage-Directory-2026-04-30.xlsx`.
 
-Tailwind grays bypass tokens, so we still need a controlled find-and-replace. Build a small codemod (`scripts/theme/champagne-sweep.mjs`) that walks `src/**/*.{ts,tsx}` and rewrites class names per this map:
+10. Test in browser after implementation
+- Navigate to `/crm/relationships`.
+- Open Developer Registry.
+- Verify Outreach Queue count includes pending applications or pending rows have been merged into Not Started.
+- Click Not Started, Pending Application, Registered, and Emirates filters.
+- Open Send dialog and Template dialog.
+- Verify test-send button is visible and preview renders normally.
+- Verify logos, office, email, phone, and maps links appear on developer cards.
+- Open Brokerages and verify seeded brokerage cards + emirate filters.
+- Test export preview and at least CSV/XLSX/PDF download UI.
 
-```
-bg-white            → bg-[#FDFBF7]
-bg-gray-50/100      → bg-[#F7F2EA]
-bg-gray-200/300     → bg-[#EFE6D6]
-bg-gray-800/900     → bg-[#1A1A1A]   (kept for dark sections)
-text-gray-400/500   → text-[#8A7556]
-text-gray-600/700   → text-[#5A4A2E]
-text-gray-900/black → text-[#1A1A1A]
-border-gray-*       → border-[#B89555]/30
-ring-gray-*         → ring-[#B89555]/30
-divide-gray-*       → divide-[#B89555]/20
-```
+Technical files likely to change:
+- `src/pages/CRMRelationships.tsx`
+- `src/lib/crm/developerPools.ts`
+- `src/lib/crm/developerPools.test.ts`
+- `src/hooks/useCRMRelationships.ts`
+- `src/components/crm/BulkSendDialog.tsx`
+- `src/components/crm/TemplateEditorDialog.tsx`
+- New export helper/component for relationship exports
+- `supabase/functions/enrich-developer-registry/index.ts`
+- New/updated database migration for fields, dedupe/sync logic, and brokerage seed data
 
-Skip files: `src/components/ui/**` (let tokens do that work), `remotion/**`, generated types, the dark `Footer.tsx` obsidian surface, Company Profile premium dark theme, AI purple components. Allowlist file: `scripts/theme/champagne-sweep.allowlist.json`.
-
-Run the codemod, hand-review the diff, commit.
-
-## 4. Universal `<IconTile>` component (every icon)
-
-Create `src/components/ui/icon-tile.tsx` mirroring the Owner overview KPI/QuickAction pattern:
-
-```tsx
-<IconTile icon={Users} tone="gold" size="md" />
-// → 40×40 rounded-xl, bg-[#B89555]/10 ring-1 ring-[#B89555]/30,
-//   icon stroke #B89555. tones: gold | emerald | red | blue | amber | purple
-//   (semantic data colors keep their hue; gold is default)
-```
-
-Replace the existing `ThemedIcon` (`src/components/ui/themed-icon.tsx`) so it forwards to `IconTile` — keeps backward compat. Then sweep the codebase with `scripts/theme/icon-tile-sweep.mjs` to wrap bare `<Icon className="w-5 h-5 text-..." />` patterns sitting next to titles inside cards. Conservative rules — only converts when the icon is the first child of a known card/list-item shell, otherwise leaves it.
-
-## 5. Button system update
-
-`src/components/ui/button.tsx` — primary/secondary/hero/dark presets stay structurally identical but:
-- Primary: `bg-[#1A1A1A] text-white` (unchanged — black still primary CTA for contrast)
-- Secondary: `bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555]`
-- Tertiary/Ghost: champagne hover instead of gray
-- New `variant="gold"` for in-dashboard CTAs (`bg-[#B89555] text-white hover:bg-[#A68444]`)
-
-The "no gold text in buttons" rule is intentionally lifted per your direction — gold *background* with white text is fine; we still avoid faded gold *text* on light backgrounds for contrast.
-
-## 6. CI / lint guard updates
-
-These existing scripts WILL fail on the new palette. They must be retuned, not deleted, so we keep guarding readability:
-
-- `scripts/contrast/check-faded-gold.mjs` — keep banning `text-gold/XX` (low-alpha gold text). Solid `text-[#B89555]` and `bg-[#B89555]/10` remain allowed.
-- `scripts/contrast/check-white-on-light.mjs` — keep as-is (still bans white text on champagne).
-- `scripts/contrast/check-black-on-dark.mjs` — keep as-is.
-- `scripts/contrast/check-tokens.mjs` — regenerate `artifacts/contrast/tokens.json` against the new HSL values; verify all token pairs still pass WCAG AA.
-- `scripts/contrast/allowlist.json` — refresh entries that referenced old gray pairs.
-- `scripts/icon-tile-audit/rules.mjs` — extend to recognize the new `<IconTile />` primitive.
-
-Run all checks and fix any genuine contrast regressions before merging.
-
-## 7. Memory updates
-
-The following Core memory rules contradict this rollout and must be rewritten:
-
-- `mem://style/color-palette/monochrome-design-standard` → replace with `champagne-gold-design-standard` (champagne neutrals, gold accent, black text).
-- `mem://constraints/faded-gold-prohibition` → narrow scope: bans only `text-gold/XX` low-alpha utility, allows solid gold and gold backgrounds.
-- `mem://ui-ux/visual-standards/cta-system-standard` → allow new `variant="gold"`, still prohibit faded gold text in buttons.
-- `mem://ui-ux/visual-standards/typography-monochrome-standard` → rename to `typography-standard` (Inter unchanged, color guidance updated).
-- Update `mem://index.md` Core block: replace "White-dominant monochrome" with "Champagne-dominant. Page #FDFBF7, surface #F7F2EA, accent #B89555, text #1A1A1A. Inter only. No raw grays."
-- New memory `mem://ui-ux/visual-standards/icon-tile-standard` documenting `<IconTile />` as the only sanctioned icon container.
-
-## 8. Verification
-
-After the sweep + token swap:
-1. Run `bunx vitest run` — existing tests should still pass.
-2. Run `node scripts/contrast/check-tokens.mjs` and the three contrast guards.
-3. Visit (in preview): `/`, `/properties`, `/owner` (overview), `/owner/crm`, `/developer-hub`, `/jbj-broker-dashboard`, `/auth`, `/legal`. Spot-check that no surface still shows `bg-gray-*` or `text-gray-*` and that every dashboard icon sits in a champagne tile.
-4. Take before/after screenshots of `/`, `/owner`, `/properties`, `/jbj-broker-dashboard` and attach to the PR notes.
-
-## Files touched (high level)
-
-```
-src/index.css                                    (token rewrite)
-tailwind.config.ts                               (gold mapping comment + values)
-src/pages/OwnerDashboardOverview.tsx             (header padding)
-src/pages/OwnerDashboardShell.tsx                (main pt audit)
-src/components/ui/button.tsx                     (palette + new gold variant)
-src/components/ui/icon-tile.tsx                  (new)
-src/components/ui/themed-icon.tsx                (forwards to IconTile)
-scripts/theme/champagne-sweep.mjs                (new codemod)
-scripts/theme/icon-tile-sweep.mjs                (new codemod)
-scripts/theme/champagne-sweep.allowlist.json     (new)
-scripts/contrast/*.mjs                           (retune thresholds)
-scripts/contrast/allowlist.json                  (refresh)
-artifacts/contrast/tokens.json                   (regenerated)
-mem://index.md + 5 memory files                  (update locked rules)
-src/**/*.tsx                                     (codemod-driven, hundreds of files)
-```
-
-## Risks I want you to acknowledge
-
-- This contradicts five locked Core design memories and will visibly change every public page (home, listings, auth, legal). Reverting later means a second sweep.
-- A code-mod that touches hundreds of files cannot be 100% perfect — expect a manual cleanup pass on edge cases (gradients, inline `style={{}}`, third-party widgets).
-- WCAG AA on light champagne with gold accent is achievable, but `#B89555` text on `#FDFBF7` only reaches ~3.4:1 — we keep gold for backgrounds/icons and use `#1A1A1A` for body copy to stay compliant.
-
-If you approve, I'll execute in this order: (1) padding fix, (2) tokens, (3) IconTile, (4) button, (5) codemod sweep, (6) CI retune, (7) memory updates, (8) verification screenshots.
+I will preserve existing features and only fix/extend the Relationships Hub workflow.

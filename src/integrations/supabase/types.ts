@@ -4990,6 +4990,7 @@ export type Database = {
           deal_count: number
           dnc_reason: string | null
           do_not_contact: boolean
+          email: string | null
           emirate: string | null
           first_contact_at: string | null
           health_score: number | null
@@ -5000,16 +5001,20 @@ export type Database = {
           last_outreach_at: string | null
           last_response_at: string | null
           linkedin_url: string | null
+          logo_url: string | null
           nda_signed_at: string | null
           nda_status: Database["public"]["Enums"]["nda_status"]
           next_action_at: string | null
           next_action_note: string | null
           next_followup_at: string | null
           notes: string | null
+          office_address: string | null
           office_location: string | null
+          office_map_url: string | null
           outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          phone: string | null
           primary_contact: Json | null
           rera_license: string | null
           response_count: number
@@ -5034,6 +5039,7 @@ export type Database = {
           deal_count?: number
           dnc_reason?: string | null
           do_not_contact?: boolean
+          email?: string | null
           emirate?: string | null
           first_contact_at?: string | null
           health_score?: number | null
@@ -5044,16 +5050,20 @@ export type Database = {
           last_outreach_at?: string | null
           last_response_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          office_address?: string | null
           office_location?: string | null
+          office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          phone?: string | null
           primary_contact?: Json | null
           rera_license?: string | null
           response_count?: number
@@ -5078,6 +5088,7 @@ export type Database = {
           deal_count?: number
           dnc_reason?: string | null
           do_not_contact?: boolean
+          email?: string | null
           emirate?: string | null
           first_contact_at?: string | null
           health_score?: number | null
@@ -5088,16 +5099,20 @@ export type Database = {
           last_outreach_at?: string | null
           last_response_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          office_address?: string | null
           office_location?: string | null
+          office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
+          phone?: string | null
           primary_contact?: Json | null
           rera_license?: string | null
           response_count?: number
@@ -5435,6 +5450,7 @@ export type Database = {
           ai_summary: string | null
           assigned_to: string | null
           attempt_count: number
+          catalog_developer_id: string | null
           commission_tier: string | null
           created_at: string
           developer_contact: Json | null
@@ -5458,12 +5474,15 @@ export type Database = {
           last_outreach_at: string | null
           last_response_at: string | null
           linkedin_url: string | null
+          logo_url: string | null
           nda_signed_at: string | null
           nda_status: Database["public"]["Enums"]["nda_status"]
           next_action_at: string | null
           next_action_note: string | null
           next_followup_at: string | null
           notes: string | null
+          office_address: string | null
+          office_map_url: string | null
           outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
@@ -5490,6 +5509,7 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          catalog_developer_id?: string | null
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
@@ -5513,12 +5533,15 @@ export type Database = {
           last_outreach_at?: string | null
           last_response_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          office_address?: string | null
+          office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
@@ -5545,6 +5568,7 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          catalog_developer_id?: string | null
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
@@ -5568,12 +5592,15 @@ export type Database = {
           last_outreach_at?: string | null
           last_response_at?: string | null
           linkedin_url?: string | null
+          logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
           next_action_note?: string | null
           next_followup_at?: string | null
           notes?: string | null
+          office_address?: string | null
+          office_map_url?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
