@@ -384,7 +384,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-white font-medium">
+                      <span className="text-[#1A1A1A] font-medium">
                         {lead.full_name || "(No name)"}
                       </span>
                     </div>
