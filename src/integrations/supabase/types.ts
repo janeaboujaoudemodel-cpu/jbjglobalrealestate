@@ -4992,9 +4992,11 @@ export type Database = {
           do_not_contact: boolean
           email: string | null
           emirate: string | null
+          entry_source: string
           first_contact_at: string | null
           health_score: number | null
           id: string
+          is_existing_match: boolean
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
           last_interaction_at: string | null
@@ -5002,6 +5004,7 @@ export type Database = {
           last_response_at: string | null
           linkedin_url: string | null
           logo_url: string | null
+          match_directory_id: string | null
           nda_signed_at: string | null
           nda_status: Database["public"]["Enums"]["nda_status"]
           next_action_at: string | null
@@ -5041,9 +5044,11 @@ export type Database = {
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
+          entry_source?: string
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
@@ -5051,6 +5056,7 @@ export type Database = {
           last_response_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
+          match_directory_id?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
@@ -5090,9 +5096,11 @@ export type Database = {
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
+          entry_source?: string
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
@@ -5100,6 +5108,7 @@ export type Database = {
           last_response_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
+          match_directory_id?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
