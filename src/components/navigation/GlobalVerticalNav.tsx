@@ -858,11 +858,11 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative flex flex-col w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
+              <div className="flex-shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
                 <div className="flex items-center gap-2.5">
                   <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
                     <Zap className="w-3.5 h-3.5 text-white" />
@@ -876,7 +876,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <X className="w-3 h-3 text-[#1A1A1A]" />
                 </button>
               </div>
-              <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
+              <div className="flex-1 min-h-0 overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
                 {filterShortcutGroups(CANONICAL_SHORTCUT_GROUPS, {
                   isAuthenticated: !!session,
                   isOwner,
