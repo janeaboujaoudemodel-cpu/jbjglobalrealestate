@@ -1,96 +1,90 @@
-## Goal
+# Fix: Buttons & Text Rendering as Solid Black on Champagne/Gold Surfaces
 
-Four CRM Developer Registry improvements:
+## Root cause
 
-1. Collapse the Outreach Queue card so it doesn't dominate the page.
-2. Expand the Sent History side beyond Under Review / Rejected / Expired with new sub-tabs: Inbox, Contacted, Pending Actions, Recently Deleted.
-3. Make "Send TEST" always send to my registered email automatically.
-4. Show the real developer logo next to every developer everywhere (registry rows, history cards, dropdowns) and on every project related to that developer.
+`src/index.css` still contains a large legacy block (lines ~2380–2455) from the old **monochrome** era that aggressively kills the gold theme with `!important` rules. The current design system is **champagne + gold**, so these rules now actively break it.
 
----
+Key offenders:
 
-## 1. Collapsible Outreach Queue
+```css
+/* line 2396–2405 */
+.text-gold        { color: #111111 !important; }
+.bg-gold          { background-color: #111111 !important; color: #fff !important; }
+.border-gold      { border-color: #d4d4d4 !important; }
+.fill-gold        { fill: #111111 !important; }
 
-File: `src/pages/CRMRelationships.tsx` (DeveloperRegistryView, around lines 860-980).
+[class*="bg-gold\/"]      { background-color: rgba(0,0,0,0.05) !important; }
+[class*="border-gold\/"]  { border-color: rgba(0,0,0,0.12) !important; }
+[class*="text-gold\/"]    { color: rgba(0,0,0,0.85) !important; }
+[class*="ring-gold"]      { --tw-ring-color: #d4d4d4 !important; }
 
-- Wrap the entire queue body (filter row + bulk-action bar + status chip row + cards grid) in a `<Collapsible>` from `@/components/ui/collapsible`.
-- Collapsed by default (persist state in `localStorage` key `crm.queue.collapsed`).
-- Header strip remains visible: "Outreach Queue (n)" + chevron toggle + the existing sub-tab pills.
-- Sent History tab keeps current behaviour (no collapse — that's the side the user actively works in).
+/* line 2412–2424 */
+svg.text-gold, [class*="text-gold"] > svg { color: #111111 !important; }
 
-## 2. Expanded Sent History with new sub-tabs
+/* line 2438–2440 */
+[class*="via-gold"]  { --tw-gradient-via: #e5e5e5 !important; }
+[class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
+[class*="to-gold"]   { --tw-gradient-to: #d4d4d4 !important; }
 
-File: `src/components/crm/SentHistoryView.tsx`.
-
-Add a top-level segmented control inside Sent History with 7 chips (counts shown):
-
-```text
-[All] [Inbox] [Contacted] [Pending Actions] [Under Review] [Rejected] [Expired] [Recently Deleted]
+/* line 2443–2454 */
+[style*="#D4AF37"], [style*="#C8A766"], [style*="#B8860B"] { color: #111 !important; border-color: #d4d4d4 !important; }
+[class*="shadow-[0_..._rgba(200,167,102..."], [style*="rgba(200,167,102"] { box-shadow: ... !important; }
 ```
 
-Filter logic per chip (computed from existing fields + a couple of new joins):
+Every CRM and dashboard component built since the champagne migration uses `bg-gold`, `bg-gold/20`, `text-gold`, `from-gold`, etc. — these all get force-flattened to black/gray, producing the "filled with black" appearance the user sees on the Add Brokerage button hover/active state and similar gold pills, badges, gradient bars, and tab indicators across the site.
 
-- **Inbox** — developers with at least one *incoming* row in `developer_action_items` (existing table from Auto-Sign Hub) where `direction = 'inbound'` and not yet resolved.
-- **Contacted** — `last_outreach_at` set in last 30d AND no inbound reply yet.
-- **Pending Actions** — joined `developer_action_items` rows still `status = 'open'` or `awaiting_owner`.
-- **Under Review / Rejected / Expired** — existing registry `status` field (kept).
-- **Recently Deleted** — registry rows with `deleted_at IS NOT NULL` in last 30 days (soft delete).
+A second, narrower problem: `.bg-gold svg` (line 2430) forces icons inside *anything* with class `bg-gold` to white — fine for solid gold tiles, but the same selector now collides because `.bg-gold` itself was forced to `#111111` background (above), so any deliberate "champagne tile with dark icon" combination is corrupted.
 
-Each card keeps the existing layout but gains:
-- A small inbox badge ("3 new replies") when inbound items exist.
-- A "Restore" button on Recently Deleted rows.
+## Plan
 
-## 3. "Send TEST" always goes to my registered email
+### 1. Delete the legacy "kill-gold" block
 
-File: `src/components/crm/BulkSendDialog.tsx` (line ~117 `sendTest`).
+Remove lines ~2388–2455 in `src/index.css` (the entire "Tailwind gold utility class overrides", "Gold opacity variants", "Global icon contrast unification (gold)", "Gold gradient stops", "Inline style gold hex overrides", and "Gold shadow overrides" sections). These were written when the brand was monochrome and have no place in the current champagne/gold system.
 
-- Resolve the owner's email server-side via the existing `useOwnerSettings()` hook (already imported in CRMRelationships) → fall back to `auth.user.email`.
-- Replace the manual `testEmail` Input with a read-only display of "Test will be sent to: <owner-email>".
-- Keep the input editable behind a small "Use a different address" toggle for power users, but default to the registered owner email.
-- The "Send TEST" button always fires regardless of what's selected — uses `previewDev` if any, otherwise template defaults.
+What replaces them: the Tailwind theme tokens already render `bg-gold = #B89555`, `text-gold = #B89555`, etc., correctly. No override is required.
 
-## 4. Real developer logos everywhere
+### 2. Replace with a tight, modern contrast guard
 
-Logo source of truth is already `developers.logo_url` (validated via `src/utils/developerLogo.ts`). Two gaps to close:
+In the same location, add a small, surgical rule set that prevents the only legitimate failure modes:
 
-### 4a. Registry & history rows
+- Solid-gold tile (`.bg-gold`, `bg-[#B89555]`, `bg-[#A68444]`) → force white text on direct text children (existing memory rule already covers this).
+- Solid-ink tile (`.bg-[#1A1A1A]`, `bg-black`, `bg-zinc-900/950`) → force white text on direct text children.
+- Faded text classes that are banned by the "Faded Gold Prohibition" memory (`text-gold/10..50`) → upgrade to solid `#1A1A1A` on champagne, solid `#FDE68A` on dark.
 
-- `CRMRelationships.tsx` queue row (line ~1103) currently uses raw `<img src={r.logo_url}>` with a letter fallback. Replace with `<DeveloperLogo src={r.logo_url} alt={r.developer_name} renderFallback />` so the locked Building2 icon appears when a logo is missing — and so the same component is used everywhere.
-- `SentHistoryView.tsx` cards currently show no logo at all. Add a `<DeveloperLogo />` (size `w-10 h-10`) to the left of `developer_name`.
-- Bulk send dialog preview list (BulkSendDialog right column rows) — same component beside each name.
+This keeps the protection the legacy block was originally trying to provide, but without nuking the entire gold theme.
 
-### 4b. Auto-fill missing `logo_url` from website
+### 3. Audit Button variants for the same trap
 
-Add a small "Refresh logos" action in the Document Pack panel that calls a new edge function `fetch-developer-logos`:
+Verify in `src/components/ui/button.tsx`:
+- `variant="gold"` → `bg-[#B89555] text-white` (correct, but uses arbitrary value so the new guard above is the safety net).
+- `variant="primary"` → `bg-[#1A1A1A] text-white` (correct).
+- `variant="hero"` hover state → `hover:bg-[#FDFBF7] hover:text-[#1A1A1A]` (correct, fix any cases where hover lacked an explicit text color).
 
-- For each registry row missing `logo_url`, fetch `<website>/favicon.ico` and the `<link rel="icon">` from the homepage HTML, prefer 256×256+, store to `developer-logos` storage bucket, write back the public URL to `developers.logo_url` (and mirror to `developer_registry.logo_url`).
-- Respects the LOCKED `isValidDeveloperLogoUrl` allow-list (no screenshots, no project photos).
+No structural change — just confirm every variant pairs background + text + hover-text, so the global guard never has work to do.
 
-### 4c. Project cards already covered
+### 4. Run the white-on-light + faded-gold static checks
 
-`src/components/ProjectCard.tsx` already renders `DeveloperLogo` from `project.developer.logo_url` (lines 207-211). Once 4b backfills the missing logos, every project card automatically reflects the correct developer logo — no further code change needed there.
+The repo already ships two CI scripts:
+- `scripts/contrast/check-white-on-light.mjs`
+- `scripts/check-faded-gold.mjs`
 
-Verify two adjacent surfaces also use the joined developer logo:
-- `src/components/project-detail/DeveloperInfoCard.tsx` — already uses it; no change.
-- `src/components/ReellyProjectCard.tsx` — confirm it pulls from `project.developer.logo_url`; if not, switch to `<DeveloperLogo />`.
+Run both after the CSS changes; fix any new violations they flag (most likely a handful of `text-gold/40` → `text-[#1A1A1A]` swaps).
 
----
+### 5. Smoke-test surfaces most likely affected
 
-## Technical summary
+Visually verify:
+- `/crm` Brokerages tab — Add Brokerage button (the reported case), tab pills, "UAE Directory" badges.
+- `/owner/inbox` and Sent History tabs — the new tab strip.
+- Property cards — price chip (orange), gold corner ribbon, developer logo container.
+- Footer — gold hairline divider.
+- Any hero with `data-surface="dark"` — buttons must stay white-on-dark.
 
-**Files edited**
-- `src/pages/CRMRelationships.tsx` — wrap queue in Collapsible; swap raw `<img>` for `<DeveloperLogo>`.
-- `src/components/crm/SentHistoryView.tsx` — new sub-tab strip, joined inbox/action-item counts, logo on every card.
-- `src/components/crm/BulkSendDialog.tsx` — default test email to owner registered email, lock by default.
-- `src/components/ReellyProjectCard.tsx` — confirm/route through `<DeveloperLogo>`.
+## Technical details
 
-**New file**
-- `supabase/functions/fetch-developer-logos/index.ts` — favicon/og:image scraper, validated against `isValidDeveloperLogoUrl`, writes to storage + `developers.logo_url`.
+Files touched:
+- `src/index.css` — remove ~70 lines (legacy block), add ~25 lines (modern guard).
+- `src/components/ui/button.tsx` — only if the variant audit finds a missing hover text color; otherwise untouched.
 
-**Migration**
-- Add `deleted_at timestamptz` column to `developer_registry` (if missing) for the Recently Deleted tab; add index on `developer_action_items(developer_registry_id, status, direction)` for the Inbox/Pending counts.
+No DB changes. No component rewrites. The fix is purely a CSS regression caused by stale global overrides.
 
-**Hook**
-- Extend `useDeveloperActionItems` to expose per-developer counts grouped by status/direction.
-
-No removed features. All existing CRM functionality preserved.
+After this change, the "Add Brokerage" button (and every other `variant="gold"` CTA, gold badge, gold gradient, gold icon, and `text-gold` label) renders with the intended champagne-gold appearance and white text — no more black-fill artifacts on normal or hover states.
