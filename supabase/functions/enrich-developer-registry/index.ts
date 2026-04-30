@@ -208,7 +208,11 @@ serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const ids: string[] | undefined = body.ids;
     const useWeb: boolean = body.useWeb !== false;
-    const batchSize: number = Math.min(Math.max(body.batchSize ?? 8, 1), 25);
+    // Hard-capped to keep us well under the 150s edge-function idle timeout.
+    // Each row can spend ~10–25s across Perplexity + Firecrawl + AI extract.
+    const batchSize: number = Math.min(Math.max(body.batchSize ?? 3, 1), 5);
+    const startedAt = Date.now();
+    const TIME_BUDGET_MS = 120_000; // stop starting new rows after 2 min
 
     // Fetch target rows
     let query = admin
