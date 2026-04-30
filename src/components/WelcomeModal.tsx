@@ -101,7 +101,7 @@ const WelcomeModal = () => {
           <div className="absolute bottom-6 left-6 w-10 h-10 border-l-2 border-b-2 border-gold/40" />
           <div className="absolute bottom-6 right-6 w-10 h-10 border-r-2 border-b-2 border-gold/40" />
 
-          <div className="relative px-10 py-14">
+          <div className="relative px-6 sm:px-10 py-8 sm:py-14">
             {/* Transparent Logo - Larger and Centered */}
             <div className="flex justify-center mb-6">
               <img 
