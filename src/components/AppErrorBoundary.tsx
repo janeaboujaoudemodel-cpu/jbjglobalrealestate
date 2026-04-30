@@ -66,12 +66,25 @@ class AppErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
+      // Silent retry path: don't flash the overlay for transient chunk errors.
+      const msg = this.state.errorMessage || "";
+      const isChunkError =
+        msg.includes("module") ||
+        msg.includes("import") ||
+        msg.includes("chunk") ||
+        msg.includes("Loading") ||
+        msg.includes("Failed to fetch") ||
+        msg.includes("dynamically imported") ||
+        msg.includes("Importing a module");
+      if (isChunkError && this.state.retryCount < 3) {
+        return null;
+      }
       return (
         <div
           style={{
             minHeight: "100vh",
-            background: "#0a0a0a",
-            color: "#fff",
+            background: "#FDFBF7",
+            color: "#1A1A1A",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -137,13 +150,14 @@ class AppErrorBoundary extends React.Component<
               </button>
               <button
                 onClick={this.handleGoHome}
+                data-no-contrast-guard
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "0.5rem",
                   padding: "0.625rem 1.25rem",
-                  background: "transparent",
-                  color: "#1a1a1a",
+                  background: "#1A1A1A",
+                  color: "#FDFBF7",
                   border: "2px solid rgba(200,167,102,0.6)",
                   borderRadius: "8px",
                   fontWeight: 600,
