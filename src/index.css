@@ -3632,11 +3632,29 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
   color: #1A1A1A;
 }
 
-/* Force any child currently using white-on-light to ink */
-.bg-\[\#FDFBF7\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]),
-.bg-\[\#F7F2EA\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]),
-.bg-\[\#EFE6D6\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#EFE6D6\]):not(.allow-white) {
+/* Force any child currently using white-on-light to ink.
+   This rule is correct ONLY when the white element sits directly on the
+   light surface — not when it sits on a nested dark surface (icon tile,
+   black CTA, dark badge) inside the light card. The re-assertion block
+   below restores white text in those nested-dark contexts. */
+.bg-\[\#FDFBF7\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]),
+.bg-\[\#F7F2EA\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]),
+.bg-\[\#EFE6D6\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#EFE6D6\]):not(.allow-white):not([data-no-contrast-guard]) {
   color: #1A1A1A !important;
+}
+
+/* RE-ASSERT white inside any nested dark surface that lives inside a
+   champagne / light card. Source-order wins at equal specificity, so this
+   beats the inversion above for the deepest matching descendant. Covers:
+   black icon tiles (TrustBar, Investor Opportunities, etc.), black CTAs
+   (VerificationBanner Get Verified), dark badges, and CRM/task popups. */
+.bg-\[\#FDFBF7\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#F7F2EA\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#EFE6D6\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground) :is(.text-white, [class*="text-white"]),
+.bg-\[\#FDFBF7\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
+.bg-\[\#F7F2EA\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white,
+.bg-\[\#EFE6D6\] :is([class*="bg-[#1A1A1A]"], [class*="bg-foreground"], .bg-black, .bg-foreground).text-white {
+  color: #FDFBF7 !important;
 }
 
 /* Gold surfaces — children inherit white text by default */
