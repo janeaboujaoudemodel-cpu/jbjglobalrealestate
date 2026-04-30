@@ -868,7 +868,7 @@ const DeveloperRegistryTab = () => {
         </Button>
         <Button
           variant="outline"
-          onClick={() => importAll.mutate()}
+          onClick={() => importAll.mutate({})}
           disabled={importAll.isPending}
           title="Import every developer from the master catalog (no duplicates, never overwrites existing entries)"
         >
@@ -982,7 +982,7 @@ const DeveloperRegistryTab = () => {
               <div className="flex gap-2 justify-center flex-wrap">
                 <Button
                   variant="outline"
-                  onClick={() => importAll.mutate()}
+                  onClick={() => importAll.mutate({})}
                   disabled={importAll.isPending}
                 >
                   {importAll.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
