@@ -726,6 +726,13 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("crm.queue.collapsed") !== "false";
+  });
+  useEffect(() => {
+    try { localStorage.setItem("crm.queue.collapsed", String(queueCollapsed)); } catch {}
+  }, [queueCollapsed]);
   const quickStatus = useQuickStatusUpdate();
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
