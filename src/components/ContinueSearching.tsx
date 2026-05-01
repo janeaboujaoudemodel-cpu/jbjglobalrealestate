@@ -176,38 +176,47 @@ const ContinueSearching = ({
 
   const isEmpty = displayItems.length === 0;
 
+  const eyebrow = hasUserHistory ? "Recently viewed" : "Editor's picks";
+
   return (
-    <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
-      {/* Premium backdrop */}
+    <section className={`py-10 md:py-14 relative overflow-hidden ${className}`}>
+      {/* Premium champagne backdrop */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black z-[1]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(200,167,102,0.06)_0%,_transparent_60%)] z-[2]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
       </div>
 
       <div className="px-4 md:px-6 lg:px-8 relative z-20">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 flex items-center justify-center">
-              <History className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center shadow-sm">
+              <History className="w-5 h-5 text-[#B89555]" />
             </div>
-            <h2 className="text-lg md:text-xl font-bold text-white">
-              {sectionTitle}
-            </h2>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-semibold tracking-[0.18em] uppercase text-[#B89555]">
+                {eyebrow}
+              </span>
+              <h2 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] leading-tight">
+                {sectionTitle}
+              </h2>
+            </div>
           </div>
           {hasUserHistory && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-[#1A1A1A] text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
+                className="px-4 py-2 rounded-lg bg-[#1A1A1A] border border-[#1A1A1A] text-white text-xs font-semibold tracking-wide hover:bg-[#2a2a2a] transition-all duration-300"
               >
                 Register Your Interest
               </button>
               <button
                 onClick={clearAll}
-                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                aria-label="Clear browsing history"
+                className="px-3 h-9 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold tracking-wide flex items-center gap-1.5 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-all duration-300"
               >
-                <X className="w-3 h-3" />
+                <X className="w-3.5 h-3.5 text-[#B33B3B]" />
                 Clear
               </button>
             </div>
@@ -216,20 +225,30 @@ const ContinueSearching = ({
 
         {isEmpty ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4">
-              <Home className="w-8 h-8 text-[#8A7556]" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
+              <Home className="w-8 h-8 text-[#B89555]" />
             </div>
-            <p className="text-white/70 text-sm mb-1">You haven't viewed any properties yet.</p>
-            <p className="text-white/85 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
+            <p className="text-[#1A1A1A] text-sm font-medium mb-1">You haven't viewed any properties yet.</p>
+            <p className="text-[#1A1A1A]/70 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
-              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-light text-[#1A1A1A] text-sm font-semibold hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
+              className="px-6 py-2.5 rounded-lg bg-[#B89555] border border-[#B89555] text-[#1A1A1A] text-sm font-semibold hover:bg-[#a8854a] transition-all duration-300"
             >
               Explore Now
             </Link>
           </div>
         ) : (
-          <WalkingStrip items={displayItems} patchItem={patchItem} />
+          <div
+            className="relative"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)",
+            }}
+          >
+            <WalkingStrip items={displayItems} patchItem={patchItem} />
+          </div>
         )}
       </div>
 
