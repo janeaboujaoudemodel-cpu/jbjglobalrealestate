@@ -49,7 +49,7 @@ const NavColumn = ({
         <li key={link.href}>
           <Link
             to={link.href}
-            className="group inline-flex items-center text-[13px] leading-snug text-white/75 hover:text-white border-l border-transparent hover:border-[hsl(var(--gold))]/60 pl-0 hover:pl-2 transition-all duration-200"
+            className="group inline-flex items-center text-[13px] leading-snug text-white/95 hover:text-white border-l border-transparent hover:border-[hsl(var(--gold))]/60 pl-0 hover:pl-2 transition-all duration-200"
           >
             {link.label}
           </Link>
@@ -126,7 +126,7 @@ const FooterCurrencyUnit = () => {
               <button
                 key={cur.code}
                 onClick={() => handleCurrency(cur.code)}
-                className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-left text-white/80 hover:text-white hover:bg-[#FDFBF7]/5 transition-colors"
+                className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-left text-white/95 hover:text-white hover:bg-[#FDFBF7]/5 transition-colors"
                 style={{
                   background: activeCurrency === cur.code ? "rgba(200,167,102,0.12)" : "transparent",
                   color: activeCurrency === cur.code ? "#FFFFFF" : "rgba(255,255,255,0.8)",
@@ -528,7 +528,7 @@ const Footer = () => {
 
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#FDFBF7]/[0.03] border border-[hsl(var(--gold))]/30">
               <div className="flex items-center gap-2.5">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/55">Connect</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/90">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
               </div>
               <span className="hidden md:inline-block w-px h-5 bg-[#FDFBF7]/10" aria-hidden="true" />
@@ -588,20 +588,20 @@ const Footer = () => {
       <div className="px-4 sm:px-6 md:px-8 py-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-[#FDFBF7]/[0.03] border border-white/10">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.address}</span>
             </div>
             <a
               href={getCallUrl()}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
             >
               <Phone className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.phone}</span>
             </a>
             <a
               href={getEmailUrl()}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
             >
               <Mail className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.emailCapitalized}</span>
@@ -610,7 +610,7 @@ const Footer = () => {
               href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/80 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[12px] text-white/95 bg-[#FDFBF7]/[0.03] border border-white/10 hover:border-[hsl(var(--gold))]/50 hover:bg-[#FDFBF7]/[0.07] hover:text-white transition-colors"
             >
               <MessageCircle className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>WhatsApp</span>
@@ -619,13 +619,13 @@ const Footer = () => {
 
           {/* Compact legal — bidi-isolated so LTR/RTL never break each other */}
           <div className="space-y-2 text-center max-w-4xl mx-auto">
-            <p className="text-[11px] leading-relaxed text-white/55 break-words" dir="ltr">
-              <bdi className="text-white/75 font-medium">JBJ Global Real Estate L.L.C S.O.C.</bdi>
+            <p className="text-[11px] leading-relaxed text-white/90 break-words" dir="ltr">
+              <bdi className="text-white/95 font-medium">JBJ Global Real Estate L.L.C S.O.C.</bdi>
               {" — Dubai mainland brokerage licensed for Buy, Sell, and Rent across the UAE. "}
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
               <FounderContent fallback={null}>
                 {" "}Owned & led by{" "}
-                <Link to="/founder" className="text-white/75 hover:text-white underline-offset-2 hover:underline">
+                <Link to="/founder" className="text-white/95 hover:text-white underline-offset-2 hover:underline">
                   <bdi>Jane Bou Jaoude</bdi>
                   {" ("}
                   <bdi>جاين بو جودة</bdi>
@@ -634,24 +634,24 @@ const Footer = () => {
                 {", Founder & CEO."}
               </FounderContent>
             </p>
-            <p className="text-[11px] leading-relaxed text-white/55 break-words" dir="rtl">
+            <p className="text-[11px] leading-relaxed text-white/90 break-words" dir="rtl">
               جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار.
             </p>
           </div>
 
           {/* Copyright + legal links — premium single row, bidi-safe */}
           <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: `rgba(255,255,255,${hairline.white})` }}>
-            <span className="text-[11px] text-white/65 tracking-[0.08em]" dir="ltr">
-              © {currentYear} <bdi className="font-medium text-white/85">JBJ Global Real Estate</bdi> · All Rights Reserved
+            <span className="text-[11px] text-white/90 tracking-[0.08em]" dir="ltr">
+              © {currentYear} <bdi className="font-medium text-white/95">JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
-            <span className="hidden sm:inline text-white/80" aria-hidden="true">·</span>
+            <span className="hidden sm:inline text-white/95" aria-hidden="true">·</span>
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               {legalLinks.map((l, i) => (
                 <span key={l.href} className="flex items-center gap-3">
                   <Link to={l.href} className="text-[11px] uppercase tracking-[0.1em] text-white/90 hover:text-white transition-colors whitespace-nowrap">
                     {l.label}
                   </Link>
-                  {i < legalLinks.length - 1 && <span className="text-white/75" aria-hidden="true">·</span>}
+                  {i < legalLinks.length - 1 && <span className="text-white/95" aria-hidden="true">·</span>}
                 </span>
               ))}
             </div>
