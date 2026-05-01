@@ -70,13 +70,13 @@ export default function CategorySelectorSection() {
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-[#5A4A2E] mb-3">
             Get started in 30 seconds
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">
             Tell us who you are
           </h2>
-          <p className="mt-3 text-neutral-600 max-w-2xl mx-auto">
+          <p className="mt-3 text-[#3A2D1D] max-w-2xl mx-auto">
             Pick your category to unlock the right tools, dashboards, and a tailored
             registration flow.
           </p>
@@ -95,32 +95,32 @@ export default function CategorySelectorSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group relative text-left bg-[#FDFBF7] border border-neutral-200 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                className="group relative text-left bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
               >
                 <div className="flex items-center justify-between gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-neutral-100 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 flex items-center justify-center group-hover:bg-[#1A1A1A] transition-colors flex-shrink-0">
                     <Icon className="w-6 h-6 text-[#1A1A1A] group-hover:text-white transition-colors" />
                   </div>
-                  <span className="text-xs uppercase tracking-wider text-neutral-400 group-hover:text-[#1A1A1A] transition-colors text-right">
+                  <span className="text-xs uppercase tracking-wider text-[#5A4A2E] group-hover:text-[#1A1A1A] transition-colors text-right">
                     {cat.tagline}
                   </span>
                 </div>
 
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{cat.label}</h3>
-                <p className="text-sm text-neutral-600 mb-5 leading-relaxed">
+                <p className="text-sm text-[#3A2D1D] mb-5 leading-relaxed">
                   {cat.description}
                 </p>
 
                 <ul className="space-y-2 mb-6">
                   {cat.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-sm text-neutral-700">
-                      <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
+                    <li key={b} className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                      <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
 
-                <div className="flex items-center justify-between w-full pt-4 border-t border-neutral-100">
+                <div className="flex items-center justify-between w-full pt-4 border-t border-[#B89555]/30">
                   <span className="text-sm font-semibold text-[#1A1A1A]">Continue</span>
                   <ArrowRight className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform flex-shrink-0" />
                 </div>
@@ -129,7 +129,7 @@ export default function CategorySelectorSection() {
           })}
         </div>
 
-        <p className="text-center text-xs text-neutral-500 mt-8">
+        <p className="text-center text-xs text-[#5A4A2E] mt-8">
           Your selection is saved to your account. You can change it any time from your profile.
         </p>
       </div>

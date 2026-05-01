@@ -69,31 +69,36 @@ export function OwnerTasksPopupAlert() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="pending-tasks-title"
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/50 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/50 p-4"
+      data-no-backdrop-blur
     >
-      <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative">
+      <div
+        data-no-contrast-guard
+        data-surface="light"
+        className="bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative"
+      >
         <button
           type="button"
           onClick={handleClose}
           aria-label="Close pending tasks alert"
-          className="absolute top-3 right-3 text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
+          className="absolute top-3 right-3 text-[#3A2D1D] hover:text-[#1A1A1A] transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 flex items-center justify-center">
             <AlertTriangle className="w-6 h-6 text-[#1A1A1A]" />
           </div>
           <div>
             <h3 id="pending-tasks-title" className="text-[#1A1A1A] font-bold text-lg">
               Pending Tasks
             </h3>
-            <p className="text-[#5A4A2E] text-sm">Daily action items require attention</p>
+            <p className="text-[#3A2D1D] text-sm">Daily action items require attention</p>
           </div>
         </div>
 
-        <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 mb-5">
+        <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-4 mb-5">
           <p className="text-[#1A1A1A] text-sm">
             You have{" "}
             <span className="font-extrabold text-[#1A1A1A] text-lg">{pendingCount}</span> pending item
@@ -112,7 +117,7 @@ export function OwnerTasksPopupAlert() {
           <Button
             variant="secondary"
             onClick={handleClose}
-            className="rounded-xl border-[#B89555]/30 text-[#1A1A1A]"
+            className="rounded-xl border-[#B89555]/40 text-[#1A1A1A]"
           >
             Later
           </Button>

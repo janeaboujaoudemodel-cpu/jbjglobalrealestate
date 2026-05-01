@@ -247,7 +247,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, [isPhoneOrTablet, showDesktopBanner, dismissDesktopBanner]);
 
   return (
-    <div className="min-h-screen bg-background md:bg-[#ECE2D2]">
+    <div className="min-h-screen bg-background md:bg-[#FDFBF7]">
       <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
       {/* Desktop banner removed — now only shows as bottom toast */}

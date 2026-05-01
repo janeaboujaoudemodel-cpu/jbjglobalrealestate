@@ -790,21 +790,21 @@ export default function GlobalVerticalNav() {
     ) {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A]/85 font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
     }
     if (item.highlight) {
       return shouldHighlight
         ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-        : "text-[#1A1A1A]/80 font-semibold hover:bg-gold/10";
+        : "text-[#1A1A1A] font-semibold hover:bg-gold/10";
     }
     return shouldHighlight
       ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] font-bold"
-      : "text-[#1A1A1A]/80 hover:bg-gold/[0.08] hover:text-[#1A1A1A]";
+      : "text-[#1A1A1A] hover:bg-gold/[0.08] hover:text-[#1A1A1A]";
   };
 
   // Saturated colored rows where the row background is a vivid fill (not champagne).
@@ -1078,20 +1078,20 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
+      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-[#F7F2EA] border-b border-[#B89555]/40">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
-            <span className="text-[11px] font-extrabold text-[#1A1A1A]/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-            <span className="text-[9px] font-bold text-[#1A1A1A]/50 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+            <span className="text-[11px] font-extrabold text-[#1A1A1A] tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+            <span className="text-[9px] font-bold text-[#3A2D1D] tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
           </div>
         </Link>
         <button
           onClick={toggleCollapse}
-          className="shrink-0 ml-2 w-6 h-6 rounded-md bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 flex items-center justify-center transition-all border border-[#1A1A1A]/10"
+          className="shrink-0 ml-2 w-6 h-6 rounded-md bg-[#1A1A1A]/5 hover:bg-[#1A1A1A]/10 flex items-center justify-center transition-all border border-[#B89555]/40"
           aria-label="Collapse navigation"
         >
-          <ChevronLeft className="w-3 h-3 text-[#1A1A1A]/60" />
+          <ChevronLeft className="w-3 h-3 text-[#1A1A1A]" />
         </button>
       </div>
 
@@ -1107,14 +1107,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
               activeMegaMenu === 'shortcuts'
                 ? "bg-gradient-to-r from-gold/25 to-gold/15 text-[#1A1A1A] border border-gold/50 shadow-md shadow-gold/10"
-                : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
+                : "text-[#1A1A1A] hover:text-[#1A1A1A] border border-dashed border-gold/40 hover:border-gold/60 bg-gold/[0.06] hover:bg-gold/[0.10]"
             }`}
           >
             <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-gold/20' : 'bg-gold/10'}`}>
               <Zap className="w-3.5 h-3.5 text-gold" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-[#8A7556]"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-[#3A2D1D]"}`} />
           </button>
         </div>
 
@@ -1180,15 +1180,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
                       sectionHighlighted
-                        ? "text-[#1A1A1A]/85 bg-gold/[0.12]"
-                        : "text-[#1A1A1A]/65 hover:text-[#1A1A1A]/85 hover:bg-gold/[0.05]"
+                        ? "text-[#1A1A1A] bg-gold/[0.18]"
+                        : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-gold/[0.10]"
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors border ${sectionHighlighted ? 'bg-[hsl(var(--gold))]/20 border-[hsl(var(--gold))]/70' : 'bg-[hsl(var(--gold))]/[0.06] border-[hsl(var(--gold))]/40 group-hover:bg-[hsl(var(--gold))]/15 group-hover:border-[hsl(var(--gold))]/65'}`}>
                       <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
                     </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]/70' : 'text-[#1A1A1A]/25'}`} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#3A2D1D]'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
                     )}
@@ -1299,13 +1299,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {collapsed ? (
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Logo header (88px) — collapsed: just icon */}
-          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
+          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-[#F7F2EA] border-b border-[#B89555]/40">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
             </Link>
           </div>
-          {/* Section icons — darker body matching header center */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] w-full border-r border-gold/20">
+          {/* Section icons — solid champagne body, no silver cast */}
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-[#F7F2EA] w-full border-r border-[#B89555]/40">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1394,7 +1394,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-r border-gold/20 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-[#F7F2EA] border-r border-[#B89555]/40 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
