@@ -133,6 +133,39 @@ serve(async (req: Request) => {
       });
     }
 
+    // Pre-flight registration check (defence in depth — UI also runs this).
+    // Skip for test sends; only enforce for real brokerage sends.
+    if (!isTest && body.brokerageId) {
+      try {
+        const checkRes = await service.functions.invoke(
+          "crm-check-brokerage-registration",
+          {
+            body: { brokerageIds: [body.brokerageId], variant },
+            headers: { Authorization: authHeader },
+          },
+        );
+        const checkData = checkRes?.data as any;
+        const result = checkData?.results?.[0];
+        if (result?.status === "block") {
+          return new Response(
+            JSON.stringify({
+              error: "Pre-send check blocked this brokerage",
+              code: "REGISTRATION_BLOCK",
+              reasons: result.reasons,
+            }),
+            {
+              status: 409,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            },
+          );
+        }
+      } catch (checkErr) {
+        // If the check itself fails, log but allow send — the UI is the
+        // primary gate; this server check is defence in depth.
+        console.warn("Pre-send check failed (continuing):", checkErr);
+      }
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
     if (!LOVABLE_API_KEY || !GMAIL_API_KEY) {
