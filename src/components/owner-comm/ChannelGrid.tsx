@@ -101,6 +101,7 @@ export default function ChannelGrid() {
         <ChannelTile
           key={state.provider.id}
           state={state}
+          toneProfiles={toneProfiles ?? []}
           onConnect={() => handleConnect(state)}
           onAddAnother={state.status === "connected" ? () => handleConnect(state) : undefined}
           onResync={state.status === "connected" ? () => handleResync(state) : undefined}
