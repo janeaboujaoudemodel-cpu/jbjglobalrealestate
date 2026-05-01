@@ -88,12 +88,12 @@ export default function DevStyleToggle() {
       setSnapshotExists(null);
       return;
     }
-    const url = snapshotPathForRoute(location.pathname);
+    const url = snapshotPathForRoute(pathname);
     const img = new Image();
     img.onload = () => setSnapshotExists(true);
     img.onerror = () => setSnapshotExists(false);
     img.src = url;
-  }, [mode, location.pathname]);
+  }, [mode, pathname]);
 
   const cycle = useCallback(() => {
     setMode((m) => (m === "after" ? "before" : m === "before" ? "snapshot" : "after"));
