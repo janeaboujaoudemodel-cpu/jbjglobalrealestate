@@ -54,7 +54,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
         </Link>
         <header className="mb-6">
           <h1 className="text-2xl font-bold" style={{ color: "#000" }}>{r.brand_name}</h1>
-          <p className="text-sm" style={{ color: "#374151" }}>{r.legal_company_name} · {r.emirate_section}</p>
+          <p className="text-sm" style={{ color: "#1A1A1A" }}>{r.legal_company_name} · {r.emirate_section}</p>
           <div className="flex flex-wrap gap-2 mt-2">
             <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]">{r.outreach_status}</Badge>
             <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]">{r.verification_status}</Badge>
@@ -66,8 +66,8 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
           <Card className="p-5 bg-[#FDFBF7] border-[#B89555]/30">
             <h2 className="font-semibold mb-3" style={{ color: "#000" }}>Outreach</h2>
             <div className="space-y-3 text-sm">
-              <div><span style={{ color: "#6b7280" }}>Recipient:</span> <strong style={{ color: "#000" }}>{recipient ?? "— add registration email —"}</strong></div>
-              <div><span style={{ color: "#6b7280" }}>Sender (locked):</span> <strong style={{ color: "#000" }}>CONTACT@JBJ.AE</strong></div>
+              <div><span style={{ color: "#1A1A1A" }}>Recipient:</span> <strong style={{ color: "#000" }}>{recipient ?? "— add registration email —"}</strong></div>
+              <div><span style={{ color: "#1A1A1A" }}>Sender (locked):</span> <strong style={{ color: "#000" }}>CONTACT@JBJ.AE</strong></div>
               <div className="flex gap-2">
                 <Select value={lang} onValueChange={(v: any) => setLang(v)}>
                   <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
@@ -86,7 +86,7 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
               </div>
               {!r.test_email_completed && <p className="text-xs" style={{ color: "#b45309" }}>Test send required before bulk send.</p>}
               <div>
-                <span className="text-xs" style={{ color: "#6b7280" }}>Status:</span>
+                <span className="text-xs" style={{ color: "#1A1A1A" }}>Status:</span>
                 <Select value={r.outreach_status} onValueChange={(v) => update.mutate({ id: r.id, patch: { outreach_status: v } })}>
                   <SelectTrigger className="w-full mt-1"><SelectValue /></SelectTrigger>
                   <SelectContent>{OUTREACH_STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
@@ -101,11 +101,11 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
               {sources.data?.map((s: any) => (
                 <div key={s.id} className="text-xs p-2 bg-[#F7F2EA] rounded">
                   <div style={{ color: "#000" }} className="font-medium">{s.source_name}</div>
-                  <a href={s.source_url} target="_blank" rel="noreferrer" className="underline" style={{ color: "#374151" }}>{s.source_url}</a>
-                  <div style={{ color: "#6b7280" }}>Fields: {(s.fields_verified ?? []).join(", ") || "—"}</div>
+                  <a href={s.source_url} target="_blank" rel="noreferrer" className="underline" style={{ color: "#1A1A1A" }}>{s.source_url}</a>
+                  <div style={{ color: "#1A1A1A" }}>Fields: {(s.fields_verified ?? []).join(", ") || "—"}</div>
                 </div>
               ))}
-              {(!sources.data || sources.data.length === 0) && <div className="text-xs" style={{ color: "#6b7280" }}>No sources yet.</div>}
+              {(!sources.data || sources.data.length === 0) && <div className="text-xs" style={{ color: "#1A1A1A" }}>No sources yet.</div>}
             </div>
             <div className="space-y-2 border-t pt-3">
               <Input placeholder="Source name" value={src.source_name} onChange={(e) => setSrc({ ...src, source_name: e.target.value })} />
@@ -127,14 +127,14 @@ export default function UAERegistryDetailPage({ type }: { type: RegistryRecordTy
             <div className="space-y-2 max-h-96 overflow-auto">
               {log.data?.map((l: any) => (
                 <div key={l.id} className="p-3 bg-[#F7F2EA] rounded border border-[#B89555]/30">
-                  <div className="flex justify-between text-xs" style={{ color: "#6b7280" }}>
+                  <div className="flex justify-between text-xs" style={{ color: "#1A1A1A" }}>
                     <span>{l.channel} · {l.direction} · {l.language}</span>
                     <span>{new Date(l.occurred_at).toLocaleString()}</span>
                   </div>
                   <div className="text-sm mt-1" style={{ color: "#000" }}>{l.summary}</div>
                 </div>
               ))}
-              {(!log.data || log.data.length === 0) && <div className="text-xs" style={{ color: "#6b7280" }}>No activity yet.</div>}
+              {(!log.data || log.data.length === 0) && <div className="text-xs" style={{ color: "#1A1A1A" }}>No activity yet.</div>}
             </div>
           </Card>
         </div>

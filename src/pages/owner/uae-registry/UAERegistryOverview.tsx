@@ -18,11 +18,11 @@ function EmirateTile({ emirate }: { emirate: typeof EMIRATES[number] }) {
       </div>
       <div className="grid grid-cols-2 gap-3 text-sm">
         <Link to={`/owner/uae-registry/developers?emirate=${encodeURIComponent(emirate)}`} className="block p-3 rounded-md bg-[#F7F2EA] hover:bg-[#F7F2EA]">
-          <div className="flex items-center gap-2 mb-1"><Building2 className="h-3.5 w-3.5" /><span className="text-xs" style={{ color: "#374151" }}>Developers</span></div>
+          <div className="flex items-center gap-2 mb-1"><Building2 className="h-3.5 w-3.5" /><span className="text-xs" style={{ color: "#1A1A1A" }}>Developers</span></div>
           <div className="text-xl font-bold" style={{ color: "#000" }}>{devCount}</div>
         </Link>
         <Link to={`/owner/uae-registry/brokerages?emirate=${encodeURIComponent(emirate)}`} className="block p-3 rounded-md bg-[#F7F2EA] hover:bg-[#F7F2EA]">
-          <div className="flex items-center gap-2 mb-1"><Users className="h-3.5 w-3.5" /><span className="text-xs" style={{ color: "#374151" }}>Brokerages</span></div>
+          <div className="flex items-center gap-2 mb-1"><Users className="h-3.5 w-3.5" /><span className="text-xs" style={{ color: "#1A1A1A" }}>Brokerages</span></div>
           <div className="text-xl font-bold" style={{ color: "#000" }}>{brkCount}</div>
         </Link>
       </div>
@@ -36,7 +36,7 @@ export default function UAERegistryOverview() {
       <div className="min-h-screen bg-[#FDFBF7] px-6 py-8 max-w-7xl mx-auto">
         <header className="mb-6">
           <h1 className="text-3xl font-bold" style={{ color: "#000" }}>UAE Registration Registry</h1>
-          <p className="text-sm mt-1" style={{ color: "#374151" }}>
+          <p className="text-sm mt-1" style={{ color: "#1A1A1A" }}>
             Outreach engine for UAE developers & brokerages. Sender locked: <strong>CONTACT@JBJ.AE</strong>.
           </p>
           <div className="mt-3 flex gap-2">
