@@ -446,7 +446,33 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Gradient overlay — stronger at bottom for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" />
-...
+
+        {/* Elevated glass reflection effect */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(200,167,102,0.05) 100%)",
+            transform: "translateZ(20px)",
+          }}
+        />
+
+        {/* Top-left: Developer logo or type badge */}
+        <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
+          {showDevLogo ? (
+            <DeveloperLogo
+              src={item.developerLogo}
+              alt={item.subtitle || "Developer"}
+              className=""
+              onError={() => setLogoError(true)}
+            />
+          ) : showDevCardLogo ? (
+            <DeveloperLogo
+              src={item.developerLogo}
+              alt={item.name}
+              className=""
+              onError={() => setLogoError(true)}
+            />
+          ) : (
           ) : (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/85 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-[#F7F2EA] border border-[#B89555]/40">
               <Icon className="w-2.5 h-2.5 text-[#B89555]" />
@@ -454,7 +480,13 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             </span>
           )}
         </div>
-...
+
+        {/* Favorite button */}
+        {item.type === "property" && (
+          <div className="absolute top-2 right-2 z-20" style={{ transform: "translateZ(30px)" }}>
+            <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
+          </div>
+        )}
         {/* Bottom content - elevated */}
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
