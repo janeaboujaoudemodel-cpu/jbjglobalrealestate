@@ -292,6 +292,7 @@ const BrokeragesTab = () => {
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [tplOpen, setTplOpen] = useState(false);
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
