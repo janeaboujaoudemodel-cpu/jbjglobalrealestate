@@ -598,6 +598,8 @@ const BrokeragesTab = () => {
         entityType="brokerage"
       />
 
+      <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} mode="brokerage" />
+
       {dealOpen && (
         <BrokerageDealModal
           open={!!dealOpen}
