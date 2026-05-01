@@ -191,8 +191,8 @@ const Index = () => {
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/85 z-[3]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-black/50 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/90 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/55 z-[3]" />
         </div>
         
         {/* Animated gold accent lines */}
@@ -227,20 +227,18 @@ const Index = () => {
               </p>
             </motion.div>
 
-            {/* Main heading — fluid edge-to-edge typography (clamp scales smoothly across all viewports without cropping) */}
+            {/* Main heading — solid white for guaranteed contrast on dim video background. */}
             <motion.h1
               variants={fadeInUp}
-              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
+              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto text-white"
               style={{
                 // Fluid size: 26px (≈320px viewport) → 60px (≈1280px+). Scales linearly with vw, never crops.
                 fontSize: "clamp(1.625rem, 4.6vw + 0.5rem, 3.75rem)",
                 letterSpacing: "-0.015em",
-                background: "linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 40%, #FFFFFF 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                color: "#FFFFFF",
                 wordSpacing: "0.01em",
                 hyphens: "auto",
-                filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.7)) drop-shadow(0 2px 6px rgba(0,0,0,0.6))",
+                textShadow: "0 2px 14px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.75)",
               }}
             >
               Your Gateway to Dubai's Finest Real Estate
