@@ -49,6 +49,8 @@ export default function ChannelGrid() {
       }
       qc.invalidateQueries({ queryKey: ["comm-channel-states"] });
       qc.invalidateQueries({ queryKey: ["owner-channels"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-summary"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-events"] });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Connection failed";
       toast.error(msg);
@@ -81,6 +83,8 @@ export default function ChannelGrid() {
       qc.invalidateQueries({ queryKey: ["owner-channels"] });
       qc.invalidateQueries({ queryKey: ["owner-inbox"] });
       qc.invalidateQueries({ queryKey: ["owner-comm-threads"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-summary"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-channel-audit-events"] });
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Resync failed";
       toast.error(msg, { id: t });
@@ -104,6 +108,7 @@ export default function ChannelGrid() {
           key={state.provider.id}
           state={state}
           toneProfiles={toneProfiles ?? []}
+          auditSummary={auditSummary}
           onConnect={() => handleConnect(state)}
           onAddAnother={state.status === "connected" ? () => handleConnect(state) : undefined}
           onResync={state.status === "connected" ? () => handleResync(state) : undefined}
