@@ -253,7 +253,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 );
               })()}
               {project.handover_date ? (
-                <span className="jj-handover-pill">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/30 rounded-full px-2 py-0.5">
                   <Calendar className="w-3 h-3" />
                   {project.handover_date}
                 </span>
