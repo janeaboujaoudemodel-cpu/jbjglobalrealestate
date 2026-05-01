@@ -53,10 +53,35 @@ serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { brokerageId, isTest } = await req.json() as {
+    const { brokerageId, isTest, preferredSlotId } = await req.json() as {
       brokerageId?: string;
       isTest?: boolean;
+      preferredSlotId?: string;
     };
+
+    // Resolve preferred slot (if any) to use as preferred_date / preferred_time
+    let preferredDate: string | null = null;
+    let preferredTime: string | null = null;
+    if (preferredSlotId) {
+      try {
+        const { data: slot } = await service
+          .from("breakfast_slots")
+          .select("slot_at")
+          .eq("id", preferredSlotId)
+          .maybeSingle();
+        if (slot?.slot_at) {
+          const iso = String(slot.slot_at);
+          preferredDate = iso.slice(0, 10);
+          // HH:MM (24h, in UTC stored value — UI re-formats to Dubai)
+          const t = new Date(iso);
+          const hh = String(t.getUTCHours()).padStart(2, "0");
+          const mm = String(t.getUTCMinutes()).padStart(2, "0");
+          preferredTime = `${hh}:${mm}`;
+        }
+      } catch (slotErr) {
+        console.warn("Preferred slot lookup failed:", slotErr);
+      }
+    }
 
     // Test sends — don't pollute meeting_requests
     if (isTest || !brokerageId) {
@@ -72,7 +97,7 @@ serve(async (req: Request) => {
     // Reuse existing non-cancelled invite if present
     const { data: existing } = await service
       .from("meeting_requests")
-      .select("invite_token, status")
+      .select("id, invite_token, status")
       .eq("brokerage_id", brokerageId)
       .eq("booking_kind", "brokerage_breakfast")
       .not("invite_token", "is", null)
@@ -82,6 +107,14 @@ serve(async (req: Request) => {
       .maybeSingle();
 
     if (existing?.invite_token) {
+      // If a new preferred slot was supplied, update the placeholder so the
+      // booking page highlights it.
+      if (preferredDate && preferredTime && existing.id) {
+        await service
+          .from("meeting_requests")
+          .update({ preferred_date: preferredDate, preferred_time: preferredTime })
+          .eq("id", existing.id);
+      }
       return new Response(JSON.stringify({
         token: existing.invite_token,
         bookingUrl: `${SITE_URL}/breakfast-booking?token=${existing.invite_token}`,
@@ -108,8 +141,8 @@ serve(async (req: Request) => {
       requester_name: pc.name || brk.company_name || "Brokerage Partner",
       requester_email: placeholderEmail,
       purpose: `Private breakfast briefing — ${brk.company_name}`,
-      preferred_date: new Date().toISOString().slice(0, 10),
-      preferred_time: "TBD",
+      preferred_date: preferredDate || new Date().toISOString().slice(0, 10),
+      preferred_time: preferredTime || "TBD",
       status: "invited",
       duration_minutes: 60,
       user_id: user.id,
