@@ -1,77 +1,54 @@
+## Goal
 
-## What is actually broken
+On every listing card, move the **price** to the bottom-right of the image (overlay on the photo) and move the **handover date** down into the card footer. This applies to all listing cards across the site, not just the homepage.
 
-I verified the database: it has **2,504 published projects**, including **908 published apartments**. Data is intact — nothing was deleted. The filter logic for `?type=apartment&transaction=buy` (the URL the sidebar opens) correctly maps to `propertyType='apartment'` and matches against `property_type_label`, so it should return ~908 results.
+## Cards affected
 
-So "0 properties" is **not a data problem**. It is a combination of three real issues that make the page look broken:
+1. `src/components/home/FeaturedListings.tsx` — homepage "Handpicked For You" grid (currently no price overlay; price + handover both live in the footer).
+2. `src/components/ProjectCard.tsx` — main card used on Properties, Favorites, DeveloperDetail, CommunityDetail, QuizResults, etc. (currently handover sits bottom-right on image, price sits in footer).
+3. `src/components/ReellyProjectCard.tsx` — Reelly variant on PropertiesReelly (same layout as ProjectCard).
 
-1. **Slow load** — the Properties page fetches the entire 2,500+ project catalogue in one shot before anything renders, so during those seconds the listing area shows the empty state and the hero looks frozen.
-2. **Faded hero (Properties + Homepage)** — the hero headlines use white text on a dim video background with a dark gradient overlay; on the homepage the headline is also rendered with a `linear-gradient(white→#E0E0E0)` clipped to text, which loses contrast against the brown-tinted video.
-3. **Unreadable filter toggles** — the inactive toggle pills (`togglePillOff`) use `text-[#5A4A2E]` (faded brown) on a champagne pill background. The number/letter inside is barely visible at rest.
+`ResalePropertiesSection.tsx` shows resale (no `price_from`/`handover_date` schema — uses `asking_price` and `handover_status`); leaving its layout untouched unless the user asks, since it's a different data shape.
 
-## Fix plan
+## Changes per card
 
-### 1. Properties hero — make text actually readable
+### FeaturedListings.tsx (ProjectCard sub-component)
 
-File: `src/components/PropertiesHeroVideo.tsx`
-- Strengthen the gradient overlay to a more uniform dark layer (`from-black/85 via-black/65 to-black/95`) so any white text on top has guaranteed contrast on every frame of the video.
-- Add a soft radial vignette behind the heading area so the headline never sits over a bright/sky frame.
+- Inside the image container (line ~154), add an absolute-positioned price pill at `bottom-3 right-3`:
+  - Use the premium price-orange treatment that matches the rest of the site: solid pill, white text on `bg-price-orange`, with a soft shadow so it stays legible over any photo. "From" prefix kept small and uppercase.
+  - Renders only when `project.price_from > 0`.
+- Replace the existing footer "Price line" block (lines 224–240) with a **handover date line** in the same slot, using the same typographic rhythm:
+  - "Handover" label in small uppercase `#5A4A2E`, value in solid ink `#1A1A1A`.
+  - Falls back to "Handover TBA" when `handover_date` is missing, so card heights stay consistent.
+- Remove the duplicate handover pill from the bottom row (lines 255–262) so handover only appears once (in the new line). Keep the payment-plan pill on the left of that row; right side becomes empty spacer to preserve rhythm.
 
-File: `src/pages/Properties.tsx` (hero block, lines ~493–531)
-- Add a stronger `textShadow` on the H1 (`0 2px 12px rgba(0,0,0,0.85)`) and bump subtitle from `text-white/95` to solid `text-white` with the same shadow, matching the institutional pattern already used elsewhere.
-- Keep the section's `data-surface="dark"` so the contrast guard does not invert these whites.
+### ProjectCard.tsx
 
-### 2. Homepage hero — restore solid headline
+- The handover badge currently at `absolute bottom-3 right-3` on the image (lines 282–286) is replaced by a **price badge** at the same position:
+  - Solid `bg-price-orange` pill, white bold text, `shadow-[0_10px_25px_hsl(0_0%_0%/0.25)]`, with optional small "From" prefix.
+  - Uses `formatPriceWithCurrency(project.price_from, currency)`.
+  - Renders only when a real price exists; otherwise renders nothing (no overlay).
+- The footer "Starting from" block (lines 316–328) is replaced with a **handover date line** ("Handover · 2026" style) using the existing `text-gold` accent for the label and `text-foreground` for the value, matching the surrounding gold card theme. When missing, render "Handover TBA" in muted tone.
 
-File: `src/pages/Index.tsx` (hero block, lines ~163–250)
-- Replace the gradient-clipped white→silver headline (`WebkitTextFillColor: transparent`) with **solid `#FFFFFF`** plus a strong dual drop-shadow. Gradient text on a dim brown video is what the user is reading as "faded".
-- Strengthen the dark overlays: `from-black/70 via-black/55 to-black/90` (currently 60/45/85).
-- Keep the video, the orbs, and the CTA pills exactly as they are.
+### ReellyProjectCard.tsx
 
-### 3. Filter toggle pills — make inactive state ink, not faded brown
+- Same swap as ProjectCard.tsx: image bottom-right becomes the price pill (price-orange, white text); footer "Starting from" line becomes a Handover line.
 
-File: `src/components/filters/FilterShortcutBar.tsx` (line 352)
-- Change `togglePillOff` from `text-[#5A4A2E]` to **`text-[#1A1A1A]`** (solid ink) and bump weight from `font-medium` to `font-semibold`. Border becomes `border-[#B89555]/50`. Hover stays champagne.
-- This matches the Faded-Gold Prohibition and Universal Same-Tone Contrast standards already in `mem://`.
-- Also fix the same pattern in `pillInactive` if it inherits any faded brown — it already uses `text-[#1A1A1A]`, so no change needed there.
+## Visual notes
 
-### 4. Properties page perceived zero-results — fix the slow first paint
+- Price overlay is the only badge in the bottom-right of the photo, so it never collides with the developer logo (top-left) or the sale-status pill (bottom-left).
+- "Sold Out" top-left badge and payment-plan pill in the footer stay where they are.
+- The price-orange token (`--price-orange`) is already the site-wide standard for prices, satisfying the existing memory rule.
 
-File: `src/hooks/useProjects.ts` — `useProjectsListing()`
-- Today: counts rows, then issues `Math.ceil(2504/1000) = 3` parallel `range()` queries before *any* listing is shown. On a slow connection that's the entire wait the user complained about.
-- Change to a **progressive two-stage fetch**:
-  - **Stage 1**: fetch the first 200 published projects ordered by `created_at desc` and return them immediately (this is what fills the visible viewport).
-  - **Stage 2**: in a `setTimeout(..., 0)` after Stage 1 resolves, fetch the rest in the background and append to the React Query cache via `queryClient.setQueryData`.
-- Add a `placeholderData: keepPreviousData` so the list does not flash to "0" between stages.
+## Out of scope
 
-File: `src/pages/Properties.tsx`
-- While `isLoading` is true, render a skeleton grid instead of letting the empty-state ("No properties matched…") component show. Currently nothing gates the empty state on `isLoading`, so during the load the user sees the "no results" copy and concludes the database is gone.
+- Resale cards (`ResalePropertiesSection.tsx`) — different data model; will revisit if the user wants the same rule applied there.
+- No data-fetching or query changes; purely layout.
 
-### 5. Light cleanup (no behaviour change)
+## QA after implementation
 
-- Confirm the `data-no-contrast-guard` attribute stays on the red sidebar Contact/Support buttons (already in place from prior turn).
-- Leave all CRM, mode-switching, and footer logic alone — strictly the four files listed above.
-
-## Files touched
-
-```
-src/components/PropertiesHeroVideo.tsx        -- darker overlay + vignette
-src/pages/Properties.tsx                      -- hero text shadow + skeleton while loading
-src/pages/Index.tsx                           -- solid white headline + stronger overlay
-src/components/filters/FilterShortcutBar.tsx  -- togglePillOff to ink
-src/hooks/useProjects.ts                      -- progressive listing fetch
-```
-
-## Out of scope (explicitly NOT changed)
-
-- No DB schema changes.
-- No removal of any sections, filters, ads, marquees, or CTAs (No-Removal policy).
-- Mode switcher, CRM auto-categorisation, footer, and login-first gating from previous turns are untouched.
-- No new packages, no design-system token changes.
-
-## Why this addresses what the user said
-
-- "Hero is very faded, content not readable" → solid white headlines + stronger overlays on both heroes.
-- "Toggles in the filter are completely horrible and not readable" → inactive toggle pills go from faded brown to solid ink.
-- "Showing 0 properties for sale, where is all the database" → DB is fine (verified 908 apartments). The skeleton + progressive fetch fixes the misleading empty state during load.
-- "It took too much time to open the page" → first paint shrinks from "fetch all 2,504 then render" to "fetch first 200, render, then backfill".
+- Homepage "Handpicked For You": price visible bottom-right on each photo, handover row visible in footer.
+- `/properties` grid (ProjectCard): same.
+- `/properties-reelly`: same.
+- Cards with missing price still render cleanly (no empty pill on the photo).
+- Cards with missing handover render "Handover TBA" so heights stay aligned.
