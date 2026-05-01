@@ -14,7 +14,10 @@
  * Hotkey: Shift+B cycles through the three modes.
  */
 import { useEffect, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+// Note: intentionally NOT using useLocation() here. This component renders
+// at the very top of the tree and must survive being mounted briefly outside
+// a <Router> (e.g. during error-boundary remounts or HMR). We read the
+// pathname directly from window.location and listen for navigation events.
 import "@/styles/dev-before-overlay.css";
 
 const STORAGE_KEY = "dev:style-mode";
