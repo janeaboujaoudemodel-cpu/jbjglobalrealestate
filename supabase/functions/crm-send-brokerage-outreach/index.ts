@@ -256,35 +256,89 @@ serve(async (req: Request) => {
       firstName((user.user_metadata as any)?.full_name as string | undefined) ||
       "Jane";
 
+    // ---------- Personalization resolution ----------
+    const personalization: Personalization = body.personalization || {};
+    const pcRaw = (brk?.primary_contact || {}) as Record<string, any>;
+
+    const resolvedContactFullName =
+      (personalization.contactName && personalization.contactName.trim()) ||
+      contactName ||
+      pcRaw.name ||
+      "";
+    const resolvedContactFirstName =
+      (personalization.contactFirstName && personalization.contactFirstName.trim()) ||
+      firstName(resolvedContactFullName) ||
+      "Team";
+
+    const resolvedGroupKey = deriveGroupStatus(brk, personalization.groupStatus);
+    const resolvedGroupLabel =
+      (personalization.groupStatusLabelOverride && personalization.groupStatusLabelOverride.trim()) ||
+      GROUP_STATUS_LABELS[resolvedGroupKey];
+    const resolvedGroupLine = GROUP_STATUS_LINES[resolvedGroupKey];
+
+    const brokerageLocation =
+      brk?.office_location || brk?.emirate || "Dubai";
+
+    // Look up preferred slot if provided
+    let preferredSlotIso = "";
+    let preferredSlotLabel = "";
+    if (personalization.preferredSlotId) {
+      try {
+        const { data: slot } = await service
+          .from("breakfast_slots")
+          .select("id, slot_at")
+          .eq("id", personalization.preferredSlotId)
+          .maybeSingle();
+        if (slot?.slot_at) {
+          preferredSlotIso = String(slot.slot_at);
+          preferredSlotLabel = formatSlotLabel(preferredSlotIso);
+        }
+      } catch (slotErr) {
+        console.warn("Preferred slot lookup failed:", slotErr);
+      }
+    }
+    if (!preferredSlotLabel && personalization.preferredEventTimeOverride) {
+      preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
+    }
+
     // Mint (or reuse) a breakfast booking invite token so the email can
     // include a real scheduling link instead of just a mailto RSVP.
     let bookingUrl = "";
     try {
       const tokenRes = await userClient.functions.invoke(
         "crm-create-breakfast-invite-token",
-        { body: { brokerageId: isTest ? undefined : body.brokerageId, isTest } },
+        {
+          body: {
+            brokerageId: isTest ? undefined : body.brokerageId,
+            isTest,
+            preferredSlotId: personalization.preferredSlotId,
+          },
+        },
       );
       bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
     } catch (tokErr) {
       console.warn("Booking token mint failed (continuing):", tokErr);
     }
 
-    const html = renderTemplate(template.html, {
+    const varsMap: Record<string, string> = {
       brokerage_name: brk.company_name || "your brokerage",
-      contact_first_name: firstName(contactName) || "Team",
+      brokerage_location: brokerageLocation,
+      contact_first_name: resolvedContactFirstName,
+      contact_full_name: resolvedContactFullName || (brk.company_name || "your team"),
+      contact_title: pcRaw.title || "",
+      group_status_label: resolvedGroupLabel,
+      group_status_line: resolvedGroupLine,
+      preferred_event_time_label: preferredSlotLabel || "",
+      preferred_event_time_iso: preferredSlotIso || "",
       owner_first_name: ownerFirstName,
       reply_to: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
       booking_url: bookingUrl,
-    });
-    const subjectRendered = renderTemplate(template.subject, {
-      brokerage_name: brk.company_name || "your brokerage",
-      contact_first_name: firstName(contactName) || "Team",
-      owner_first_name: ownerFirstName,
-      from_name: fromName,
-      booking_url: bookingUrl,
-    });
+    };
+
+    const html = renderTemplate(template.html, varsMap);
+    const subjectRendered = renderTemplate(template.subject, varsMap);
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
 
     const raw = buildRawMime({
