@@ -941,7 +941,23 @@ const AdminLeads = () => {
                 <TableBody>
                   {filteredLeads.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center text-[#1A1A1A]/50 py-10">No leads found</TableCell>
+                      <TableCell colSpan={9} className="py-12">
+                        {(() => {
+                          const tab = CATEGORY_TABS.find(t => t.key === categoryFilter) ?? CATEGORY_TABS[0];
+                          return (
+                            <div className="flex flex-col items-center justify-center text-center px-6">
+                              <div
+                                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 border-2"
+                                style={{ backgroundColor: tab.surface, borderColor: tab.accent }}
+                              >
+                                <Users className="w-7 h-7" style={{ color: tab.accent }} />
+                              </div>
+                              <p className="text-[15px] font-bold text-[#1A1A1A]">{tab.emptyTitle}</p>
+                              <p className="text-[13px] text-[#1A1A1A]/70 mt-1 max-w-md">{tab.emptySubtitle}</p>
+                            </div>
+                          );
+                        })()}
+                      </TableCell>
                     </TableRow>
                   ) : (
                     filteredLeads.map((lead) => {
