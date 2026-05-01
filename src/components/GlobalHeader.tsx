@@ -647,12 +647,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       />
       
-      {/* Premium Bottom Border - 3D Effect when solid */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
-        {/* Main gradient line - shown when solid */}
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gray-400 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
-        {/* Highlight on top - shown when solid */}
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+      {/* Premium Bottom Border — gold hairline on champagne */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10">
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Gold divider when transparent - separates header from hero */}
