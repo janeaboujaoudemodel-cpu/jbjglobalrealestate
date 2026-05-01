@@ -1933,6 +1933,36 @@ export type Database = {
         }
         Relationships: []
       }
+      breakfast_slots: {
+        Row: {
+          capacity: number
+          created_at: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          slot_at: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          slot_at: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          slot_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       briefing_attendance: {
         Row: {
           briefing_request_id: string
@@ -17556,6 +17586,11 @@ export type Database = {
       }
       meeting_requests: {
         Row: {
+          attendee_count: number | null
+          booking_kind: string | null
+          briefing_topics: string | null
+          brokerage_id: string | null
+          brokerage_name: string | null
           calendar_event_id: string | null
           cancellation_reason: string | null
           cancelled_at: string | null
@@ -17565,9 +17600,12 @@ export type Database = {
           created_at: string
           duration_minutes: number | null
           id: string
+          invite_token: string | null
+          is_test: boolean
           meeting_summary: string | null
           notes: string | null
           owner_notes: string | null
+          partnership_focus: string | null
           preferred_date: string
           preferred_time: string
           purpose: string
@@ -17583,6 +17621,11 @@ export type Database = {
           video_meet_link: string | null
         }
         Insert: {
+          attendee_count?: number | null
+          booking_kind?: string | null
+          briefing_topics?: string | null
+          brokerage_id?: string | null
+          brokerage_name?: string | null
           calendar_event_id?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
@@ -17592,9 +17635,12 @@ export type Database = {
           created_at?: string
           duration_minutes?: number | null
           id?: string
+          invite_token?: string | null
+          is_test?: boolean
           meeting_summary?: string | null
           notes?: string | null
           owner_notes?: string | null
+          partnership_focus?: string | null
           preferred_date: string
           preferred_time: string
           purpose: string
@@ -17610,6 +17656,11 @@ export type Database = {
           video_meet_link?: string | null
         }
         Update: {
+          attendee_count?: number | null
+          booking_kind?: string | null
+          briefing_topics?: string | null
+          brokerage_id?: string | null
+          brokerage_name?: string | null
           calendar_event_id?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
@@ -17619,9 +17670,12 @@ export type Database = {
           created_at?: string
           duration_minutes?: number | null
           id?: string
+          invite_token?: string | null
+          is_test?: boolean
           meeting_summary?: string | null
           notes?: string | null
           owner_notes?: string | null
+          partnership_focus?: string | null
           preferred_date?: string
           preferred_time?: string
           purpose?: string
@@ -17636,7 +17690,15 @@ export type Database = {
           user_id?: string | null
           video_meet_link?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "meeting_requests_brokerage_fk"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       meeting_session_consents: {
         Row: {
