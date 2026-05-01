@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { SafeTooltipProvider } from "@/components/ui/SafeTooltipProvider";
