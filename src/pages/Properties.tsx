@@ -534,8 +534,8 @@ const Properties = () => {
       {/* Scroll sentinel for two-phase filter fix */}
       <div ref={filterSentinelRef} className="h-0" />
 
-      {/* Filters Section - 3-Layer System: Black > Active Champagne > Pearl Filter Boxes */}
-      <section className="z-40 bg-[#1A1A1A] py-3 md:py-4 border-b border-gold/30" style={{ WebkitOverflowScrolling: 'touch' }}>
+      {/* Filters Section - Champagne page surface (replaces previous black band) */}
+      <section className="z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
           <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
@@ -1195,7 +1195,7 @@ const Properties = () => {
 
       {/* Results Section - Split-screen map mode or standard grid */}
       {isMapMode ? (
-        <section className="bg-[#1A1A1A]">
+        <section className="bg-[#FDFBF7]">
           <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
             {/* Vertical nav handled globally by MainLayout */}
 
@@ -1260,7 +1260,7 @@ const Properties = () => {
           </div>
         </section>
       ) : (
-        <section className="py-12 bg-[#1A1A1A]">
+        <section className="py-12 bg-[#FDFBF7]">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
               {/* Vertical nav handled globally by MainLayout */}
@@ -1435,7 +1435,7 @@ const Properties = () => {
       )}
 
       {/* CONSOLIDATED: Unified "Confused About Where to Buy" Section with Consultation Form */}
-      <section className="py-16 sm:py-20 bg-[#1A1A1A]">
+      <section className="py-16 sm:py-20 bg-[#F7F2EA]">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="jj-layer-2 p-6 sm:p-8 md:p-10 rounded-2xl">
