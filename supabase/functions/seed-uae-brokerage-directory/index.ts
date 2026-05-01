@@ -276,12 +276,26 @@ serve(async (req) => {
 
           if (existing) {
             // Don't overwrite curated data — only fill blanks
-            const { error } = await admin.rpc("crm_brokerage_fill_blanks", {
-              p_id: existing.id,
-              p_data: row,
-              p_sources: sources,
-            }).single();
-            if (error) console.error("update err", error);
+            const { data: cur } = await admin
+              .from("crm_brokerages")
+              .select("rera_license, office_address, phone, email, website, field_sources")
+              .eq("id", existing.id)
+              .maybeSingle();
+            const patch: Record<string, unknown> = {};
+            if (!cur?.rera_license && row.rera_license) patch.rera_license = row.rera_license;
+            if (!cur?.office_address && row.office_address) {
+              patch.office_address = row.office_address;
+              patch.office_location = row.office_location;
+            }
+            if (!cur?.phone && row.phone) patch.phone = row.phone;
+            if (!cur?.email && row.email) patch.email = row.email;
+            if (!cur?.website && row.website) patch.website = row.website;
+            if (Object.keys(patch).length) {
+              patch.field_sources = { ...(cur?.field_sources as object ?? {}), ...sources };
+              patch.last_verified_at = row.last_verified_at;
+              const { error } = await admin.from("crm_brokerages").update(patch).eq("id", existing.id);
+              if (error) console.error("update err", error.message);
+            }
             stat.updated++;
           } else {
             const { error } = await admin.from("crm_brokerages").insert(row);
