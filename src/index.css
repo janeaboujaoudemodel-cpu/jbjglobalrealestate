@@ -3683,3 +3683,66 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 .jbj-contrast-fix {
   /* Marker only — actual color is set inline by contrastGuard.ts */
 }
+
+/* ============================================================
+ * FINAL ANTI-GRAY / ANTI-SILVER LOCK (2026-05-01)
+ * Eliminates lingering gray/silver casts and faded ink labels
+ * across sidebars, homepage, popups, and CRM surfaces.
+ * Runs LAST so it beats earlier low-contrast utility classes.
+ * ============================================================ */
+
+/* 1. Lift faded ink (text-[#1A1A1A]/25..85) to solid ink on light surfaces */
+:root:not(.dark) :is(
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+):not([data-surface="dark"]) :is(
+  .text-\[\#1A1A1A\]\/25, .text-\[\#1A1A1A\]\/40, .text-\[\#1A1A1A\]\/50,
+  .text-\[\#1A1A1A\]\/60, .text-\[\#1A1A1A\]\/65, .text-\[\#1A1A1A\]\/70,
+  .text-\[\#1A1A1A\]\/80, .text-\[\#1A1A1A\]\/85, .text-\[\#1A1A1A\]\/90,
+  [class*="text-[#1A1A1A]/2"], [class*="text-[#1A1A1A]/3"],
+  [class*="text-[#1A1A1A]/4"], [class*="text-[#1A1A1A]/5"],
+  [class*="text-[#1A1A1A]/6"], [class*="text-[#1A1A1A]/7"]
+) {
+  color: #1A1A1A !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 2. Replace gray/silver utility surfaces with champagne */
+:root:not(.dark) :is(
+  .bg-neutral-50, .bg-neutral-100, .bg-gray-50, .bg-gray-100,
+  .bg-zinc-50, .bg-zinc-100, .bg-slate-50, .bg-slate-100,
+  .bg-stone-50, .bg-stone-100
+):not([data-surface="dark"]) {
+  background-color: #F7F2EA !important;
+}
+
+/* 3. Replace neutral text on light surfaces with ink/brown */
+:root:not(.dark) :is(
+  .text-neutral-400, .text-neutral-500, .text-neutral-600, .text-neutral-700,
+  .text-zinc-500, .text-zinc-600, .text-slate-500, .text-slate-600,
+  .text-stone-500, .text-stone-600
+) {
+  color: #3A2D1D !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 4. Neutral borders on light surfaces → champagne gold hairline */
+:root:not(.dark) :is(
+  .border-neutral-100, .border-neutral-200, .border-neutral-300,
+  .border-gray-100, .border-gray-200, .border-gray-300,
+  .border-zinc-100, .border-zinc-200, .border-zinc-300,
+  .border-slate-100, .border-slate-200
+) {
+  border-color: rgba(184, 149, 85, 0.40) !important;
+}
+
+/* 5. Faded brown text-[#5A4A2E] on champagne reads as gray — promote to #3A2D1D */
+:root:not(.dark) :is(
+  .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"]
+):not([data-surface="dark"]) :is(
+  .text-\[\#8A7556\], [class*="text-[#8A7556]"]
+) {
+  color: #3A2D1D !important;
+}
