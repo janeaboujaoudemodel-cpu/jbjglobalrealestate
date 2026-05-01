@@ -693,6 +693,13 @@ const ListingAdmin = () => {
             </div>
             <div className="flex items-center gap-3">
               <Button
+                onClick={() => navigate("/admin/media-ingestion")}
+                variant="gold"
+              >
+                <Upload className="w-4 h-4 mr-2" />
+                Media Ingestion Hub
+              </Button>
+              <Button
                 onClick={() => navigate("/team")}
                 variant="secondary"
               >
