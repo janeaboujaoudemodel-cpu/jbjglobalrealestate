@@ -8,19 +8,22 @@
  */
 import { execSync } from "child_process";
 
+// NOTE: `(?!\/)` after each bg/text token excludes alpha-tinted variants
+// (e.g. `bg-[#1A1A1A]/5`, `bg-foreground/10`) — those are translucent surfaces
+// painted over a different underlying color, not a real same-tone bug.
 const PATTERNS = [
   // Token-based same-tone
-  { id: "fg-fg",      re: /bg-foreground[^"'`]*text-foreground/g, msg: "bg-foreground + text-foreground" },
-  { id: "primary-primary", re: /bg-primary(?!-foreground)(?!\/)[^"'`]*text-primary(?!-foreground)/g, msg: "bg-primary + text-primary" },
-  // Hex literal same-tone (ink)
-  { id: "ink-ink",    re: /bg-\[#1A1A1A\][^"'`]*text-\[#1A1A1A\]/gi, msg: "bg-[#1A1A1A] + text-[#1A1A1A]" },
-  // Hex literal same-tone (champagne)
-  { id: "champ-champ", re: /bg-\[#FDFBF7\][^"'`]*text-\[#FDFBF7\]/gi, msg: "bg-[#FDFBF7] + text-[#FDFBF7]" },
-  { id: "champ-champ-7", re: /bg-\[#F7F2EA\][^"'`]*text-\[#F7F2EA\]/gi, msg: "bg-[#F7F2EA] + text-[#F7F2EA]" },
-  // Black on black
-  { id: "black-black", re: /bg-black[^"'`]*text-black/g, msg: "bg-black + text-black" },
-  // White on white
-  { id: "white-white", re: /bg-white[^"'`]*text-white/g, msg: "bg-white + text-white" },
+  { id: "fg-fg",      re: /bg-foreground(?!\/)[^"'`]*text-foreground(?!\/)/g, msg: "bg-foreground + text-foreground" },
+  { id: "primary-primary", re: /bg-primary(?!-foreground)(?!\/)[^"'`]*text-primary(?!-foreground)(?!\/)/g, msg: "bg-primary + text-primary" },
+  // Hex literal same-tone (ink) — solid only
+  { id: "ink-ink",    re: /bg-\[#1A1A1A\](?!\/)[^"'`]*text-\[#1A1A1A\](?!\/)/gi, msg: "bg-[#1A1A1A] + text-[#1A1A1A]" },
+  // Hex literal same-tone (champagne) — solid only
+  { id: "champ-champ", re: /bg-\[#FDFBF7\](?!\/)[^"'`]*text-\[#FDFBF7\](?!\/)/gi, msg: "bg-[#FDFBF7] + text-[#FDFBF7]" },
+  { id: "champ-champ-7", re: /bg-\[#F7F2EA\](?!\/)[^"'`]*text-\[#F7F2EA\](?!\/)/gi, msg: "bg-[#F7F2EA] + text-[#F7F2EA]" },
+  // Black on black — solid only
+  { id: "black-black", re: /bg-black(?!\/)[^"'`]*text-black(?!\/)/g, msg: "bg-black + text-black" },
+  // White on white — solid only
+  { id: "white-white", re: /bg-white(?!\/)[^"'`]*text-white(?!\/)/g, msg: "bg-white + text-white" },
 ];
 
 let files = [];
