@@ -274,26 +274,78 @@ export const BulkSendDialog = ({
   const previewDev = selected.find((d) => d.id === previewDevId) || selected[0];
 
   // Substitution map used to render preview HTML/subject for the selected recipient.
+  const GROUP_LABELS_LOCAL: Record<BrokerageGroupStatus, string> = {
+    prospective: "Prospective Partner",
+    existing: "Existing Relationship",
+    priority: "Priority Partner",
+    active: "Active Channel Partner",
+    nda: "NDA-Signed Partner",
+    custom: "Channel Partner",
+  };
+  const GROUP_LINES_LOCAL: Record<BrokerageGroupStatus, string> = {
+    prospective:
+      "We'd love to introduce JBJ Global Real Estate to your team and explore a formal channel partnership.",
+    existing:
+      "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
+    priority:
+      "As one of the priority brokerages on our shortlist, I'd like to reserve a private session for your team.",
+    active:
+      "As one of our active channel partners, I'd like to set aside time for a strategic review with your leadership.",
+    nda:
+      "Building on the NDA already in place between our firms, I'd like to walk your leadership through what's coming next.",
+    custom:
+      "I'd like to host your leadership for a private briefing tailored to your team.",
+  };
+
   const previewVars = useMemo<Record<string, string>>(() => {
     const name = getName(previewDev || ({} as Recipient), entityType);
-    const contactName = previewDev?.primary_contact?.name || "Team";
-    const firstName = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
-    return entityType === "brokerage"
-      ? {
-          brokerage_name: name,
-          contact_first_name: firstName(contactName) || "Team",
-          owner_first_name: "Jane",
-          reply_to: "contact@jbj.ae",
-          cc_email: "infoo.jane@gmail.com",
-          from_name: "JBJ Global Real Estate",
-        }
-      : {
-          developer_name: name,
-        };
-  }, [previewDev, entityType]);
+    const firstNameOf = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
+    if (entityType !== "brokerage") {
+      return { developer_name: name };
+    }
+    const personal = previewDev ? resolvePersonalization(previewDev) : undefined;
+    const contactFull =
+      personal?.contactName ||
+      previewDev?.primary_contact?.name ||
+      "";
+    const groupKey: BrokerageGroupStatus =
+      personal?.groupStatus || autoDetectGroupStatus(previewDev || {});
+    const groupLabel =
+      personal?.groupStatusLabelOverride ||
+      GROUP_LABELS_LOCAL[groupKey];
+    const groupLine = GROUP_LINES_LOCAL[groupKey];
+    const slot = upcomingSlots.find((s) => s.id === personal?.preferredSlotId);
+    const slotLabel = slot
+      ? formatSlotLabelLocal(slot.slot_at)
+      : (personal?.preferredEventTimeOverride || "");
+    const brokerageLocation =
+      (previewDev as any)?.office_location || (previewDev as any)?.emirate || "Dubai";
+    return {
+      brokerage_name: name,
+      brokerage_location: brokerageLocation,
+      contact_first_name: firstNameOf(contactFull) || "Team",
+      contact_full_name: contactFull || name,
+      contact_title: previewDev?.primary_contact?.title || "",
+      group_status_label: groupLabel,
+      group_status_line: groupLine,
+      preferred_event_time_label: slotLabel,
+      preferred_event_time_iso: slot?.slot_at || "",
+      owner_first_name: "Jane",
+      reply_to: "contact@jbj.ae",
+      cc_email: "infoo.jane@gmail.com",
+      from_name: "JBJ Global Real Estate",
+      booking_url: "#preview",
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, upcomingSlots]);
 
-  const renderPreview = (s: string) =>
-    s.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+  const renderPreview = (s: string) => {
+    const conditional = s.replace(
+      /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
+      (_, k, inner) => (previewVars[k] && String(previewVars[k]).trim().length > 0 ? inner : ""),
+    );
+    return conditional.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+  };
 
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
