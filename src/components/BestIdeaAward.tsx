@@ -189,14 +189,14 @@ const BestIdeaAward = () => {
                   </div>
 
                   {/* Winner's Recognition */}
-                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-4 mb-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 bg-gold/20 rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-gold" />
+                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-lg p-3 mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-gold/20 rounded-md flex items-center justify-center">
+                        <Sparkles className="w-3.5 h-3.5 text-gold" />
                       </div>
-                      <span className="text-[#1A1A1A] font-bold text-sm">Winner's Recognition Package</span>
+                      <span className="text-[#1A1A1A] font-bold text-xs">Winner's Recognition Package</span>
                     </div>
-                    <ul className="space-y-2 text-xs" style={{ color: '#374151' }}>
+                    <ul className="space-y-1.5 text-[11px]" style={{ color: '#374151' }}>
                       <li className="flex items-start gap-2">
                         <span className="text-gold mt-0.5">✦</span>
                         <span>Your <span className="text-gold font-semibold">portrait framed</span> & featured on our website</span>
