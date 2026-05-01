@@ -631,11 +631,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
-      {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
+      {/* Solid header background — champagne (creamy), not raw white */}
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.99) 50%, rgba(255,255,255,1) 100%)',
+          background: 'linear-gradient(180deg, #F7F2EA 0%, #F3ECDB 60%, #EFE6D6 100%)',
         }}
       />
       
