@@ -720,7 +720,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   color: '#FFFFFF',
                   textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
-                  color: '#666666',
+                  color: '#3A2D1D',
                 }}
               >
                 Excellence in Real Estate
