@@ -212,7 +212,7 @@ const BestIdeaAward = () => {
                     </ul>
                   </div>
 
-                  <div className="text-xs space-y-1" style={{ color: '#6b7280' }}>
+                  <div className="text-[11px] space-y-0.5" style={{ color: '#6b7280' }}>
                     <p>• One winner selected monthly from all valid entries</p>
                     <p>• Anonymous submissions are welcome but won't enter the draw</p>
                     <p>• <span style={{ color: '#C8A766' }} className="font-semibold">Submit multiple unique ideas = Multiple draw tickets!</span></p>
@@ -224,15 +224,16 @@ const BestIdeaAward = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                        <Button
-                        className="relative bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                        className="relative bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-7 py-5 text-base font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
                         <span className="relative flex items-center gap-2 whitespace-nowrap">
-                          <Lightbulb className="w-6 h-6 text-white" />
+                          <Lightbulb className="w-5 h-5 text-white" />
                           <span className="whitespace-nowrap text-white font-bold">Drop Your Idea</span>
-                          <ArrowUpRight className="w-5 h-5 text-white ml-1" />
+                          <ArrowUpRight className="w-4 h-4 text-white ml-1" />
                         </span>
                       </Button>
                     </DialogTrigger>
+
                     
                     <DialogContent className="bg-[#FDFBF7] border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
                       <DialogHeader>
