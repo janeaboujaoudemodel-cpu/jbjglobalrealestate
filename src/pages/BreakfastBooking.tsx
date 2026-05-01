@@ -60,21 +60,13 @@ export default function BreakfastBooking() {
     }
     (async () => {
       try {
-        const { data: res, error: invErr } = await supabase.functions.invoke(
-          "breakfast-booking-lookup",
-          { method: "GET" as any },
-        );
-        // functions.invoke doesn't pass query, so call manually
-        const url = `${(supabase as any).functionsUrl || ""}/breakfast-booking-lookup?token=${encodeURIComponent(token)}`;
         const r = await fetch(
-          `https://mdafrewypkkrildjgtey.supabase.co/functions/v1/breakfast-booking-lookup?token=${encodeURIComponent(token)}`,
-          { headers: { apikey: (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY || "" } },
+          `${edgeFnUrl("breakfast-booking-lookup")}?token=${encodeURIComponent(token)}`,
+          { headers: anonHeaders() },
         );
         const json = await r.json();
         if (!r.ok) throw new Error(json?.error || "Failed to load invitation");
         setData(json as LookupResult);
-        // void unused linter
-        void res; void invErr;
       } catch (e: any) {
         setError(e?.message || "Could not load invitation");
       } finally {
