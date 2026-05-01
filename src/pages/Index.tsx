@@ -343,12 +343,7 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* CONTINUE SEARCHING */}
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
-          <ContinueSearching type="property" />
-        </Suspense>
-      </div>
+      {/* CONTINUE SEARCHING — removed per owner request */}
 
       {/* RESALE PROPERTIES - single divider before Starting Point */}
       <div className="cv-auto">
