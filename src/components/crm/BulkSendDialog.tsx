@@ -549,6 +549,40 @@ export const BulkSendDialog = ({
             </div>
           </div>
 
+          {/* Personalization (brokerage only) — bulk defaults */}
+          {isBrokerageEntity && (
+            <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
+                <UserCog className="w-4 h-4" /><strong>Personalization defaults</strong>
+              </div>
+              <div className="text-[11px] text-[#5A4A2E]">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Group / partnership status</Label>
+                <Select value={bulkGroupStatus || "__auto"} onValueChange={(v) => setBulkGroupStatus(v === "__auto" ? "" : (v as BrokerageGroupStatus))}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__auto" className="text-xs">Auto-detect per recipient</SelectItem>
+                    {GROUP_STATUS_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Preferred event time</Label>
+                <Select value={bulkPreferredSlotId || "__none"} onValueChange={(v) => setBulkPreferredSlotId(v === "__none" ? "" : v)}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none" className="text-xs">Let them pick a time</SelectItem>
+                    {upcomingSlots.map((s) => (
+                      <SelectItem key={s.id} value={s.id} className="text-xs">{formatSlotLabelLocal(s.slot_at)}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
           {/* Status breakdown of eligible recipients */}
           <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
             <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
