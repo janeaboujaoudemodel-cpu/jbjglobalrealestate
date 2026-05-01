@@ -1,25 +1,60 @@
-## What's happening
+## What's wrong
 
-The "We're getting things ready" screen with the Refresh / Go to Homepage buttons is **not a loading screen** — it's the top-level error boundary (`src/components/AppErrorBoundary.tsx`) catching a thrown error in the React tree and showing its visible fallback card.
+On the homepage **"Handpicked For You"** grid:
 
-Today the boundary only silently retries when the error message matches a narrow list of "chunk / dynamic import" keywords. Any other transient render error (a race during route transition, a lazy component throwing during Suspense, a one-shot hook error, etc.) skips the silent-retry path and immediately renders the visible card — which is exactly the bug you're seeing on the homepage.
+1. The price badge is loud — full orange gradient with white drop-shadowed text. Too heavy for the calm champagne palette.
+2. **Tilal Al Furjan** (Nakheel) shows no price because its `price_from` is `NULL` in the database. Confirmed via DB query. Cards with no price look incomplete next to priced cards.
+3. The 8 cards already aim for one card per developer, but the fallback pass at the end can let a developer repeat if a primary one fails to load.
+4. The **handover-date pill** (`.jj-handover-pill`) renders soft gold-on-gold (`hsl(--handover-gold / 0.12)` background, `hsl(--handover-gold)` text) — the user can see that something is there but it's not legible.
+
+The issues live in two files: `src/components/home/FeaturedListings.tsx` and `src/index.css` (`.jj-handover-pill`).
 
 ## Fix
 
-Make the boundary silently retry **any** error a few times before ever showing the visible card. Users should never see this fallback unless the app has truly failed multiple times in a row.
+### 1. `src/components/home/FeaturedListings.tsx` — query selection
 
-### Changes to `src/components/AppErrorBoundary.tsx`
+In `useFeaturedProjects`, prefer projects that have a real price for every developer slot:
 
-1. In `componentDidCatch`:
-   - Always silently retry (clear `hasError`, increment `retryCount`) up to 3 times for any error, not just chunk errors.
-   - Keep the existing behavior of triggering a `window.location.reload()` after 2.5s **only** when the message looks like a chunk/network failure. For non-chunk errors, just remount the tree without a hard reload.
+- Inside `addOne(devName, nameFilter?)`: build a `priced` pool first (where `typeof p.price_from === 'number' && p.price_from > 0`). Use the priced pool when it's non-empty; only fall back to the full developer list if no priced project exists. This swaps Tilal Al Furjan for another priced Nakheel project automatically.
+- In the post-fill loop, sort `all` so priced projects come first before filling remaining slots.
+- Tighten the **last-resort** fill to keep enforcing `usedDevs` (today the very last loop drops that check, allowing developer repeats). Result: 8 unique developers, guaranteed.
 
-2. In `render`:
-   - While `retryCount < 3`, return `null` instead of the fallback card — no visible flash for transient errors.
-   - Only render the visible "We're getting things ready" card after the boundary has been hit 3+ times in a row, which indicates a genuine, persistent failure.
+### 2. `src/components/home/FeaturedListings.tsx` — price badge + always-on price
 
-### Why this fixes the screenshot
+Replace the heavy orange gradient badge with a calm, premium chip and always render a price line so cards feel uniform:
 
-The boundary will no longer flash the card for one-off render errors during route changes, lazy chunk loads, or hydration hiccups. The homepage will simply remount silently and recover.
+- Remove the bottom-right orange gradient overlay on the image.
+- In the content area (after the divider, beside the handover pill), render a small price block:
+  - When `price_from > 0`: small `from` label in `#5A4A2E`, then the number in `text-price-orange` (uses the global `--price-orange` token), Inter, weight 700, ~14px.
+  - When no price: the same slot shows `Price on request` in `#5A4A2E` italic, same size — so every card has equal vertical rhythm.
+- Move the price into the same flex row as the handover pill (so price-left, handover-right, both at the bottom of every card).
 
-No other files are touched. The card itself is preserved as a true last-resort safety net (after 3 consecutive failures), so we are not removing the feature — just preventing it from triggering on transient issues.
+### 3. `src/index.css` — `.jj-handover-pill` contrast
+
+Replace the low-contrast gold-on-gold with a readable institutional chip:
+
+- `background`: solid `#F7F2EA` (champagne surface).
+- `border`: `1px solid hsl(var(--handover-gold) / 0.55)`.
+- `color`: `#1A1A1A` (ink) — drop the `!important` gold color.
+- Keep the existing size, padding, font-weight, tabular numerals.
+- Mobile + desktop sizes unchanged.
+
+This keeps the gold accent on the border (premium signal) while the date itself is clearly legible on champagne. No raw grays introduced.
+
+### 4. Smaller, quieter card chrome
+
+Minor restraint tweaks in the same file to match "more premium, smaller, calm":
+
+- Reduce price/handover row to `text-[11px] md:text-xs` so the row reads as a quiet caption.
+- Reduce payment-breakdown chip and price chip to the same height for visual harmony.
+
+No structural layout changes — just typography sizing within the existing footer row.
+
+## Why this satisfies the request
+
+- "More premium, smaller, calm with premium orange for prices" → calm champagne chips, ink labels, the price number itself in `--price-orange` (the project-wide premium price token), no loud gradient.
+- "Tilal Al Furjan has no price — not acceptable" → query now prefers priced projects per developer, and every card always shows a price line (real number or "Price on request").
+- "8 different developers, no repeats" → last-resort fill now also enforces `usedDevs`.
+- "Handover date not visible" → pill rebuilt with ink-on-champagne and a gold border for accent.
+
+No memory rules touched (champagne palette preserved, `--price-orange` honored, no faded gold text, IconTile/CTA standards untouched).
