@@ -5,17 +5,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks, ShieldCheck, ShieldAlert, ShieldX, Loader2 } from "lucide-react";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks, ShieldCheck, ShieldAlert, ShieldX, Loader2, UserCog, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import {
   useSendDeveloperRegistration,
   useSendBrokerageOutreach,
   useEmailTemplate,
   useCheckBrokerageRegistration,
+  useUpcomingBreakfastSlots,
   type RegistrationVariant,
   type BrokerageVariant,
   type AnyEmailVariant,
   type BrokerageCheckResult,
+  type BrokerageGroupStatus,
+  type BrokerageOutreachPersonalization,
 } from "@/hooks/useCRMRelationships";
 
 type EntityType = "developer" | "brokerage";
@@ -56,6 +59,41 @@ const STATUS_PILL: Record<string, string> = {
   introduced: "bg-blue-100 text-blue-900 border-blue-300",
   active: "bg-emerald-100 text-emerald-900 border-emerald-300",
   paused: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
+};
+
+const GROUP_STATUS_OPTIONS: Array<{ value: BrokerageGroupStatus; label: string }> = [
+  { value: "prospective", label: "Prospective Partner" },
+  { value: "existing", label: "Existing Relationship" },
+  { value: "priority", label: "Priority Partner" },
+  { value: "active", label: "Active Channel Partner" },
+  { value: "nda", label: "NDA-Signed Partner" },
+  { value: "custom", label: "Custom label…" },
+];
+
+const formatSlotLabelLocal = (iso: string) => {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Dubai",
+    }).format(new Date(iso)) + " (GST)";
+  } catch {
+    return iso;
+  }
+};
+
+const autoDetectGroupStatus = (r: any): BrokerageGroupStatus => {
+  const stage = String(r?.outreach_stage || "").toLowerCase();
+  const tags: string[] = Array.isArray(r?.tags) ? r.tags.map((t: any) => String(t).toLowerCase()) : [];
+  if (String(r?.nda_status || "").toLowerCase() === "signed") return "nda";
+  if (stage === "active") return "active";
+  if (tags.includes("vip") || tags.includes("priority")) return "priority";
+  if (r?.is_existing_match) return "existing";
+  return "prospective";
 };
 
 interface Recipient {
@@ -120,6 +158,36 @@ export const BulkSendDialog = ({
   const [checkRanFor, setCheckRanFor] = useState<string>(""); // signature of last-checked target set
   // Per-row override of "warn" rows — owner explicitly approved sending despite warnings.
   const [warnOverrides, setWarnOverrides] = useState<Record<string, boolean>>({});
+
+  // Personalization (brokerage only). Per-recipient overrides; bulk defaults
+  // applied on top of auto-derived values.
+  const isBrokerageEntity = entityType === "brokerage";
+  const { data: upcomingSlots = [] } = useUpcomingBreakfastSlots();
+  const [bulkPreferredSlotId, setBulkPreferredSlotId] = useState<string>("");
+  const [bulkGroupStatus, setBulkGroupStatus] = useState<BrokerageGroupStatus | "">("");
+  const [perRowPersonalization, setPerRowPersonalization] = useState<
+    Record<string, BrokerageOutreachPersonalization>
+  >({});
+  const [expandedPersonalize, setExpandedPersonalize] = useState<Record<string, boolean>>({});
+
+  const resolvePersonalization = (r: Recipient): BrokerageOutreachPersonalization | undefined => {
+    if (!isBrokerageEntity) return undefined;
+    const row = perRowPersonalization[r.id] || {};
+    const detected = autoDetectGroupStatus(r);
+    const groupStatus =
+      row.groupStatus ?? (bulkGroupStatus || undefined) ?? detected;
+    const slotId = row.preferredSlotId ?? (bulkPreferredSlotId || undefined);
+    const contactName = row.contactName ?? (r.primary_contact?.name || "");
+    const out: BrokerageOutreachPersonalization = {
+      contactName: contactName || undefined,
+      groupStatus,
+      preferredSlotId: slotId || undefined,
+      groupStatusLabelOverride: row.groupStatusLabelOverride,
+      preferredEventTimeOverride: row.preferredEventTimeOverride,
+    };
+    return out;
+  };
+
 
   // Keep testEmail in sync if owner email changes (and they haven't overridden)
   useEffect(() => {
@@ -206,26 +274,78 @@ export const BulkSendDialog = ({
   const previewDev = selected.find((d) => d.id === previewDevId) || selected[0];
 
   // Substitution map used to render preview HTML/subject for the selected recipient.
+  const GROUP_LABELS_LOCAL: Record<BrokerageGroupStatus, string> = {
+    prospective: "Prospective Partner",
+    existing: "Existing Relationship",
+    priority: "Priority Partner",
+    active: "Active Channel Partner",
+    nda: "NDA-Signed Partner",
+    custom: "Channel Partner",
+  };
+  const GROUP_LINES_LOCAL: Record<BrokerageGroupStatus, string> = {
+    prospective:
+      "We'd love to introduce JBJ Global Real Estate to your team and explore a formal channel partnership.",
+    existing:
+      "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
+    priority:
+      "As one of the priority brokerages on our shortlist, I'd like to reserve a private session for your team.",
+    active:
+      "As one of our active channel partners, I'd like to set aside time for a strategic review with your leadership.",
+    nda:
+      "Building on the NDA already in place between our firms, I'd like to walk your leadership through what's coming next.",
+    custom:
+      "I'd like to host your leadership for a private briefing tailored to your team.",
+  };
+
   const previewVars = useMemo<Record<string, string>>(() => {
     const name = getName(previewDev || ({} as Recipient), entityType);
-    const contactName = previewDev?.primary_contact?.name || "Team";
-    const firstName = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
-    return entityType === "brokerage"
-      ? {
-          brokerage_name: name,
-          contact_first_name: firstName(contactName) || "Team",
-          owner_first_name: "Jane",
-          reply_to: "contact@jbj.ae",
-          cc_email: "infoo.jane@gmail.com",
-          from_name: "JBJ Global Real Estate",
-        }
-      : {
-          developer_name: name,
-        };
-  }, [previewDev, entityType]);
+    const firstNameOf = (s?: string) => (s ? s.trim().split(/\s+/)[0] : "");
+    if (entityType !== "brokerage") {
+      return { developer_name: name };
+    }
+    const personal = previewDev ? resolvePersonalization(previewDev) : undefined;
+    const contactFull =
+      personal?.contactName ||
+      previewDev?.primary_contact?.name ||
+      "";
+    const groupKey: BrokerageGroupStatus =
+      personal?.groupStatus || autoDetectGroupStatus(previewDev || {});
+    const groupLabel =
+      personal?.groupStatusLabelOverride ||
+      GROUP_LABELS_LOCAL[groupKey];
+    const groupLine = GROUP_LINES_LOCAL[groupKey];
+    const slot = upcomingSlots.find((s) => s.id === personal?.preferredSlotId);
+    const slotLabel = slot
+      ? formatSlotLabelLocal(slot.slot_at)
+      : (personal?.preferredEventTimeOverride || "");
+    const brokerageLocation =
+      (previewDev as any)?.office_location || (previewDev as any)?.emirate || "Dubai";
+    return {
+      brokerage_name: name,
+      brokerage_location: brokerageLocation,
+      contact_first_name: firstNameOf(contactFull) || "Team",
+      contact_full_name: contactFull || name,
+      contact_title: previewDev?.primary_contact?.title || "",
+      group_status_label: groupLabel,
+      group_status_line: groupLine,
+      preferred_event_time_label: slotLabel,
+      preferred_event_time_iso: slot?.slot_at || "",
+      owner_first_name: "Jane",
+      reply_to: "contact@jbj.ae",
+      cc_email: "infoo.jane@gmail.com",
+      from_name: "JBJ Global Real Estate",
+      booking_url: "#preview",
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, upcomingSlots]);
 
-  const renderPreview = (s: string) =>
-    s.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+  const renderPreview = (s: string) => {
+    const conditional = s.replace(
+      /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
+      (_, k, inner) => (previewVars[k] && String(previewVars[k]).trim().length > 0 ? inner : ""),
+    );
+    return conditional.replace(/\{\{(\w+)\}\}/g, (_, k) => previewVars[k] ?? `{{${k}}}`);
+  };
 
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
@@ -308,7 +428,12 @@ export const BulkSendDialog = ({
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
         if (entityType === "brokerage") {
-          await sendBrk.mutateAsync({ brokerageId: t.id, variant: variant as BrokerageVariant, silent: true });
+          await sendBrk.mutateAsync({
+            brokerageId: t.id,
+            variant: variant as BrokerageVariant,
+            personalization: resolvePersonalization(t),
+            silent: true,
+          });
         } else {
           await sendDev.mutateAsync({ developerId: t.id, variant: variant as RegistrationVariant, silent: true });
         }
@@ -423,6 +548,40 @@ export const BulkSendDialog = ({
               <span className="font-bold text-emerald-700">{targets.length}</span>
             </div>
           </div>
+
+          {/* Personalization (brokerage only) — bulk defaults */}
+          {isBrokerageEntity && (
+            <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
+                <UserCog className="w-4 h-4" /><strong>Personalization defaults</strong>
+              </div>
+              <div className="text-[11px] text-[#5A4A2E]">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Group / partnership status</Label>
+                <Select value={bulkGroupStatus || "__auto"} onValueChange={(v) => setBulkGroupStatus(v === "__auto" ? "" : (v as BrokerageGroupStatus))}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__auto" className="text-xs">Auto-detect per recipient</SelectItem>
+                    {GROUP_STATUS_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Preferred event time</Label>
+                <Select value={bulkPreferredSlotId || "__none"} onValueChange={(v) => setBulkPreferredSlotId(v === "__none" ? "" : v)}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__none" className="text-xs">Let them pick a time</SelectItem>
+                    {upcomingSlots.map((s) => (
+                      <SelectItem key={s.id} value={s.id} className="text-xs">{formatSlotLabelLocal(s.slot_at)}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
 
           {/* Status breakdown of eligible recipients */}
           <div className="space-y-2 border border-[#1A1A1A]/10 rounded-xl p-3 bg-[#FDFBF7]">
@@ -587,6 +746,60 @@ export const BulkSendDialog = ({
                             ))}
                           </ul>
                         )}
+                        {/* Per-row personalization */}
+                        <div className="ml-6 mt-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedPersonalize((p) => ({ ...p, [t.id]: !p[t.id] }))}
+                            className="inline-flex items-center gap-1 text-[10px] text-[#5A4A2E] hover:text-[#1A1A1A]"
+                          >
+                            {expandedPersonalize[t.id] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                            Customize for this recipient
+                          </button>
+                          {expandedPersonalize[t.id] && (
+                            <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2 p-2 bg-[#FAF5EA] border border-[#1A1A1A]/10 rounded-lg">
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Contact name</Label>
+                                <Input
+                                  className="h-7 text-xs mt-0.5"
+                                  value={perRowPersonalization[t.id]?.contactName ?? (t.primary_contact?.name || "")}
+                                  onChange={(e) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], contactName: e.target.value } }))}
+                                  placeholder="Full name"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Group status</Label>
+                                <Select
+                                  value={perRowPersonalization[t.id]?.groupStatus || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], groupStatus: v === "__inherit" ? undefined : (v as BrokerageGroupStatus) } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default</SelectItem>
+                                    {GROUP_STATUS_OPTIONS.map((o) => (
+                                      <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Preferred time</Label>
+                                <Select
+                                  value={perRowPersonalization[t.id]?.preferredSlotId || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], preferredSlotId: v === "__inherit" ? undefined : v } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default</SelectItem>
+                                    {upcomingSlots.map((s) => (
+                                      <SelectItem key={s.id} value={s.id} className="text-xs">{formatSlotLabelLocal(s.slot_at)}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     );
                   })}

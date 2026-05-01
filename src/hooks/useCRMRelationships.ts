@@ -367,6 +367,23 @@ export type RegistrationVariant = "developer_registration" | "developer_confirm_
 export type BrokerageVariant = "brokerage_partnership_intro" | "brokerage_breakfast_invite";
 export type AnyEmailVariant = RegistrationVariant | BrokerageVariant;
 
+export type BrokerageGroupStatus =
+  | "prospective"
+  | "existing"
+  | "priority"
+  | "active"
+  | "nda"
+  | "custom";
+
+export interface BrokerageOutreachPersonalization {
+  contactName?: string;
+  contactFirstName?: string;
+  groupStatus?: BrokerageGroupStatus;
+  groupStatusLabelOverride?: string;
+  preferredSlotId?: string;
+  preferredEventTimeOverride?: string;
+}
+
 export const useSendBrokerageOutreach = () => {
   const qc = useQueryClient();
   return useMutation({
@@ -378,6 +395,7 @@ export const useSendBrokerageOutreach = () => {
       overrideEmail?: string;
       fromEmailOverride?: string;
       ccEmailOverride?: string;
+      personalization?: BrokerageOutreachPersonalization;
       silent?: boolean;
     }) => {
       const { silent, ...payload } = vars;
@@ -395,6 +413,24 @@ export const useSendBrokerageOutreach = () => {
     onError: (e: any) => toast.error(e.message || "Send failed"),
   });
 };
+
+/* ---------- Upcoming breakfast slots (for personalization picker) ---------- */
+export const useUpcomingBreakfastSlots = () =>
+  useQuery({
+    queryKey: ["breakfast-slots-upcoming"],
+    queryFn: async () => {
+      const nowIso = new Date().toISOString();
+      const { data, error } = await supabase
+        .from("breakfast_slots")
+        .select("id, slot_at, capacity")
+        .gt("slot_at", nowIso)
+        .order("slot_at", { ascending: true })
+        .limit(8);
+      if (error) throw error;
+      return (data || []) as Array<{ id: string; slot_at: string; capacity: number | null }>;
+    },
+    staleTime: 60_000,
+  });
 
 /* ---------- Pre-send registration check (brokerage outreach) ---------- */
 export type BrokerageCheckReasonCode =

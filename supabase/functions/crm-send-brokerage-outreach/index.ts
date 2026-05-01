@@ -29,6 +29,23 @@ type BrokerageVariant =
   | "brokerage_partnership_intro"
   | "brokerage_breakfast_invite";
 
+type GroupStatusKey =
+  | "prospective"
+  | "existing"
+  | "priority"
+  | "active"
+  | "nda"
+  | "custom";
+
+interface Personalization {
+  contactName?: string;
+  contactFirstName?: string;
+  groupStatus?: GroupStatusKey;
+  groupStatusLabelOverride?: string;
+  preferredSlotId?: string;
+  preferredEventTimeOverride?: string;
+}
+
 interface Body {
   brokerageId?: string;
   variant?: BrokerageVariant;
@@ -37,7 +54,60 @@ interface Body {
   overrideEmail?: string;
   fromEmailOverride?: string;
   ccEmailOverride?: string;
+  personalization?: Personalization;
 }
+
+const GROUP_STATUS_LABELS: Record<GroupStatusKey, string> = {
+  prospective: "Prospective Partner",
+  existing: "Existing Relationship",
+  priority: "Priority Partner",
+  active: "Active Channel Partner",
+  nda: "NDA-Signed Partner",
+  custom: "Channel Partner",
+};
+
+const GROUP_STATUS_LINES: Record<GroupStatusKey, string> = {
+  prospective:
+    "We'd love to introduce JBJ Global Real Estate to your team and explore a formal channel partnership.",
+  existing:
+    "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
+  priority:
+    "As one of the priority brokerages on our shortlist, I'd like to reserve a private session for your team.",
+  active:
+    "As one of our active channel partners, I'd like to set aside time for a strategic review with your leadership.",
+  nda:
+    "Building on the NDA already in place between our firms, I'd like to walk your leadership through what's coming next.",
+  custom:
+    "I'd like to host your leadership for a private briefing tailored to your team.",
+};
+
+const deriveGroupStatus = (brk: any, override?: GroupStatusKey): GroupStatusKey => {
+  if (override) return override;
+  const stage = String(brk?.outreach_stage || "").toLowerCase();
+  const tags: string[] = Array.isArray(brk?.tags) ? brk.tags.map((t: any) => String(t).toLowerCase()) : [];
+  if (String(brk?.nda_status || "").toLowerCase() === "signed") return "nda";
+  if (stage === "active") return "active";
+  if (tags.includes("vip") || tags.includes("priority")) return "priority";
+  if (brk?.is_existing_match) return "existing";
+  return "prospective";
+};
+
+const formatSlotLabel = (iso: string): string => {
+  try {
+    const d = new Date(iso);
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Dubai",
+    }).format(d) + " (GST)";
+  } catch {
+    return "";
+  }
+};
 
 const base64UrlEncode = (str: string) => {
   const bytes = new TextEncoder().encode(str);
@@ -60,8 +130,14 @@ const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: s
   return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
 
-const renderTemplate = (html: string, vars: Record<string, string>) =>
-  html.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
+const renderTemplate = (html: string, vars: Record<string, string>) => {
+  // Support simple {{#if varname}}...{{/if}} blocks (truthy = non-empty string).
+  const conditional = html.replace(
+    /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
+    (_, k, inner) => (vars[k] && String(vars[k]).trim().length > 0 ? inner : ""),
+  );
+  return conditional.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
+};
 
 const firstName = (full?: string | null) => {
   if (!full) return "";
@@ -180,35 +256,89 @@ serve(async (req: Request) => {
       firstName((user.user_metadata as any)?.full_name as string | undefined) ||
       "Jane";
 
+    // ---------- Personalization resolution ----------
+    const personalization: Personalization = body.personalization || {};
+    const pcRaw = (brk?.primary_contact || {}) as Record<string, any>;
+
+    const resolvedContactFullName =
+      (personalization.contactName && personalization.contactName.trim()) ||
+      contactName ||
+      pcRaw.name ||
+      "";
+    const resolvedContactFirstName =
+      (personalization.contactFirstName && personalization.contactFirstName.trim()) ||
+      firstName(resolvedContactFullName) ||
+      "Team";
+
+    const resolvedGroupKey = deriveGroupStatus(brk, personalization.groupStatus);
+    const resolvedGroupLabel =
+      (personalization.groupStatusLabelOverride && personalization.groupStatusLabelOverride.trim()) ||
+      GROUP_STATUS_LABELS[resolvedGroupKey];
+    const resolvedGroupLine = GROUP_STATUS_LINES[resolvedGroupKey];
+
+    const brokerageLocation =
+      brk?.office_location || brk?.emirate || "Dubai";
+
+    // Look up preferred slot if provided
+    let preferredSlotIso = "";
+    let preferredSlotLabel = "";
+    if (personalization.preferredSlotId) {
+      try {
+        const { data: slot } = await service
+          .from("breakfast_slots")
+          .select("id, slot_at")
+          .eq("id", personalization.preferredSlotId)
+          .maybeSingle();
+        if (slot?.slot_at) {
+          preferredSlotIso = String(slot.slot_at);
+          preferredSlotLabel = formatSlotLabel(preferredSlotIso);
+        }
+      } catch (slotErr) {
+        console.warn("Preferred slot lookup failed:", slotErr);
+      }
+    }
+    if (!preferredSlotLabel && personalization.preferredEventTimeOverride) {
+      preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
+    }
+
     // Mint (or reuse) a breakfast booking invite token so the email can
     // include a real scheduling link instead of just a mailto RSVP.
     let bookingUrl = "";
     try {
       const tokenRes = await userClient.functions.invoke(
         "crm-create-breakfast-invite-token",
-        { body: { brokerageId: isTest ? undefined : body.brokerageId, isTest } },
+        {
+          body: {
+            brokerageId: isTest ? undefined : body.brokerageId,
+            isTest,
+            preferredSlotId: personalization.preferredSlotId,
+          },
+        },
       );
       bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
     } catch (tokErr) {
       console.warn("Booking token mint failed (continuing):", tokErr);
     }
 
-    const html = renderTemplate(template.html, {
+    const varsMap: Record<string, string> = {
       brokerage_name: brk.company_name || "your brokerage",
-      contact_first_name: firstName(contactName) || "Team",
+      brokerage_location: brokerageLocation,
+      contact_first_name: resolvedContactFirstName,
+      contact_full_name: resolvedContactFullName || (brk.company_name || "your team"),
+      contact_title: pcRaw.title || "",
+      group_status_label: resolvedGroupLabel,
+      group_status_line: resolvedGroupLine,
+      preferred_event_time_label: preferredSlotLabel || "",
+      preferred_event_time_iso: preferredSlotIso || "",
       owner_first_name: ownerFirstName,
       reply_to: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
       booking_url: bookingUrl,
-    });
-    const subjectRendered = renderTemplate(template.subject, {
-      brokerage_name: brk.company_name || "your brokerage",
-      contact_first_name: firstName(contactName) || "Team",
-      owner_first_name: ownerFirstName,
-      from_name: fromName,
-      booking_url: bookingUrl,
-    });
+    };
+
+    const html = renderTemplate(template.html, varsMap);
+    const subjectRendered = renderTemplate(template.subject, varsMap);
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
 
     const raw = buildRawMime({
@@ -270,7 +400,7 @@ serve(async (req: Request) => {
       to_emails: [recipient],
       cc_emails: cc,
       subject,
-      body_snippet: `Sent ${variant === "brokerage_breakfast_invite" ? "private breakfast invitation" : "channel-partner outreach"} to ${brk.company_name}`,
+      body_snippet: `Sent ${variant === "brokerage_breakfast_invite" ? "private breakfast invitation" : "channel-partner outreach"} to ${brk.company_name} · ${resolvedContactFullName || "(no contact)"} · ${resolvedGroupLabel}${preferredSlotLabel ? ` · suggested ${preferredSlotLabel}` : ""}`,
       sent_at: new Date().toISOString(),
     });
 

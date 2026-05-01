@@ -1,59 +1,102 @@
-I’ll do a focused contrast hardening pass instead of another cosmetic tweak.
+## Goal
 
-What I will fix:
+Make every brokerage breakfast / partnership email render fully personalized for the recipient: their **contact name**, their **company name**, their **group / partnership status**, and a **preferred event time** they can lock in before sending — with sensible fallbacks so a missing field never produces a broken `{{variable}}` in the inbox.
 
-1. Remove the gray/silver cast from the main app shell
-- Change the main public layout desktop background from the current grayish champagne (`#ECE2D2`) to the approved page/surface tokens: `#FDFBF7`, `#F7F2EA`, `#EFE6D6`.
-- Replace sidebar gradients using `#ECE2D2`, `#D8C7A6`, and `#E0D3BF` with stronger champagne/gold surfaces that do not look silver/gray.
+Today the template only knows `{{brokerage_name}}`, `{{contact_first_name}}`, `{{owner_first_name}}`, `{{booking_url}}` etc. Group status and a personalized event time are not passed through.
 
-2. Fix the owner/CRM vertical sidebar readability
-- Increase all owner sidebar labels/icons from faded alpha text to solid ink/gold.
-- Replace `text-[#1A1A1A]/50`, `/60`, `/65`, `/70`, `/80`, `/85` in the navigation with explicit high-contrast colors.
-- Strengthen active/hover rows so sections and icons are readable at normal zoom.
-- Keep the 88px L-shaped layout intact.
+## What changes
 
-3. Fix the CRM relationships page background and controls
-- Replace the `#FAF7F2` page background with approved champagne `#FDFBF7` / `#F7F2EA`.
-- Harden tabs, buttons, filters, badges, and search controls so text/icons never inherit low opacity.
-- Keep all relationship features intact; no removal.
+### 1. Expanded template variable set
 
-4. Fix the pending-tasks popup that is currently washing out
-- The screenshot shows the modal is being dimmed into nearly white/gray text. I will mark the modal content as an explicit light surface and remove/adjust the blur/dim interaction so the page is dimmed but the popup itself stays crisp.
-- Ensure the title, description, icon, message box, “View Tasks”, “Later”, and close button are all readable.
+The send function (`crm-send-brokerage-outreach`) will compute and inject these variables for every send (test or real):
 
-5. Fix homepage unreadable sections/icons
-- Update homepage category cards and trust/service sections that still use `neutral-*`, gray borders, or faded brown text.
-- Replace gray/neutral classes with champagne/gold/ink tokens.
-- Ensure icons use strong ink/gold/white-on-ink contrast, not low-opacity gray.
-- Remove the silver gradient from homepage navigation/header surfaces.
+| Variable | Source | Fallback |
+|---|---|---|
+| `contact_first_name` | `primary_contact.name` first token | `"Team"` |
+| `contact_full_name` | `primary_contact.name` | `company_name` |
+| `contact_title` | `primary_contact.title` | `""` (line hidden) |
+| `brokerage_name` | `crm_brokerages.company_name` | `"your brokerage"` |
+| `brokerage_location` | `office_location` / `emirate` | `"Dubai"` |
+| `group_status_label` | derived (see below) | `"Independent Brokerage"` |
+| `group_status_line` | one-sentence intro line built from status | generic line |
+| `preferred_event_time_label` | human-readable preferred slot | `"a time that suits you"` |
+| `preferred_event_time_iso` | ISO of chosen slot | `""` |
+| `booking_url` | existing token URL | existing |
+| `owner_first_name`, `from_name`, `reply_to`, `cc_email` | existing | existing |
 
-6. Add a final global contrast safety net
-- Add a last-source-order CSS lock for champagne/light surfaces:
-  - light/champagne backgrounds → text must be ink `#1A1A1A` or strong brown `#3A2D1D`
-  - dark/ink backgrounds → text/icons must be white/champagne
-  - gold backgrounds → text/icons must be white or ink depending on the exact fill
-- Replace remaining gray/neutral utility colors in affected surfaces with warm champagne/ink equivalents.
-- Avoid broad rules that accidentally turn text white inside light cards.
+**Group status derivation** uses fields already on the row (no schema change required for v1):
+- `outreach_stage = "active"` → `Active Channel Partner`
+- `tags` contains `vip` / `priority` → `Priority Partner`
+- `nda_status = "signed"` → `NDA-Signed Partner`
+- `is_existing_match = true` → `Existing Relationship`
+- otherwise → `Prospective Partner`
 
-7. Verify visually
-- Re-open `/owner/crm/relationships` at the current viewport and confirm:
-  - no gray/silver background cast
-  - vertical sidebar labels and icons are readable
-  - pending task popup is readable
-  - CRM relationship controls are readable
-- Re-open homepage and confirm:
-  - icons and section text are visible
-  - no gray/neutral card styling remains in the visible homepage sections
+The matching `group_status_line` is a short pre-written sentence per status (e.g. *"As one of our active channel partners, …"* vs *"We'd love to introduce JBJ Global Real Estate to your team …"*).
 
-Technical files I expect to update:
-- `src/index.css`
-- `src/components/MainLayout.tsx`
-- `src/components/navigation/GlobalVerticalNav.tsx`
-- `src/pages/OwnerDashboardShell.tsx`
-- `src/components/owner-dashboard/OwnerSidebarNav.tsx`
-- `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`
-- `src/pages/CRMRelationships.tsx`
-- `src/pages/Index.tsx`
-- selected homepage components such as `CategorySelectorSection`, `TrustBar`, `WhyChooseUs`, `ServicesGrid`, `ExploreServicesCard`, and `ToolkitShowcaseCard` if they still contain gray/neutral/low-opacity styling.
+### 2. Per-send overrides from the UI
 
-I will not remove any features or content. This is a contrast and palette correction only.
+`BulkSendDialog` gets a new compact "Personalization" panel (collapsible, on by default for brokerage variants) with three optional overrides per recipient row:
+
+- **Contact name** — pre-filled from `primary_contact.name`, editable inline.
+- **Group status** — dropdown: Prospective / Existing Relationship / Priority / Active Channel / NDA-Signed / Custom… (auto-detected default).
+- **Preferred event time** — dropdown of upcoming `breakfast_slots` (next ~6 slots) plus an "Open scheduler — let them choose" option (current behavior).
+
+All three are optional; leaving them blank uses the auto-derived value above. The dialog already iterates over recipients, so each row carries its own `personalization` object.
+
+The hook `useSendBrokerageOutreach` and the edge function payload gain:
+
+```ts
+personalization?: {
+  contactName?: string;
+  contactFirstName?: string;
+  groupStatus?: "prospective" | "existing" | "priority" | "active" | "nda" | "custom";
+  groupStatusLabelOverride?: string;
+  preferredSlotId?: string;       // breakfast_slots.id
+  preferredEventTimeOverride?: string; // free-text, e.g. "Tuesday 9 May, 8:30 AM"
+}
+```
+
+### 3. Edge function logic (`crm-send-brokerage-outreach`)
+
+- Accept the new `personalization` object.
+- After loading the brokerage row, compute the variable map using overrides → row values → fallbacks (in that order).
+- If `preferredSlotId` is provided, fetch that slot from `breakfast_slots`, format it in Dubai timezone (e.g. *"Tuesday, 12 May · 8:30 AM (GST)"*), and pass it as `preferred_event_time_label` + ISO.
+- If `preferredSlotId` is set, also forward it to `crm-create-breakfast-invite-token` so the booking page can pre-select that slot (small additive param `preferredSlotId` — token endpoint just stores it on `meeting_requests.preferred_date`/`preferred_time`).
+- Render both `subject` and `html` through `renderTemplate` with the full variable map (subject gains `{{contact_first_name}}` and `{{group_status_label}}` support).
+- Log the resolved personalization snapshot into `crm_relationship_email_log.body_snippet` for traceability.
+
+### 4. Template updates (data-only, via insert tool)
+
+Update the two existing rows in `crm_email_templates` (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) so the HTML body uses the new variables:
+
+- Greeting: `Dear {{contact_first_name}},`
+- A personalized intro paragraph that injects `{{group_status_line}}` and references `{{brokerage_name}}` and `{{brokerage_location}}`.
+- A "Suggested time" block: *"We've held **{{preferred_event_time_label}}** for {{brokerage_name}} — confirm or pick another time below."* This block is rendered conditionally via a simple `{{#if preferred_event_time_iso}}…{{/if}}` substitution we add to `renderTemplate` (tiny extension, still no dependencies).
+- Subjects updated to e.g. *"{{contact_first_name}}, breakfast with JBJ — {{preferred_event_time_label}}"* with graceful fallback when the time is empty.
+
+No schema migration required — only template HTML/subject text is updated, which is data, applied via the insert tool.
+
+### 5. Booking page hand-off
+
+`BreakfastBooking.tsx` already reads `attendee_count` / `briefing_topics` / `preferred_date` / `preferred_time` from the lookup endpoint. We pass the chosen `preferredSlotId` through `crm-create-breakfast-invite-token` so when the partner clicks the email link, their pre-selected slot is highlighted (no behavior change if absent).
+
+## Files touched
+
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — accept `personalization`, derive variables, look up slot, expand renderTemplate map, support `{{#if x}}…{{/if}}`.
+- `supabase/functions/crm-create-breakfast-invite-token/index.ts` — accept optional `preferredSlotId` and persist it on the placeholder `meeting_requests` row.
+- `src/hooks/useCRMRelationships.ts` — extend `useSendBrokerageOutreach` payload type.
+- `src/components/crm/BulkSendDialog.tsx` — new collapsible Personalization panel per row (contact name, group status, preferred slot dropdown), pulls upcoming slots via a small new hook `useUpcomingBreakfastSlots()`.
+- `src/hooks/useCRMRelationships.ts` — add `useUpcomingBreakfastSlots()` (selects next 8 future rows from `breakfast_slots`).
+- `crm_email_templates` rows for both brokerage variants — updated subject + HTML (data update, applied via the insert tool).
+
+## Out of scope
+
+- No new database columns. Group status is derived, not stored separately. If later the user wants a hard-coded `group_status` field on `crm_brokerages`, that's a follow-up.
+- No changes to developer-registration variants — personalization stays brokerage-only for now.
+- No new auth or RLS work; `breakfast_slots` is already readable, and the rest runs server-side with service role.
+
+## Acceptance check
+
+- Sending a test email for a brokerage with a populated `primary_contact.name`, an `outreach_stage`, and a chosen preferred slot produces an email whose subject, greeting, intro line, and "suggested time" block all reflect those values — no `{{variable}}` leaks in the inbox.
+- Sending with everything left blank still produces a valid, professional email using the fallback values.
+- The booking link in that same email opens the scheduler with the suggested slot highlighted.
