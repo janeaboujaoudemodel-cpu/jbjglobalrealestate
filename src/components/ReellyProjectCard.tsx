@@ -236,12 +236,15 @@ const ReellyProjectCard = ({
                 </div>
               )}
            
-           {/* Bottom-Right: Handover Year */}
-           {project.handover_date && (
-             <div className="absolute bottom-3 right-3 z-10 bg-handover text-handover-foreground px-2.5 py-1 rounded text-xs font-bold shadow-[0_10px_25px_hsl(0_0%_0%/0.25)]">
-               {project.handover_date}
+           {/* Bottom-Right: Price overlay (replaces handover; handover moved to footer) */}
+           {project.price_from ? (
+             <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1 rounded-full bg-price-orange px-2.5 py-1 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
+               <span className="text-[9px] uppercase tracking-[0.14em] font-semibold text-white/85">From</span>
+               <span className="text-white font-bold text-xs tabular-nums leading-none">
+                 {formatPriceWithCurrency(project.price_from, currency)}
+               </span>
              </div>
-           )}
+           ) : null}
          </div>
          
          {/* Content */}
@@ -262,17 +265,17 @@ const ReellyProjectCard = ({
            {/* Divider */}
            <div className="h-px bg-gold/20 my-2" />
            
-          {/* Starting Price */}
+          {/* Handover line (replaces price; price now lives on the photo) */}
           <p className="text-sm mb-2">
-            {project.price_from ? (
+            {project.handover_date ? (
               <>
-                <span className="text-muted-foreground">Starting from </span>
-                <span className="text-price-orange font-bold text-lg">
-                  {formatPriceWithCurrency(project.price_from, currency)}
+                <span className="text-muted-foreground">Handover </span>
+                <span className="text-foreground font-semibold">
+                  {project.handover_date}
                 </span>
               </>
             ) : (
-              <span className="text-price-orange font-medium">Price on Request</span>
+              <span className="text-muted-foreground">Handover TBA</span>
             )}
           </p>
            
