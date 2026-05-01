@@ -495,7 +495,7 @@ const Footer = () => {
       {/* === ZONE 1 — Brand + utility row === */}
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex flex-col items-center text-center gap-6">
             <Link to="/" className="inline-flex items-center gap-4 group">
               <span
                 className="inline-flex items-center justify-center w-16 h-16 rounded-md border bg-[#FDFBF7]/[0.04] shrink-0"
@@ -526,7 +526,7 @@ const Footer = () => {
               </div>
             </Link>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#FDFBF7]/[0.03] border border-white/10">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#FDFBF7]/[0.03] border border-[hsl(var(--gold))]/30">
               <div className="flex items-center gap-2.5">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-white/55">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
