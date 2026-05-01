@@ -18,6 +18,7 @@ import {
   type ToolDefinition,
   type ToolCategory,
 } from '@/config/royalToolsRegistry';
+import { useToolVisibility } from '@/hooks/useToolVisibility';
 
 interface ToolCardProps {
   tool: ToolDefinition;
