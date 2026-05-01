@@ -528,14 +528,6 @@ const Index = () => {
 
       <div className="cv-auto">
         <Suspense fallback={<SectionLoader />}>
-          <BestIdeaAward />
-        </Suspense>
-      </div>
-
-      <SectionDivider fullWidth />
-
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
           <WhyChooseUs />
         </Suspense>
       </div>
