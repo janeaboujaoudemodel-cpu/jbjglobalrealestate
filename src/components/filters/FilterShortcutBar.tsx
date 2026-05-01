@@ -348,8 +348,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const popoverClass = "bg-[#FDFBF7] border border-[#B89555]/30 z-[10200] shadow-xl";
 
-  const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
-  const togglePillOff = "border-[#B89555]/30 text-[#5A4A2E] bg-[#FDFBF7] hover:bg-[#F7F2EA]";
+  const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer";
+  const togglePillOff = "border-[#B89555]/50 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
   const togglePillOn = "border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold";
 
   const handleSaveFilter = (name: string) => {

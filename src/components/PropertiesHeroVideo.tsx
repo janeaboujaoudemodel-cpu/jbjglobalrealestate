@@ -19,8 +19,16 @@ const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
       {/* Video background with poster fallback */}
       <VideoBackground src={propertiesHeroVideo} poster={POSTER} />
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/95" />
+      {/* Gradient overlay — strengthened for guaranteed white-text contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/95" />
+      {/* Soft radial vignette behind heading area */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at 30% 70%, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 40%, transparent 75%)',
+        }}
+      />
 
       {/* Floating gold accent orbs */}
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />

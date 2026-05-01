@@ -515,14 +515,15 @@ const Properties = () => {
             {/* Heading */}
             <h1 
               className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
               Curated Listings. Global Standard.
             </h1>
             
             {/* Subtitle */}
             <p
-              className="text-white/95 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
-              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.55)' }}
+              className="text-white text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
+              style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.7)' }}
             >
               Exclusive investment-grade properties with trusted advisory.
             </p>

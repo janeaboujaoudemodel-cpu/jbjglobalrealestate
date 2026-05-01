@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
@@ -347,8 +347,16 @@ export function useProjects() {
 /**
  * Lightweight listing hook - no images/documents joins.
  * Use this for Properties page and other listing views.
+ *
+ * Progressive fetch strategy for fast first paint on a 2,500+ row catalogue:
+ *   Stage 1: fetch the first FAST_PAGE rows and return them immediately so the
+ *            grid renders within ~one network round-trip.
+ *   Stage 2: in the background, fetch the rest in 1000-row pages and merge
+ *            them into the React Query cache so filtering/sorting works on
+ *            the full dataset shortly after.
  */
 export function useProjectsListing() {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
@@ -370,38 +378,67 @@ export function useProjectsListing() {
         community:communities(id, name, slug)
       `;
 
-      const PAGE_SIZE = 1000;
+      const FAST_PAGE = 200;
+      const BG_PAGE = 1000;
 
-      const { count, error: countError } = await supabase
+      // Stage 1 — fast initial slice
+      const { data: fastData, error: fastError } = await supabase
         .from("projects")
-        .select("id", { count: "exact", head: true })
-        .eq("is_published", true);
+        .select(LISTING_COLUMNS)
+        .eq("is_published", true)
+        .order("created_at", { ascending: false })
+        .range(0, FAST_PAGE - 1);
 
-      if (countError) throw countError;
+      if (fastError) throw fastError;
+      const firstSlice = (fastData ?? []) as unknown as UnifiedProject[];
 
-      const totalRows = count ?? 0;
-      if (totalRows === 0) return [] as UnifiedProject[];
-
-      const pageOffsets = Array.from(
-        { length: Math.ceil(totalRows / PAGE_SIZE) },
-        (_, idx) => idx * PAGE_SIZE
-      );
-
-      const pageResults = await Promise.all(
-        pageOffsets.map(async (offset) => {
-          const { data, error } = await supabase
+      // Stage 2 — background backfill (don't block first paint)
+      void (async () => {
+        try {
+          const { count, error: countError } = await supabase
             .from("projects")
-            .select(LISTING_COLUMNS)
-            .eq("is_published", true)
-            .order("created_at", { ascending: false })
-            .range(offset, offset + PAGE_SIZE - 1);
+            .select("id", { count: "exact", head: true })
+            .eq("is_published", true);
+          if (countError) throw countError;
+          const total = count ?? 0;
+          if (total <= FAST_PAGE) return;
 
-          if (error) throw error;
-          return data ?? [];
-        })
-      );
+          const offsets: number[] = [];
+          for (let off = FAST_PAGE; off < total; off += BG_PAGE) offsets.push(off);
 
-      return pageResults.flat() as unknown as UnifiedProject[];
+          const pages = await Promise.all(
+            offsets.map(async (offset) => {
+              const { data, error } = await supabase
+                .from("projects")
+                .select(LISTING_COLUMNS)
+                .eq("is_published", true)
+                .order("created_at", { ascending: false })
+                .range(offset, offset + BG_PAGE - 1);
+              if (error) throw error;
+              return data ?? [];
+            })
+          );
+
+          const rest = pages.flat() as unknown as UnifiedProject[];
+          // Merge into cache, deduping by id
+          queryClient.setQueryData<UnifiedProject[]>(["projects-listing"], (prev) => {
+            const base = prev ?? firstSlice;
+            const seen = new Set(base.map((p) => p.id));
+            const merged = [...base];
+            for (const r of rest) {
+              if (!seen.has(r.id)) {
+                merged.push(r);
+                seen.add(r.id);
+              }
+            }
+            return merged;
+          });
+        } catch {
+          // Silent — first slice is already on screen
+        }
+      })();
+
+      return firstSlice;
     },
   });
 }
