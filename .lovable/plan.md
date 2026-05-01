@@ -1,91 +1,102 @@
-## Audit
+## Media Ingestion Hub — bulk drop, AI-match, review, merge
 
-I reproduced the issues and traced every one to a single CSS rule. Here is what I found, with the actual code references.
+A new admin workspace where you dump **any number of files (videos, PDFs, brochures, fact sheets, presentations) and links**. The AI reads each one, identifies the **developer** and the **project**, and stages an enrichment proposal. You review, multi-select, then approve to merge into the existing published listing.
 
-### Reported issues
+### Does this exist today?
 
-| # | Issue | Verified? |
-|---|------|-----------|
-| 1 | Investor Opportunities cards: black box + black title + black icons | Yes — root cause identified |
-| 2 | "Tell us who you are": white icon on white box, icon touching text, Continue misaligned | Yes — root cause identified |
-| 3 | 8 trust cards on home (RERA, Instant Response, Verified Listings, Award Winning, …): black-on-black | Yes — root cause identified |
-| 4 | "Get Verified" button after developer names: black-on-black | Yes — root cause identified |
-| 5 | Sidebar Contact + Support icons should be red, text should be black (last turn made them white) | Code already says red icons + ink text — must verify in screenshot after fix; will harden the colours so no guard can override |
-| 6 | "Same thing across all pages, backend, forms, task popups" | Same root cause covers any champagne card with a nested dark icon tile or black CTA |
+**No.** Today's tools are partial and not fit for this:
+- `ProvidentPortalHub`, `universal-link-extractor`, `firecrawl-scrape` — only handle **URLs/scraping**, not uploaded files.
+- `ProjectMediaManager`, `DocumentsManager` — manual, **one project at a time**, no AI matching.
+- `material_ingestion_jobs` table exists in the DB but has **no UI, no edge function, no file support** — we'll repurpose and extend it.
+- No bulk select / bulk merge / bulk delete / duplicate / skip workflow exists for incoming media.
 
-### Root cause
+So this is a **net-new feature** built on top of existing primitives.
 
-In `src/index.css` lines 3635–3640 there is a "PASS 5" contrast guard:
+---
 
-```css
-.bg-[#FDFBF7] :is(.text-white, .text-[#FDFBF7], .text-[#F7F2EA]),
-.bg-[#F7F2EA] :is(.text-white, .text-[#FDFBF7], .text-[#F7F2EA]),
-.bg-[#EFE6D6] :is(.text-white, ...):not(.allow-white) {
-  color: #1A1A1A !important;
-}
-```
+### What you'll get
 
-This rule says: "any white text inside a champagne card gets forced to ink." It is correct in spirit, but the descendant combinator (` `) recurses into ALL descendants — including nested **dark** wrappers. So:
+A new page at **`/admin/media-ingestion`** (linked from `ListingAdmin`) with three tabs:
 
-- TrustBar card: `bg-[#FDFBF7]` card → `bg-[#1A1A1A]` icon tile → `text-white` icon → forced to `#1A1A1A` → **black icon on black tile**.
-- DeveloperPortalCTA Investor Opportunities cards (`src/components/home/DeveloperPortalCTA.tsx:117-129`): same exact pattern.
-- VerificationBanner "Get Verified" button (`src/components/verification/VerificationBanner.tsx:57-63`): `bg-[#F7F2EA]` parent → `bg-[#1A1A1A]` button → `text-white` label → forced to ink → **black-on-black button**.
-- CategorySelectorSection (`src/components/home/CategorySelectorSection.tsx:101-103`): hover state turns the icon tile dark, the icon is `text-white` → inverted to ink → **invisible icon, looks like a white-on-white box because the tile only goes dark on hover**.
+1. **Drop Zone** — drag-and-drop or paste links. Mix any combination (50 videos + 30 PDFs + 20 Drive links, etc.). Files upload to a private storage bucket; links queue immediately. A job is created per item.
 
-The runtime guard `src/utils/contrastGuard.ts` only walks interactive elements (`button, a[href], …`) so it doesn't double up on cards, but it doesn't fix this either.
+2. **Staging Queue** — every uploaded item appears as a card with:
+   - Thumbnail/preview, filename, size, duration (videos), page count (PDFs)
+   - **AI-detected developer** (e.g. "Omniyat") with confidence %
+   - **AI-matched project** (e.g. "AVA at Palm Jumeirah") with confidence %
+   - Detected document type (`brochure` / `fact_sheet` / `presentation` / `floor_plan` / `payment_plan` / `video_tour` / `unknown`)
+   - Status: `processing` → `needs_review` / `auto_matched` / `unmatched` / `merged` / `skipped`
+   - Inline editors to override the developer/project/type if AI got it wrong
+   - **Bulk toolbar** (always visible when ≥1 selected): Select all / Invert / Approve & merge / Skip / Delete / Duplicate / Re-run AI / Reassign developer / Reassign project / Change type
 
-### Sidebar Contact + Support audit
+3. **Merge History** — log of what was merged into which project, by whom, when, with one-click rollback (removes the doc/video rows added by that merge).
 
-`src/components/navigation/GlobalVerticalNav.tsx:1246-1259` already has:
-- Text: `text-[#1A1A1A]/80` (near-black ink, correct)
-- Icons: `<Headphones text-red-600>` and `<Ticket text-red-600>` (red, correct)
+---
 
-So the user's "all white" claim doesn't match current code. I will harden it to make absolutely sure no guard or inheritance can turn it white: set the text to solid `#1A1A1A` (no /80 fade) and add inline `style={{ color: '#DC2626' }}` to the icons so any future cascade can't override them.
+### How AI matching works
 
-## Fix plan
+Per item, an edge function pipeline runs:
+- **Videos**: extract first/middle/last frames + run audio through `video-transcribe` → feed transcript + frames to Lovable AI (`google/gemini-2.5-flash`) for "which developer + which project is this about?"
+- **PDFs**: text extraction (first 10 pages) via `document-extractor` → same AI prompt
+- **Links**: `universal-link-extractor` → same AI prompt
+- AI receives **the full developer list + project list** (name, aliases, emirate) so it can return a `developer_id` + `project_id` (or `null` + suggested name for new projects)
+- Confidence ≥ 0.85 → `auto_matched`; 0.5–0.85 → `needs_review`; < 0.5 → `unmatched`
+- Filename heuristics run first as a cheap pre-pass (e.g. `OMNIYAT_AVA_Brochure.pdf`)
 
-### 1. `src/index.css` — fix the over-aggressive PASS 5 rule
+### What "merge to listing" does
 
-Replace the white→ink override with a version that:
-1. Keeps the existing inversion for white text directly inside champagne surfaces.
-2. **Re-asserts** `color: #FDFBF7` on white text/icons that sit inside any nested dark surface (`bg-[#1A1A1A]`, `bg-foreground`, `bg-black`) inside the champagne card. The re-assertion comes later in source order at equal specificity, so it wins.
-3. Adds `:not([data-no-contrast-guard])` so any developer can opt out an element if needed.
+When you approve a card (or bulk-approve N cards):
+- **PDFs/brochures/fact sheets/floor plans** → insert into `project_documents` for the matched project (uses existing `DocumentsManager` schema, including `display_title`, `is_visible`, `allow_download`)
+- **Videos** → set `projects.video_url` if empty, otherwise add to a new `project_videos` table (created in the migration)
+- **Cover/render images** → insert into `project_images` with the right `display_order`
+- Source files keep living in `project-documents` / `project-media` storage buckets — nothing is re-uploaded
+- Every merge writes an audit row so rollback is one click
 
-This single change fixes issues #1, #2 (icon part), #3, #4, and any other location with the same composition pattern (CRM popups, task forms, dashboards). Zero JSX changes for those four.
+### Bulk automation (your explicit ask)
 
-### 2. `src/components/home/CategorySelectorSection.tsx` — fix layout polish
+The toolbar supports, on any multi-select:
+- ✅ Approve & merge (only valid for items with a matched project)
+- ⏭ Skip (keeps file, marks `skipped`, hidden from default view)
+- 🗑 Delete (removes job + file from storage)
+- 📑 Duplicate (clones the job — useful when one PDF belongs to two projects)
+- 🔁 Re-run AI matching
+- ✏️ Reassign developer / project / document type in one go
+- ⬇️ Export selected as CSV (filename, developer, project, status)
 
-Independent of the colour bug, the card has these tweaks needed:
-- Add gap between the icon tile and tagline (`mb-5` is fine; the issue is the icon tile + tagline live in the same `flex justify-between` row; on narrow widths they touch). Add `gap-3` to the parent flex.
-- "Continue" + arrow row: keep current alignment but ensure the button's bottom row uses `justify-between` properly with `pt-4 border-t` — already correct in code. Re-check after rendering.
-- Replace the reported "Continue button is not aligned" by adding `w-full` to the bottom row and keeping `justify-between`.
+Filter bar: by developer, by project, by status, by file type, by confidence range, free-text search.
 
-### 3. `src/components/navigation/GlobalVerticalNav.tsx` — harden Contact/Support pills
+---
 
-In the bottom-of-sidebar Contact + Support block (lines 1246-1259):
-- Change text from `text-[#1A1A1A]/80` to solid `text-[#1A1A1A]` (no fade).
-- Add `style={{ color: '#DC2626' }}` inline to the `<Headphones />` and `<Ticket />` icons so the red survives any future cascade.
-- Add `data-no-contrast-guard` on each `<Link>` so the runtime contrast guard never inverts them.
+### Technical plan
 
-### 4. Verification — full audit with screenshots
+**Storage**
+- New private bucket `ingestion-staging` for raw uploads pre-merge
+- On merge, files are **moved** (not re-uploaded) into `project-documents` / `project-media` using `storage.move`
 
-After the fixes I will:
-1. Reload `/` in the browser.
-2. Take a fresh screenshot of the hero + CTA pills row.
-3. Scroll to and screenshot:
-   - The 8 trust cards (TrustBar) — confirm white icons on dark tiles inside champagne cards.
-   - The "Tell us who you are" section — confirm the icon stays visible on hover.
-   - The "Investor Opportunities" 4-card grid — confirm icons + labels readable.
-   - The "Get Verified" yellow banner — confirm button is dark with white text.
-   - The sidebar bottom — confirm Contact/Support text is black and icons are red.
-4. Post all screenshots back in chat as a written audit confirming each fix.
+**Database migration**
+- Extend `material_ingestion_jobs` with: `file_path`, `file_name`, `file_size`, `mime_type`, `duration_seconds`, `page_count`, `detected_doc_type`, `matched_project_id`, `match_confidence`, `developer_confidence`, `ai_summary`, `merge_target` (jsonb), `merged_at`, `merged_by`, `selected` (transient), proper indexes on `(status, user_id)` and `(matched_project_id)`
+- New `project_videos` table (project_id, url, title, source_job_id, display_order, is_visible)
+- New `media_ingestion_audit` table for rollback (job_id, target_table, target_row_id, action, performed_by, performed_at)
+- RLS: owner + listing admins only
 
-If any of those still fail visually after step 1's CSS change, I will iterate **in the same turn** rather than ending the response.
+**Edge functions (new)**
+- `media-ingestion-classify` — runs the AI matching pipeline for a job (or batch)
+- `media-ingestion-merge` — moves storage files + writes `project_documents` / `project_videos` / `project_images` rows + audit
+- `media-ingestion-rollback` — undoes a merge using the audit table
 
-## Files to edit
+**Frontend**
+- New page `src/pages/admin/MediaIngestionHub.tsx` + components in `src/components/listing-admin/media-ingestion/`:
+  `DropZone.tsx`, `StagingQueue.tsx`, `IngestionCard.tsx`, `BulkToolbar.tsx`, `MatchEditor.tsx`, `MergeHistory.tsx`
+- Hook `useMediaIngestion.ts` (list, mutate, bulk actions, realtime via existing Supabase realtime channel)
+- Route registered in `src/routes/AdminRoutes.tsx` under `OwnerGuard` + `ListingAdminGuard`
+- Entry tile added to `ListingAdmin.tsx` next to `ProvidentPortalHub`
 
-- `src/index.css` — replace the PASS 5 white→ink rule with a nested-dark-aware version (~25 lines around line 3635).
-- `src/components/home/CategorySelectorSection.tsx` — minor flex spacing polish (1 prop change).
-- `src/components/navigation/GlobalVerticalNav.tsx` — harden Contact/Support pill colours (lines 1246-1259).
+**Design**
+- Champagne surfaces, gold accents, IconTile for status, `--price-orange` reserved for prices only, AI badges in vivid purple per the AI Premium Purple standard
+- Strict no-removal: existing `ProjectMediaManager`, `DocumentsManager`, `ProvidentPortalHub` stay untouched
 
-No new files, no dependency changes, no DB changes.
+**Out of scope (this round)**
+- OCR'ing handwriting in scanned PDFs (uses standard text extraction; we can add OCR fallback later)
+- Auto-creating brand-new projects from unmatched files (kept as a manual "Promote to new project" button — safer)
+
+After approval I'll switch to build mode and ship it end-to-end.
