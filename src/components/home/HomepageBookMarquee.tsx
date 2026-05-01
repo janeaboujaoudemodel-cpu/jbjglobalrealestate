@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
-import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
+
 
 import type { BookData } from "@/types/books";
 
@@ -106,11 +106,6 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </div>
-
-      {/* Premium Company Profile standalone strip */}
-      <div className="px-4 md:px-6 lg:px-8 pt-8 pb-2">
-        <CompanyProfileBrochure />
       </div>
     </section>
   );
