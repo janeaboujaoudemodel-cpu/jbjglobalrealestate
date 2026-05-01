@@ -533,7 +533,6 @@ export default function HorizontalUtilityBar() {
             variant="light"
             filters={globalFilters}
             onFilterChange={handleGlobalFilterChange}
-            resultsLabel="Properties"
           />
         </div>
       </div>

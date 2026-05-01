@@ -2403,24 +2403,31 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
  *      (matches the "Faded Gold Prohibition" memory rule)
  * ============================================================ */
 
-/* 1. Icons on solid-ink tiles → white */
-.bg-black svg,
-.bg-zinc-900 svg, .bg-zinc-950 svg,
-.bg-neutral-900 svg, .bg-neutral-950 svg,
-.bg-gray-900 svg, .bg-gray-950 svg,
-.bg-stone-900 svg, .bg-stone-950 svg,
-.bg-slate-900 svg, .bg-slate-950 svg,
-[class*="bg-[#1A1A1A]"] > svg,
-[class*="bg-[#0F0F0F]"] > svg,
-[class*="bg-[#111"] > svg {
+/* 1. Icons on SOLID-ink tiles → white.
+   IMPORTANT: Tailwind arbitrary alpha (e.g. bg-[#1A1A1A]/50) compiles to a class
+   like "bg-[#1A1A1A]/50" — the substring [class*="bg-[#1A1A1A]"] would match it
+   and force the icon white over a translucent tile, producing invisible icons
+   on champagne (#F7F2EA) surfaces. We use [class~="…"] which matches the bare
+   class as a whole word, EXCLUDING any /<alpha> suffix. */
+.bg-black > svg,
+.bg-zinc-900 > svg, .bg-zinc-950 > svg,
+.bg-neutral-900 > svg, .bg-neutral-950 > svg,
+.bg-gray-900 > svg, .bg-gray-950 > svg,
+.bg-stone-900 > svg, .bg-stone-950 > svg,
+.bg-slate-900 > svg, .bg-slate-950 > svg,
+[class~="bg-[#1A1A1A]"] > svg,
+[class~="bg-[#0F0F0F]"] > svg,
+[class~="bg-[#111111]"] > svg,
+[class~="bg-[#000000]"] > svg {
   color: #FFFFFF;
 }
 
-/* 2. Icons on solid-gold tiles → white (gold #B89555 / deep #A68444) */
+/* 2. Icons on SOLID-gold tiles → white. Same exact-token logic as above so
+   translucent gold tiles (bg-[#B89555]/10, /15…) keep their authored gold icon. */
 .bg-gold > svg,
-[class*="bg-[#B89555]"] > svg,
-[class*="bg-[#A68444]"] > svg,
-[class*="bg-[#C8A766]"] > svg {
+[class~="bg-[#B89555]"] > svg,
+[class~="bg-[#A68444]"] > svg,
+[class~="bg-[#C8A766]"] > svg {
   color: #FFFFFF;
 }
 
@@ -2695,6 +2702,31 @@ button[style*="linear-gradient"] *,
 button[style*="background"] [class*="text-gold"] {
   color: #111111 !important;
   opacity: 1 !important;
+}
+
+/* ============================================================
+   LIGHT-SURFACE INTERACTIVE LABEL GUARD
+   Filter pills, select triggers, popover items, and listing cards
+   must never render text-white on champagne/light backgrounds at
+   rest. Active states with a SOLID dark/red/gold background on the
+   element itself are preserved. Dark surfaces opt out via data-surface="dark".
+   ============================================================ */
+:root:not(.dark) :is(
+  .bg-champagne, [class*="bg-champagne"],
+  .bg-white, .bg-card, .bg-popover,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
+  [class*="bg-[#EFE6D6]"], [class*="bg-[#ECE2D2]"]
+):not([data-surface="dark"])
+:is(button, a, [role="button"], [role="option"], [role="menuitem"], label, span, p, h1, h2, h3, h4, h5, h6):is(.text-white, [class*="text-white/"]):not(.bg-black):not([class~="bg-[#1A1A1A]"]):not(.bg-gold):not([class~="bg-[#B89555]"]):not([class*="bg-red-5"]):not([class*="bg-red-6"]):not([class*="bg-red-7"]):not([class*="bg-emerald-6"]):not([class*="bg-blue-6"]):not([data-surface="dark"]) {
+  color: hsl(var(--foreground)) !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Property listing card muted-foreground → readable warm brown on champagne */
+:root:not(.dark) :is([class*="bg-[#FDFBF7]"], [class*="from-[#FDFBF7]"], .bg-card):not([data-surface="dark"]) .text-muted-foreground {
+  color: #5A4A2E !important;
+  --tw-text-opacity: 1 !important;
 }
 
 /* ============================================================

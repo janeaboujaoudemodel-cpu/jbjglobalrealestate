@@ -77,10 +77,12 @@ interface FilterShortcutBarProps {
   onMapToggle?: (active: boolean) => void;
   searchSlot?: React.ReactNode;
   priorityFilter?: 'developers' | 'areas' | 'emirates' | 'projects';
-  /** Live results count — displayed as a sticky badge at the end of row 2 */
+  /** Live results count — only displayed when `showResultsCount` is explicitly true. */
   resultsCount?: number;
   /** Label for the results count (default: "Results") */
   resultsLabel?: string;
+  /** Show the live results badge inside the shortcut rail. Default false. */
+  showResultsCount?: boolean;
 }
 
 const PRICE_PRESETS = [
@@ -155,7 +157,7 @@ const CURRENCY_RATES: Record<string, number> = {
 const SQFT_TO_SQM = 1 / 10.764;
 const SQM_TO_SQFT = 10.764;
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel, showResultsCount = false }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
@@ -861,8 +863,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         )}
 
-        {/* Live Results Count Badge */}
-        {resultsCount !== undefined && (
+        {/* Live Results Count Badge — opt-in only via showResultsCount.
+            Removed from default rails to avoid stray "54 / 054" numbers
+            appearing in the search/filter area on the properties page. */}
+        {showResultsCount && resultsCount !== undefined && (
           <div className="flex-shrink-0 ml-auto sticky right-0 pl-2">
             <div
               key={resultsCount}
@@ -873,7 +877,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             >
               <Activity className="w-3.5 h-3.5 text-white" />
               <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
-              <span className="text-white/70 font-medium">{resultsLabel || 'Results'}</span>
+              <span className="text-white/85 font-medium">{resultsLabel || 'Results'}</span>
             </div>
           </div>
         )}

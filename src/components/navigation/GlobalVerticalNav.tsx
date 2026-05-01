@@ -1247,20 +1247,24 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#1A1A1A]/[0.04] transition-all px-1 py-[5px] rounded-lg"
-              style={{ color: '#1A1A1A' }}
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-bold transition-all px-1 py-[6px] rounded-lg border group"
+              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.40)', backgroundColor: 'rgba(220,38,38,0.06)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.06)'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.40)'; }}
             >
-              <Headphones className="w-3.5 h-3.5" strokeWidth={2.5} style={{ color: '#DC2626' }} />
-              <span style={{ color: '#1A1A1A' }}>Contact</span>
+              <Headphones className="w-3.5 h-3.5 group-hover:[color:#FFFFFF]" strokeWidth={2.5} style={{ color: '#DC2626' }} />
+              <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-[#1A1A1A] hover:bg-[#1A1A1A]/[0.04] transition-all px-1 py-[5px] rounded-lg"
-              style={{ color: '#1A1A1A' }}
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-bold transition-all px-1 py-[6px] rounded-lg border group"
+              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.40)', backgroundColor: 'rgba(220,38,38,0.06)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.06)'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.40)'; }}
             >
-              <Ticket className="w-3.5 h-3.5" strokeWidth={2.5} style={{ color: '#DC2626' }} />
-              <span style={{ color: '#1A1A1A' }}>Support</span>
+              <Ticket className="w-3.5 h-3.5 group-hover:[color:#FFFFFF]" strokeWidth={2.5} style={{ color: '#DC2626' }} />
+              <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
           {session ? (
@@ -1347,16 +1351,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <div className="w-5 h-[1px] bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10 mb-0.5" />
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link to="/contact" className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50/60 transition-all">
-                    <Headphones className="w-3.5 h-3.5" />
+                  <Link to="/contact" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#DC2626] border border-[#DC2626]/40 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all">
+                    <Headphones className="w-3.5 h-3.5" strokeWidth={2.5} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link to="/ticket-hub" className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50/60 transition-all">
-                    <Ticket className="w-3.5 h-3.5" />
+                  <Link to="/ticket-hub" className="w-7 h-7 rounded-lg flex items-center justify-center text-[#DC2626] border border-[#DC2626]/40 bg-[#DC2626]/[0.06] hover:text-white hover:bg-[#DC2626] hover:border-[#DC2626] transition-all">
+                    <Ticket className="w-3.5 h-3.5" strokeWidth={2.5} />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>

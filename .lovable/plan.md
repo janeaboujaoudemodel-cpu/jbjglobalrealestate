@@ -1,62 +1,125 @@
-## What's wrong
+## Targeted global contrast repair
 
-1. **Header & sidebar look white** — they should be champagne. Code already uses `#F7F2EA` champagne in `GlobalHeader`, `HorizontalUtilityBar`, and `GlobalVerticalNav`, but recent global contrast rules (`src/index.css` 2459–2502) force any `.text-white` *and* white surfaces toward ink whenever an ancestor matches a light-surface selector. The header gradient is fine, but the visual "white" feel comes from the gradient stops being too pale and a missing warm tint at top. Restore the previous warmer champagne stops (`#F7F1E6 → ECE2D2 → D8C7A6`) used in `JBJSidebar` for consistency.
+I’ll fix the actual broken global patterns instead of adding another broad override.
 
-2. **Homepage hero is unreadable** — `src/pages/Index.tsx` line 163 wraps the hero in `<div className="jj-hero-fullscreen relative ... bg-gradient-to-br from-[hsl(32,28%,13%)] ...">` but does **not** set `data-surface="dark"`. The global contrast guard's "dark surface" detector (index.css 2571) recognizes `[class*="from-[hsl(32,28%,13%)]"]`, but the white-text rescue at 2520 requires the ancestor to match `[class*="bg-black"]` etc. — which the hero does not. The result: `.text-white` is preserved by Tailwind specificity, but every child `text-white/85`, `text-white/90` on the three pillar cards (`bg-[#1A1A1A]/50` → not matched by `[class*="bg-black"]`) gets visually washed because no `text-shadow`/scrim is applied and the video is bright. Fix by tagging the hero with `data-surface="dark"` and strengthening the scrim.
+### 1. Fix invisible icons in label tiles globally
+**File:** `src/index.css`
 
-3. **Six quick-action cards are unreadable + misaligned** — Index.tsx 252-260 uses `flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2` with `text-[10.5px] sm:text-xs`, `whitespace-normal break-words`. The labels wrap to 2-3 lines causing height mismatch across cards, and `bg-[#1A1A1A]/60 backdrop-blur-md` with `text-white` becomes muddy over the bright video. Fix by: locking each card to a fixed grid row, equalizing padding, raising background opacity, adding a uniform `text-shadow`, and removing the `flex-col → flex-row` switch (use a single layout).
+The current icon contrast guard is too broad:
 
-4. **"Dubia's Trusted Real Estate Technology Platform" tagline + 3 pillar cards** — same root cause; the tagline relies on a single inline `text-shadow` that's too subtle, and the pillar cards use `text-white/85` and `text-white/85` paragraph that is dimmed by the video.
+```css
+[class*="bg-[#B89555]"] > svg { color: #FFFFFF; }
+[class*="bg-[#1A1A1A]"] > svg { color: #FFFFFF; }
+```
 
-## Plan
+This also matches translucent tiles like `bg-[#B89555]/10` and `bg-[#1A1A1A]/75`, which makes icons white inside pale champagne/gold boxes. That is why some boxes look empty.
 
-### A. Restore champagne to chrome
-- `src/components/GlobalHeader.tsx` (lines 635-639): change the solid background gradient from `#F7F2EA → #F3ECDB → #EFE6D6` to the warmer `#F7F1E6 → #ECE2D2 → #D8C7A6` so it visibly reads as creamy champagne, not near-white.
-- `src/components/navigation/HorizontalUtilityBar.tsx` (line 192): change `bg-[#F7F2EA]` to `bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2]`.
-- `src/components/navigation/GlobalVerticalNav.tsx`:
-  - Line 1081 (logo header): change `bg-[#F7F2EA]` to `bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2]`.
-  - Line 1302, 1308 (collapsed sidebar bg): same change.
-  - Line 1397 (expanded 200px sidebar): change `bg-[#F7F2EA]` to `bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]`.
+I will replace those substring selectors with exact class-token selectors:
 
-### B. Make the hero readable (Index.tsx)
-- Line 163: add `data-surface="dark"` to the `<div className="jj-hero-fullscreen ...">`. This lets the global guard treat it as a true dark surface and stops any future ink-overrides.
-- Line 194: strengthen the bottom-third scrim from `from-black/50 via-black/30 to-black/70` to `from-black/60 via-black/45 to-black/85` so headlines remain crisp.
-- Line 221-226 (tagline `<motion.p>`): keep `text-white` but bump font-weight, add a stronger `text-shadow: 0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.6)`, and increase tracking. Add a subtle pill background `bg-black/35 backdrop-blur-sm rounded-full px-4 py-1.5 inline-block` so it stands off the video.
-- Line 230-245 (h1): the gradient `WebkitTextFillColor: transparent` can fail over bright frames. Add a `filter: drop-shadow(0 4px 24px rgba(0,0,0,0.7)) drop-shadow(0 2px 6px rgba(0,0,0,0.6))` so the gradient text stays legible.
+```css
+[class~="bg-[#B89555]"] > svg
+[class~="bg-[#1A1A1A]"] > svg
+```
 
-### C. Fix the six quick-action CTA cards (Index.tsx 247-262)
-Replace the flex layout with a uniform grid cell:
-- Container: `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 max-w-md sm:max-w-3xl lg:max-w-5xl mx-auto`.
-- Each `<Link>`:
-  - Layout: `flex flex-col items-center justify-center gap-1.5 px-3 py-3 min-h-[76px]` (single layout — no row/col switch).
-  - Background: `bg-[#1A1A1A]/75 hover:bg-[#1A1A1A]/90 backdrop-blur-md` (raise from /60 to /75 for legibility).
-  - Border: `border border-white/40 hover:border-gold/70`.
-  - Text: `text-white text-[11px] sm:text-xs font-semibold tracking-tight` with `style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}`.
-  - Icon: `w-4 h-4 text-gold` (gold accent for visual hierarchy, keeps brand consistency).
-  - Label span: `whitespace-normal text-center leading-[1.15] line-clamp-2`.
+This preserves white icons on **solid** dark/gold tiles, but stops forcing white icons on faded/tinted icon boxes. IconTile and all similar label/icon tiles will show their correct gold/red/semantic icons again.
 
-This guarantees all six cards are exactly the same height, label text is centered + readable, and icons use gold for premium feel.
+### 2. Make vertical sidebar Contact / Support readable
+**File:** `src/components/navigation/GlobalVerticalNav.tsx`
 
-### D. Fix the three pillar badges (Index.tsx 264-279)
-- Container: keep grid but raise `border-white/20` to `border-white/40` and use `bg-[#1A1A1A]/70` instead of `/50`.
-- Card:
-  - `bg-[#1A1A1A]/70 backdrop-blur-md p-4 sm:p-5 text-center`.
-  - Icon: `w-5 h-5 sm:w-6 sm:h-6 text-gold` (was `text-white`).
-  - Title: `text-sm font-bold text-white` with `textShadow: '0 1px 3px rgba(0,0,0,0.8)'`.
-  - Desc: `text-xs text-white` (drop the `/85`) — solid white reads cleanly over the darker card.
+Update the bottom Contact and Support actions so they are not plain faint text on champagne:
 
-### E. QA
-- After edits, navigate to `/` in the preview, take a screenshot of:
-  1. Top of homepage — verify hero tagline, h1, six CTA cards, and three pillar cards are all readable.
-  2. Header — verify champagne (not white) tone.
-  3. Sidebar — verify champagne gradient (not flat white).
-- If any element still washes out, raise the scrim and card opacities one more step and re-screenshot. Do not declare done without actually inspecting the screenshots.
+- Use visible champagne cards with `border-red-600/35` and `bg-red-600/8`.
+- Keep icons solid red (`#DC2626`) at rest.
+- Text stays solid ink (`#1A1A1A`) at rest.
+- Hover becomes solid red background with white text/icon.
+- Collapsed sidebar Contact/Support icons get the same red readable treatment.
 
-## Files to edit
-- `src/index.css` — no changes needed (the existing rules are correct once `data-surface="dark"` is added to hero).
-- `src/pages/Index.tsx` — hero `data-surface`, scrim strength, tagline pill, h1 drop-shadow, six CTA grid + styling, three pillar cards.
-- `src/components/GlobalHeader.tsx` — warmer champagne gradient.
-- `src/components/navigation/HorizontalUtilityBar.tsx` — warmer champagne gradient.
-- `src/components/navigation/GlobalVerticalNav.tsx` — warmer champagne on logo header (1081), collapsed sidebar (1302, 1308), expanded sidebar (1397).
+### 3. Remove the unwanted “54 / 054” property count from filter shortcut areas
+**Files:**
+- `src/pages/Properties.tsx`
+- `src/components/filters/FilterShortcutBar.tsx`
+- `src/components/navigation/HorizontalUtilityBar.tsx`
 
-No features removed. All copy preserved. Only color tones, opacities, layout alignment, and one `data-surface` attribute change.
+The property filter rail currently has a live result badge:
+
+```tsx
+<Activity /> 54 Properties
+```
+
+This is what is showing as the unwanted number in the search/filter area. I will remove it from the horizontal shortcut filter UI and keep result counts only in the proper results header/list area.
+
+Changes:
+- Stop passing `resultsCount={finalProjects.length}` into `FilterShortcutBar` from `Properties.tsx`.
+- Keep `resultsLabel` harmless or remove it where it is unused.
+- In `FilterShortcutBar`, make the live result badge opt-in only if a new prop like `showResultsCount` is explicitly true. Default false.
+- Horizontal header will not show result numbers.
+- Properties page filter rail will not show result numbers.
+
+### 4. Fix “All Emirates”, “All Areas”, select triggers, popovers at normal load
+**Files:**
+- `src/components/ui/select.tsx`
+- `src/pages/Properties.tsx`
+- `src/components/filters/FilterShortcutBar.tsx`
+- `src/components/navigation/HorizontalUtilityBar.tsx`
+
+The Radix select trigger/content and filter pills must never render white text on champagne/light backgrounds.
+
+I will harden the base UI components:
+- `SelectTrigger`: force `text-[#1A1A1A]`, `bg-[#FDFBF7]`, `border-[#B89555]/40`, and ensure child `span` inherits ink.
+- `SelectContent` / `SelectItem`: ensure menu items are ink on champagne at rest and hover/focus.
+- `FilterShortcutBar` light variant: all inactive pills use ink text on champagne, active pills use white text only on solid ink backgrounds.
+- Any `text-white/70` used inside light filter badges will be replaced with ink or removed.
+
+This fixes All Emirates, All Areas, developer, price, bedroom, status, and other filter labels across the site.
+
+### 5. Fix properties hero readability
+**Files:**
+- `src/pages/Properties.tsx`
+- `src/components/PropertiesHeroVideo.tsx`
+- `src/index.css`
+
+Properties hero needs the same dark-surface protection as the homepage hero:
+- Add/confirm `data-surface="dark"` on the properties hero wrapper.
+- Strengthen the video/photo scrim so “Properties”, “Curated Listings. Global Standard.” and subtitle are readable at normal load.
+- Lock hero text to white with strong text shadow only inside `.jj-hero-fullscreen[data-surface="dark"]`.
+- Avoid forcing dark text inside dark/video heroes.
+
+### 6. Fix listings card labels, location, developer, CTA buttons
+**Files:**
+- `src/components/ProjectCard.tsx`
+- `src/components/ui/developer-link.tsx`
+- `src/index.css`
+
+Property listing cards currently use muted/gold classes that can be too weak on champagne surfaces.
+
+I will update:
+- Location row: solid warm-brown/ink instead of muted gray; MapPin stays visible gold/brown.
+- Developer row: “by” uses ink; developer name uses solid gold or ink with underline/hover, not faded gold.
+- Starting from / Price on request: readable ink/orange/gold according to existing price token rules.
+- CTA buttons: enforce white text/icons only on solid red/ink/gold buttons; champagne buttons use ink text.
+- Listing badges: no white text on pale gold/champagne backgrounds.
+
+### 7. Global safety net for light surfaces only
+**File:** `src/index.css`
+
+Add a narrowly scoped light-surface guard for interactive labels:
+
+- On champagne/light surfaces, text in buttons, anchors, select triggers, popovers, and labels cannot be white unless the element itself has a solid dark/red/gold background.
+- Icons inside translucent tiles keep their authored color.
+- Dark/video surfaces and `[data-surface="dark"]` remain excluded.
+
+This makes the fix apply across the website without damaging heroes or dark sections.
+
+## QA checklist after implementation
+
+I will inspect real preview screenshots for:
+
+1. Vertical sidebar expanded: Contact, Support, Sign Out readable.
+2. Vertical sidebar collapsed: Contact/Support icons visible.
+3. `/properties` top hero: all hero content readable.
+4. `/properties` horizontal header filter: no “54/054” number in search/filter rail.
+5. `/properties` in-page filter rail: no unwanted number, All Emirates/All Areas readable at rest.
+6. Properties listing cards: location, developer, labels, and CTA buttons readable.
+7. Any IconTile/label icon box: no empty white icon boxes; icons render in their proper color.
+
+No features or content will be removed; only contrast, icon visibility, and the unwanted filter count display will be corrected.

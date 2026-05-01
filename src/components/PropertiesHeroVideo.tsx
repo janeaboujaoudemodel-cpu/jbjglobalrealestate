@@ -15,12 +15,12 @@ const POSTER = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1
 
 const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
   return (
-    <section className="jj-hero-fullscreen relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
+    <section data-surface="dark" className="jj-hero-fullscreen relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
       {/* Video background with poster fallback */}
       <VideoBackground src={propertiesHeroVideo} poster={POSTER} />
       
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/95" />
 
       {/* Floating gold accent orbs */}
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px] pointer-events-none" />
