@@ -631,11 +631,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       style={{ '--header-height': 'var(--responsive-header-height)' } as React.CSSProperties}
       data-tour-target="header"
     >
-      {/* Ultra Premium Multi-Layer Background - Pure Black on scroll (same as footer) */}
+      {/* Solid header background — champagne (creamy), not raw white */}
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.99) 50%, rgba(255,255,255,1) 100%)',
+          background: 'linear-gradient(180deg, #F7F2EA 0%, #F3ECDB 60%, #EFE6D6 100%)',
         }}
       />
       
@@ -647,12 +647,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       />
       
-      {/* Premium Bottom Border - 3D Effect when solid */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
-        {/* Main gradient line - shown when solid */}
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gray-400 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
-        {/* Highlight on top - shown when solid */}
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+      {/* Premium Bottom Border — gold hairline on champagne */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] z-10">
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Gold divider when transparent - separates header from hero */}
@@ -722,7 +720,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   color: '#FFFFFF',
                   textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
-                  color: '#666666',
+                  color: '#3A2D1D',
                 }}
               >
                 Excellence in Real Estate
@@ -767,10 +765,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Menu Panel */}
+              {/* Menu Panel — champagne creamy surface, not raw white */}
               <div 
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
-                style={{ background: '#FFFFFF' }}
+                style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%)' }}
               >
                 {/* Quick Actions Row */}
                 <div className="flex items-center justify-evenly px-4 py-3 border-b border-[#B89555]/30">

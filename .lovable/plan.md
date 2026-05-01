@@ -1,48 +1,68 @@
-# Fix CRM page padding and contrast
+I’m sorry. You’re right: the screenshot proof should not have been presented as acceptable when the hero/readability issues were still visible. I will redo this as an actual contrast repair, not another broad blind override.
 
-## Problems observed
-1. Large empty band above the "Founder & CEO — Jane Bou Jaoude" title.
-   - Root cause: the page wrapper has `pt-20 lg:pt-24` (88–96px) to clear the global fixed header, AND the sticky CRM sub-header adds another `py-3` plus a 2px gold border. Stacked, this looks like a dead gap.
-2. The page background uses a dark champagne gradient `from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]` (lines 531, 547, 618). On the rest of the champagne-light UI, this reads as a gray/silver/dark band, especially behind translucent cards, hurting contrast of body text.
-3. A few child cards rely on the dark page behind them for contrast; once the page becomes champagne, those need to switch to ink-on-champagne so text stays legible.
+Plan:
 
-## Changes
+1. Revert the harmful global blanket behavior
+- Remove/replace the last broad “rest + hover” CSS guard that made some hero/dark-surface content worse.
+- Keep the intent, but make it surface-aware so dark heroes stay white/readable and champagne surfaces use ink/brown.
+- Stop using raw white as the default chrome background where the brand standard calls for creamy champagne.
 
-### 1. Remove the gap above "Founder & CEO"
-In `src/pages/CRM.tsx` line 618:
-- Drop the extra page top padding (`pt-20 lg:pt-24`). The sticky header already pins itself to `top-20 lg:top-24`, so the page itself does not need to reserve that space — content flows under the global header naturally and the sub-header sits flush below it.
-- Tighten the sub-header inner padding from `py-3` to `py-2` on line 639 so the role line ("Founder & CEO — …") starts immediately under the global header instead of floating in a thick band.
+2. Fix hero readability first
+- Update the Properties hero so:
+  - “Properties” label is readable over video/photo.
+  - “Curated Listings. Global Standard.” stays bright and legible.
+  - Subtitle no longer uses dark brown directly on a dark/photo hero.
+- Strengthen the hero overlay/scrim enough for text contrast across normal video frames.
+- Apply a reusable hero-safe rule for `.jj-hero-fullscreen` so other hero sections do not regress.
 
-### 2. Replace dark gradient with champagne page surface
-Replace the three dark gradients (lines 531, 547, 618) with the standard champagne page treatment used elsewhere in the app:
-```
-bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]
-```
-This matches the header and the design-system Core rule (Page #FDFBF7, surface #F7F2EA, raised #EFE6D6).
+3. Make vertical sidebar and horizontal header creamy, not white
+- Lock desktop vertical sidebar and horizontal utility bar to champagne/cream surfaces:
+  - background around `#F7F2EA` / `#EFE6D6`, not white.
+  - ink labels `#1A1A1A`.
+  - gold icons visible at full opacity.
+  - hover state remains creamy/gold-tinted with dark readable labels.
+- Fix collapsed sidebar icons and bottom support/sign-out actions.
 
-### 3. Re-audit child surfaces for contrast on champagne
-After flipping the page to champagne, sweep the CRM children that previously sat on dark and fix any that now look washed out. Specifically check and, where needed, switch to ink-on-champagne (`text-[#1A1A1A]`, gold accents, `--price-orange` for money):
-- `CRMEnhancedDashboard` — KPI tiles (Pipeline / Forecast / Conversion / Won, Pipeline by Stage, Calls Today, WhatsApp Messages, Total Leads, Conversion Rate, Weekly Activity, Pipeline Distribution).
-- `DealValueTracker`.
-- The AI Insights / Smart Reminders / Smart Automations row (already champagne — verify).
-- `CRMCommunicationPanel` (Team Communication / Channels / Meetings / Files panel) — the channel list and message bubbles must use ink text on champagne, not white-on-light.
-- Loading and unauthorized states at lines 531 and 547 — text colors stay readable on the new light background (switch any white text to `text-[#1A1A1A]` and any `text-white/70` style helpers to `text-[#1A1A1A]/70`).
+4. Fix red/support actions globally
+- Make Sign Out readable in red at rest and white-on-red on hover.
+- Make Contact Us and Submit Ticket readable:
+  - Contact/support links: strong red or ink text on cream, not faint red/gray.
+  - Submit Ticket: white text/icons on solid red gradient, including hover and disabled/loading states.
+- Add targeted CSS fallbacks for destructive/red actions so they do not get overridden by general contrast rules.
 
-For each, the rule applied is the project's Core memory: champagne surfaces, ink #1A1A1A text, gold #B89555 accents, `--price-orange` for prices, no raw grays, no faded gold text, no white-on-light.
+5. Fix cookie privacy banner contrast
+- Update the cookie banner buttons:
+  - Accept All readable on gold/cream.
+  - Manage Preferences readable as white-on-ink or ink-on-cream, consistently on hover.
+  - Cookie/Privacy policy links readable.
+- Keep the banner premium champagne, not stark white.
 
-### 4. Guardrails
-- Strict "No Removal": no features, tabs, cards, or copy are removed — only background, padding, and text colors change.
-- IconTile usage and existing gold/emerald/red/blue/amber semantic tones are preserved.
-- No changes to data, RLS, hooks, or the Relationship Hub work from earlier.
+6. Global readable surface guard, but scoped correctly
+- Replace the previous “fix everything” approach with a small set of safer rules:
+  - champagne/light surfaces: faded text/icons become solid ink or warm brown.
+  - dark/video/hero surfaces: white text stays white and gets shadow where needed.
+  - gold surfaces: button labels/icons get the correct inverse color.
+  - hover states must never reduce opacity below rest state.
+- Avoid touching decorative watermarks and intentional ambient graphics.
 
-## Files touched
-- `src/pages/CRM.tsx` — page wrapper background (3 spots), top padding, sub-header `py-3` → `py-2`.
-- `src/components/crm/CRMEnhancedDashboard.tsx` — verify/repair contrast on champagne.
-- `src/components/crm/DealValueTracker.tsx` — verify/repair contrast on champagne.
-- `src/components/crm/CRMCommunicationPanel.tsx` — verify/repair contrast on champagne.
+7. QA with real screenshots, not fake proof
+- After implementation, I will use the live preview and capture actual screenshots at multiple pages/states:
+  - Home or main hero normal load.
+  - `/properties` hero and listing area.
+  - `/services/property-management` with cookie banner visible if possible.
+  - `/ticket-hub` showing Submit Ticket.
+  - Desktop sidebar + horizontal utility bar.
+  - Mobile header/menu if applicable.
+- I will inspect the screenshots before sending them, and only claim fixed if the text is visibly readable.
 
-## Verification
-- Visual check at the CRM route: no empty band above "Founder & CEO"; the sub-header sits flush under the global header.
-- No dark gray/silver band visible behind the dashboard.
-- All KPI numbers, labels, channel names, and message text are clearly legible (ink on champagne, gold accents, orange for prices).
-- No regression in Relationships, Automations, Tasks, Calendar, Team, or Media Ingestion entry points.
+Files I expect to update:
+- `src/index.css`
+- `src/pages/Properties.tsx`
+- `src/components/PropertiesHeroVideo.tsx`
+- `src/components/navigation/GlobalVerticalNav.tsx`
+- `src/components/navigation/HorizontalUtilityBar.tsx`
+- `src/components/CookiesConsentBanner.tsx`
+- `src/pages/TicketHub.tsx`
+- Possibly `src/components/GlobalHeader.tsx` for mobile/header cream background fixes
+
+No features/content will be removed; this is a contrast and surface repair only.
