@@ -273,8 +273,18 @@ const Index = () => {
                   className="bg-[#1A1A1A]/75 backdrop-blur-md p-4 sm:p-5 text-center"
                 >
                   <pillar.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gold mx-auto mb-2" />
-                  <h3 className="text-[12px] sm:text-sm font-bold text-white mb-1" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{pillar.title}</h3>
-                  <p className="text-[10px] sm:text-xs text-white leading-tight" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{pillar.desc}</p>
+                  <h3
+                    className="text-[12px] sm:text-sm font-bold mb-1"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}
+                  >
+                    {pillar.title}
+                  </h3>
+                  <p
+                    className="text-[10px] sm:text-xs leading-tight"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}
+                  >
+                    {pillar.desc}
+                  </p>
                 </div>
               ))}
             </motion.div>
