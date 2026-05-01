@@ -34,10 +34,21 @@ import {
   Facebook,
   Linkedin,
   Hash,
+  History,
+  Inbox,
+  Link2,
+  ChevronDown,
+  ChevronUp,
   type LucideIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { ProviderState } from "@/hooks/useCommChannels";
 import { ToneProfile, useUpdateChannelToneSettings } from "@/hooks/useToneProfiles";
+import {
+  ChannelAuditSummaryRow,
+  useChannelAuditEvents,
+  type ChannelAuditEventType,
+} from "@/hooks/useChannelAudit";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
