@@ -3,6 +3,7 @@
 // using Lovable AI gateway, and either auto-sends (if enabled) or stores as a
 // draft suggestion.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -52,6 +53,13 @@ Deno.serve(async (req) => {
         .eq("id", thread.channel_id)
         .maybeSingle();
       if (ch && (ch.auto_reply_enabled === false || ch.is_active === false)) {
+        await logChannelAudit(admin, {
+          user_id: thread.user_id,
+          channel_id: thread.channel_id,
+          channel_type: thread.channel_type,
+          event_type: "auto_reply_skipped",
+          details: { reason: ch.auto_reply_enabled === false ? "auto_reply_disabled" : "channel_inactive", thread_id: thread.id, message_id },
+        });
         return new Response(
           JSON.stringify({ ok: true, skipped: "auto_reply_disabled_for_channel" }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -186,6 +194,22 @@ Deno.serve(async (req) => {
       status: autoSend ? "draft_pending_send" : "draft_suggested",
       is_ai_generated: true,
       ai_model_used: "google/gemini-2.5-pro",
+    });
+
+    await logChannelAudit(admin, {
+      user_id: thread.user_id,
+      channel_id: thread.channel_id ?? null,
+      channel_type: thread.channel_type,
+      event_type: "auto_replied",
+      details: {
+        thread_id,
+        message_id,
+        auto_send: autoSend,
+        tone_profile_id: channelToneProfileId,
+        tone_profile_name: tone?.profile_name ?? null,
+        draft_length: draft.length,
+        model: "google/gemini-2.5-pro",
+      },
     });
 
     return new Response(JSON.stringify({ ok: true, draft }), {

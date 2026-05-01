@@ -34,10 +34,21 @@ import {
   Facebook,
   Linkedin,
   Hash,
+  History,
+  Inbox,
+  Link2,
+  ChevronDown,
+  ChevronUp,
   type LucideIcon,
 } from "lucide-react";
+import { useState } from "react";
 import { ProviderState } from "@/hooks/useCommChannels";
 import { ToneProfile, useUpdateChannelToneSettings } from "@/hooks/useToneProfiles";
+import {
+  ChannelAuditSummaryRow,
+  useChannelAuditEvents,
+  type ChannelAuditEventType,
+} from "@/hooks/useChannelAudit";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
@@ -59,11 +70,50 @@ const PROVIDER_ICONS: Record<string, LucideIcon> = {
 interface Props {
   state: ProviderState;
   toneProfiles: ToneProfile[];
+  auditSummary?: Record<string, ChannelAuditSummaryRow>;
   onConnect: () => void;
   onAddAnother?: () => void;
   onResync?: () => void;
   isConnecting: boolean;
   isResyncing?: boolean;
+}
+
+const EVENT_LABELS: Record<ChannelAuditEventType, string> = {
+  connected: "Connected",
+  reconnected: "Reconnected",
+  synced: "Synced",
+  sync_failed: "Sync failed",
+  auto_replied: "Auto-replied",
+  auto_reply_skipped: "Auto-reply paused",
+  inbound_received: "Inbound message",
+};
+
+function fmtRel(ts: string | null | undefined) {
+  if (!ts) return "—";
+  return formatDistanceToNow(new Date(ts), { addSuffix: true });
+}
+
+function ChannelActivityPanel({ channelId }: { channelId: string }) {
+  const { data: events, isLoading } = useChannelAuditEvents(channelId);
+  if (isLoading) {
+    return <p className="text-[11px] text-[#5A4A2E] mt-1">Loading activity…</p>;
+  }
+  if (!events || events.length === 0) {
+    return <p className="text-[11px] text-[#5A4A2E] mt-1">No activity recorded yet.</p>;
+  }
+  return (
+    <ul className="mt-1 space-y-1 max-h-48 overflow-y-auto pr-1">
+      {events.map((ev) => (
+        <li
+          key={ev.id}
+          className="flex items-center justify-between gap-2 text-[11px] text-[#1A1A1A]"
+        >
+          <span className="font-medium">{EVENT_LABELS[ev.event_type] ?? ev.event_type}</span>
+          <span className="text-[#5A4A2E]">{fmtRel(ev.created_at)}</span>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyAggregate"] }) {
@@ -92,6 +142,7 @@ function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyA
 export default function ChannelTile({
   state,
   toneProfiles,
+  auditSummary,
   onConnect,
   onAddAnother,
   onResync,
@@ -102,6 +153,7 @@ export default function ChannelTile({
     state;
   const Icon = PROVIDER_ICONS[provider.id] || MessageSquare;
   const updateChannel = useUpdateChannelToneSettings();
+  const [openActivity, setOpenActivity] = useState<Record<string, boolean>>({});
 
   const statusPill = (() => {
     if (status === "connected") {
@@ -237,6 +289,36 @@ export default function ChannelTile({
                     </SelectContent>
                   </Select>
                 </div>
+
+                {(() => {
+                  const summary = auditSummary?.[row.id];
+                  const isOpen = !!openActivity[row.id];
+                  return (
+                    <div className="border-t border-[#B89555]/20 pt-2 mt-1 space-y-1">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Link2 className="h-3 w-3" /> Connected</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_connected_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><RefreshCw className="h-3 w-3" /> Synced</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_synced_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Sparkles className="h-3 w-3" /> Auto-reply</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_auto_reply_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Inbox className="h-3 w-3" /> Inbound</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_inbound_at)}</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setOpenActivity((s) => ({ ...s, [row.id]: !s[row.id] }))}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] hover:underline mt-1"
+                        aria-expanded={isOpen}
+                      >
+                        <History className="h-3 w-3" />
+                        {isOpen ? "Hide activity" : "View activity"}
+                        {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                      </button>
+                      {isOpen && <ChannelActivityPanel channelId={row.id} />}
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}

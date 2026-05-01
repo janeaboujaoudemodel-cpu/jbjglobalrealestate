@@ -4,6 +4,7 @@
 // - Resolves the user's identifier
 // - Upserts the owner_comm_channels row (active, synced)
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -178,11 +179,27 @@ Deno.serve(async (req) => {
       connection_id: connectorId,
     };
 
+    let resolvedChannelId: string | null = existing?.id ?? null;
+    const wasReconnect = !!existing?.id;
     if (existing?.id) {
       await admin.from("owner_comm_channels").update(payload).eq("id", existing.id);
     } else {
-      await admin.from("owner_comm_channels").insert(payload);
+      const { data: inserted } = await admin
+        .from("owner_comm_channels")
+        .insert(payload)
+        .select("id")
+        .single();
+      resolvedChannelId = inserted?.id ?? null;
     }
+
+    await logChannelAudit(admin, {
+      user_id: user.id,
+      channel_id: resolvedChannelId,
+      channel_type: channelType,
+      identifier,
+      event_type: wasReconnect ? "reconnected" : "connected",
+      details: { display_name: displayName, connection_id: connectorId },
+    });
 
     return new Response(
       JSON.stringify({ success: true, identifier, display_name: displayName }),

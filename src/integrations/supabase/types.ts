@@ -18472,6 +18472,47 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_comm_channel_audit_log: {
+        Row: {
+          channel_id: string | null
+          channel_type: string
+          created_at: string
+          details: Json
+          event_type: string
+          id: string
+          identifier: string | null
+          user_id: string
+        }
+        Insert: {
+          channel_id?: string | null
+          channel_type: string
+          created_at?: string
+          details?: Json
+          event_type: string
+          id?: string
+          identifier?: string | null
+          user_id: string
+        }
+        Update: {
+          channel_id?: string | null
+          channel_type?: string
+          created_at?: string
+          details?: Json
+          event_type?: string
+          id?: string
+          identifier?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_channel_audit_log_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       owner_comm_channels: {
         Row: {
           assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
@@ -28720,6 +28761,28 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      owner_comm_channel_audit_summary: {
+        Row: {
+          auto_reply_count: number | null
+          channel_id: string | null
+          inbound_count: number | null
+          last_auto_reply_at: string | null
+          last_connected_at: string | null
+          last_inbound_at: string | null
+          last_sync_failed_at: string | null
+          last_synced_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_channel_audit_log_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_channels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       owner_comm_provider_status: {
         Row: {
