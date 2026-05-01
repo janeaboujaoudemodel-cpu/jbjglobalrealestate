@@ -4,6 +4,7 @@
 // - Resolves the user's identifier
 // - Upserts the owner_comm_channels row (active, synced)
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
