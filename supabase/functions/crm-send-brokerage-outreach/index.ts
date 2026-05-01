@@ -137,12 +137,9 @@ serve(async (req: Request) => {
     // Skip for test sends; only enforce for real brokerage sends.
     if (!isTest && body.brokerageId) {
       try {
-        const checkRes = await service.functions.invoke(
+        const checkRes = await userClient.functions.invoke(
           "crm-check-brokerage-registration",
-          {
-            body: { brokerageIds: [body.brokerageId], variant },
-            headers: { Authorization: authHeader },
-          },
+          { body: { brokerageIds: [body.brokerageId], variant } },
         );
         const checkData = checkRes?.data as any;
         const result = checkData?.results?.[0];
