@@ -3905,3 +3905,56 @@ a[class*="bg-red-"]:hover {
   color: #FFFFFF !important;
   background-color: #0A0A0A !important;
 }
+
+/* =====================================================================
+   ARBITRARY-VALUE INK ALPHA GUARD — rest + hover
+   ---------------------------------------------------------------------
+   Many components use Tailwind arbitrary-value alphas like
+   `text-[#1A1A1A]/85`, `/70`, `/50`, `/25`, `/20` on champagne surfaces.
+   These render as washed-out gray and read as "faded" at rest.
+   Promote them to solid ink on light surfaces. Hover keeps them solid.
+   Scope: anywhere NOT on a dark surface or hero.
+   Opt-out: [data-decorative="true"], .jj-text-fade-allow, [data-no-contrast-guard].
+   ===================================================================== */
+:where(body):not([data-surface="dark"])
+  :where(
+    [class*="text-[#1A1A1A]/2"],
+    [class*="text-[#1A1A1A]/3"],
+    [class*="text-[#1A1A1A]/4"],
+    [class*="text-[#1A1A1A]/5"],
+    [class*="text-[#1A1A1A]/6"],
+    [class*="text-[#1A1A1A]/7"],
+    [class*="text-[#1A1A1A]/8"]
+  ):not([data-surface="dark"] *):not(.jj-hero-fullscreen *):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Faded brown chevrons/icons on champagne — promote to ink */
+:where(body):not([data-surface="dark"])
+  :where(
+    [class*="text-[#3A2D1D]"],
+    [class*="text-[#5A4A2E]"]
+  ):not([data-surface="dark"] *):not(.jj-hero-fullscreen *):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* HOVER: keep nav item text + icons solid ink on champagne hover bg */
+:where(
+  .bg-card, .bg-background, .bg-popover, .bg-white,
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+  [class*="from-[#F7F1E6]"]
+):not([data-surface="dark"]):not(.jj-hero-fullscreen)
+  :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"]):hover
+  :where(span, p, svg, [class*="lucide"]):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
+  color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Red action exception: keep red icons/text red at rest, white on hover
+   (Sign Out / Contact / Support icons in nav). Only when explicitly set. */
+:where(a, button)[style*="#DC2626"] :where(svg, span),
+:where(a, button)[style*="#B91C1C"] :where(svg, span) {
+  color: inherit !important;
+}
