@@ -272,6 +272,7 @@ serve(async (req) => {
             source_detail: meta.authority,
             confidence: license && (phone || email) ? "high" : email || website ? "medium" : "low",
             last_verified_at: new Date().toISOString(),
+            field_sources: sources,
           };
 
           if (existing) {
