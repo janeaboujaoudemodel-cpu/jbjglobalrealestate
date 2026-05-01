@@ -548,13 +548,6 @@ const Index = () => {
 
       <SectionDivider fullWidth />
 
-      <SectionDivider fullWidth />
-
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
-          <SupportTicketBox />
-        </Suspense>
-      </div>
 
       {/* Final divider closes rhythm before footer */}
       <SectionDivider fullWidth />
