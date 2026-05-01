@@ -95,22 +95,23 @@ export function useMediaIngestion() {
           toast.error(`Upload failed: ${file.name}`);
           continue;
         }
+        const insertRow: any = {
+          user_id: userId,
+          file_path: path,
+          file_name: file.name,
+          file_size: file.size,
+          mime_type: file.type || null,
+          source_kind: "upload",
+          source_type: file.type?.startsWith("video/")
+            ? "video"
+            : file.type?.includes("pdf")
+              ? "pdf"
+              : "file",
+          status: "pending",
+        };
         const { data, error } = await supabase
           .from("material_ingestion_jobs")
-          .insert({
-            user_id: userId,
-            file_path: path,
-            file_name: file.name,
-            file_size: file.size,
-            mime_type: file.type || null,
-            source_kind: "upload",
-            source_type: file.type?.startsWith("video/")
-              ? "video"
-              : file.type?.includes("pdf")
-                ? "pdf"
-                : "file",
-            status: "pending",
-          })
+          .insert(insertRow)
           .select("id")
           .single();
         if (!error && data?.id) created.push(data.id);
