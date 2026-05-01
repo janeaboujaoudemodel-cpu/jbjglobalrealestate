@@ -44,10 +44,12 @@ interface Props {
   state: ProviderState;
   onConnect: () => void;
   onAddAnother?: () => void;
+  onResync?: () => void;
   isConnecting: boolean;
+  isResyncing?: boolean;
 }
 
-export default function ChannelTile({ state, onConnect, onAddAnother, isConnecting }: Props) {
+export default function ChannelTile({ state, onConnect, onAddAnother, onResync, isConnecting, isResyncing }: Props) {
   const { provider, status, anyActive, lastSyncAt, trainingSamples, lastError, channelCount } = state;
   const Icon = PROVIDER_ICONS[provider.id] || MessageSquare;
 
