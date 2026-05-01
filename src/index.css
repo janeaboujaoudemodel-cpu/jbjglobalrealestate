@@ -3021,14 +3021,14 @@ button[style*="background"] [class*="text-gold"] {
   [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
   [class*="bg-[#FFFFFF]"]
-):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6, p, span, div, button)[class*="text-black"],
+):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6, p, span, div, button)[class*="text-black"]:not([data-surface="dark"] *):not(.jj-hero-fullscreen *),
 :is(
   .bg-white, .bg-card, .bg-popover,
   .bg-champagne, [class*="bg-champagne"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
   [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
   [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
-):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6) {
+):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6):not([data-surface="dark"] *):not(.jj-hero-fullscreen *) {
   color: #111111 !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
