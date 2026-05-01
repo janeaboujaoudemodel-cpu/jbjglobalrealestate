@@ -6,7 +6,7 @@ import {
   CreditCard, Users, UserCheck, Briefcase, Camera, 
   Share2, Brain, Layers, BarChart3, Table2, Calendar,
   MessageSquare, Target, GraduationCap, Wrench, Building2,
-  X, Zap, CheckSquare, Bell, StickyNote, LayoutDashboard
+  X, Zap, CheckSquare, Bell, StickyNote, LayoutDashboard, Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,6 +25,7 @@ const toolCategories = [
       { name: "Daily Agenda", href: "/owner/agenda", icon: Calendar, color: "text-blue-400" },
       { name: "Unified Inbox", href: "/owner/inbox", icon: MessageSquare, color: "text-emerald-400" },
       { name: "Message Templates", href: "/owner/templates", icon: FileText, color: "text-purple-400" },
+      { name: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox, color: "text-gold" },
       { name: "Communication Settings", href: "/owner/settings/communication", icon: Wrench, color: "text-white/70" },
       { name: "Feature Registry", href: "/owner/features", icon: Layers, color: "text-pink-400" },
     ]

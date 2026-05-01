@@ -1,56 +1,35 @@
-# Media Ingestion — sidebar visibility, shortcuts, and Owner Templates mirror
+## Why you can't see it
 
-Three small, independent changes. No backend / DB work — the ingestion tables, edge functions and hook already exist and stay untouched.
+The "Media Ingestion" button **was** added — but only on **one** CRM page (`/crm/relationships`, top toolbar, gold button next to "Back to CRM Hub"). If you're on the CRM Hub landing page (`/owner/crm`), the Leads inbox, Tasks, Calendar, or any other CRM tab, there's no shortcut.
 
-## 1. Keep the global sidebar visible on Media Ingestion
+You're on `/owner/crm/relationships` right now, so the button **is** on this page — top-right of the header bar, gold, with an Inbox icon labeled "Media Ingestion". If you don't see it, it's likely scrolled off or the toolbar wraps on your viewport. But the bigger problem is that anywhere else in CRM, it's missing.
 
-Today `/admin/media-ingestion` lives under `/admin/*`, which `MainLayout` treats as "back-office" and hides the global vertical sidebar + utility bar.
+## Plan — make it reachable from anywhere in CRM
 
-**Fix:** add an explicit allow-list exception so this one route keeps the full L-shaped frame.
+### 1. Add Media Ingestion to the CRM tools sidebar
+`src/components/crm/CRMToolsSidebar.tsx` already has an "Owner Command Center" group. Add a new entry:
+- **Media Ingestion** → `/admin/media-ingestion` (Inbox icon, gold tone)
 
-- `src/config/mainLayoutRoutes.ts` — add a `BACK_OFFICE_EXCEPTIONS` set containing `/admin/media-ingestion`. Update `isBackOfficeRoute(pathname)` to return `false` when the path matches an exception.
-- `src/pages/admin/MediaIngestionHub.tsx` — replace the page wrapper so it respects the sidebar offset (`pl-[200px]` collapsed `pl-[48px]`) and the 88px header spacer, matching the rest of the app.
-- Verify nothing else depends on `/admin/media-ingestion` being back-office (smoke tests in `src/lib/serviceLayoutRegression.test.ts` only check `/listing-admin`, so they stay green).
+This sidebar is the persistent CRM navigation panel, so the shortcut becomes one click from every CRM tab.
 
-## 2. Sidebar shortcut — always one click away
+### 2. Add a prominent Media Ingestion card to the CRM Hub landing page
+On `/owner/crm` (the hub you land on first), add a "Media Ingestion" quick-action card alongside the existing Relationships / Leads / Tasks cards, so it's the first thing visible when you enter CRM.
 
-- `src/components/navigation/GlobalVerticalNav.tsx` — add a new owner-only entry "Media Ingestion" (Inbox icon, gold tone) in the existing owner shortcuts group, linking to `/admin/media-ingestion`. Gated by the same owner check used for the other admin shortcuts so non-owners don't see it.
+### 3. Keep the existing Relationships toolbar button
+Already in place at `/owner/crm/relationships` — no change.
 
-## 3. CRM toolbar shortcut
+### 4. Keep the global sidebar entry
+Already added in `GlobalVerticalNav.tsx` — visible from every page in the app, not just CRM.
 
-- `src/pages/CRMRelationships.tsx` — in the page header toolbar (next to "Add Brokerage" / "Send Outreach" / "Edit Templates"), add a gold outline button **"Media Ingestion"** that `navigate("/admin/media-ingestion")`. Visible on all CRM tabs (Developers, Brokerages, …) so it's reachable from anywhere in CRM.
+## Files to touch
 
-## 4. Mirror the hub inside Owner Templates / Comms
+- `src/components/crm/CRMToolsSidebar.tsx` — add Media Ingestion entry to the Owner Command Center group
+- `src/pages/` CRM hub landing page (will locate the exact file — likely `OwnerCRMHub.tsx` or similar) — add a Media Ingestion quick-action card
 
-`/owner/templates` is currently a single-screen template manager. Mirror Media Ingestion there as a second tab so the comms team can attach freshly-merged brochures/videos to outgoing messages without leaving the page.
+## Result
 
-- `src/pages/OwnerTemplates.tsx` — wrap the existing content in a shadcn `Tabs` shell with two tabs:
-  1. **Templates** (existing behaviour, unchanged — strict no-removal).
-  2. **Media Ingestion** — renders `<MediaIngestionHub embedded />`.
-- `src/pages/admin/MediaIngestionHub.tsx` — accept an optional `embedded?: boolean` prop. When true, drop the outer `min-h-screen bg-[#FDFBF7] pt-[88px]` wrapper and the `max-w-7xl` container so it fits inside the host page; otherwise behaviour is identical to today.
-- Same `useMediaIngestion` hook, same `material_ingestion_jobs` table, same realtime channel — both routes show the same queue. No data duplication.
-
-## Out of scope (confirmed)
-
-- No DB migrations.
-- No new edge functions.
-- No changes to AI classification / merge logic.
-- No changes to `owner_comm_templates` schema — owner comms still pulls templates from its own table; ingestion remains the asset side.
-
-## Technical notes
-
-```text
-MainLayout
- └─ isBackOfficeRoute(path)
-      ├─ matches BACK_OFFICE_PREFIXES?  (/admin, /listing-admin, /broker-dashboard)
-      └─ AND not in BACK_OFFICE_EXCEPTIONS  ← new (/admin/media-ingestion)
-            → false  → sidebar + utility bar render
-```
-
-Files touched:
-
-- `src/config/mainLayoutRoutes.ts` (add exception)
-- `src/pages/admin/MediaIngestionHub.tsx` (embedded prop, drop hard-coded full-screen wrapper when embedded; respect sidebar offset when standalone)
-- `src/components/navigation/GlobalVerticalNav.tsx` (owner shortcut entry)
-- `src/pages/CRMRelationships.tsx` (toolbar button)
-- `src/pages/OwnerTemplates.tsx` (wrap in Tabs, add Media Ingestion tab)
+After this change, from inside CRM you'll see Media Ingestion in **three places**:
+1. Global left sidebar (always visible across the entire app)
+2. CRM tools sidebar (every CRM tab)
+3. CRM Hub landing page as a primary card
+4. Relationships page top toolbar (already there)
