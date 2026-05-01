@@ -28,7 +28,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-[#FDFBF7] pt-8 md:pt-12">
+    <section className="bg-[#FDFBF7] pt-12 md:pt-16 pb-16 md:pb-24">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
@@ -78,18 +78,19 @@ const AreasWeCover = () => {
                 {/* Top-right badges */}
                 <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                   {area.isTrending && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/80 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#B89555] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-[0_4px_12px_rgba(184,149,85,0.45)] ring-1 ring-[#1A1A1A]/10">
                       <TrendingUp className="w-2.5 h-2.5" />
                       Trending
                     </span>
                   )}
                   {area.isHighDemand && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-[#B89555] text-[9px] font-bold uppercase tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.45)] ring-1 ring-[#B89555]/40">
                       <Flame className="w-2.5 h-2.5" />
                       High Demand
                     </span>
                   )}
                 </div>
+
 
                 {/* Bottom content */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">
@@ -108,7 +109,7 @@ const AreasWeCover = () => {
         </div>
 
         {/* View All Areas CTA */}
-        <div className="text-center mt-10 mb-14">
+        <div className="text-center mt-12 md:mt-14">
           <Link
             to="/areas"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white border border-[#1A1A1A] rounded-xl font-semibold text-sm hover:bg-[#1A1A1A] hover:-translate-y-0.5 transition-all duration-300 group"
@@ -117,6 +118,7 @@ const AreasWeCover = () => {
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
+
       </div>
     </section>
   );
