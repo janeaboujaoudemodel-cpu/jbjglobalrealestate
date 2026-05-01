@@ -28,7 +28,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-[#FDFBF7] pt-8 md:pt-12">
+    <section className="bg-[#FDFBF7] pt-12 md:pt-16 pb-16 md:pb-24">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
