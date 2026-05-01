@@ -3,6 +3,7 @@
 // using Lovable AI gateway, and either auto-sends (if enabled) or stores as a
 // draft suggestion.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
