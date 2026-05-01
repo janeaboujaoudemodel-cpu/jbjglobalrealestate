@@ -520,7 +520,10 @@ const Properties = () => {
             </h1>
             
             {/* Subtitle */}
-            <p className="text-[#5A4A2E] text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+            <p
+              className="text-white/95 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed font-light"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.55)' }}
+            >
               Exclusive investment-grade properties with trusted advisory.
             </p>
           </motion.div>
