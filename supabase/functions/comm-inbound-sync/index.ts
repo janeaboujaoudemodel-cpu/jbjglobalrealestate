@@ -83,6 +83,15 @@ Deno.serve(async (req) => {
 
     let imported = 0;
     for (const ch of channels ?? []) {
+      // Non-Gmail channels: no provider-specific poller yet — just refresh
+      // last_sync_at so the UI shows the user that the action ran.
+      if (ch.channel_type !== "email_gmail") {
+        await admin
+          .from("owner_comm_channels")
+          .update({ last_sync_at: new Date().toISOString(), sync_status: "synced", last_error: null })
+          .eq("id", ch.id);
+        continue;
+      }
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
       const list = await gmailListMessages(LOVABLE_API_KEY, GMAIL_KEY, sinceMs);
       for (const m of list) {
