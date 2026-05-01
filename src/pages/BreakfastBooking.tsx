@@ -10,6 +10,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { edgeFnUrl, anonHeaders } from "@/config/backend";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
