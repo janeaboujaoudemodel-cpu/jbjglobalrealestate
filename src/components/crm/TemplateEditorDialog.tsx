@@ -11,36 +11,64 @@ import {
   useUpsertEmailTemplate,
   useLockEmailTemplate,
   useSendDeveloperRegistration,
+  useSendBrokerageOutreach,
   type RegistrationVariant,
+  type BrokerageVariant,
+  type AnyEmailVariant,
 } from "@/hooks/useCRMRelationships";
 
-const VARIANT_LABELS: Record<RegistrationVariant, string> = {
+type EditorMode = "developer" | "brokerage";
+
+const DEVELOPER_LABELS: Record<RegistrationVariant, string> = {
   developer_registration: "New registration request",
   developer_confirm_registered: "Confirm we are already registered",
+};
+
+const BROKERAGE_LABELS: Record<BrokerageVariant, string> = {
+  brokerage_partnership_intro: "Partnership intro · Private breakfast",
+  brokerage_breakfast_invite: "Breakfast invitation · RSVP",
 };
 
 export const TemplateEditorDialog = ({
   open,
   onOpenChange,
-  initialVariant = "developer_registration",
+  mode = "developer",
+  initialVariant,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  initialVariant?: RegistrationVariant;
+  mode?: EditorMode;
+  initialVariant?: AnyEmailVariant;
 }) => {
-  const [variant, setVariant] = useState<RegistrationVariant>(initialVariant);
+  const isBrokerage = mode === "brokerage";
+  const VARIANT_LABELS = (isBrokerage ? BROKERAGE_LABELS : DEVELOPER_LABELS) as Record<string, string>;
+  const defaultVariant: AnyEmailVariant = isBrokerage
+    ? "brokerage_partnership_intro"
+    : "developer_registration";
+
+  const [variant, setVariant] = useState<AnyEmailVariant>(initialVariant ?? defaultVariant);
   const { data: template } = useEmailTemplate(variant);
   const upsert = useUpsertEmailTemplate();
   const lock = useLockEmailTemplate();
-  const sendTest = useSendDeveloperRegistration();
+  const sendDeveloperTest = useSendDeveloperRegistration();
+  const sendBrokerageTest = useSendBrokerageOutreach();
+  const sendTestPending = isBrokerage ? sendBrokerageTest.isPending : sendDeveloperTest.isPending;
 
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
   const [showPreview, setShowPreview] = useState(true);
   const [testEmail, setTestEmail] = useState("");
-  const [testDeveloperName, setTestDeveloperName] = useState("Sample Developer Co.");
+  const [testSampleName, setTestSampleName] = useState(
+    isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.",
+  );
 
-  useEffect(() => { setVariant(initialVariant); }, [initialVariant, open]);
+  // Reset to a valid variant whenever the editor mode (or `open`) changes
+  useEffect(() => {
+    setVariant(initialVariant ?? defaultVariant);
+    setTestSampleName(isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, initialVariant, open]);
+
   useEffect(() => {
     if (template) { setSubject(template.subject); setHtml(template.html); }
   }, [template?.variant, template?.updated_at]);
@@ -58,15 +86,20 @@ export const TemplateEditorDialog = ({
 
   const isLocked = !!template?.locked_at;
 
-  const previewHtml = useMemo(
-    () =>
-      html
-        .replace(/\{\{developer_name\}\}/g, testDeveloperName || "Sample Developer Co.")
-        .replace(/\{\{drive_url\}\}/g, "https://drive.google.com/…")
+  const previewHtml = useMemo(() => {
+    if (isBrokerage) {
+      return html
+        .replace(/\{\{brokerage_name\}\}/g, testSampleName || "Sample Brokerage Group")
+        .replace(/\{\{contact_first_name\}\}/g, "Sample")
         .replace(/\{\{reply_to\}\}/g, "contact@jbj.ae")
-        .replace(/\{\{cc_email\}\}/g, "infoo.jane@gmail.com"),
-    [html, testDeveloperName],
-  );
+        .replace(/\{\{cc_email\}\}/g, "infoo.jane@gmail.com");
+    }
+    return html
+      .replace(/\{\{developer_name\}\}/g, testSampleName || "Sample Developer Co.")
+      .replace(/\{\{drive_url\}\}/g, "https://drive.google.com/…")
+      .replace(/\{\{reply_to\}\}/g, "contact@jbj.ae")
+      .replace(/\{\{cc_email\}\}/g, "infoo.jane@gmail.com");
+  }, [html, testSampleName, isBrokerage]);
 
   const handleLock = () => {
     if (!confirm("Lock this template? After locking, the subject and body cannot be edited from the app — every email will use exactly this version.")) return;
@@ -79,16 +112,39 @@ export const TemplateEditorDialog = ({
       alert("Enter a valid email address to receive the test.");
       return;
     }
-    sendTest.mutate({
-      variant,
-      testRecipient: recipient,
-      testDeveloperName: testDeveloperName || "Sample Developer Co.",
-    });
+    if (isBrokerage) {
+      sendBrokerageTest.mutate({
+        variant: variant as BrokerageVariant,
+        testRecipient: recipient,
+        testBrokerageName: testSampleName || "Sample Brokerage Group",
+      });
+    } else {
+      sendDeveloperTest.mutate({
+        variant: variant as RegistrationVariant,
+        testRecipient: recipient,
+        testDeveloperName: testSampleName || "Sample Developer Co.",
+      });
+    }
   };
+
+  const variantKeys = Object.keys(VARIANT_LABELS) as AnyEmailVariant[];
+  const titleSuffix = isBrokerage ? "Brokerage outreach" : "Developer registration";
+  const placeholderHint = isBrokerage ? (
+    <>
+      HTML body — use{" "}
+      <code className="bg-[#F7F2EA] px-1">{`{{brokerage_name}}`}</code> and{" "}
+      <code className="bg-[#F7F2EA] px-1">{`{{contact_first_name}}`}</code> placeholders
+    </>
+  ) : (
+    <>
+      HTML body — use{" "}
+      <code className="bg-[#F7F2EA] px-1">{`{{developer_name}}`}</code> and{" "}
+      <code className="bg-[#F7F2EA] px-1">{`{{drive_url}}`}</code> placeholders
+    </>
+  );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* Near-fullscreen so the email preview is fully readable without horizontal scrolling */}
       <DialogContent
         className="
           bg-[#FDFBF7] text-[#1A1A1A]
@@ -100,7 +156,7 @@ export const TemplateEditorDialog = ({
       >
         <DialogHeader className="px-6 pt-5 pb-3 border-b border-[#1A1A1A]/10">
           <DialogTitle className="flex items-center gap-3 text-[#1A1A1A]">
-            <span className="text-base font-semibold">Email Template</span>
+            <span className="text-base font-semibold">Email Template · {titleSuffix}</span>
             {isLocked && (
               <span className="text-xs font-medium text-amber-700 flex items-center gap-1 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
                 <Lock className="w-3 h-3" /> Locked {new Date(template!.locked_at!).toLocaleDateString()}
@@ -111,7 +167,7 @@ export const TemplateEditorDialog = ({
 
         {/* Variant + preview toggle row */}
         <div className="flex flex-wrap items-center gap-2 px-6 py-3 border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
-          {(Object.keys(VARIANT_LABELS) as RegistrationVariant[]).map((v) => (
+          {variantKeys.map((v) => (
             <Button
               key={v}
               variant={variant === v ? "default" : "outline"}
@@ -133,7 +189,7 @@ export const TemplateEditorDialog = ({
           </Button>
         </div>
 
-        {/* Body — two columns; each scrolls vertically only, no horizontal scroll */}
+        {/* Body — two columns */}
         <div
           className={`
             flex-1 min-h-0 grid gap-0
@@ -152,11 +208,7 @@ export const TemplateEditorDialog = ({
               />
             </div>
             <div>
-              <Label className="text-xs text-[#1A1A1A]">
-                HTML body — use{" "}
-                <code className="bg-[#F7F2EA] px-1">{`{{developer_name}}`}</code> and{" "}
-                <code className="bg-[#F7F2EA] px-1">{`{{drive_url}}`}</code> placeholders
-              </Label>
+              <Label className="text-xs text-[#1A1A1A]">{placeholderHint}</Label>
               <Textarea
                 value={html}
                 onChange={(e) => setHtml(e.target.value)}
@@ -173,7 +225,7 @@ export const TemplateEditorDialog = ({
                 <h4 className="text-sm font-semibold text-[#1A1A1A]">Send a test to your inbox</h4>
               </div>
               <p className="text-xs text-[#5A4A2E]">
-                Sends the live template (placeholders filled in) to the address below. The subject is prefixed with <span className="font-mono">[TEST]</span> and nothing is logged against any developer record.
+                Sends the live template (placeholders filled in) to the address below. The subject is prefixed with <span className="font-mono">[TEST]</span> and nothing is logged against any {isBrokerage ? "brokerage" : "developer"} record.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
@@ -187,11 +239,13 @@ export const TemplateEditorDialog = ({
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-[#1A1A1A]">Sample developer name</Label>
+                  <Label className="text-xs text-[#1A1A1A]">
+                    {isBrokerage ? "Sample brokerage name" : "Sample developer name"}
+                  </Label>
                   <Input
-                    value={testDeveloperName}
-                    onChange={(e) => setTestDeveloperName(e.target.value)}
-                    placeholder="Sample Developer Co."
+                    value={testSampleName}
+                    onChange={(e) => setTestSampleName(e.target.value)}
+                    placeholder={isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co."}
                     className="bg-[#FDFBF7] text-[#1A1A1A]"
                   />
                 </div>
@@ -199,10 +253,10 @@ export const TemplateEditorDialog = ({
               <div>
                 <Button
                   onClick={handleSendTest}
-                  disabled={sendTest.isPending}
+                  disabled={sendTestPending}
                   className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
                 >
-                  {sendTest.isPending ? (
+                  {sendTestPending ? (
                     <><Loader2 className="w-3 h-3 mr-1 animate-spin" /> Sending…</>
                   ) : (
                     <><Send className="w-3 h-3 mr-1" /> Send test email</>
@@ -212,7 +266,7 @@ export const TemplateEditorDialog = ({
             </div>
           </div>
 
-          {/* Preview column — iframe fills remaining height */}
+          {/* Preview column */}
           {showPreview && (
             <div className="min-h-0 flex flex-col bg-[#FAF5EA]">
               <div className="text-[10px] uppercase tracking-wider text-[#5A4A2E] px-4 py-2 bg-[#FDFBF7] border-b border-[#1A1A1A]/10 truncate">
