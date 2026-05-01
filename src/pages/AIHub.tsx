@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { 
   ArrowUpRight, 
   Sparkles, 
