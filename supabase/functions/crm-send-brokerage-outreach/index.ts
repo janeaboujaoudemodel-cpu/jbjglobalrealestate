@@ -180,6 +180,19 @@ serve(async (req: Request) => {
       firstName((user.user_metadata as any)?.full_name as string | undefined) ||
       "Jane";
 
+    // Mint (or reuse) a breakfast booking invite token so the email can
+    // include a real scheduling link instead of just a mailto RSVP.
+    let bookingUrl = "";
+    try {
+      const tokenRes = await userClient.functions.invoke(
+        "crm-create-breakfast-invite-token",
+        { body: { brokerageId: isTest ? undefined : body.brokerageId, isTest } },
+      );
+      bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
+    } catch (tokErr) {
+      console.warn("Booking token mint failed (continuing):", tokErr);
+    }
+
     const html = renderTemplate(template.html, {
       brokerage_name: brk.company_name || "your brokerage",
       contact_first_name: firstName(contactName) || "Team",
@@ -187,12 +200,14 @@ serve(async (req: Request) => {
       reply_to: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
+      booking_url: bookingUrl,
     });
     const subjectRendered = renderTemplate(template.subject, {
       brokerage_name: brk.company_name || "your brokerage",
       contact_first_name: firstName(contactName) || "Team",
       owner_first_name: ownerFirstName,
       from_name: fromName,
+      booking_url: bookingUrl,
     });
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
 
