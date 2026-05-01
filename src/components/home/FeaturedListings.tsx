@@ -177,7 +177,17 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             </div>
 
-            {/* Price badge removed — price now lives in the calmer footer row below */}
+            {/* Price overlay — bottom-right of photo */}
+            {typeof project.price_from === 'number' && project.price_from > 0 && (
+              <div className="absolute bottom-3 right-3 z-20 inline-flex items-baseline gap-1 rounded-full bg-price-orange px-2.5 py-1 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
+                <span className="text-[9px] uppercase tracking-[0.14em] font-semibold text-white/85">
+                  From
+                </span>
+                <span className="text-white font-bold text-xs md:text-[13px] tabular-nums leading-none">
+                  {formatPrice(project.price_from)}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Content */}
