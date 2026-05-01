@@ -196,6 +196,22 @@ Deno.serve(async (req) => {
       ai_model_used: "google/gemini-2.5-pro",
     });
 
+    await logChannelAudit(admin, {
+      user_id: thread.user_id,
+      channel_id: thread.channel_id ?? null,
+      channel_type: thread.channel_type,
+      event_type: "auto_replied",
+      details: {
+        thread_id,
+        message_id,
+        auto_send: autoSend,
+        tone_profile_id: channelToneProfileId,
+        tone_profile_name: tone?.profile_name ?? null,
+        draft_length: draft.length,
+        model: "google/gemini-2.5-pro",
+      },
+    });
+
     return new Response(JSON.stringify({ ok: true, draft }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
