@@ -267,8 +267,10 @@ const ContinueSearching = ({
 function isUrlValid(url: string | undefined): boolean {
   if (!url) return false;
   if (url.includes("undefined") || url.includes("null")) return false;
-  if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
-  return true;
+  // Accept absolute http(s) URLs, protocol-relative URLs, and root-relative paths.
+  if (url.startsWith("http://") || url.startsWith("https://")) return true;
+  if (url.startsWith("//") || url.startsWith("/")) return true;
+  return false;
 }
 
 function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: number; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
