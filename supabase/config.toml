@@ -466,9 +466,6 @@ verify_jwt = false
 [functions.create-user-alert]
 verify_jwt = false
 
-[functions.compute-user-scores]
-verify_jwt = false
-
 [functions.listing-score]
 verify_jwt = false
 
@@ -508,9 +505,6 @@ verify_jwt = false
 [functions.resend-support-ticket-confirmation]
 verify_jwt = false
 
-[functions.send-ticket-status-email]
-verify_jwt = false
-
 [functions.verify-owner]
 verify_jwt = false
 
@@ -530,9 +524,6 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.full-project-extract]
-verify_jwt = false
-
-[functions.scheduled-extraction]
 verify_jwt = false
 
 [functions.generate-listing]
