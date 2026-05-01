@@ -159,6 +159,36 @@ export const BulkSendDialog = ({
   // Per-row override of "warn" rows — owner explicitly approved sending despite warnings.
   const [warnOverrides, setWarnOverrides] = useState<Record<string, boolean>>({});
 
+  // Personalization (brokerage only). Per-recipient overrides; bulk defaults
+  // applied on top of auto-derived values.
+  const isBrokerageEntity = entityType === "brokerage";
+  const { data: upcomingSlots = [] } = useUpcomingBreakfastSlots();
+  const [bulkPreferredSlotId, setBulkPreferredSlotId] = useState<string>("");
+  const [bulkGroupStatus, setBulkGroupStatus] = useState<BrokerageGroupStatus | "">("");
+  const [perRowPersonalization, setPerRowPersonalization] = useState<
+    Record<string, BrokerageOutreachPersonalization>
+  >({});
+  const [expandedPersonalize, setExpandedPersonalize] = useState<Record<string, boolean>>({});
+
+  const resolvePersonalization = (r: Recipient): BrokerageOutreachPersonalization | undefined => {
+    if (!isBrokerageEntity) return undefined;
+    const row = perRowPersonalization[r.id] || {};
+    const detected = autoDetectGroupStatus(r);
+    const groupStatus =
+      row.groupStatus ?? (bulkGroupStatus || undefined) ?? detected;
+    const slotId = row.preferredSlotId ?? (bulkPreferredSlotId || undefined);
+    const contactName = row.contactName ?? (r.primary_contact?.name || "");
+    const out: BrokerageOutreachPersonalization = {
+      contactName: contactName || undefined,
+      groupStatus,
+      preferredSlotId: slotId || undefined,
+      groupStatusLabelOverride: row.groupStatusLabelOverride,
+      preferredEventTimeOverride: row.preferredEventTimeOverride,
+    };
+    return out;
+  };
+
+
   // Keep testEmail in sync if owner email changes (and they haven't overridden)
   useEffect(() => {
     if (!useCustomTestEmail) setTestEmail(defaultTestEmail);
