@@ -47,6 +47,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [searchParams] = useSearchParams();
   const { user, signIn, signUp, updatePassword, signOut, loading, isOwner } = useAuth();
   const { isAvailable: isBiometricAvailable, authenticate: biometricAuth, hasStoredCredential, isLoading: biometricLoading } = useBiometricAuth();
+  const { setMode: setPlatformMode } = useUserModeContext();
 
   const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
