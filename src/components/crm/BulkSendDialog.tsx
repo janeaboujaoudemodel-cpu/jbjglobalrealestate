@@ -94,6 +94,7 @@ const autoDetectGroupStatus = (r: any): BrokerageGroupStatus => {
   if (tags.includes("vip") || tags.includes("priority")) return "priority";
   if (r?.is_existing_match) return "existing";
   return "prospective";
+};
 
 interface Recipient {
   id: string;
