@@ -91,7 +91,7 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
         <header className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold" style={{ color: "#000" }}>{title}</h1>
-            <p className="text-sm" style={{ color: "#374151" }}>Sender locked: CONTACT@JBJ.AE</p>
+            <p className="text-sm" style={{ color: "#1A1A1A" }}>Sender locked: CONTACT@JBJ.AE</p>
           </div>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -131,19 +131,19 @@ export default function UAERegistryListPage({ type }: { type: RegistryRecordType
         </div>
 
         <Card className="bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden">
-          <div className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 text-xs font-semibold border-b" style={{ color: "#374151" }}>
+          <div className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 text-xs font-semibold border-b" style={{ color: "#1A1A1A" }}>
             <span>Company</span><span>Emirate</span><span>Status</span><span>Verification</span><span>Actions</span>
           </div>
-          {list.isLoading && <div className="p-6 text-sm" style={{ color: "#374151" }}>Loading…</div>}
-          {!list.isLoading && filtered.length === 0 && <div className="p-6 text-sm" style={{ color: "#374151" }}>No records yet.</div>}
+          {list.isLoading && <div className="p-6 text-sm" style={{ color: "#1A1A1A" }}>Loading…</div>}
+          {!list.isLoading && filtered.length === 0 && <div className="p-6 text-sm" style={{ color: "#1A1A1A" }}>No records yet.</div>}
           {filtered.map((r: any) => (
             <div key={r.id} className="grid grid-cols-[1fr_120px_140px_140px_120px] gap-2 px-4 py-3 border-b items-center text-sm hover:bg-[#F7F2EA]">
               <Link to={`${detailBase}/${r.id}`} className="font-medium hover:underline" style={{ color: "#000" }}>
-                {r.brand_name} <span className="text-xs" style={{ color: "#6b7280" }}>· {r.legal_company_name}</span>
+                {r.brand_name} <span className="text-xs" style={{ color: "#1A1A1A" }}>· {r.legal_company_name}</span>
               </Link>
-              <span style={{ color: "#374151" }}>{r.emirate_section}</span>
+              <span style={{ color: "#1A1A1A" }}>{r.emirate_section}</span>
               <span><Badge className={STATUS_COLOR[r.outreach_status] ?? "bg-[#F7F2EA] text-[#1A1A1A]"}>{r.outreach_status}</Badge></span>
-              <span style={{ color: "#374151" }}>{r.verification_status}</span>
+              <span style={{ color: "#1A1A1A" }}>{r.verification_status}</span>
               <div className="flex gap-1">
                 <Button size="sm" variant="outline" onClick={() => handleTestSend(r)} title="Test send"><Send className="h-3 w-3" /></Button>
                 {r.website && <a href={r.website} target="_blank" rel="noreferrer"><Button size="sm" variant="outline"><ExternalLink className="h-3 w-3" /></Button></a>}
