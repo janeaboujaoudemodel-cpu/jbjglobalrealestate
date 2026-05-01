@@ -29,10 +29,10 @@ Deno.serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-    // Resolve thread + user
+    // Resolve thread + user (+ channel binding)
     const { data: thread } = await admin
       .from("owner_comm_threads")
-      .select("id, user_id, channel_type, contact_name, contact_identifier")
+      .select("id, user_id, channel_id, channel_type, contact_name, contact_identifier")
       .eq("id", thread_id)
       .maybeSingle();
     if (!thread) {
@@ -42,13 +42,45 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Tone profile + settings
-    const { data: tone } = await admin
-      .from("owner_comm_tone_profiles")
-      .select("*")
-      .eq("user_id", thread.user_id)
-      .eq("is_active", true)
-      .maybeSingle();
+    // Per-channel auto-reply gate. The Comm Hub lets the owner toggle
+    // auto-reply per channel; if this thread's channel is OFF, bail early.
+    let channelToneProfileId: string | null = null;
+    if (thread.channel_id) {
+      const { data: ch } = await admin
+        .from("owner_comm_channels")
+        .select("auto_reply_enabled, tone_profile_id, is_active")
+        .eq("id", thread.channel_id)
+        .maybeSingle();
+      if (ch && (ch.auto_reply_enabled === false || ch.is_active === false)) {
+        return new Response(
+          JSON.stringify({ ok: true, skipped: "auto_reply_disabled_for_channel" }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+      channelToneProfileId = ch?.tone_profile_id ?? null;
+    }
+
+    // Tone profile — prefer the channel's pinned profile, fall back to the
+    // user's active default profile.
+    let tone: any = null;
+    if (channelToneProfileId) {
+      const { data } = await admin
+        .from("owner_comm_tone_profiles")
+        .select("*")
+        .eq("id", channelToneProfileId)
+        .eq("user_id", thread.user_id)
+        .maybeSingle();
+      tone = data;
+    }
+    if (!tone) {
+      const { data } = await admin
+        .from("owner_comm_tone_profiles")
+        .select("*")
+        .eq("user_id", thread.user_id)
+        .eq("is_active", true)
+        .maybeSingle();
+      tone = data;
+    }
 
     const { data: settings } = await admin
       .from("owner_comm_settings")
@@ -75,7 +107,7 @@ Deno.serve(async (req) => {
       .limit(200);
 
     const toneProfile = tone
-      ? `Formality: ${tone.formality_level}/5. Emoji usage: ${tone.emoji_usage}/5. Length: ${tone.message_length}. Signature: ${tone.signature || "(none)"}.`
+      ? `Profile: ${tone.profile_name}. Formality: ${tone.formality_level}/5. Emoji usage: ${tone.emoji_usage}/5. Length: ${tone.message_length}. Signature: ${tone.signature || "(none)"}.`
       : "Default professional tone.";
 
     const corpusSamples = (corpus ?? [])

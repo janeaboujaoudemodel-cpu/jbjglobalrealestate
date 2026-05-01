@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCommChannels, ProviderState } from "@/hooks/useCommChannels";
+import { useToneProfiles } from "@/hooks/useToneProfiles";
 import ChannelTile from "./ChannelTile";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ import { Loader2 } from "lucide-react";
 
 export default function ChannelGrid() {
   const { data: states, isLoading } = useCommChannels();
+  const { data: toneProfiles } = useToneProfiles();
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [resyncingId, setResyncingId] = useState<string | null>(null);
   const qc = useQueryClient();
@@ -99,6 +101,7 @@ export default function ChannelGrid() {
         <ChannelTile
           key={state.provider.id}
           state={state}
+          toneProfiles={toneProfiles ?? []}
           onConnect={() => handleConnect(state)}
           onAddAnother={state.status === "connected" ? () => handleConnect(state) : undefined}
           onResync={state.status === "connected" ? () => handleResync(state) : undefined}

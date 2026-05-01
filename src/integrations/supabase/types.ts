@@ -18475,6 +18475,7 @@ export type Database = {
       owner_comm_channels: {
         Row: {
           assistant_type: Database["public"]["Enums"]["comm_assistant_type"]
+          auto_reply_enabled: boolean
           channel_type: string
           connection_id: string | null
           created_at: string
@@ -18488,12 +18489,14 @@ export type Database = {
           last_sync_at: string | null
           settings: Json | null
           sync_status: string | null
+          tone_profile_id: string | null
           training_sample_count: number
           updated_at: string
           user_id: string
         }
         Insert: {
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          auto_reply_enabled?: boolean
           channel_type: string
           connection_id?: string | null
           created_at?: string
@@ -18507,12 +18510,14 @@ export type Database = {
           last_sync_at?: string | null
           settings?: Json | null
           sync_status?: string | null
+          tone_profile_id?: string | null
           training_sample_count?: number
           updated_at?: string
           user_id: string
         }
         Update: {
           assistant_type?: Database["public"]["Enums"]["comm_assistant_type"]
+          auto_reply_enabled?: boolean
           channel_type?: string
           connection_id?: string | null
           created_at?: string
@@ -18526,11 +18531,20 @@ export type Database = {
           last_sync_at?: string | null
           settings?: Json | null
           sync_status?: string | null
+          tone_profile_id?: string | null
           training_sample_count?: number
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "owner_comm_channels_tone_profile_id_fkey"
+            columns: ["tone_profile_id"]
+            isOneToOne: false
+            referencedRelation: "owner_comm_tone_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       owner_comm_messages: {
         Row: {

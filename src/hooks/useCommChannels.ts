@@ -35,6 +35,8 @@ export const PROVIDERS: ChannelProvider[] = [
   { id: "snapchat",           label: "Snapchat",             description: "Not connected — provider not linked yet", connectorId: null },
 ];
 
+export type AutoReplyAggregate = "all_on" | "all_off" | "mixed" | "none";
+
 export type ProviderState = {
   provider: ChannelProvider;
   status: ChannelStatus;
@@ -43,6 +45,8 @@ export type ProviderState = {
   lastSyncAt: string | null;
   trainingSamples: number;
   lastError: string | null;
+  /** Aggregate auto-reply state across all accounts of this provider. */
+  autoReplyAggregate: AutoReplyAggregate;
   channelRows: Array<{
     id: string;
     display_name: string;
@@ -52,6 +56,8 @@ export type ProviderState = {
     last_sync_at: string | null;
     last_error: string | null;
     training_sample_count: number | null;
+    auto_reply_enabled: boolean | null;
+    tone_profile_id: string | null;
   }>;
 };
 
@@ -65,7 +71,9 @@ export function useCommChannels() {
     queryFn: async (): Promise<ProviderState[]> => {
       const { data: rows, error } = await supabase
         .from("owner_comm_channels")
-        .select("id, channel_type, display_name, identifier, is_active, sync_status, last_sync_at, last_error, training_sample_count")
+        .select(
+          "id, channel_type, display_name, identifier, is_active, sync_status, last_sync_at, last_error, training_sample_count, auto_reply_enabled, tone_profile_id"
+        )
         .order("created_at", { ascending: false });
       if (error) throw error;
 
@@ -88,8 +96,14 @@ export function useCommChannels() {
 
         let status: ChannelStatus = "not_linked";
         if (channelRows.length > 0) status = "connected";
-        // "available" is computed at the edge function level (workspace has connection but project not linked).
-        // We optimistically show "not_linked" and let the autowire endpoint flip it.
+
+        let autoReplyAggregate: AutoReplyAggregate = "none";
+        if (channelRows.length > 0) {
+          const onCount = channelRows.filter((r) => r.auto_reply_enabled === true).length;
+          if (onCount === 0) autoReplyAggregate = "all_off";
+          else if (onCount === channelRows.length) autoReplyAggregate = "all_on";
+          else autoReplyAggregate = "mixed";
+        }
 
         return {
           provider,
@@ -99,6 +113,7 @@ export function useCommChannels() {
           lastSyncAt,
           trainingSamples,
           lastError,
+          autoReplyAggregate,
           channelRows,
         };
       });
