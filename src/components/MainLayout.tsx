@@ -266,7 +266,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {!isBackOfficeRoute && (
         <>
           <div data-chrome="sidebar" className="hidden md:block fixed left-0 top-0 h-screen z-[9997]">
-            <Suspense fallback={null}>
+            <Suspense fallback={
+              <div
+                aria-hidden="true"
+                className="h-screen bg-[#F7F2EA] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
+              />
+            }>
               <GlobalVerticalNav />
             </Suspense>
           </div>
