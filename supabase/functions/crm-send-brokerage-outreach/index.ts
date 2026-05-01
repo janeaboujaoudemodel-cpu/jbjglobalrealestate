@@ -130,8 +130,14 @@ const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: s
   return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
 
-const renderTemplate = (html: string, vars: Record<string, string>) =>
-  html.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
+const renderTemplate = (html: string, vars: Record<string, string>) => {
+  // Support simple {{#if varname}}...{{/if}} blocks (truthy = non-empty string).
+  const conditional = html.replace(
+    /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
+    (_, k, inner) => (vars[k] && String(vars[k]).trim().length > 0 ? inner : ""),
+  );
+  return conditional.replace(/\{\{(\w+)\}\}/g, (_, k) => vars[k] ?? "");
+};
 
 const firstName = (full?: string | null) => {
   if (!full) return "";
