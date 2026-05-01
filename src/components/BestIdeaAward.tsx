@@ -120,9 +120,9 @@ const BestIdeaAward = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-16 md:py-20">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
-      <div className="jj-layer-2">
+      <div className="jj-layer-2 max-w-5xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -133,70 +133,70 @@ const BestIdeaAward = () => {
           {/* Main Card - Champagne style inside active champagne layer */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-36 h-36 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
             
-            <CardContent className="p-8 md:p-12 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <CardContent className="p-6 sm:p-8 md:p-10 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
                 {/* Left - Info */}
                 <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-gold/30">
-                      <Lightbulb className="w-6 h-6 text-gold" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-gold/30">
+                      <Lightbulb className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
+                      <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
                         Best Idea Award
                       </h2>
                     </div>
                   </div>
                   
-                  <p className="text-[#5A4A2E] mb-6 leading-relaxed">
+                  <p className="text-[#5A4A2E] text-sm mb-4 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
 
                   {/* Prize Display - Two Options */}
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-2 mb-4">
                     {/* iPad Pro M4 */}
-                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-lg p-3 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
-                      <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
-                          <Tablet className="w-7 h-7 text-gold" />
+                      <div className="relative z-10 flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
+                          <Tablet className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPad Pro with M4 chip (13-inch)</p>
-                          <p className="text-white/70 text-xs">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
+                          <p className="text-gold font-bold text-sm">iPad Pro with M4 chip (13-inch)</p>
+                          <p className="text-white/70 text-[11px]">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
                         </div>
                       </div>
                     </div>
                     {/* iPhone 16 Pro Max */}
-                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-lg p-3 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
-                      <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
-                          <Gift className="w-7 h-7 text-gold" />
+                      <div className="relative z-10 flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
+                          <Gift className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPhone 16 Pro Max</p>
-                          <p className="text-white/90 text-xs">A18 Pro chip • 48MP Camera System • Titanium Design</p>
+                          <p className="text-gold font-bold text-sm">iPhone 16 Pro Max</p>
+                          <p className="text-white/90 text-[11px]">A18 Pro chip • 48MP Camera System • Titanium Design</p>
                         </div>
                       </div>
                     </div>
-                    <p className="text-xs italic text-center" style={{ color: '#6b7280' }}>Prize depends on the winning idea</p>
+                    <p className="text-[11px] italic text-center" style={{ color: '#6b7280' }}>Prize depends on the winning idea</p>
                   </div>
 
                   {/* Winner's Recognition */}
-                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-4 mb-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-8 h-8 bg-gold/20 rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-gold" />
+                  <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-lg p-3 mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 bg-gold/20 rounded-md flex items-center justify-center">
+                        <Sparkles className="w-3.5 h-3.5 text-gold" />
                       </div>
-                      <span className="text-[#1A1A1A] font-bold text-sm">Winner's Recognition Package</span>
+                      <span className="text-[#1A1A1A] font-bold text-xs">Winner's Recognition Package</span>
                     </div>
-                    <ul className="space-y-2 text-xs" style={{ color: '#374151' }}>
+                    <ul className="space-y-1.5 text-[11px]" style={{ color: '#374151' }}>
                       <li className="flex items-start gap-2">
                         <span className="text-gold mt-0.5">✦</span>
                         <span>Your <span className="text-gold font-semibold">portrait framed</span> & featured on our website</span>
@@ -212,7 +212,7 @@ const BestIdeaAward = () => {
                     </ul>
                   </div>
 
-                  <div className="text-xs space-y-1" style={{ color: '#6b7280' }}>
+                  <div className="text-[11px] space-y-0.5" style={{ color: '#6b7280' }}>
                     <p>• One winner selected monthly from all valid entries</p>
                     <p>• Anonymous submissions are welcome but won't enter the draw</p>
                     <p>• <span style={{ color: '#C8A766' }} className="font-semibold">Submit multiple unique ideas = Multiple draw tickets!</span></p>
@@ -224,15 +224,16 @@ const BestIdeaAward = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                        <Button
-                        className="relative bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
+                        className="relative bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] px-7 py-5 text-base font-bold rounded-xl transition-all duration-300 hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
                         <span className="relative flex items-center gap-2 whitespace-nowrap">
-                          <Lightbulb className="w-6 h-6 text-white" />
+                          <Lightbulb className="w-5 h-5 text-white" />
                           <span className="whitespace-nowrap text-white font-bold">Drop Your Idea</span>
-                          <ArrowUpRight className="w-5 h-5 text-white ml-1" />
+                          <ArrowUpRight className="w-4 h-4 text-white ml-1" />
                         </span>
                       </Button>
                     </DialogTrigger>
+
                     
                     <DialogContent className="bg-[#FDFBF7] border-gold/30 max-w-lg max-h-[85vh] z-[100] mt-20 overflow-hidden flex flex-col">
                       <DialogHeader>
