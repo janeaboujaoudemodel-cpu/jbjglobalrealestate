@@ -3804,19 +3804,23 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
 }
 
 /* =====================================================================
-   GLOBAL TEXT/INTERACTIVE CONTRAST GUARD — rest + hover
+   GLOBAL TEXT/INTERACTIVE CONTRAST GUARD — rest + hover (surface-aware)
    ---------------------------------------------------------------------
-   Scope: text/links/buttons/nav-items rendered on light champagne
-   surfaces. Brings faded ink (text-foreground/40..70, text-ink/40..70,
-   text-muted-foreground at low alpha) up to readable contrast at REST,
-   and ensures HOVER never drops below rest.
+   This pass is intentionally SCOPED to champagne/light surfaces. It must
+   never affect dark heroes, dark surfaces, or [data-surface="dark"]
+   regions, where white text is the correct color.
 
-   Opt-out: ancestor with [data-decorative="true"] or class
-   `.jj-text-fade-allow` (e.g. ghosted hero copy, watermarks).
+   Opt-out: ancestor with [data-decorative="true"], `.jj-text-fade-allow`,
+   `.jj-hero-fullscreen`, or `[data-surface="dark"]`.
    ===================================================================== */
 @layer utilities {
-  /* 1. REST: faded ink on light/champagne surfaces → solid ink */
+  /* 1. REST: faded ink ONLY when on a champagne/light surface */
   :where(
+    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    .bg-card, .bg-background, .bg-popover, .bg-muted, .bg-secondary,
+    .bg-white,
+    [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+  ):not([data-surface="dark"]):not(.jj-hero-fullscreen) :where(
     [class*="text-foreground/3"], [class*="text-foreground/4"],
     [class*="text-foreground/5"], [class*="text-foreground/6"], [class*="text-foreground/7"],
     [class*="text-ink/3"], [class*="text-ink/4"],
@@ -3827,29 +3831,77 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
     opacity: 1 !important;
   }
 
-  /* 2. REST: low-alpha muted-foreground (mid-tone gray) → AA-compliant ink */
-  :where(.text-muted-foreground):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
+  /* 2. REST: low-alpha muted-foreground on light surfaces only */
+  :where(
+    [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
+    .bg-card, .bg-background, .bg-popover, .bg-muted, .bg-white
+  ):not([data-surface="dark"]):not(.jj-hero-fullscreen)
+    :where(.text-muted-foreground):not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
     color: #4A4A4A !important;
   }
 
-  /* 3. HOVER: any interactive element on light surface must keep
-     contrast ≥ rest (never fade out on hover). */
+  /* 3. HOVER: never fade out interactive elements (any surface). */
   :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"], .nav-item, .menu-item):hover:not([data-decorative="true"]):not(.jj-text-fade-allow):not(.jj-text-fade-allow *) {
-    /* Don't override explicit hover colors set by component variants;
-       only fix transparency drops by clamping opacity. */
     opacity: 1 !important;
   }
 
-  /* 4. HOVER: fix common Tailwind "fade on hover" patterns on light bg */
-  :where(a, button, [role="button"], [role="link"], [role="menuitem"]):hover :where(
-    [class*="hover:text-foreground/3"], [class*="hover:text-foreground/4"],
-    [class*="hover:text-ink/3"], [class*="hover:text-ink/4"]
-  ):not([data-decorative="true"]) {
-    color: #1A1A1A !important;
-  }
-
-  /* 5. HOVER for icons inside interactive elements — keep solid */
+  /* 4. HOVER icons inside interactive elements — keep solid (any surface). */
   :where(a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"]):hover :where(svg, [class*="lucide"]):not([data-decorative="true"]):not(.jj-icon-fade-allow):not(.jj-icon-fade-allow *) {
     opacity: 1 !important;
   }
+}
+
+/* =====================================================================
+   HERO READABILITY LOCK — keep white text crisp on dark/photo heroes.
+   Restores contrast that earlier "fix faded ink" rules accidentally
+   ate when the hero copy used `text-white`, `text-white/85`, etc.
+   Adds a soft text-shadow so words survive bright video frames.
+   ===================================================================== */
+.jj-hero-fullscreen :is(h1, h2, h3, h4, h5, h6),
+.jj-hero-fullscreen :is(p, span, a, label, li),
+[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6) {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.jj-hero-fullscreen .text-white,
+.jj-hero-fullscreen [class*="text-white"],
+.jj-hero-fullscreen h1,
+.jj-hero-fullscreen h2 {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* =====================================================================
+   DESTRUCTIVE / RED ACTION READABILITY (Sign Out, Submit Ticket, etc.)
+   Guarantees red CTAs and "Submit Ticket" buttons remain readable in
+   white-on-red, regardless of any earlier contrast override layer.
+   ===================================================================== */
+button[class*="from-red-"],
+button[class*="bg-red-"],
+a[class*="from-red-"],
+a[class*="bg-red-"] {
+  color: #FFFFFF !important;
+}
+button[class*="from-red-"] :is(span, svg, p, div),
+button[class*="bg-red-"] :is(span, svg, p, div),
+a[class*="from-red-"] :is(span, svg, p, div),
+a[class*="bg-red-"] :is(span, svg, p, div) {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+button[class*="from-red-"]:hover,
+button[class*="bg-red-"]:hover,
+a[class*="from-red-"]:hover,
+a[class*="bg-red-"]:hover {
+  color: #FFFFFF !important;
+}
+
+/* Cookie banner: Manage Preferences (dark ink button) — readable on hover */
+.cookie-banner button[class*="bg-[#1A1A1A]"],
+[data-chrome="cookie-banner"] button[class*="bg-[#1A1A1A]"] {
+  color: #FFFFFF !important;
+}
+.cookie-banner button[class*="bg-[#1A1A1A]"]:hover,
+[data-chrome="cookie-banner"] button[class*="bg-[#1A1A1A]"]:hover {
+  color: #FFFFFF !important;
+  background-color: #0A0A0A !important;
 }
