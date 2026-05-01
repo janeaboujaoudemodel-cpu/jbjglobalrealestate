@@ -159,6 +159,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <button
             disabled={isLoading}
             style={triggerStyle}
+            data-no-contrast-guard
             className={cn(
               "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
