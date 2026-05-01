@@ -17368,49 +17368,136 @@ export type Database = {
       }
       material_ingestion_jobs: {
         Row: {
+          ai_summary: string | null
           completed_at: string | null
           created_at: string
+          detected_developer_id: string | null
+          detected_developer_name: string | null
+          detected_doc_type: string | null
+          developer_confidence: number | null
           developer_id: string | null
+          duration_seconds: number | null
           enrichment_results: Json | null
           error_log: Json | null
           extracted_projects: Json | null
+          file_name: string | null
+          file_path: string | null
+          file_size: number | null
           folder_structure: Json | null
           id: string
+          match_confidence: number | null
+          matched_project_id: string | null
+          matched_project_name: string | null
+          merge_target: Json | null
+          merged_at: string | null
+          merged_by: string | null
+          mime_type: string | null
           needs_review_reason: string | null
+          page_count: number | null
+          source_kind: string | null
           source_type: string
           source_url: string
           status: string
           user_id: string
         }
         Insert: {
+          ai_summary?: string | null
           completed_at?: string | null
           created_at?: string
+          detected_developer_id?: string | null
+          detected_developer_name?: string | null
+          detected_doc_type?: string | null
+          developer_confidence?: number | null
           developer_id?: string | null
+          duration_seconds?: number | null
           enrichment_results?: Json | null
           error_log?: Json | null
           extracted_projects?: Json | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
           folder_structure?: Json | null
           id?: string
+          match_confidence?: number | null
+          matched_project_id?: string | null
+          matched_project_name?: string | null
+          merge_target?: Json | null
+          merged_at?: string | null
+          merged_by?: string | null
+          mime_type?: string | null
           needs_review_reason?: string | null
+          page_count?: number | null
+          source_kind?: string | null
           source_type?: string
           source_url: string
           status?: string
           user_id: string
         }
         Update: {
+          ai_summary?: string | null
           completed_at?: string | null
           created_at?: string
+          detected_developer_id?: string | null
+          detected_developer_name?: string | null
+          detected_doc_type?: string | null
+          developer_confidence?: number | null
           developer_id?: string | null
+          duration_seconds?: number | null
           enrichment_results?: Json | null
           error_log?: Json | null
           extracted_projects?: Json | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
           folder_structure?: Json | null
           id?: string
+          match_confidence?: number | null
+          matched_project_id?: string | null
+          matched_project_name?: string | null
+          merge_target?: Json | null
+          merged_at?: string | null
+          merged_by?: string | null
+          mime_type?: string | null
           needs_review_reason?: string | null
+          page_count?: number | null
+          source_kind?: string | null
           source_type?: string
           source_url?: string
           status?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      media_ingestion_audit: {
+        Row: {
+          action: string
+          id: string
+          job_id: string
+          payload: Json | null
+          performed_at: string
+          performed_by: string | null
+          target_row_id: string
+          target_table: string
+        }
+        Insert: {
+          action: string
+          id?: string
+          job_id: string
+          payload?: Json | null
+          performed_at?: string
+          performed_by?: string | null
+          target_row_id: string
+          target_table: string
+        }
+        Update: {
+          action?: string
+          id?: string
+          job_id?: string
+          payload?: Json | null
+          performed_at?: string
+          performed_by?: string | null
+          target_row_id?: string
+          target_table?: string
         }
         Relationships: []
       }
@@ -20549,6 +20636,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      project_videos: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          is_visible: boolean
+          project_id: string
+          source_job_id: string | null
+          title: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          project_id: string
+          source_job_id?: string | null
+          title?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_visible?: boolean
+          project_id?: string
+          source_job_id?: string | null
+          title?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
       }
       projects: {
         Row: {
