@@ -118,6 +118,7 @@ export const OwnerRoutes = () => (
     <Route path="uae-registry/brokerages" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryListPage").then(m => ({ default: () => <m.default type="brokerage" /> }))))}</Suspense>} />
     <Route path="uae-registry/brokerages/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryDetailPage").then(m => ({ default: () => <m.default type="brokerage" /> }))))}</Suspense>} />
     <Route path="toolkit" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="ai-tools-control" element={<AIToolsControlPanel />} />
     <Route path="automations" element={<Automations />} />
     <Route path="studio" element={<Studio />} />
     <Route path="studio/editor/:projectId" element={<StudioEditor />} />
