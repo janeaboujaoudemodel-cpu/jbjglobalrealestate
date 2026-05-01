@@ -371,6 +371,7 @@ export const PublicRoutes = () => (
     <Route path="/qr-generator" element={<AuthRequiredRoute><QRCodeGenerator /></AuthRequiredRoute>} />
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
+    <Route path="/breakfast-booking" element={<BreakfastBooking />} />
     <Route path="/presentations" element={<Presentations />} />
     <Route path="/document-studio" element={<AuthRequiredRoute><DocumentStudio /></AuthRequiredRoute>} />
 
