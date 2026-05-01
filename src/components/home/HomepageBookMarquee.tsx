@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
-import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
+
 
 import type { BookData } from "@/types/books";
 
