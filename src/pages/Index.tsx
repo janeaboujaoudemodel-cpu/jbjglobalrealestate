@@ -218,13 +218,14 @@ const Index = () => {
         >
           <div className="w-full max-w-5xl mx-auto text-center pt-[max(12vh,88px)] sm:pt-[18vh] md:pt-[22vh] space-y-5 sm:space-y-7 md:space-y-8">
             {/* Platform tagline badge */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white font-semibold"
-              style={{ textShadow: '0 2px 16px rgba(0,0,0,0.85)' }}
-            >
-              Dubai's Trusted Real Estate Technology Platform
-            </motion.p>
+            <motion.div variants={fadeInUp} className="flex justify-center">
+              <p
+                className="inline-block bg-black/45 backdrop-blur-md rounded-full px-5 py-2 text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white font-bold border border-white/25"
+                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.6)' }}
+              >
+                Dubai's Trusted Real Estate Technology Platform
+              </p>
+            </motion.div>
 
             {/* Main heading — fluid edge-to-edge typography (clamp scales smoothly across all viewports without cropping) */}
             <motion.h1
@@ -239,24 +240,26 @@ const Index = () => {
                 WebkitTextFillColor: "transparent",
                 wordSpacing: "0.01em",
                 hyphens: "auto",
+                filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.7)) drop-shadow(0 2px 6px rgba(0,0,0,0.6))",
               }}
             >
               Your Gateway to Dubai's Finest Real Estate
             </motion.h1>
 
-            {/* Quick-action CTA pills — balanced 6-tile grid: 3×2 mobile/tablet, single row of 6 on desktop. Labels never truncate. */}
+            {/* Quick-action CTA pills — uniform 6-tile grid: 2×3 mobile, 3×2 tablet, 1×6 desktop. Equal heights, readable labels. */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-md sm:max-w-3xl lg:max-w-none mx-auto"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 max-w-md sm:max-w-3xl lg:max-w-5xl mx-auto"
             >
               {heroActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/70 sm:border-white/30 bg-[#1A1A1A]/60 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-medium hover:bg-[#FDFBF7]/15 hover:border-white/70 hover:text-white transition-all duration-300 min-h-[58px] sm:min-h-[44px]"
+                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/75 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#1A1A1A]/90 hover:border-gold/70 transition-all duration-300 min-h-[76px]"
+                  style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
                 >
-                  <action.icon className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
-                  <span className="whitespace-normal break-words leading-tight text-center">{action.label}</span>
+                  <action.icon className="w-4 h-4 text-gold flex-shrink-0" />
+                  <span className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2">{action.label}</span>
                 </Link>
               ))}
             </motion.div>
@@ -264,16 +267,16 @@ const Index = () => {
             {/* Three pillar badges */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-white/20 overflow-hidden"
+              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-white/40 overflow-hidden rounded-lg"
             >
-              {pillars.map((pillar, i) => (
+              {pillars.map((pillar) => (
                 <div
                   key={pillar.title}
-                  className="bg-[#1A1A1A]/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
+                  className="bg-[#1A1A1A]/75 backdrop-blur-md p-4 sm:p-5 text-center"
                 >
-                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white mx-auto mb-1.5" />
-                  <h3 className="text-[11px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
-                  <p className="text-[10px] sm:text-[10px] text-white/85 leading-tight">{pillar.desc}</p>
+                  <pillar.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gold mx-auto mb-2" />
+                  <h3 className="text-[12px] sm:text-sm font-bold text-white mb-1" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{pillar.title}</h3>
+                  <p className="text-[10px] sm:text-xs text-white leading-tight" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{pillar.desc}</p>
                 </div>
               ))}
             </motion.div>
