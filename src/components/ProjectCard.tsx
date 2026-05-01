@@ -300,33 +300,33 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         
         {/* Content - Premium Hybrid Style */}
         <div className="p-4 flex-1 flex flex-col">
-          {/* Project Name - Gold */}
-          <h4 className="text-gold text-lg font-bold mb-1 break-words leading-tight line-clamp-2 group-hover:text-[#1A1A1A] transition-colors">
+          {/* Project Name - Ink black for max readability */}
+          <h4 className="text-[#1A1A1A] text-lg font-bold mb-1 break-words leading-tight line-clamp-2 group-hover:text-[#A68444] transition-colors">
             {project.name}
           </h4>
           
           {/* Location with icon */}
           {project.location && (
-            <div className="flex items-center gap-1.5 text-muted-foreground text-sm mb-2">
-              <MapPin className="w-3.5 h-3.5 text-[#5A4A2E] flex-shrink-0" />
+            <div className="flex items-center gap-1.5 text-[#1A1A1A]/80 text-sm mb-2 font-medium">
+              <MapPin className="w-3.5 h-3.5 text-[#A68444] flex-shrink-0" />
               <span className="truncate">{project.location}</span>
             </div>
           )}
           
           {/* Divider */}
-          <div className="h-px bg-gold/20 my-2" />
+          <div className="h-px bg-[#B89555]/30 my-2" />
           
           {/* Handover line (replaces price; price now lives on the photo) */}
           <p className="text-sm mb-2">
             {project.handover_date ? (
               <>
-                <span className="text-muted-foreground">Handover </span>
-                <span className="text-foreground font-semibold">
+                <span className="text-[#1A1A1A]/70">Handover </span>
+                <span className="text-[#1A1A1A] font-semibold">
                   {project.handover_date}
                 </span>
               </>
             ) : (
-              <span className="text-muted-foreground">Handover TBA</span>
+              <span className="text-[#1A1A1A]/70">Handover TBA</span>
             )}
           </p>
           
@@ -341,12 +341,12 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           )}
           
           {/* Unit Types Row (1BR • 2BR • 3BR | 800-1500 sqft) */}
-          <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3 flex-wrap">
+          <div className="flex items-center gap-2 text-[#1A1A1A]/80 text-xs mb-3 flex-wrap font-medium">
             {getUnitTypesText() && (
-              <span className="font-medium">{getUnitTypesText()}</span>
+              <span className="font-semibold">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
-              <span className="text-[#8A7556]">|</span>
+              <span className="text-[#A68444]">|</span>
             )}
             {getSizeText() && (
               <span>{getSizeText()}</span>
@@ -354,9 +354,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           </div>
           
           {/* Description with ...more link - Shorter */}
-          <p className="text-muted-foreground text-sm leading-relaxed mb-3 flex-1 line-clamp-2 overflow-hidden">
+          <p className="text-[#1A1A1A]/85 text-sm leading-relaxed mb-3 flex-1 line-clamp-2 overflow-hidden">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-gold font-bold hover:text-[#5A4A2E] cursor-pointer ml-1">
+            <span className="text-[#A68444] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
             </span>
           </p>
