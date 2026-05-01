@@ -45,6 +45,7 @@ export default function DevStyleToggle() {
   });
   const [collapsed, setCollapsed] = useState(false);
   const [wipe, setWipe] = useState(50); // 0–100 wipe % for snapshot mode
+  const [snapshotExists, setSnapshotExists] = useState<boolean | null>(null);
   const [pathname, setPathname] = useState<string>(() =>
     typeof window === "undefined" ? "/" : window.location.pathname
   );
