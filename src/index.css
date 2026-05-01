@@ -2957,12 +2957,10 @@ button[style*="background"] [class*="text-gold"] {
   gap: 0.375rem;
   padding: 0.1875rem 0.625rem;
   border-radius: 9999px;
-  background: linear-gradient(135deg,
-    hsl(var(--handover-gold) / 0.12),
-    hsl(var(--handover-gold-glow) / 0.18));
-  border: 1px solid hsl(var(--handover-gold) / 0.35);
-  color: hsl(var(--handover-gold)) !important;
-  font-weight: 700;
+  background: #F7F2EA;
+  border: 1px solid hsl(var(--handover-gold) / 0.55);
+  color: #1A1A1A !important;
+  font-weight: 600;
   font-size: 0.75rem; /* 12px mobile */
   line-height: 1.125rem; /* 18px */
   letter-spacing: 0.02em;
