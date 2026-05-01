@@ -142,6 +142,7 @@ function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyA
 export default function ChannelTile({
   state,
   toneProfiles,
+  auditSummary,
   onConnect,
   onAddAnother,
   onResync,
@@ -152,6 +153,7 @@ export default function ChannelTile({
     state;
   const Icon = PROVIDER_ICONS[provider.id] || MessageSquare;
   const updateChannel = useUpdateChannelToneSettings();
+  const [openActivity, setOpenActivity] = useState<Record<string, boolean>>({});
 
   const statusPill = (() => {
     if (status === "connected") {
