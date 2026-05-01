@@ -1,60 +1,68 @@
 ## Goal
 
-Make the "Trending Projects in Dubai" / "Continue Searching" section on the homepage fully readable, premium, and on-brand. Fix the title contrast, restore project photos, fix the Clear button, and ensure every label/CTA in the section is legible.
+1. Delete the homepage "Continue Searching / Trending Projects" section.
+2. Reshape the JBJ Royal Tools Hub showcase on the homepage: drop AI Video Studio + Voice Studio, add Business Card Maker + Logo Maker, and recolor each tile per the brief.
+3. Hide AI Video Studio + Voice Studio across the entire public website (not yet ready).
+4. Build an admin "AI Tools Visibility" panel: per-tool public/hidden toggle that gates every AI tool everywhere.
 
-## Root causes found in `src/components/ContinueSearching.tsx`
+## Files to change
 
-1. **Title invisible** — section uses a black backdrop (lines 183–184: `from-black via-[#0a0a0a] to-black`) while the rest of the homepage is champagne, so the white `h2` clashes with the surrounding page and feels broken/unreadable in context.
-2. **Card subtitle invisible** — line 472 sets the location/subtitle text to `text-[#1A1A1A]` (ink) on a dark image gradient, so locations like "Dubai Marina" disappear.
-3. **"Clear" button unreadable** — line 208 uses `text-muted-foreground hover:text-foreground`, which on the black backdrop renders as faded gray on black.
-4. **Empty/fallback copy low contrast** — lines 222–223 use `text-white/70` and `text-white/85`, dim and inconsistent once the surface flips to champagne.
-5. **No photos showing for trending** — the trending query (lines 133–141) selects `cover_image_url` but the card only renders the image when `isUrlValid` passes (must start with `http(s)://`). Many DB rows store storage paths or relative URLs, so `imgBroken` flips immediately and the dark fallback gradient is shown. The self-heal path also re-fetches the same broken URL.
-6. **Type badge low contrast** — line 455 "PROPERTY/AREA/DEVELOPER" pill uses gold-on-translucent-ink, fine on dark images but illegible over light photos.
+- `src/pages/Index.tsx` — remove the `<ContinueSearching>` block (lines 346–351).
+- `src/components/home/ToolkitShowcaseCard.tsx` — replace the 8-tool list (drop Video/Voice Studio, add Business Card Designer + AI Logo Maker), assign tone colors per tile, switch the icon tile from flat champagne to per-tool tone backgrounds.
+- New DB migration adding `ai_tool_visibility` (id text PK, is_public boolean default true, updated_at, updated_by) with RLS — public can `select`, owner/admin can `upsert/update`.
+- New hook `src/hooks/useToolVisibility.ts` — returns `{ visibleIds: Set<string>, isHidden(id), loading }`. Subscribes to realtime changes so toggles take effect instantly.
+- `src/config/royalToolsRegistry.ts` — keep entries but add a `defaultHidden?: boolean` flag; mark `ai-video-studio`, `voice-studio` (and any other "not yet ready" duplicates) with `defaultHidden: true`.
+- `src/pages/AIHub.tsx`, `src/pages/toolkit/RoyalToolsHub.tsx`, `src/components/home/ToolkitShowcaseCard.tsx`, `src/components/header/MegaMenuToolkit.tsx`, `src/components/Footer.tsx`, `src/config/globalSearchIndex.ts`, `src/config/shortcutsConfig.ts` — filter every render by the visibility hook so a tool flipped off in admin disappears site-wide. The admin AI Tools Control Panel itself ignores the filter.
+- `src/pages/owner/AIToolsControlPanel.tsx` — add a "Public Visibility" column to each tool row: a `<Switch>` writing to `ai_tool_visibility` via upsert. Show a header summary (X/Y public).
+- `src/routes/OwnerRoutes.tsx` — add `<Route path="ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />` if not already routed; add a sidebar link in `OwnerSidebarNav.tsx`.
 
-## Plan
+## Tile recoloring (homepage Royal Tools showcase)
 
-### 1. Re-skin the section to premium champagne (matches site standard)
+Apply per-tile tone (icon container bg + icon color + hover ring) using existing palette tokens:
 
-- Replace the black radial backdrop (lines 182–185) with a subtle champagne surface: page `#FDFBF7` base, soft `#F7F2EA` raised band, hairline gold top/bottom dividers using `<AdaptiveHairline />`.
-- Title `h2` becomes solid ink `text-[#1A1A1A]` with Inter semibold, sized `text-xl md:text-2xl`. Keep the gold history disc icon to its left.
-- Add a small ink/gold eyebrow above the title ("Recently viewed" / "Editor's picks") for institutional polish.
+- Property Evaluator → blue (`bg-blue-500/15 text-blue-600`)
+- Property Comparison → emerald/green (`bg-emerald-500/15 text-emerald-600`)
+- Mortgage Calculator → champagne gold (`bg-[#B89555]/15 text-[#B89555]`)
+- AI Home Finder → vivid purple (matches global AI purple theme — `bg-purple-500/15 text-purple-600`)
+- Rental Index → darker green (`bg-green-700/15 text-green-700`)
+- AI Interior Design → light purple/pink (`bg-pink-400/15 text-pink-500`)
+- Business Card Designer → ink/champagne neutral (`bg-[#1A1A1A]/10 text-[#1A1A1A]`)
+- AI Logo Maker → amber (`bg-amber-500/15 text-amber-600`)
 
-### 2. Header controls (Register Interest + Clear)
+Card body, title, description and CTA stay champagne/ink so contrast guards remain happy. Only the small icon chip changes color — matches the existing `IconTile` semantic-tone standard.
 
-- "Register Your Interest" stays as a gold-bordered champagne pill but force solid ink text (`text-[#1A1A1A]`) and a stronger hover (`hover:bg-[#EFE6D6]`).
-- Replace the faded "Clear" button with a solid, readable control: ink text on a thin gold-bordered chip (`border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]`), red `X` icon for clarity. Min tap area 32px.
+Final order on homepage grid:
+1. Property Evaluator (blue) · 2. Property Comparison (green) · 3. AI Home Finder (purple) · 4. Mortgage Calculator (gold) · 5. Rental Index (dark green) · 6. AI Interior Design (pink) · 7. Business Card Designer (ink) · 8. AI Logo Maker (amber).
 
-### 3. Cards — fix images and contrast
+## Visibility system — technical
 
-- **Image resolution fix**: in `RecentCard3D`, when `isUrlValid` returns false but a non-empty `imageUrl` exists, treat it as a Supabase storage path and resolve via `supabase.storage.from(...).getPublicUrl(...)` OR upgrade the validator to accept `/`-prefixed and storage URLs. Combined with the existing `fetchCoverImage` self-heal, this restores cover photos for trending projects.
-- **Subtitle visible**: change line 472 from `text-[#1A1A1A]` to `text-white/95` with a soft text-shadow (already sitting over the dark bottom-gradient overlay at line 427), or move it onto a small frosted ink chip. Pick the chip approach for premium feel: `bg-[#1A1A1A]/55 backdrop-blur px-2 py-0.5 rounded-md text-white text-[10px]`.
-- **Title on card**: keep white but bump weight to `font-semibold` and add `drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]` so it stays readable on bright photos.
-- **Type badge**: switch to solid `bg-[#1A1A1A]/80` with `text-[#F7F2EA]` and gold-tinted icon for guaranteed contrast on any photo.
-- **Image fallback** (no photo): replace the navy gradient (line 421) with a champagne-to-gold gradient and a gold icon, so cards never look "broken/empty" while resolving.
+```sql
+create table public.ai_tool_visibility (
+  tool_id text primary key,
+  is_public boolean not null default true,
+  updated_at timestamptz not null default now(),
+  updated_by uuid references auth.users(id)
+);
+alter table public.ai_tool_visibility enable row level security;
+create policy "Anyone can read tool visibility" on public.ai_tool_visibility for select using (true);
+create policy "Owner/admin can upsert" on public.ai_tool_visibility for all
+  using (public.has_role(auth.uid(),'admin') or public.has_role(auth.uid(),'owner'))
+  with check (public.has_role(auth.uid(),'admin') or public.has_role(auth.uid(),'owner'));
+-- Seed: hide the not-ready tools by default
+insert into public.ai_tool_visibility (tool_id, is_public) values
+  ('ai-video-studio', false),
+  ('voice-studio', false)
+on conflict (tool_id) do nothing;
+alter publication supabase_realtime add table public.ai_tool_visibility;
+```
 
-### 4. Empty state
-
-- Re-skin to champagne: gold disc icon, ink primary copy (`text-[#1A1A1A]`), muted ink secondary (`text-[#1A1A1A]/70`), and gold CTA button "Explore Now" with ink text.
-
-### 5. Marquee polish
-
-- Add fade masks on the left/right edges of the WalkingStrip viewport (linear-gradient mask-image from `#F7F2EA`) so cards drift in/out elegantly instead of clipping.
-- Keep the existing pause-on-hover behavior.
-
-## Files to edit
-
-- `src/components/ContinueSearching.tsx` — backdrop, header, Clear button, empty state, RecentCard3D image validator/fallback, subtitle chip, type badge, fade masks.
-
-## Out of scope
-
-- No changes to `useRecentSearches`, `LeadCaptureModal`, `DeveloperLogo`, or routing.
-- No DB migrations; image fix is purely client-side URL resolution + self-heal already in place.
+`useToolVisibility` returns a memoised set; all public tool surfaces filter via `tools.filter(t => visibility.isPublic(t.id))`. Admin pages bypass the filter.
 
 ## Acceptance checklist
 
-- Title "Trending Projects in Dubai" / "Continue Searching…" is fully readable on the champagne homepage.
-- Every trending card shows a real photo (or a branded champagne fallback while loading).
-- Subtitle (location), title, and type badge on each card are legible over any photo.
-- "Register Your Interest" and "Clear" are both clearly readable, with proper hover states.
-- Empty state copy and CTA are high-contrast ink/gold on champagne.
-- No white-on-light or ink-on-dark regressions; respects the champagne-gold and white-on-light contrast guards.
+- Homepage no longer shows the Continue Searching / Trending Projects section.
+- Royal Tools Hub showcase on homepage shows exactly the 8 tiles above, with the colored icon chips, no Video/Voice Studio.
+- Visiting `/ai-hub`, `/toolkit`, header mega menu, footer, and global search returns no results for AI Video Studio or Voice Studio.
+- Owner AI Tools Control Panel shows a "Public" toggle per tool; flipping any toggle hides/shows that tool everywhere within ~1s (realtime).
+- Admin still sees and can administer hidden tools from the control panel.
+- No contrast / faded-gold / white-on-light regressions on the recolored tiles.

@@ -18,6 +18,7 @@ import {
   type ToolDefinition,
   type ToolCategory,
 } from '@/config/royalToolsRegistry';
+import { useToolVisibility } from '@/hooks/useToolVisibility';
 
 interface ToolCardProps {
   tool: ToolDefinition;
@@ -52,19 +53,23 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
 export default function RoyalToolsHub() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory | 'all'>('all');
+  const visibility = useToolVisibility();
 
   const filteredTools = useMemo(() => {
     return allTools.filter(tool => {
-      const matchesSearch = 
+      // Hide tools toggled off in the admin AI Tools Control Panel
+      if (!visibility.isPublic(tool.id)) return false;
+
+      const matchesSearch =
         tool.name.toLowerCase().includes(search.toLowerCase()) ||
         tool.description.toLowerCase().includes(search.toLowerCase()) ||
         tool.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
-      
+
       const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
-      
+
       return matchesSearch && matchesCategory;
     });
-  }, [search, selectedCategory]);
+  }, [search, selectedCategory, visibility]);
 
   const categories = Object.keys(categoryLabels) as ToolCategory[];
 

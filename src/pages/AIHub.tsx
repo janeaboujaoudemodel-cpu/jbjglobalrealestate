@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/SEOHead";
 import { SectionDivider } from "@/components/ui/section-divider";
+import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { 
   ArrowUpRight, 
   Sparkles, 
@@ -515,8 +516,12 @@ const AIHub = () => {
   const [toolSearch, setToolSearch] = useState('');
   const [toolFilter, setToolFilter] = useState<ToolCategory | 'all'>('all');
 
-  // Combine all tools
-  const allTools = [...investorTools, ...productivityTools, ...mediaAndCreativeTools, ...aiSalesTools, ...aiReportTools, ...aiCommTools, ...aiContentTools];
+  // Visibility filter — hides tools toggled off in the admin AI Tools Control Panel
+  const visibility = useToolVisibility();
+
+  // Combine all tools, then drop anything hidden by the admin
+  const allTools = [...investorTools, ...productivityTools, ...mediaAndCreativeTools, ...aiSalesTools, ...aiReportTools, ...aiCommTools, ...aiContentTools]
+    .filter(tool => visibility.isPublic(tool.id));
 
   // Filter tools by search and category
   const filteredTools = allTools.filter(tool => {
@@ -525,7 +530,7 @@ const AIHub = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Group tools by category
+  // Group tools by category (already filtered by visibility)
   const toolsByCategory = allTools.reduce((acc, tool) => {
     if (!acc[tool.category]) acc[tool.category] = [];
     acc[tool.category].push(tool);

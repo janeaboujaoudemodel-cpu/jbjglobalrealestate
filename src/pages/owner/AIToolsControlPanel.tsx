@@ -9,10 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { Switch } from "@/components/ui/switch";
 import {
   ChevronDown, Copy, ExternalLink, Search, CheckCircle2, XCircle,
   RotateCcw, Play, Save, Clock, Shield, AlertTriangle, History,
-  Eye, Undo2, Rocket, FileText,
+  Eye, EyeOff, Undo2, Rocket, FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -169,22 +170,53 @@ export default function AIToolsControlPanel() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // Per-tool public visibility — stored in `ai_tool_visibility`
+  const [hiddenTools, setHiddenTools] = useState<Set<string>>(new Set());
 
   // Fetch all data
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [vRes, tRes, rRes] = await Promise.all([
+    const [vRes, tRes, rRes, visRes] = await Promise.all([
       (supabase.from("ai_tool_versions") as any).select("*").order("created_at", { ascending: false }),
       (supabase.from("ai_tool_test_logs") as any).select("*").order("created_at", { ascending: false }),
       supabase.from("ai_recommendations").select("*").order("created_at", { ascending: false }),
+      (supabase.from("ai_tool_visibility") as any).select("tool_id, is_public"),
     ]);
     if (vRes.data) setVersions(vRes.data as ToolVersion[]);
     if (tRes.data) setTestLogs(tRes.data as TestLog[]);
     if (rRes.data) setRecommendations(rRes.data as Recommendation[]);
+    if (visRes.data) {
+      const next = new Set<string>();
+      for (const row of visRes.data as Array<{ tool_id: string; is_public: boolean }>) {
+        if (row.is_public === false) next.add(row.tool_id);
+      }
+      setHiddenTools(next);
+    }
     setLoading(false);
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // Toggle a tool's public visibility
+  const toggleVisibility = useCallback(async (toolId: string, makePublic: boolean) => {
+    const { error } = await (supabase.from("ai_tool_visibility") as any).upsert({
+      tool_id: toolId,
+      is_public: makePublic,
+      updated_by: user?.id ?? null,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "tool_id" });
+    if (error) {
+      toast.error("Failed to update visibility");
+      return;
+    }
+    setHiddenTools(prev => {
+      const next = new Set(prev);
+      if (makePublic) next.delete(toolId); else next.add(toolId);
+      return next;
+    });
+    toast.success(makePublic ? "Tool is now public" : "Tool hidden from public");
+  }, [user?.id]);
+
 
   // Get current status for a tool (latest version status, or "live" if no versions)
   const getToolStatus = useCallback((toolId: string): string => {
@@ -397,6 +429,28 @@ export default function AIToolsControlPanel() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
+                          {/* Public visibility toggle */}
+                          <div
+                            onClick={e => e.stopPropagation()}
+                            className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${
+                              hiddenTools.has(tool.id)
+                                ? "bg-red-500/10 border-red-500/40"
+                                : "bg-emerald-500/10 border-emerald-500/40"
+                            }`}
+                            title={hiddenTools.has(tool.id) ? "Hidden from public" : "Visible to public"}
+                          >
+                            {hiddenTools.has(tool.id)
+                              ? <EyeOff className="w-3.5 h-3.5 text-red-400" />
+                              : <Eye className="w-3.5 h-3.5 text-emerald-400" />}
+                            <Switch
+                              checked={!hiddenTools.has(tool.id)}
+                              onCheckedChange={(checked) => toggleVisibility(tool.id, checked)}
+                              aria-label={`Toggle public visibility for ${tool.title}`}
+                            />
+                            <span className="text-[10px] font-semibold uppercase tracking-wide text-white/80">
+                              {hiddenTools.has(tool.id) ? "Hidden" : "Public"}
+                            </span>
+                          </div>
                           <Badge className="bg-zinc-800 text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
