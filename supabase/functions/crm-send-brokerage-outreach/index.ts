@@ -29,6 +29,23 @@ type BrokerageVariant =
   | "brokerage_partnership_intro"
   | "brokerage_breakfast_invite";
 
+type GroupStatusKey =
+  | "prospective"
+  | "existing"
+  | "priority"
+  | "active"
+  | "nda"
+  | "custom";
+
+interface Personalization {
+  contactName?: string;
+  contactFirstName?: string;
+  groupStatus?: GroupStatusKey;
+  groupStatusLabelOverride?: string;
+  preferredSlotId?: string;
+  preferredEventTimeOverride?: string;
+}
+
 interface Body {
   brokerageId?: string;
   variant?: BrokerageVariant;
@@ -37,7 +54,60 @@ interface Body {
   overrideEmail?: string;
   fromEmailOverride?: string;
   ccEmailOverride?: string;
+  personalization?: Personalization;
 }
+
+const GROUP_STATUS_LABELS: Record<GroupStatusKey, string> = {
+  prospective: "Prospective Partner",
+  existing: "Existing Relationship",
+  priority: "Priority Partner",
+  active: "Active Channel Partner",
+  nda: "NDA-Signed Partner",
+  custom: "Channel Partner",
+};
+
+const GROUP_STATUS_LINES: Record<GroupStatusKey, string> = {
+  prospective:
+    "We'd love to introduce JBJ Global Real Estate to your team and explore a formal channel partnership.",
+  existing:
+    "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
+  priority:
+    "As one of the priority brokerages on our shortlist, I'd like to reserve a private session for your team.",
+  active:
+    "As one of our active channel partners, I'd like to set aside time for a strategic review with your leadership.",
+  nda:
+    "Building on the NDA already in place between our firms, I'd like to walk your leadership through what's coming next.",
+  custom:
+    "I'd like to host your leadership for a private briefing tailored to your team.",
+};
+
+const deriveGroupStatus = (brk: any, override?: GroupStatusKey): GroupStatusKey => {
+  if (override) return override;
+  const stage = String(brk?.outreach_stage || "").toLowerCase();
+  const tags: string[] = Array.isArray(brk?.tags) ? brk.tags.map((t: any) => String(t).toLowerCase()) : [];
+  if (String(brk?.nda_status || "").toLowerCase() === "signed") return "nda";
+  if (stage === "active") return "active";
+  if (tags.includes("vip") || tags.includes("priority")) return "priority";
+  if (brk?.is_existing_match) return "existing";
+  return "prospective";
+};
+
+const formatSlotLabel = (iso: string): string => {
+  try {
+    const d = new Date(iso);
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Dubai",
+    }).format(d) + " (GST)";
+  } catch {
+    return "";
+  }
+};
 
 const base64UrlEncode = (str: string) => {
   const bytes = new TextEncoder().encode(str);
