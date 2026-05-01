@@ -1,35 +1,88 @@
-## Why you can't see it
+## Pre-send duplicate check for brokerage breakfast outreach
 
-The "Media Ingestion" button **was** added — but only on **one** CRM page (`/crm/relationships`, top toolbar, gold button next to "Back to CRM Hub"). If you're on the CRM Hub landing page (`/owner/crm`), the Leads inbox, Tasks, Calendar, or any other CRM tab, there's no shortcut.
+Before any breakfast-event email goes out, the system should automatically check if the brokerage **company** or its **contact email** is already registered in the CRM and warn or block accordingly. Today the bulk send flow only deduplicates against `last_outreach_at` (skips anyone contacted in the last 7 days) — it does **not** verify whether the company/contact already exists as a lead, client, broker, or in the relationship email log.
 
-You're on `/owner/crm/relationships` right now, so the button **is** on this page — top-right of the header bar, gold, with an Inbox icon labeled "Media Ingestion". If you don't see it, it's likely scrolled off or the toolbar wraps on your viewport. But the bigger problem is that anywhere else in CRM, it's missing.
+### What "already registered" means (4 signals)
 
-## Plan — make it reachable from anywhere in CRM
+For a target brokerage row in `crm_brokerages`, check whether:
 
-### 1. Add Media Ingestion to the CRM tools sidebar
-`src/components/crm/CRMToolsSidebar.tsx` already has an "Owner Command Center" group. Add a new entry:
-- **Media Ingestion** → `/admin/media-ingestion` (Inbox icon, gold tone)
+1. **Company is already an active partner** — the row's own `status = 'active'` or `outreach_stage IN ('responded','meeting_booked','partner_signed')`, or `nda_status = 'signed'`. They've already been onboarded; sending a cold breakfast invite would be embarrassing.
+2. **Contact email exists elsewhere in the CRM**:
+   - `crm_leads.email` (active leads — they may already be in pipeline as a buyer/investor lead)
+   - `crm_clients.email` (existing clients)
+   - `crm_brokers` / `broker_profiles.email` (registered platform brokers)
+3. **A previous breakfast invite was already sent** — `crm_relationship_email_log` already has a row where `entity_type='brokerage'`, `entity_id` matches, and `body_snippet` mentions "private breakfast invitation" (the exact phrase the send function writes).
+4. **Marked do-not-contact** — `do_not_contact = true` on the brokerage row. This is already an implicit block but should surface explicitly.
 
-This sidebar is the persistent CRM navigation panel, so the shortcut becomes one click from every CRM tab.
+### Implementation
 
-### 2. Add a prominent Media Ingestion card to the CRM Hub landing page
-On `/owner/crm` (the hub you land on first), add a "Media Ingestion" quick-action card alongside the existing Relationships / Leads / Tasks cards, so it's the first thing visible when you enter CRM.
+#### 1. New edge function: `crm-check-brokerage-registration`
 
-### 3. Keep the existing Relationships toolbar button
-Already in place at `/owner/crm/relationships` — no change.
+Owner-only, mirrors the auth pattern from `crm-send-brokerage-outreach`. Input:
+```ts
+{ brokerageIds: string[], variant: BrokerageVariant }
+```
+Output (per id):
+```ts
+{
+  brokerageId: string,
+  status: "ok" | "warn" | "block",
+  reasons: Array<{
+    code: "already_partner" | "lead_exists" | "client_exists" | "registered_broker" |
+          "previous_breakfast_invite" | "do_not_contact",
+    label: string,            // human-readable for the UI
+    matchedTable?: string,    // e.g. "crm_leads"
+    matchedId?: string,
+    matchedEmail?: string,
+  }>
+}
+```
 
-### 4. Keep the global sidebar entry
-Already added in `GlobalVerticalNav.tsx` — visible from every page in the app, not just CRM.
+Rules:
+- `do_not_contact` → **block** (always, regardless of variant).
+- `already_partner` → **block** for `brokerage_breakfast_invite` (don't invite an existing partner to a "let's get to know you" breakfast); **warn** for `brokerage_partnership_intro`.
+- `previous_breakfast_invite` (same variant already sent) → **block**.
+- `lead_exists` / `client_exists` / `registered_broker` → **warn** (the contact may be wearing two hats — show owner the match so they can decide).
 
-## Files to touch
+The function uses the service-role client and queries:
+- `crm_brokerages` for status/stage/nda/dnc on the target.
+- `crm_leads`, `crm_clients`, `crm_brokers` joined on `LOWER(email)` against `LOWER(primary_contact->>'email')`, `secondary_contact->>'email'`, and the brokerage's `email` column.
+- `crm_relationship_email_log` filtered by `entity_id` + variant marker in `body_snippet`.
 
-- `src/components/crm/CRMToolsSidebar.tsx` — add Media Ingestion entry to the Owner Command Center group
-- `src/pages/` CRM hub landing page (will locate the exact file — likely `OwnerCRMHub.tsx` or similar) — add a Media Ingestion quick-action card
+#### 2. New hook: `useCheckBrokerageRegistration`
 
-## Result
+In `src/hooks/useCRMRelationships.ts` — invokes the edge function and returns the per-id check results. React Query mutation, no caching (results must be fresh at send time).
 
-After this change, from inside CRM you'll see Media Ingestion in **three places**:
-1. Global left sidebar (always visible across the entire app)
-2. CRM tools sidebar (every CRM tab)
-3. CRM Hub landing page as a primary card
-4. Relationships page top toolbar (already there)
+#### 3. Wire into `BulkSendDialog`
+
+Update `src/components/crm/BulkSendDialog.tsx` (only when `entityType === "brokerage"`):
+
+- New automated step **between** "Test send" and "Send to all": **Step 2 — Pre-flight registration check**.
+- When the owner clicks **Send to all** for the first time (the existing `reviewing` gate), run the check on all `targets` in one batched call.
+- Render results inline in the existing review table:
+  - Green ✓ "OK to send" rows.
+  - Amber ⚠ "Warn" rows with reasons listed (e.g. "Contact john@x.com is already a CRM lead since Mar 2025"). Owner can tick a per-row override checkbox to include them.
+  - Red ✕ "Blocked" rows — disabled, cannot be sent (with a clear reason). They are filtered out of the eventual send loop.
+- New summary line: "X ready · Y warnings · Z blocked".
+- Add an `onlyShowProblems` toggle to filter the table to flagged rows.
+- The actual `sendAll()` loop only iterates over `status === "ok"` rows + warn rows the owner explicitly approved.
+
+#### 4. Server-side guard (defence in depth)
+
+Inside `crm-send-brokerage-outreach`, before sending a real (non-test) breakfast invite, run the same check inline for the single brokerage and refuse with 409 if `status === "block"`. This way the check is enforced even if the dialog is bypassed (e.g. a future automation calls the function directly). Test sends bypass the check.
+
+### Files touched
+
+```
+supabase/functions/crm-check-brokerage-registration/index.ts   (new)
+supabase/functions/crm-send-brokerage-outreach/index.ts        (add inline guard)
+src/hooks/useCRMRelationships.ts                                (new hook)
+src/components/crm/BulkSendDialog.tsx                           (review step UI)
+```
+
+### Out of scope
+
+- No DB migrations — uses existing tables.
+- No new template variants.
+- Developer-registration flow is unchanged (this is brokerage-only).
+- No bulk override "send anyway to all blocked" button — blocks must be resolved one row at a time on purpose.
