@@ -289,6 +289,36 @@ export default function ChannelTile({
                     </SelectContent>
                   </Select>
                 </div>
+
+                {(() => {
+                  const summary = auditSummary?.[row.id];
+                  const isOpen = !!openActivity[row.id];
+                  return (
+                    <div className="border-t border-[#B89555]/20 pt-2 mt-1 space-y-1">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Link2 className="h-3 w-3" /> Connected</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_connected_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><RefreshCw className="h-3 w-3" /> Synced</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_synced_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Sparkles className="h-3 w-3" /> Auto-reply</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_auto_reply_at)}</div>
+                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Inbox className="h-3 w-3" /> Inbound</div>
+                        <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_inbound_at)}</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setOpenActivity((s) => ({ ...s, [row.id]: !s[row.id] }))}
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] hover:underline mt-1"
+                        aria-expanded={isOpen}
+                      >
+                        <History className="h-3 w-3" />
+                        {isOpen ? "Hide activity" : "View activity"}
+                        {isOpen ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                      </button>
+                      {isOpen && <ChannelActivityPanel channelId={row.id} />}
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}
