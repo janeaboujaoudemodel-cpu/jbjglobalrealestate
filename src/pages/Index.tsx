@@ -160,7 +160,7 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div data-surface="dark" className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Branded fallback — renders instantly, unmounts after video loads */}
@@ -191,8 +191,8 @@ const Index = () => {
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[3]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/45 to-black/85 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-black/50 z-[3]" />
         </div>
         
         {/* Animated gold accent lines */}
