@@ -475,7 +475,7 @@ const BrokeragesTab = () => {
                   )}
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="font-semibold text-base">{r.company_name}</h3>
+                      <h3 className="font-bold text-base text-[#1A1A1A]">{r.company_name}</h3>
                       {isDirectory && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#B89555] text-white">UAE Directory</span>
                       )}
@@ -680,7 +680,7 @@ const ClientsTab = () => {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
+                      <h3 className="font-bold text-base text-[#1A1A1A]">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
                       <InlineStatusSelect entityType="client" id={r.id} value={r.status} options={STATUS_CLIENT} />
                     </div>
                     <div className="text-xs text-[#5A4A2E] space-y-0.5">
@@ -1270,7 +1270,7 @@ const DeveloperRegistryTab = () => {
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-[#1A1A1A]">{r.developer_name}</h3>
+                        <h3 className="font-bold text-base text-[#1A1A1A]">{r.developer_name}</h3>
                         <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
                         {r.status === "registered" && (
                           <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
