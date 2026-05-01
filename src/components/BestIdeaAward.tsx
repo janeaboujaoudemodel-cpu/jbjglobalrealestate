@@ -140,52 +140,52 @@ const BestIdeaAward = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
                 {/* Left - Info */}
                 <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-gold/30">
-                      <Lightbulb className="w-6 h-6 text-gold" />
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center border border-gold/30">
+                      <Lightbulb className="w-5 h-5 text-gold" />
                     </div>
                     <div>
-                      <span className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
+                      <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
                         Best Idea Award
                       </h2>
                     </div>
                   </div>
                   
-                  <p className="text-[#5A4A2E] mb-6 leading-relaxed">
+                  <p className="text-[#5A4A2E] text-sm mb-4 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
 
                   {/* Prize Display - Two Options */}
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-2 mb-4">
                     {/* iPad Pro M4 */}
-                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-lg p-3 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
-                      <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
-                          <Tablet className="w-7 h-7 text-gold" />
+                      <div className="relative z-10 flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
+                          <Tablet className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPad Pro with M4 chip (13-inch)</p>
-                          <p className="text-white/70 text-xs">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
+                          <p className="text-gold font-bold text-sm">iPad Pro with M4 chip (13-inch)</p>
+                          <p className="text-white/70 text-[11px]">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
                         </div>
                       </div>
                     </div>
                     {/* iPhone 16 Pro Max */}
-                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-lg p-3 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
-                      <div className="relative z-10 flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
-                          <Gift className="w-7 h-7 text-gold" />
+                      <div className="relative z-10 flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-gold/30 to-gold/10 rounded-lg flex items-center justify-center shrink-0">
+                          <Gift className="w-5 h-5 text-gold" />
                         </div>
                         <div>
-                          <p className="text-gold font-bold">iPhone 16 Pro Max</p>
-                          <p className="text-white/90 text-xs">A18 Pro chip • 48MP Camera System • Titanium Design</p>
+                          <p className="text-gold font-bold text-sm">iPhone 16 Pro Max</p>
+                          <p className="text-white/90 text-[11px]">A18 Pro chip • 48MP Camera System • Titanium Design</p>
                         </div>
                       </div>
                     </div>
-                    <p className="text-xs italic text-center" style={{ color: '#6b7280' }}>Prize depends on the winning idea</p>
+                    <p className="text-[11px] italic text-center" style={{ color: '#6b7280' }}>Prize depends on the winning idea</p>
                   </div>
 
                   {/* Winner's Recognition */}
