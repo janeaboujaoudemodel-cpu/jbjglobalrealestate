@@ -51,6 +51,7 @@ const FoundersNotesPanel = lazy(() => import("@/components/founders-assistant/Fo
 const BrandAssetsDashboard = lazy(() => import("@/pages/owner/BrandAssetsDashboard"));
 const CRMSecurityDashboard = lazy(() => import("@/pages/owner/CRMSecurityDashboard"));
 const AIToolAnalyticsDashboard = lazy(() => import("@/pages/owner/AIToolAnalyticsDashboard"));
+const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
 const EncryptionAuditDashboard = lazy(() => import("@/pages/owner/EncryptionAuditDashboard"));
 const GlobalAuditDashboard = lazy(() => import("@/pages/owner/GlobalAuditDashboard"));
 const DeveloperModerationQueue = lazy(() => import("@/pages/owner/DeveloperModerationQueue"));
