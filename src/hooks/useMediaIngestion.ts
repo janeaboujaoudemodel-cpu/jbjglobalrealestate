@@ -133,15 +133,16 @@ export function useMediaIngestion() {
       if (!userId) return;
       const created: string[] = [];
       for (const url of urls) {
+        const linkRow: any = {
+          user_id: userId,
+          source_url: url,
+          source_kind: "link",
+          source_type: "link",
+          status: "pending",
+        };
         const { data, error } = await supabase
           .from("material_ingestion_jobs")
-          .insert({
-            user_id: userId,
-            source_url: url,
-            source_kind: "link",
-            source_type: "link",
-            status: "pending",
-          })
+          .insert(linkRow)
           .select("id")
           .single();
         if (!error && data?.id) created.push(data.id);
