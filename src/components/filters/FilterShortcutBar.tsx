@@ -863,8 +863,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         )}
 
-        {/* Live Results Count Badge */}
-        {resultsCount !== undefined && (
+        {/* Live Results Count Badge — opt-in only via showResultsCount.
+            Removed from default rails to avoid stray "54 / 054" numbers
+            appearing in the search/filter area on the properties page. */}
+        {showResultsCount && resultsCount !== undefined && (
           <div className="flex-shrink-0 ml-auto sticky right-0 pl-2">
             <div
               key={resultsCount}
@@ -875,7 +877,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             >
               <Activity className="w-3.5 h-3.5 text-white" />
               <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
-              <span className="text-white/70 font-medium">{resultsLabel || 'Results'}</span>
+              <span className="text-white/85 font-medium">{resultsLabel || 'Results'}</span>
             </div>
           </div>
         )}
