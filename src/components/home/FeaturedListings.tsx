@@ -36,17 +36,25 @@ interface FeaturedProject {
 
 function useFeaturedProjects() {
   return useQuery({
-    queryKey: ["featured-projects-elite-v3"],
+    queryKey: ["featured-projects-elite-v4"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("projects")
-        .select("id, name, slug, developer_name, description, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)")
-        .in("developer_name", ELITE_DEVELOPERS)
-        .eq("is_published", true)
-        .order("created_at", { ascending: false })
-        .limit(40);
+      const SELECT =
+        "id, name, slug, developer_name, description, price_from, area_name, location, cover_image_url, bedrooms_min, bedrooms_max, handover_date, payment_breakdown, images:project_images(image_url), developer:developers(id, name, slug, logo_url)";
 
-      if (error) throw error;
+      const perDevResults = await Promise.all(
+        ELITE_DEVELOPERS.map((dev) =>
+          supabase
+            .from("projects")
+            .select(SELECT)
+            .eq("developer_name", dev)
+            .eq("is_published", true)
+            .order("price_from", { ascending: false, nullsFirst: false })
+            .limit(8)
+            .then((r) => (r.error ? [] : (r.data || []))),
+        ),
+      );
+
+      const data = perDevResults.flat();
 
       const all = data as FeaturedProject[];
       const byDev: Record<string, FeaturedProject[]> = {};
