@@ -14,7 +14,10 @@
  * Hotkey: Shift+B cycles through the three modes.
  */
 import { useEffect, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+// Note: intentionally NOT using useLocation() here. This component renders
+// at the very top of the tree and must survive being mounted briefly outside
+// a <Router> (e.g. during error-boundary remounts or HMR). We read the
+// pathname directly from window.location and listen for navigation events.
 import "@/styles/dev-before-overlay.css";
 
 const STORAGE_KEY = "dev:style-mode";
@@ -43,7 +46,36 @@ export default function DevStyleToggle() {
   const [collapsed, setCollapsed] = useState(false);
   const [wipe, setWipe] = useState(50); // 0–100 wipe % for snapshot mode
   const [snapshotExists, setSnapshotExists] = useState<boolean | null>(null);
-  const location = useLocation();
+  const [pathname, setPathname] = useState<string>(() =>
+    typeof window === "undefined" ? "/" : window.location.pathname
+  );
+
+  // Track route changes without depending on Router context.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const update = () => setPathname(window.location.pathname);
+    window.addEventListener("popstate", update);
+    // Patch pushState/replaceState to emit a synthetic event we can listen to.
+    const origPush = window.history.pushState;
+    const origReplace = window.history.replaceState;
+    window.history.pushState = function (...args) {
+      const r = origPush.apply(this, args as Parameters<typeof origPush>);
+      window.dispatchEvent(new Event("dev:locationchange"));
+      return r;
+    };
+    window.history.replaceState = function (...args) {
+      const r = origReplace.apply(this, args as Parameters<typeof origReplace>);
+      window.dispatchEvent(new Event("dev:locationchange"));
+      return r;
+    };
+    window.addEventListener("dev:locationchange", update);
+    return () => {
+      window.removeEventListener("popstate", update);
+      window.removeEventListener("dev:locationchange", update);
+      window.history.pushState = origPush;
+      window.history.replaceState = origReplace;
+    };
+  }, []);
 
   useEffect(() => {
     applyMode(mode);
@@ -56,12 +88,12 @@ export default function DevStyleToggle() {
       setSnapshotExists(null);
       return;
     }
-    const url = snapshotPathForRoute(location.pathname);
+    const url = snapshotPathForRoute(pathname);
     const img = new Image();
     img.onload = () => setSnapshotExists(true);
     img.onerror = () => setSnapshotExists(false);
     img.src = url;
-  }, [mode, location.pathname]);
+  }, [mode, pathname]);
 
   const cycle = useCallback(() => {
     setMode((m) => (m === "after" ? "before" : m === "before" ? "snapshot" : "after"));
