@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit, BookOpen, Loader2, RotateCcw } from "lucide-react";
+import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon, Lock, FlaskConical, MapPin, Phone, CheckCircle2, FileEdit, BookOpen, Loader2, RotateCcw, Inbox } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
