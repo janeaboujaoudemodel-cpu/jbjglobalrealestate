@@ -96,6 +96,7 @@ export const BulkSendDialog = ({
   const sendDev = useSendDeveloperRegistration();
   const sendBrk = useSendBrokerageOutreach();
   const send = entityType === "brokerage" ? sendBrk : sendDev;
+  const checkBrk = useCheckBrokerageRegistration();
 
   const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
   const defaultVariant: AnyEmailVariant =
@@ -112,6 +113,13 @@ export const BulkSendDialog = ({
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
   const [reviewing, setReviewing] = useState(false);
+
+  // Pre-flight registration check (brokerage only).
+  // Map of brokerageId → result. `null` value = "OK to send" but record exists.
+  const [checks, setChecks] = useState<Record<string, BrokerageCheckResult>>({});
+  const [checkRanFor, setCheckRanFor] = useState<string>(""); // signature of last-checked target set
+  // Per-row override of "warn" rows — owner explicitly approved sending despite warnings.
+  const [warnOverrides, setWarnOverrides] = useState<Record<string, boolean>>({});
 
   // Keep testEmail in sync if owner email changes (and they haven't overridden)
   useEffect(() => {
