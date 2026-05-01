@@ -170,22 +170,53 @@ export default function AIToolsControlPanel() {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [expandedTool, setExpandedTool] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // Per-tool public visibility — stored in `ai_tool_visibility`
+  const [hiddenTools, setHiddenTools] = useState<Set<string>>(new Set());
 
   // Fetch all data
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [vRes, tRes, rRes] = await Promise.all([
+    const [vRes, tRes, rRes, visRes] = await Promise.all([
       (supabase.from("ai_tool_versions") as any).select("*").order("created_at", { ascending: false }),
       (supabase.from("ai_tool_test_logs") as any).select("*").order("created_at", { ascending: false }),
       supabase.from("ai_recommendations").select("*").order("created_at", { ascending: false }),
+      (supabase.from("ai_tool_visibility") as any).select("tool_id, is_public"),
     ]);
     if (vRes.data) setVersions(vRes.data as ToolVersion[]);
     if (tRes.data) setTestLogs(tRes.data as TestLog[]);
     if (rRes.data) setRecommendations(rRes.data as Recommendation[]);
+    if (visRes.data) {
+      const next = new Set<string>();
+      for (const row of visRes.data as Array<{ tool_id: string; is_public: boolean }>) {
+        if (row.is_public === false) next.add(row.tool_id);
+      }
+      setHiddenTools(next);
+    }
     setLoading(false);
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // Toggle a tool's public visibility
+  const toggleVisibility = useCallback(async (toolId: string, makePublic: boolean) => {
+    const { error } = await (supabase.from("ai_tool_visibility") as any).upsert({
+      tool_id: toolId,
+      is_public: makePublic,
+      updated_by: user?.id ?? null,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "tool_id" });
+    if (error) {
+      toast.error("Failed to update visibility");
+      return;
+    }
+    setHiddenTools(prev => {
+      const next = new Set(prev);
+      if (makePublic) next.delete(toolId); else next.add(toolId);
+      return next;
+    });
+    toast.success(makePublic ? "Tool is now public" : "Tool hidden from public");
+  }, [user?.id]);
+
 
   // Get current status for a tool (latest version status, or "live" if no versions)
   const getToolStatus = useCallback((toolId: string): string => {
