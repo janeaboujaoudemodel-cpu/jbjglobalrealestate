@@ -5125,6 +5125,7 @@ export type Database = {
           assigned_to: string | null
           attempt_count: number
           company_name: string
+          confidence: string | null
           created_at: string
           deal_count: number
           deal_count_cached: number
@@ -5144,6 +5145,7 @@ export type Database = {
           last_interaction_at: string | null
           last_outreach_at: string | null
           last_response_at: string | null
+          last_verified_at: string | null
           linkedin_url: string | null
           logo_url: string | null
           match_directory_id: string | null
@@ -5183,6 +5185,7 @@ export type Database = {
           assigned_to?: string | null
           attempt_count?: number
           company_name: string
+          confidence?: string | null
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
@@ -5202,6 +5205,7 @@ export type Database = {
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
@@ -5241,6 +5245,7 @@ export type Database = {
           assigned_to?: string | null
           attempt_count?: number
           company_name?: string
+          confidence?: string | null
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
@@ -5260,6 +5265,7 @@ export type Database = {
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
@@ -5617,6 +5623,7 @@ export type Database = {
           attempt_count: number
           catalog_developer_id: string | null
           commission_tier: string | null
+          confidence: string | null
           created_at: string
           deleted_at: string | null
           developer_contact: Json | null
@@ -5639,6 +5646,7 @@ export type Database = {
           last_interaction_at: string | null
           last_outreach_at: string | null
           last_response_at: string | null
+          last_verified_at: string | null
           linkedin_url: string | null
           logo_url: string | null
           nda_signed_at: string | null
@@ -5677,6 +5685,7 @@ export type Database = {
           attempt_count?: number
           catalog_developer_id?: string | null
           commission_tier?: string | null
+          confidence?: string | null
           created_at?: string
           deleted_at?: string | null
           developer_contact?: Json | null
@@ -5699,6 +5708,7 @@ export type Database = {
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           nda_signed_at?: string | null
@@ -5737,6 +5747,7 @@ export type Database = {
           attempt_count?: number
           catalog_developer_id?: string | null
           commission_tier?: string | null
+          confidence?: string | null
           created_at?: string
           deleted_at?: string | null
           developer_contact?: Json | null
@@ -5759,6 +5770,7 @@ export type Database = {
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
+          last_verified_at?: string | null
           linkedin_url?: string | null
           logo_url?: string | null
           nda_signed_at?: string | null
