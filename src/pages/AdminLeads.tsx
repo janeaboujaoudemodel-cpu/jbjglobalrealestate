@@ -83,10 +83,38 @@ interface Lead {
   lead_source_type: string | null;
   vip: boolean | null;
   pipeline_stage: string | null;
+  contact_type: string | null;
+  source: string | null;
+  tags: string[] | null;
   created_at: string;
   updated_at: string;
   deleted_at?: string | null;
 }
+
+type LeadCategory = 'all' | 'investor' | 'broker' | 'developer';
+
+const CATEGORY_TABS: Array<{
+  key: LeadCategory;
+  label: string;
+  contactType: 'investor' | 'broker' | 'developer' | null;
+  // Tone for chip + IconTile color (matches site palette)
+  accent: string;
+  surface: string;
+  emptyTitle: string;
+  emptySubtitle: string;
+}> = [
+  { key: 'all', label: 'All Leads', contactType: null, accent: '#1A1A1A', surface: '#EFE6D6',
+    emptyTitle: 'No leads yet', emptySubtitle: 'Leads from every channel will appear here.' },
+  { key: 'investor', label: 'Investors', contactType: 'investor', accent: '#2563EB', surface: '#E8F0FE',
+    emptyTitle: 'No investors registered yet',
+    emptySubtitle: 'When visitors register as investors, they will appear here automatically.' },
+  { key: 'broker', label: 'Brokers', contactType: 'broker', accent: '#B89555', surface: '#F7F2EA',
+    emptyTitle: 'No brokers registered yet',
+    emptySubtitle: 'When visitors register as brokers, they will appear here automatically.' },
+  { key: 'developer', label: 'Developers', contactType: 'developer', accent: '#7C3AED', surface: '#F1ECFE',
+    emptyTitle: 'No developers registered yet',
+    emptySubtitle: 'When visitors register as developers, they will appear here automatically.' },
+];
 
 interface ChatConversation {
   id: string;
