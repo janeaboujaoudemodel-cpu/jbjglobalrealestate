@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   Loader2,
   Plus,
+  RefreshCw,
   Mail,
   MessageSquare,
   Send,
@@ -43,10 +44,12 @@ interface Props {
   state: ProviderState;
   onConnect: () => void;
   onAddAnother?: () => void;
+  onResync?: () => void;
   isConnecting: boolean;
+  isResyncing?: boolean;
 }
 
-export default function ChannelTile({ state, onConnect, onAddAnother, isConnecting }: Props) {
+export default function ChannelTile({ state, onConnect, onAddAnother, onResync, isConnecting, isResyncing }: Props) {
   const { provider, status, anyActive, lastSyncAt, trainingSamples, lastError, channelCount } = state;
   const Icon = PROVIDER_ICONS[provider.id] || MessageSquare;
 
@@ -109,16 +112,39 @@ export default function ChannelTile({ state, onConnect, onAddAnother, isConnecti
         </div>
       )}
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         {status === "connected" ? (
           <>
+            {onResync && (
+              <Button
+                variant="gold"
+                size="sm"
+                className="flex-1 min-w-[140px]"
+                onClick={onResync}
+                disabled={isResyncing || isConnecting}
+                aria-label={`Resync ${provider.label} inbox`}
+              >
+                {isResyncing ? (
+                  <><Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" /> Syncing…</>
+                ) : (
+                  <><RefreshCw className="h-3.5 w-3.5 mr-1" /> Resync inbox</>
+                )}
+              </Button>
+            )}
             {onAddAnother && (
               <Button variant="secondary" size="sm" className="flex-1" onClick={onAddAnother} disabled={isConnecting}>
                 <Plus className="h-3.5 w-3.5 mr-1" /> Add another
               </Button>
             )}
-            <Button variant="secondary" size="sm" className="flex-1" onClick={onConnect} disabled={isConnecting}>
-              {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Resync"}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="flex-1"
+              onClick={onConnect}
+              disabled={isConnecting}
+              aria-label={`Reconnect ${provider.label}`}
+            >
+              {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Reconnect"}
             </Button>
           </>
         ) : (

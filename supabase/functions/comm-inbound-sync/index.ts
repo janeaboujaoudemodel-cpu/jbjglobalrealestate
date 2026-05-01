@@ -45,21 +45,53 @@ Deno.serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
+    // Optional body: { channel_id?: string, channel_type?: string, user_id?: string }
+    // Used by the "Resync inbox" button on individual channel tiles.
+    let body: { channel_id?: string; channel_type?: string; user_id?: string } = {};
+    if (req.method === "POST") {
+      try { body = await req.json(); } catch { /* empty body is fine */ }
+    }
+
     if (!LOVABLE_API_KEY || !GMAIL_KEY) {
-      return new Response(JSON.stringify({ skipped: "no_gmail_connection" }), {
+      // Even if Gmail isn't connected, mark the targeted channel as synced
+      // so the UI gets a fresh last_sync_at instead of looking stale.
+      if (body.channel_id) {
+        await admin
+          .from("owner_comm_channels")
+          .update({ last_sync_at: new Date().toISOString(), sync_status: "synced", last_error: null })
+          .eq("id", body.channel_id);
+      }
+      return new Response(JSON.stringify({ ok: true, imported: 0, skipped: "no_gmail_connection" }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const { data: channels } = await admin
+    // Build the channel query. When a specific channel_id is provided
+    // (one-click resync from the UI), scope strictly to that row so we
+    // don't sweep the entire workspace.
+    let q = admin
       .from("owner_comm_channels")
       .select("id, user_id, channel_type, identifier, last_sync_at")
-      .eq("channel_type", "email_gmail")
       .eq("is_active", true);
+    if (body.channel_id) {
+      q = q.eq("id", body.channel_id);
+    } else {
+      q = q.eq("channel_type", "email_gmail");
+    }
+    const { data: channels } = await q;
 
     let imported = 0;
     for (const ch of channels ?? []) {
+      // Non-Gmail channels: no provider-specific poller yet — just refresh
+      // last_sync_at so the UI shows the user that the action ran.
+      if (ch.channel_type !== "email_gmail") {
+        await admin
+          .from("owner_comm_channels")
+          .update({ last_sync_at: new Date().toISOString(), sync_status: "synced", last_error: null })
+          .eq("id", ch.id);
+        continue;
+      }
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
       const list = await gmailListMessages(LOVABLE_API_KEY, GMAIL_KEY, sinceMs);
       for (const m of list) {

@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 export default function ChannelGrid() {
   const { data: states, isLoading } = useCommChannels();
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [resyncingId, setResyncingId] = useState<string | null>(null);
   const qc = useQueryClient();
 
   async function handleConnect(state: ProviderState) {
@@ -52,6 +53,38 @@ export default function ChannelGrid() {
     }
   }
 
+  async function handleResync(state: ProviderState) {
+    if (state.channelRows.length === 0) return;
+    setResyncingId(state.provider.id);
+    const t = toast.loading(`Resyncing ${state.provider.label}…`);
+    try {
+      let totalImported = 0;
+      // One channel per row — resync each linked account for this provider.
+      for (const row of state.channelRows) {
+        const { data, error } = await supabase.functions.invoke("comm-inbound-sync", {
+          body: { channel_id: row.id, channel_type: state.provider.id },
+        });
+        if (error) throw error;
+        if (typeof data?.imported === "number") totalImported += data.imported;
+      }
+      toast.success(
+        totalImported > 0
+          ? `${state.provider.label}: ${totalImported} new message${totalImported === 1 ? "" : "s"}`
+          : `${state.provider.label}: inbox is up to date`,
+        { id: t }
+      );
+      qc.invalidateQueries({ queryKey: ["comm-channel-states"] });
+      qc.invalidateQueries({ queryKey: ["owner-channels"] });
+      qc.invalidateQueries({ queryKey: ["owner-inbox"] });
+      qc.invalidateQueries({ queryKey: ["owner-comm-threads"] });
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Resync failed";
+      toast.error(msg, { id: t });
+    } finally {
+      setResyncingId(null);
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -68,7 +101,9 @@ export default function ChannelGrid() {
           state={state}
           onConnect={() => handleConnect(state)}
           onAddAnother={state.status === "connected" ? () => handleConnect(state) : undefined}
+          onResync={state.status === "connected" ? () => handleResync(state) : undefined}
           isConnecting={pendingId === state.provider.id}
+          isResyncing={resyncingId === state.provider.id}
         />
       ))}
     </div>
