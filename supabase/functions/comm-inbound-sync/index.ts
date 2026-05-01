@@ -91,6 +91,14 @@ Deno.serve(async (req) => {
           .from("owner_comm_channels")
           .update({ last_sync_at: new Date().toISOString(), sync_status: "synced", last_error: null })
           .eq("id", ch.id);
+        await logChannelAudit(admin, {
+          user_id: ch.user_id,
+          channel_id: ch.id,
+          channel_type: ch.channel_type,
+          identifier: ch.identifier,
+          event_type: "synced",
+          details: { provider_supported: false, imported: 0 },
+        });
         continue;
       }
       const sinceMs = ch.last_sync_at ? new Date(ch.last_sync_at).getTime() : Date.now() - 7 * 86400_000;
