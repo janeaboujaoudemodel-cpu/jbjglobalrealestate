@@ -341,10 +341,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation";
   const pillInactive = isDark
     ? "bg-[#FDFBF7]/10 backdrop-blur-md border border-white/20 text-white hover:bg-[#FDFBF7]/20"
-    : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] hover:border-[#B89555]/30 hover:bg-[#F7F2EA]";
+    : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] font-semibold hover:border-[#B89555] hover:bg-[#F7F2EA] hover:-translate-y-0.5 transition-all";
   const pillActive = isDark
     ? "bg-[#FDFBF7] text-[#1A1A1A] border border-white shadow-lg"
-    : "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-sm";
+    : "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-md hover:bg-[#A68444] hover:border-[#A68444]";
 
   const popoverClass = "bg-[#FDFBF7] border border-[#B89555]/30 z-[10200] shadow-xl";
 
