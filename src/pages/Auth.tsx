@@ -227,14 +227,23 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             const params = new URLSearchParams(window.location.search);
             const returnTo = params.get('returnTo');
             const preselect = params.get('preselect');
+            // Pick up either the URL param or a value stashed during signup.
+            let pendingPreselect: string | null = preselect;
+            try {
+              const stashed = localStorage.getItem('jj_pending_preselect');
+              if (!isValidPreselect(pendingPreselect) && isValidPreselect(stashed)) {
+                pendingPreselect = stashed;
+              }
+            } catch {}
             // If the user picked a category before signing in (from "Tell us
             // who you are"), apply it now so the modal doesn't force-open
             // post-login and a CRM lead is auto-created.
             let preselectedApplied = false;
-            if (isValidPreselect(preselect)) {
+            if (isValidPreselect(pendingPreselect)) {
               try {
-                await setPlatformMode(preselect);
+                await setPlatformMode(pendingPreselect);
                 preselectedApplied = true;
+                try { localStorage.removeItem('jj_pending_preselect'); } catch {}
               } catch (err) {
                 console.warn('Failed to apply preselected mode:', err);
               }
