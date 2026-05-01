@@ -70,11 +70,50 @@ const PROVIDER_ICONS: Record<string, LucideIcon> = {
 interface Props {
   state: ProviderState;
   toneProfiles: ToneProfile[];
+  auditSummary?: Record<string, ChannelAuditSummaryRow>;
   onConnect: () => void;
   onAddAnother?: () => void;
   onResync?: () => void;
   isConnecting: boolean;
   isResyncing?: boolean;
+}
+
+const EVENT_LABELS: Record<ChannelAuditEventType, string> = {
+  connected: "Connected",
+  reconnected: "Reconnected",
+  synced: "Synced",
+  sync_failed: "Sync failed",
+  auto_replied: "Auto-replied",
+  auto_reply_skipped: "Auto-reply paused",
+  inbound_received: "Inbound message",
+};
+
+function fmtRel(ts: string | null | undefined) {
+  if (!ts) return "—";
+  return formatDistanceToNow(new Date(ts), { addSuffix: true });
+}
+
+function ChannelActivityPanel({ channelId }: { channelId: string }) {
+  const { data: events, isLoading } = useChannelAuditEvents(channelId);
+  if (isLoading) {
+    return <p className="text-[11px] text-[#5A4A2E] mt-1">Loading activity…</p>;
+  }
+  if (!events || events.length === 0) {
+    return <p className="text-[11px] text-[#5A4A2E] mt-1">No activity recorded yet.</p>;
+  }
+  return (
+    <ul className="mt-1 space-y-1 max-h-48 overflow-y-auto pr-1">
+      {events.map((ev) => (
+        <li
+          key={ev.id}
+          className="flex items-center justify-between gap-2 text-[11px] text-[#1A1A1A]"
+        >
+          <span className="font-medium">{EVENT_LABELS[ev.event_type] ?? ev.event_type}</span>
+          <span className="text-[#5A4A2E]">{fmtRel(ev.created_at)}</span>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyAggregate"] }) {
