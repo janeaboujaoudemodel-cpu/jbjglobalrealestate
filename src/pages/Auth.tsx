@@ -22,6 +22,11 @@ import { useBiometricAuth } from "@/hooks/useBiometricAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
+
+const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'investor_broker', 'developer'];
+const isValidPreselect = (v: string | null): v is PlatformUserMode =>
+  !!v && (PRESELECT_MODES as string[]).includes(v);
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
