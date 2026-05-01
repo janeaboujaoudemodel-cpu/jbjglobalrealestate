@@ -746,6 +746,60 @@ export const BulkSendDialog = ({
                             ))}
                           </ul>
                         )}
+                        {/* Per-row personalization */}
+                        <div className="ml-6 mt-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setExpandedPersonalize((p) => ({ ...p, [t.id]: !p[t.id] }))}
+                            className="inline-flex items-center gap-1 text-[10px] text-[#5A4A2E] hover:text-[#1A1A1A]"
+                          >
+                            {expandedPersonalize[t.id] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                            Customize for this recipient
+                          </button>
+                          {expandedPersonalize[t.id] && (
+                            <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-2 p-2 bg-[#FAF5EA] border border-[#1A1A1A]/10 rounded-lg">
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Contact name</Label>
+                                <Input
+                                  className="h-7 text-xs mt-0.5"
+                                  value={perRowPersonalization[t.id]?.contactName ?? (t.primary_contact?.name || "")}
+                                  onChange={(e) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], contactName: e.target.value } }))}
+                                  placeholder="Full name"
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Group status</Label>
+                                <Select
+                                  value={perRowPersonalization[t.id]?.groupStatus || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], groupStatus: v === "__inherit" ? undefined : (v as BrokerageGroupStatus) } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default</SelectItem>
+                                    {GROUP_STATUS_OPTIONS.map((o) => (
+                                      <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div>
+                                <Label className="text-[10px] text-[#1A1A1A]">Preferred time</Label>
+                                <Select
+                                  value={perRowPersonalization[t.id]?.preferredSlotId || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], preferredSlotId: v === "__inherit" ? undefined : v } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default</SelectItem>
+                                    {upcomingSlots.map((s) => (
+                                      <SelectItem key={s.id} value={s.id} className="text-xs">{formatSlotLabelLocal(s.slot_at)}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
