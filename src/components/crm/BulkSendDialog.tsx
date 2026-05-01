@@ -428,7 +428,12 @@ export const BulkSendDialog = ({
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
         if (entityType === "brokerage") {
-          await sendBrk.mutateAsync({ brokerageId: t.id, variant: variant as BrokerageVariant, silent: true });
+          await sendBrk.mutateAsync({
+            brokerageId: t.id,
+            variant: variant as BrokerageVariant,
+            personalization: resolvePersonalization(t),
+            silent: true,
+          });
         } else {
           await sendDev.mutateAsync({ developerId: t.id, variant: variant as RegistrationVariant, silent: true });
         }
