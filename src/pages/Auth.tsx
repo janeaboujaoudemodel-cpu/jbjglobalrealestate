@@ -189,6 +189,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               toast.error(error.message);
             }
           } else {
+            // Stash the preselected category so it's applied after email
+            // verification + first sign-in (signup itself doesn't log in).
+            const preselectParam = new URLSearchParams(window.location.search).get('preselect');
+            if (isValidPreselect(preselectParam)) {
+              try { localStorage.setItem('jj_pending_preselect', preselectParam); } catch {}
+            }
             // Send welcome email
             try {
               await supabase.functions.invoke("send-welcome-email", {
