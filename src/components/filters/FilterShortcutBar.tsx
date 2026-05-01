@@ -77,10 +77,12 @@ interface FilterShortcutBarProps {
   onMapToggle?: (active: boolean) => void;
   searchSlot?: React.ReactNode;
   priorityFilter?: 'developers' | 'areas' | 'emirates' | 'projects';
-  /** Live results count — displayed as a sticky badge at the end of row 2 */
+  /** Live results count — only displayed when `showResultsCount` is explicitly true. */
   resultsCount?: number;
   /** Label for the results count (default: "Results") */
   resultsLabel?: string;
+  /** Show the live results badge inside the shortcut rail. Default false. */
+  showResultsCount?: boolean;
 }
 
 const PRICE_PRESETS = [
