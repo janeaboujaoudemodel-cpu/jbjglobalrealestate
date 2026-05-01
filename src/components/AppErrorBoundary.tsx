@@ -28,20 +28,25 @@ class AppErrorBoundary extends React.Component<
     // eslint-disable-next-line no-console
     console.error("AppErrorBoundary caught error:", error, info);
 
-    const msg = error instanceof Error ? error.message : "";
-    const isChunkError =
-      msg.includes("module") ||
-      msg.includes("import") ||
-      msg.includes("chunk") ||
-      msg.includes("Loading") ||
-      msg.includes("Failed to fetch") ||
-      msg.includes("dynamically imported") ||
-      msg.includes("Importing a module");
-
-    // Auto-retry up to 3 times for chunk/module loading failures
-    if (isChunkError && this.state.retryCount < 3) {
+    // Always silently auto-retry up to 3 times before showing any visible
+    // fallback. This prevents transient render errors (chunk loads, route
+    // transitions, hydration hiccups, lazy Suspense throws) from ever
+    // flashing the "We're getting things ready" card.
+    if (this.state.retryCount < 3) {
       this.setState((prev) => ({ hasError: false, retryCount: prev.retryCount + 1 }));
-      setTimeout(() => window.location.reload(), 2500);
+      const msg = error instanceof Error ? error.message : "";
+      const looksLikeChunk =
+        msg.includes("module") ||
+        msg.includes("import") ||
+        msg.includes("chunk") ||
+        msg.includes("Loading") ||
+        msg.includes("Failed to fetch") ||
+        msg.includes("dynamically imported") ||
+        msg.includes("Importing a module");
+      // Hard-reload only for chunk/network errors; otherwise just remount.
+      if (looksLikeChunk) {
+        setTimeout(() => window.location.reload(), 2500);
+      }
     }
   }
 
@@ -66,17 +71,9 @@ class AppErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      // Silent retry path: don't flash the overlay for transient chunk errors.
-      const msg = this.state.errorMessage || "";
-      const isChunkError =
-        msg.includes("module") ||
-        msg.includes("import") ||
-        msg.includes("chunk") ||
-        msg.includes("Loading") ||
-        msg.includes("Failed to fetch") ||
-        msg.includes("dynamically imported") ||
-        msg.includes("Importing a module");
-      if (isChunkError && this.state.retryCount < 3) {
+      // While retries remain, render nothing instead of the visible card so
+      // users never see the fallback flash for transient errors.
+      if (this.state.retryCount < 3) {
         return null;
       }
       return (

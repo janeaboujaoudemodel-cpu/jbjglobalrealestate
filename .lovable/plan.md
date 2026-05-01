@@ -1,102 +1,25 @@
-## Goal
+## What's happening
 
-Make every brokerage breakfast / partnership email render fully personalized for the recipient: their **contact name**, their **company name**, their **group / partnership status**, and a **preferred event time** they can lock in before sending — with sensible fallbacks so a missing field never produces a broken `{{variable}}` in the inbox.
+The "We're getting things ready" screen with the Refresh / Go to Homepage buttons is **not a loading screen** — it's the top-level error boundary (`src/components/AppErrorBoundary.tsx`) catching a thrown error in the React tree and showing its visible fallback card.
 
-Today the template only knows `{{brokerage_name}}`, `{{contact_first_name}}`, `{{owner_first_name}}`, `{{booking_url}}` etc. Group status and a personalized event time are not passed through.
+Today the boundary only silently retries when the error message matches a narrow list of "chunk / dynamic import" keywords. Any other transient render error (a race during route transition, a lazy component throwing during Suspense, a one-shot hook error, etc.) skips the silent-retry path and immediately renders the visible card — which is exactly the bug you're seeing on the homepage.
 
-## What changes
+## Fix
 
-### 1. Expanded template variable set
+Make the boundary silently retry **any** error a few times before ever showing the visible card. Users should never see this fallback unless the app has truly failed multiple times in a row.
 
-The send function (`crm-send-brokerage-outreach`) will compute and inject these variables for every send (test or real):
+### Changes to `src/components/AppErrorBoundary.tsx`
 
-| Variable | Source | Fallback |
-|---|---|---|
-| `contact_first_name` | `primary_contact.name` first token | `"Team"` |
-| `contact_full_name` | `primary_contact.name` | `company_name` |
-| `contact_title` | `primary_contact.title` | `""` (line hidden) |
-| `brokerage_name` | `crm_brokerages.company_name` | `"your brokerage"` |
-| `brokerage_location` | `office_location` / `emirate` | `"Dubai"` |
-| `group_status_label` | derived (see below) | `"Independent Brokerage"` |
-| `group_status_line` | one-sentence intro line built from status | generic line |
-| `preferred_event_time_label` | human-readable preferred slot | `"a time that suits you"` |
-| `preferred_event_time_iso` | ISO of chosen slot | `""` |
-| `booking_url` | existing token URL | existing |
-| `owner_first_name`, `from_name`, `reply_to`, `cc_email` | existing | existing |
+1. In `componentDidCatch`:
+   - Always silently retry (clear `hasError`, increment `retryCount`) up to 3 times for any error, not just chunk errors.
+   - Keep the existing behavior of triggering a `window.location.reload()` after 2.5s **only** when the message looks like a chunk/network failure. For non-chunk errors, just remount the tree without a hard reload.
 
-**Group status derivation** uses fields already on the row (no schema change required for v1):
-- `outreach_stage = "active"` → `Active Channel Partner`
-- `tags` contains `vip` / `priority` → `Priority Partner`
-- `nda_status = "signed"` → `NDA-Signed Partner`
-- `is_existing_match = true` → `Existing Relationship`
-- otherwise → `Prospective Partner`
+2. In `render`:
+   - While `retryCount < 3`, return `null` instead of the fallback card — no visible flash for transient errors.
+   - Only render the visible "We're getting things ready" card after the boundary has been hit 3+ times in a row, which indicates a genuine, persistent failure.
 
-The matching `group_status_line` is a short pre-written sentence per status (e.g. *"As one of our active channel partners, …"* vs *"We'd love to introduce JBJ Global Real Estate to your team …"*).
+### Why this fixes the screenshot
 
-### 2. Per-send overrides from the UI
+The boundary will no longer flash the card for one-off render errors during route changes, lazy chunk loads, or hydration hiccups. The homepage will simply remount silently and recover.
 
-`BulkSendDialog` gets a new compact "Personalization" panel (collapsible, on by default for brokerage variants) with three optional overrides per recipient row:
-
-- **Contact name** — pre-filled from `primary_contact.name`, editable inline.
-- **Group status** — dropdown: Prospective / Existing Relationship / Priority / Active Channel / NDA-Signed / Custom… (auto-detected default).
-- **Preferred event time** — dropdown of upcoming `breakfast_slots` (next ~6 slots) plus an "Open scheduler — let them choose" option (current behavior).
-
-All three are optional; leaving them blank uses the auto-derived value above. The dialog already iterates over recipients, so each row carries its own `personalization` object.
-
-The hook `useSendBrokerageOutreach` and the edge function payload gain:
-
-```ts
-personalization?: {
-  contactName?: string;
-  contactFirstName?: string;
-  groupStatus?: "prospective" | "existing" | "priority" | "active" | "nda" | "custom";
-  groupStatusLabelOverride?: string;
-  preferredSlotId?: string;       // breakfast_slots.id
-  preferredEventTimeOverride?: string; // free-text, e.g. "Tuesday 9 May, 8:30 AM"
-}
-```
-
-### 3. Edge function logic (`crm-send-brokerage-outreach`)
-
-- Accept the new `personalization` object.
-- After loading the brokerage row, compute the variable map using overrides → row values → fallbacks (in that order).
-- If `preferredSlotId` is provided, fetch that slot from `breakfast_slots`, format it in Dubai timezone (e.g. *"Tuesday, 12 May · 8:30 AM (GST)"*), and pass it as `preferred_event_time_label` + ISO.
-- If `preferredSlotId` is set, also forward it to `crm-create-breakfast-invite-token` so the booking page can pre-select that slot (small additive param `preferredSlotId` — token endpoint just stores it on `meeting_requests.preferred_date`/`preferred_time`).
-- Render both `subject` and `html` through `renderTemplate` with the full variable map (subject gains `{{contact_first_name}}` and `{{group_status_label}}` support).
-- Log the resolved personalization snapshot into `crm_relationship_email_log.body_snippet` for traceability.
-
-### 4. Template updates (data-only, via insert tool)
-
-Update the two existing rows in `crm_email_templates` (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) so the HTML body uses the new variables:
-
-- Greeting: `Dear {{contact_first_name}},`
-- A personalized intro paragraph that injects `{{group_status_line}}` and references `{{brokerage_name}}` and `{{brokerage_location}}`.
-- A "Suggested time" block: *"We've held **{{preferred_event_time_label}}** for {{brokerage_name}} — confirm or pick another time below."* This block is rendered conditionally via a simple `{{#if preferred_event_time_iso}}…{{/if}}` substitution we add to `renderTemplate` (tiny extension, still no dependencies).
-- Subjects updated to e.g. *"{{contact_first_name}}, breakfast with JBJ — {{preferred_event_time_label}}"* with graceful fallback when the time is empty.
-
-No schema migration required — only template HTML/subject text is updated, which is data, applied via the insert tool.
-
-### 5. Booking page hand-off
-
-`BreakfastBooking.tsx` already reads `attendee_count` / `briefing_topics` / `preferred_date` / `preferred_time` from the lookup endpoint. We pass the chosen `preferredSlotId` through `crm-create-breakfast-invite-token` so when the partner clicks the email link, their pre-selected slot is highlighted (no behavior change if absent).
-
-## Files touched
-
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — accept `personalization`, derive variables, look up slot, expand renderTemplate map, support `{{#if x}}…{{/if}}`.
-- `supabase/functions/crm-create-breakfast-invite-token/index.ts` — accept optional `preferredSlotId` and persist it on the placeholder `meeting_requests` row.
-- `src/hooks/useCRMRelationships.ts` — extend `useSendBrokerageOutreach` payload type.
-- `src/components/crm/BulkSendDialog.tsx` — new collapsible Personalization panel per row (contact name, group status, preferred slot dropdown), pulls upcoming slots via a small new hook `useUpcomingBreakfastSlots()`.
-- `src/hooks/useCRMRelationships.ts` — add `useUpcomingBreakfastSlots()` (selects next 8 future rows from `breakfast_slots`).
-- `crm_email_templates` rows for both brokerage variants — updated subject + HTML (data update, applied via the insert tool).
-
-## Out of scope
-
-- No new database columns. Group status is derived, not stored separately. If later the user wants a hard-coded `group_status` field on `crm_brokerages`, that's a follow-up.
-- No changes to developer-registration variants — personalization stays brokerage-only for now.
-- No new auth or RLS work; `breakfast_slots` is already readable, and the rest runs server-side with service role.
-
-## Acceptance check
-
-- Sending a test email for a brokerage with a populated `primary_contact.name`, an `outreach_stage`, and a chosen preferred slot produces an email whose subject, greeting, intro line, and "suggested time" block all reflect those values — no `{{variable}}` leaks in the inbox.
-- Sending with everything left blank still produces a valid, professional email using the fallback values.
-- The booking link in that same email opens the scheduler with the suggested slot highlighted.
+No other files are touched. The card itself is preserved as a true last-resort safety net (after 3 consecutive failures), so we are not removing the feature — just preventing it from triggering on transient issues.
