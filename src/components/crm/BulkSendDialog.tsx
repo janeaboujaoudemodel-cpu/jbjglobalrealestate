@@ -499,6 +499,102 @@ export const BulkSendDialog = ({
             )}
           </div>
 
+          {/* Pre-flight registration check (brokerage only) */}
+          {isBrokerageFlow && (reviewing || Object.keys(checks).length > 0 || checkBrk.isPending) && !running && (
+            <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A]/10 bg-[#FAF5EA]">
+                <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                  <strong>Pre-flight CRM registration check</strong>
+                </div>
+                {checksReady && Object.keys(checks).length > 0 && (
+                  <div className="flex items-center gap-2 text-[11px]">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                      {checkBreakdown.ok} ready
+                    </span>
+                    {checkBreakdown.warn > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold">
+                        {checkBreakdown.warn} warn
+                      </span>
+                    )}
+                    {checkBreakdown.block > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300 font-bold">
+                        {checkBreakdown.block} blocked
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              {checkBrk.isPending ? (
+                <div className="px-3 py-4 flex items-center gap-2 text-xs text-[#5A4A2E]">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Checking each brokerage against existing CRM leads, clients, brokers and prior outreach…
+                </div>
+              ) : Object.keys(checks).length === 0 ? (
+                <div className="px-3 py-3 text-xs text-[#5A4A2E] flex items-center justify-between gap-2">
+                  <span>Not yet run. Click "Review &amp; send" below to scan for duplicates.</span>
+                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={runRegistrationCheck}>
+                    Run check now
+                  </Button>
+                </div>
+              ) : (
+                <div className="max-h-[260px] overflow-y-auto divide-y divide-black/5">
+                  {targets.map((t) => {
+                    const r = checks[t.id];
+                    if (!r) return null;
+                    const Icon =
+                      r.status === "ok" ? ShieldCheck :
+                      r.status === "warn" ? ShieldAlert : ShieldX;
+                    const tone =
+                      r.status === "ok" ? "text-emerald-700" :
+                      r.status === "warn" ? "text-amber-700" : "text-red-700";
+                    return (
+                      <div key={t.id} className="px-3 py-2 text-xs">
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Icon className={`w-4 h-4 ${tone}`} />
+                            <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
+                            <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
+                          </div>
+                          {r.status === "warn" && (
+                            <label className="flex items-center gap-1 text-[10px] text-[#5A4A2E] cursor-pointer shrink-0">
+                              <input
+                                type="checkbox"
+                                checked={!!warnOverrides[t.id]}
+                                onChange={(e) =>
+                                  setWarnOverrides((p) => ({ ...p, [t.id]: e.target.checked }))
+                                }
+                                className="accent-amber-600"
+                              />
+                              <span>Send anyway</span>
+                            </label>
+                          )}
+                          {r.status === "block" && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-red-700 shrink-0">
+                              Blocked
+                            </span>
+                          )}
+                          {r.status === "ok" && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-700 shrink-0">
+                              OK to send
+                            </span>
+                          )}
+                        </div>
+                        {r.reasons.length > 0 && (
+                          <ul className={`mt-1 ml-6 list-disc text-[11px] ${tone}`}>
+                            {r.reasons.map((re, idx) => (
+                              <li key={idx}>{re.label}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Per-recipient progress */}
           {(running || Object.keys(statuses).length > 0) && (
             <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7]">
