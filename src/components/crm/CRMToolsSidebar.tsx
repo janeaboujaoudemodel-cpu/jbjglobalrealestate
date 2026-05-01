@@ -6,7 +6,7 @@ import {
   CreditCard, Users, UserCheck, Briefcase, Camera, 
   Share2, Brain, Layers, BarChart3, Table2, Calendar,
   MessageSquare, Target, GraduationCap, Wrench, Building2,
-  X, Zap, CheckSquare, Bell, StickyNote, LayoutDashboard
+  X, Zap, CheckSquare, Bell, StickyNote, LayoutDashboard, Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
