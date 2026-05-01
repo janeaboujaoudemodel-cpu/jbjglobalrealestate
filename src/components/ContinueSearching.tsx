@@ -473,7 +473,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               onError={() => setLogoError(true)}
             />
           ) : (
-          ) : (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/85 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-[#F7F2EA] border border-[#B89555]/40">
               <Icon className="w-2.5 h-2.5 text-[#B89555]" />
               {item.type}
