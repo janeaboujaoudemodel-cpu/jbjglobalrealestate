@@ -767,10 +767,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-sm"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Menu Panel */}
+              {/* Menu Panel — champagne creamy surface, not raw white */}
               <div 
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
-                style={{ background: '#FFFFFF' }}
+                style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%)' }}
               >
                 {/* Quick Actions Row */}
                 <div className="flex items-center justify-evenly px-4 py-3 border-b border-[#B89555]/30">
