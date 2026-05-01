@@ -400,7 +400,7 @@ serve(async (req: Request) => {
       to_emails: [recipient],
       cc_emails: cc,
       subject,
-      body_snippet: `Sent ${variant === "brokerage_breakfast_invite" ? "private breakfast invitation" : "channel-partner outreach"} to ${brk.company_name}`,
+      body_snippet: `Sent ${variant === "brokerage_breakfast_invite" ? "private breakfast invitation" : "channel-partner outreach"} to ${brk.company_name} · ${resolvedContactFullName || "(no contact)"} · ${resolvedGroupLabel}${preferredSlotLabel ? ` · suggested ${preferredSlotLabel}` : ""}`,
       sent_at: new Date().toISOString(),
     });
 
