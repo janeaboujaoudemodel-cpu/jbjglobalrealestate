@@ -815,6 +815,27 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_tool_visibility: {
+        Row: {
+          is_public: boolean
+          tool_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          is_public?: boolean
+          tool_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          is_public?: boolean
+          tool_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       ai_usage_logs: {
         Row: {
           client_ip_hash: string | null
