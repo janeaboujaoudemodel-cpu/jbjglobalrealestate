@@ -33,6 +33,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
+import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
