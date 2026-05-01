@@ -2,6 +2,7 @@
 // Pulls Gmail inbox messages since last_sync_at, threads them, deduplicates,
 // and writes into owner_comm_threads + owner_comm_messages.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { logChannelAudit } from "../_shared/channelAudit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
