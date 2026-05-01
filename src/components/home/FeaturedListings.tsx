@@ -177,14 +177,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             </div>
 
-            {/* Price badge */}
-            {project.price_from && (
-              <div className="absolute bottom-3 right-3 z-10 px-3 py-1.5 rounded-lg bg-gradient-to-r from-orange-600 to-amber-500 backdrop-blur-md border border-orange-400/50 shadow-[0_4px_12px_rgba(234,88,12,0.4)]">
-                <span className="text-white font-bold text-xs tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
-                  From {formatPrice(project.price_from)}
-                </span>
-              </div>
-            )}
+            {/* Price badge removed — price now lives in the calmer footer row below */}
           </div>
 
           {/* Content */}
