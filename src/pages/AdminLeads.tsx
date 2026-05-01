@@ -203,7 +203,7 @@ const AdminLeads = () => {
       const [leadsResult, chatsResult, deletedResult] = await Promise.all([
         supabase
           .from("crm_leads")
-          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, created_at, updated_at, deleted_at")
+          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, contact_type, source, tags, created_at, updated_at, deleted_at")
           .is("deleted_at", null)
           .order("created_at", { ascending: false }),
         supabase
@@ -212,7 +212,7 @@ const AdminLeads = () => {
           .order("created_at", { ascending: false }),
         supabase
           .from("crm_leads")
-          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, created_at, updated_at, deleted_at")
+          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, contact_type, source, tags, created_at, updated_at, deleted_at")
           .not("deleted_at", "is", null)
           .order("deleted_at", { ascending: false }),
       ]);
