@@ -727,6 +727,43 @@ const AdminLeads = () => {
           </div>
         )}
 
+        {/* Category tabs (Investor / Broker / Developer) */}
+        {activeTab === "leads" && (
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            {CATEGORY_TABS.map((tab) => {
+              const isActive = categoryFilter === tab.key;
+              const count = tab.contactType === null
+                ? leads.length
+                : leads.filter(l => l.contact_type === tab.contactType || (l.tags ?? []).includes(tab.key)).length;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setCategoryFilter(tab.key)}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border-2 text-[12px] font-bold transition-all"
+                  style={{
+                    backgroundColor: isActive ? tab.accent : tab.surface,
+                    borderColor: tab.accent,
+                    color: isActive ? '#FFFFFF' : '#1A1A1A',
+                  }}
+                >
+                  {tab.label}
+                  <span
+                    className="inline-flex items-center justify-center min-w-[22px] h-[20px] px-1.5 rounded-full text-[10px] font-bold"
+                    style={{
+                      backgroundColor: isActive ? 'rgba(255,255,255,0.22)' : '#FFFFFF',
+                      color: isActive ? '#FFFFFF' : tab.accent,
+                      border: isActive ? '1px solid rgba(255,255,255,0.35)' : `1px solid ${tab.accent}`,
+                    }}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
