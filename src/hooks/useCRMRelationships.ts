@@ -297,6 +297,53 @@ export const useEnrichDeveloperRegistry = () => {
   });
 };
 
+/**
+ * Pulls every licensed UAE real-estate brokerage from RERA / DMT / municipality
+ * registries via Perplexity grounded search, normalizes phone/website/address,
+ * and upserts into crm_brokerages without overwriting curated data.
+ */
+export const useSeedUaeBrokerageDirectory = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { emirates?: string[]; target_per_emirate?: number } = {}) => {
+      const { data, error } = await supabase.functions.invoke("seed-uae-brokerage-directory", { body: input });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data as { ok: true; summary: Record<string, { fetched: number; inserted: number; updated: number; skipped: number }> };
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      const totals = Object.values(data.summary).reduce(
+        (a, s) => ({ inserted: a.inserted + s.inserted, updated: a.updated + s.updated }),
+        { inserted: 0, updated: 0 },
+      );
+      toast.success(`Synced UAE directory · +${totals.inserted} new, ${totals.updated} updated`);
+    },
+    onError: (e: any) => toast.error(e.message || "Sync failed"),
+  });
+};
+
+/**
+ * Fills missing phone/email/website/office on brokerages via Perplexity + Firecrawl + AI extract.
+ */
+export const useEnrichUaeBrokerageDirectory = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { ids?: string[]; reverify?: boolean; batchSize?: number } = {}) => {
+      const { data, error } = await supabase.functions.invoke("enrich-uae-brokerage-directory", { body: input });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data as { processed: number; timedOut?: boolean; results: Array<{ id: string; name: string; filled: string[] }> };
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      const filled = (data.results || []).reduce((s, r) => s + (r.filled?.length ?? 0), 0);
+      toast.success(`Researched ${data.processed} brokerage${data.processed === 1 ? "" : "s"} · ${filled} field${filled === 1 ? "" : "s"} filled`);
+    },
+    onError: (e: any) => toast.error(e.message || "Enrichment failed"),
+  });
+};
+
 /* ---------- Owner Settings ---------- */
 export const useOwnerSettings = () => {
   const { user } = useAuth();
