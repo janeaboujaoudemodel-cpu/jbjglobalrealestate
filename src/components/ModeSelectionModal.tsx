@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { User, Briefcase, Users, ArrowRight, CheckCircle2, Handshake, Building2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -47,16 +47,27 @@ const MODE_OPTIONS: ModeOption[] = [
 
 export const ModeSelectionModal = () => {
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
-  const { isVisible, dismiss } = usePopupVisibility('mode-selection-modal');
+  const { isVisible, dismiss, requestToShow } = usePopupVisibility('mode-selection-modal');
   const { user } = useAuth();
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<SelectableMode | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isLoggedIn = !!user;
+
+  // Auto-open ONLY for logged-in users who haven't picked a category yet.
+  // Anonymous visitors are NEVER force-shown the modal — they pick from the
+  // "Tell us who you are" section, which routes them to /auth?preselect=...
+  useEffect(() => {
+    if (isLoggedIn && !hasMadeInitialSelection) {
+      requestToShow();
+    }
+  }, [isLoggedIn, hasMadeInitialSelection, requestToShow]);
+
   // Don't render if user has already made their initial selection
   if (hasMadeInitialSelection) return null;
-
-  const isLoggedIn = !!user;
+  // Don't render at all for anonymous users — login is required first.
+  if (!isLoggedIn) return null;
 
   // For logged-in users without a mode: modal is NOT dismissable (freeze screen)
   const isForcedOpen = isLoggedIn && !hasMadeInitialSelection;

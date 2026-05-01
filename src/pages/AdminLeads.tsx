@@ -83,10 +83,38 @@ interface Lead {
   lead_source_type: string | null;
   vip: boolean | null;
   pipeline_stage: string | null;
+  contact_type: string | null;
+  source: string | null;
+  tags: string[] | null;
   created_at: string;
   updated_at: string;
   deleted_at?: string | null;
 }
+
+type LeadCategory = 'all' | 'investor' | 'broker' | 'developer';
+
+const CATEGORY_TABS: Array<{
+  key: LeadCategory;
+  label: string;
+  contactType: 'investor' | 'broker' | 'developer' | null;
+  // Tone for chip + IconTile color (matches site palette)
+  accent: string;
+  surface: string;
+  emptyTitle: string;
+  emptySubtitle: string;
+}> = [
+  { key: 'all', label: 'All Leads', contactType: null, accent: '#1A1A1A', surface: '#EFE6D6',
+    emptyTitle: 'No leads yet', emptySubtitle: 'Leads from every channel will appear here.' },
+  { key: 'investor', label: 'Investors', contactType: 'investor', accent: '#2563EB', surface: '#E8F0FE',
+    emptyTitle: 'No investors registered yet',
+    emptySubtitle: 'When visitors register as investors, they will appear here automatically.' },
+  { key: 'broker', label: 'Brokers', contactType: 'broker', accent: '#B89555', surface: '#F7F2EA',
+    emptyTitle: 'No brokers registered yet',
+    emptySubtitle: 'When visitors register as brokers, they will appear here automatically.' },
+  { key: 'developer', label: 'Developers', contactType: 'developer', accent: '#7C3AED', surface: '#F1ECFE',
+    emptyTitle: 'No developers registered yet',
+    emptySubtitle: 'When visitors register as developers, they will appear here automatically.' },
+];
 
 interface ChatConversation {
   id: string;
@@ -114,6 +142,7 @@ const AdminLeads = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
   const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<LeadCategory>("all");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
   const [activeTab, setActiveTab] = useState<"leads" | "chats" | "deleted">("leads");
@@ -175,7 +204,7 @@ const AdminLeads = () => {
       const [leadsResult, chatsResult, deletedResult] = await Promise.all([
         supabase
           .from("crm_leads")
-          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, created_at, updated_at, deleted_at")
+          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, contact_type, source, tags, created_at, updated_at, deleted_at")
           .is("deleted_at", null)
           .order("created_at", { ascending: false }),
         supabase
@@ -184,7 +213,7 @@ const AdminLeads = () => {
           .order("created_at", { ascending: false }),
         supabase
           .from("crm_leads")
-          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, created_at, updated_at, deleted_at")
+          .select("id, full_name, email_lower, phone_e164, lead_source_type, vip, pipeline_stage, contact_type, source, tags, created_at, updated_at, deleted_at")
           .not("deleted_at", "is", null)
           .order("deleted_at", { ascending: false }),
       ]);
@@ -192,9 +221,9 @@ const AdminLeads = () => {
       if (leadsResult.error) throw leadsResult.error;
       if (chatsResult.error) throw chatsResult.error;
 
-      setLeads(leadsResult.data || []);
+      setLeads((leadsResult.data || []) as Lead[]);
       setConversations(chatsResult.data || []);
-      setDeletedLeads(deletedResult.data || []);
+      setDeletedLeads((deletedResult.data || []) as Lead[]);
     } catch (error: any) {
       toast.error(error.message || "Failed to fetch data");
     } finally {
@@ -410,13 +439,16 @@ const AdminLeads = () => {
         (lead.phone_e164 || "").includes(searchQuery);
       const matchesStatus = statusFilter === "all" || lead.pipeline_stage === statusFilter;
       const matchesSource = sourceFilter === "all" || lead.lead_source_type === sourceFilter;
-      const matchesSourceType = sourceTypeFilter === "all" 
+      const matchesSourceType = sourceTypeFilter === "all"
         || (sourceTypeFilter === "needs_action" && needsAction(lead))
         || (sourceTypeFilter === "vip" && lead.vip)
         || getSourceCategory(lead.lead_source_type) === sourceTypeFilter;
-      return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
+      const matchesCategory = categoryFilter === "all"
+        || lead.contact_type === categoryFilter
+        || (lead.tags ?? []).includes(categoryFilter);
+      return matchesSearch && matchesStatus && matchesSource && matchesSourceType && matchesCategory;
     });
-  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, getSourceCategory, needsAction]);
+  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, categoryFilter, getSourceCategory, needsAction]);
 
   const filteredConversations = useMemo(() => {
     return conversations.filter((chat) => {
@@ -695,6 +727,43 @@ const AdminLeads = () => {
           </div>
         )}
 
+        {/* Category tabs (Investor / Broker / Developer) */}
+        {activeTab === "leads" && (
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            {CATEGORY_TABS.map((tab) => {
+              const isActive = categoryFilter === tab.key;
+              const count = tab.contactType === null
+                ? leads.length
+                : leads.filter(l => l.contact_type === tab.contactType || (l.tags ?? []).includes(tab.key)).length;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setCategoryFilter(tab.key)}
+                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border-2 text-[12px] font-bold transition-all"
+                  style={{
+                    backgroundColor: isActive ? tab.accent : tab.surface,
+                    borderColor: tab.accent,
+                    color: isActive ? '#FFFFFF' : '#1A1A1A',
+                  }}
+                >
+                  {tab.label}
+                  <span
+                    className="inline-flex items-center justify-center min-w-[22px] h-[20px] px-1.5 rounded-full text-[10px] font-bold"
+                    style={{
+                      backgroundColor: isActive ? 'rgba(255,255,255,0.22)' : '#FFFFFF',
+                      color: isActive ? '#FFFFFF' : tab.accent,
+                      border: isActive ? '1px solid rgba(255,255,255,0.35)' : `1px solid ${tab.accent}`,
+                    }}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Filters */}
         <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
@@ -872,7 +941,23 @@ const AdminLeads = () => {
                 <TableBody>
                   {filteredLeads.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center text-[#1A1A1A]/50 py-10">No leads found</TableCell>
+                      <TableCell colSpan={9} className="py-12">
+                        {(() => {
+                          const tab = CATEGORY_TABS.find(t => t.key === categoryFilter) ?? CATEGORY_TABS[0];
+                          return (
+                            <div className="flex flex-col items-center justify-center text-center px-6">
+                              <div
+                                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 border-2"
+                                style={{ backgroundColor: tab.surface, borderColor: tab.accent }}
+                              >
+                                <Users className="w-7 h-7" style={{ color: tab.accent }} />
+                              </div>
+                              <p className="text-[15px] font-bold text-[#1A1A1A]">{tab.emptyTitle}</p>
+                              <p className="text-[13px] text-[#1A1A1A]/70 mt-1 max-w-md">{tab.emptySubtitle}</p>
+                            </div>
+                          );
+                        })()}
+                      </TableCell>
                     </TableRow>
                   ) : (
                     filteredLeads.map((lead) => {

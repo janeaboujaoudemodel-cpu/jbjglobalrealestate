@@ -22,6 +22,11 @@ import { useBiometricAuth } from "@/hooks/useBiometricAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
+
+const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'investor_broker', 'developer'];
+const isValidPreselect = (v: string | null): v is PlatformUserMode =>
+  !!v && (PRESELECT_MODES as string[]).includes(v);
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -42,6 +47,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [searchParams] = useSearchParams();
   const { user, signIn, signUp, updatePassword, signOut, loading, isOwner } = useAuth();
   const { isAvailable: isBiometricAvailable, authenticate: biometricAuth, hasStoredCredential, isLoading: biometricLoading } = useBiometricAuth();
+  const { setMode: setPlatformMode } = useUserModeContext();
 
   const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
@@ -183,6 +189,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               toast.error(error.message);
             }
           } else {
+            // Stash the preselected category so it's applied after email
+            // verification + first sign-in (signup itself doesn't log in).
+            const preselectParam = new URLSearchParams(window.location.search).get('preselect');
+            if (isValidPreselect(preselectParam)) {
+              try { localStorage.setItem('jj_pending_preselect', preselectParam); } catch {}
+            }
             // Send welcome email
             try {
               await supabase.functions.invoke("send-welcome-email", {
@@ -215,13 +227,36 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             const params = new URLSearchParams(window.location.search);
             const returnTo = params.get('returnTo');
             const preselect = params.get('preselect');
-            const modeSelected = localStorage.getItem('jj_mode_selected');
-            if (modeSelected === 'true' && returnTo) {
+            // Pick up either the URL param or a value stashed during signup.
+            let pendingPreselect: string | null = preselect;
+            try {
+              const stashed = localStorage.getItem('jj_pending_preselect');
+              if (!isValidPreselect(pendingPreselect) && isValidPreselect(stashed)) {
+                pendingPreselect = stashed;
+              }
+            } catch {}
+            // If the user picked a category before signing in (from "Tell us
+            // who you are"), apply it now so the modal doesn't force-open
+            // post-login and a CRM lead is auto-created.
+            let preselectedApplied = false;
+            if (isValidPreselect(pendingPreselect)) {
+              try {
+                await setPlatformMode(pendingPreselect);
+                preselectedApplied = true;
+                try { localStorage.removeItem('jj_pending_preselect'); } catch {}
+              } catch (err) {
+                console.warn('Failed to apply preselected mode:', err);
+              }
+            }
+            const modeSelected = preselectedApplied || localStorage.getItem('jj_mode_selected') === 'true';
+            if (modeSelected && returnTo) {
               navigate(returnTo);
-            } else if (modeSelected === 'true') {
+            } else if (modeSelected) {
               navigate("/");
             } else {
-              navigate(`/welcome${preselect ? `?preselect=${preselect}` : ''}`);
+              // No preselection and no prior selection → land on home; the
+              // ModeSelectionModal will force-open until they pick a category.
+              navigate("/");
             }
           }
           break;
