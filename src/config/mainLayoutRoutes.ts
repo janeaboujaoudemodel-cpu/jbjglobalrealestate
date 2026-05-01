@@ -40,7 +40,17 @@ export const BACK_OFFICE_PREFIXES = [
   "/broker-dashboard",
 ] as const;
 
+/**
+ * Routes that live under a back-office prefix but should still render the
+ * full L-shaped frame (global vertical sidebar + utility bar). Add a route
+ * here when the owner needs persistent navigation while working there.
+ */
+export const BACK_OFFICE_EXCEPTIONS = new Set<string>([
+  "/admin/media-ingestion",
+]);
+
 export function isBackOfficeRoute(pathname: string): boolean {
+  if (BACK_OFFICE_EXCEPTIONS.has(pathname)) return false;
   return BACK_OFFICE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 

@@ -15,7 +15,7 @@ import {
   Database, Cog, HardHat, UserPlus, Presentation,
   QrCode, FileSignature, MailOpen, MessagesSquare,
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
-  Podcast, NotebookPen, BookText, HelpCircle, ScrollText,
+  Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
@@ -299,6 +299,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Admin Intelligence", href: "/admin/intelligence", icon: Brain },
   { label: "Admin Developers", href: "/admin/developers", icon: Building },
   { label: "Marketing Hub", href: "/admin/marketing-hub", icon: Megaphone },
+  { label: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox },
   { label: "Admin Training Guide", href: "/admin/training-guide", icon: BookOpen },
   { label: "Admin Legal Center", href: "/admin/legal-center", icon: Gavel },
   { label: "HR Dashboard", href: "/hr-dashboard", icon: Users },

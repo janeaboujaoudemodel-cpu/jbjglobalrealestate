@@ -3,7 +3,7 @@
  * Manage message templates for all channels
  */
 
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const MediaIngestionHub = lazy(() => import("@/pages/admin/MediaIngestionHub"));
 import {
   Dialog,
   DialogContent,
@@ -41,6 +44,7 @@ import {
   Search,
   Tag,
   Loader2,
+  Inbox,
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -202,6 +206,23 @@ export default function OwnerTemplates() {
     <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4 py-6 max-w-6xl">
+          <Tabs defaultValue="templates" className="w-full">
+            <TabsList className="bg-[#EFE6D6] border border-gold/30 mb-6">
+              <TabsTrigger
+                value="templates"
+                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold"
+              >
+                <FileText className="w-4 h-4 mr-2" />Message Templates
+              </TabsTrigger>
+              <TabsTrigger
+                value="ingestion"
+                className="data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold"
+              >
+                <Inbox className="w-4 h-4 mr-2" />Media Ingestion
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="templates">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -481,6 +502,14 @@ export default function OwnerTemplates() {
               })}
             </div>
           )}
+            </TabsContent>
+
+            <TabsContent value="ingestion">
+              <Suspense fallback={<div className="text-sm text-[#5A4A2E]">Loading Media Ingestion…</div>}>
+                <MediaIngestionHub embedded />
+              </Suspense>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </>
