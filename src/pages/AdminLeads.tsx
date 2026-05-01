@@ -142,6 +142,7 @@ const AdminLeads = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
   const [sourceTypeFilter, setSourceTypeFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<LeadCategory>("all");
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [selectedConversation, setSelectedConversation] = useState<ChatConversation | null>(null);
   const [activeTab, setActiveTab] = useState<"leads" | "chats" | "deleted">("leads");
