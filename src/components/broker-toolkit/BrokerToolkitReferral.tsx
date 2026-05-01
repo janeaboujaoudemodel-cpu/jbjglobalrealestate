@@ -99,7 +99,7 @@ export function BrokerToolkitReferral() {
                       JBJ GLOBAL REAL ESTATE
                     </span>
                   </div>
-                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
+                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-lg mb-4 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                     <Handshake className="w-3.5 h-3.5 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-medium">How Referral Works</span>
                   </span>

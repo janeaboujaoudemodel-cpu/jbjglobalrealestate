@@ -280,7 +280,7 @@ const ListingPortal = () => {
             <div className="text-center mb-8">
               <Button
                 onClick={() => navigate('/listing-portal/my-listings')}
-                className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto"
+                className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
               >
                 <Eye className="w-4 h-4 mr-2 text-gold" />
                 View My Listings
@@ -376,7 +376,7 @@ const ListingPortal = () => {
                       </Button>
                       <Button
                         onClick={() => navigate('/listing-portal/submit')}
-                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold"
+                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                       >
                         <Wand2 className="w-4 h-4 mr-2 text-gold" /> AI Listing
                       </Button>

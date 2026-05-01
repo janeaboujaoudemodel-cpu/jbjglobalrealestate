@@ -187,13 +187,13 @@ const BuyerFAQ = () => {
         actions={
           <>
             <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]"
+              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Search className="w-4 h-4 mr-2 text-[#1A1A1A]" />
               <span className="text-gold font-semibold">Browse FAQs</span>
             </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)]">
+            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
               <Link to="/contact">
                 <Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                 <span className="text-gold font-semibold">Ask Our Team</span>

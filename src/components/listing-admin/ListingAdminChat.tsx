@@ -892,7 +892,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       onDrop={handleDropFiles}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ borderRadius: 0 }}>
+      <div className="flex items-center gap-3 p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ borderRadius: 0 }}>
         <Avatar className="w-10 h-10 border-2 border-gold/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
           <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
@@ -1069,7 +1069,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* Multi-URL Upload Section */}
       {showBulkUpload && (
-        <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto">
+        <div className="p-4 border-t border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="flex items-center gap-2 mb-3">
             <ListChecks className="w-5 h-5 text-gold" />
             <span className="font-medium text-[#1A1A1A] text-sm">Batch URL Extraction</span>

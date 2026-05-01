@@ -82,7 +82,7 @@ const Admin = () => {
       <CommandPalette isOpen={h.showCommandPalette} onClose={() => h.setShowCommandPalette(false)} />
 
       {/* Premium Header */}
-      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center shadow-lg shadow-gold/20">

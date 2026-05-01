@@ -116,7 +116,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       )}
     >
       {/* Header - Champagne gradient */}
-      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg border border-gold/30">
@@ -242,7 +242,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Footer - Premium champagne */}
-      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <Button variant="primary" className="w-full" onClick={() => {}}>
           <Sparkles className="w-4 h-4 mr-2" />
           View All Insights

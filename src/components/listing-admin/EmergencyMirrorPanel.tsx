@@ -78,7 +78,7 @@ export const EmergencyMirrorPanel = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold">
+          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
             {isCheckingStatus ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
             Check Current Status
           </Button>

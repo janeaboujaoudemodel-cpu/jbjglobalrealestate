@@ -99,7 +99,7 @@ const Partners = () => {
           <div className="container mx-auto px-4 relative z-10">
             <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-4xl mx-auto text-center">
               <motion.div variants={fadeIn}>
-                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default">
+                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                   <Handshake className="w-4 h-4 text-gold" />
                   <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Strategic Partnerships</span>
                 </button>
@@ -351,7 +351,7 @@ const Partners = () => {
 
               <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-3 mb-10">
                 {REGIONS.map((r) => (
-                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm">{r}</span>
+                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">{r}</span>
                 ))}
               </motion.div>
 
