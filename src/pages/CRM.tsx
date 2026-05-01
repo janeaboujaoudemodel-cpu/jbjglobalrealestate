@@ -714,6 +714,16 @@ const CRM = () => {
                   <Briefcase className="h-4 w-4 mr-1" />
                   Relationships
                 </Button>
+                <Button
+                  variant="gold"
+                  size="sm"
+                  onClick={() => navigate("/admin/media-ingestion")}
+                  className="text-xs font-semibold shadow-md"
+                  title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
+                >
+                  <Inbox className="h-4 w-4 mr-1" />
+                  Media Ingestion
+                </Button>
                 {isCRMOwner && (
                   <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 text-xs font-semibold">
                     <Zap className="h-4 w-4 mr-1" />
