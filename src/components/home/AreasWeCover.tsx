@@ -78,18 +78,19 @@ const AreasWeCover = () => {
                 {/* Top-right badges */}
                 <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                   {area.isTrending && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/80 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#B89555] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-[0_4px_12px_rgba(184,149,85,0.45)] ring-1 ring-[#1A1A1A]/10">
                       <TrendingUp className="w-2.5 h-2.5" />
                       Trending
                     </span>
                   )}
                   {area.isHighDemand && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A] text-[#B89555] text-[9px] font-bold uppercase tracking-wider shadow-[0_4px_12px_rgba(0,0,0,0.45)] ring-1 ring-[#B89555]/40">
                       <Flame className="w-2.5 h-2.5" />
                       High Demand
                     </span>
                   )}
                 </div>
+
 
                 {/* Bottom content */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">
