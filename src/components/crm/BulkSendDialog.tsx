@@ -260,18 +260,51 @@ export const BulkSendDialog = ({
     }
   };
 
+  const runRegistrationCheck = async () => {
+    if (!isBrokerageFlow || targets.length === 0) return;
+    const sig = targets.map((t) => t.id).sort().join("|") + "::" + variant;
+    if (sig === checkRanFor && Object.keys(checks).length > 0) return; // already fresh
+    try {
+      const results = await checkBrk.mutateAsync({
+        brokerageIds: targets.map((t) => t.id),
+        variant: variant as BrokerageVariant,
+      });
+      const map: Record<string, BrokerageCheckResult> = {};
+      results.forEach((r) => { map[r.brokerageId] = r; });
+      setChecks(map);
+      setCheckRanFor(sig);
+      setWarnOverrides({}); // reset overrides after a fresh check
+    } catch (e) {
+      // hook surfaces the toast — leave checks empty so UI shows "not yet run"
+    }
+  };
+
   const sendAll = async () => {
     if (!targets.length) { toast.error("No eligible recipients"); return; }
-    if (!reviewing) { setReviewing(true); return; }
+
+    // Step 1 of the review flow: run the registration check (brokerage only).
+    if (isBrokerageFlow && !reviewing) {
+      await runRegistrationCheck();
+      setReviewing(true);
+      return;
+    }
+    // Dev flow keeps original behaviour (single review step with no check).
+    if (!isBrokerageFlow && !reviewing) { setReviewing(true); return; }
+
+    const sendList = effectiveTargets;
+    if (!sendList.length) {
+      toast.error("Nothing to send — all rows are blocked or unapproved");
+      return;
+    }
     setReviewing(false);
     setRunning(true);
     const init: Record<string, { status: RowStatus }> = {};
-    targets.forEach((t) => { init[t.id] = { status: "queued" }; });
+    sendList.forEach((t) => { init[t.id] = { status: "queued" }; });
     setStatuses(init);
 
     let ok = 0, fail = 0;
-    for (let i = 0; i < targets.length; i++) {
-      const t = targets[i];
+    for (let i = 0; i < sendList.length; i++) {
+      const t = sendList[i];
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
         if (entityType === "brokerage") {
@@ -294,8 +327,12 @@ export const BulkSendDialog = ({
   const closeAndReset = () => {
     if (running) return;
     setStatuses({});
+    setChecks({});
+    setCheckRanFor("");
+    setWarnOverrides({});
     onOpenChange(false);
   };
+
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
