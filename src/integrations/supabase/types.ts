@@ -5134,6 +5134,7 @@ export type Database = {
           email: string | null
           emirate: string | null
           entry_source: string
+          field_sources: Json
           first_contact_at: string | null
           health_score: number | null
           id: string
@@ -5194,6 +5195,7 @@ export type Database = {
           email?: string | null
           emirate?: string | null
           entry_source?: string
+          field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
@@ -5254,6 +5256,7 @@ export type Database = {
           email?: string | null
           emirate?: string | null
           entry_source?: string
+          field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
