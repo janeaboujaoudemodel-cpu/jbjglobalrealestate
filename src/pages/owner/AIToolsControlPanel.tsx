@@ -429,6 +429,28 @@ export default function AIToolsControlPanel() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
+                          {/* Public visibility toggle */}
+                          <div
+                            onClick={e => e.stopPropagation()}
+                            className={`flex items-center gap-1.5 px-2 py-1 rounded-md border ${
+                              hiddenTools.has(tool.id)
+                                ? "bg-red-500/10 border-red-500/40"
+                                : "bg-emerald-500/10 border-emerald-500/40"
+                            }`}
+                            title={hiddenTools.has(tool.id) ? "Hidden from public" : "Visible to public"}
+                          >
+                            {hiddenTools.has(tool.id)
+                              ? <EyeOff className="w-3.5 h-3.5 text-red-400" />
+                              : <Eye className="w-3.5 h-3.5 text-emerald-400" />}
+                            <Switch
+                              checked={!hiddenTools.has(tool.id)}
+                              onCheckedChange={(checked) => toggleVisibility(tool.id, checked)}
+                              aria-label={`Toggle public visibility for ${tool.title}`}
+                            />
+                            <span className="text-[10px] font-semibold uppercase tracking-wide text-white/80">
+                              {hiddenTools.has(tool.id) ? "Hidden" : "Public"}
+                            </span>
+                          </div>
                           <Badge className="bg-zinc-800 text-white/70 border-[#1A1A1A] text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
