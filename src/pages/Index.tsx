@@ -217,34 +217,24 @@ const Index = () => {
           variants={staggerContainer}
         >
           <div className="w-full max-w-5xl mx-auto text-center pt-[max(12vh,88px)] sm:pt-[18vh] md:pt-[22vh] space-y-5 sm:space-y-7 md:space-y-8">
-            {/* Platform tagline badge */}
-            <motion.div variants={fadeInUp} className="flex justify-center">
-              <p
-                className="inline-block bg-black/45 backdrop-blur-md rounded-full px-5 py-2 text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white font-bold border border-white/25"
-                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.6)' }}
-              >
-                Dubai's Trusted Real Estate Technology Platform
-              </p>
-            </motion.div>
-
-            {/* Main heading — solid white, hardened against any cascaded color overrides. */}
+            {/* Single merged premium tagline — replaces label + title combo. "Platform" → "Ecosystem". */}
             <motion.h1
               variants={fadeInUp}
               className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
               style={{
-                fontSize: "clamp(1.625rem, 4.6vw + 0.5rem, 3.75rem)",
+                fontSize: "clamp(1.75rem, 4.8vw + 0.5rem, 4rem)",
                 letterSpacing: "-0.015em",
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
                 wordSpacing: "0.01em",
                 hyphens: "auto",
-                textShadow: "0 2px 18px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.9)",
+                textShadow: "0 2px 18px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.95), 0 4px 30px rgba(0,0,0,0.55)",
               }}
             >
-              Your Gateway to Dubai's Finest Real Estate
+              Your Trusted Gateway to Dubai's Real Estate Ecosystem
             </motion.h1>
 
-            {/* Quick-action CTA pills — uniform 6-tile grid: 2×3 mobile, 3×2 tablet, 1×6 desktop. Equal heights, readable labels. */}
+            {/* Quick-action CTA pills — uniform 6-tile grid: 2×3 mobile, 3×2 tablet, 1×6 desktop. */}
             <motion.div
               variants={fadeInUp}
               className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 max-w-md sm:max-w-3xl lg:max-w-5xl mx-auto"
@@ -253,35 +243,41 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/75 backdrop-blur-md text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#1A1A1A]/90 hover:border-gold/70 transition-all duration-300 min-h-[76px]"
-                  style={{ textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}
+                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/85 text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#1A1A1A] hover:border-gold/70 transition-all duration-300 min-h-[76px]"
+                  style={{ textShadow: '0 1px 4px rgba(0,0,0,0.85)' }}
                 >
-                  <action.icon className="w-4 h-4 text-gold flex-shrink-0" />
+                  <action.icon
+                    className="w-4 h-4 text-gold flex-shrink-0"
+                    style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.7))" }}
+                  />
                   <span className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2">{action.label}</span>
                 </Link>
               ))}
             </motion.div>
 
-            {/* Three pillar badges */}
+            {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-white/40 overflow-hidden rounded-lg"
+              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-gold/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
             >
               {pillars.map((pillar) => (
                 <div
                   key={pillar.title}
-                  className="bg-[#1A1A1A]/75 backdrop-blur-md p-4 sm:p-5 text-center"
+                  className="bg-[#0A0A0A] p-4 sm:p-5 text-center"
                 >
-                  <pillar.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gold mx-auto mb-2" />
+                  <pillar.icon
+                    className="w-6 h-6 sm:w-7 sm:h-7 text-gold mx-auto mb-2"
+                    style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.9))" }}
+                  />
                   <h3
-                    className="text-[12px] sm:text-sm font-bold mb-1"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}
+                    className="text-[13px] sm:text-sm font-bold mb-1"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
                   >
                     {pillar.title}
                   </h3>
                   <p
-                    className="text-[10px] sm:text-xs leading-tight"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.85)" }}
+                    className="text-[11px] sm:text-xs leading-tight"
+                    style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
                   >
                     {pillar.desc}
                   </p>
