@@ -1,43 +1,31 @@
-# Fix faded "Mode: Investor" chip in the footer
+# Make sidebar Contact + Support buttons readable with stacked icons
 
 ## Problem
 
-In the footer, the "Mode: Investor" pill renders as a pale peach instead of the vivid orange shown in the top header. The chip is correct in code — it uses an inline orange gradient (`#F97316 → #C2410C`) with inline `color: #FFFFFF` for the icon, label, and chevron.
+In the vertical sidebar's bottom block, the **Contact** and **Support** buttons are unreadable:
+- Tiny `text-[10px]` label sits *next to* a small icon on a single row, leaving very little width for text in the narrow sidebar.
+- Resting state uses a faint translucent red wash (`rgba(220,38,38,0.06)` background, `rgba(220,38,38,0.40)` border) on a champagne backdrop, so both the icon and the label appear washed out at first glance.
 
-Why it looks faded:
-- The footer wraps the chip in a translucent panel: `bg-[#FDFBF7]/[0.03]` (`src/components/Footer.tsx:529`).
-- The PASS 5 same-tone contrast guard in `src/index.css` matches **any** class containing `bg-[#FDFBF7]` regardless of alpha, so it treats that panel as a "light surface".
-- Rule at `src/index.css:3670-3674` then force-rewrites `.text-white` and `[class*="text-white"]` descendants to `#1A1A1A !important`, beating the inline `color: #FFFFFF`.
-- Result: the chip's icon, label, and chevron go dark on the orange gradient, producing the washed-out look.
+User wants:
+1. The icon **above** the label (stacked) so both have room to breathe.
+2. The button title clearly readable in the resting state, not only on hover.
 
-The header chip is unaffected because the header wrapper does not have a `bg-[#FDFBF7]*` class.
+## Fix — single file: `src/components/navigation/GlobalVerticalNav.tsx` (lines 1245–1269)
 
-## Fix
+Restructure the Contact and Support buttons in the expanded sidebar's bottom block:
 
-Add the documented opt-out attribute (`data-no-contrast-guard`) to the ModeSwitcher trigger button so the contrast guard leaves its white icon/label/chevron alone. The PASS 5 guard already excludes `[data-no-contrast-guard]` in its champagne-surface rules.
+- Switch layout from `flex items-center` (icon + label inline) to `flex flex-col items-center` (icon stacked above label).
+- Bump icon size from `w-3.5 h-3.5` to `w-4 h-4` so the headphones / ticket glyph reads cleanly above the word.
+- Bump label from `text-[10px]` to `text-[11px] font-bold tracking-wide leading-none`.
+- Replace the faded `rgba(220,38,38,0.06)` background with a solid champagne fill (`#FDFBF7`) and a solid 2px red border (`#DC2626`), giving high resting contrast: ink-black label, red border, white surface.
+- Icon color uses `inherit` so it follows the label color, flipping cleanly to white on hover (when background turns solid red).
+- Hover state stays the same intent: solid red `#DC2626` fill with white text/icon.
+- Increase button padding to `py-2` and container padding to `py-2.5` / gap `gap-2` to accommodate the stacked layout without crowding.
 
-Single, scoped edit — no new CSS, no behavior change.
+No other components affected. The collapsed (icon-only) sidebar variant at lines 1354–1366 already shows tooltips and remains unchanged.
 
-### File: `src/components/ModeSwitcher.tsx`
+## Result
 
-On the `<button>` returned from `DropdownMenuTrigger asChild` (the trigger that renders the orange chip with label + chevron, currently around lines 158–183), add:
-
-```tsx
-data-no-contrast-guard
-```
-
-Also add the same attribute to the compact `<button>` variant (around lines 127–145) so the chip stays vivid wherever it is rendered against translucent light overlays.
-
-No other files need to change. The header instance is already vivid and continues to work; this only restores the same vividness when the chip sits inside a translucent champagne wrapper (footer, future cards, etc.).
-
-## Verification
-
-After the change, in the footer:
-- Chip background: saturated orange gradient (`#F97316 → #C2410C`) — unchanged.
-- Icon, "Mode: Investor" label, and chevron: pure white, fully legible.
-- Header chip: unchanged (still vivid).
-- Other modes (Broker blue, Investor+Broker green, Developer purple) automatically benefit from the same fix.
-
-## Out of scope
-
-No changes to the contrast guard itself, no changes to footer layout, and no changes to the ModeSwitcher dropdown panel.
+- Resting: white pill with crisp red 2px border; **headphones icon on top**, bold ink-black "Contact" / "Support" label below — instantly readable on the champagne sidebar.
+- Hover: pill fills solid red with white icon + label.
+- Same routing (`/contact`, `/ticket-hub`) and same red brand accent — only legibility changes.
