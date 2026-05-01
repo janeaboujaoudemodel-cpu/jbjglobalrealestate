@@ -19,7 +19,16 @@ const STATUS_OPTIONS = [
   "skipped",
 ];
 
-export default function MediaIngestionHub() {
+interface MediaIngestionHubProps {
+  /**
+   * When true, render without the full-screen page wrapper (no min-h-screen,
+   * no top spacer, no max-width container). Use when embedding inside another
+   * page such as Owner Templates.
+   */
+  embedded?: boolean;
+}
+
+export default function MediaIngestionHub({ embedded = false }: MediaIngestionHubProps = {}) {
   const {
     jobs,
     loading,
@@ -113,9 +122,91 @@ export default function MediaIngestionHub() {
     return c;
   }, [jobs]);
 
+  const body = (
+    <div className="space-y-6">
+      <header>
+        <h1 className="text-3xl font-bold text-foreground">Media Ingestion Hub</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Drop videos, PDFs, brochures and links in bulk. AI matches each one to the right
+          developer & project. Review, then merge into your published listings.
+        </p>
+      </header>
+      <IngestionTabs
+        tab={tab}
+        setTab={setTab}
+        jobs={jobs}
+        filtered={filtered}
+        loading={loading}
+        busy={busy}
+        counts={counts}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        search={search}
+        setSearch={setSearch}
+        selected={selected}
+        setSelected={setSelected}
+        selectedIds={selectedIds}
+        toggleOne={toggleOne}
+        uploadFiles={uploadFiles}
+        addLinks={addLinks}
+        classify={classify}
+        approveAndMerge={approveAndMerge}
+        skip={skip}
+        remove={remove}
+        duplicate={duplicate}
+        reassign={reassign}
+        exportCsv={exportCsv}
+      />
+    </div>
+  );
+
+  if (embedded) {
+    return body;
+  }
+
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pt-[88px]">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-[#FDFBF7] pt-[88px] [body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px] transition-all duration-300">
+      <div className="max-w-7xl mx-auto p-6">{body}</div>
+    </div>
+  );
+}
+
+interface IngestionTabsProps {
+  tab: string;
+  setTab: (v: string) => void;
+  jobs: IngestionJob[];
+  filtered: IngestionJob[];
+  loading: boolean;
+  busy: boolean;
+  counts: Record<string, number>;
+  statusFilter: string;
+  setStatusFilter: (v: string) => void;
+  search: string;
+  setSearch: (v: string) => void;
+  selected: Set<string>;
+  setSelected: React.Dispatch<React.SetStateAction<Set<string>>>;
+  selectedIds: string[];
+  toggleOne: (id: string, sel: boolean) => void;
+  uploadFiles: (files: File[]) => Promise<void>;
+  addLinks: (urls: string[]) => Promise<void>;
+  classify: (ids: string[]) => Promise<void>;
+  approveAndMerge: (ids: string[]) => Promise<void>;
+  skip: (ids: string[]) => Promise<void>;
+  remove: (ids: string[]) => Promise<void>;
+  duplicate: (ids: string[]) => Promise<void>;
+  reassign: (ids: string[], patch: any) => Promise<void>;
+  exportCsv: () => void;
+}
+
+function IngestionTabs(props: IngestionTabsProps) {
+  const {
+    tab, setTab, jobs, filtered, loading, busy, counts,
+    statusFilter, setStatusFilter, search, setSearch,
+    selected, setSelected, selectedIds, toggleOne,
+    uploadFiles, addLinks, classify, approveAndMerge,
+    skip, remove, duplicate, reassign, exportCsv,
+  } = props;
+  return (
         <header>
           <h1 className="text-3xl font-bold text-foreground">Media Ingestion Hub</h1>
           <p className="text-sm text-muted-foreground mt-1">
