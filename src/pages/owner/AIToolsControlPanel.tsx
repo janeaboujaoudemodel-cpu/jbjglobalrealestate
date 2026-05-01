@@ -9,10 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
+import { Switch } from "@/components/ui/switch";
 import {
   ChevronDown, Copy, ExternalLink, Search, CheckCircle2, XCircle,
   RotateCcw, Play, Save, Clock, Shield, AlertTriangle, History,
-  Eye, Undo2, Rocket, FileText,
+  Eye, EyeOff, Undo2, Rocket, FileText,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
