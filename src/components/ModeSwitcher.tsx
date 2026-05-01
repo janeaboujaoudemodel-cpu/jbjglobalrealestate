@@ -92,12 +92,15 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
 };
 
 export const ModeSwitcher = ({ variant = 'header', className, showForUnselected = false, side = 'bottom' }: ModeSwitcherProps) => {
-  const { mode, isLoading, setMode } = useUserModeContext();
+  const { mode, isLoading, setMode, hasMadeInitialSelection } = useUserModeContext();
   const { hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredMode, setHoveredMode] = useState<UserMode | null>(null);
 
-  if (!hasSelectedRole && !showForUnselected) return null;
+  // Hide the badge entirely until the user has explicitly chosen a category.
+  // (Anonymous visitors and freshly-signed-in users without a selection both
+  // fall into this branch — they only see role-neutral UI.)
+  if (!hasMadeInitialSelection && !hasSelectedRole && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
     await setMode(newMode);
