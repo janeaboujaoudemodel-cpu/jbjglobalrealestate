@@ -316,17 +316,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Divider */}
           <div className="h-px bg-gold/20 my-2" />
           
-          {/* Starting Price - Gold */}
+          {/* Handover line (replaces price; price now lives on the photo) */}
           <p className="text-sm mb-2">
-            {project.price_from ? (
+            {project.handover_date ? (
               <>
-                <span className="text-muted-foreground">Starting from </span>
-                <span className="text-gold font-bold text-lg">
-                  {formatPriceWithCurrency(project.price_from, currency)}
+                <span className="text-muted-foreground">Handover </span>
+                <span className="text-foreground font-semibold">
+                  {project.handover_date}
                 </span>
               </>
             ) : (
-              <span className="text-gold font-medium">Price on Request</span>
+              <span className="text-muted-foreground">Handover TBA</span>
             )}
           </p>
           
