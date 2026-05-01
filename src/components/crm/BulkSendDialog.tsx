@@ -5,15 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks } from "lucide-react";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks, ShieldCheck, ShieldAlert, ShieldX, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   useSendDeveloperRegistration,
   useSendBrokerageOutreach,
   useEmailTemplate,
+  useCheckBrokerageRegistration,
   type RegistrationVariant,
   type BrokerageVariant,
   type AnyEmailVariant,
+  type BrokerageCheckResult,
 } from "@/hooks/useCRMRelationships";
 
 type EntityType = "developer" | "brokerage";
@@ -94,6 +96,7 @@ export const BulkSendDialog = ({
   const sendDev = useSendDeveloperRegistration();
   const sendBrk = useSendBrokerageOutreach();
   const send = entityType === "brokerage" ? sendBrk : sendDev;
+  const checkBrk = useCheckBrokerageRegistration();
 
   const VARIANT_LABELS = (entityType === "brokerage" ? VARIANT_LABELS_BRK : VARIANT_LABELS_DEV) as Record<string, string>;
   const defaultVariant: AnyEmailVariant =
@@ -110,6 +113,13 @@ export const BulkSendDialog = ({
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
   const [reviewing, setReviewing] = useState(false);
+
+  // Pre-flight registration check (brokerage only).
+  // Map of brokerageId → result. `null` value = "OK to send" but record exists.
+  const [checks, setChecks] = useState<Record<string, BrokerageCheckResult>>({});
+  const [checkRanFor, setCheckRanFor] = useState<string>(""); // signature of last-checked target set
+  // Per-row override of "warn" rows — owner explicitly approved sending despite warnings.
+  const [warnOverrides, setWarnOverrides] = useState<Record<string, boolean>>({});
 
   // Keep testEmail in sync if owner email changes (and they haven't overridden)
   useEffect(() => {
@@ -147,7 +157,45 @@ export const BulkSendDialog = ({
   }, [targets]);
 
   // Reset review state if selection or filter changes
-  useEffect(() => { setReviewing(false); }, [variant, skipRecent, selected.length]);
+  useEffect(() => {
+    setReviewing(false);
+    setChecks({});
+    setCheckRanFor("");
+    setWarnOverrides({});
+  }, [variant, skipRecent, selected.length]);
+
+  // Compute per-id check breakdown.
+  const checkBreakdown = useMemo(() => {
+    let ok = 0, warn = 0, block = 0;
+    targets.forEach((t) => {
+      const r = checks[t.id];
+      if (!r) return;
+      if (r.status === "ok") ok++;
+      else if (r.status === "warn") warn++;
+      else block++;
+    });
+    return { ok, warn, block };
+  }, [checks, targets]);
+
+  // The list of recipients we will actually send to: ok rows + warn rows the
+  // owner has explicitly overridden. Block rows are always excluded. When the
+  // check hasn't run yet (e.g. dev flow), fall back to all targets.
+  const isBrokerageFlow = entityType === "brokerage";
+  const checksReady =
+    !isBrokerageFlow ||
+    (Object.keys(checks).length > 0 &&
+      targets.every((t) => !!checks[t.id]));
+
+  const effectiveTargets = useMemo(() => {
+    if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+    return targets.filter((t) => {
+      const r = checks[t.id];
+      if (!r) return true;
+      if (r.status === "ok") return true;
+      if (r.status === "warn") return !!warnOverrides[t.id];
+      return false; // block
+    });
+  }, [targets, checks, warnOverrides, isBrokerageFlow]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
@@ -212,18 +260,51 @@ export const BulkSendDialog = ({
     }
   };
 
+  const runRegistrationCheck = async () => {
+    if (!isBrokerageFlow || targets.length === 0) return;
+    const sig = targets.map((t) => t.id).sort().join("|") + "::" + variant;
+    if (sig === checkRanFor && Object.keys(checks).length > 0) return; // already fresh
+    try {
+      const results = await checkBrk.mutateAsync({
+        brokerageIds: targets.map((t) => t.id),
+        variant: variant as BrokerageVariant,
+      });
+      const map: Record<string, BrokerageCheckResult> = {};
+      results.forEach((r) => { map[r.brokerageId] = r; });
+      setChecks(map);
+      setCheckRanFor(sig);
+      setWarnOverrides({}); // reset overrides after a fresh check
+    } catch (e) {
+      // hook surfaces the toast — leave checks empty so UI shows "not yet run"
+    }
+  };
+
   const sendAll = async () => {
     if (!targets.length) { toast.error("No eligible recipients"); return; }
-    if (!reviewing) { setReviewing(true); return; }
+
+    // Step 1 of the review flow: run the registration check (brokerage only).
+    if (isBrokerageFlow && !reviewing) {
+      await runRegistrationCheck();
+      setReviewing(true);
+      return;
+    }
+    // Dev flow keeps original behaviour (single review step with no check).
+    if (!isBrokerageFlow && !reviewing) { setReviewing(true); return; }
+
+    const sendList = effectiveTargets;
+    if (!sendList.length) {
+      toast.error("Nothing to send — all rows are blocked or unapproved");
+      return;
+    }
     setReviewing(false);
     setRunning(true);
     const init: Record<string, { status: RowStatus }> = {};
-    targets.forEach((t) => { init[t.id] = { status: "queued" }; });
+    sendList.forEach((t) => { init[t.id] = { status: "queued" }; });
     setStatuses(init);
 
     let ok = 0, fail = 0;
-    for (let i = 0; i < targets.length; i++) {
-      const t = targets[i];
+    for (let i = 0; i < sendList.length; i++) {
+      const t = sendList[i];
       setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
         if (entityType === "brokerage") {
@@ -246,8 +327,12 @@ export const BulkSendDialog = ({
   const closeAndReset = () => {
     if (running) return;
     setStatuses({});
+    setChecks({});
+    setCheckRanFor("");
+    setWarnOverrides({});
     onOpenChange(false);
   };
+
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
@@ -414,6 +499,102 @@ export const BulkSendDialog = ({
             )}
           </div>
 
+          {/* Pre-flight registration check (brokerage only) */}
+          {isBrokerageFlow && (reviewing || Object.keys(checks).length > 0 || checkBrk.isPending) && !running && (
+            <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A]/10 bg-[#FAF5EA]">
+                <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                  <strong>Pre-flight CRM registration check</strong>
+                </div>
+                {checksReady && Object.keys(checks).length > 0 && (
+                  <div className="flex items-center gap-2 text-[11px]">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                      {checkBreakdown.ok} ready
+                    </span>
+                    {checkBreakdown.warn > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold">
+                        {checkBreakdown.warn} warn
+                      </span>
+                    )}
+                    {checkBreakdown.block > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300 font-bold">
+                        {checkBreakdown.block} blocked
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              {checkBrk.isPending ? (
+                <div className="px-3 py-4 flex items-center gap-2 text-xs text-[#5A4A2E]">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Checking each brokerage against existing CRM leads, clients, brokers and prior outreach…
+                </div>
+              ) : Object.keys(checks).length === 0 ? (
+                <div className="px-3 py-3 text-xs text-[#5A4A2E] flex items-center justify-between gap-2">
+                  <span>Not yet run. Click "Review &amp; send" below to scan for duplicates.</span>
+                  <Button size="sm" variant="outline" className="h-7 text-xs" onClick={runRegistrationCheck}>
+                    Run check now
+                  </Button>
+                </div>
+              ) : (
+                <div className="max-h-[260px] overflow-y-auto divide-y divide-black/5">
+                  {targets.map((t) => {
+                    const r = checks[t.id];
+                    if (!r) return null;
+                    const Icon =
+                      r.status === "ok" ? ShieldCheck :
+                      r.status === "warn" ? ShieldAlert : ShieldX;
+                    const tone =
+                      r.status === "ok" ? "text-emerald-700" :
+                      r.status === "warn" ? "text-amber-700" : "text-red-700";
+                    return (
+                      <div key={t.id} className="px-3 py-2 text-xs">
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Icon className={`w-4 h-4 ${tone}`} />
+                            <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
+                            <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
+                          </div>
+                          {r.status === "warn" && (
+                            <label className="flex items-center gap-1 text-[10px] text-[#5A4A2E] cursor-pointer shrink-0">
+                              <input
+                                type="checkbox"
+                                checked={!!warnOverrides[t.id]}
+                                onChange={(e) =>
+                                  setWarnOverrides((p) => ({ ...p, [t.id]: e.target.checked }))
+                                }
+                                className="accent-amber-600"
+                              />
+                              <span>Send anyway</span>
+                            </label>
+                          )}
+                          {r.status === "block" && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-red-700 shrink-0">
+                              Blocked
+                            </span>
+                          )}
+                          {r.status === "ok" && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-700 shrink-0">
+                              OK to send
+                            </span>
+                          )}
+                        </div>
+                        {r.reasons.length > 0 && (
+                          <ul className={`mt-1 ml-6 list-disc text-[11px] ${tone}`}>
+                            {r.reasons.map((re, idx) => (
+                              <li key={idx}>{re.label}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Per-recipient progress */}
           {(running || Object.keys(statuses).length > 0) && (
             <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7]">
@@ -485,9 +666,13 @@ export const BulkSendDialog = ({
               Back
             </Button>
           )}
-          <Button onClick={sendAll} disabled={running || !targets.length} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
+          <Button onClick={sendAll} disabled={running || !targets.length || (reviewing && isBrokerageFlow && effectiveTargets.length === 0)} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
             <Send className="w-3 h-3 mr-1" />
-            {running ? "Sending…" : reviewing ? `Confirm & send to ${targets.length}` : `Review & send (${targets.length})`}
+            {running
+              ? "Sending…"
+              : reviewing
+                ? `Confirm & send to ${isBrokerageFlow ? effectiveTargets.length : targets.length}`
+                : `Review & send (${targets.length})`}
           </Button>
         </DialogFooter>
       </DialogContent>
