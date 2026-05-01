@@ -396,6 +396,48 @@ export const useSendBrokerageOutreach = () => {
   });
 };
 
+/* ---------- Pre-send registration check (brokerage outreach) ---------- */
+export type BrokerageCheckReasonCode =
+  | "do_not_contact"
+  | "already_partner"
+  | "previous_breakfast_invite"
+  | "previous_partnership_intro"
+  | "lead_exists"
+  | "client_exists"
+  | "registered_broker";
+
+export interface BrokerageCheckReason {
+  code: BrokerageCheckReasonCode;
+  label: string;
+  matchedTable?: string;
+  matchedId?: string;
+  matchedEmail?: string;
+}
+
+export interface BrokerageCheckResult {
+  brokerageId: string;
+  status: "ok" | "warn" | "block";
+  reasons: BrokerageCheckReason[];
+}
+
+export const useCheckBrokerageRegistration = () =>
+  useMutation({
+    mutationFn: async (vars: {
+      brokerageIds: string[];
+      variant: BrokerageVariant;
+    }): Promise<BrokerageCheckResult[]> => {
+      if (!vars.brokerageIds.length) return [];
+      const { data, error } = await supabase.functions.invoke(
+        "crm-check-brokerage-registration",
+        { body: vars },
+      );
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return (data?.results || []) as BrokerageCheckResult[];
+    },
+    onError: (e: any) => toast.error(e.message || "Pre-send check failed"),
+  });
+
 export const useSendDeveloperRegistration = () => {
   const qc = useQueryClient();
   return useMutation({
