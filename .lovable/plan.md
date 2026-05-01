@@ -1,72 +1,91 @@
-# Fix hero readability + Category card icons
+# Careers / Application Form — Full Overhaul
 
-Three fixes confirmed from the live preview screenshots and code inspection.
+Fixes the broken `/careers` route, the submit-failure that ejects users to the property page, the cramped layout, hard-to-read selects without search/flags, and the always-on Sales Qualification block. Also expands CV uploads to images.
 
-## 1. Merge label + title into a single premium hero line
+---
 
-**Where:** `src/pages/Index.tsx` (hero block, ~lines 220-245)
+## 1. Fix the broken `/careers` route
 
-- Remove the small pill that says `Dubai's Trusted Real Estate Technology Platform`.
-- Replace the H1 `Your Gateway to Dubai's Finest Real Estate` with a single combined premium line:
-  - **`Your Trusted Gateway to Dubai's Real Estate Ecosystem`**
-  - "Platform" → "Ecosystem" as requested.
-  - Slightly larger fluid type: `clamp(1.75rem, 4.8vw + 0.5rem, 4rem)`.
-  - Triple-stacked `text-shadow` (sharp + soft + ambient) so it stays crisp on any video frame.
-  - `color` and `-webkit-text-fill-color` both pinned to `#FFFFFF` to defeat any cascaded `text-fill-color` override.
+`/careers` is referenced from the homepage support card and "Meet the Team" but **no route exists** — it falls through to NotFound. We'll register `/careers` as an alias of `/join` so existing links work and the page actually opens.
 
-## 2. Make the three pillar cards (Premium Marketplace / AI-Powered Tools / Brokerage Services) fully readable
-
-**Where:** `src/pages/Index.tsx` (pillar grid, just below the H1)
-
-Issue: cards used `bg-[#1A1A1A]/75 backdrop-blur-md`. `backdrop-blur` re-samples the busy hero photo every frame and visually washes out white text + gold icons (this matches the documented anti-pattern in our knowledge base).
-
-Changes:
-- Drop `backdrop-blur-md`. Use **solid `bg-[#0A0A0A]`** (near-black) for guaranteed contrast.
-- Border upgraded from `white/40` to `gold/40`, plus an outer `shadow-[0_10px_40px_rgba(0,0,0,0.5)]` so the whole pill bar reads as one premium ribbon.
-- Icon size bumped (`w-6 h-6 sm:w-7 sm:h-7`) with `drop-shadow` so the gold glyph keeps definition even at small sizes.
-- Title text bumped to `text-[13px] sm:text-sm` with hardened white fill + heavy text-shadow.
-- Description text bumped to `text-[11px] sm:text-xs` at 92% white with the same shadow recipe.
-
-## 3. Fix invisible icons in "Tell us who you are" cards (CategorySelectorSection)
-
-**Where:** `src/components/home/CategorySelectorSection.tsx`
-
-Issue (confirmed in code at lines 100-106): the icon tile is `bg-[#F7F2EA]` (champagne) with a `text-[#1A1A1A]` icon — but the icon visually disappears at rest because the runtime `contrastGuard.ts` scans every `<button>` and forces an inverse color on the parent button, which cascades into the icon via `currentColor`. On hover it switches to `bg-[#1A1A1A] text-white`, but the user reports both states are unreadable.
-
-Changes — bring icons up to a high-contrast premium gold treatment in BOTH states:
-
-- **Icon tile (rest):** keep `bg-[#F7F2EA]` champagne tile, but switch the icon to `text-[#B89555]` (solid gold) with a `drop-shadow(0 1px 2px rgba(26,26,26,0.35))` so it pops on the champagne surface. Add `data-no-contrast-guard` on the button so the runtime guard cannot strip the colour.
-- **Icon tile (hover):** `bg-[#1A1A1A]` (ink), icon stays `text-[#B89555]` (gold) — same drop-shadow but darker — so the gold icon is always visible against either champagne or ink. No more white-on-light or black-on-black flips.
-- **Continue arrow** on the bottom of each card: also switch to `text-[#B89555]` with a soft drop-shadow so it never blends into the card surface.
-- **Bullet check icons** (`CheckCircle2`): keep gold (already correct), unchanged.
-
-Result: the three category cards have a consistent gold icon language at rest and on hover, with shadows giving them dimension so they read as premium and never disappear.
-
-## Technical details
-
+In `src/routes/PublicRoutes.tsx`, alongside the existing `/join` route, add:
 ```tsx
-// CategorySelectorSection.tsx — icon tile
-<motion.button
-  data-no-contrast-guard
-  className="group relative text-left bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-6
-             hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300
-             focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
->
-  <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40
-                  flex items-center justify-center
-                  group-hover:bg-[#1A1A1A] group-hover:border-[#B89555]
-                  transition-colors flex-shrink-0">
-    <Icon
-      className="w-6 h-6 text-[#B89555]"
-      style={{ filter: "drop-shadow(0 1px 2px rgba(26,26,26,0.35))" }}
-    />
-  </div>
-  ...
-  <ArrowRight
-    className="w-4 h-4 text-[#B89555] group-hover:translate-x-1 transition-transform flex-shrink-0"
-    style={{ filter: "drop-shadow(0 1px 2px rgba(26,26,26,0.25))" }}
-  />
-</motion.button>
+<Route path="/careers" element={<JoinApplication />} />
 ```
 
-No other files change. No content removed (per the No-Removal policy). Memory entries `Universal Same-Tone Contrast Guard` and `Champagne-Gold Design Standard` remain authoritative; this change adds a per-card opt-out that is consistent with both.
+## 2. Full-width premium layout
+
+The page is currently constrained to `max-w-2xl` (narrow column with a huge gap on the right). We'll:
+- Widen the container to `max-w-5xl` and center it.
+- Use a 2-column responsive grid for paired fields (already partially done) so the form fills the width without feeling stretched.
+- Increase form padding, restore champagne page background consistency, and make the headline section full-bleed.
+
+## 3. Reusable "premium select" treatment for Nationality, Language, Country, City
+
+The project already has battle-tested components we'll wire in instead of bare `<Select>`s:
+- `src/components/ui/nationality-select.tsx` — flags + built-in search.
+- `src/components/ui/language-multi-select.tsx` — flags + search (we'll use single-select mode for Preferred Language).
+- `src/components/ui/searchable-select.tsx` — generic searchable dropdown for Country and City.
+
+For each we'll:
+- Replace the current `<Select>` blocks for **Nationality**, **Preferred Language**, **Country**, **City**.
+- Add flag emoji + country name in each option row, larger text (`text-base`), comfortable row height (`py-2.5`), and a sticky search input pinned at the top of the dropdown.
+- Constrain dropdown width to match the trigger (no edge-to-edge sprawl) and cap height with internal scroll so long lists don't push the page.
+- Apply this same pattern wherever these selects are used across other forms (HR Agent, Onboarding, Broker join, Investor join) so the experience is consistent site-wide.
+
+## 4. Open Positions: Apply button, search, "View more", count
+
+Currently every open position card auto-renders fully expanded with no way to filter. We'll redesign the section:
+- Add a **search input** above the grid ("Search positions by title, department or location").
+- Show a **count chip** ("12 open positions") next to the section heading.
+- Initially render only the **first 6 positions**; add a **"View all positions"** button that expands the rest in place.
+- Each card gets a clear **"Apply"** button (ink-on-champagne, gold hover) that selects the position and smooth-scrolls down to the form fields. Clicking the card body still selects it for accessibility.
+- Remove the secondary "Or select a general category" fallback dropdown when DB positions exist (it currently duplicates the choice and confuses users).
+
+## 5. Role-aware qualification block (Sales vs. non-Sales)
+
+Right now the Sales Qualification section appears for a fixed list of position values. We'll refactor it so the block is chosen by the **department** (or `is_broker_role` flag) of the actually selected position:
+
+- **Sales / Brokerage** (department in `Sales`, `Brokerage`, or `is_broker_role = true`): show today's Sales Qualification block (deals closed, value, projects, developers, references).
+- **Marketing**: marketing-specific questions (campaigns managed, budget handled, tools, portfolio link).
+- **HR / Operations / Admin**: years of experience, systems used, certifications.
+- **Tech / Web Development**: years of experience, stack, GitHub/portfolio link.
+- **General / Other**: short "Tell us about yourself" + years of experience.
+
+A small mapping helper picks which block to render based on the resolved position object — no qualification fields ever leak across categories.
+
+## 6. CV upload: photos accepted + larger drop zone + clearer hints
+
+Today the file input only accepts `.pdf,.doc,.docx`. We'll:
+- Accept **PDF, Word, and images** (`.pdf,.doc,.docx,.png,.jpg,.jpeg,.heic,.webp`).
+- Bump the inline file-type validation list accordingly.
+- Increase the drop-zone padding, raise the helper-text size to `text-base`, and explicitly say: *"Upload your CV — PDF, Word, or a clear photo (JPG/PNG/HEIC). Max 10 MB."*
+- Keep the 10 MB cap but show file size after selection.
+
+## 7. Fix the broken Submit flow ("kicked out to property page")
+
+Two real bugs combine here:
+1. **Field-validation jump**: required HTML inputs inside hidden/conditional sections cause the browser to scroll to an invisible field and the form never submits. We'll only mark fields `required` when their parent block is actually rendered, and add a top-level "fix these fields" summary on submit.
+2. **Auth redirect loop**: when an unauthenticated user clicks Submit, `handleSubmit` calls `navigate("/auth?redirect=/join")`. After auth, some flows land users on the home/properties page instead of returning here. We'll:
+   - Persist the in-progress form to `sessionStorage` on submit-when-signed-out, navigate to `/auth?redirect=/careers`, and rehydrate on return.
+   - On successful insert, navigate to `/onboarding` only if the user is authenticated and the insert truly succeeded; otherwise show a toast and stay on the form so users can retry.
+   - Wrap the submit handler in a try/catch that **never** triggers a route change on failure (current code's `finally` is fine, but the unhandled rejection from `uploadCV` was bubbling and the error boundary was bouncing users away).
+
+## 8. Typography & contrast pass
+
+- Increase base form font to `text-base` (currently mixed `text-sm` / `text-xs`), labels to `text-sm font-semibold text-[#1A1A1A]`.
+- Inputs/selects: champagne surface `bg-[#FDFBF7]`, ink text `#1A1A1A`, gold focus ring — matches global Institutional Form Standard.
+- Add visible placeholder examples to every text input: First Name → "e.g. Sarah", Last Name → "e.g. Khan", City → "e.g. Dubai", Phone already has one. All placeholders use ink at 60% so they're clearly readable on champagne.
+
+## 9. Files to change
+
+- `src/routes/PublicRoutes.tsx` — add `/careers` route.
+- `src/pages/JoinApplication.tsx` — layout widening, swap selects to flag/searchable variants, position search + view-more + Apply buttons, role-aware qualification renderer, CV photo support, submit/auth fix, placeholders & typography.
+- `src/components/ui/searchable-select.tsx` — minor: ensure it accepts a `renderOption` for flag rendering on Country (re-used pattern).
+- (No DB migrations needed — all changes are client-side.)
+
+## 10. Out of scope / preserved
+
+- No removal of any existing fields, references, consent checkboxes, or honeypot.
+- HR Jessica CTA card preserved.
+- All existing translations and analytics remain intact.
