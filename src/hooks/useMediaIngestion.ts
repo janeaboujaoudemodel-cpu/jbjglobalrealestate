@@ -240,7 +240,7 @@ export function useMediaIngestion() {
         const { id, created_at, completed_at, merged_at, merged_by, ...rest } = r as any;
         return { ...rest, status: "needs_review" };
       });
-      const { error } = await supabase.from("material_ingestion_jobs").insert(inserts);
+      const { error } = await supabase.from("material_ingestion_jobs").insert(inserts as any);
       if (error) toast.error("Duplicate failed");
       else toast.success(`Duplicated ${jobIds.length} item(s)`);
       await fetchJobs();
