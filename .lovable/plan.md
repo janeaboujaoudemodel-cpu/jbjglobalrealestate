@@ -1,125 +1,60 @@
-## Targeted global contrast repair
+## Goal
 
-I’ll fix the actual broken global patterns instead of adding another broad override.
+Make the "Trending Projects in Dubai" / "Continue Searching" section on the homepage fully readable, premium, and on-brand. Fix the title contrast, restore project photos, fix the Clear button, and ensure every label/CTA in the section is legible.
 
-### 1. Fix invisible icons in label tiles globally
-**File:** `src/index.css`
+## Root causes found in `src/components/ContinueSearching.tsx`
 
-The current icon contrast guard is too broad:
+1. **Title invisible** — section uses a black backdrop (lines 183–184: `from-black via-[#0a0a0a] to-black`) while the rest of the homepage is champagne, so the white `h2` clashes with the surrounding page and feels broken/unreadable in context.
+2. **Card subtitle invisible** — line 472 sets the location/subtitle text to `text-[#1A1A1A]` (ink) on a dark image gradient, so locations like "Dubai Marina" disappear.
+3. **"Clear" button unreadable** — line 208 uses `text-muted-foreground hover:text-foreground`, which on the black backdrop renders as faded gray on black.
+4. **Empty/fallback copy low contrast** — lines 222–223 use `text-white/70` and `text-white/85`, dim and inconsistent once the surface flips to champagne.
+5. **No photos showing for trending** — the trending query (lines 133–141) selects `cover_image_url` but the card only renders the image when `isUrlValid` passes (must start with `http(s)://`). Many DB rows store storage paths or relative URLs, so `imgBroken` flips immediately and the dark fallback gradient is shown. The self-heal path also re-fetches the same broken URL.
+6. **Type badge low contrast** — line 455 "PROPERTY/AREA/DEVELOPER" pill uses gold-on-translucent-ink, fine on dark images but illegible over light photos.
 
-```css
-[class*="bg-[#B89555]"] > svg { color: #FFFFFF; }
-[class*="bg-[#1A1A1A]"] > svg { color: #FFFFFF; }
-```
+## Plan
 
-This also matches translucent tiles like `bg-[#B89555]/10` and `bg-[#1A1A1A]/75`, which makes icons white inside pale champagne/gold boxes. That is why some boxes look empty.
+### 1. Re-skin the section to premium champagne (matches site standard)
 
-I will replace those substring selectors with exact class-token selectors:
+- Replace the black radial backdrop (lines 182–185) with a subtle champagne surface: page `#FDFBF7` base, soft `#F7F2EA` raised band, hairline gold top/bottom dividers using `<AdaptiveHairline />`.
+- Title `h2` becomes solid ink `text-[#1A1A1A]` with Inter semibold, sized `text-xl md:text-2xl`. Keep the gold history disc icon to its left.
+- Add a small ink/gold eyebrow above the title ("Recently viewed" / "Editor's picks") for institutional polish.
 
-```css
-[class~="bg-[#B89555]"] > svg
-[class~="bg-[#1A1A1A]"] > svg
-```
+### 2. Header controls (Register Interest + Clear)
 
-This preserves white icons on **solid** dark/gold tiles, but stops forcing white icons on faded/tinted icon boxes. IconTile and all similar label/icon tiles will show their correct gold/red/semantic icons again.
+- "Register Your Interest" stays as a gold-bordered champagne pill but force solid ink text (`text-[#1A1A1A]`) and a stronger hover (`hover:bg-[#EFE6D6]`).
+- Replace the faded "Clear" button with a solid, readable control: ink text on a thin gold-bordered chip (`border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]`), red `X` icon for clarity. Min tap area 32px.
 
-### 2. Make vertical sidebar Contact / Support readable
-**File:** `src/components/navigation/GlobalVerticalNav.tsx`
+### 3. Cards — fix images and contrast
 
-Update the bottom Contact and Support actions so they are not plain faint text on champagne:
+- **Image resolution fix**: in `RecentCard3D`, when `isUrlValid` returns false but a non-empty `imageUrl` exists, treat it as a Supabase storage path and resolve via `supabase.storage.from(...).getPublicUrl(...)` OR upgrade the validator to accept `/`-prefixed and storage URLs. Combined with the existing `fetchCoverImage` self-heal, this restores cover photos for trending projects.
+- **Subtitle visible**: change line 472 from `text-[#1A1A1A]` to `text-white/95` with a soft text-shadow (already sitting over the dark bottom-gradient overlay at line 427), or move it onto a small frosted ink chip. Pick the chip approach for premium feel: `bg-[#1A1A1A]/55 backdrop-blur px-2 py-0.5 rounded-md text-white text-[10px]`.
+- **Title on card**: keep white but bump weight to `font-semibold` and add `drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]` so it stays readable on bright photos.
+- **Type badge**: switch to solid `bg-[#1A1A1A]/80` with `text-[#F7F2EA]` and gold-tinted icon for guaranteed contrast on any photo.
+- **Image fallback** (no photo): replace the navy gradient (line 421) with a champagne-to-gold gradient and a gold icon, so cards never look "broken/empty" while resolving.
 
-- Use visible champagne cards with `border-red-600/35` and `bg-red-600/8`.
-- Keep icons solid red (`#DC2626`) at rest.
-- Text stays solid ink (`#1A1A1A`) at rest.
-- Hover becomes solid red background with white text/icon.
-- Collapsed sidebar Contact/Support icons get the same red readable treatment.
+### 4. Empty state
 
-### 3. Remove the unwanted “54 / 054” property count from filter shortcut areas
-**Files:**
-- `src/pages/Properties.tsx`
-- `src/components/filters/FilterShortcutBar.tsx`
-- `src/components/navigation/HorizontalUtilityBar.tsx`
+- Re-skin to champagne: gold disc icon, ink primary copy (`text-[#1A1A1A]`), muted ink secondary (`text-[#1A1A1A]/70`), and gold CTA button "Explore Now" with ink text.
 
-The property filter rail currently has a live result badge:
+### 5. Marquee polish
 
-```tsx
-<Activity /> 54 Properties
-```
+- Add fade masks on the left/right edges of the WalkingStrip viewport (linear-gradient mask-image from `#F7F2EA`) so cards drift in/out elegantly instead of clipping.
+- Keep the existing pause-on-hover behavior.
 
-This is what is showing as the unwanted number in the search/filter area. I will remove it from the horizontal shortcut filter UI and keep result counts only in the proper results header/list area.
+## Files to edit
 
-Changes:
-- Stop passing `resultsCount={finalProjects.length}` into `FilterShortcutBar` from `Properties.tsx`.
-- Keep `resultsLabel` harmless or remove it where it is unused.
-- In `FilterShortcutBar`, make the live result badge opt-in only if a new prop like `showResultsCount` is explicitly true. Default false.
-- Horizontal header will not show result numbers.
-- Properties page filter rail will not show result numbers.
+- `src/components/ContinueSearching.tsx` — backdrop, header, Clear button, empty state, RecentCard3D image validator/fallback, subtitle chip, type badge, fade masks.
 
-### 4. Fix “All Emirates”, “All Areas”, select triggers, popovers at normal load
-**Files:**
-- `src/components/ui/select.tsx`
-- `src/pages/Properties.tsx`
-- `src/components/filters/FilterShortcutBar.tsx`
-- `src/components/navigation/HorizontalUtilityBar.tsx`
+## Out of scope
 
-The Radix select trigger/content and filter pills must never render white text on champagne/light backgrounds.
+- No changes to `useRecentSearches`, `LeadCaptureModal`, `DeveloperLogo`, or routing.
+- No DB migrations; image fix is purely client-side URL resolution + self-heal already in place.
 
-I will harden the base UI components:
-- `SelectTrigger`: force `text-[#1A1A1A]`, `bg-[#FDFBF7]`, `border-[#B89555]/40`, and ensure child `span` inherits ink.
-- `SelectContent` / `SelectItem`: ensure menu items are ink on champagne at rest and hover/focus.
-- `FilterShortcutBar` light variant: all inactive pills use ink text on champagne, active pills use white text only on solid ink backgrounds.
-- Any `text-white/70` used inside light filter badges will be replaced with ink or removed.
+## Acceptance checklist
 
-This fixes All Emirates, All Areas, developer, price, bedroom, status, and other filter labels across the site.
-
-### 5. Fix properties hero readability
-**Files:**
-- `src/pages/Properties.tsx`
-- `src/components/PropertiesHeroVideo.tsx`
-- `src/index.css`
-
-Properties hero needs the same dark-surface protection as the homepage hero:
-- Add/confirm `data-surface="dark"` on the properties hero wrapper.
-- Strengthen the video/photo scrim so “Properties”, “Curated Listings. Global Standard.” and subtitle are readable at normal load.
-- Lock hero text to white with strong text shadow only inside `.jj-hero-fullscreen[data-surface="dark"]`.
-- Avoid forcing dark text inside dark/video heroes.
-
-### 6. Fix listings card labels, location, developer, CTA buttons
-**Files:**
-- `src/components/ProjectCard.tsx`
-- `src/components/ui/developer-link.tsx`
-- `src/index.css`
-
-Property listing cards currently use muted/gold classes that can be too weak on champagne surfaces.
-
-I will update:
-- Location row: solid warm-brown/ink instead of muted gray; MapPin stays visible gold/brown.
-- Developer row: “by” uses ink; developer name uses solid gold or ink with underline/hover, not faded gold.
-- Starting from / Price on request: readable ink/orange/gold according to existing price token rules.
-- CTA buttons: enforce white text/icons only on solid red/ink/gold buttons; champagne buttons use ink text.
-- Listing badges: no white text on pale gold/champagne backgrounds.
-
-### 7. Global safety net for light surfaces only
-**File:** `src/index.css`
-
-Add a narrowly scoped light-surface guard for interactive labels:
-
-- On champagne/light surfaces, text in buttons, anchors, select triggers, popovers, and labels cannot be white unless the element itself has a solid dark/red/gold background.
-- Icons inside translucent tiles keep their authored color.
-- Dark/video surfaces and `[data-surface="dark"]` remain excluded.
-
-This makes the fix apply across the website without damaging heroes or dark sections.
-
-## QA checklist after implementation
-
-I will inspect real preview screenshots for:
-
-1. Vertical sidebar expanded: Contact, Support, Sign Out readable.
-2. Vertical sidebar collapsed: Contact/Support icons visible.
-3. `/properties` top hero: all hero content readable.
-4. `/properties` horizontal header filter: no “54/054” number in search/filter rail.
-5. `/properties` in-page filter rail: no unwanted number, All Emirates/All Areas readable at rest.
-6. Properties listing cards: location, developer, labels, and CTA buttons readable.
-7. Any IconTile/label icon box: no empty white icon boxes; icons render in their proper color.
-
-No features or content will be removed; only contrast, icon visibility, and the unwanted filter count display will be corrected.
+- Title "Trending Projects in Dubai" / "Continue Searching…" is fully readable on the champagne homepage.
+- Every trending card shows a real photo (or a branded champagne fallback while loading).
+- Subtitle (location), title, and type badge on each card are legible over any photo.
+- "Register Your Interest" and "Clear" are both clearly readable, with proper hover states.
+- Empty state copy and CTA are high-contrast ink/gold on champagne.
+- No white-on-light or ink-on-dark regressions; respects the champagne-gold and white-on-light contrast guards.
