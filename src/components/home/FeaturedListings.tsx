@@ -221,14 +221,32 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <hr className="border-[#B89555]/30 my-2" />
             <div className="flex-grow" />
 
-            <div className="flex items-end justify-between mt-2 min-h-[36px]">
+            {/* Price line — always rendered so every card has equal rhythm */}
+            <div className="mt-2 min-h-[22px]">
+              {typeof project.price_from === 'number' && project.price_from > 0 ? (
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-[#5A4A2E] font-medium">
+                    From
+                  </span>
+                  <span className="text-price-orange font-bold text-sm md:text-[15px] tabular-nums">
+                    {formatPrice(project.price_from)}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-[#5A4A2E] text-xs italic">
+                  Price on request
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-end justify-between mt-2 min-h-[28px]">
               {(() => {
                 const breakdown = project.payment_breakdown;
                 if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return <span />;
                 const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
                 if (percentages.length === 0) return <span />;
                 return (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/30 rounded-full px-2 py-0.5">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/30 rounded-full px-2 py-0.5">
                     <CreditCard className="w-3 h-3" />
                     {percentages.join('/')}
                   </span>
