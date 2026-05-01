@@ -444,6 +444,9 @@ const BrokeragesTab = () => {
         >
           <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
         </Button>
+        <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
+          <Mail className="w-4 h-4 mr-2" />Edit Templates
+        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
