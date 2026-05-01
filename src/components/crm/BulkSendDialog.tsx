@@ -61,6 +61,40 @@ const STATUS_PILL: Record<string, string> = {
   paused: "bg-zinc-200 text-[#1A1A1A] border-zinc-300",
 };
 
+const GROUP_STATUS_OPTIONS: Array<{ value: BrokerageGroupStatus; label: string }> = [
+  { value: "prospective", label: "Prospective Partner" },
+  { value: "existing", label: "Existing Relationship" },
+  { value: "priority", label: "Priority Partner" },
+  { value: "active", label: "Active Channel Partner" },
+  { value: "nda", label: "NDA-Signed Partner" },
+  { value: "custom", label: "Custom label…" },
+];
+
+const formatSlotLabelLocal = (iso: string) => {
+  try {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Dubai",
+    }).format(new Date(iso)) + " (GST)";
+  } catch {
+    return iso;
+  }
+};
+
+const autoDetectGroupStatus = (r: any): BrokerageGroupStatus => {
+  const stage = String(r?.outreach_stage || "").toLowerCase();
+  const tags: string[] = Array.isArray(r?.tags) ? r.tags.map((t: any) => String(t).toLowerCase()) : [];
+  if (String(r?.nda_status || "").toLowerCase() === "signed") return "nda";
+  if (stage === "active") return "active";
+  if (tags.includes("vip") || tags.includes("priority")) return "priority";
+  if (r?.is_existing_match) return "existing";
+  return "prospective";
+
 interface Recipient {
   id: string;
   // developer fields
