@@ -1,5 +1,11 @@
 project_id = "mdafrewypkkrildjgtey"
 
+[functions.breakfast-booking-lookup]
+verify_jwt = false
+
+[functions.breakfast-booking-confirm]
+verify_jwt = false
+
 [functions.create-crm-user]
 verify_jwt = false
 
