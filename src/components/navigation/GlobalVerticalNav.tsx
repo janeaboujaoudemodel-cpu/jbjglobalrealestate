@@ -1078,7 +1078,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-[#F7F2EA] border-b border-[#B89555]/40">
+      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-b border-[#B89555]/40">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
