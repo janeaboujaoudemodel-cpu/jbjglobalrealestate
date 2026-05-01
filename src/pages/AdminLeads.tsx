@@ -439,13 +439,16 @@ const AdminLeads = () => {
         (lead.phone_e164 || "").includes(searchQuery);
       const matchesStatus = statusFilter === "all" || lead.pipeline_stage === statusFilter;
       const matchesSource = sourceFilter === "all" || lead.lead_source_type === sourceFilter;
-      const matchesSourceType = sourceTypeFilter === "all" 
+      const matchesSourceType = sourceTypeFilter === "all"
         || (sourceTypeFilter === "needs_action" && needsAction(lead))
         || (sourceTypeFilter === "vip" && lead.vip)
         || getSourceCategory(lead.lead_source_type) === sourceTypeFilter;
-      return matchesSearch && matchesStatus && matchesSource && matchesSourceType;
+      const matchesCategory = categoryFilter === "all"
+        || lead.contact_type === categoryFilter
+        || (lead.tags ?? []).includes(categoryFilter);
+      return matchesSearch && matchesStatus && matchesSource && matchesSourceType && matchesCategory;
     });
-  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, getSourceCategory, needsAction]);
+  }, [leads, searchQuery, statusFilter, sourceFilter, sourceTypeFilter, categoryFilter, getSourceCategory, needsAction]);
 
   const filteredConversations = useMemo(() => {
     return conversations.filter((chat) => {
