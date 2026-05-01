@@ -231,22 +231,16 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <hr className="border-[#B89555]/30 my-2" />
             <div className="flex-grow" />
 
-            {/* Price line — always rendered so every card has equal rhythm */}
+            {/* Handover line — replaces the price line; price now lives on the photo */}
             <div className="mt-2 min-h-[22px]">
-              {typeof project.price_from === 'number' && project.price_from > 0 ? (
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-[10px] uppercase tracking-[0.14em] text-[#5A4A2E] font-medium">
-                    From
-                  </span>
-                  <span className="text-price-orange font-bold text-sm md:text-[15px] tabular-nums">
-                    {formatPrice(project.price_from)}
-                  </span>
-                </div>
-              ) : (
-                <span className="text-[#5A4A2E] text-xs italic">
-                  Price on request
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[10px] uppercase tracking-[0.14em] text-[#5A4A2E] font-medium">
+                  Handover
                 </span>
-              )}
+                <span className="text-[#1A1A1A] font-semibold text-sm md:text-[15px] tabular-nums">
+                  {project.handover_date || 'TBA'}
+                </span>
+              </div>
             </div>
 
             <div className="flex items-end justify-between mt-2 min-h-[28px]">
@@ -262,14 +256,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                   </span>
                 );
               })()}
-              {project.handover_date ? (
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/30 rounded-full px-2 py-0.5">
-                  <Calendar className="w-3 h-3" />
-                  {project.handover_date}
-                </span>
-              ) : (
-                <span className="text-transparent text-xs" aria-hidden="true">—</span>
-              )}
+              <span className="text-transparent text-xs" aria-hidden="true">—</span>
             </div>
           </div>
         </div>
