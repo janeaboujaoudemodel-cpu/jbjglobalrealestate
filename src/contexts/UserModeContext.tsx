@@ -139,6 +139,18 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
       } catch (err) {
         console.error('Error saving user mode:', err);
       }
+
+      // Auto-register the user as a categorized CRM lead.
+      // Idempotent on the server (upserts the user's self-registration lead),
+      // so calling it on every mode change keeps contact_type in sync.
+      try {
+        await supabase.functions.invoke('register-mode-lead', {
+          body: { mode: newMode },
+        });
+      } catch (err) {
+        // Non-blocking: never let CRM sync break the UI selection.
+        console.warn('[UserMode] register-mode-lead failed (non-fatal):', err);
+      }
     }
   }, [user?.id]);
 
