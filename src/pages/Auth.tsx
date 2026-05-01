@@ -221,13 +221,27 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             const params = new URLSearchParams(window.location.search);
             const returnTo = params.get('returnTo');
             const preselect = params.get('preselect');
-            const modeSelected = localStorage.getItem('jj_mode_selected');
-            if (modeSelected === 'true' && returnTo) {
+            // If the user picked a category before signing in (from "Tell us
+            // who you are"), apply it now so the modal doesn't force-open
+            // post-login and a CRM lead is auto-created.
+            let preselectedApplied = false;
+            if (isValidPreselect(preselect)) {
+              try {
+                await setPlatformMode(preselect);
+                preselectedApplied = true;
+              } catch (err) {
+                console.warn('Failed to apply preselected mode:', err);
+              }
+            }
+            const modeSelected = preselectedApplied || localStorage.getItem('jj_mode_selected') === 'true';
+            if (modeSelected && returnTo) {
               navigate(returnTo);
-            } else if (modeSelected === 'true') {
+            } else if (modeSelected) {
               navigate("/");
             } else {
-              navigate(`/welcome${preselect ? `?preselect=${preselect}` : ''}`);
+              // No preselection and no prior selection → land on home; the
+              // ModeSelectionModal will force-open until they pick a category.
+              navigate("/");
             }
           }
           break;
