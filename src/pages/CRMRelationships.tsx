@@ -33,6 +33,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
+import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -345,6 +346,7 @@ const BrokeragesTab = () => {
   return (
     <TooltipProvider>
     <div className="space-y-4">
+      <DirectoryToolsPanel />
       {/* Source sub-tabs */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
