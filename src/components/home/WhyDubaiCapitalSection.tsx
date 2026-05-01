@@ -1,159 +1,90 @@
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { T } from "@/components/ui/T";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
+import { Globe2, ShieldCheck, Sparkles, Users } from "lucide-react";
 
-const WHY_DUBAI_VIDEO_URL = "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4";
-const POSTER_URL = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
+/**
+ * Why Dubai — Capital of Global Investors
+ * Premium, compact champagne section. No video background.
+ * Four high-contrast stat cards with semantic icons.
+ */
 
 const stats = [
-  { value: "0%", label: "Income Tax" },
-  { value: "10Y", label: "Golden Visa" },
-  { value: "#1", label: "Safety Rank" },
-  { value: "200+", label: "Nationalities" },
+  { value: "0%",   label: "Income Tax",    icon: Sparkles },
+  { value: "10Y",  label: "Golden Visa",   icon: ShieldCheck },
+  { value: "#1",   label: "Safety Rank",   icon: Globe2 },
+  { value: "200+", label: "Nationalities", icon: Users },
 ];
 
 export default function WhyDubaiCapitalSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // IntersectionObserver: only load videos when section is near viewport
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Play video once visible
-  useEffect(() => {
-    if (isVisible && videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Autoplay blocked — poster stays visible
-      });
-    }
-  }, [isVisible]);
-
-  const handleLoadedData = useCallback(() => {
-    setVideoReady(true);
-  }, []);
-
   return (
-    <section ref={sectionRef} className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] overflow-hidden">
-      {/* Poster image — shown immediately */}
-      <img
-        src={POSTER_URL}
-        alt=""
+    <section className="relative bg-[#FDFBF7] py-14 md:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Subtle champagne radial accent — no imagery, no video */}
+      <div
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover"
-        loading="eager"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          opacity: videoReady ? 0 : 1,
-          transition: "opacity 0.8s ease-in-out",
+          background:
+            "radial-gradient(ellipse at 80% 0%, rgba(184,149,85,0.10) 0%, transparent 55%), radial-gradient(ellipse at 0% 100%, rgba(184,149,85,0.06) 0%, transparent 50%)",
         }}
       />
 
-      {/* Video — fades in over poster when ready */}
-      {isVisible && (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          onLoadedData={handleLoadedData}
-          style={{
-            opacity: videoReady ? 1 : 0,
-            transition: "opacity 0.8s ease-in-out",
-          }}
+      <div className="relative max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto mb-10"
         >
-          <source src={WHY_DUBAI_VIDEO_URL} type="video/mp4" />
-        </video>
-      )}
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.22em] font-semibold text-[#1A1A1A]">
+            <T>Global Investment Hub</T>
+          </span>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <h2 className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-[#1A1A1A] tracking-tight">
+            <T>Why Dubai Became the Capital of</T>{" "}
+            <span className="text-[#B89555]"><T>Global Investors</T></span>
+          </h2>
 
-      {/* Content overlay */}
-      <div className="relative z-10 h-full flex items-center">
-        <div className="px-6 md:px-12 lg:px-16 max-w-xl">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border backdrop-blur-md text-[10px] uppercase tracking-[0.2em] font-bold" style={{ borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(0,0,0,0.5)', color: '#FFFFFF' }}>
-              <T>Global Investment Hub</T>
-            </span>
+          <p className="mt-3 text-sm md:text-base text-[#3A2D1D] leading-relaxed">
+            <T>
+              Strategic location, world-class infrastructure, and long-term
+              government execution make Dubai the most investable city in the region.
+            </T>
+          </p>
+        </motion.div>
 
-            <h2
-              className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
-              style={{ 
-                color: '#FFFFFF',
-                textShadow: '0 2px 12px rgba(0,0,0,0.6)'
-              }}
-            >
-              <T>Why Dubai Became the Capital of</T>{" "}
-              <span style={{ color: '#FFFFFF' }}><T>Global Investors</T></span>
-            </h2>
+        {/* Four premium stat cards — solid champagne with gold accent */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
+          {stats.map((s, index) => {
+            const Icon = s.icon;
+            return (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.07, duration: 0.4 }}
+                className="group relative rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 p-4 md:p-5 text-center shadow-sm hover:shadow-md hover:border-[#B89555]/70 transition-all duration-300"
+              >
+                <div className="mx-auto mb-2.5 w-9 h-9 md:w-10 md:h-10 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 text-[#B89555]" />
+                </div>
+                <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-none tabular-nums">
+                  {s.value}
+                </div>
+                <div className="mt-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.14em] font-semibold text-[#5A4A2E] whitespace-nowrap">
+                  <T>{s.label}</T>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
 
-            <p className="mt-3 text-sm md:text-base max-w-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
-            </p>
-
-            <div className="mt-5 grid grid-cols-4 gap-1.5 max-w-sm">
-              {stats.map((s, index) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  className="group relative rounded-lg overflow-hidden"
-                >
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold/30 via-gold/15 to-gold/30 p-[1px]">
-                    <div className="h-full w-full rounded-lg bg-[hsl(32,28%,13%)]/70 backdrop-blur-md" />
-                  </div>
-                  <div className="relative px-2 py-2.5 text-center">
-                    <div 
-                      className="text-lg md:text-xl font-bold text-gold leading-none"
-                      style={{ textShadow: '0 0 16px rgba(200,167,102,0.4)' }}
-                    >
-                      {s.value}
-                    </div>
-                    <div className="mt-0.5 text-[8px] md:text-[9px] uppercase tracking-wider font-semibold whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                      <T>{s.label}</T>
-                    </div>
-                  </div>
-                  <div 
-                    className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                    style={{ boxShadow: '0 0 24px rgba(200,167,102,0.3)' }} 
-                  />
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-5">
-              <PremiumHeroButton href="/guides/investment" size="default">
-                <T>Explore Investments</T>
-              </PremiumHeroButton>
-            </div>
-          </motion.div>
+        <div className="mt-10 flex justify-center">
+          <PremiumHeroButton href="/guides/investment" size="default">
+            <T>Explore Investments</T>
+          </PremiumHeroButton>
         </div>
       </div>
     </section>
