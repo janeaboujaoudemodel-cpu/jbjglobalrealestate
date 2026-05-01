@@ -120,9 +120,9 @@ const BestIdeaAward = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-16 md:py-20">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
-      <div className="jj-layer-2">
+      <div className="jj-layer-2 max-w-5xl mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -133,11 +133,11 @@ const BestIdeaAward = () => {
           {/* Main Card - Champagne style inside active champagne layer */}
           <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-36 h-36 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
             
-            <CardContent className="p-8 md:p-12 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <CardContent className="p-6 sm:p-8 md:p-10 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-4">
