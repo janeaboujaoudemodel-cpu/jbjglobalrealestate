@@ -73,6 +73,7 @@ const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments")
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
 const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
 const TranslationCoverage = lazy(() => import("@/pages/admin/TranslationCoverage"));
+const MediaIngestionHub = lazy(() => import("@/pages/admin/MediaIngestionHub"));
 
 export const AdminRoutes = () => (
   <>
