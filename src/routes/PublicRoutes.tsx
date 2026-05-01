@@ -360,6 +360,8 @@ export const PublicRoutes = () => (
     <Route path="/ticket-hub" element={<AuthRequiredRoute><TicketHub /></AuthRequiredRoute>} />
     <Route path="/reopen-ticket" element={<AuthRequiredRoute><ReopenTicket /></AuthRequiredRoute>} />
     <Route path="/join" element={<JoinApplication />} />
+    <Route path="/careers" element={<JoinApplication />} />
+    <Route path="/careers/apply" element={<JoinApplication />} />
     <Route path="/onboarding" element={<AuthRequiredRoute><Onboarding /></AuthRequiredRoute>} />
     <Route path="/onboarding/module/:moduleId" element={<AuthRequiredRoute><OnboardingModule /></AuthRequiredRoute>} />
     <Route path="/verify-certificate/:token" element={<VerifyCertificate />} />
