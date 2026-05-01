@@ -76,8 +76,14 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
               localStorage.setItem(MODE_KEY, dbMode);
               setHasMadeInitialSelection(true);
               localStorage.setItem(MODE_SELECTED_KEY, 'true');
-            } else {
-              // User has a local selection — push it to DB to keep in sync
+              // Make sure a categorized CRM lead exists for this returning user
+              try {
+                await supabase.functions.invoke('register-mode-lead', { body: { mode: dbMode } });
+              } catch (e) {
+                console.warn('[UserMode] register-mode-lead (DB adopt) failed', e);
+              }
+            } else if (storedSelection === 'true') {
+              // User has an explicit local selection — push it to DB to keep in sync
               const localMode = normalizeMode(storedMode);
               if (data.selected_mode !== localMode) {
                 await supabase
@@ -89,8 +95,10 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
                   }, { onConflict: 'user_id' });
               }
             }
-          } else if (!error) {
-            // No preferences record yet, create one with current mode
+          } else if (!error && storedSelection === 'true' && storedMode) {
+            // First write to DB only when the user has EXPLICITLY chosen a mode.
+            // Never auto-create a preferences row from an anonymous default — that
+            // would silently classify users who never picked a category.
             const currentMode = normalizeMode(storedMode);
             await supabase
               .from('user_preferences')
@@ -98,6 +106,11 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
                 user_id: user.id,
                 selected_mode: currentMode
               });
+            try {
+              await supabase.functions.invoke('register-mode-lead', { body: { mode: currentMode } });
+            } catch (e) {
+              console.warn('[UserMode] register-mode-lead (first sync) failed', e);
+            }
           }
         } catch (err) {
           console.error('Error loading user mode:', err);
