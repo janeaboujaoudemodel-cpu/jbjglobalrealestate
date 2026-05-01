@@ -292,6 +292,7 @@ const BrokeragesTab = () => {
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
   const [bulkOpen, setBulkOpen] = useState(false);
+  const [tplOpen, setTplOpen] = useState(false);
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
@@ -443,6 +444,9 @@ const BrokeragesTab = () => {
         >
           <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
         </Button>
+        <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
+          <Mail className="w-4 h-4 mr-2" />Edit Templates
+        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
@@ -593,6 +597,8 @@ const BrokeragesTab = () => {
         defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
         entityType="brokerage"
       />
+
+      <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} mode="brokerage" />
 
       {dealOpen && (
         <BrokerageDealModal

@@ -440,7 +440,7 @@ export const useEmailTemplate = (variant: AnyEmailVariant) =>
 export const useUpsertEmailTemplate = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (vars: { variant: RegistrationVariant; subject: string; html: string }) => {
+    mutationFn: async (vars: { variant: AnyEmailVariant; subject: string; html: string }) => {
       const { data, error } = await supabase
         .from("crm_email_templates")
         .update({ subject: vars.subject, html: vars.html })
@@ -462,7 +462,7 @@ export const useUpsertEmailTemplate = () => {
 export const useLockEmailTemplate = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (variant: RegistrationVariant) => {
+    mutationFn: async (variant: AnyEmailVariant) => {
       const { data: { user } } = await supabase.auth.getUser();
       const { error } = await supabase
         .from("crm_email_templates")
