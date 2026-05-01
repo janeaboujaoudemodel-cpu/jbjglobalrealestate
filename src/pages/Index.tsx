@@ -227,18 +227,18 @@ const Index = () => {
               </p>
             </motion.div>
 
-            {/* Main heading — solid white for guaranteed contrast on dim video background. */}
+            {/* Main heading — solid white, hardened against any cascaded color overrides. */}
             <motion.h1
               variants={fadeInUp}
-              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto text-white"
+              className="font-bold tracking-tight leading-[1.08] text-balance w-full mx-auto"
               style={{
-                // Fluid size: 26px (≈320px viewport) → 60px (≈1280px+). Scales linearly with vw, never crops.
                 fontSize: "clamp(1.625rem, 4.6vw + 0.5rem, 3.75rem)",
                 letterSpacing: "-0.015em",
                 color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 wordSpacing: "0.01em",
                 hyphens: "auto",
-                textShadow: "0 2px 14px rgba(0,0,0,0.85), 0 1px 4px rgba(0,0,0,0.75)",
+                textShadow: "0 2px 18px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.9)",
               }}
             >
               Your Gateway to Dubai's Finest Real Estate
