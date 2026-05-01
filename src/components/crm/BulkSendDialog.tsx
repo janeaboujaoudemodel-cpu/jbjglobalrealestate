@@ -157,7 +157,45 @@ export const BulkSendDialog = ({
   }, [targets]);
 
   // Reset review state if selection or filter changes
-  useEffect(() => { setReviewing(false); }, [variant, skipRecent, selected.length]);
+  useEffect(() => {
+    setReviewing(false);
+    setChecks({});
+    setCheckRanFor("");
+    setWarnOverrides({});
+  }, [variant, skipRecent, selected.length]);
+
+  // Compute per-id check breakdown.
+  const checkBreakdown = useMemo(() => {
+    let ok = 0, warn = 0, block = 0;
+    targets.forEach((t) => {
+      const r = checks[t.id];
+      if (!r) return;
+      if (r.status === "ok") ok++;
+      else if (r.status === "warn") warn++;
+      else block++;
+    });
+    return { ok, warn, block };
+  }, [checks, targets]);
+
+  // The list of recipients we will actually send to: ok rows + warn rows the
+  // owner has explicitly overridden. Block rows are always excluded. When the
+  // check hasn't run yet (e.g. dev flow), fall back to all targets.
+  const isBrokerageFlow = entityType === "brokerage";
+  const checksReady =
+    !isBrokerageFlow ||
+    (Object.keys(checks).length > 0 &&
+      targets.every((t) => !!checks[t.id]));
+
+  const effectiveTargets = useMemo(() => {
+    if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+    return targets.filter((t) => {
+      const r = checks[t.id];
+      if (!r) return true;
+      if (r.status === "ok") return true;
+      if (r.status === "warn") return !!warnOverrides[t.id];
+      return false; // block
+    });
+  }, [targets, checks, warnOverrides, isBrokerageFlow]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
