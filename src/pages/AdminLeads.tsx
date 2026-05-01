@@ -221,9 +221,9 @@ const AdminLeads = () => {
       if (leadsResult.error) throw leadsResult.error;
       if (chatsResult.error) throw chatsResult.error;
 
-      setLeads(leadsResult.data || []);
+      setLeads((leadsResult.data || []) as Lead[]);
       setConversations(chatsResult.data || []);
-      setDeletedLeads(deletedResult.data || []);
+      setDeletedLeads((deletedResult.data || []) as Lead[]);
     } catch (error: any) {
       toast.error(error.message || "Failed to fetch data");
     } finally {
