@@ -207,15 +207,7 @@ function IngestionTabs(props: IngestionTabsProps) {
     skip, remove, duplicate, reassign, exportCsv,
   } = props;
   return (
-        <header>
-          <h1 className="text-3xl font-bold text-foreground">Media Ingestion Hub</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Drop videos, PDFs, brochures and links in bulk. AI matches each one to the right
-            developer & project. Review, then merge into your published listings.
-          </p>
-        </header>
-
-        <Tabs value={tab} onValueChange={setTab}>
+    <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-[#EFE6D6] border border-gold/30">
             <TabsTrigger
               value="drop"
@@ -327,7 +319,5 @@ function IngestionTabs(props: IngestionTabsProps) {
             <MergeHistory />
           </TabsContent>
         </Tabs>
-      </div>
-    </div>
   );
 }
