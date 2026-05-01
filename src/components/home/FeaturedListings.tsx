@@ -60,17 +60,24 @@ function useFeaturedProjects() {
       const usedIds = new Set<string>();
       const usedDevs = new Set<string>();
 
+      const hasPrice = (p: FeaturedProject) =>
+        typeof p.price_from === 'number' && p.price_from > 0;
+
       const addOne = (devName: string, nameFilter?: string): boolean => {
         const devProjects = byDev[devName] || [];
+        // Strong preference: a project that has a real price.
+        const priced = devProjects.filter(hasPrice);
+        const pool = priced.length > 0 ? priced : devProjects;
+
         let candidate: FeaturedProject | undefined;
         if (nameFilter) {
-          candidate = devProjects.find(p => p.name.toLowerCase().includes(nameFilter) && !usedIds.has(p.id));
+          candidate = pool.find(p => p.name.toLowerCase().includes(nameFilter) && !usedIds.has(p.id));
         }
         if (!candidate) {
-          candidate = devProjects.find(p => !usedIds.has(p.id) && !p.name.toLowerCase().includes('mirage'));
+          candidate = pool.find(p => !usedIds.has(p.id) && !p.name.toLowerCase().includes('mirage'));
         }
         if (!candidate) {
-          candidate = devProjects.find(p => !usedIds.has(p.id));
+          candidate = pool.find(p => !usedIds.has(p.id));
         }
         if (candidate) {
           result.push(candidate);
@@ -90,8 +97,15 @@ function useFeaturedProjects() {
       addOne('ALDAR');
       addOne('Omniyat');
 
+      // Fill remaining slots, still enforcing one card per developer and
+      // preferring projects with a real price so the grid feels uniform.
       if (result.length < 8) {
-        for (const p of all) {
+        const sortedByPrice = [...all].sort((a, b) => {
+          const ap = hasPrice(a) ? 0 : 1;
+          const bp = hasPrice(b) ? 0 : 1;
+          return ap - bp;
+        });
+        for (const p of sortedByPrice) {
           if (result.length >= 8) break;
           if (usedIds.has(p.id)) continue;
           const dev = p.developer_name || 'Unknown';
@@ -102,13 +116,16 @@ function useFeaturedProjects() {
         }
       }
 
+      // Last-resort fill — STILL enforces unique developers (no repeats).
       if (result.length < 8) {
         for (const p of all) {
           if (result.length >= 8) break;
-          if (!usedIds.has(p.id)) {
-            result.push(p);
-            usedIds.add(p.id);
-          }
+          if (usedIds.has(p.id)) continue;
+          const dev = p.developer_name || 'Unknown';
+          if (usedDevs.has(dev)) continue;
+          result.push(p);
+          usedIds.add(p.id);
+          usedDevs.add(dev);
         }
       }
 
