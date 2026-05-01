@@ -109,7 +109,7 @@ const AreasWeCover = () => {
         </div>
 
         {/* View All Areas CTA */}
-        <div className="text-center mt-10 mb-14">
+        <div className="text-center mt-12 md:mt-14">
           <Link
             to="/areas"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white border border-[#1A1A1A] rounded-xl font-semibold text-sm hover:bg-[#1A1A1A] hover:-translate-y-0.5 transition-all duration-300 group"
@@ -118,6 +118,7 @@ const AreasWeCover = () => {
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
+
       </div>
     </section>
   );
