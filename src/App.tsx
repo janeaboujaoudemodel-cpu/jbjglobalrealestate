@@ -76,7 +76,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <DevStyleToggle />
+            
             <AuthProvider>
             <BrandPaletteProvider>
               <UserModeProvider>
