@@ -1,99 +1,48 @@
+# Fix CRM page padding and contrast
 
-# Relationship Hub: Full UAE Directory + Prefilled Contacts
+## Problems observed
+1. Large empty band above the "Founder & CEO — Jane Bou Jaoude" title.
+   - Root cause: the page wrapper has `pt-20 lg:pt-24` (88–96px) to clear the global fixed header, AND the sticky CRM sub-header adds another `py-3` plus a 2px gold border. Stacked, this looks like a dead gap.
+2. The page background uses a dark champagne gradient `from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]` (lines 531, 547, 618). On the rest of the champagne-light UI, this reads as a gray/silver/dark band, especially behind translucent cards, hurting contrast of body text.
+3. A few child cards rely on the dark page behind them for contrast; once the page becomes champagne, those need to switch to ink-on-champagne so text stays legible.
 
-## What's broken today
+## Changes
 
-After investigating the database directly:
+### 1. Remove the gap above "Founder & CEO"
+In `src/pages/CRM.tsx` line 618:
+- Drop the extra page top padding (`pt-20 lg:pt-24`). The sticky header already pins itself to `top-20 lg:top-24`, so the page itself does not need to reserve that space — content flows under the global header naturally and the sub-header sits flush below it.
+- Tighten the sub-header inner padding from `py-3` to `py-2` on line 639 so the role line ("Founder & CEO — …") starts immediately under the global header instead of floating in a thick band.
 
-- `crm_brokerages` has **73 rows total** — but they're all owned by a single owner (`72ca2405-…`). The two other owners (you included) see **0** because RLS scopes rows by `owner_id`. That's why the Brokerage tab shows "All · 0".
-- Of those 73 brokerages, only **47** have phone/email/website/office address filled. The rest are name-only stubs.
-- `crm_developer_registry` has 774 rows for the same single owner. Phone fill rate is **32%**, email **34%**, website **59%**, office address barely tracked at all.
-- There is no real "UAE-wide directory" today — what exists is one owner's partially-enriched personal list.
-
-You want: **every brokerage in the UAE** and **every developer in the UAE**, prefilled with office location, email, phone, website — visible to all owners, not just one.
-
-## Plan
-
-### 1. Make the directory shared, not per-owner
-
-Today every owner sees a private list. The fix is to treat brokerages and the developer registry as a **shared UAE directory** that every owner sees, with each owner still able to add private notes / status / outreach.
-
-- Add a new `is_directory` flag (boolean) on `crm_brokerages` and `crm_developer_registry`.
-- Mark the 73 + 774 existing directory rows as `is_directory = true` and detach them from a single `owner_id` (set to `NULL` for directory rows).
-- Update RLS:
-  - Directory rows: readable by **all authenticated owners**.
-  - Owner-private fields (status, notes, AI summary, outreach state) move to a sibling `crm_brokerage_state` / `crm_developer_state` table keyed by `(owner_id, brokerage_id)` so each owner's pipeline stays private.
-- The list query joins the shared directory + the current owner's private state.
-
-Effect: every owner instantly sees the full directory and counts go from 0 → real numbers.
-
-### 2. Bulk-load every brokerage in the UAE
-
-Right now there are 73 brokerages. We'll grow this to the full RERA-licensed brokerage population across all 7 emirates by combining three sources:
-
-- **DLD / RERA Dubai broker registry** — public, has license, office, phone, email, website (~3,000+ Dubai firms).
-- **Abu Dhabi DMT brokerage list**.
-- **Sharjah, Ajman, RAK, Fujairah, UAQ municipality real-estate broker lists** (smaller but completable).
-
-Approach:
-
-- New edge function `seed-uae-brokerage-directory` runs server-side with the service role.
-- It fetches each emirate's source via Firecrawl (already wired in this project), normalizes the schema, and upserts into `crm_brokerages` with `is_directory = true`.
-- Idempotent: re-running updates the row if RERA license matches, never duplicates.
-- Captures into the existing columns: `company_name`, `rera_license`, `office_address`, `office_location`, `office_map_url`, `phone`, `email`, `website`, `linkedin_url`, `emirate`, `logo_url`. `field_sources` jsonb tracks where each field came from.
-- For rows that come back missing a field, the existing `enrich-developer-data`-style flow (Perplexity + Firecrawl) fills the gaps.
-
-A new **"Sync UAE Directory"** button on the Brokerages tab (admin-only) triggers the function and shows live progress (scanned / inserted / enriched / failed).
-
-### 3. Bulk-load every developer in the UAE
-
-The `developers` master catalog already has **631** rows but they're not propagated into the registry for new owners, and contact fields are sparse.
-
-- The existing **"Import all developers"** action already pulls from `developers` → `crm_developer_registry`. After step 1's RLS change it'll act on the shared directory once instead of per-owner.
-- Add a companion **"Enrich missing contacts"** bulk action that, for any directory developer where phone/email/website/HQ is empty, runs the existing `enrich-developer-registry` edge function in batches (rate-limited, resumable).
-- Same `field_sources` jsonb so each filled field shows where it came from (master catalog, AI web research, website scrape, AI inferred, manual). This is already wired in the UI.
-
-### 4. UI tightening on the Relationship Hub
-
-- Remove the "Sync UAE Directory" / "Import all developers" buttons from the per-owner toolbar and put them under an **"Admin · Directory tools"** section (visible only to `admin` / `is_jbj_owner`).
-- Replace the misleading **"All · 0"** counter behavior: when the directory hasn't been loaded yet for the signed-in owner, show a "Directory loading…" skeleton instead of a zero count.
-- Add the missing **office address column** to the brokerage table view (today `office_address` is in the DB but only shown inside the edit dialog).
-- Add **emirate-grouped counts** at the top: "Dubai 1,842 · Abu Dhabi 410 · Sharjah …" so the UAE-wide coverage is visible at a glance.
-
-### 5. Permissions & costs
-
-- The Firecrawl + Perplexity calls run server-side; both keys are already configured.
-- Bulk enrichment is rate-limited (50 rows / batch, 1 s spacing) and chunked so a full UAE sweep doesn't blow credits.
-- Admins can pause / resume the run from the UI.
-
-## Technical details
-
-```text
-crm_brokerages              <- shared directory rows (is_directory=true, owner_id=NULL)
-                                + per-owner additions (is_directory=false, owner_id=uid)
-crm_brokerage_state         <- NEW: (owner_id, brokerage_id) -> status, notes, outreach, reminders, AI fields
-crm_developer_registry      <- shared directory rows + per-owner adds (same pattern)
-crm_developer_state         <- NEW: (owner_id, developer_id) -> per-owner pipeline state
-
-Edge functions:
-  seed-uae-brokerage-directory   NEW   pulls RERA / DMT / municipality lists via Firecrawl
-  enrich-brokerage-directory     NEW   fills missing phone/email/web/office on directory rows
-  enrich-developer-registry      EXISTING (reused for the developer side)
-
-Migrations:
-  1. add is_directory boolean default false to crm_brokerages, crm_developer_registry
-  2. backfill existing 73 brokerages + 774 dev rows as directory (owner_id -> NULL)
-  3. create crm_brokerage_state, crm_developer_state with RLS (owner can only see own state)
-  4. update brokerage / registry RLS: SELECT allowed if is_directory OR owner_id = auth.uid()
-                                      INSERT/UPDATE/DELETE only on own rows; directory rows admin-only
-  5. helper view crm_brokerage_with_state and crm_developer_with_state that left-join state for the current owner
+### 2. Replace dark gradient with champagne page surface
+Replace the three dark gradients (lines 531, 547, 618) with the standard champagne page treatment used elsewhere in the app:
 ```
+bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]
+```
+This matches the header and the design-system Core rule (Page #FDFBF7, surface #F7F2EA, raised #EFE6D6).
 
-The two list hooks (`useBrokerages`, `useDeveloperRegistry`) switch to read from the joined views so the UI keeps the same shape — no large refactor in `CRMRelationships.tsx`.
+### 3. Re-audit child surfaces for contrast on champagne
+After flipping the page to champagne, sweep the CRM children that previously sat on dark and fix any that now look washed out. Specifically check and, where needed, switch to ink-on-champagne (`text-[#1A1A1A]`, gold accents, `--price-orange` for money):
+- `CRMEnhancedDashboard` — KPI tiles (Pipeline / Forecast / Conversion / Won, Pipeline by Stage, Calls Today, WhatsApp Messages, Total Leads, Conversion Rate, Weekly Activity, Pipeline Distribution).
+- `DealValueTracker`.
+- The AI Insights / Smart Reminders / Smart Automations row (already champagne — verify).
+- `CRMCommunicationPanel` (Team Communication / Channels / Meetings / Files panel) — the channel list and message bubbles must use ink text on champagne, not white-on-light.
+- Loading and unauthorized states at lines 531 and 547 — text colors stay readable on the new light background (switch any white text to `text-[#1A1A1A]` and any `text-white/70` style helpers to `text-[#1A1A1A]/70`).
 
-## What you'll see after this ships
+For each, the rule applied is the project's Core memory: champagne surfaces, ink #1A1A1A text, gold #B89555 accents, `--price-orange` for prices, no raw grays, no faded gold text, no white-on-light.
 
-- Brokerage tab: every UAE brokerage we can find (target ≥ 3,500 across emirates), with office, phone, email, website prefilled where the source provides them; the rest filled in by AI enrichment with a source pill on each value.
-- Developer Registry tab: full UAE developer set (631+ today, growing as the master catalog grows), prefilled the same way.
-- The "0" count disappears for every owner — directory is shared.
-- Your private pipeline (statuses, notes, outreach) stays private to you.
+### 4. Guardrails
+- Strict "No Removal": no features, tabs, cards, or copy are removed — only background, padding, and text colors change.
+- IconTile usage and existing gold/emerald/red/blue/amber semantic tones are preserved.
+- No changes to data, RLS, hooks, or the Relationship Hub work from earlier.
+
+## Files touched
+- `src/pages/CRM.tsx` — page wrapper background (3 spots), top padding, sub-header `py-3` → `py-2`.
+- `src/components/crm/CRMEnhancedDashboard.tsx` — verify/repair contrast on champagne.
+- `src/components/crm/DealValueTracker.tsx` — verify/repair contrast on champagne.
+- `src/components/crm/CRMCommunicationPanel.tsx` — verify/repair contrast on champagne.
+
+## Verification
+- Visual check at the CRM route: no empty band above "Founder & CEO"; the sub-header sits flush under the global header.
+- No dark gray/silver band visible behind the dashboard.
+- All KPI numbers, labels, channel names, and message text are clearly legible (ink on champagne, gold accents, orange for prices).
+- No regression in Relationships, Automations, Tasks, Calendar, Team, or Media Ingestion entry points.
