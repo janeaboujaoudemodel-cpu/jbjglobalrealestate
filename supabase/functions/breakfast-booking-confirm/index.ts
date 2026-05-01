@@ -1,0 +1,177 @@
+/**
+ * breakfast-booking-confirm (PUBLIC)
+ *
+ * Confirms a breakfast booking using a one-time invite token.
+ *  - Validates token + selected slot capacity
+ *  - Updates the placeholder meeting_requests row with attendee details
+ *  - Advances the linked brokerage to outreach_stage = 'meeting_booked'
+ *  - Logs an inbound entry on the relationship timeline
+ */
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
+
+interface Body {
+  token: string;
+  slotId: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  attendeeCount: number;
+  briefingTopics?: string;
+  partnershipFocus?: string;
+  notes?: string;
+  consent: boolean;
+}
+
+serve(async (req: Request) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  try {
+    const body = await req.json() as Body;
+    const required: (keyof Body)[] = ["token", "slotId", "fullName", "email", "attendeeCount", "consent"];
+    for (const k of required) {
+      if (body[k] === undefined || body[k] === null || body[k] === "") {
+        return new Response(JSON.stringify({ error: `Missing field: ${k}` }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+    if (!body.consent) {
+      return new Response(JSON.stringify({ error: "Consent required" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(body.email)) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (body.token.startsWith("test_")) {
+      return new Response(JSON.stringify({
+        ok: true, preview: true,
+        message: "Preview mode — booking not recorded.",
+      }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const service = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // Look up the invite
+    const { data: invite, error: invErr } = await service
+      .from("meeting_requests")
+      .select("id, brokerage_id, brokerage_name, status, user_id")
+      .eq("invite_token", body.token)
+      .maybeSingle();
+    if (invErr) throw invErr;
+    if (!invite) {
+      return new Response(JSON.stringify({ error: "Invitation not found" }), {
+        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (invite.status === "cancelled") {
+      return new Response(JSON.stringify({ error: "Invitation has been cancelled" }), {
+        status: 410, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Validate slot
+    const { data: slot, error: slotErr } = await service
+      .from("breakfast_slots")
+      .select("id, slot_at, capacity, is_active")
+      .eq("id", body.slotId)
+      .maybeSingle();
+    if (slotErr) throw slotErr;
+    if (!slot || !slot.is_active || new Date(slot.slot_at) <= new Date()) {
+      return new Response(JSON.stringify({ error: "This slot is no longer available." }), {
+        status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Capacity check — count confirmed bookings on this slot
+    const slotDate = new Date(slot.slot_at);
+    const dateStr = slotDate.toISOString().slice(0, 10);
+    const timeStr = slotDate.toISOString().slice(11, 16);
+    const { count: usedCount } = await service
+      .from("meeting_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("booking_kind", "brokerage_breakfast")
+      .eq("preferred_date", dateStr)
+      .eq("preferred_time", timeStr)
+      .in("status", ["pending", "completed"])
+      .neq("id", invite.id);
+
+    if ((usedCount || 0) >= slot.capacity) {
+      return new Response(JSON.stringify({ error: "This slot just filled up. Please pick another time." }), {
+        status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Update the invite row
+    const { error: updErr } = await service
+      .from("meeting_requests")
+      .update({
+        requester_name: body.fullName,
+        requester_email: body.email,
+        requester_phone: body.phone || null,
+        preferred_date: dateStr,
+        preferred_time: timeStr,
+        attendee_count: body.attendeeCount,
+        briefing_topics: body.briefingTopics || null,
+        partnership_focus: body.partnershipFocus || null,
+        notes: body.notes || null,
+        status: "pending",
+      })
+      .eq("id", invite.id);
+    if (updErr) throw updErr;
+
+    // Advance brokerage stage
+    if (invite.brokerage_id) {
+      await service
+        .from("crm_brokerages")
+        .update({
+          outreach_stage: "meeting_booked",
+          last_reply_at: new Date().toISOString(),
+        })
+        .eq("id", invite.brokerage_id);
+
+      // Audit on relationship timeline
+      if (invite.user_id) {
+        await service.from("crm_relationship_email_log").insert({
+          owner_id: invite.user_id,
+          entity_type: "brokerage",
+          entity_id: invite.brokerage_id,
+          direction: "inbound",
+          sent_via: "booking_page",
+          from_email: body.email,
+          to_emails: [],
+          subject: `Breakfast slot confirmed — ${invite.brokerage_name}`,
+          body_snippet: `Confirmed ${dateStr} ${timeStr} — ${body.attendeeCount} attendee(s)`,
+          sent_at: new Date().toISOString(),
+        });
+      }
+    }
+
+    return new Response(JSON.stringify({
+      ok: true,
+      slotAt: slot.slot_at,
+      brokerageName: invite.brokerage_name,
+    }), {
+      status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (e: any) {
+    console.error("breakfast-booking-confirm error:", e);
+    return new Response(JSON.stringify({ error: e?.message || "Internal error" }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
