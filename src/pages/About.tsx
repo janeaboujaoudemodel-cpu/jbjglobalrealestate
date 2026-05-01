@@ -188,7 +188,7 @@ const About = () => {
                   <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Explore Our Services</span>
                   <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
               </Link>
               <Link 
@@ -202,7 +202,7 @@ const About = () => {
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Contact Our Team</span>
                 <ArrowUpRight className="w-4 h-4 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </Link>
             </motion.div>
           </motion.div>

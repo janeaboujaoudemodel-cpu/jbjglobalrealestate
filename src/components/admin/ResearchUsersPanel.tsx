@@ -236,7 +236,7 @@ export default function ResearchUsersPanel() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#F7F2EA]">
+                <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#F7F2EA] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                   <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Email</TableHead>
                   <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Name</TableHead>
                   <TableHead className="text-[#1A1A1A] font-semibold whitespace-nowrap">Subscribed</TableHead>

@@ -212,7 +212,7 @@ const AdminRoleManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button

@@ -337,7 +337,7 @@ const BuyerGuide = () => {
             >
               <ArrowDown className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
               <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
             </button>
             <Link to="/properties?transaction=buy">
               <button 
@@ -349,7 +349,7 @@ const BuyerGuide = () => {
               >
                 <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Browse Properties</span>
                 <ArrowRight className="w-4 h-4 text-gold group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </Link>
           </>

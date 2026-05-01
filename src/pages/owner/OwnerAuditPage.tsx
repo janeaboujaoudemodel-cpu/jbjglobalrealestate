@@ -176,7 +176,7 @@ const OwnerAuditPage = () => {
     <OwnerGuard>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Header */}
-        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">

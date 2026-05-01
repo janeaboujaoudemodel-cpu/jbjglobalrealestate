@@ -81,7 +81,7 @@ export const FAQHero = ({
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div 
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             variants={fadeInUp}
           >
             <BadgeIcon className="w-4 h-4 text-[#1A1A1A]" />

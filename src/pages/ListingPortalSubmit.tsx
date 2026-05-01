@@ -584,7 +584,7 @@ const ListingPortalSubmit = () => {
               <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-gold hover:bg-gold/90 text-[#1A1A1A] border-0">
                 View My Listings
               </Button>
-              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold">
+              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 Back to Portal
               </Button>
             </div>
@@ -816,7 +816,7 @@ const ListingPortalSubmit = () => {
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>
@@ -947,7 +947,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('upload')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
@@ -1236,7 +1236,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
@@ -1383,7 +1383,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('review')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-[#1A1A1A] hover:border-gold h-12 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>

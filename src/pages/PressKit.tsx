@@ -260,7 +260,7 @@ const PressKit = () => {
                   Jane Bou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
               </div>
-              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 <p className="text-[#5A4A2E] text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>

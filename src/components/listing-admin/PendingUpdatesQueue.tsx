@@ -309,7 +309,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
               size="sm"
               onClick={handleApproveAll}
               disabled={batchProcessing}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/40 hover:border-gold/60"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] border border-gold/40 hover:border-gold/60 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <Check className="h-4 w-4 mr-1" />
               Approve All ({newProjects.length})

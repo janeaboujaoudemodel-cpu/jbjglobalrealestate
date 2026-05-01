@@ -218,7 +218,7 @@ const MarketingHub: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-[#1A1A1A] hover:bg-gold/10">
@@ -520,7 +520,7 @@ const MarketingHub: React.FC = () => {
       </div>
 
       {/* Horizontal Quick Actions Bar (replaces right sidebar) */}
-      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
+      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Button

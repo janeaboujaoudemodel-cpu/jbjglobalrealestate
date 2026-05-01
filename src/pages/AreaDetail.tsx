@@ -217,7 +217,7 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-gold/20">
+      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-gold/20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center gap-3">
             {filterBarContent}

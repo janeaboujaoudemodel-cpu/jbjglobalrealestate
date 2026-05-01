@@ -265,7 +265,7 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555]"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -363,7 +363,7 @@ Best regards`);
                   </div>
                   
                   <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold">
+                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                       View Property
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -514,7 +514,7 @@ Best regards`);
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555]">
+              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
                 Browse All Properties
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>

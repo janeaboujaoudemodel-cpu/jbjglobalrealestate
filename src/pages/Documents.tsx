@@ -440,7 +440,7 @@ const Documents = () => {
     <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Header */}
-        <div className="border-b-2 border-[hsl(var(--gold)/0.3)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <div className="border-b-2 border-[hsl(var(--gold)/0.3)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
           <div className="max-w-[1600px] mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
