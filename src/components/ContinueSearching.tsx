@@ -439,62 +439,33 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             style={{ backgroundImage: `url(${item.imageUrl})` }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex items-center justify-center">
-            <Icon className="w-12 h-12 text-[#8A7556]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#B89555]/40 flex items-center justify-center">
+            <Icon className="w-12 h-12 text-[#B89555]" />
           </div>
         )}
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
-
-        {/* Elevated glass reflection effect */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
-          style={{
-            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(200,167,102,0.05) 100%)",
-            transform: "translateZ(20px)",
-          }}
-        />
-
-        {/* Top-left: Developer logo or type badge */}
-        <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
-          {showDevLogo ? (
-            <DeveloperLogo
-              src={item.developerLogo}
-              alt={item.subtitle || "Developer"}
-              className=""
-              onError={() => setLogoError(true)}
-            />
-          ) : showDevCardLogo ? (
-            <DeveloperLogo
-              src={item.developerLogo}
-              alt={item.name}
-              className=""
-              onError={() => setLogoError(true)}
-            />
+        {/* Gradient overlay — stronger at bottom for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/10" />
+...
           ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
-              <Icon className="w-2.5 h-2.5" />
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/85 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-[#F7F2EA] border border-[#B89555]/40">
+              <Icon className="w-2.5 h-2.5 text-[#B89555]" />
               {item.type}
             </span>
           )}
         </div>
-
-        {/* Favorite button */}
-        {item.type === "property" && (
-          <div className="absolute top-2 right-2 z-20" style={{ transform: "translateZ(30px)" }}>
-            <FavoriteButton projectId={item.id} showShortlist={false} size="sm" />
-          </div>
-        )}
-
+...
         {/* Bottom content - elevated */}
         <div className="absolute bottom-0 left-0 right-0 p-3 z-20" style={{ transform: "translateZ(25px)" }}>
           {item.subtitle && (
-            <span className="inline-block mb-1 text-[10px] text-[#1A1A1A] font-medium truncate w-full">
+            <span className="inline-flex max-w-full mb-1.5 px-2 py-0.5 rounded-md bg-[#1A1A1A]/60 backdrop-blur-sm text-[10px] text-white font-medium truncate">
               {item.subtitle}
             </span>
           )}
-          <h3 className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-gold transition-colors duration-300">
+          <h3
+            className="text-white font-semibold text-xs md:text-sm leading-tight truncate group-hover:text-[#E5C97A] transition-colors duration-300"
+            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.7)" }}
+          >
             {typeof item.name === 'string' ? item.name : String(item.name || '')}
           </h3>
         </div>
