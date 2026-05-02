@@ -39,7 +39,7 @@ const OwnerDashboardShell = () => {
     <>
       {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
       <div
-        className="border-b border-[#B89555]/40 flex items-center justify-between px-4 flex-shrink-0 bg-[#F7F2EA]"
+        className="border-b border-[#B89555]/40 flex items-center justify-between px-4 flex-shrink-0 bg-[#FDFBF7]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
         {!collapsed && (
@@ -102,7 +102,7 @@ const OwnerDashboardShell = () => {
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" data-surface="champagne" className="w-64 p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
+          <SheetContent side="left" data-surface="champagne" className="w-64 p-0 bg-[#FDFBF7] border-r border-[#B89555]/40">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -115,7 +115,7 @@ const OwnerDashboardShell = () => {
         <aside 
           data-surface="champagne"
           className={cn(
-            "fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
+            "fixed left-0 top-0 h-full bg-[#FDFBF7] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
             sidebarCollapsed ? "w-16" : "w-64"
           )}
           role="navigation"

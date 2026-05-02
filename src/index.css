@@ -4353,3 +4353,15 @@ a[class*="bg-red-"]:hover {
 [data-surface="champagne"] [class*="grid-cols-"] .truncate {
   min-width: 0;
 }
+
+/* 9. Owner sidebar nav — LOCKED active/hover system.
+ *    Active = gold gradient + ink text. Hover = soft gold wash + ink text.
+ *    Never allow text bleach to white or black-on-black active state. */
+[data-surface="champagne"] nav button[data-no-contrast-guard],
+[data-surface="champagne"] nav button[data-no-contrast-guard] * {
+  color: #1A1A1A !important;
+}
+[data-surface="champagne"] nav button[data-no-contrast-guard]:hover,
+[data-surface="champagne"] nav button[data-no-contrast-guard]:hover * {
+  color: #1A1A1A !important;
+}
