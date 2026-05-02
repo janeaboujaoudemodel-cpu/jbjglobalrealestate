@@ -249,7 +249,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4"
+        className="fixed inset-0 z-[10050] flex items-start md:items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4 pt-24 md:pt-[104px]"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
