@@ -273,15 +273,25 @@ export const useUpsertDeveloperRegistry = () => {
  * via master catalog → Perplexity → Firecrawl → AI inference, and records the source
  * for each filled field in `field_sources`.
  */
+// Wrap an edge-function invoke with a hard client-side timeout so spinners
+// never run forever when the function hangs / network stalls.
+async function invokeWithTimeout<T = any>(name: string, body: any, ms = 90_000): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`${name} timed out after ${Math.round(ms / 1000)}s — try a smaller batch or retry.`)), ms),
+  );
+  const call = supabase.functions.invoke(name, { body }).then(({ data, error }) => {
+    if (error) throw error;
+    if ((data as any)?.error) throw new Error((data as any).error);
+    return data as T;
+  });
+  return await Promise.race([call, timeout]);
+}
+
 export const useEnrichDeveloperRegistry = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { ids?: string[]; useWeb?: boolean; batchSize?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("enrich-developer-registry", {
-        body: input,
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      const data = await invokeWithTimeout<any>("enrich-developer-registry", input);
       return data as { processed: number; results: Array<{ id: string; name: string; filled?: string[]; error?: string }>; message?: string };
     },
     onSuccess: (data) => {
@@ -306,9 +316,7 @@ export const useSeedUaeBrokerageDirectory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { emirates?: string[]; target_per_emirate?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("seed-uae-brokerage-directory", { body: input });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      const data = await invokeWithTimeout<any>("seed-uae-brokerage-directory", input, 120_000);
       return data as { ok: true; summary: Record<string, { fetched: number; inserted: number; updated: number; skipped: number }> };
     },
     onSuccess: (data) => {
@@ -330,9 +338,7 @@ export const useEnrichUaeBrokerageDirectory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { ids?: string[]; reverify?: boolean; batchSize?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("enrich-uae-brokerage-directory", { body: input });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      const data = await invokeWithTimeout<any>("enrich-uae-brokerage-directory", input, 120_000);
       return data as { processed: number; timedOut?: boolean; results: Array<{ id: string; name: string; filled: string[] }> };
     },
     onSuccess: (data) => {
