@@ -25,9 +25,9 @@ const BRAND_SECONDARY =
 const BRAND_TERTIARY =
   "bg-[#F7F2EA] text-[#1A1A1A]/75 border-2 border-[#B89555]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]/40";
 
-// GOLD: solid gold tile CTA — for in-dashboard primary actions
+// GOLD: cream champagne tile with thin gold border (debranded fill)
 const BRAND_GOLD =
-  "bg-[#B89555] text-white border-2 border-[#B89555] hover:bg-[#A68444] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] hover:bg-[#F7F2EA] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 font-semibold";
 
 // HERO: transparent with white border on dark images (dark hero overlays)
 const BRAND_HERO =
