@@ -70,7 +70,7 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
   if (!loaded || dismissed || totalAlerts === 0) return null;
 
   return (
-    <div ref={ref} className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm p-4">
+    <div ref={ref} className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm p-4 pt-24 md:pt-[104px]">
       <div
         data-no-contrast-guard
         data-surface="light"
