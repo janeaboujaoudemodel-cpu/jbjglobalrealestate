@@ -186,9 +186,9 @@ const AIToolPremiumLayout = ({
   const gradientWord = gradientWordIndex >= 0 ? titleWords.slice(gradientWordIndex).join(" ") : titleWords.slice(1).join(" ");
 
   return (
-    <div className="min-h-screen" style={{ background: "#0D0C08" }}>
-      {/* Hero Section - Colored Gradient Theme */}
-      <section className={`pt-32 pb-16 bg-gradient-to-b ${gradient}`}>
+    <div data-surface="page" className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
+      {/* Hero Section — champagne tone with subtle gold accent */}
+      <section className="pt-32 pb-16 bg-gradient-to-b from-[#F7F2EA] via-[#FDFBF7] to-[#FDFBF7] border-b border-[#B89555]/30">
         <div className="container mx-auto px-4">
           {/* Back Button - Always left-aligned */}
           <motion.div
@@ -209,7 +209,7 @@ const AIToolPremiumLayout = ({
                 }
               }}
               data-no-contrast-guard
-              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] hover:text-[#FDFBF7] border-2 border-[#FDFBF7]/30 hover:border-[#FDFBF7]/60"
+              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#A68444] text-white border-2 border-[#1A1A1A] hover:border-[#A68444]"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
@@ -228,47 +228,47 @@ const AIToolPremiumLayout = ({
               <span className={`${colors.text} text-xs font-semibold uppercase tracking-wider`}>{badge}</span>
             </div>
             
-            {/* Title with gradient colored word */}
-            <h1 
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+            {/* Title with gold accent on the second word */}
+            <h1
+              className="text-[#1A1A1A] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
               style={{ fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif", letterSpacing: "-0.02em" }}
             >
               {beforeGradient}{" "}
-              <span className={`text-transparent bg-clip-text bg-gradient-to-r ${colors.gradient}`}>
+              <span className="text-[#B89555]">
                 {gradientWord}
               </span>
             </h1>
-            
+
             {/* Subtitle/Description */}
-            <p className="text-[#5A4A2E] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto opacity-90">
               {subtitle}
             </p>
-            
+
             {/* Powered by AI */}
-            <p className={`${colors.text} opacity-70 text-sm`}>
-              <Sparkles className="inline h-4 w-4 mr-1" />
+            <p className="text-[#5A4A2E] text-sm">
+              <Sparkles className="inline h-4 w-4 mr-1 text-[#B89555]" />
               Powered by AI • Data-driven insights • Real-time analysis
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Content Section - Full border wrapper */}
-      <section className="py-12" style={{ background: "#0D0C08" }}>
+      {/* Content Section — champagne page surface */}
+      <section className="py-12 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className={`max-w-6xl mx-auto border ${colors.border} rounded-2xl p-6 md:p-8`}
+            className="max-w-6xl mx-auto border border-[#B89555]/30 bg-[#FDFBF7] rounded-2xl p-6 md:p-8 shadow-sm"
           >
             {children}
 
             {showFinancialDisclaimer && (
-              <div className="mt-8 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.04)", border: "1px solid rgba(184,148,62,0.15)" }}>
-                <p className="text-[#5A4A2E] text-sm leading-relaxed">
-                  <strong className="text-[#5A4A2E]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
-                  <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+              <div className="mt-8 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                <p className="text-[#1A1A1A] text-sm leading-relaxed">
+                  <strong className="text-[#1A1A1A]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+                  <Link to="/contact" className="text-[#A68444] underline hover:text-[#1A1A1A]">Contact our team</Link> for professional guidance.
                   Past performance does not guarantee future results.
                 </p>
               </div>

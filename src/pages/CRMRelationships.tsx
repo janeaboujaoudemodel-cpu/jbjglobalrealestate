@@ -347,6 +347,27 @@ const BrokeragesTab = () => {
     <TooltipProvider>
     <div className="space-y-4">
       <DirectoryToolsPanel />
+
+      {/* Directory status summary — always reflects actual counts available */}
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-[#1A1A1A]">
+          <div className="font-semibold flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#B89555]" />
+            Directory status
+          </div>
+          <div><span className="text-[#5A4A2E]">All:</span> <b>{data.length}</b></div>
+          <div><span className="text-[#5A4A2E]">UAE Directory:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#5A4A2E]">My Additions:</span> <b>{ownerCount}</b></div>
+          <div><span className="text-[#5A4A2E]">Existing Matches:</span> <b>{existingCount}</b></div>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#5A4A2E]">
+          {EMIRATES.map((e) => (
+            <span key={e}>
+              {e}: <b className="text-[#1A1A1A]">{emirateCounts[e] || 0}</b>
+            </span>
+          ))}
+        </div>
+      </div>
       {/* Source sub-tabs */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
@@ -506,12 +527,13 @@ const BrokeragesTab = () => {
                     </div>
 
                     {/* KPI strip — readable champagne palette, never white-on-white */}
-                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-6 gap-2">
                       {[
+                        { label: "Rating", value: r.star_rating ? `★ ${Number(r.star_rating).toFixed(1)}` : "—" },
+                        { label: "Agents", value: r.estimated_agent_count ? `~${r.estimated_agent_count}` : "—" },
                         { label: "Brokers", value: r.active_broker_count || 0 },
                         { label: "Inquiries", value: r.inquiry_count || 0 },
                         { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
-                        { label: "Total (AED)", value: Number(r.total_deal_value_cached || 0).toLocaleString() },
                         { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
                       ].map((k) => (
                         <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
@@ -530,6 +552,14 @@ const BrokeragesTab = () => {
                   </div>
                   <div className="flex flex-wrap gap-1.5 items-start">
                     <LeadAIStar entityType="brokerage" entityId={r.id} entityName={r.company_name} />
+                    <Button
+                      size="sm"
+                      variant="gold"
+                      onClick={() => { setBulkSel(new Set([r.id])); setBulkOpen(true); }}
+                      title="Preview & send outreach to this brokerage (test send to me first)"
+                    >
+                      <Send className="w-3 h-3 mr-1" />Message
+                    </Button>
                     <Button size="sm" variant="secondary" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
                       <Sparkles className="w-3 h-3 mr-1" />AI
                     </Button>
@@ -1034,25 +1064,22 @@ const DeveloperRegistryTab = () => {
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
       ) : (
-      <Collapsible open={!queueCollapsed} onOpenChange={(open) => setQueueCollapsed(!open)}>
-        <CollapsibleTrigger asChild>
-          <button
-            type="button"
-            className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA] hover:bg-[#F2EBDA] transition text-left"
-          >
-            <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
-              {queueCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              Outreach Queue
-              <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/10 text-[11px] font-bold">
-                {queuePool.length}
-              </span>
-            </div>
-            <span className="text-[11px] text-[#5A4A2E]">
-              {queueCollapsed ? "Click to expand" : "Click to collapse"}
+      <div className="space-y-5">
+        <div
+          className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA]"
+        >
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+            <ChevronDown className="w-4 h-4 text-[#B89555]" />
+            Outreach Queue
+            <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/10 text-[11px] font-bold text-[#1A1A1A]">
+              {queuePool.length}
             </span>
-          </button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-5 pt-4">
+          </div>
+          <span className="text-[11px] text-[#5A4A2E]">
+            Always expanded — Document Pack &amp; Outreach Settings stay collapsible
+          </span>
+        </div>
+        <div className="space-y-5">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
@@ -1423,8 +1450,8 @@ const DeveloperRegistryTab = () => {
           );})}
         </div>
       )}
-        </CollapsibleContent>
-      </Collapsible>
+        </div>
+      </div>
       )}
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
