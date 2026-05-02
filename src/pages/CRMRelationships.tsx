@@ -1034,25 +1034,22 @@ const DeveloperRegistryTab = () => {
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
       ) : (
-      <Collapsible open={!queueCollapsed} onOpenChange={(open) => setQueueCollapsed(!open)}>
-        <CollapsibleTrigger asChild>
-          <button
-            type="button"
-            className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA] hover:bg-[#F2EBDA] transition text-left"
-          >
-            <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
-              {queueCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              Outreach Queue
-              <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/10 text-[11px] font-bold">
-                {queuePool.length}
-              </span>
-            </div>
-            <span className="text-[11px] text-[#5A4A2E]">
-              {queueCollapsed ? "Click to expand" : "Click to collapse"}
+      <div className="space-y-5">
+        <div
+          className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA]"
+        >
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+            <ChevronDown className="w-4 h-4 text-[#B89555]" />
+            Outreach Queue
+            <span className="ml-1 px-2 py-0.5 rounded-full bg-[#1A1A1A]/10 text-[11px] font-bold text-[#1A1A1A]">
+              {queuePool.length}
             </span>
-          </button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-5 pt-4">
+          </div>
+          <span className="text-[11px] text-[#5A4A2E]">
+            Always expanded — Document Pack &amp; Outreach Settings stay collapsible
+          </span>
+        </div>
+        <div className="space-y-5">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
