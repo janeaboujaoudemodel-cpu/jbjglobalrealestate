@@ -1242,33 +1242,34 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
       <div className="mt-auto flex-shrink-0">
         <div className="h-[1px] my-2 bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10" />
-        <div className="px-2.5 py-2.5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
-          <div className="flex gap-2 mb-2">
+        <div className="px-2 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
+          <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-1 text-[11px] font-bold tracking-wide leading-none transition-all px-1 py-2 rounded-lg border-2"
-              style={{ color: '#1A1A1A', borderColor: '#DC2626', backgroundColor: '#FDFBF7' }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
+              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.45)', backgroundColor: '#FDFBF7' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.45)'; }}
             >
-              <Headphones className="w-4 h-4" strokeWidth={2.5} style={{ color: 'inherit' }} />
+              <Headphones className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Contact</span>
             </Link>
             <Link
               to="/ticket-hub"
               data-no-contrast-guard
-              className="flex-1 flex flex-col items-center justify-center gap-1 text-[11px] font-bold tracking-wide leading-none transition-all px-1 py-2 rounded-lg border-2"
-              style={{ color: '#1A1A1A', borderColor: '#DC2626', backgroundColor: '#FDFBF7' }}
+              className="flex-1 flex flex-col items-center justify-center gap-0.5 text-[10px] font-bold tracking-wide leading-none transition-all px-1 py-1.5 rounded-lg border"
+              style={{ color: '#1A1A1A', borderColor: 'rgba(220,38,38,0.45)', backgroundColor: '#FDFBF7' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.borderColor = '#DC2626'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = '#DC2626'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.color = '#1A1A1A'; e.currentTarget.style.borderColor = 'rgba(220,38,38,0.45)'; }}
             >
-              <Ticket className="w-4 h-4" strokeWidth={2.5} style={{ color: 'inherit' }} />
+              <Ticket className="w-3.5 h-3.5" strokeWidth={2} style={{ color: 'inherit' }} />
               <span style={{ color: 'inherit' }}>Support</span>
             </Link>
           </div>
           {session ? (
             <button
+              data-no-contrast-guard
               onClick={() => { supabase.auth.signOut(); }}
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
               style={{ color: '#B91C1C', borderColor: 'rgba(185,28,28,0.35)', backgroundColor: 'rgba(185,28,28,0.04)' }}
@@ -1281,6 +1282,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           ) : (
             <Link
               to="/auth"
+              data-no-contrast-guard
               className="flex items-center justify-center gap-1.5 text-[10px] font-semibold transition-all px-2 py-[5px] rounded-lg border w-full group"
               style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >

@@ -1,65 +1,30 @@
-# Site-Wide Audit — Results & Remaining Hardening
+## Goal
+Fix the bottom of the global vertical sidebar in `src/components/navigation/GlobalVerticalNav.tsx`:
 
-## ✅ What I verified is already fixed
+1. Make the **Contact** and **Support** tiles smaller and use a finer red border.
+2. Stop the **Sign Out** button text from flickering between red and white.
 
-I ran the three static contrast guards plus targeted greps across every page and component:
+## Changes
 
-| Check | Result |
-|---|---|
-| `check-white-on-light` (white text on bright bg) | **PASS** — 0 violations |
-| `check-black-on-dark` (ink text on dark bg) | **PASS** — 0 violations |
-| `Properties.tsx` black gaps | **GONE** — champagne `#FDFBF7` / `#F7F2EA` only |
-| Filter pills contrast | **OK** — ink + gold border on inactive, ink-on-white on active |
-| `ProjectCard` text | **OK** — ink-black names, high-opacity ink metadata |
-| Public listing hooks (`useProjects`) | **OK** — every public query filters `is_published = true` |
-| "Media Pending Verification" string | **GONE** from `src/` (0 hits) |
-| Database — projects without cover image | **UNPUBLISHED** by the migration we ran |
-| Need-help card on Index | **REMOVED** |
+### 1. Shrink Contact + Support tiles (lines ~1247-1268)
+- Reduce vertical padding: `py-2` → `py-1.5`
+- Reduce font size: `text-[11px]` → `text-[10px]`
+- Reduce icon size: `w-4 h-4` → `w-3.5 h-3.5`, lower `strokeWidth` from `2.5` to `2`
+- Tighter gap between icon + label: `gap-1` → `gap-0.5`
+- Replace heavy `border-2` with finer `border` (1px) and soften the red: `borderColor: '#DC2626'` → `'rgba(220,38,38,0.45)'`
+- Hover keeps solid red fill (unchanged behavior, just thinner resting border)
+- Reduce wrapper container padding: `px-2.5 py-2.5` → `px-2 py-2`, and `gap-2` → `gap-1.5` between the two tiles
 
-## ⚠️ Gaps the audit found
+### 2. Fix Sign Out flicker (lines ~1270-1280)
+Root cause: the Sign Out button is missing `data-no-contrast-guard`, so the runtime contrast guard in `src/utils/contrastGuard.ts` periodically rewrites its color (red on light champagne is treated as a same-tone/low-contrast risk in some passes), producing the white→red→white flicker the user sees.
 
-### 1. One residual dark tile on the homepage
-`src/pages/Index.tsx:266` — the 3-pillar grid still uses `bg-[#0A0A0A]` with white text. The CSS guard allows this (white-on-dark is fine), but it's the only black box left on `/` and likely the "black gap" feel on the homepage you mentioned. Should be flipped to champagne (`#F7F2EA`) with ink text + gold accents to match the rest of the page.
+Fix:
+- Add `data-no-contrast-guard` to both the signed-in `<button>` and the signed-out `<Link to="/auth">` so the guard leaves them alone.
+- Keep the resting state explicitly red text + red exit icon + faint red tint background, so it stays red without requiring hover.
+- Keep the existing hover (solid red fill, white text) behavior intact.
+- Apply the same finer `border` (1px) treatment for visual consistency with the shrunk Contact/Support tiles above.
 
-### 2. Same-tone alpha-tinted badges (cosmetic, low risk)
-The same-tone guard reported 14 spots like `bg-[#1A1A1A]/5 text-[#1A1A1A]` and `bg-[#1A1A1A]/10 text-[#1A1A1A]`. These are translucent badge backgrounds — the actual rendered contrast is fine because the bg is 5–10% alpha over champagne. They are NOT readability bugs. The static regex doesn't understand `/NN` opacity. **No change needed**, but I'll add these to the guard's allowlist so CI stops warning.
+### Files touched
+- `src/components/navigation/GlobalVerticalNav.tsx` (only the bottom block, ~lines 1242-1292)
 
-Files affected (informational only):
-- GlobalSearchModal, DirectContactCTA, AdminLeads, BookCard, CRMRelationships, SentHistoryView, MortgageCalculator, SearchModule, EnvelopeDetail, mega-menu-primitives, FAQTableOfContents, FAQFloatingSidebar, AreaGuides
-
-### 3. Re-publication safety net (data layer)
-The SQL migration unpublished current cover-less projects, but **nothing prevents a new upload without a cover from going public**. I'll add a DB-level guard so this can't regress:
-
-```sql
--- Trigger: block is_published=true when cover is missing
-CREATE OR REPLACE FUNCTION enforce_cover_before_publish()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF NEW.is_published = true AND (NEW.cover_image_url IS NULL OR NEW.cover_image_url = '') THEN
-    RAISE EXCEPTION 'Cannot publish project without a cover image';
-  END IF;
-  RETURN NEW;
-END; $$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_enforce_cover_before_publish
-BEFORE INSERT OR UPDATE OF is_published, cover_image_url ON public.projects
-FOR EACH ROW EXECUTE FUNCTION enforce_cover_before_publish();
-```
-
-Admins will see a clear error in the listing-admin UI instead of silently publishing a broken card.
-
-## 🛠 Proposed changes (3 small, scoped edits)
-
-1. **`src/pages/Index.tsx`** — convert the 3-pillar grid (lines 263–290) from black tiles to champagne tiles with ink text and gold icons, matching the rest of the homepage's monochrome-on-champagne palette. Border becomes gold hairline; remove the heavy black drop-shadow.
-
-2. **`scripts/contrast/check-same-tone.mjs`** — tighten the regex so `bg-[#1A1A1A]/5` (alpha) is no longer flagged as same-tone. Pure cleanup — no UI impact.
-
-3. **New migration** — add the `enforce_cover_before_publish` trigger so the "media pending → public" leak cannot reappear.
-
-## What this does NOT change
-
-- No removal of any feature, page, route, or content (per the No-Removal policy).
-- No styling changes outside the one homepage pillar grid.
-- No changes to Properties, ProjectCard, FilterShortcutBar, or any page already verified clean.
-
-Approve and I'll apply the three edits in one pass and confirm with the contrast scripts re-running green.
+No other files, no DB, no new dependencies.
