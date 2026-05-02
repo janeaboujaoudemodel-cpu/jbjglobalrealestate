@@ -423,13 +423,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 placeholder={t('filter.searchPlaceholder')}
                 className={filterSearchPillInput}
               />
-              <input
-                type="text"
-                value={filters.searchQuery}
-                onChange={(e) => update({ searchQuery: e.target.value })}
-                placeholder={t('filter.searchPlaceholder')}
-                className="w-full py-1.5 bg-transparent text-xs text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 outline-none"
-              />
             </div>
           )}
         {/* Price */}
