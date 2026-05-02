@@ -136,6 +136,7 @@ const OwnerDashboardShell = () => {
         {/* Top Bar — height locked to --shell-header-h so its bottom border aligns
             pixel-for-pixel with the sidebar logo divider. No top padding/margin. */}
         <header
+          data-no-contrast-guard
           className="bg-[#FDFBF7] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0"
           style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
         >
@@ -160,7 +161,7 @@ const OwnerDashboardShell = () => {
           <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Owner Badge */}
             <div className="flex items-center gap-1.5 md:gap-2 bg-[#B89555]/12 border border-[#B89555]/50 rounded-xl px-2 md:px-4 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
-              <Shield className="w-4 h-4 text-[#B89555] flex-shrink-0" />
+              <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
               <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold hidden sm:inline tracking-wide">Owner</span>
             </div>
             
