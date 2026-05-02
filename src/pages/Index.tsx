@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -21,17 +21,13 @@ const chunkImports = {
   SupportTicketBox: () => import("@/components/SupportTicketBox"),
   ExploreServicesCard: () => import("@/components/home/ExploreServicesCard"),
   ToolkitShowcaseCard: () => import("@/components/home/ToolkitShowcaseCard").then(m => ({ default: m.ToolkitShowcaseCard })),
-  StartingPointSection: () => import("@/components/home/StartingPointSection"),
   OverseasInvestorsBanner: () => import("@/components/home/OverseasInvestorsBanner"),
   TrustBar: () => import("@/components/home/TrustBar"),
   FeaturedListings: () => import("@/components/home/FeaturedListings"),
   ServicesGrid: () => import("@/components/home/ServicesGrid"),
-  WhyChooseUs: () => import("@/components/home/WhyChooseUs"),
   AreasWeCover: () => import("@/components/home/AreasWeCover"),
   ContinueSearching: () => import("@/components/ContinueSearching"),
   HomepageBookMarquee: () => import("@/components/home/HomepageBookMarquee"),
-  WhyDubaiCapitalSection: () => import("@/components/home/WhyDubaiCapitalSection"),
-  TestimonialsSection: () => import("@/components/home/TestimonialsSection"),
   AIComparisonWidget: () => import("@/components/AIComparisonWidget"),
   MarketReportCTA: () => import("@/components/MarketReportCTA"),
   MortgageCalculator: () => import("@/components/MortgageCalculator"),
@@ -48,17 +44,13 @@ const BestIdeaAward = lazy(chunkImports.BestIdeaAward);
 const SupportTicketBox = lazy(chunkImports.SupportTicketBox);
 const ExploreServicesCard = lazy(chunkImports.ExploreServicesCard);
 const ToolkitShowcaseCard = lazy(chunkImports.ToolkitShowcaseCard);
-const StartingPointSection = lazy(chunkImports.StartingPointSection);
 const OverseasInvestorsBanner = lazy(chunkImports.OverseasInvestorsBanner);
 const TrustBar = lazy(chunkImports.TrustBar);
 const FeaturedListings = lazy(chunkImports.FeaturedListings);
 const ServicesGrid = lazy(chunkImports.ServicesGrid);
-const WhyChooseUs = lazy(chunkImports.WhyChooseUs);
 const AreasWeCover = lazy(chunkImports.AreasWeCover);
 const ContinueSearching = lazy(chunkImports.ContinueSearching);
 const HomepageBookMarquee = lazy(chunkImports.HomepageBookMarquee);
-const WhyDubaiCapitalSection = lazy(chunkImports.WhyDubaiCapitalSection);
-const TestimonialsSection = lazy(chunkImports.TestimonialsSection);
 const AIComparisonWidget = lazy(chunkImports.AIComparisonWidget);
 const MarketReportCTA = lazy(chunkImports.MarketReportCTA);
 const MortgageCalculator = lazy(chunkImports.MortgageCalculator);
@@ -124,7 +116,6 @@ const Index = () => {
         chunkImports.DeveloperPartnersMarquee,
         chunkImports.TrustBar,
         chunkImports.FeaturedListings,
-        chunkImports.StartingPointSection,
       ].forEach((importFn) => {
         void importFn();
       });
