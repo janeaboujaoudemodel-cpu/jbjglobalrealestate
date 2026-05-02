@@ -90,7 +90,7 @@ const OwnerDashboardShell = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex">
+    <div data-surface="champagne" className="min-h-screen bg-[#FDFBF7] flex">
       {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
       <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
         <OwnerTasksPopupAlert />
@@ -98,7 +98,7 @@ const OwnerDashboardShell = () => {
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="w-64 p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
+          <SheetContent side="left" data-surface="champagne" className="w-64 p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -109,6 +109,7 @@ const OwnerDashboardShell = () => {
       {/* Desktop Sidebar */}
       {!isMobile && (
         <aside 
+          data-surface="champagne"
           className={cn(
             "fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
             sidebarCollapsed ? "w-16" : "w-64"

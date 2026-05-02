@@ -1298,6 +1298,14 @@ const DeveloperRegistryTab = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-bold text-base text-[#1A1A1A]">{r.developer_name}</h3>
+                        {r.tier && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">{r.tier}</span>
+                        )}
+                        {r.star_rating != null && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A]" title={`Rating ${Number(r.star_rating).toFixed(1)} / 5`}>
+                            ★ {Number(r.star_rating).toFixed(1)}
+                          </span>
+                        )}
                         <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
                         {r.status === "registered" && (
                           <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">

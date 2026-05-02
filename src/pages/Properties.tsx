@@ -486,7 +486,7 @@ const Properties = () => {
         title={dynamicSEO.title}
         description={dynamicSEO.metaDescription}
       />
-      <div className="min-h-screen bg-[hsl(var(--premium-bg))]">
+      <div data-surface="page" className="min-h-screen bg-[hsl(var(--premium-bg))]">
       
       
       {/* Hero Section - Multi-Scene Cinematic Video */}
