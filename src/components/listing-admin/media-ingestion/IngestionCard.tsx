@@ -13,7 +13,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { IconTile } from "@/components/ui/icon-tile";
 import { MatchEditor } from "./MatchEditor";
 import type { IngestionJob } from "@/hooks/useMediaIngestion";
 
