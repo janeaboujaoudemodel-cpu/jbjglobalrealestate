@@ -37,6 +37,27 @@ export interface IngestionJob {
   merged_at: string | null;
   merged_by: string | null;
   created_at: string;
+  last_error?: string | null;
+  merge_mode?: string | null;
+}
+
+const MAX_BATCH = 100;
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+function describeUploadError(err: any): string {
+  const msg = String(err?.message || err || "Upload failed");
+  if (/row-level security|permission|forbidden|403/i.test(msg))
+    return "Permission denied — owner / admin / listing-admin role required.";
+  if (/exceeded|payload|too large|413/i.test(msg))
+    return "File too large — 500 MB max per file.";
+  if (/mime|content type|not allowed/i.test(msg))
+    return "File type not allowed for ingestion.";
+  return msg;
 }
 
 export function useMediaIngestion() {
@@ -51,11 +72,8 @@ export function useMediaIngestion() {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(500);
-    if (error) {
-      toast.error("Failed to load ingestion queue");
-    } else {
-      setJobs((data as any[]) ?? []);
-    }
+    if (error) toast.error("Failed to load ingestion queue");
+    else setJobs((data as any[]) ?? []);
     setLoading(false);
   }, []);
 
@@ -74,6 +92,17 @@ export function useMediaIngestion() {
     };
   }, [fetchJobs]);
 
+  const classify = useCallback(async (jobIds: string[]) => {
+    if (!jobIds.length) return;
+    // Run classify in batches of 10 in parallel for big drops
+    const batches = chunk(jobIds, 10);
+    await Promise.allSettled(
+      batches.map((b) =>
+        supabase.functions.invoke("media-ingestion-classify", { body: { job_ids: b } }),
+      ),
+    );
+  }, []);
+
   const uploadFiles = useCallback(
     async (files: File[]) => {
       const { data: userResp } = await supabase.auth.getUser();
@@ -82,48 +111,75 @@ export function useMediaIngestion() {
         toast.error("You must be signed in");
         return;
       }
+      if (files.length > MAX_BATCH) {
+        toast.message(`Queueing ${files.length} files in batches of ${MAX_BATCH}…`);
+      }
+
       setBusy(true);
-      const created: string[] = [];
-      for (const file of files) {
-        const ts = Date.now();
-        const safe = file.name.replace(/[^A-Za-z0-9._-]/g, "_");
-        const path = `${userId}/${ts}-${safe}`;
-        const { error: upErr } = await supabase.storage
-          .from("ingestion-staging")
-          .upload(path, file, { upsert: false });
-        if (upErr) {
-          toast.error(`Upload failed: ${file.name}`);
-          continue;
-        }
-        const insertRow: any = {
-          user_id: userId,
-          file_path: path,
-          file_name: file.name,
-          file_size: file.size,
-          mime_type: file.type || null,
-          source_kind: "upload",
-          source_type: file.type?.startsWith("video/")
+      const allCreated: string[] = [];
+
+      for (const slice of chunk(files, MAX_BATCH)) {
+        for (const file of slice) {
+          // 1) Optimistic insert so the row appears in the queue immediately
+          const sourceType = file.type?.startsWith("video/")
             ? "video"
             : file.type?.includes("pdf")
               ? "pdf"
-              : "file",
-          status: "pending",
-        };
-        const { data, error } = await supabase
-          .from("material_ingestion_jobs")
-          .insert(insertRow)
-          .select("id")
-          .single();
-        if (!error && data?.id) created.push(data.id);
+              : "file";
+          const { data: created, error: insErr } = await supabase
+            .from("material_ingestion_jobs")
+            .insert({
+              user_id: userId,
+              file_name: file.name,
+              file_size: file.size,
+              mime_type: file.type || null,
+              source_kind: "upload",
+              source_type: sourceType,
+              status: "pending",
+            } as any)
+            .select("id")
+            .single();
+          if (insErr || !created?.id) {
+            toast.error(`Could not queue ${file.name}: ${insErr?.message ?? "insert failed"}`);
+            continue;
+          }
+          const jobId = created.id;
+
+          // 2) Upload file
+          const ts = Date.now();
+          const safe = file.name.replace(/[^A-Za-z0-9._-]/g, "_");
+          const path = `${userId}/${ts}-${safe}`;
+          const { error: upErr } = await supabase.storage
+            .from("ingestion-staging")
+            .upload(path, file, { upsert: false });
+          if (upErr) {
+            const human = describeUploadError(upErr);
+            toast.error(`${file.name}: ${human}`);
+            await supabase
+              .from("material_ingestion_jobs")
+              .update({ status: "error", last_error: human })
+              .eq("id", jobId);
+            continue;
+          }
+
+          // 3) Patch row with file_path
+          await supabase
+            .from("material_ingestion_jobs")
+            .update({ file_path: path })
+            .eq("id", jobId);
+          allCreated.push(jobId);
+        }
       }
+
       setBusy(false);
-      if (created.length) {
-        toast.success(`Uploaded ${created.length} file(s). AI is matching…`);
-        await classify(created);
+      if (allCreated.length) {
+        toast.success(`Uploaded ${allCreated.length} file(s). AI is matching…`);
+        // Don't await — let realtime update the UI as classify completes
+        classify(allCreated).catch(() => {});
         await fetchJobs();
       }
     },
-    [fetchJobs],
+    [classify, fetchJobs],
   );
 
   const addLinks = useCallback(
@@ -133,47 +189,56 @@ export function useMediaIngestion() {
       if (!userId) return;
       const created: string[] = [];
       for (const url of urls) {
-        const linkRow: any = {
-          user_id: userId,
-          source_url: url,
-          source_kind: "link",
-          source_type: "link",
-          status: "pending",
-        };
         const { data, error } = await supabase
           .from("material_ingestion_jobs")
-          .insert(linkRow)
+          .insert({
+            user_id: userId,
+            source_url: url,
+            source_kind: "link",
+            source_type: "link",
+            status: "pending",
+          } as any)
           .select("id")
           .single();
         if (!error && data?.id) created.push(data.id);
       }
       if (created.length) {
         toast.success(`Queued ${created.length} link(s)`);
-        await classify(created);
+        classify(created).catch(() => {});
         await fetchJobs();
       }
     },
-    [fetchJobs],
+    [classify, fetchJobs],
   );
-
-  const classify = useCallback(async (jobIds: string[]) => {
-    if (!jobIds.length) return;
-    const { error } = await supabase.functions.invoke("media-ingestion-classify", {
-      body: { job_ids: jobIds },
-    });
-    if (error) toast.error("AI matching failed");
-  }, []);
 
   const approveAndMerge = useCallback(
     async (jobIds: string[]) => {
       if (!jobIds.length) return;
       setBusy(true);
       const { error } = await supabase.functions.invoke("media-ingestion-merge", {
-        body: { job_ids: jobIds },
+        body: { job_ids: jobIds, mode: "attach" },
       });
       setBusy(false);
-      if (error) toast.error("Merge failed");
-      else toast.success(`Merged ${jobIds.length} item(s) into listings`);
+      if (error) toast.error("Attach failed");
+      else toast.success(`Attached ${jobIds.length} item(s) to listings`);
+      await fetchJobs();
+    },
+    [fetchJobs],
+  );
+
+  const extractOnly = useCallback(
+    async (jobIds: string[]) => {
+      if (!jobIds.length) return;
+      setBusy(true);
+      const { error } = await supabase.functions.invoke("media-ingestion-merge", {
+        body: { job_ids: jobIds, mode: "extract" },
+      });
+      setBusy(false);
+      if (error) toast.error("Extraction failed");
+      else
+        toast.success(
+          `Extracted insights from ${jobIds.length} item(s) — listings enriched, files kept private.`,
+        );
       await fetchJobs();
     },
     [fetchJobs],
@@ -209,7 +274,6 @@ export function useMediaIngestion() {
 
   const remove = useCallback(
     async (jobIds: string[]) => {
-      // Remove storage files first
       const { data: rows } = await supabase
         .from("material_ingestion_jobs")
         .select("id, file_path")
@@ -284,6 +348,7 @@ export function useMediaIngestion() {
     addLinks,
     classify,
     approveAndMerge,
+    extractOnly,
     rollback,
     skip,
     remove,

@@ -1,5 +1,6 @@
 import {
   CheckCircle2,
+  Sparkles,
   SkipForward,
   Trash2,
   Copy,
@@ -15,7 +16,8 @@ interface BulkToolbarProps {
   onSelectAll: () => void;
   onInvert: () => void;
   onClear: () => void;
-  onApprove: () => void;
+  onAttach: () => void;
+  onExtract: () => void;
   onSkip: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
@@ -30,7 +32,8 @@ export function BulkToolbar({
   onSelectAll,
   onInvert,
   onClear,
-  onApprove,
+  onAttach,
+  onExtract,
   onSkip,
   onDelete,
   onDuplicate,
@@ -38,9 +41,10 @@ export function BulkToolbar({
   onExportCsv,
   busy,
 }: BulkToolbarProps) {
+  const disabled = busy || count === 0;
   return (
-    <div className="sticky top-[88px] z-10 rounded-xl border border-gold/40 bg-[#EFE6D6] p-3 flex flex-wrap items-center gap-2 shadow-sm">
-      <div className="text-sm font-medium text-foreground mr-2">
+    <div className="sticky top-[88px] z-10 rounded-xl border border-[#B89555]/40 bg-[#EFE6D6] p-3 flex flex-wrap items-center gap-2 shadow-sm">
+      <div className="text-sm font-medium text-[#1A1A1A] mr-2">
         {count} of {total} selected
       </div>
       <Button size="sm" variant="outline" onClick={onSelectAll} disabled={busy}>
@@ -52,48 +56,26 @@ export function BulkToolbar({
       <Button size="sm" variant="ghost" onClick={onClear} disabled={busy || count === 0}>
         <X className="w-3.5 h-3.5 mr-1" /> Clear
       </Button>
-      <div className="w-px h-6 bg-gold/30 mx-1" />
-      <Button
-        size="sm"
-        variant="gold"
-        onClick={onApprove}
-        disabled={busy || count === 0}
-      >
-        <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Approve & merge
+      <div className="w-px h-6 bg-[#B89555]/30 mx-1" />
+      <Button size="sm" variant="gold" onClick={onAttach} disabled={disabled}>
+        <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Attach to listing
       </Button>
-      <Button size="sm" variant="outline" onClick={onSkip} disabled={busy || count === 0}>
+      <Button size="sm" variant="outline" onClick={onExtract} disabled={disabled}>
+        <Sparkles className="w-3.5 h-3.5 mr-1" /> Extract only
+      </Button>
+      <Button size="sm" variant="outline" onClick={onSkip} disabled={disabled}>
         <SkipForward className="w-3.5 h-3.5 mr-1" /> Skip
       </Button>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={onDuplicate}
-        disabled={busy || count === 0}
-      >
+      <Button size="sm" variant="outline" onClick={onDuplicate} disabled={disabled}>
         <Copy className="w-3.5 h-3.5 mr-1" /> Duplicate
       </Button>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={onReclassify}
-        disabled={busy || count === 0}
-      >
+      <Button size="sm" variant="outline" onClick={onReclassify} disabled={disabled}>
         <RefreshCw className="w-3.5 h-3.5 mr-1" /> Re-run AI
       </Button>
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={onExportCsv}
-        disabled={busy || count === 0}
-      >
+      <Button size="sm" variant="outline" onClick={onExportCsv} disabled={disabled}>
         <Download className="w-3.5 h-3.5 mr-1" /> CSV
       </Button>
-      <Button
-        size="sm"
-        variant="destructive"
-        onClick={onDelete}
-        disabled={busy || count === 0}
-      >
+      <Button size="sm" variant="destructive" onClick={onDelete} disabled={disabled}>
         <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete
       </Button>
     </div>

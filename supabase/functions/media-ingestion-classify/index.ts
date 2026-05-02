@@ -4,6 +4,7 @@
 // confidence, and document type.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { z } from "https://esm.sh/zod@3.23.8";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,8 +16,17 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-interface ClassifyRequest {
-  job_ids: string[];
+const RequestSchema = z.object({
+  job_ids: z.array(z.string().uuid()).min(1).max(100),
+});
+
+async function hasOwnerOrAdmin(supabase: ReturnType<typeof createClient>, userId: string) {
+  const { data } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .in("role", ["admin", "owner", "listing_admin"]);
+  return (data?.length ?? 0) > 0;
 }
 
 const DOC_TYPES = [
@@ -319,19 +329,36 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-
-    const body = (await req.json()) as ClassifyRequest;
-    if (!Array.isArray(body.job_ids) || body.job_ids.length === 0) {
-      return new Response(JSON.stringify({ error: "job_ids required" }), {
-        status: 400,
+    if (!(await hasOwnerOrAdmin(supabase, userResp.user.id))) {
+      return new Response(JSON.stringify({ error: "forbidden" }), {
+        status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const results: any[] = [];
-    for (const id of body.job_ids.slice(0, 50)) {
-      results.push(await classifyJob(supabase, id));
+    const parsed = RequestSchema.safeParse(await req.json());
+    if (!parsed.success) {
+      return new Response(JSON.stringify({ error: parsed.error.flatten() }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
+    const { job_ids } = parsed.data;
+
+    // Run with concurrency 5
+    const results: any[] = [];
+    const queue = [...job_ids];
+    const workers = Array.from({ length: Math.min(5, queue.length) }, async () => {
+      while (queue.length) {
+        const id = queue.shift()!;
+        try {
+          results.push(await classifyJob(supabase, id));
+        } catch (err) {
+          results.push({ jobId: id, error: err instanceof Error ? err.message : "failed" });
+        }
+      }
+    });
+    await Promise.all(workers);
 
     return new Response(JSON.stringify({ results }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

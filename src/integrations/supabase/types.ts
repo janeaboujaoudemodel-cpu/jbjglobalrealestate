@@ -17469,9 +17469,11 @@ export type Database = {
           file_size: number | null
           folder_structure: Json | null
           id: string
+          last_error: string | null
           match_confidence: number | null
           matched_project_id: string | null
           matched_project_name: string | null
+          merge_mode: string
           merge_target: Json | null
           merged_at: string | null
           merged_by: string | null
@@ -17502,9 +17504,11 @@ export type Database = {
           file_size?: number | null
           folder_structure?: Json | null
           id?: string
+          last_error?: string | null
           match_confidence?: number | null
           matched_project_id?: string | null
           matched_project_name?: string | null
+          merge_mode?: string
           merge_target?: Json | null
           merged_at?: string | null
           merged_by?: string | null
@@ -17535,9 +17539,11 @@ export type Database = {
           file_size?: number | null
           folder_structure?: Json | null
           id?: string
+          last_error?: string | null
           match_confidence?: number | null
           matched_project_id?: string | null
           matched_project_name?: string | null
+          merge_mode?: string
           merge_target?: Json | null
           merged_at?: string | null
           merged_by?: string | null
