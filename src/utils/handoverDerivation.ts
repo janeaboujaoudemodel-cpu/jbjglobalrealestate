@@ -28,6 +28,10 @@ export const deriveHandover = (p: any): string | null => {
     null;
   if (direct && String(direct).trim()) return String(direct).trim();
 
+  // Ready / Completed / Handed over → "Ready"
+  const cs = p.construction_status ? String(p.construction_status) : "";
+  if (/ready|complet|handed.?over/i.test(cs)) return "Ready";
+
   const haystacks: string[] = [
     p.description,
     p.payment_breakdown,

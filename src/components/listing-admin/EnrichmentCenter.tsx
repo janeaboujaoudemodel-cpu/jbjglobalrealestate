@@ -12,6 +12,7 @@ import {
   FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff, Eye, Info
 } from "lucide-react";
 import { EnrichmentAuditPanel } from "./EnrichmentAuditPanel";
+import { HandoverBackfillCard } from "./HandoverBackfillCard";
 
 interface EnrichStats {
   total_projects: number;
@@ -545,6 +546,8 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           payment plans, unit types, and more. Runs in background — safe to navigate away.
         </p>
       </div>
+
+      <HandoverBackfillCard />
 
       <Tabs defaultValue={defaultTab} className="space-y-4">
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 p-1">
