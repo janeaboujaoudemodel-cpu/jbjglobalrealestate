@@ -12,6 +12,7 @@ import {
   FileText, Image, Building2, Calendar, ShieldCheck, Trash2, Upload
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
+import { HandoverRepairPanel } from "./HandoverRepairPanel";
 
 interface EnrichmentStats {
   total: number;
@@ -299,6 +300,9 @@ export function ProvidentPortalHub() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Handover date repair */}
+      <HandoverRepairPanel />
 
       {/* Enrichment Status */}
       <Card className="border-gold/20">
