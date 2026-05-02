@@ -1,77 +1,75 @@
-# Fix Real Handover Dates for All Projects
+# Fix card hover + handover label consistency
 
-## Diagnosis (from production data)
+Three issues to fix:
 
-| Bucket | Count | Status |
-|---|---|---|
-| Total projects | 2,778 | — |
-| Reelly-sourced (`reelly_id IS NOT NULL`) | 1,237 | 1,236 already have a real handover from Reelly. Only **1** missing. |
-| `handover_date = 'Q4 2026'` (suspicious bulk default) | 563 | **561 are non-Reelly** — clearly a placeholder fill, not a real date. |
-| `handover_date IS NULL` | 376 | All 376 still have a `source_url`, 99 also have `developer_name`. |
+1. **Past handover dates should show "Ready"** — A project showing `31 December 2024` should render as `Ready` (just `Ready`, not `Handover Ready`), matching how Dalana Residence behaves.
+2. **Cards turn dark on hover** — Hovering a project card on the homepage darkens the whole card background, hiding the orange price and orange handover date.
+3. **Hover effect** — Replace the dark color shift with a clean lift/zoom (no color change).
 
-Two real problems:
-1. **561 non-Reelly rows are stamped `Q4 2026`** — a fake bulk default that the cards display as a "real" date. Worse than NULL.
-2. **376 NULL rows** never got resolved.
+---
 
-The existing `supabase/functions/backfill-handover-dates/` already has Stage 2 (Firecrawl scrape of `source_url`) and Stage 3 (Lovable AI inference from developer + name) — but it only runs against `handover_date IS NULL` and skips the `Q4 2026` bulk default. And `supabase/functions/reelly-backfill-details/` writes amenities/floor plans but never writes `handover_date`/`expected_completion` from Reelly's `completion_datetime` / `construction_end_date` / `completion_date` fields.
+## 1. Handover label normalization
 
-## Plan
+**File**: `src/utils/handoverDerivation.ts`
 
-### 1. Patch `supabase/functions/reelly-backfill-details/index.ts` — write Reelly's real handover
+Currently `deriveHandover()` returns the raw `handover_date` field as-is — so a stored value like `"31 December 2024"` or `"2023"` displays literally. Update it to:
 
-After the existing Reelly detail fetch, add normalization + persistence:
+- Try to parse the direct field as a date (full date strings, `YYYY`, `Q# YYYY`).
+- If the parsed date is **in the past** OR matches `/ready|complet|handed.?over/i` → return `"Ready"`.
+- Otherwise return the existing normalized string (`Q# YYYY`, `YYYY`, or the raw value if already in the allowed format).
 
-```text
-if detail.completion_datetime || detail.completion_date || detail.construction_end_date:
-   raw = first non-empty of those three
-   normalized = normalizeHandover(raw)  // shared util — Q1-4 YYYY | YYYY | "Ready" | null
-   if normalized:
-       updateData.handover_date = normalized
-       updateData.expected_completion = normalized
+Also add a `Ready` short-circuit for `construction_status` BEFORE reading `handover_date`, so a row marked `ready` always wins over a stale date field.
+
+The eyebrow label on cards stays as `Handover` and the value renders `Ready` — so the full visual reads `HANDOVER  Ready`, never `Handover Ready` as a single phrase. No code currently emits the string `"Handover Ready"`; this is purely the date normalization fix.
+
+## 2. Card hover — kill the black flash
+
+**Root cause**: `src/index.css` lines 3440–3455 apply a generic hover treatment to **any** `<a>` that contains a Lucide icon:
+
+```css
+a:hover:has(.lucide) {
+  background-color: hsl(var(--accent) / 0.6);   /* darkens the card */
+  ...
+}
+a:hover:has(.lucide) .lucide {
+  color: hsl(var(--accent-foreground));
+  transform: translateY(-0.5px);
+}
 ```
 
-This is the source of truth for the 1,237 Reelly projects and any future Reelly imports. (Today only 1 of them is missing, but this closes the loop and protects future imports.)
+The homepage project card is an `<a>` (Link) that contains MapPin + CreditCard icons → it matches → background flips to a near-ink accent → the runtime `contrastGuard` (`src/utils/contrastGuard.ts`) then sees a dark effective background and force-sets `color: #FDFBF7 !important` on the link, dragging price and handover text off-orange.
 
-### 2. Add an "owner-only" admin endpoint to clear the `Q4 2026` bulk default
+**Fix**: scope that hover rule so it only targets icon-tile-style controls, not full cards. Two changes in `src/index.css`:
 
-New edge function `supabase/functions/clear-fake-handover-defaults/index.ts`:
+- Narrow the selector to `.icon-tile:hover` (and the dark-mode equivalent at line 3506). The `a:hover:has(.lucide)` / `button:hover:has(.lucide)` / `[role="button"]:hover:has(.lucide)` selectors get removed from the background+icon-color block.
+- Keep the focus-visible/active rules (lines 3459–3489) as-is — those only kick in on keyboard or click, not mouse hover, so they don't cause the regression.
 
-- Owner-auth gated.
-- Sets `handover_date = NULL` and `expected_completion = NULL` for every row where:
-  - `handover_date = 'Q4 2026'` AND
-  - `reelly_id IS NULL` AND
-  - `expected_completion` is also `'Q4 2026'` or NULL (extra safety so we don't blow away a hand-curated date).
-- Returns the affected count.
+## 3. New homepage card hover effect
 
-This converts the 561 fakes into honest NULLs so the cards show "Coming soon" instead of misinforming buyers — and so the existing backfill engine will pick them up.
+**File**: `src/components/home/FeaturedListings.tsx` (the inner card `<div>` at line 162).
 
-### 3. Run the existing two-stage backfill against the now-NULL rows
+Current hover: `hover:border-[#B89555]/30 hover:shadow-lg hover:-translate-y-1` (already a lift, but masked by issue #2).
 
-Once Step 2 is done, ~561 + 376 ≈ ~937 rows are NULL. Trigger the existing pipeline:
+After the CSS fix above, the lift will work. Strengthen it slightly so the user clearly sees motion without any color change:
 
-- **Stage 2 (Firecrawl)** — all 937 have a `source_url`. Batches of 50.
-- **Stage 3 (Lovable AI)** — for any remaining stragglers that have `developer_name` (gemini-2.5-pro, temperature 0, returns `null` when not confident; never invents dates).
+- Bump shadow: `hover:shadow-xl`
+- Slightly larger lift: `hover:-translate-y-1.5`
+- Keep image inner zoom: `group-hover:scale-105` (already present)
+- Border on hover: stay at the same gold tone, no contrast change
+- Add `transition-transform duration-300` for a smooth feel
 
-No schema or UI changes needed — `backfill-handover-dates` already exists and is owner-gated; the Provident Portal already has a UI for triggering it. The only code change here is wiring up Reelly persistence (Step 1) and adding the placeholder-clearing function (Step 2).
+Add `data-no-contrast-guard` on the `.price-pill-premium` and `.handover-orange` containers as belt-and-braces, so even if any future cascade darkens an ancestor the orange text is never re-flipped to white by the runtime guard.
 
-### 4. Add a small one-off owner UI tile (optional but recommended)
+---
 
-In the existing Provident Portal admin page, add a "Run handover repair" panel with three buttons:
-- **Clear Q4 2026 placeholders** → calls the new function from Step 2.
-- **Stage 2 — Firecrawl batch** → existing `backfill-handover-dates` with `{ stage: 2, batch_size: 50 }`.
-- **Stage 3 — AI batch** → existing `backfill-handover-dates` with `{ stage: 3, batch_size: 50 }`.
+## Files changed
 
-Each button shows the live "remaining" count returned by the function so you can rerun until 0.
+- `src/utils/handoverDerivation.ts` — past-date → `Ready` normalization
+- `src/index.css` — narrow `a:hover:has(.lucide)` rule to `.icon-tile` only
+- `src/components/home/FeaturedListings.tsx` — stronger lift on hover, `data-no-contrast-guard` on price + handover
 
-## Out of scope
+## Out of scope (will not touch)
 
-- No changes to the property/project card UI — `deriveHandover` and the "Coming soon" fallback already handle every state correctly.
-- No mass writes against Reelly projects (their data is already correct).
-- No writes that fabricate dates. Every value persisted must come from Reelly, the project's own scraped page, or a confidence-gated AI inference that is allowed to return `null`.
-- No changes to `daily-reelly-auto-sync` schedules.
-
-## Acceptance
-
-- After Step 1 + Reelly re-run: any future Reelly import auto-fills handover.
-- After Step 2: zero non-Reelly rows are stamped `Q4 2026` unless that's their genuine value (which we cannot prove, so they fall back to NULL → "Coming soon").
-- After Step 3 batches drain: `count(*) WHERE handover_date IS NULL` trends toward 0; whatever remains has no verifiable source and correctly renders as "Coming soon" rather than a fake date.
+- The `.payment-plan-square` styling — already ink-on-gold and unaffected.
+- The Project Detail filter chips — fixed in the previous turn.
+- The Provident Portal handover repair tools — already shipped.

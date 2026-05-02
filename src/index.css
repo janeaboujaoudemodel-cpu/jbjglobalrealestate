@@ -3436,19 +3436,17 @@ button:has(.lucide) .lucide,
   transition: color 180ms ease, transform 180ms ease, opacity 180ms ease;
 }
 
-/* HOVER — subtle surface lift + slightly stronger ink */
+/* HOVER — subtle surface lift + slightly stronger ink.
+   NOTE: Scoped to `.icon-tile` only. Earlier versions matched any
+   `a/button:hover:has(.lucide)`, which darkened entire project
+   cards on hover and dragged the orange price/handover text
+   off-color via the runtime contrast guard. */
 @media (hover: hover) {
-  a:hover:has(.lucide),
-  button:hover:has(.lucide),
-  [role="button"]:hover:has(.lucide),
   .icon-tile:hover {
     background-color: hsl(var(--accent) / 0.6);
     border-color: hsl(var(--border));
     box-shadow: 0 1px 2px 0 hsl(var(--foreground) / 0.06);
   }
-  a:hover:has(.lucide) .lucide,
-  button:hover:has(.lucide) .lucide,
-  [role="button"]:hover:has(.lucide) .lucide,
   .icon-tile:hover .lucide {
     color: hsl(var(--accent-foreground));
     transform: translateY(-0.5px);
