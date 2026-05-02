@@ -159,7 +159,7 @@ Deno.serve(async (req) => {
           owner_user_id: userId,
           created_by_user_id: userId,
           contact_type: contactType,
-          full_name: fullName,
+          full_name: ensureName(),
           email_lower: email,
           email_normalized: email,
           phone_e164: phoneRaw,
