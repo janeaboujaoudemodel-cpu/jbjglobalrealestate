@@ -49,12 +49,17 @@ const PAIRS = [
   ['sidebar-accent-foreground', 'sidebar-accent'],
   ['gold-foreground', 'gold'],
   ['gold-foreground', 'gold-dark'],
+  // Global Surface Theme — 4 canonical tones
+  ['surface-fg', 'surface-bg'],
+  ['surface-fg-muted', 'surface-bg'],
+  ['surface-cta-fg', 'surface-cta-bg'],
 ];
 
 function extractScopes(css) {
-  // Match top-level theme scopes: :root, .dark, [data-theme="..."], etc.
+  // Match top-level theme scopes: :root, .dark, [data-theme="..."],
+  // and the new [data-surface="..."] rebinding blocks.
   const scopes = {};
-  const re = /(:root|\.dark|\[data-theme=[^\]]+\])\s*\{([\s\S]*?)\}/g;
+  const re = /(:root|\.dark|\[data-theme=[^\]]+\]|\[data-surface=[^\]]+\])\s*\{([\s\S]*?)\}/g;
   let m;
   while ((m = re.exec(css))) {
     const name = m[1];
