@@ -629,7 +629,7 @@ END:VCARD`;
                                 onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                               />
                             </FormControl>
-                            <p className="text-xs text-muted-foreground mt-1">
+                            <p className="text-xs text-[#1A1A1A]/60 mt-1">
                               If you were referred by a partner, enter their code here
                             </p>
                             <FormMessage className="text-red-500 text-xs" />
