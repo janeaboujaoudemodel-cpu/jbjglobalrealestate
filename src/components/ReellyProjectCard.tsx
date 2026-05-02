@@ -166,6 +166,7 @@ const ReellyProjectCard = ({
                 <DeveloperLogo
                   src={getDeveloperLogoUrl((project as any).developer)}
                   alt={project.developer_name || "Developer"}
+                  variant="bare"
                 />
               </div>
             )}
