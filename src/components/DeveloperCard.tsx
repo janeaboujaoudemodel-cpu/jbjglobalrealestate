@@ -77,40 +77,43 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           ) : isDamac ? (
             <div className="w-full h-full bg-[#1A1A1A] flex items-center justify-center">
               <div className="text-center">
-                <DeveloperLogo
-                  src={developer.logo_url}
-                  alt={developer.name}
-                  className="w-24 h-24 mx-auto mb-2 bg-[#FDFBF7]/95"
-                  loading={isEager ? "eager" : "lazy"}
-                  renderFallback
-                />
+                {developer.logo_url && (
+                  <DeveloperLogo
+                    src={developer.logo_url}
+                    alt={developer.name}
+                    className="w-24 h-24 mx-auto mb-2 bg-[#FDFBF7]/95"
+                    loading={isEager ? "eager" : "lazy"}
+                  />
+                )}
                 <p className="text-white/70 text-xs font-medium tracking-[0.3em] uppercase mt-2">DAMAC</p>
               </div>
             </div>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center">
               <div className="text-center">
-                <DeveloperLogo
-                  src={developer.logo_url}
-                  alt={developer.name}
-                  className="w-20 h-20 mx-auto mb-2 bg-[#FDFBF7]/95"
-                  loading="lazy"
-                  renderFallback
-                />
+                {developer.logo_url && (
+                  <DeveloperLogo
+                    src={developer.logo_url}
+                    alt={developer.name}
+                    className="w-20 h-20 mx-auto mb-2 bg-[#FDFBF7]/95"
+                    loading="lazy"
+                  />
+                )}
                 <span className="text-white/90 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
               </div>
             </div>
           )}
           
-      {/* Logo Overlay - Top Left */}
-          <div className="absolute top-3 left-3 z-20">
-            <DeveloperLogo
-              src={developer.logo_url}
-              alt={`${developer.name} logo`}
-              loading={isEager ? "eager" : "lazy"}
-              renderFallback
-            />
-          </div>
+      {/* Logo Overlay - Top Left — only when real logo exists */}
+          {developer.logo_url && (
+            <div className="absolute top-3 left-3 z-20">
+              <DeveloperLogo
+                src={developer.logo_url}
+                alt={`${developer.name} logo`}
+                loading={isEager ? "eager" : "lazy"}
+              />
+            </div>
+          )}
           
           {/* Tier Badge - Top Right */}
           {tier && (

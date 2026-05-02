@@ -99,13 +99,19 @@ export default function RecommendedDevelopers({
                   to={`/developer/${dev.slug}`}
                   className="group block rounded-xl border-2 border-gold/20 hover:border-gold/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
                 >
-                  {/* Logo — canonical only; DeveloperLogo renders Building2 fallback */}
+                  {/* Logo — real logo only; show name fallback when missing */}
                   <div className="h-28 flex items-center justify-center p-4">
-                    <DeveloperLogo
-                      src={dev.logo_url}
-                      alt={dev.name}
-                      renderFallback
-                    />
+                    {dev.logo_url ? (
+                      <DeveloperLogo
+                        src={dev.logo_url}
+                        alt={dev.name}
+                        className="w-20 h-20"
+                      />
+                    ) : (
+                      <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
+                        {dev.name}
+                      </span>
+                    )}
                   </div>
 
                   {/* Info */}
