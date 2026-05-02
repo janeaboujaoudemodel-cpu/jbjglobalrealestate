@@ -4365,3 +4365,112 @@ a[class*="bg-red-"]:hover {
 [data-surface="champagne"] nav button[data-no-contrast-guard]:hover * {
   color: #1A1A1A !important;
 }
+
+/* ============================================================
+ * GOLD-FILL DEBRAND (site-wide, front + back)
+ * Dominant gold fills are removed everywhere. Gold survives only
+ * as a 1px hairline accent (border / ring / underline). All
+ * previously gold-filled buttons, badges, active states, tabs,
+ * tiles, gradients become cream champagne (#EFE6D6) with ink text.
+ *
+ * Exceptions kept: brand monogram (img tags untouched),
+ * --price-orange, AI purple system, semantic data-viz colours,
+ * `text-gold` foreground accent labels, and 1px gold borders.
+ * ============================================================ */
+
+/* 1. data-surface="gold" repainted to cream + ink + 1px gold border */
+[data-surface="gold"] {
+  --surface-bg: 36 41% 89% !important;        /* #EFE6D6 raised cream */
+  --surface-fg: 0 0% 10% !important;          /* #1A1A1A ink */
+  --surface-fg-muted: 0 0% 30% !important;
+  --surface-border: 36 33% 43% !important;    /* #B89555 hairline */
+  --surface-icon: 0 0% 10% !important;
+  --surface-link: 36 33% 33% !important;      /* deep gold for link affordance */
+  --surface-cta-bg: 0 0% 10% !important;
+  --surface-cta-fg: 36 41% 95% !important;
+  --background: var(--surface-bg);
+  --foreground: var(--surface-fg);
+  --card: 36 47% 98%;
+  --card-foreground: var(--surface-fg);
+  --muted-foreground: var(--surface-fg-muted);
+  --border: var(--surface-border);
+  color: hsl(var(--surface-fg)) !important;
+  background-color: hsl(var(--surface-bg)) !important;
+  border: 1px solid #B89555;
+}
+
+/* 2. Solid gold-hex background literals → cream champagne fill, ink text.
+ *    Tailwind escapes [ ] and # in arbitrary values, so we target the
+ *    rendered class strings via attribute selectors. Excludes the gold
+ *    foreground (text-) and border (border-) tokens — those are kept. */
+[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]):not([data-no-gold-debrand]),
+[class*="bg-[#b89555]"]:not([class*="bg-[#b89555]/"]):not([data-no-gold-debrand]),
+[class*="bg-[#A68444]"]:not([class*="bg-[#A68444]/"]):not([data-no-gold-debrand]),
+[class*="bg-[#a68444]"]:not([class*="bg-[#a68444]/"]):not([data-no-gold-debrand]) {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+  border-color: #B89555 !important;
+}
+
+/* 3. Tailwind token-named gold fills (bg-gold, bg-gold-dark, etc.)
+ *    Use class~= to match exact utility names. */
+.bg-gold:not([data-no-gold-debrand]),
+.bg-gold-dark:not([data-no-gold-debrand]),
+.bg-gold-light:not([data-no-gold-debrand]),
+.bg-gold-muted:not([data-no-gold-debrand]) {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+}
+
+/* 4. Linear-gradient backgrounds that use gold endpoints. Tailwind emits
+ *    `from-[#B89555]` / `to-[#A68444]` as classes; replace the actual
+ *    rendered background image so the gradient flattens to cream. */
+[class*="from-[#B89555]"][class*="to-[#A68444]"]:not([data-no-gold-debrand]),
+[class*="from-[#b89555]"][class*="to-[#a68444]"]:not([data-no-gold-debrand]),
+[class*="from-[#A68444]"][class*="to-[#B89555]"]:not([data-no-gold-debrand]),
+[class*="bg-gradient-to-r"][class*="from-gold"]:not([data-no-gold-debrand]),
+[class*="bg-gradient-to-br"][class*="from-gold"]:not([data-no-gold-debrand]) {
+  background-image: none !important;
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+  border: 1px solid #B89555 !important;
+}
+
+/* 5. Active tab / data-state="active" gold fills → cream + 1px gold underline. */
+[data-state="active"][class*="bg-[#B89555]"],
+[data-state="active"][class*="bg-gold"],
+[data-state="active"][class*="from-[#B89555]"] {
+  background-color: #EFE6D6 !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  border-bottom: 1px solid #B89555 !important;
+}
+
+/* 6. Badge / chip safety: text on the new cream fill must never inherit
+ *    white from a previous solid-gold context. */
+[class*="bg-[#B89555]"]:not([class*="bg-[#B89555]/"]) :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]),
+.bg-gold :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
+  color: #1A1A1A !important;
+}
+
+/* 7. Sidebar nav active item — locked cream system (front + back).
+ *    Hover: soft cream wash + 1px gold left bar. Active: same cream + bold. */
+nav button[aria-current="page"],
+nav a[aria-current="page"],
+nav button[data-active="true"],
+nav a[data-active="true"] {
+  background-color: #EFE6D6 !important;
+  color: #1A1A1A !important;
+  border-left: 2px solid #B89555 !important;
+  font-weight: 600;
+}
+
+/* 8. Keep gold for hairline borders, focus rings, and small text accents. */
+[class*="border-[#B89555]"],
+[class*="ring-[#B89555]"],
+[class*="border-gold"],
+[class*="ring-gold"],
+[class*="text-[#B89555]"],
+[class*="text-gold"] {
+  /* no-op: these stay gold by design (hairline accent) */
+}
