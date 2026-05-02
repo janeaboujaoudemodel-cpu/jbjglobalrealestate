@@ -4334,3 +4334,22 @@ a[class*="bg-red-"]:hover {
 [data-surface="page"][data-no-contrast-guard] label {
   color: #1A1A1A !important;
 }
+
+/* 6. Faded red action icons on champagne (e.g. trash buttons) → solid ink at rest.
+ *    User explicitly required: garbage icons must always be black, red only on hover. */
+[data-surface="champagne"] :is(.text-red-300, .text-red-400):not([data-no-contrast-guard]):not(:hover) {
+  color: #1A1A1A !important;
+}
+
+/* 7. Backend chat bubble safety net — never let long content escape its container. */
+[data-surface="champagne"] .max-w-\[70\%\] > p,
+[data-surface="champagne"] .max-w-\[70\%\] > div {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+
+/* 8. Backend KPI / badge labels — ensure tiny captions can shrink without overflowing cards. */
+[data-surface="champagne"] [class*="grid-cols-"] .truncate {
+  min-width: 0;
+}
