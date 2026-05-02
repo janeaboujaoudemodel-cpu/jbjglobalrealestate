@@ -4129,3 +4129,56 @@ a[class*="bg-red-"]:hover {
 :where(a, button)[style*="#B91C1C"] :where(svg, span) {
   color: inherit !important;
 }
+
+/* ============================================================
+ * URGENT CONTRAST RESCUE — legacy AI tool pages and dark cards
+ * Pages still rendering bg-zinc-* / bg-black with brown #5A4A2E
+ * or generic gray text were unreadable. Force readable colors.
+ * ============================================================ */
+:where(
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-black, [class*="bg-black"],
+  [class*="bg-zinc-8"], [class*="bg-zinc-9"],
+  [class*="from-zinc-9"], [class*="from-black"],
+  [class*="bg-[#0D0C08]"], [class*="bg-[#1A1A1A]"]
+) :is(h1, h2, h3, h4, h5, h6, p, span, li, label, small, strong, em, div):not(.text-price-orange):not([class*="text-price-orange"]):not([data-no-contrast-guard]) {
+  color: rgb(255 255 255 / 0.92);
+}
+
+/* Brown #5A4A2E on dark surfaces becomes legible champagne */
+:where(
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-black, [class*="bg-black"],
+  [class*="bg-zinc-8"], [class*="bg-zinc-9"],
+  [class*="from-zinc-9"],
+  [class*="bg-[#0D0C08]"], [class*="bg-[#1A1A1A]"]
+) :is([class*="text-[#5A4A2E]"], [class*="text-[#3A2D1D]"], [class*="text-[#8A7556]"]):not([data-no-contrast-guard]) {
+  color: #F5E9D0 !important;
+  opacity: 1 !important;
+}
+
+/* Inputs / textareas / selects on dark surfaces — readable text + placeholder */
+:where(
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-black, [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"]
+) :is(input, textarea, select):not([data-no-contrast-guard]) {
+  color: #FFFFFF !important;
+}
+:where(
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-black, [class*="bg-black"]
+) :is(input, textarea, select)::placeholder {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+/* Pending Tasks popup is forced champagne — guarantee its descendants render
+   ink even if global guards otherwise inverted them. */
+[aria-labelledby="pending-tasks-title"] :is(h1, h2, h3, h4, h5, h6, p, span, b, strong) {
+  color: #1A1A1A !important;
+}
