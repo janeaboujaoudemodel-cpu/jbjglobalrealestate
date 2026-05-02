@@ -635,7 +635,7 @@ const CRM = () => {
       </Suspense>
 
       {/* Premium Header - Champagne with Gold border */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header data-surface="champagne" className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)] transition-all duration-300">
         <div className="max-w-[1600px] w-full mx-auto px-6 py-2">
           {/* First Line - Role Only */}
           <div className="flex items-center justify-between">

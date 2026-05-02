@@ -283,18 +283,18 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+    <Card data-surface="champagne" className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-2">
         <CardTitle className="text-[#1A1A1A] font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-              <MessageSquare className="h-4 w-4 text-[#1A1A1A]" />
+            <div className="p-1.5 rounded-lg bg-[#1A1A1A] border border-[#B89555]/60 shadow-sm">
+              <MessageSquare className="h-4 w-4" style={{ color: "#B89555" }} />
             </div>
-            Team Communication
+            <span style={{ color: "#1A1A1A" }} className="font-bold tracking-tight">Team Communication</span>
           </div>
           <div className="flex items-center gap-2">
             <Link to="/video-meeting">
-              <Button variant="secondary" size="sm" className="h-7 text-xs">
+              <Button variant="primary" size="sm" className="h-7 text-xs">
                 <Video className="h-3 w-3 mr-1" />
                 New Meeting
               </Button>
@@ -305,19 +305,19 @@ const CRMCommunicationPanel = () => {
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] grid grid-cols-4 rounded-none border-b border-[#B89555]/30">
-            <TabsTrigger value="chat" className="tab-trigger-champagne text-[#1A1A1A] text-xs data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="chat" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
               <Hash className="h-3 w-3 mr-1" />
               Channels
             </TabsTrigger>
-            <TabsTrigger value="team" className="tab-trigger-champagne text-[#1A1A1A] text-xs data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="team" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
               <Users className="h-3 w-3 mr-1" />
               Team
             </TabsTrigger>
-            <TabsTrigger value="meetings" className="tab-trigger-champagne text-[#1A1A1A] text-xs data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="meetings" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
               <Video className="h-3 w-3 mr-1" />
               Meetings
             </TabsTrigger>
-            <TabsTrigger value="files" className="tab-trigger-champagne text-[#1A1A1A] text-xs data-[state=active]:text-[#1A1A1A]">
+            <TabsTrigger value="files" className="tab-trigger-champagne text-[#1A1A1A] text-xs font-semibold data-[state=active]:text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7]">
               <FileText className="h-3 w-3 mr-1" />
               Files
             </TabsTrigger>
@@ -328,7 +328,7 @@ const CRMCommunicationPanel = () => {
             <div className="flex h-[280px]">
               {/* Channels Sidebar */}
               <div className="w-1/3 border-r border-[#B89555]/30 p-2">
-                <p className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wide mb-2 px-1">Channels</p>
+                <p className="text-[10px] text-[#1A1A1A] font-bold uppercase tracking-wide mb-2 px-1">Channels</p>
                 <div className="space-y-1">
                 {channels.map(channel => {
                     const unreadCount = getUnreadCount(channel.id);
