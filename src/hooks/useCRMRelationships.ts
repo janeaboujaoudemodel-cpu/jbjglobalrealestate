@@ -292,9 +292,6 @@ export const useEnrichDeveloperRegistry = () => {
   return useMutation({
     mutationFn: async (input: { ids?: string[]; useWeb?: boolean; batchSize?: number } = {}) => {
       const data = await invokeWithTimeout<any>("enrich-developer-registry", input);
-      const error = null as any;
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
       return data as { processed: number; results: Array<{ id: string; name: string; filled?: string[]; error?: string }>; message?: string };
     },
     onSuccess: (data) => {
