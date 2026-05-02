@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
-import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users } from "lucide-react";
+import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users, Sparkles, ShieldCheck, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const dubaiStats = [
+  { value: "0%",   label: "Income Tax",    icon: Sparkles },
+  { value: "10Y",  label: "Golden Visa",   icon: ShieldCheck },
+  { value: "#1",   label: "Safety Rank",   icon: Globe2 },
+  { value: "200+", label: "Nationalities", icon: Users },
+];
 
 const highlights = [
   { icon: Shield, label: "0% Income Tax", desc: "No personal income or capital gains tax in the UAE" },
@@ -19,19 +26,44 @@ const OverseasInvestorsBanner = () => {
         <div className="text-center mb-6 md:mb-8">
           <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
             <Globe className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#5A4A2E]" />
-            <span className="text-[#1A1A1A]">International Investors</span>
+            <span className="text-[#1A1A1A]">Global Investment Hub</span>
           </span>
         </div>
 
         {/* Hero content */}
-        <div className="max-w-4xl mx-auto text-center mb-8 md:mb-12 animate-fade-in-up">
+        <div className="max-w-4xl mx-auto text-center mb-8 md:mb-10 animate-fade-in-up">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Invest in Dubai From Anywhere in the World
           </h2>
           <p className="text-[#5A4A2E] text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Whether you're in Europe, Asia, the Americas, or CIS markets — Dubai offers the world's most investor-friendly environment. 
-            Zero income tax, world-class infrastructure, and a 10-year Golden Visa make it the ideal destination for wealth preservation and growth.
+            Strategic location, world-class infrastructure, and long-term government execution
+            make Dubai the most investable city in the region — with zero income tax, full foreign
+            ownership, and a 10-year Golden Visa for qualifying investors.
           </p>
+        </div>
+
+        {/* Dubai Capital Stats — merged from former "Why Dubai" section */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto mb-10 md:mb-12">
+          {dubaiStats.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <div
+                key={s.label}
+                className="rounded-2xl bg-[#F7F2EA] border border-[#B89555]/40 p-4 md:p-5 text-center shadow-sm hover:shadow-md hover:border-[#B89555]/70 transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                <div className="mx-auto mb-2.5 w-9 h-9 md:w-10 md:h-10 rounded-xl bg-[#1A1A1A] flex items-center justify-center">
+                  <Icon className="w-4 h-4 md:w-5 md:h-5 text-[#B89555]" />
+                </div>
+                <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-none tabular-nums">
+                  {s.value}
+                </div>
+                <div className="mt-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.14em] font-semibold text-[#5A4A2E] whitespace-nowrap">
+                  {s.label}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Highlights Grid */}
