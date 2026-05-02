@@ -99,11 +99,10 @@ export default function CategorySelectorSection() {
                 className="group relative text-left bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
               >
                 <div className="flex items-center justify-between gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] via-[#B89555] to-[#A68444] border border-[#A68444] flex items-center justify-center shadow-[0_4px_12px_rgba(184,149,85,0.35)] group-hover:shadow-[0_6px_18px_rgba(184,149,85,0.55)] transition-all flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#1A1A1A] group-hover:border-[#B89555]">
                     <Icon
-                      className="w-6 h-6"
+                      className="w-6 h-6 text-[#1A1A1A] group-hover:text-[#B89555] transition-colors duration-200"
                       strokeWidth={2.25}
-                      style={{ color: "#FFFFFF", filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.35))" }}
                     />
                   </div>
                   <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors text-right">
