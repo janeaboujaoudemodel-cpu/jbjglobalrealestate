@@ -281,11 +281,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
 
-          {/* Bottom-Right: Price pill — solid orange, opaque white text */}
+          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
           {project.price_from ? (
-            <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1.5 rounded-full bg-[hsl(var(--price-orange))] px-3 py-1.5 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
-              <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-[#FFFFFF]">From</span>
-              <span className="text-[#FFFFFF] font-extrabold text-sm tabular-nums leading-none">
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
+              <span className="price-pill-eyebrow">From</span>
+              <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
