@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
@@ -176,13 +177,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Developer Logo — real logos only, no fallback icon */}
+            {/* Developer Logo — real logos only, full-fit overlay (no white frame) */}
             {logoUrl && (
               <div className="absolute top-3 left-3 z-20">
                 <DeveloperLogo
                   src={logoUrl}
                   alt={devName}
                   loading={isAboveFold ? "eager" : "lazy"}
+                  variant="bare"
                 />
               </div>
             )}
@@ -214,20 +216,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
               {project.name}
             </h3>
-            {project.developer?.slug ? (
-              <span className="text-xs mb-1 block">
-                <span className="text-[#1A1A1A]/70 font-medium">by </span>
-                <Link
-                  to={`/developer/${project.developer.slug}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-[#1A1A1A] font-medium hover:text-[#1A1A1A] hover:underline transition-colors"
-                >
-                  {project.developer_name}
-                </Link>
-              </span>
-            ) : project.developer_name ? (
-              <span className="text-xs font-medium mb-1 block"><span className="text-[#1A1A1A]/70">by </span><span className="text-[#1A1A1A]">{project.developer_name}</span></span>
-            ) : null}
+            {project.developer_name && (
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs mb-1 block"
+                showPrefix={true}
+              />
+            )}
 
             {(project as any).description && (() => {
               const cleanDesc = sanitizeForDisplay((project as any).description);
@@ -258,9 +254,10 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
                 if (percentages.length === 0) return <span />;
                 return (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1A1A1A] bg-[#F7F2EA] border border-[#B89555]/30 rounded-full px-2 py-0.5">
-                    <CreditCard className="w-3 h-3" />
-                    {percentages.join('/')}
+                  <span className="payment-plan-square" aria-label={`Payment plan ${percentages.join('/')}`}>
+                    <CreditCard className="w-3 h-3" aria-hidden="true" />
+                    <span className="payment-plan-eyebrow">Plan</span>
+                    <span className="payment-plan-value">{percentages.join('/')}</span>
                   </span>
                 );
               })()}

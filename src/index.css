@@ -4227,13 +4227,47 @@ a[class*="bg-red-"]:hover {
   color: hsl(var(--price-orange));
 }
 
-/* Handover line — orange, semibold, matches the price pill identity. */
+/* Handover line — label is solid ink black; date stays orange to match the price pill identity. */
 .handover-orange {
   color: hsl(var(--price-orange)) !important;
   font-weight: 600;
   letter-spacing: -0.005em;
 }
 .handover-orange .handover-label {
-  color: hsl(var(--price-orange) / 0.78);
-  font-weight: 500;
+  color: #1A1A1A !important;
+  font-weight: 700;
+}
+
+/* Premium square payment-plan badge — ink fill, gold hairline, used on every project card. */
+.payment-plan-square {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #1A1A1A;
+  color: #FDFBF7;
+  border: 1px solid #B89555;
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.08),
+    0 1px 0 hsl(0 0% 0% / 0.25),
+    0 0 0 1px hsl(var(--gold) / 0.18);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.payment-plan-square .payment-plan-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: hsl(var(--gold));
+}
+.payment-plan-square .payment-plan-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #FDFBF7;
+}
+.payment-plan-square svg {
+  color: hsl(var(--gold));
 }

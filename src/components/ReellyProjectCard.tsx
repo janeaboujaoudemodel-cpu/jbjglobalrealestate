@@ -3,7 +3,7 @@
  import type { ReellyProject } from "@/hooks/useReellyProjects";
  import FavoriteButton from "./FavoriteButton";
  import ShortlistBadgeButton from "./ShortlistBadgeButton";
- import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle } from "lucide-react";
+ import { ChevronLeft, ChevronRight, MapPin, Mail, Phone, MessageCircle, CreditCard } from "lucide-react";
  import { CONTACT_INFO, getWhatsAppUrl, getCallUrl } from "@/constants/stats";
 import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
@@ -166,6 +166,7 @@ const ReellyProjectCard = ({
                 <DeveloperLogo
                   src={getDeveloperLogoUrl((project as any).developer)}
                   alt={project.developer_name || "Developer"}
+                  variant="bare"
                 />
               </div>
             )}
@@ -266,14 +267,27 @@ const ReellyProjectCard = ({
            {/* Divider */}
            <div className="h-px bg-gold/20 my-2" />
            
-          {/* Handover line — orange, matches the price label identity */}
+          {/* Handover line — black label, orange date */}
           {(() => {
             const derived = deriveHandover(project);
+            const breakdown = (project as any).payment_breakdown;
+            const percentages = Array.isArray(breakdown)
+              ? breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number')
+              : [];
             return (
-              <p className="text-sm mb-2 handover-orange">
-                <span className="handover-label">Handover </span>
-                <span>{derived || HANDOVER_FALLBACK}</span>
-              </p>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <p className="text-sm handover-orange">
+                  <span className="handover-label">Handover </span>
+                  <span>{derived || HANDOVER_FALLBACK}</span>
+                </p>
+                {percentages.length > 0 && (
+                  <span className="payment-plan-square" aria-label={`Payment plan ${percentages.join('/')}`}>
+                    <CreditCard className="w-3 h-3" aria-hidden="true" />
+                    <span className="payment-plan-eyebrow">Plan</span>
+                    <span className="payment-plan-value">{percentages.join('/')}</span>
+                  </span>
+                )}
+              </div>
             );
           })()}
            

@@ -11,10 +11,20 @@ interface DeveloperLogoProps {
   onError?: () => void;
   /**
    * When true, render the approved Building2 icon fallback instead of
-   * returning null if no valid logo is available. Use this when the caller
-   * wants a guaranteed slot (e.g. for layout stability).
+   * returning null if no valid logo is available.
+   * NOTE: Building2 fallback is reserved for internal CRM/admin surfaces
+   * only — never on public project listings.
    */
   renderFallback?: boolean;
+  /**
+   * Visual variant.
+   *  - "tile" (default): champagne tile with gold hairline, used in
+   *    developer directories, area chips, dev detail cards.
+   *  - "bare": no border, no background, no inner padding. Used as an
+   *    overlay on project-card photos so the logo reads as a clean,
+   *    full-fit brand mark with a soft drop-shadow for legibility.
+   */
+  variant?: "tile" | "bare";
 }
 
 /**
@@ -24,7 +34,9 @@ interface DeveloperLogoProps {
  *  - Only canonical `logo_url` values pass through.
  *  - Project photos, screenshots, WhatsApp images, initials,
  *    or any other substitute is forbidden and will be rejected.
- *  - The only approved fallback is the `Building2` icon.
+ *  - The Building2 fallback is reserved for internal/admin tiles
+ *    where layout stability matters — public listings must never
+ *    show a fake icon.
  *  - DO NOT MODIFY without explicit Founder authorization.
  */
 export function DeveloperLogo({
@@ -34,11 +46,52 @@ export function DeveloperLogo({
   loading = "lazy",
   onError,
   renderFallback = false,
+  variant = "tile",
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
+  if (variant === "bare") {
+    if (!valid) {
+      // No fake icon on public listings — render nothing so the photo stays clean.
+      if (!renderFallback) return null;
+      return (
+        <div
+          className={cn(
+            "h-12 w-16 inline-flex items-center justify-center",
+            className,
+          )}
+          aria-label={`${alt} (logo unavailable)`}
+        >
+          <Building2 className="w-6 h-6 text-[#FDFBF7]/85 drop-shadow" />
+        </div>
+      );
+    }
+    return (
+      <div
+        className={cn(
+          // Wide 4:3 box so wordmark logos (Emaar, Aldar, Meraas) read fully.
+          // No background, no border — the logo sits cleanly on the photo.
+          "h-12 w-16 inline-flex items-center justify-center overflow-hidden",
+          className,
+        )}
+      >
+        <img
+          src={src as string}
+          alt={alt}
+          loading={loading}
+          onError={() => {
+            setError(true);
+            onError?.();
+          }}
+          className="block h-full w-full object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+        />
+      </div>
+    );
+  }
+
+  // ── Default tile variant (developer directory, dev-detail, area chips) ──
   if (!valid) {
     if (!renderFallback) return null;
     return (
