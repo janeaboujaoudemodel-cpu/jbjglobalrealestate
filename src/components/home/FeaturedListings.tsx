@@ -216,20 +216,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
               {project.name}
             </h3>
-            {project.developer?.slug ? (
-              <span className="text-xs mb-1 block">
-                <span className="text-[#1A1A1A]/70 font-medium">by </span>
-                <Link
-                  to={`/developer/${project.developer.slug}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-[#1A1A1A] font-medium hover:text-[#1A1A1A] hover:underline transition-colors"
-                >
-                  {project.developer_name}
-                </Link>
-              </span>
-            ) : project.developer_name ? (
-              <span className="text-xs font-medium mb-1 block"><span className="text-[#1A1A1A]/70">by </span><span className="text-[#1A1A1A]">{project.developer_name}</span></span>
-            ) : null}
+            {project.developer_name && (
+              <DeveloperLink
+                name={project.developer_name}
+                slug={project.developer?.slug || null}
+                className="text-xs mb-1 block"
+                showPrefix={true}
+              />
+            )}
 
             {(project as any).description && (() => {
               const cleanDesc = sanitizeForDisplay((project as any).description);
