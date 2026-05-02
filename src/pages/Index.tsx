@@ -249,13 +249,28 @@ const Index = () => {
             {/* Three pillar badges — solid near-black surface (no backdrop-blur) + drop-shadows for guaranteed legibility on busy hero photo */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-gold/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+              className="grid grid-cols-3 max-w-3xl mx-auto mb-8 border border-gold/40 overflow-hidden rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] bg-[#0A0A0A]"
             >
-              {pillars.map((pillar) => (
+              {pillars.map((pillar, idx) => (
                 <div
                   key={pillar.title}
-                  className="bg-[#0A0A0A] p-4 sm:p-5 text-center"
+                  className="relative bg-[#0A0A0A] p-4 sm:p-5 text-center"
                 >
+                  {/* Premium divider — gold gradient hairline + center diamond, between cards only */}
+                  {idx > 0 && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute left-0 top-3 bottom-3 w-px"
+                      style={{
+                        background:
+                          "linear-gradient(to bottom, transparent 0%, rgba(184,149,85,0.15) 15%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0.15) 85%, transparent 100%)",
+                      }}
+                    >
+                      <span
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_6px_rgba(184,149,85,0.8)]"
+                      />
+                    </div>
+                  )}
                   <pillar.icon
                     className="w-6 h-6 sm:w-7 sm:h-7 text-gold mx-auto mb-2"
                     style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.9))" }}
