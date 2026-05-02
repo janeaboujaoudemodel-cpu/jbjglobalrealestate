@@ -498,10 +498,10 @@ const BrokeragesTab = () => {
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="font-bold text-base text-[#1A1A1A]">{r.company_name}</h3>
                       {isDirectory && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#B89555] text-white">UAE Directory</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">RERA-Licensed</span>
                       )}
                       {isExistingMatch && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already in Directory</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already Licensed</span>
                       )}
                       {!isDirectory && !isExistingMatch && r.entry_source === "owner" && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
@@ -511,9 +511,6 @@ const BrokeragesTab = () => {
                     <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
-                      {(r.office_address || r.office_location) && <div>{r.office_address || r.office_location}</div>}
-                      {(r.email || r.primary_contact?.email) && <div>{r.email || r.primary_contact?.email}</div>}
-                      {(r.phone || r.primary_contact?.phone) && <div>{r.phone || r.primary_contact?.phone}</div>}
                       {r.primary_contact?.name && (
                         <div className="font-medium text-[#1A1A1A]">
                           Primary: {r.primary_contact.name}{r.primary_contact.role ? ` · ${r.primary_contact.role}` : ""}
@@ -526,19 +523,22 @@ const BrokeragesTab = () => {
                       )}
                     </div>
 
-                    {/* KPI strip — readable champagne palette, never white-on-white */}
+                    {/* Clickable contact row */}
+                    <BrokerageContactLinks r={r} />
+
+                    {/* KPI strip — Agents (single) + Top Closer + activity */}
                     <div className="mt-3 grid grid-cols-2 sm:grid-cols-6 gap-2">
                       {[
                         { label: "Rating", value: r.star_rating ? `★ ${Number(r.star_rating).toFixed(1)}` : "—" },
                         { label: "Agents", value: r.estimated_agent_count ? `~${r.estimated_agent_count}` : "—" },
-                        { label: "Brokers", value: r.active_broker_count || 0 },
+                        { label: "Top Closer", value: (Array.isArray(r.top_active_agents) && r.top_active_agents[0]?.name) ? `${r.top_active_agents[0].name}${r.top_active_agents[0].deals_count ? ` · ${r.top_active_agents[0].deals_count}` : ""}` : "—" },
                         { label: "Inquiries", value: r.inquiry_count || 0 },
                         { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
                         { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
                       ].map((k) => (
                         <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
                           <div className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold">{k.label}</div>
-                          <div className="text-sm font-bold text-[#1A1A1A]">{k.value}</div>
+                          <div className="text-sm font-bold text-[#1A1A1A] truncate">{k.value}</div>
                         </div>
                       ))}
                     </div>
