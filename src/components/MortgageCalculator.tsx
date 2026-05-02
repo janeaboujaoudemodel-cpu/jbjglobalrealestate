@@ -110,7 +110,7 @@ const MortgageCalculator = ({
         {/* Interactive Sliders */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Property Price Slider */}
-          <div className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-[#5A4A2E]" />
@@ -133,7 +133,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Down Payment Slider */}
-          <div className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider flex items-center gap-1.5">
                 <Percent className="w-3.5 h-3.5 text-[#5A4A2E]" />
@@ -156,7 +156,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Interest Rate Slider */}
-          <div className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5 text-[#5A4A2E]" />
@@ -179,7 +179,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Loan Term Slider */}
-          <div className="bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 p-4">
+          <div className="bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-[#5A4A2E]" />
@@ -214,7 +214,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Down Payment */}
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
             <p className="text-[#5A4A2E] text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
             <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
               {downPaymentPercent}%
@@ -225,7 +225,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Loan Amount */}
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
             <p className="text-[#5A4A2E] text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
             <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
               {100 - downPaymentPercent}%
@@ -236,7 +236,7 @@ const MortgageCalculator = ({
           </div>
 
           {/* Total Cost */}
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
+          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-center shadow-sm">
             <p className="text-[#5A4A2E] text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
             <p className="text-[#1A1A1A] font-bold text-lg sm:text-xl">
               {formatCurrency(calculations.totalPayment)}

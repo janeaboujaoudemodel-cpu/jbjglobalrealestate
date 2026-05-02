@@ -39,10 +39,10 @@ const OverseasInvestorsBanner = () => {
           {highlights.map((item, i) => (
             <div
               key={item.label}
-              className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-4 md:p-5 text-center hover:border-[#B89555]/30 hover:shadow-lg transition-all duration-300 animate-fade-in-up"
-              style={{ animationDelay: `${i * 80}ms` }}
+              className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-4 md:p-5 text-center hover:border-[#B89555]/30 hover:shadow-lg transition-all duration-300 animate-fade-in-up"
+              style={{ animationDelay: `${i * 0.1}s` }}
             >
-              <div className="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-3">
+              <div className="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-xl bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center mb-3">
                 <item.icon className="w-5 h-5 md:w-6 md:h-6 text-[#5A4A2E]" />
               </div>
               <h4 className="text-[#1A1A1A] text-xs md:text-sm font-bold mb-1">{item.label}</h4>

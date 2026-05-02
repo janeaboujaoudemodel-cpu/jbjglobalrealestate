@@ -1,67 +1,82 @@
 ## Goal
-Guarantee that on every page, every card, every button and every text block remains readable, no matter which background it lands on — without authors having to remember per-component contrast rules.
 
-The site already has many partial guards (`scripts/contrast/*`, `src/utils/contrastGuard.ts`, the PASS guards in `src/index.css`). They cover specific failure modes. This plan unifies them behind a single, predictable **surface theme system**.
+Make all the cards listed below use the **same champagne color as the vertical sidebar background (`#F7F2EA`)** instead of the current `#FDFBF7` (page tone) or white. Also restyle the footer social row so every icon uses the same gold-circle/black-glyph hover treatment that YouTube and TikTok already share.
 
-## Architecture: 4 named surfaces
+## Color contract
 
-Every container declares one of four surfaces. Descendants inherit safe colors automatically.
+- Sidebar/raised surface = `#F7F2EA` ← **target card color**
+- Page background       = `#FDFBF7` ← stays as section/page bg
+- Inner pill/icon tile  = `#EFE6D6` (one tone deeper, only where current code uses `#F7F2EA` as an inner accent inside a card we're elevating)
+- Border                = `#B89555/40` (gold hairline, unchanged)
 
-```text
-surface-page       FDFBF7  ink #1A1A1A   (default — everywhere)
-surface-champagne  F7F2EA  ink #1A1A1A   (cards on page)
-surface-gold       B89555  white #FFFFFF (gold CTAs / accent tiles)
-surface-ink        1A1A1A  champagne #F7F2EA (dark hero / footer / dark cards)
-```
+When a card is moved from `#FDFBF7` → `#F7F2EA`, any nested element currently using `#F7F2EA` as its accent will shift to `#EFE6D6` so we keep visible separation between the card surface and its inner tiles.
 
-Each surface rebinds the same set of CSS variables: `--surface-bg`, `--surface-fg`, `--surface-fg-muted`, `--surface-border`, `--surface-icon`, `--surface-link`, `--surface-cta-bg`, `--surface-cta-fg`. So `text-foreground`, `border-border`, `bg-card`, `text-muted-foreground` all "just work" on any surface.
+## Sections to update
 
-## Changes
+### Home page
+1. **Category Selector — three role cards** (`src/components/home/CategorySelectorSection.tsx`)
+   Investor / Broker / Developer cards: `bg-[#FDFBF7]` → `bg-[#F7F2EA]`.
 
-### 1. `src/index.css` — new global layer (added near existing `.surface-light` / `.surface-dark` block)
+2. **Starting Point Section — JBJ Royal Tools card + inner 8 cards** (`src/components/home/StartingPointSection.tsx`)
+   - Outer wrapper card → `#F7F2EA`
+   - Inner mini-cards currently `#FDFBF7` → `#F7F2EA`
+   - Inner icon tiles previously `#F7F2EA` → `#EFE6D6` (so they stay distinguishable)
 
-- Add `[data-surface="page"|"champagne"|"gold"|"ink"]` selectors that rebind the token set above (HSL, in `@layer base`).
-- Add aliases so existing `.surface-light` and `.surface-dark` keep working (no breaking change).
-- Strengthen the global text floors so any descendant of a `data-surface` ancestor that uses `text-white` / `text-black` / `text-gray-*` is auto-corrected to the surface's foreground color (extends the existing PASS rules for all four surfaces, not just light/dark).
-- Add a new utility selector group: cards built with `bg-card`, `bg-white`, `bg-[#FDFBF7]`, `bg-[#F7F2EA]`, `bg-black`, `bg-[#1A1A1A]`, gold backgrounds → automatically inherit the matching `data-surface` so descendant text/icons/borders are corrected even when the author forgot to add the attribute.
-- Border floor: any `border-*/0…20` on a text-bearing card is lifted to `--surface-border`, so faint hairlines never disappear against same-tone backgrounds.
+3. **Toolkit Showcase Card — main "AI Property Comparison / Royal Tools" hero card** (`src/components/home/ToolkitShowcaseCard.tsx`)
+   - Outer card → `#F7F2EA`
+   - Inner tool cards `#FDFBF7` → `#F7F2EA`
+   - Header strip currently `#F7F2EA` → `#EFE6D6` (deeper accent strip)
 
-### 2. `src/utils/contrastGuard.ts` — broaden runtime coverage
+4. **AI Property Comparison Widget** (`src/components/AIComparisonWidget.tsx`)
+   - Property comparison rows + container → `#F7F2EA`
+   - The internal accent block currently `#F7F2EA` → `#EFE6D6`
 
-Currently scans only `button, a, [role=button]…`. Expand to also scan text-bearing nodes that commonly fail:
-- `h1-h6, p, li, span.font-*, [data-card], .card`
-- For each, compute fg/bg luminance the same way; if the WCAG AA ratio for normal text (4.5:1) fails, force `--surface-fg` (or its inverse) via the existing `jbj-contrast-fix` class.
-- Keep the `[data-no-contrast-guard]` opt-out and the existing 250 ms / 1 s / mutation-observer schedule.
-- Add a small throttle (max 4 scans/sec) to keep the cost flat on large pages.
+5. **Mortgage Calculator** (`src/components/MortgageCalculator.tsx`)
+   - All result/input panel cards `#FDFBF7` → `#F7F2EA`
 
-### 3. New small primitive: `src/components/ui/Surface.tsx`
+6. **Overseas Investors Banner — "Invest in Dubai from anywhere"** (`src/components/home/OverseasInvestorsBanner.tsx`)
+   - Stat cards `#FDFBF7` → `#F7F2EA`
+   - Inner icon circles `#F7F2EA` → `#EFE6D6`
 
-```tsx
-<Surface tone="champagne" as="section">…</Surface>
-```
+7. **Why Choose Us cards** (`src/components/home/WhyChooseUs.tsx`)
+   - Feature cards `#FDFBF7` → `#F7F2EA`
+   - Icon tiles `#F7F2EA` → `#EFE6D6`
 
-Thin wrapper that renders `<section data-surface={tone} className="bg-[var(--surface-bg)] text-[var(--surface-fg)] border-[var(--surface-border)]">`. Optional, non-breaking — existing components keep working through the auto-mapping in step 1.
+8. **Ready to Get Started container** (`src/components/home/CTABand.tsx`)
+   - Main card holding the three-card loop → `#F7F2EA`
+   - Inner three cards keep their existing tone but if they currently use `#FDFBF7`, keep them so they pop against the now-champagne parent. If they use `#F7F2EA` already, shift them to `#EFE6D6` for separation.
 
-### 4. CI: extend the existing contrast scripts
+### Footer
+9. **Footer "white card" → champagne card** (`src/components/Footer.tsx`)
+   The brand/connect chip currently uses `bg-[#FDFBF7]/[0.03]` (almost-transparent on dark). Replace with a solid champagne card: `bg-[#F7F2EA]` with ink text + gold border, matching the rest of the site.
 
-- `scripts/contrast/check-tokens.mjs` — add the 4 new surface pairs to the matrix it already validates (4.5:1 normal text, 3:1 UI).
-- `scripts/contrast/check-rendered.mjs` — add 5 routes to the rendered Playwright sweep: `/`, `/properties`, `/jbj-broker-dashboard`, `/owner-dashboard`, `/contact`.
-- `scripts/contrast/allowlist.json` — no new entries; existing decorative selectors remain.
+10. **Footer social icons** (`src/components/marketing/SocialLinks.tsx`)
+    Update the `premium` variant (used in the footer) so every icon — Facebook, Instagram, LinkedIn, YouTube, TikTok — renders as:
+    - 36px circle, `bg-[hsl(var(--gold))]/15`, gold border
+    - **Glyph color: `#1A1A1A` (black)** instead of the current gold
+    - Hover: fills to solid gold (`bg-[hsl(var(--gold))]`), glyph stays/becomes ink, scales 1.06, gold glow shadow
+    
+    All five icons already share one className via `colorClasses`, so all five automatically get the unified style — i.e. YouTube/TikTok behavior is propagated to the others, with the glyph color flipped from gold to black per the request.
 
-### 5. Memory
+## No-Removal guarantee
 
-Save a `mem://ui-ux/visual-standards/global-surface-theme-standard` rule with:
-- The 4-tone model and which token each surface rebinds.
-- The "set `data-surface` on any new container; never hardcode `text-white`/`text-black` directly" instruction.
-- Pointer to `Surface.tsx` and the auto-mapping fallback.
+Per project memory's strict "No Removal" policy: this is a color-only restyle. No layout, content, animation, link, or component is removed or rearranged.
 
-## Files touched
+## Technical notes
 
-- `src/index.css` — add the surface-tone block and auto-mapping rules (~80 lines, additive)
-- `src/utils/contrastGuard.ts` — broaden selector + add throttle (~20 lines changed)
-- `src/components/ui/Surface.tsx` — new (~30 lines)
-- `scripts/contrast/check-tokens.mjs` — add 4 token pairs
-- `scripts/contrast/check-rendered.mjs` — add 5 routes
-- `mem://ui-ux/visual-standards/global-surface-theme-standard.md` — new memory
+- Edits are localized className swaps; no new components, no token additions to `index.css` (the values `#F7F2EA`, `#FDFBF7`, `#EFE6D6` are already the project's standard champagne tokens).
+- Social icon update is a single change in `SocialLinks.tsx` (`premium` variant string) — applies across the footer and any other premium consumer.
+- After edits I'll spot-check that text contrast on the new `#F7F2EA` cards still meets the existing global contrast guard (ink `#1A1A1A` on `#F7F2EA` is well above WCAG AA, so no additional changes needed).
 
-No DB changes. No new dependencies. No removals. Fully backward-compatible: pages that don't opt in still get the existing PASS guards plus the broader runtime coverage.
+## Files to edit
+
+- `src/components/home/CategorySelectorSection.tsx`
+- `src/components/home/StartingPointSection.tsx`
+- `src/components/home/ToolkitShowcaseCard.tsx`
+- `src/components/AIComparisonWidget.tsx`
+- `src/components/MortgageCalculator.tsx`
+- `src/components/home/OverseasInvestorsBanner.tsx`
+- `src/components/home/WhyChooseUs.tsx`
+- `src/components/home/CTABand.tsx`
+- `src/components/Footer.tsx`
+- `src/components/marketing/SocialLinks.tsx`

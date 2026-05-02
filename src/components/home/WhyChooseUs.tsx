@@ -47,10 +47,10 @@ const WhyChooseUs = () => {
             {valueProps.map((prop, index) => (
               <div
                 key={index}
-                className="group relative p-6 bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in-up shadow-sm"
-                style={{ animationDelay: `${index * 80}ms` }}
+                className="group relative p-6 bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 hover:border-[#B89555]/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in-up shadow-sm"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <prop.icon className="w-6 h-6 text-[#5A4A2E]" />
                 </div>
                 <h3 className="text-[#1A1A1A] font-bold text-base mb-2 group-hover:text-[#5A4A2E] transition-colors">

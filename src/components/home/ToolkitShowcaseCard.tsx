@@ -47,10 +47,10 @@ export function ToolkitShowcaseCard() {
   return (
     <section className="bg-[#FDFBF7] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7]">
-          {/* Header Section */}
-          <div className="bg-[#F7F2EA] p-6 md:p-8 border-b border-[#B89555]/30">
-            <div className="flex items-center gap-3 mb-3">
+        <div className="rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#F7F2EA]">
+          {/* Header - Premium Banner */}
+          <div className="bg-[#EFE6D6] p-6 md:p-8 border-b border-[#B89555]/30">
+            <div className="flex flex-col items-center text-center gap-3">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold uppercase tracking-[0.2em]">
                 <Sparkles className="w-3 h-3 text-[#B89555]" />
                 Free Professional Tools
@@ -79,7 +79,7 @@ export function ToolkitShowcaseCard() {
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <Link to={tool.href} className="group block h-full">
-                      <div className={`h-full flex flex-col bg-[#FDFBF7] rounded-xl border border-[#B89555]/30 ring-2 ring-transparent ${tone.ring} p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}>
+                      <div className={`h-full flex flex-col bg-[#F7F2EA] rounded-xl border border-[#B89555]/30 ring-2 ring-transparent ${tone.ring} p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}>
                         {/* Icon — per-tool tone */}
                         <div className={`w-12 h-12 rounded-xl ${tone.bg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                           <Icon className={`w-6 h-6 ${tone.icon}`} />
