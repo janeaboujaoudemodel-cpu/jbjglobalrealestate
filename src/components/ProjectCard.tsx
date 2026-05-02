@@ -13,6 +13,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -319,18 +320,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Divider */}
           <div className="h-px bg-[#B89555]/40" />
 
-          {/* Meta block — handover + developer + unit types, all solid ink */}
+          {/* Meta block — handover (orange, matches price pill) + developer + unit types */}
           <div className="flex flex-col gap-2">
-            <p className="text-sm">
-              {project.handover_date ? (
-                <>
-                  <span className="text-[#1A1A1A]/85">Handover </span>
-                  <span className="text-[#1A1A1A] font-semibold">{project.handover_date}</span>
-                </>
-              ) : (
-                <span className="text-[#1A1A1A]/85">Handover TBA</span>
-              )}
-            </p>
+            {(() => {
+              const derived = deriveHandover(project);
+              return (
+                <p className="text-sm handover-orange">
+                  <span className="handover-label">Handover </span>
+                  <span>{derived || HANDOVER_FALLBACK}</span>
+                </p>
+              );
+            })()}
 
             {project.developer && (
               <DeveloperLink
