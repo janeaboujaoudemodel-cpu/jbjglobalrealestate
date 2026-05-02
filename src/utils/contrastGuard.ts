@@ -38,17 +38,19 @@ function effectiveBgColor(el: Element): string {
   return "rgb(253, 251, 247)"; // page #FDFBF7 fallback
 }
 
-function fixIfLowContrast(el: HTMLElement) {
+function fixIfLowContrast(el: HTMLElement, minRatio: number) {
   if (el.closest("[data-no-contrast-guard]")) return;
+  // Skip nodes with no rendered text content (decorative wrappers)
+  if (!el.textContent || !el.textContent.trim()) return;
   const cs = window.getComputedStyle(el);
+  if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
   const fg = parseRgb(cs.color);
   const bg = parseRgb(effectiveBgColor(el));
   if (!fg || !bg) return;
   const lf = relLuminance(fg);
   const lb = relLuminance(bg);
   const ratio = (Math.max(lf, lb) + 0.05) / (Math.min(lf, lb) + 0.05);
-  if (ratio < 2.5) {
-    // Force inverse — pick white if bg is dark, ink otherwise.
+  if (ratio < minRatio) {
     el.classList.add(CONTRAST_FIX_CLASS);
     if (lb < 0.4) {
       el.style.setProperty("color", "#FDFBF7", "important");
@@ -59,16 +61,31 @@ function fixIfLowContrast(el: HTMLElement) {
 }
 
 let scheduled = false;
+let lastRun = 0;
+const MIN_INTERVAL_MS = 250; // throttle: max 4 scans/sec
 function scan() {
   if (scheduled) return;
+  const now = Date.now();
+  const wait = Math.max(0, MIN_INTERVAL_MS - (now - lastRun));
   scheduled = true;
-  requestAnimationFrame(() => {
+  const run = () => {
     scheduled = false;
-    const interactives = document.querySelectorAll<HTMLElement>(
-      'button, a[href], [role="button"], [role="menuitem"], [role="tab"], summary, label.cursor-pointer'
-    );
-    interactives.forEach(fixIfLowContrast);
-  });
+    lastRun = Date.now();
+    requestAnimationFrame(() => {
+      // Interactive elements — UI contrast floor (~3:1)
+      const interactives = document.querySelectorAll<HTMLElement>(
+        'button, a[href], [role="button"], [role="menuitem"], [role="tab"], summary, label.cursor-pointer'
+      );
+      interactives.forEach((el) => fixIfLowContrast(el, 2.5));
+      // Text-bearing nodes — body-text floor (tolerant 3.5; AA is 4.5)
+      const textNodes = document.querySelectorAll<HTMLElement>(
+        "h1, h2, h3, h4, h5, h6, p, li, blockquote, dt, dd, [data-card], .card"
+      );
+      textNodes.forEach((el) => fixIfLowContrast(el, 3.5));
+    });
+  };
+  if (wait > 0) setTimeout(run, wait);
+  else run();
 }
 
 let installed = false;
