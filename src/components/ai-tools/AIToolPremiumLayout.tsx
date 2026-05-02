@@ -253,22 +253,22 @@ const AIToolPremiumLayout = ({
         </div>
       </section>
 
-      {/* Content Section - Full border wrapper */}
-      <section className="py-12" style={{ background: "#0D0C08" }}>
+      {/* Content Section — champagne page surface */}
+      <section className="py-12 bg-[#FDFBF7]">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className={`max-w-6xl mx-auto border ${colors.border} rounded-2xl p-6 md:p-8`}
+            className="max-w-6xl mx-auto border border-[#B89555]/30 bg-[#FDFBF7] rounded-2xl p-6 md:p-8 shadow-sm"
           >
             {children}
 
             {showFinancialDisclaimer && (
-              <div className="mt-8 p-4 rounded-xl" style={{ background: "rgba(184,148,62,0.04)", border: "1px solid rgba(184,148,62,0.15)" }}>
-                <p className="text-[#5A4A2E] text-sm leading-relaxed">
-                  <strong className="text-[#5A4A2E]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
-                  <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+              <div className="mt-8 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
+                <p className="text-[#1A1A1A] text-sm leading-relaxed">
+                  <strong className="text-[#1A1A1A]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+                  <Link to="/contact" className="text-[#A68444] underline hover:text-[#1A1A1A]">Contact our team</Link> for professional guidance.
                   Past performance does not guarantee future results.
                 </p>
               </div>
