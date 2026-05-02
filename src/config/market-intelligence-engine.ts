@@ -398,7 +398,7 @@ export function getSentimentLabel(score: number): { label: string; color: string
   } else if (score >= SENTIMENT_THRESHOLDS.positive) {
     return { label: 'Positive', color: 'text-green-500', icon: 'UP' };
   } else if (score >= SENTIMENT_THRESHOLDS.neutral_lower) {
-    return { label: 'Neutral', color: 'text-[#8A7556]', icon: '--' };
+    return { label: 'Neutral', color: 'text-[#1A1A1A]/70', icon: '--' };
   } else if (score >= SENTIMENT_THRESHOLDS.negative) {
     return { label: 'Negative', color: 'text-orange-500', icon: 'DOWN' };
   } else {
