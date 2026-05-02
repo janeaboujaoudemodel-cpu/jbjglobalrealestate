@@ -88,6 +88,11 @@ Deno.serve(async (req) => {
       null;
 
     let fullName: string | null = metaName;
+    // crm_leads.full_name is NOT NULL — always fall back to email/local-part/'New User'
+    const ensureName = () =>
+      fullName ||
+      (email ? email.split('@')[0] : null) ||
+      'New User';
     try {
       const { data: profile } = await admin
         .from('profiles')
