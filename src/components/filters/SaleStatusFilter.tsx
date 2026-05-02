@@ -1,5 +1,10 @@
 /**
- * SaleStatusFilter - Multi-select sale status with colored dots
+ * SaleStatusFilter — Multi-select sale status with colored dots.
+ *
+ * Uses the canonical filter tokens from `filterStyles.ts` so triggers,
+ * popovers, checkboxes and clear-button all match the rest of the filter UI
+ * and meet the accessibility / faded-gold rules (no text-gold/XX, no
+ * placeholder below /70).
  */
 
 import { useState } from "react";
@@ -10,9 +15,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { SALE_STATUS_OPTIONS, getSaleStatusConfig } from "@/constants/filterConfig";
+import {
+  filterPillBase,
+  filterPillActive,
+  filterPillInactiveLight,
+  filterPillInactiveDark,
+  filterPopoverSurface,
+  filterCheckBox,
+  filterCheckBoxOn,
+  filterCheckBoxOff,
+} from "./filterStyles";
 
 interface SaleStatusFilterProps {
   value: string[];
@@ -21,11 +35,11 @@ interface SaleStatusFilterProps {
   className?: string;
 }
 
-export function SaleStatusFilter({ 
-  value, 
-  onChange, 
+export function SaleStatusFilter({
+  value,
+  onChange,
   variant = 'light',
-  className 
+  className,
 }: SaleStatusFilterProps) {
   const [open, setOpen] = useState(false);
 
@@ -34,7 +48,7 @@ export function SaleStatusFilter({
       onChange([]);
       return;
     }
-    
+
     const newValue = value.includes(statusValue)
       ? value.filter(v => v !== statusValue)
       : [...value, statusValue];
@@ -46,28 +60,32 @@ export function SaleStatusFilter({
   };
 
   const selectedCount = value.length;
-  const displayText = selectedCount === 0 
-    ? "All Statuses" 
-    : selectedCount === 1 
-      ? value[0] 
+  const isActive = selectedCount > 0;
+  const displayText = selectedCount === 0
+    ? "All Statuses"
+    : selectedCount === 1
+      ? value[0]
       : `${selectedCount} Selected`;
 
-  const isDark = variant === 'dark';
+  const triggerClass = cn(
+    filterPillBase,
+    "h-11 min-w-[160px] justify-between max-w-none",
+    isActive
+      ? filterPillActive
+      : variant === 'dark'
+        ? filterPillInactiveDark
+        : filterPillInactiveLight,
+    className,
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className={cn(
-            "justify-between min-w-[160px] h-11",
-            isDark 
-              ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
-            className
-          )}
+          className={triggerClass}
         >
           <div className="flex items-center gap-2 truncate">
             {selectedCount > 0 && (
@@ -75,9 +93,13 @@ export function SaleStatusFilter({
                 {value.slice(0, 3).map(status => {
                   const config = getSaleStatusConfig(status);
                   return config ? (
-                    <div 
+                    <div
                       key={status}
-                      className={cn("w-2.5 h-2.5 rounded-full ring-2 ring-white", config.dotClass)} 
+                      className={cn(
+                        "w-2.5 h-2.5 rounded-full ring-2",
+                        isActive ? "ring-[#1A1A1A]" : "ring-[#FDFBF7]",
+                        config.dotClass,
+                      )}
                     />
                   ) : null;
                 })}
@@ -85,14 +107,16 @@ export function SaleStatusFilter({
             )}
             <span className="truncate">{displayText}</span>
           </div>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown
+            className={cn(
+              "ml-2 h-4 w-4 shrink-0 transition-opacity",
+              isActive ? "opacity-90" : "opacity-70",
+            )}
+          />
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className={cn(
-          "w-[240px] p-2",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
-        )}
+      <PopoverContent
+        className={cn(filterPopoverSurface, "w-[240px] p-2")}
         align="start"
         side="bottom"
         sideOffset={8}
@@ -102,52 +126,42 @@ export function SaleStatusFilter({
           {SALE_STATUS_OPTIONS.filter(opt => opt.value !== 'all').map((option) => {
             const isSelected = value.includes(option.value);
             const config = 'color' in option ? option.color : null;
-            
+
             return (
               <button
                 key={option.value}
                 onClick={() => toggleStatus(option.value)}
                 className={cn(
-                  "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-                  isDark 
-                    ? "hover:bg-[#2a2a2a]"
-                    : "hover:bg-champagne-light",
-                  isSelected && (isDark ? "bg-[#2a2a2a]" : "bg-champagne-light")
+                  "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  "text-[#1A1A1A] hover:bg-[#F7F2EA]",
+                  isSelected && "bg-[#F7F2EA]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
                 )}
               >
-                <div className={cn(
-                  "w-4 h-4 rounded border flex items-center justify-center",
-                  isDark ? "border-[#1A1A1A]" : "border-gold/40",
-                  isSelected && "bg-gold border-gold"
-                )}>
-                  {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
-                </div>
-                
+                <span
+                  className={cn(
+                    filterCheckBox,
+                    isSelected ? filterCheckBoxOn : filterCheckBoxOff,
+                  )}
+                >
+                  {isSelected && <Check className="w-3 h-3 text-white" />}
+                </span>
+
                 {config && (
                   <div className={cn("w-2.5 h-2.5 rounded-full", config.dotClass)} />
                 )}
-                
-                <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
-                  {option.label}
-                </span>
+
+                <span>{option.label}</span>
               </button>
             );
           })}
         </div>
-        
+
         {selectedCount > 0 && (
-          <div className={cn(
-            "mt-2 pt-2 border-t",
-            isDark ? "border-[#1A1A1A]" : "border-gold/20"
-          )}>
+          <div className="mt-2 pt-2 border-t border-[#B89555]/30">
             <button
               onClick={clearAll}
-              className={cn(
-                "w-full text-center text-sm py-1.5 rounded transition-colors",
-                isDark 
-                  ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
-              )}
+              className="w-full text-center text-xs font-semibold py-1.5 rounded text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
             >
               Clear Selection
             </button>
@@ -166,30 +180,35 @@ interface SaleStatusSelectProps {
   className?: string;
 }
 
-export function SaleStatusSelect({ 
-  value, 
-  onChange, 
+export function SaleStatusSelect({
+  value,
+  onChange,
   variant = 'light',
-  className 
+  className,
 }: SaleStatusSelectProps) {
   const [open, setOpen] = useState(false);
   const config = value ? getSaleStatusConfig(value) : null;
-  const isDark = variant === 'dark';
+  const isActive = !!value;
+
+  const triggerClass = cn(
+    filterPillBase,
+    "h-11 min-w-[140px] justify-between max-w-none",
+    isActive
+      ? filterPillActive
+      : variant === 'dark'
+        ? filterPillInactiveDark
+        : filterPillInactiveLight,
+    className,
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className={cn(
-            "justify-between min-w-[140px] h-11",
-            isDark 
-              ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-champagne-light",
-            className
-          )}
+          className={triggerClass}
         >
           <div className="flex items-center gap-2">
             {config && (
@@ -197,14 +216,16 @@ export function SaleStatusSelect({
             )}
             <span>{value || "Status"}</span>
           </div>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown
+            className={cn(
+              "ml-2 h-4 w-4 shrink-0 transition-opacity",
+              isActive ? "opacity-90" : "opacity-70",
+            )}
+          />
         </Button>
       </PopoverTrigger>
-      <PopoverContent 
-        className={cn(
-          "w-[200px] p-2",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-gold/20"
-        )}
+      <PopoverContent
+        className={cn(filterPopoverSurface, "w-[200px] p-2")}
         align="start"
         side="bottom"
         sideOffset={8}
@@ -214,7 +235,7 @@ export function SaleStatusSelect({
           {SALE_STATUS_OPTIONS.map((option) => {
             const optConfig = option.value !== 'all' ? getSaleStatusConfig(option.value) : null;
             const isSelected = value === option.value || (option.value === 'all' && !value);
-            
+
             return (
               <button
                 key={option.value}
@@ -223,24 +244,21 @@ export function SaleStatusSelect({
                   setOpen(false);
                 }}
                 className={cn(
-                  "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-                  isDark 
-                    ? "hover:bg-[#2a2a2a]"
-                    : "hover:bg-champagne-light",
-                  isSelected && (isDark ? "bg-[#2a2a2a]" : "bg-champagne-light")
+                  "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  "text-[#1A1A1A] hover:bg-[#F7F2EA]",
+                  isSelected && "bg-[#F7F2EA]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
                 )}
               >
                 {optConfig && (
                   <div className={cn("w-2.5 h-2.5 rounded-full", optConfig.dotClass)} />
                 )}
                 {!optConfig && <div className="w-2.5" />}
-                
-                <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
-                  {option.label}
-                </span>
-                
+
+                <span>{option.label}</span>
+
                 {isSelected && (
-                  <Check className="ml-auto w-4 h-4 text-gold" />
+                  <Check className="ml-auto w-4 h-4 text-[#1A1A1A]" />
                 )}
               </button>
             );
