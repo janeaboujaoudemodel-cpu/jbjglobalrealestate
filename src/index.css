@@ -4267,3 +4267,14 @@ a[class*="bg-red-"]:hover {
 .payment-plan-square svg {
   color: hsl(var(--gold));
 }
+
+/* ─── Mode chip — floating-lift hover (no colour change) ─────────────────
+   The trigger button gets a soft mode-color glow + deeper shadow on hover,
+   while the colour palette stays identical to the rest state so the ink
+   label remains readable in both states. */
+[data-mode-trigger]:hover {
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.32),
+    0 0 0 2px rgba(255, 255, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+}
