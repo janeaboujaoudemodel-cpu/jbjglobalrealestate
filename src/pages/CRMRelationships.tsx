@@ -356,7 +356,7 @@ const BrokeragesTab = () => {
             Directory status
           </div>
           <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
-          <div><span className="text-[#1A1A1A]/70">UAE Directory:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">Licensed:</span> <b>{directoryCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
         </div>
@@ -373,17 +373,17 @@ const BrokeragesTab = () => {
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
           {[
             { v: "all", label: `All · ${data.length}` },
-            { v: "directory", label: `UAE Directory · ${directoryCount}` },
+            { v: "directory", label: `Licensed · ${directoryCount}` },
             { v: "owner", label: `My Additions · ${ownerCount}` },
             { v: "existing", label: `Existing Matches · ${existingCount}` },
           ].map((t) => (
             <button
               key={t.v}
               onClick={() => setSourceTab(t.v as any)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
                 sourceTab === t.v
-                  ? "bg-[#B89555] text-white shadow-sm"
-                  : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
+                  : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
               }`}
             >
               {t.label}
@@ -395,7 +395,7 @@ const BrokeragesTab = () => {
             <button
               type="button"
               className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              aria-label="What is the UAE Directory?"
+              aria-label="What do these tabs mean?"
             >
               <HelpCircle className="w-4 h-4" />
             </button>
@@ -403,14 +403,14 @@ const BrokeragesTab = () => {
           <TooltipContent side="bottom" className="max-w-xs bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40">
             <p className="font-semibold mb-1">What's the difference?</p>
             <p className="text-xs">
-              <strong>UAE Directory</strong> = pre-loaded RERA-licensed brokerages (currently {directoryCount}).
+              <strong>Licensed</strong> = pre-loaded RERA / DMT brokerages (currently {directoryCount}).
               Reference data only — read-only until you contact them.
             </p>
             <p className="text-xs mt-1">
               <strong>My Additions</strong> = brokerages you added yourself.
             </p>
             <p className="text-xs mt-1">
-              <strong>Existing Matches</strong> = your additions that match a directory entry.
+              <strong>Existing Matches</strong> = your additions that match a licensed firm.
             </p>
           </TooltipContent>
         </Tooltip>
