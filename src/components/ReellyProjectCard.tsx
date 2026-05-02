@@ -11,6 +11,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -236,11 +237,11 @@ const ReellyProjectCard = ({
                 </div>
               )}
            
-           {/* Bottom-Right: Price overlay (replaces handover; handover moved to footer) */}
+           {/* Bottom-Right: Premium price label — square, transparent core, orange border */}
            {project.price_from ? (
-             <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1 rounded-full bg-price-orange px-2.5 py-1 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
-               <span className="text-[9px] uppercase tracking-[0.14em] font-semibold text-white/85">From</span>
-               <span className="text-white font-bold text-xs tabular-nums leading-none">
+             <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
+               <span className="price-pill-eyebrow">From</span>
+               <span className="price-pill-value">
                  {formatPriceWithCurrency(project.price_from, currency)}
                </span>
              </div>
@@ -265,19 +266,16 @@ const ReellyProjectCard = ({
            {/* Divider */}
            <div className="h-px bg-gold/20 my-2" />
            
-          {/* Handover line (replaces price; price now lives on the photo) */}
-          <p className="text-sm mb-2">
-            {project.handover_date ? (
-              <>
-                <span className="text-muted-foreground">Handover </span>
-                <span className="text-foreground font-semibold">
-                  {project.handover_date}
-                </span>
-              </>
-            ) : (
-              <span className="text-muted-foreground">Handover TBA</span>
-            )}
-          </p>
+          {/* Handover line — orange, matches the price label identity */}
+          {(() => {
+            const derived = deriveHandover(project);
+            return (
+              <p className="text-sm mb-2 handover-orange">
+                <span className="handover-label">Handover </span>
+                <span>{derived || HANDOVER_FALLBACK}</span>
+              </p>
+            );
+          })()}
            
            {/* Developer - Clickable */}
             {project.developer_name && (
