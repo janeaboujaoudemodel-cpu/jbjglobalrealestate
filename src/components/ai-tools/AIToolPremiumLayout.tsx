@@ -228,25 +228,25 @@ const AIToolPremiumLayout = ({
               <span className={`${colors.text} text-xs font-semibold uppercase tracking-wider`}>{badge}</span>
             </div>
             
-            {/* Title with gradient colored word */}
-            <h1 
-              className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+            {/* Title with gold accent on the second word */}
+            <h1
+              className="text-[#1A1A1A] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
               style={{ fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif", letterSpacing: "-0.02em" }}
             >
               {beforeGradient}{" "}
-              <span className={`text-transparent bg-clip-text bg-gradient-to-r ${colors.gradient}`}>
+              <span className="text-[#B89555]">
                 {gradientWord}
               </span>
             </h1>
-            
+
             {/* Subtitle/Description */}
-            <p className="text-[#5A4A2E] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto opacity-90">
               {subtitle}
             </p>
-            
+
             {/* Powered by AI */}
-            <p className={`${colors.text} opacity-70 text-sm`}>
-              <Sparkles className="inline h-4 w-4 mr-1" />
+            <p className="text-[#5A4A2E] text-sm">
+              <Sparkles className="inline h-4 w-4 mr-1 text-[#B89555]" />
               Powered by AI • Data-driven insights • Real-time analysis
             </p>
           </motion.div>
