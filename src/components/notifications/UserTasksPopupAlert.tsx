@@ -73,21 +73,23 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
     <div ref={ref} className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center bg-[#1A1A1A]/40 backdrop-blur-sm p-4 pt-24 md:pt-[104px]">
       <div
         data-no-contrast-guard
-        data-surface="light"
-        className="bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative"
+        data-surface="page"
+        style={{ backgroundColor: "#FDFBF7", color: "#1A1A1A" }}
+        className="border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative"
       >
         <button
           type="button"
           onClick={handleDismiss}
           aria-label="Close pending tasks alert"
-          className="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+          style={{ color: "#1A1A1A" }}
+          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" style={{ color: "#1A1A1A" }} />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40 flex items-center justify-center">
-            <Bell className="w-6 h-6 text-[#1A1A1A]" />
+          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
+            <Bell className="w-6 h-6" style={{ color: "#B89555" }} />
           </div>
           <div>
             <h3 className="text-[#1A1A1A] font-bold text-lg">
