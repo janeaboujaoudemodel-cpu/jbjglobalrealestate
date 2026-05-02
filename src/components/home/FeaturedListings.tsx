@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { DeveloperLink } from "@/components/ui/developer-link";
 import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
@@ -176,13 +177,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Developer Logo — real logos only, no fallback icon */}
+            {/* Developer Logo — real logos only, full-fit overlay (no white frame) */}
             {logoUrl && (
               <div className="absolute top-3 left-3 z-20">
                 <DeveloperLogo
                   src={logoUrl}
                   alt={devName}
                   loading={isAboveFold ? "eager" : "lazy"}
+                  variant="bare"
                 />
               </div>
             )}
