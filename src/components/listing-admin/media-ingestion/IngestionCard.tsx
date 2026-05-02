@@ -89,15 +89,11 @@ export function IngestionCard({
       <div className="flex items-start gap-3">
         <Checkbox checked={selected} onCheckedChange={(v) => onSelect(!!v)} />
 
-        <IconTile
-          tone="gold"
-          size="md"
-          icon={
-            <FileIcon
-              kind={job.source_kind === "link" ? "link" : job.detected_doc_type ?? job.source_type}
-            />
-          }
-        />
+        <div className="w-10 h-10 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center flex-shrink-0 text-[#1A1A1A]">
+          <FileIcon
+            kind={job.source_kind === "link" ? "link" : job.detected_doc_type ?? job.source_type}
+          />
+        </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
