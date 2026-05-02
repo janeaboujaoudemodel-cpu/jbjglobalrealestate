@@ -291,20 +291,21 @@ END:VCARD`;
       <section className="relative pt-28 pb-20 md:pt-36 md:pb-28" data-surface="dark">
         <div className="absolute inset-0">
           <VideoBackground src={contactHeroVideo} poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/75 to-black/95" />
         </div>
         <div className="relative container mx-auto px-4">
-          <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: '#FDE68A' }}>Real Estate Brokerage</p>
+          <p data-no-contrast-guard className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: '#FDE68A' }}>Real Estate Brokerage</p>
           <h1
+            data-no-contrast-guard
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
             style={{ color: '#ffffff' }}
           >
             Contact JBJ Global Real Estate
           </h1>
-          <p className="text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4" style={{ color: '#ffffff' }}>
+          <p data-no-contrast-guard className="text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4" style={{ color: '#ffffff' }}>
             Professional Support. Clear Communication. Trusted Guidance.
           </p>
-          <p className="text-base md:text-lg max-w-3xl leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
+          <p data-no-contrast-guard className="text-base md:text-lg max-w-3xl leading-relaxed" style={{ color: 'rgba(255,255,255,0.92)' }}>
             Whether you are an investor, property owner, broker, or partner, our team is here to support you with accurate information, structured guidance, and accountable follow-up. Choose the option below that best fits your request.
           </p>
         </div>
