@@ -496,49 +496,75 @@ const Footer = () => {
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center text-center gap-6">
-            <Link to="/" className="inline-flex items-center gap-4 group">
-              <span
-                className="inline-flex items-center justify-center w-16 h-16 rounded-md border bg-[#FDFBF7]/[0.04] shrink-0"
-                style={{
-                  borderColor: "rgba(200,167,102,0.4)",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(200,167,102,0.18)",
-                }}
-              >
-                <img
-                  src={jbjMonogramNobuffer}
-                  alt="JBJ Global Real Estate"
-                  className="h-11 w-11 object-contain transition-opacity group-hover:opacity-90"
-                />
-              </span>
-              <div className="flex flex-col">
-                <span className="text-white text-[15px] font-semibold tracking-[0.18em] uppercase leading-tight">
+            <Link to="/" className="inline-flex items-center gap-4 group" data-no-contrast-guard>
+              <img
+                src={jbjMonogramNobuffer}
+                alt="JBJ Global Real Estate"
+                className="h-14 w-14 object-contain transition-opacity group-hover:opacity-90 shrink-0"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(200,167,102,0.45))" }}
+              />
+              <div className="flex flex-col items-start">
+                <span
+                  className="text-[16px] font-semibold tracking-[0.22em] uppercase leading-tight"
+                  style={{ color: "#FDFBF7" }}
+                >
                   JBJ Global Real Estate
                 </span>
                 <div
-                  className="w-10 h-px my-1.5"
-                  style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.7), rgba(200,167,102,0))" }}
+                  className="w-12 h-px my-1.5"
+                  style={{ background: "linear-gradient(90deg, rgba(200,167,102,0.85), rgba(200,167,102,0))" }}
                   aria-hidden="true"
                 />
-                <span className="text-white/90 text-[11px] tracking-[0.12em] uppercase">
+                <span
+                  className="text-[11px] tracking-[0.14em] uppercase"
+                  style={{ color: "rgba(253,251,247,0.92)" }}
+                >
                   Excellence in Real Estate · Licensed UAE Brokerage
                 </span>
               </div>
             </Link>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#F7F2EA] border border-[hsl(var(--gold))]/40 shadow-[0_4px_18px_rgba(0,0,0,0.25)]">
-              <div className="flex items-center gap-2.5">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-semibold">Connect</span>
+            {/* Gold metallic mirror Connect card. data-no-contrast-guard
+                prevents the dark-surface guard from flipping ink children
+                to white. data-surface="champagne" provides a stable scope. */}
+            <div
+              data-no-contrast-guard
+              data-surface="champagne"
+              className="relative flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-4 py-2.5 rounded-xl overflow-hidden"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, #D4B66A 0%, #B89555 32%, #8B6F3D 52%, #B89555 72%, #E6CFA0 100%)",
+                border: "1px solid rgba(255,255,255,0.28)",
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -1px 0 rgba(0,0,0,0.28), 0 8px 28px rgba(0,0,0,0.45)",
+              }}
+            >
+              {/* Mirror-sweep highlight overlay */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.18) 50%, transparent 62%)",
+                  mixBlendMode: "screen",
+                }}
+              />
+              <div className="relative flex items-center gap-2.5">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
-              <GoogleMyBusinessLink />
-              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
-              {/* Mode switcher opens upward inside the footer so it never
-                  overlays the page header above. */}
-              <ModeSwitcher variant="header" showForUnselected={true} side="top" />
-              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
-              <FooterCurrencyUnit />
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <div className="relative">
+                <GoogleMyBusinessLink />
+              </div>
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <div className="relative">
+                <ModeSwitcher variant="header" showForUnselected={true} side="top" />
+              </div>
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <div className="relative">
+                <FooterCurrencyUnit />
+              </div>
             </div>
           </div>
         </div>
@@ -617,15 +643,17 @@ const Footer = () => {
             </a>
           </div>
 
-          {/* Compact legal — bidi-isolated so LTR/RTL never break each other */}
-          <div className="space-y-2 text-center max-w-4xl mx-auto">
-            <p className="text-[11px] leading-relaxed text-white/90 break-words" dir="ltr">
-              <bdi className="text-white/95 font-medium">JBJ Global Real Estate L.L.C S.O.C.</bdi>
+          {/* Compact legal — bidi-isolated so LTR/RTL never break each other.
+              data-no-contrast-guard ensures the dark-surface contrast guard
+              doesn't damp these strings to a faint gray. */}
+          <div className="space-y-2 text-center max-w-4xl mx-auto" data-no-contrast-guard>
+            <p className="text-[11.5px] leading-relaxed break-words" style={{ color: "rgba(253,251,247,0.96)" }} dir="ltr">
+              <bdi className="font-semibold" style={{ color: "#E6CFA0" }}>JBJ Global Real Estate L.L.C S.O.C.</bdi>
               {" — Dubai mainland brokerage licensed for Buy, Sell, and Rent across the UAE. "}
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
               <FounderContent fallback={null}>
                 {" "}Owned & led by{" "}
-                <Link to="/founder" className="text-white/95 hover:text-white underline-offset-2 hover:underline">
+                <Link to="/founder" className="underline-offset-2 hover:underline" style={{ color: "#E6CFA0" }}>
                   <bdi>Jane Bou Jaoude</bdi>
                   {" ("}
                   <bdi>جاين بو جودة</bdi>
@@ -634,30 +662,38 @@ const Footer = () => {
                 {", Founder & CEO."}
               </FounderContent>
             </p>
-            <p className="text-[11px] leading-relaxed text-white/90 break-words" dir="rtl">
+            <p className="text-[11.5px] leading-relaxed break-words" style={{ color: "rgba(253,251,247,0.96)" }} dir="rtl">
               جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار.
             </p>
           </div>
 
           {/* Copyright + legal links — premium single row, bidi-safe */}
-          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: `rgba(255,255,255,${hairline.white})` }}>
-            <span className="text-[11px] text-white/90 tracking-[0.08em]" dir="ltr">
-              © {currentYear} <bdi className="font-medium text-white/95">JBJ Global Real Estate</bdi> · All Rights Reserved
+          <div
+            className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center"
+            style={{ borderColor: `rgba(255,255,255,${hairline.white})` }}
+            data-no-contrast-guard
+          >
+            <span className="text-[11.5px] tracking-[0.08em]" style={{ color: "#FDFBF7", fontWeight: 500 }} dir="ltr">
+              © {currentYear} <bdi className="font-semibold" style={{ color: "#E6CFA0" }}>JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
-            <span className="hidden sm:inline text-white/95" aria-hidden="true">·</span>
+            <span className="hidden sm:inline" style={{ color: "rgba(253,251,247,0.55)" }} aria-hidden="true">·</span>
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               {legalLinks.map((l, i) => (
                 <span key={l.href} className="flex items-center gap-3">
-                  <Link to={l.href} className="text-[11px] uppercase tracking-[0.1em] text-white/90 hover:text-white transition-colors whitespace-nowrap">
+                  <Link
+                    to={l.href}
+                    className="text-[11px] uppercase tracking-[0.1em] hover:text-white transition-colors whitespace-nowrap"
+                    style={{ color: "rgba(253,251,247,0.92)" }}
+                  >
                     {l.label}
                   </Link>
-                  {i < legalLinks.length - 1 && <span className="text-white/95" aria-hidden="true">·</span>}
+                  {i < legalLinks.length - 1 && (
+                    <span style={{ color: "rgba(253,251,247,0.55)" }} aria-hidden="true">·</span>
+                  )}
                 </span>
               ))}
             </div>
           </div>
-        </div>
-      </div>
 
       {/* Bottom hairline */}
       <AdaptiveHairline variant="accent" />
