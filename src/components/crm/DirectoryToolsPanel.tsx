@@ -30,8 +30,8 @@ export const DirectoryToolsPanel = () => {
       <CardContent className="p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Globe2 className="w-4 h-4 text-[#B89555]" />
-          <h3 className="text-sm font-semibold text-[#1A1A1A]">UAE Directory · Admin tools</h3>
-          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-0 ml-auto">Owner / Admin only</Badge>
+          <h3 className="text-sm font-semibold text-[#1A1A1A]">UAE Licensed Directory · Admin tools</h3>
+          <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 ml-auto">Owner / Admin only</Badge>
         </div>
 
         <div className="space-y-2">

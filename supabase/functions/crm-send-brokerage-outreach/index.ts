@@ -245,7 +245,13 @@ serve(async (req: Request) => {
       throw new Error("Gmail connector not configured");
     }
 
-    const fromName = settings?.from_name || "JBJ Global Real Estate";
+    // Sender brand = represented developer (per-row → owner default → fallback)
+    const representedDeveloperName: string =
+      (brk?.represented_developer_name && String(brk.represented_developer_name).trim()) ||
+      (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
+      "Channel Partner Activation";
+
+    const fromName = `${representedDeveloperName} · Channel Partner Activation`;
     const replyTo = (body.fromEmailOverride || settings?.reply_to_email || "contact@jbj.ae").trim();
     const ccEmail = (body.ccEmailOverride || settings?.cc_email || "infoo.jane@gmail.com").trim();
     const cc = !isTest && settings?.cc_jane_enabled ? [ccEmail] : [];
@@ -301,8 +307,7 @@ serve(async (req: Request) => {
       preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
     }
 
-    // Mint (or reuse) a breakfast booking invite token so the email can
-    // include a real scheduling link instead of just a mailto RSVP.
+    // Mint (or reuse) a breakfast booking invite token
     let bookingUrl = "";
     try {
       const tokenRes = await userClient.functions.invoke(
@@ -334,11 +339,27 @@ serve(async (req: Request) => {
       reply_to: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
+      represented_developer_name: representedDeveloperName,
       booking_url: bookingUrl,
     };
 
-    const html = renderTemplate(template.html, varsMap);
-    const subjectRendered = renderTemplate(template.subject, varsMap);
+    // If the stored template doesn't reference {{represented_developer_name}},
+    // build a fallback subject/body so test sends still showcase the new sender.
+    const refsDeveloper = /\{\{\s*represented_developer_name\s*\}\}/.test(template.html + " " + template.subject);
+    let html = renderTemplate(template.html, varsMap);
+    let subjectRendered = renderTemplate(template.subject, varsMap);
+    if (!refsDeveloper) {
+      subjectRendered = `Private Briefing — ${representedDeveloperName} × ${varsMap.brokerage_name}`;
+      html = `<!DOCTYPE html><html><body style="background:#ffffff;color:#1A1A1A;font-family:Inter,Arial,sans-serif;padding:32px;max-width:640px;margin:0 auto;line-height:1.55">
+        <p>Dear ${varsMap.contact_first_name},</p>
+        <p>This is <strong>${ownerFirstName}</strong> from the <strong>Sales &amp; Channel Partner Activation</strong> team at <strong>${representedDeveloperName}</strong>, in partnership with <strong>JBJ Global Real Estate</strong>.</p>
+        <p>${resolvedGroupLine}</p>
+        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> for select brokerages — agenda covers our latest launches, commissions, training and channel activation tools.</p>
+        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf so you can start receiving inventory and incentives immediately.</p>
+        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a slot</a></p>` : ""}
+        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>Sales &amp; Channel Partner Activation · ${representedDeveloperName}<br/>in partnership with JBJ Global Real Estate<br/>${replyTo}</p>
+      </body></html>`;
+    }
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
 
     const raw = buildRawMime({

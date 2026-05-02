@@ -5162,6 +5162,7 @@ export type Database = {
           health_score: number | null
           id: string
           inquiry_count: number
+          instagram_url: string | null
           is_existing_match: boolean
           last_auto_reply_at: string | null
           last_deal_at: string | null
@@ -5189,6 +5190,8 @@ export type Database = {
           owner_id: string
           phone: string | null
           primary_contact: Json | null
+          represented_developer_id: string | null
+          represented_developer_name: string | null
           rera_license: string | null
           response_count: number
           secondary_contact: Json | null
@@ -5197,6 +5200,7 @@ export type Database = {
           star_rating: number | null
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
+          top_active_agents: Json
           total_deal_value: number
           total_deal_value_cached: number
           updated_at: string
@@ -5227,6 +5231,7 @@ export type Database = {
           health_score?: number | null
           id?: string
           inquiry_count?: number
+          instagram_url?: string | null
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_deal_at?: string | null
@@ -5254,6 +5259,8 @@ export type Database = {
           owner_id: string
           phone?: string | null
           primary_contact?: Json | null
+          represented_developer_id?: string | null
+          represented_developer_name?: string | null
           rera_license?: string | null
           response_count?: number
           secondary_contact?: Json | null
@@ -5262,6 +5269,7 @@ export type Database = {
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
+          top_active_agents?: Json
           total_deal_value?: number
           total_deal_value_cached?: number
           updated_at?: string
@@ -5292,6 +5300,7 @@ export type Database = {
           health_score?: number | null
           id?: string
           inquiry_count?: number
+          instagram_url?: string | null
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_deal_at?: string | null
@@ -5319,6 +5328,8 @@ export type Database = {
           owner_id?: string
           phone?: string | null
           primary_contact?: Json | null
+          represented_developer_id?: string | null
+          represented_developer_name?: string | null
           rera_license?: string | null
           response_count?: number
           secondary_contact?: Json | null
@@ -5327,6 +5338,7 @@ export type Database = {
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
+          top_active_agents?: Json
           total_deal_value?: number
           total_deal_value_cached?: number
           updated_at?: string
@@ -6834,6 +6846,8 @@ export type Database = {
           cc_email: string
           cc_jane_enabled: boolean
           created_at: string
+          default_brokerage_sender_developer_id: string | null
+          default_brokerage_sender_developer_name: string | null
           drive_doc_pack_url: string | null
           from_name: string
           owner_id: string
@@ -6845,6 +6859,8 @@ export type Database = {
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
+          default_brokerage_sender_developer_id?: string | null
+          default_brokerage_sender_developer_name?: string | null
           drive_doc_pack_url?: string | null
           from_name?: string
           owner_id: string
@@ -6856,6 +6872,8 @@ export type Database = {
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
+          default_brokerage_sender_developer_id?: string | null
+          default_brokerage_sender_developer_name?: string | null
           drive_doc_pack_url?: string | null
           from_name?: string
           owner_id?: string

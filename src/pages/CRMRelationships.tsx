@@ -35,7 +35,7 @@ import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
-import { ArrowLeftRight, Trophy, HelpCircle } from "lucide-react";
+import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -277,6 +277,62 @@ const aiRecommend = async (kind: "brokerage" | "client" | "developer_registry", 
 };
 
 /* ===========================================================
+   Brokerage clickable contact row
+=========================================================== */
+const BrokerageContactLinks = ({ r }: { r: any }) => {
+  const email = r.email || r.primary_contact?.email || "";
+  const phone = r.phone || r.primary_contact?.phone || "";
+  const wa = r.whatsapp_e164 || r.primary_contact?.whatsapp || "";
+  const website = r.website || "";
+  const ig = r.instagram_url || "";
+  const address = r.office_address || r.office_location || "";
+  const mapUrl = r.office_map_url
+    || (address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + (r.emirate ? ", " + r.emirate : ""))}` : "");
+
+  const link = "inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] border-b border-[#B89555]/50 hover:border-[#B89555] py-0.5";
+
+  if (!email && !phone && !wa && !website && !ig && !mapUrl) return null;
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5">
+      {email && <a href={`mailto:${email}`} className={link}><Mail className="w-3 h-3" />{email}</a>}
+      {phone && <a href={`tel:${phone.replace(/\s+/g, "")}`} className={link}><Phone className="w-3 h-3" />{phone}</a>}
+      {wa && <a href={`https://wa.me/${wa.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener" className={link}><MessageCircle className="w-3 h-3" />WhatsApp</a>}
+      {mapUrl && <a href={mapUrl} target="_blank" rel="noopener" className={link}><MapPin className="w-3 h-3" />{address || "Map"}</a>}
+      {website && <a href={website.startsWith("http") ? website : `https://${website}`} target="_blank" rel="noopener" className={link}><Globe2 className="w-3 h-3" />Website</a>}
+      {ig && <a href={ig.startsWith("http") ? ig : `https://instagram.com/${ig.replace(/^@/, "")}`} target="_blank" rel="noopener" className={link}><Instagram className="w-3 h-3" />Instagram</a>}
+    </div>
+  );
+};
+
+/* ===========================================================
+   Top active agents editor
+=========================================================== */
+type TopAgent = { name: string; role?: string; deals_count?: number };
+const TopAgentsEditor = ({ value, onChange }: { value: TopAgent[]; onChange: (v: TopAgent[]) => void }) => {
+  const update = (i: number, patch: Partial<TopAgent>) => {
+    const next = [...value];
+    next[i] = { ...next[i], ...patch };
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {value.map((a, i) => (
+        <div key={i} className="grid grid-cols-12 gap-2">
+          <Input className="col-span-5" placeholder="Agent name" value={a.name || ""} onChange={(e) => update(i, { name: e.target.value })} />
+          <Input className="col-span-4" placeholder="Role / specialty" value={a.role || ""} onChange={(e) => update(i, { role: e.target.value })} />
+          <Input className="col-span-2" type="number" placeholder="Deals" value={a.deals_count ?? ""} onChange={(e) => update(i, { deals_count: e.target.value ? +e.target.value : undefined })} />
+          <Button type="button" variant="outline" size="sm" className="col-span-1" onClick={() => onChange(value.filter((_, j) => j !== i))}><Trash2 className="w-3 h-3" /></Button>
+        </div>
+      ))}
+      <Button type="button" variant="outline" size="sm" onClick={() => onChange([...value, { name: "" }])}>
+        <Plus className="w-3 h-3 mr-1" />Add agent
+      </Button>
+    </div>
+  );
+};
+
+/* ===========================================================
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
@@ -356,7 +412,7 @@ const BrokeragesTab = () => {
             Directory status
           </div>
           <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
-          <div><span className="text-[#1A1A1A]/70">UAE Directory:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">Licensed:</span> <b>{directoryCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
         </div>
@@ -373,17 +429,17 @@ const BrokeragesTab = () => {
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
           {[
             { v: "all", label: `All · ${data.length}` },
-            { v: "directory", label: `UAE Directory · ${directoryCount}` },
+            { v: "directory", label: `Licensed · ${directoryCount}` },
             { v: "owner", label: `My Additions · ${ownerCount}` },
             { v: "existing", label: `Existing Matches · ${existingCount}` },
           ].map((t) => (
             <button
               key={t.v}
               onClick={() => setSourceTab(t.v as any)}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors border ${
                 sourceTab === t.v
-                  ? "bg-[#B89555] text-white shadow-sm"
-                  : "text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                  ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
+                  : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
               }`}
             >
               {t.label}
@@ -395,7 +451,7 @@ const BrokeragesTab = () => {
             <button
               type="button"
               className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-              aria-label="What is the UAE Directory?"
+              aria-label="What do these tabs mean?"
             >
               <HelpCircle className="w-4 h-4" />
             </button>
@@ -403,14 +459,14 @@ const BrokeragesTab = () => {
           <TooltipContent side="bottom" className="max-w-xs bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/40">
             <p className="font-semibold mb-1">What's the difference?</p>
             <p className="text-xs">
-              <strong>UAE Directory</strong> = pre-loaded RERA-licensed brokerages (currently {directoryCount}).
+              <strong>Licensed</strong> = pre-loaded RERA / DMT brokerages (currently {directoryCount}).
               Reference data only — read-only until you contact them.
             </p>
             <p className="text-xs mt-1">
               <strong>My Additions</strong> = brokerages you added yourself.
             </p>
             <p className="text-xs mt-1">
-              <strong>Existing Matches</strong> = your additions that match a directory entry.
+              <strong>Existing Matches</strong> = your additions that match a licensed firm.
             </p>
           </TooltipContent>
         </Tooltip>
@@ -498,10 +554,10 @@ const BrokeragesTab = () => {
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h3 className="font-bold text-base text-[#1A1A1A]">{r.company_name}</h3>
                       {isDirectory && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#B89555] text-white">UAE Directory</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">RERA-Licensed</span>
                       )}
                       {isExistingMatch && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already in Directory</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already Licensed</span>
                       )}
                       {!isDirectory && !isExistingMatch && r.entry_source === "owner" && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
@@ -511,9 +567,6 @@ const BrokeragesTab = () => {
                     <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
-                      {(r.office_address || r.office_location) && <div>{r.office_address || r.office_location}</div>}
-                      {(r.email || r.primary_contact?.email) && <div>{r.email || r.primary_contact?.email}</div>}
-                      {(r.phone || r.primary_contact?.phone) && <div>{r.phone || r.primary_contact?.phone}</div>}
                       {r.primary_contact?.name && (
                         <div className="font-medium text-[#1A1A1A]">
                           Primary: {r.primary_contact.name}{r.primary_contact.role ? ` · ${r.primary_contact.role}` : ""}
@@ -526,19 +579,22 @@ const BrokeragesTab = () => {
                       )}
                     </div>
 
-                    {/* KPI strip — readable champagne palette, never white-on-white */}
+                    {/* Clickable contact row */}
+                    <BrokerageContactLinks r={r} />
+
+                    {/* KPI strip — Agents (single) + Top Closer + activity */}
                     <div className="mt-3 grid grid-cols-2 sm:grid-cols-6 gap-2">
                       {[
                         { label: "Rating", value: r.star_rating ? `★ ${Number(r.star_rating).toFixed(1)}` : "—" },
                         { label: "Agents", value: r.estimated_agent_count ? `~${r.estimated_agent_count}` : "—" },
-                        { label: "Brokers", value: r.active_broker_count || 0 },
+                        { label: "Top Closer", value: (Array.isArray(r.top_active_agents) && r.top_active_agents[0]?.name) ? `${r.top_active_agents[0].name}${r.top_active_agents[0].deals_count ? ` · ${r.top_active_agents[0].deals_count}` : ""}` : "—" },
                         { label: "Inquiries", value: r.inquiry_count || 0 },
                         { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
                         { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
                       ].map((k) => (
                         <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
                           <div className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold">{k.label}</div>
-                          <div className="text-sm font-bold text-[#1A1A1A]">{k.value}</div>
+                          <div className="text-sm font-bold text-[#1A1A1A] truncate">{k.value}</div>
                         </div>
                       ))}
                     </div>
@@ -594,7 +650,10 @@ const BrokeragesTab = () => {
                 <Field label="Company name *"><Input value={editing.company_name || ""} onChange={(e) => setEditing({ ...editing, company_name: e.target.value })} /></Field>
                 <Field label="RERA license"><Input value={editing.rera_license || ""} onChange={(e) => setEditing({ ...editing, rera_license: e.target.value })} /></Field>
                 <Field label="Office location"><Input value={editing.office_location || ""} onChange={(e) => setEditing({ ...editing, office_location: e.target.value })} /></Field>
+                <Field label="Google Maps URL"><Input placeholder="https://maps.google.com/…" value={editing.office_map_url || ""} onChange={(e) => setEditing({ ...editing, office_map_url: e.target.value })} /></Field>
                 <Field label="Website"><Input value={editing.website || ""} onChange={(e) => setEditing({ ...editing, website: e.target.value })} /></Field>
+                <Field label="Instagram URL"><Input placeholder="https://instagram.com/…" value={editing.instagram_url || ""} onChange={(e) => setEditing({ ...editing, instagram_url: e.target.value })} /></Field>
+                <Field label="Agents (count)"><Input type="number" value={editing.estimated_agent_count || 0} onChange={(e) => setEditing({ ...editing, estimated_agent_count: +e.target.value })} /></Field>
                 <Field label="Status">
                   <Select value={editing.status} onValueChange={(v) => setEditing({ ...editing, status: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -602,6 +661,16 @@ const BrokeragesTab = () => {
                   </Select>
                 </Field>
                 <Field label="Deal count"><Input type="number" value={editing.deal_count || 0} onChange={(e) => setEditing({ ...editing, deal_count: +e.target.value })} /></Field>
+                <Field label="Represented developer (sender)">
+                  <Input placeholder="e.g. Emaar, DAMAC, Sobha" value={editing.represented_developer_name || ""} onChange={(e) => setEditing({ ...editing, represented_developer_name: e.target.value })} />
+                </Field>
+              </div>
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2">Top active agents (closing with us)</div>
+                <TopAgentsEditor
+                  value={Array.isArray(editing.top_active_agents) ? editing.top_active_agents : []}
+                  onChange={(v) => setEditing({ ...editing, top_active_agents: v })}
+                />
               </div>
               <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">Primary Contact</div>
                 <div className="grid grid-cols-2 gap-3">
@@ -1565,9 +1634,10 @@ const CRMRelationships = () => {
 
           <Tabs value={tab} onValueChange={setTab}>
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
-              <TabsList className="bg-[#FDFBF7] border border-[#1A1A1A]/10 p-1 rounded-xl inline-flex w-auto">
-                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#B89555] data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#EFE6D6] hover:text-[#1A1A1A] rounded-lg px-5 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#B89555] data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#EFE6D6] hover:text-[#1A1A1A] rounded-lg px-5 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+              <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
+                <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+                <span aria-hidden className="self-center w-px h-5 bg-[#B89555]/30" />
+                <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
