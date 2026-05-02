@@ -23,7 +23,7 @@ export function DropZone({ onFiles, onLinks, busy }: DropZoneProps) {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-w-3xl mx-auto">
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -36,17 +36,17 @@ export function DropZone({ onFiles, onLinks, busy }: DropZoneProps) {
           handleFiles(e.dataTransfer.files);
         }}
         className={`border-2 border-dashed rounded-2xl p-10 text-center transition-colors bg-[#F7F2EA] ${
-          dragOver ? "border-gold bg-[#EFE6D6]" : "border-gold/40"
+          dragOver ? "border-[#B89555] bg-[#EFE6D6]" : "border-[#B89555]/40"
         }`}
       >
         <div className="flex justify-center gap-3 mb-3">
-          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] text-gold flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center text-[#1A1A1A]">
             <Upload className="w-5 h-5" />
           </div>
-          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] text-gold flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center text-[#1A1A1A]">
             <FileText className="w-5 h-5" />
           </div>
-          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] text-gold flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center text-[#1A1A1A]">
             <Video className="w-5 h-5" />
           </div>
         </div>
