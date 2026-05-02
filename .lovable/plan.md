@@ -1,66 +1,77 @@
-# Fix Welcome Tour Popup, Backend Task Popup, and Header Color Unification
+# Fix Real Handover Dates for All Projects
 
-Three connected issues, all on the home and backend (Nexus CRM) screens.
+## Diagnosis (from production data)
 
-## 1. Welcome / "Take a Tour" popup — `src/components/GuidedTour.tsx`
+| Bucket | Count | Status |
+|---|---|---|
+| Total projects | 2,778 | — |
+| Reelly-sourced (`reelly_id IS NOT NULL`) | 1,237 | 1,236 already have a real handover from Reelly. Only **1** missing. |
+| `handover_date = 'Q4 2026'` (suspicious bulk default) | 563 | **561 are non-Reelly** — clearly a placeholder fill, not a real date. |
+| `handover_date IS NULL` | 376 | All 376 still have a `source_url`, 99 also have `developer_name`. |
 
-**Problems:**
-- The modal centers vertically over the whole viewport (`fixed inset-0 ... items-center`) at `z-50`, while the horizontal header is `z-[9998]` and 88 px tall. On home, the modal currently butts up against / is clipped by the header.
-- The button **"View Quick Shortcuts"** (sitting under "Take a Quick Tour") reads as transparent / low-contrast on the champagne modal surface.
+Two real problems:
+1. **561 non-Reelly rows are stamped `Q4 2026`** — a fake bulk default that the cards display as a "real" date. Worse than NULL.
+2. **376 NULL rows** never got resolved.
 
-**Fix:**
-- Change the overlay container so the modal cannot touch the header:
-  - Add `top-[88px]` (and `pt-4`) to the inner flex wrapper, so the modal is offset below the fixed 88 px utility bar on tablet/desktop.
-  - On mobile (`md:hidden` header is 96 px), use a responsive offset: `top-24 md:top-[88px]`.
-- Lift the overlay z-index above the header: `z-[10050]` (sits at the existing dialog tier from `Z_INDEX`).
-- Replace the secondary button with a high-contrast variant:
-  - Use the shared `<Button variant="secondary">` (champagne fill `#F7F2EA` + gold border + ink text) instead of the current bespoke `bg-transparent` outline. Same for "Skip for now" — promote it to a quiet `<Button variant="tertiary">` so the label is always legible.
-- Keep the primary "Take a Quick Tour" button (ink + gold text) as-is.
+The existing `supabase/functions/backfill-handover-dates/` already has Stage 2 (Firecrawl scrape of `source_url`) and Stage 3 (Lovable AI inference from developer + name) — but it only runs against `handover_date IS NULL` and skips the `Q4 2026` bulk default. And `supabase/functions/reelly-backfill-details/` writes amenities/floor plans but never writes `handover_date`/`expected_completion` from Reelly's `completion_datetime` / `construction_end_date` / `completion_date` fields.
 
-## 2. Backend "Pending Tasks" popup — `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx` and `src/components/notifications/UserTasksPopupAlert.tsx`
+## Plan
 
-**Problems:**
-- Same overlap: both use `fixed inset-0 ... items-center` so the modal can ride up under the 88 px backend header.
-- User reports the action buttons inside ("View Tasks", "Later", "My Tickets") render unreadable in the Nexus CRM context.
+### 1. Patch `supabase/functions/reelly-backfill-details/index.ts` — write Reelly's real handover
 
-**Fix:**
-- Add `pt-[104px] md:pt-[104px]` (88 px header + 16 px breathing room) to the outer overlay so the dialog can never visually touch the top bar.
-- Force the buttons to the brand-defined readable variants:
-  - Primary action ("View Tasks" / "My Tickets") → `<Button variant="primary">` (already in use — re-confirm it isn't being overridden by class merging. Drop any `text-gold` / faded class still applied).
-  - Dismiss action ("Later") → `<Button variant="secondary">` (champagne fill, gold border, ink text).
-- Give the dialog body `data-no-contrast-guard` removal review: it's already there but ensure nested buttons still receive their intended `text-white` / `text-[#1A1A1A]` and aren't being washed out by a parent rule.
+After the existing Reelly detail fetch, add normalization + persistence:
 
-## 3. Horizontal header unified to sidebar champagne — both public and backend
+```text
+if detail.completion_datetime || detail.completion_date || detail.construction_end_date:
+   raw = first non-empty of those three
+   normalized = normalizeHandover(raw)  // shared util — Q1-4 YYYY | YYYY | "Ready" | null
+   if normalized:
+       updateData.handover_date = normalized
+       updateData.expected_completion = normalized
+```
 
-The vertical sidebar uses these solid champagne stops:
-- Top brand cell: `linear-gradient(180deg, #F7F1E6 → #ECE2D2)`
-- Lower nav body: `linear-gradient(180deg, #ECE2D2 → #D8C7A6)`
+This is the source of truth for the 1,237 Reelly projects and any future Reelly imports. (Today only 1 of them is missing, but this closes the loop and protects future imports.)
 
-Goal: the **whole** horizontal top bar (logo edge → mode/settings edge) shares the same champagne look as the sidebar so the L-frame reads as one continuous surface.
+### 2. Add an "owner-only" admin endpoint to clear the `Q4 2026` bulk default
 
-**Files & changes:**
+New edge function `supabase/functions/clear-fake-handover-defaults/index.ts`:
 
-- `src/components/navigation/HorizontalUtilityBar.tsx` (line 192)
-  - Already `bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2]`. Extend the bar so its right-edge tone matches the sidebar's lower body: switch to `bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]`. Keep the gold hairline bottom border.
+- Owner-auth gated.
+- Sets `handover_date = NULL` and `expected_completion = NULL` for every row where:
+  - `handover_date = 'Q4 2026'` AND
+  - `reelly_id IS NULL` AND
+  - `expected_completion` is also `'Q4 2026'` or NULL (extra safety so we don't blow away a hand-curated date).
+- Returns the affected count.
 
-- `src/components/GlobalHeader.tsx` (mobile / non-backoffice public header, lines 634–640)
-  - Replace the current `linear-gradient(180deg, #F7F1E6 0%, #ECE2D2 60%, #D8C7A6 100%)` (vertical) with the same `linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)` so the colour flows horizontally from the logo side to the mode/settings side, mirroring the sidebar palette.
-  - Keep the gold hairline bottom and inner shadow as-is.
+This converts the 561 fakes into honest NULLs so the cards show "Coming soon" instead of misinforming buyers — and so the existing backfill engine will pick them up.
 
-- `src/components/MainLayout.tsx` (lines 270–286, fallback skeletons)
-  - Update the sidebar fallback (`bg-[#F7F2EA]`) to the same `bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2]`.
-  - Update the utility-bar fallback (`bg-[#F7F2EA]`) to the new horizontal gradient so there's no flash of a different tone before hydration.
+### 3. Run the existing two-stage backfill against the now-NULL rows
 
-No changes are required to:
-- The vertical sidebar itself (already correct).
-- The backend Nexus CRM header — it uses `HorizontalUtilityBar`, so it inherits the new gradient automatically.
+Once Step 2 is done, ~561 + 376 ≈ ~937 rows are NULL. Trigger the existing pipeline:
+
+- **Stage 2 (Firecrawl)** — all 937 have a `source_url`. Batches of 50.
+- **Stage 3 (Lovable AI)** — for any remaining stragglers that have `developer_name` (gemini-2.5-pro, temperature 0, returns `null` when not confident; never invents dates).
+
+No schema or UI changes needed — `backfill-handover-dates` already exists and is owner-gated; the Provident Portal already has a UI for triggering it. The only code change here is wiring up Reelly persistence (Step 1) and adding the placeholder-clearing function (Step 2).
+
+### 4. Add a small one-off owner UI tile (optional but recommended)
+
+In the existing Provident Portal admin page, add a "Run handover repair" panel with three buttons:
+- **Clear Q4 2026 placeholders** → calls the new function from Step 2.
+- **Stage 2 — Firecrawl batch** → existing `backfill-handover-dates` with `{ stage: 2, batch_size: 50 }`.
+- **Stage 3 — AI batch** → existing `backfill-handover-dates` with `{ stage: 3, batch_size: 50 }`.
+
+Each button shows the live "remaining" count returned by the function so you can rerun until 0.
 
 ## Out of scope
-- No changes to popup behaviour, dismissal logic, routing, or copy.
-- No changes to mega menus, the L-frame structure, or the gold border tokens.
-- No removal of any existing feature (per the No-Removal policy).
+
+- No changes to the property/project card UI — `deriveHandover` and the "Coming soon" fallback already handle every state correctly.
+- No mass writes against Reelly projects (their data is already correct).
+- No writes that fabricate dates. Every value persisted must come from Reelly, the project's own scraped page, or a confidence-gated AI inference that is allowed to return `null`.
+- No changes to `daily-reelly-auto-sync` schedules.
 
 ## Acceptance
-- On `/` after first visit: tour modal is fully visible below the 88 px header, both action buttons are clearly readable on champagne.
-- In Nexus CRM (`/owner`, etc.): pending-tasks alert sits below the header with a clear gap; "View Tasks" and "Later" both legible.
-- Top horizontal bar (public and backend) reads as a continuous champagne strip flowing into the vertical sidebar with no colour seam at the corner.
+
+- After Step 1 + Reelly re-run: any future Reelly import auto-fills handover.
+- After Step 2: zero non-Reelly rows are stamped `Q4 2026` unless that's their genuine value (which we cannot prove, so they fall back to NULL → "Coming soon").
+- After Step 3 batches drain: `count(*) WHERE handover_date IS NULL` trends toward 0; whatever remains has no verifiable source and correctly renders as "Coming soon" rather than a fake date.
