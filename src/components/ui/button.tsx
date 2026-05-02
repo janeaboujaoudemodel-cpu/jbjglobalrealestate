@@ -23,7 +23,7 @@ const BRAND_SECONDARY =
 
 // TERTIARY: subtle champagne ghost
 const BRAND_TERTIARY =
-  "bg-[#F7F2EA] text-[#5A4A2E] border-2 border-[#B89555]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]/40";
+  "bg-[#F7F2EA] text-[#1A1A1A]/75 border-2 border-[#B89555]/20 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] hover:border-[#B89555]/40";
 
 // GOLD: solid gold tile CTA — for in-dashboard primary actions
 const BRAND_GOLD =
