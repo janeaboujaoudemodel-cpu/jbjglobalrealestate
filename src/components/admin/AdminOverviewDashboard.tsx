@@ -93,6 +93,7 @@ export const AdminOverviewDashboard = () => {
         blockedRes,
         aiLogsRes,
         pendingRes,
+        mediaPendingRes,
         visitorSessionsRes,
         visitorEventsRes,
       ] = await Promise.all([
@@ -102,6 +103,13 @@ export const AdminOverviewDashboard = () => {
         supabase.from("ip_blocklist").select("id", { count: "exact", head: true }),
         supabase.from("ai_usage_logs").select("id", { count: "exact", head: true }).gte("created_at", subDays(new Date(), 7).toISOString()),
         supabase.from("pending_project_imports").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        // Listings unpublished and waiting for media verification — they would
+        // otherwise render the "Media pending verification" placeholder publicly.
+        supabase
+          .from("projects")
+          .select("id", { count: "exact", head: true })
+          .eq("is_published", false)
+          .or("cover_image_url.is.null,cover_image_url.eq."),
         // Real visitor session count (last 24h)
         supabase.from("visitor_sessions").select("id", { count: "exact", head: true }).gte("first_visit_at", last24Hours),
         // Real visitor event count (last 24h)
@@ -115,7 +123,7 @@ export const AdminOverviewDashboard = () => {
         aiInteractions: aiLogsRes.count || 0,
         blockedIPs: blockedRes.count || 0,
         activeUsers: visitorSessionsRes.count || 0, // Real: visitor sessions (24h)
-        pendingApprovals: pendingRes.count || 0,
+        pendingApprovals: (pendingRes.count || 0) + (mediaPendingRes.count || 0),
         todayVisitors: visitorEventsRes.count || 0, // Real: visitor events (24h)
       });
 
