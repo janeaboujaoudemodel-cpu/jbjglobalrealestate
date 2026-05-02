@@ -16,8 +16,42 @@
  * enrichment edge function is responsible for persisting derived dates back
  * onto the row so the cards eventually show real data.
  */
+/** Try to extract a "is this in the past?" decision from a stored value. */
+const isPastHandover = (raw: string): boolean => {
+  const s = raw.trim();
+  if (!s) return false;
+  const now = new Date();
+  const thisYear = now.getFullYear();
+  const thisQuarter = Math.floor(now.getMonth() / 3) + 1;
+
+  // Q# YYYY
+  const qm = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+  if (qm) {
+    const q = Number(qm[1]);
+    const y = Number(qm[2]);
+    if (y < thisYear) return true;
+    if (y === thisYear && q < thisQuarter) return true;
+    return false;
+  }
+
+  // Bare year
+  const ym = s.match(/^\s*(20\d{2})\s*$/);
+  if (ym) return Number(ym[1]) < thisYear;
+
+  // Full date string (e.g. "31 December 2024", "2024-12-31")
+  const parsed = Date.parse(s);
+  if (!Number.isNaN(parsed)) {
+    return parsed < now.getTime();
+  }
+  return false;
+};
+
 export const deriveHandover = (p: any): string | null => {
   if (!p) return null;
+
+  // Ready / Completed / Handed over short-circuit (wins over stale dates).
+  const cs = p.construction_status ? String(p.construction_status) : "";
+  if (/ready|complet|handed.?over/i.test(cs)) return "Ready";
 
   const direct =
     p.handover_date ??
@@ -26,11 +60,13 @@ export const deriveHandover = (p: any): string | null => {
     p.expected_completion ??
     p.handover_quarter ??
     null;
-  if (direct && String(direct).trim()) return String(direct).trim();
-
-  // Ready / Completed / Handed over → "Ready"
-  const cs = p.construction_status ? String(p.construction_status) : "";
-  if (/ready|complet|handed.?over/i.test(cs)) return "Ready";
+  if (direct && String(direct).trim()) {
+    const value = String(direct).trim();
+    // Past dates → "Ready" (consistent with completed projects).
+    if (isPastHandover(value)) return "Ready";
+    if (/^ready$/i.test(value)) return "Ready";
+    return value;
+  }
 
   const haystacks: string[] = [
     p.description,

@@ -159,7 +159,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
   return (
     <div className="group h-full animate-fade-in-up">
       <Link to={`/project/${project.slug}`} className="block h-full" onMouseEnter={prefetchProjectDetail}>
-        <div className="flex flex-col h-full bg-[#FDFBF7] rounded-xl overflow-hidden border border-[#B89555]/30 hover:border-[#B89555]/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+        <div className="flex flex-col h-full bg-[#FDFBF7] rounded-xl overflow-hidden border border-[#B89555]/30 hover:border-[#B89555]/50 transition-all duration-300 ease-out hover:shadow-xl hover:-translate-y-1.5">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-[#F7F2EA]">
             {imageUrl ? (
@@ -191,7 +191,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
 
             {/* Premium price label — square, transparent core, orange border + ink */}
             {typeof project.price_from === 'number' && project.price_from > 0 && (
-              <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge>
+              <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge data-no-contrast-guard>
                 <span className="price-pill-eyebrow">From</span>
                 <span className="price-pill-value">
                   {formatPrice(project.price_from)}
@@ -237,7 +237,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
 
             {/* Handover line — orange, matches the price label identity */}
             <div className="mt-2 min-h-[22px]">
-              <div className="flex items-baseline gap-1.5 handover-orange">
+              <div className="flex items-baseline gap-1.5 handover-orange" data-no-contrast-guard>
                 <span className="handover-label text-[10px] uppercase tracking-[0.14em] font-medium">
                   Handover
                 </span>
