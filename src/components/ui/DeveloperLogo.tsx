@@ -23,8 +23,12 @@ interface DeveloperLogoProps {
    *  - "bare": no border, no background, no inner padding. Used as an
    *    overlay on project-card photos so the logo reads as a clean,
    *    full-fit brand mark with a soft drop-shadow for legibility.
+   *  - "card": Reelly-style hero plate. Uniform-size white rounded plate
+   *    used on the developer directory and per-developer header tiles.
+   *    Logo renders `object-contain` with generous padding so wordmark
+   *    and colored marks always read fully without cropping.
    */
-  variant?: "tile" | "bare";
+  variant?: "tile" | "bare" | "card";
 }
 
 /**
