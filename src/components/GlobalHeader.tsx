@@ -635,7 +635,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, #F7F1E6 0%, #ECE2D2 60%, #D8C7A6 100%)',
+          background: 'linear-gradient(90deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
         }}
       />
       

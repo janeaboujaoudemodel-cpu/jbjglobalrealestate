@@ -269,7 +269,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <Suspense fallback={
               <div
                 aria-hidden="true"
-                className="h-screen bg-[#F7F2EA] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
+                className="h-screen bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
               />
             }>
               <GlobalVerticalNav />
@@ -279,7 +279,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <Suspense fallback={
               <div
                 aria-hidden="true"
-                className="fixed top-0 right-0 h-[88px] z-[9998] bg-[#F7F2EA] border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
+                className="fixed top-0 right-0 h-[88px] z-[9998] bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
               />
             }>
               <HorizontalUtilityBar />

@@ -249,7 +249,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4"
+        className="fixed inset-0 z-[10050] flex items-start md:items-center justify-center bg-[#1A1A1A]/70 backdrop-blur-md p-4 pt-24 md:pt-[104px]"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -325,19 +325,21 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       handleExploreAlone();
                     }}
                     type="button"
-                    variant="outline"
-                    className="w-full py-5 sm:py-6 border-[#B89555]/30 bg-transparent text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-gold/50 group rounded-xl transition-all"
+                    variant="secondary"
+                    className="w-full py-5 sm:py-6 rounded-xl group"
                   >
-                    <span className="flex-1 text-left font-medium">View Quick Shortcuts</span>
-                    <ArrowRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                    <span className="flex-1 text-left font-semibold">View Quick Shortcuts</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
 
-                  <button
+                  <Button
                     onClick={handleComplete}
-                    className="w-full py-3 text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm transition-colors"
+                    type="button"
+                    variant="tertiary"
+                    className="w-full py-3 rounded-xl text-sm"
                   >
                     Skip for now
-                  </button>
+                  </Button>
                 </div>
               </motion.div>
             )}
