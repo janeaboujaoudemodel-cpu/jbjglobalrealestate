@@ -382,10 +382,15 @@ export function useProjectsListing() {
       const BG_PAGE = 1000;
 
       // Stage 1 — fast initial slice
+      // NOTE: We additionally require a cover image at the query level so
+      // listings whose media is still pending verification never surface on
+      // public pages, even if a row sneaks past the publish-gate trigger.
       const { data: fastData, error: fastError } = await supabase
         .from("projects")
         .select(LISTING_COLUMNS)
         .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
         .order("created_at", { ascending: false })
         .range(0, FAST_PAGE - 1);
 
@@ -398,7 +403,9 @@ export function useProjectsListing() {
           const { count, error: countError } = await supabase
             .from("projects")
             .select("id", { count: "exact", head: true })
-            .eq("is_published", true);
+            .eq("is_published", true)
+            .not("cover_image_url", "is", null)
+            .neq("cover_image_url", "");
           if (countError) throw countError;
           const total = count ?? 0;
           if (total <= FAST_PAGE) return;
@@ -412,6 +419,8 @@ export function useProjectsListing() {
                 .from("projects")
                 .select(LISTING_COLUMNS)
                 .eq("is_published", true)
+                .not("cover_image_url", "is", null)
+                .neq("cover_image_url", "")
                 .order("created_at", { ascending: false })
                 .range(offset, offset + BG_PAGE - 1);
               if (error) throw error;
