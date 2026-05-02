@@ -115,14 +115,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const CurrentIcon = currentConfig.icon;
 
   // ─────────────────────────────────────────────────────────────────
-  // Closed-trigger styling: a SOLID mode-color chip (not a pastel),
-  // so the selected mode visibly "reflects" in header / footer / menu.
+  // Closed-trigger styling: a saturated mode-color chip with **ink black**
+  // label/icon (never white). Hover does NOT change colour — only floats
+  // upward + adds a soft glow ring.
   // ─────────────────────────────────────────────────────────────────
   const triggerStyle: CSSProperties = {
-    backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.baseDark} 100%)`,
+    backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
     borderColor: currentConfig.baseDark,
-    color: '#FFFFFF',
-    boxShadow: `0 2px 6px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.25)`,
+    color: '#1A1A1A',
+    boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
   };
 
   if (variant === 'compact') {
@@ -132,17 +133,18 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         disabled={isLoading}
         style={triggerStyle}
         data-no-contrast-guard
+        data-mode-trigger="compact"
         className={cn(
-          "flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-300",
+          "flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-200 hover:-translate-y-0.5",
           className
         )}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#FFFFFF' }} />
+          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#1A1A1A' }} />
         ) : (
-          <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+          <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#1A1A1A' }} />
         )}
-        <span className="text-xs font-bold" style={{ color: '#FFFFFF' }}>
+        <span className="text-xs font-bold" style={{ color: '#1A1A1A' }}>
           {currentConfig.shortLabel}
         </span>
       </button>
@@ -163,27 +165,28 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             disabled={isLoading}
             style={triggerStyle}
             data-no-contrast-guard
+            data-mode-trigger="header"
             className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:brightness-110 whitespace-nowrap shrink-0",
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className
             )}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#FFFFFF' }} />
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#1A1A1A' }} />
             ) : (
-              <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: '#FFFFFF' }} />
+              <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: '#1A1A1A' }} />
             )}
             <span
               className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block"
-              style={{ color: '#FFFFFF' }}
+              style={{ color: '#1A1A1A' }}
             >
               {currentConfig.label}
             </span>
             <ChevronDown
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
-              style={{ color: '#FFFFFF' }}
+              style={{ color: '#1A1A1A' }}
             />
           </button>
         </DropdownMenuTrigger>
