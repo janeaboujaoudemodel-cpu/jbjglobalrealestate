@@ -1,54 +1,67 @@
-## Premium price label + handover date restyle
+# Backfill real handover dates for all projects
 
-Restyle the price label on property cards so it reads as **premium**, not as a candy pill, and align the handover date with the same orange identity. Replace the bland "TBA / To be announced" fallback with a real derived date wherever the data allows.
+## Current state
+- 2,778 total projects, **1,330 missing `handover_date`** (1,056 of them are published).
+- Only ~36 are recoverable from existing text fields via regex.
+- 1,329 of the missing rows have a `source_url`; 1,053 have a `developer_name`.
+- 175 rows have `construction_status` indicating Ready/Completed but no handover.
 
-### What changes visually
+So a regex-only pass is not enough. We need a 3-stage backfill that always writes a real, sourced value.
 
-Property cards (`ProjectCard`, `ReellyProjectCard`, `FeaturedListings`) get a unified price + handover treatment:
+## Goal
+Eliminate all "Coming soon" / TBA fallbacks on cards by populating `handover_date` (+ mirror to `expected_completion`) for every project, using **only verified signals** — never invented dates.
 
-```text
-┌──────────────────────┐
-│  [ FROM  AED 2.4M ]  │  ← square (rounded-md), transparent core,
-│                      │     2px orange border, orange ink price,
-│                      │     subtle inner glow; no solid fill
-└──────────────────────┘
-   Handover · Q4 2026     ← same orange, semibold, matches the pill
-```
+## Stages (run in order, idempotent, batched)
 
-- Price pill: `rounded-md` (square corners, not full-pill), transparent background with a 1.5–2px `--price-orange` border, orange text, soft outer shadow for depth, subtle inner highlight for the premium look.
-- "From" eyebrow stays uppercase tracked, smaller, in the same orange but slightly muted weight.
-- Handover line on the card body switches from ink (`#1A1A1A`) to `--price-orange`, semibold, matching the pill's tone exactly.
+### Stage 1 — Local regex sweep (fast, free)
+Sweep all rows where `handover_date IS NULL`. For each row, scan `description`, `payment_plan`, `payment_breakdown`, `status_label`, `construction_status`:
+1. `Q[1-4] YYYY` → `Q# YYYY`
+2. Earliest future bare year `20YY` (≥ current year) → `YYYY`
+3. If `construction_status` matches `ready|complet|handed.?over` → `"Ready"`
 
-### Smart handover (no more "TBA")
+Writes `handover_date` and `expected_completion`. Expected to fix ~36 + ~175 Ready rows.
 
-Add a `deriveHandover(project)` helper used by all three cards. Resolution order:
+### Stage 2 — Source-URL scrape via Firecrawl (real data)
+For remaining missing rows that have `source_url`:
+- New edge function `backfill-handover-dates` (batched, 20 rows / call).
+- For each project, call Firecrawl `/v2/scrape` with `formats: ['markdown', { type: 'json', prompt: '...handover/completion date...', schema: { handover_date: string|null, status: 'Ready'|'Under Construction'|'Presale'|null } }]` against `source_url`.
+- Accept only values matching `^(Q[1-4] 20\d{2}|20\d{2}|Ready)$`. Reject anything else (no invention).
+- Persist on success; on failure leave row for Stage 3.
 
-1. Existing `handover_date`.
-2. Alt fields if present on the row: `handover`, `completion_date`, `expected_completion`, `handover_quarter`.
-3. Regex scrape `Q[1-4] YYYY` from `description`, `payment_breakdown`, `payment_plan`, `status_label`, `construction_status`.
-4. Earliest future bare year (`20YY` ≥ current year) in the same fields.
-5. If still nothing, render a refined fallback label "Handover — coming soon" in orange (never "TBA", never "To be announced").
+### Stage 3 — AI inference fallback (Lovable AI Gateway)
+For rows still missing after Stage 2 but with `name` + `developer_name`:
+- Reuse pattern from `ai-enrich-drafts` but `model: google/gemini-2.5-pro` with explicit instruction: "Return null unless you are confident this is a real, verifiable Dubai/UAE project handover quarter or year." Strict regex validation on output before persist.
 
-We do not fetch external developer websites at render time (would hit CORS, leak referrers, slow the grid). Instead we extend the existing **listing enrichment edge function** so that whenever a project is enriched it also writes a derived `handover_date` into the row when the column is empty and we can extract one from the developer's payload. That one-time backfill makes the live cards show real dates rather than fallbacks.
+### Orchestration
+- New edge function `backfill-handover-dates` exposes `POST` with body `{ stage: 1|2|3, batch_size, dry_run }`.
+- Owner-only (uses `requireOwnerAuth`).
+- Returns `{ updated, skipped, failed, details[] }`.
+- Run sequentially from a small admin trigger button on the existing **Provident Portal** enrichment hub (no new page). Button: "Backfill Handover Dates" with progress toast; loops calling stage 1 → 2 → 3 until `updated === 0` per stage.
 
-### Files touched
+## Validation rules (applied at every stage before write)
+- Allow: `^Q[1-4] 20\d{2}$`, `^20\d{2}$`, `^Ready$`.
+- Reject: empty, "TBA", "To be announced", "soon", anything outside the regex.
+- Always mirror value into `expected_completion`.
+- Never overwrite an existing non-null `handover_date`.
 
-- `src/components/ProjectCard.tsx` — new pill style + orange handover line + `deriveHandover` helper.
-- `src/components/ReellyProjectCard.tsx` — same pill + handover treatment.
-- `src/components/home/FeaturedListings.tsx` — replace `'TBA'` with `deriveHandover` + premium fallback.
-- `src/components/project-detail/ProjectDetailLayout.tsx` — replace remaining `"TBA"` strings on the detail summary with the same helper, keep the orange handover styling consistent.
-- `src/index.css` — small utility class `.price-pill-premium` so the look is reusable and lint-stable (no inline color literals).
-- `supabase/functions/enrich-listing-metadata/index.ts` (existing enrichment fn — extend it, do not create a new one) — when a project has no `handover_date`, parse the same Q#/year patterns from any source text it already has and persist the result. Owner-auth only.
+## Files
 
-### Constraints honored
+### New
+- `supabase/functions/backfill-handover-dates/index.ts` — orchestrator (3 stages, owner-auth, batched).
 
-- Keeps `--price-orange` as the single source of truth for prices and handover (per Premium Price Orange standard).
-- No solid white text on light. No faded gold. Inter only.
-- "No Removal" — every existing element (From label, currency, sold-out badge, sale-status badge) stays; only the visual treatment changes.
-- Runtime contrast guard still passes: orange ink on transparent-over-image gets a subtle dark scrim behind the pill so it remains AA on bright photos.
+### Edited
+- `src/pages/ProvidentPortal.tsx` (or the enrichment hub it renders) — add "Backfill Handover Dates" admin button that loops the function and shows progress.
+- `src/utils/handoverDerivation.ts` — extend `deriveHandover` to also recognize Ready/Completed `construction_status` (kept in sync with Stage 1 logic so cards render consistently between renders and DB writes).
 
-### Out of scope
+### Secrets
+- Requires `FIRECRAWL_API_KEY` (Firecrawl connector) and `LOVABLE_API_KEY` (already present).
+- If Firecrawl is not connected, Stage 2 is skipped and we proceed to Stage 3.
 
-- Live scraping of developer websites at render time.
-- Changing the price value, currency conversion, or sale-status badges.
-- Touching homepage hero (per prior directive).
+## Expected outcome
+- Stage 1: ~210 rows fixed instantly.
+- Stage 2: bulk of the remaining ~1,120 rows fixed from real developer pages.
+- Stage 3: long-tail (~50-150) inferred only when AI is confident; rest stay "Coming soon" rather than fabricated.
+
+## Out of scope
+- No schema changes (columns already exist).
+- No card UI changes — premium orange handover label already shipped.
