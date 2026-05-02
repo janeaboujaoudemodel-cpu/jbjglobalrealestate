@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 
 // PRIMARY: solid ink (still highest-contrast CTA on champagne)
 const BRAND_PRIMARY =
-  "bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] hover:bg-[#A68444] hover:border-[#A68444] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#1A1A1A] text-white border-2 border-[#1A1A1A] hover:bg-[#2A2A2A] hover:border-[#B89555] shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
 
 // SECONDARY: champagne surface, gold border
 const BRAND_SECONDARY =
@@ -37,10 +37,10 @@ const BRAND_MEDIA = BRAND_HERO;
 
 // DARK: dark surface (for dark sections only)
 const BRAND_DARK =
-  "bg-[#1A1A1A] text-white border-2 border-[#B89555]/40 hover:bg-[#B89555] hover:text-white hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
+  "bg-[#1A1A1A] text-white border-2 border-[#B89555]/40 hover:bg-[#2A2A2A] hover:text-white hover:border-[#B89555] hover:-translate-y-0.5 active:translate-y-0";
 
 // AI Tool button variants — keep AI premium purple identity
-const AI_MONO = "bg-[#1A1A1A] hover:bg-[#A68444] text-white border border-[#B89555]/40 shadow-sm";
+const AI_MONO = "bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white border border-[#B89555]/40 shadow-sm";
 
 // Dark theme variants (for use on dark sections)
 const DARK_GHOST = "bg-transparent text-white border-2 border-[#B89555]/40 hover:bg-[#FDFBF7]/10 hover:border-[#B89555] transition-all";
