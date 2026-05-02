@@ -355,8 +355,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   // Pill styling — sourced from filterStyles so every filter surface looks identical.
   // The `pillBase` token already handles touch-manipulation and the focus-visible ring.
   const pillBase = filterPillBase;
-  const pillInactiveClass = pillInactive(isDark ? "dark" : "light");
-  const pillActiveClass = filterPillActive;
+  const pillInactiveCls = pillInactive(isDark ? "dark" : "light");
+  const pillActive = filterPillActive;
   const popoverClass = filterPopoverSurface;
 
   const handleSaveFilter = (name: string) => {
