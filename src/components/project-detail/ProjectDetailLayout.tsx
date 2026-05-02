@@ -74,6 +74,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 import { formatDisplayDate } from "@/utils/formatDate";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
 import {
   Accordion,
@@ -626,12 +627,15 @@ export default function ProjectDetailLayout({
                 <span className="text-sm md:text-base">{sizeText}</span>
               </div>
             )}
-            {project.handover_date && (
-              <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                <Calendar className="w-5 h-5" style={{ color: '#FCD34D' }} />
-                <span className="text-sm md:text-base">{formatDisplayDate(project.handover_date)}</span>
-              </div>
-            )}
+            {(() => {
+              const derivedHero = deriveHandover(project);
+              return derivedHero ? (
+                <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                  <Calendar className="w-5 h-5" style={{ color: '#FCD34D' }} />
+                  <span className="text-sm md:text-base">{project.handover_date ? formatDisplayDate(project.handover_date) : derivedHero}</span>
+                </div>
+              ) : null;
+            })()}
           </div>
 
           {/* Hero CTAs - Download Brochure + Register Interest */}
@@ -750,7 +754,7 @@ export default function ProjectDetailLayout({
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
-              <p className="mt-2 text-xl font-bold text-foreground">{formatDisplayDate(project.handover_date) || "TBA"}</p>
+              <p className="mt-2 text-xl font-bold handover-orange">{(project.handover_date && formatDisplayDate(project.handover_date)) || deriveHandover(project) || HANDOVER_FALLBACK}</p>
             </div>
             <div className="rounded-xl border-2 border-gold bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>

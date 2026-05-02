@@ -13,6 +13,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -281,11 +282,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             </div>
           )}
 
-          {/* Bottom-Right: Price pill — solid orange, opaque white text */}
+          {/* Bottom-Right: Price label — premium square, transparent core, orange border + ink */}
           {project.price_from ? (
-            <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1.5 rounded-full bg-[hsl(var(--price-orange))] px-3 py-1.5 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
-              <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-[#FFFFFF]">From</span>
-              <span className="text-[#FFFFFF] font-extrabold text-sm tabular-nums leading-none">
+            <div className="absolute bottom-3 right-3 z-10 price-pill-premium" data-price-badge>
+              <span className="price-pill-eyebrow">From</span>
+              <span className="price-pill-value">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
@@ -319,18 +320,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Divider */}
           <div className="h-px bg-[#B89555]/40" />
 
-          {/* Meta block — handover + developer + unit types, all solid ink */}
+          {/* Meta block — handover (orange, matches price pill) + developer + unit types */}
           <div className="flex flex-col gap-2">
-            <p className="text-sm">
-              {project.handover_date ? (
-                <>
-                  <span className="text-[#1A1A1A]/85">Handover </span>
-                  <span className="text-[#1A1A1A] font-semibold">{project.handover_date}</span>
-                </>
-              ) : (
-                <span className="text-[#1A1A1A]/85">Handover TBA</span>
-              )}
-            </p>
+            {(() => {
+              const derived = deriveHandover(project);
+              return (
+                <p className="text-sm handover-orange">
+                  <span className="handover-label">Handover </span>
+                  <span>{derived || HANDOVER_FALLBACK}</span>
+                </p>
+              );
+            })()}
 
             {project.developer && (
               <DeveloperLink
