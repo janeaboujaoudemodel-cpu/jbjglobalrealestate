@@ -1,0 +1,264 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
+import { CheckCircle2, Clock, ImageOff, ImageIcon, Search, ExternalLink, AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
+
+interface ProjectRow {
+  id: string;
+  name: string | null;
+  slug: string | null;
+  developer_name: string | null;
+  city: string | null;
+  community: string | null;
+  is_published: boolean | null;
+  cover_image_url: string | null;
+  card_image_url: string | null;
+  updated_at: string | null;
+  created_at: string | null;
+  gallery_count?: number;
+}
+
+type MediaStatus = "complete" | "gallery-only" | "missing";
+
+const getMediaStatus = (p: ProjectRow): MediaStatus => {
+  const hasCover = !!(p.cover_image_url && p.cover_image_url.trim());
+  const hasCard = !!(p.card_image_url && p.card_image_url.trim());
+  if (hasCover || hasCard) return "complete";
+  if ((p.gallery_count ?? 0) > 0) return "gallery-only";
+  return "missing";
+};
+
+const MediaStatusBadge = ({ status }: { status: MediaStatus }) => {
+  if (status === "complete") {
+    return (
+      <Badge className="bg-emerald-600 text-white border-0 gap-1">
+        <ImageIcon className="h-3 w-3" /> Media Complete
+      </Badge>
+    );
+  }
+  if (status === "gallery-only") {
+    return (
+      <Badge className="bg-amber-500 text-white border-0 gap-1">
+        <AlertTriangle className="h-3 w-3" /> Gallery Only — No Cover
+      </Badge>
+    );
+  }
+  return (
+    <Badge className="bg-red-600 text-white border-0 gap-1">
+      <ImageOff className="h-3 w-3" /> Media Missing
+    </Badge>
+  );
+};
+
+const ListingsApproval = () => {
+  const [projects, setProjects] = useState<ProjectRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [tab, setTab] = useState<"pending" | "approved">("pending");
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,updated_at,created_at")
+        .order("updated_at", { ascending: false })
+        .limit(500);
+      if (error) throw error;
+
+      const ids = (data || []).map((p: any) => p.id);
+      let counts: Record<string, number> = {};
+      if (ids.length > 0) {
+        const { data: imgs } = await supabase
+          .from("project_images")
+          .select("project_id")
+          .in("project_id", ids);
+        (imgs || []).forEach((row: any) => {
+          counts[row.project_id] = (counts[row.project_id] || 0) + 1;
+        });
+      }
+      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0 })));
+    } catch (e: any) {
+      toast.error(e.message || "Failed to load listings");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return projects.filter((p) => {
+      if (!q) return true;
+      return [p.name, p.developer_name, p.city, p.community]
+        .filter(Boolean)
+        .some((v) => v!.toLowerCase().includes(q));
+    });
+  }, [projects, search]);
+
+  const approved = filtered.filter((p) => p.is_published);
+  const pending = filtered.filter((p) => !p.is_published);
+
+  const approve = async (p: ProjectRow) => {
+    const status = getMediaStatus(p);
+    if (status === "missing") {
+      toast.error("Cannot approve: at least one image is required");
+      return;
+    }
+    const { error } = await supabase
+      .from("projects")
+      .update({ is_published: true })
+      .eq("id", p.id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success(`${p.name} approved`);
+      load();
+    }
+  };
+
+  const unpublish = async (p: ProjectRow) => {
+    const { error } = await supabase
+      .from("projects")
+      .update({ is_published: false })
+      .eq("id", p.id);
+    if (error) toast.error(error.message);
+    else {
+      toast.success(`${p.name} moved to Pending`);
+      load();
+    }
+  };
+
+  const renderRow = (p: ProjectRow) => {
+    const status = getMediaStatus(p);
+    const thumb = p.cover_image_url || p.card_image_url;
+    return (
+      <Card
+        key={p.id}
+        data-surface="champagne"
+        className="flex items-center gap-4 p-4 border border-[#B89555]/40"
+      >
+        <div className="h-16 w-24 rounded-lg overflow-hidden bg-[#EFE6D6] flex items-center justify-center flex-shrink-0">
+          {thumb ? (
+            <img src={thumb} alt="" className="h-full w-full object-cover" />
+          ) : (
+            <ImageOff className="h-6 w-6 text-[#1A1A1A]/50" />
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="font-semibold text-[#1A1A1A] truncate">{p.name || "Untitled"}</h3>
+            <MediaStatusBadge status={status} />
+            {p.is_published ? (
+              <Badge className="bg-[#B89555] text-white border-0 gap-1">
+                <CheckCircle2 className="h-3 w-3" /> Approved
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-amber-500 text-amber-700 gap-1">
+                <Clock className="h-3 w-3" /> Pending
+              </Badge>
+            )}
+          </div>
+          <div className="text-sm text-[#1A1A1A]/70 truncate">
+            {[p.developer_name, p.community, p.city].filter(Boolean).join(" • ")}
+          </div>
+          <div className="text-xs text-[#1A1A1A]/60 mt-1">
+            Gallery: {p.gallery_count ?? 0} image{(p.gallery_count ?? 0) === 1 ? "" : "s"}
+          </div>
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {p.slug && (
+            <Button asChild variant="outline" size="sm">
+              <Link to={`/projects/${p.slug}`} target="_blank">
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+          {p.is_published ? (
+            <Button size="sm" variant="outline" onClick={() => unpublish(p)}>
+              Unpublish
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              variant="gold"
+              disabled={status === "missing"}
+              onClick={() => approve(p)}
+            >
+              Approve
+            </Button>
+          )}
+        </div>
+      </Card>
+    );
+  };
+
+  return (
+    <div data-surface="page" className="min-h-screen p-6">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-6">
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">Listings Approval</h1>
+          <p className="text-[#1A1A1A]/70 mt-1">
+            Review approved and pending listings with clear media status indicators.
+          </p>
+        </header>
+
+        <div className="mb-4 flex items-center gap-3">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
+            <Input
+              placeholder="Search by name, developer, city…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <Button variant="outline" onClick={load} disabled={loading}>
+            {loading ? "Loading…" : "Refresh"}
+          </Button>
+        </div>
+
+        <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
+          <TabsList>
+            <TabsTrigger value="pending" className="gap-2">
+              <Clock className="h-4 w-4" /> Pending Approval ({pending.length})
+            </TabsTrigger>
+            <TabsTrigger value="approved" className="gap-2">
+              <CheckCircle2 className="h-4 w-4" /> Approved ({approved.length})
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="pending" className="mt-4 space-y-3">
+            {pending.length === 0 ? (
+              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
+                {loading ? "Loading…" : "No listings pending approval."}
+              </Card>
+            ) : (
+              pending.map(renderRow)
+            )}
+          </TabsContent>
+
+          <TabsContent value="approved" className="mt-4 space-y-3">
+            {approved.length === 0 ? (
+              <Card data-surface="champagne" className="p-8 text-center text-[#1A1A1A]/70">
+                {loading ? "Loading…" : "No approved listings yet."}
+              </Card>
+            ) : (
+              approved.map(renderRow)
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+};
+
+export default ListingsApproval;
