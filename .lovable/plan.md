@@ -1,90 +1,65 @@
 ## Goal
 
-Polish every project listing card sitewide so:
-1. The word **"Handover"** is solid black; only the **date** stays orange.
-2. The **developer name** ("by Emaar / Aldar / Meraas / …") is **gold, clickable, with a permanent underline** so users can see it's a link.
-3. Every card shows the **payment plan** directly under the handover line, with a **premium square badge** (small radius, not pill-shaped).
-4. Every project card renders the **real developer logo, fully fit, no white frame, no fake building icon, no project photo as logo**. The home-page **partners marquee stays locked and untouched**.
+Update the three category cards ("I'm an Investor / Broker / Developer") on the home page so the icon tile matches the champagne sidebar tone, with a clean black/gold invert on hover.
 
-## What changes
+## Scope
 
-### 1. Handover line — black label, orange date
-Currently the whole line ("Handover 2026") is orange. Split it:
+Single file: `src/components/home/CategorySelectorSection.tsx` (lines ~99–110, the icon tile `div` and its `<Icon />`).
 
-```text
-Handover           2026
-^ black, semibold  ^ orange, tabular-nums
-```
+Nothing else changes — card body, text, bullets, "Continue" row, and the locked homepage marquee all stay exactly as they are.
 
-Files:
-- `src/index.css` (`.handover-orange .handover-label` rule) → label becomes ink `#1A1A1A`, date keeps `--price-orange`.
-- `src/components/ProjectCard.tsx`, `src/components/ReellyProjectCard.tsx`, `src/components/home/FeaturedListings.tsx` already use `<span className="handover-label">Handover</span>` + value span — only the CSS needs to flip the label colour.
+## Visual spec
 
-### 2. Developer name — gold, clickable, underlined
-Files:
-- `src/components/ui/developer-link.tsx` — change the link class to `text-gold font-semibold underline underline-offset-4 decoration-gold/60 hover:decoration-gold` (always-on underline, not hover-only).
-- `src/components/home/FeaturedListings.tsx` lines 217–230 — replace the local ink-coloured `<Link>` with `<DeveloperLink>` so the home cards match the standard.
-- `src/components/ReellyProjectCard.tsx` — same fix where developer name is rendered.
+**Default state**
+- Icon tile background: champagne (`#F7F2EA`) — same tone as the vertical sidebar surface
+- Tile border: subtle gold hairline (`#B89555` at ~40% opacity), no heavy gradient/shadow
+- Icon color: solid black (`#1A1A1A`), strokeWidth 2.25, no white drop-shadow
 
-### 3. Payment-plan badge — premium square
-Replace the rounded-full pill with a premium square chip on every card:
+**Hover state** (whole card already lifts via `whileHover={{ y: -4 }}` — keep that, plus invert the tile)
+- Tile background: ink black (`#1A1A1A`)
+- Tile border: gold (`#B89555`)
+- Icon color: gold (`#B89555`)
+- Smooth color transition (~200ms)
+
+This gives the "floating + invert" effect the user described, picking option B (black fill, gold icon on hover) layered on top of the existing card lift.
+
+## Technical change
+
+Replace the current tile markup:
 
 ```text
-Before:  ( CreditCard 20/80 )   ← rounded-full, gold pill
-After:   [ CreditCard  20/80 ]  ← rounded-md, ink fill, gold hairline, eyebrow text
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] ... shadow-[...]">
+  <Icon style={{ color: "#FFFFFF", filter: "drop-shadow(...)" }} />
+</div>
 ```
 
-Spec (matches the price-pill premium identity):
-- shape: `rounded-md` (~6 px), padding `px-2.5 py-1`
-- bg: `#1A1A1A`, text `#FDFBF7`, border `1px solid #B89555`
-- inner eyebrow `PAYMENT` in `10px` uppercase tracking, value bold tabular-nums
-- subtle gold inner shadow for the premium feel
+With a champagne-filled tile that inverts on group-hover:
 
-Add a single CSS utility `.payment-plan-square` in `src/index.css` so all three cards stay in sync. Apply in:
-- `src/components/ProjectCard.tsx` (footer meta row, lines 384–389)
-- `src/components/ReellyProjectCard.tsx` (payment row)
-- `src/components/home/FeaturedListings.tsx` lines 254–268
+```text
+<div class="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40
+            flex items-center justify-center flex-shrink-0
+            transition-colors duration-200
+            group-hover:bg-[#1A1A1A] group-hover:border-[#B89555]">
+  <Icon class="w-6 h-6 text-[#1A1A1A] group-hover:text-[#B89555] transition-colors duration-200"
+        strokeWidth={2.25} />
+</div>
+```
 
-Also: the badge must render on **every** card (so currently-hidden conditions stay, but the visual is upgraded). When no payment-plan data exists, the slot stays empty — never fake.
-
-### 4. Developer logo — full-fit on every project listing
-The fake `Building2` fallback was already removed in the previous turn. Two remaining issues:
-
-a. Logos still show a visible **champagne/white inner frame** because `DeveloperLogo` wraps the image in a `bg-[#FDFBF7] p-1.5 border border-[#B89555]/30` tile. Inside a project-card photo this reads as a "white border".
-
-b. The image uses `max-h-full max-w-full object-contain`, so wide logos shrink and look cropped or undersized inside the 56×56 tile.
-
-Fix in `src/components/ui/DeveloperLogo.tsx`:
-- Add a `variant` prop: `"tile" | "bare"`. Default `"tile"` keeps current behaviour (used on the developer directory and dev-detail card where a tile makes sense).
-- When `variant="bare"` (used by every **project card**): no border, no inner padding, transparent rounded-md background, image rendered with `object-contain w-full h-full` inside a `w-14 h-14` (or caller-controlled) box. No white frame; the logo sits cleanly on the photo with a soft drop shadow for legibility.
-- Increase the box default to `w-16 h-12` (4:3) so wide wordmark logos (Emaar, Aldar, Meraas) are fully readable instead of squished into a square.
-
-Apply `variant="bare"` in:
-- `src/components/ProjectCard.tsx` (line 211)
-- `src/components/ReellyProjectCard.tsx` (line 166)
-- `src/components/home/FeaturedListings.tsx` (line 181)
-
-Keep `variant="tile"` (default) on:
-- `src/components/DeveloperCard.tsx` (developer directory grid)
-- `src/components/area-detail/AreaDevelopersBar.tsx` (dev chips)
-- `src/components/developer/RecommendedDevelopers.tsx`
-- `src/components/project-detail/DeveloperInfoCard.tsx`
-
-Marquee stays untouched: `src/components/DeveloperPartnersMarquee.tsx` is **not** modified.
-
-### 5. Audit
-
-After the changes, run a quick visual audit on:
-- `/` (home → Featured Listings, plus untouched marquee)
-- `/properties` (project grid)
-- `/properties-reelly`
-- `/developer/<slug>` (recommended-projects strip)
-- `/project/<slug>` (recommended projects)
-
-For each, verify: handover label is black + date orange, developer name is gold underlined and links to `/developer/:slug`, payment-plan badge is square premium, and every card with a known developer shows the real logo full-fit with no white frame and no Building2 fallback. Report findings inline; no hardcoded screenshots needed beyond the live preview the user can already see.
+Notes:
+- The parent `<motion.button>` already has `className="group ..."`, so `group-hover:` works without further changes.
+- Drop the inline `style={{ color, filter }}` on the icon so Tailwind `text-*` classes drive the color cleanly.
+- Keep `flex-shrink-0`, sizing, and rounded corners identical so layout doesn't shift.
 
 ## Out of scope / locked
 
-- `src/components/DeveloperPartnersMarquee.tsx` and its placement on the home page → **DO NOT touch**.
-- CRM-internal logo usages (`SentHistoryView`, `CRMRelationships`) → keep current `tile` look.
-- Fake brochures, price logic, filters → unchanged.
+- Homepage hero marquee and `DeveloperPartnersMarquee` — untouched.
+- Project listing cards, developer logos, payment-plan badges — untouched.
+- Tagline text, bullets, "Continue" arrow row — untouched.
+- No global token changes; this is a local restyle of one component.
+
+## Verification
+
+After implementing, visually confirm on `/`:
+1. Default: tile reads as champagne with a black icon, matching the sidebar tone.
+2. Hover: card lifts, tile flips to black, icon flips to gold, transition is smooth.
+3. Focus ring (`focus-visible:ring-[#B89555]`) still visible for keyboard users.
