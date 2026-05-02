@@ -819,7 +819,7 @@ END:VCARD`;
                 <h3 className="text-[#1A1A1A] font-semibold mb-0.5">
                   Call Us
                 </h3>
-                <p className="text-gold text-sm">+971-5659-11000</p>
+                <p className="text-[#1A1A1A]/80 text-sm font-medium">+971-5659-11000</p>
               </div>
             </a>
           </div>
