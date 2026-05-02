@@ -306,6 +306,33 @@ const BrokerageContactLinks = ({ r }: { r: any }) => {
 };
 
 /* ===========================================================
+   Top active agents editor
+=========================================================== */
+type TopAgent = { name: string; role?: string; deals_count?: number };
+const TopAgentsEditor = ({ value, onChange }: { value: TopAgent[]; onChange: (v: TopAgent[]) => void }) => {
+  const update = (i: number, patch: Partial<TopAgent>) => {
+    const next = [...value];
+    next[i] = { ...next[i], ...patch };
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {value.map((a, i) => (
+        <div key={i} className="grid grid-cols-12 gap-2">
+          <Input className="col-span-5" placeholder="Agent name" value={a.name || ""} onChange={(e) => update(i, { name: e.target.value })} />
+          <Input className="col-span-4" placeholder="Role / specialty" value={a.role || ""} onChange={(e) => update(i, { role: e.target.value })} />
+          <Input className="col-span-2" type="number" placeholder="Deals" value={a.deals_count ?? ""} onChange={(e) => update(i, { deals_count: e.target.value ? +e.target.value : undefined })} />
+          <Button type="button" variant="outline" size="sm" className="col-span-1" onClick={() => onChange(value.filter((_, j) => j !== i))}><Trash2 className="w-3 h-3" /></Button>
+        </div>
+      ))}
+      <Button type="button" variant="outline" size="sm" onClick={() => onChange([...value, { name: "" }])}>
+        <Plus className="w-3 h-3 mr-1" />Add agent
+      </Button>
+    </div>
+  );
+};
+
+/* ===========================================================
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
