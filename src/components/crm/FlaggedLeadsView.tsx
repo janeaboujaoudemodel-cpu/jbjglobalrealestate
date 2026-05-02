@@ -533,7 +533,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
               {/* Raw Data */}
               {selectedLead.raw_import && (
                 <div>
-                  <label className="text-xs text-[#5A4A2E]">Original Import Data</label>
+                  <label className="text-xs text-[#1A1A1A]/70">Original Import Data</label>
                   <div className="bg-[#B89555]/10 rounded-lg p-3 mt-1 max-h-32 overflow-auto border border-[#B89555]/20">
                     <pre className="text-xs text-[#1A1A1A]">
                       {JSON.stringify(selectedLead.raw_import, null, 2)}
@@ -593,7 +593,7 @@ const FlaggedLeadsView = ({ userId, onRefresh }: FlaggedLeadsViewProps) => {
                   placeholder="+971501234567"
                   className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/40"
                 />
-                <p className="text-xs text-[#5A4A2E]">
+                <p className="text-xs text-[#1A1A1A]/70">
                   Enter full international format (e.g., +971501234567)
                 </p>
               </div>

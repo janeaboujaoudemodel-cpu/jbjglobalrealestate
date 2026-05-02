@@ -127,7 +127,7 @@ const ServicesGrid = () => {
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-[#5A4A2E] mb-4 leading-relaxed">
+          <p className="text-sm text-[#1A1A1A]/70 mb-4 leading-relaxed">
             {service.description}
           </p>
 
@@ -151,7 +151,7 @@ const ServicesGrid = () => {
           >
             {t('services.howCanWeHelp', 'How Can We Help?')}
           </h2>
-          <p className="text-[#5A4A2E] text-sm max-w-md mx-auto">
+          <p className="text-[#1A1A1A]/70 text-sm max-w-md mx-auto">
             {t('services.subtitle', 'Whether you\'re buying, selling, renting, or investing—we\'ve got you covered.')}
           </p>
         </div>

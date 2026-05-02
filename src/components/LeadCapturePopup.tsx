@@ -135,7 +135,7 @@ const LeadCapturePopup = () => {
               <h3 className="text-xl font-bold text-[#1A1A1A]">
                 {headline}
               </h3>
-              <p className="text-sm text-[#5A4A2E] mt-1">
+              <p className="text-sm text-[#1A1A1A]/70 mt-1">
                 {subtitle}
               </p>
             </div>

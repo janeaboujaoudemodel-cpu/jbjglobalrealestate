@@ -146,7 +146,7 @@ export function AIBrokerCallDialog({
         <div className="space-y-4 mt-4">
           {/* Phone Number Display */}
           <div>
-            <Label className="text-[#5A4A2E]">Phone Number</Label>
+            <Label className="text-[#1A1A1A]/70">Phone Number</Label>
             <div className="bg-zinc-800 border border-[#1A1A1A] rounded-md px-3 py-2 mt-1 text-white font-mono">
               {lead.phone || "N/A"}
             </div>
@@ -154,7 +154,7 @@ export function AIBrokerCallDialog({
 
           {/* Call Timer */}
           <div className="bg-zinc-800 rounded-lg p-6 text-center">
-            <div className="flex items-center justify-center gap-2 text-[#5A4A2E] mb-2">
+            <div className="flex items-center justify-center gap-2 text-[#1A1A1A]/70 mb-2">
               <Clock className="h-4 w-4" />
               <span className="text-sm">Call Duration</span>
             </div>
@@ -187,7 +187,7 @@ export function AIBrokerCallDialog({
 
           {/* Call Outcome */}
           <div>
-            <Label className="text-[#5A4A2E]">Call Outcome</Label>
+            <Label className="text-[#1A1A1A]/70">Call Outcome</Label>
             <Select value={callStatus} onValueChange={setCallStatus}>
               <SelectTrigger className="bg-zinc-800 border-[#1A1A1A] text-white mt-1">
                 <SelectValue />
@@ -204,7 +204,7 @@ export function AIBrokerCallDialog({
 
           {/* Call Notes */}
           <div>
-            <Label className="text-[#5A4A2E]">Call Notes (Optional)</Label>
+            <Label className="text-[#1A1A1A]/70">Call Notes (Optional)</Label>
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

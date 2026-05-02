@@ -289,7 +289,7 @@ export const AdminOverviewDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-[#1A1A1A]">Dashboard Overview</h2>
-          <p className="text-[#5A4A2E] text-sm">
+          <p className="text-[#1A1A1A]/70 text-sm">
             Last updated: {formatDistanceToNow(lastUpdated, { addSuffix: true })}
           </p>
         </div>
@@ -368,7 +368,7 @@ export const AdminOverviewDashboard = () => {
                   {stat.trend && stat.change && (
                     <div className={`flex items-center gap-1 text-xs font-medium ${
                       stat.trend === "up" ? "text-emerald-600" : 
-                      stat.trend === "down" ? "text-red-600" : "text-[#5A4A2E]"
+                      stat.trend === "down" ? "text-red-600" : "text-[#1A1A1A]/70"
                     }`}>
                       {stat.trend === "up" && <ArrowUpRight className="w-3 h-3" />}
                       {stat.trend === "down" && <ArrowDownRight className="w-3 h-3" />}
@@ -377,7 +377,7 @@ export const AdminOverviewDashboard = () => {
                   )}
                 </div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stat.value}</p>
-                <p className="text-xs text-[#5A4A2E] mt-1">{stat.label}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">{stat.label}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -435,7 +435,7 @@ export const AdminOverviewDashboard = () => {
             <ScrollArea className="h-[320px]">
               <div className="divide-y divide-[#B89555]/20">
                 {recentActivities.length === 0 ? (
-                  <div className="p-6 text-center text-[#5A4A2E]">
+                  <div className="p-6 text-center text-[#1A1A1A]/70">
                     <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p>No recent activity</p>
                   </div>
@@ -452,9 +452,9 @@ export const AdminOverviewDashboard = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-[#1A1A1A]">{activity.title}</p>
-                        <p className="text-xs text-[#5A4A2E] truncate">{activity.description}</p>
+                        <p className="text-xs text-[#1A1A1A]/70 truncate">{activity.description}</p>
                       </div>
-                      <span className="text-xs text-[#5A4A2E] whitespace-nowrap">
+                      <span className="text-xs text-[#1A1A1A]/70 whitespace-nowrap">
                         {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
                       </span>
                     </motion.div>

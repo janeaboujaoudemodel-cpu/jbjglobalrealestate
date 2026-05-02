@@ -206,7 +206,7 @@ export default function OwnerAgenda() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Daily Agenda</h1>
-                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
                 </div>
               </div>
               
@@ -322,7 +322,7 @@ export default function OwnerAgenda() {
                       {loadingTasks ? (
                         <TasksSkeleton />
                       ) : todayTasks.length === 0 ? (
-                        <EmptyState icon={<Calendar className="h-8 w-8 text-[#5A4A2E]" />} message="No tasks due today" />
+                        <EmptyState icon={<Calendar className="h-8 w-8 text-[#1A1A1A]/70" />} message="No tasks due today" />
                       ) : (
                         <div className="space-y-2">
                           {todayTasks.map(task => (
@@ -397,7 +397,7 @@ export default function OwnerAgenda() {
                     {loadingLeads ? (
                       <LeadsSkeleton />
                     ) : leadsNeedingAction.length === 0 ? (
-                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-[#5A4A2E]" />} message="No leads need immediate action" />
+                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-[#1A1A1A]/70" />} message="No leads need immediate action" />
                     ) : (
                       <div className="space-y-2">
                         {leadsNeedingAction.map(lead => (
@@ -483,7 +483,7 @@ function SummaryCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-[#5A4A2E]">{label}</p>
+            <p className="text-xs text-[#1A1A1A]/70">{label}</p>
             <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
@@ -515,10 +515,10 @@ function TaskItem({
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-[#1A1A1A] truncate">{task.title}</p>
         {task.lead?.full_name && (
-          <p className="text-xs text-[#5A4A2E]">Lead: {task.lead.full_name}</p>
+          <p className="text-xs text-[#1A1A1A]/70">Lead: {task.lead.full_name}</p>
         )}
         {showDate && task.due_at && (
-          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-[#5A4A2E]'}`}>
+          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-[#1A1A1A]/70'}`}>
             {format(new Date(task.due_at), 'MMM d, h:mm a')}
           </p>
         )}
@@ -546,19 +546,19 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
       className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-[#FDFBF7] hover:bg-gold/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-[#F7F2EA] text-[#5A4A2E]'}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-[#F7F2EA] text-[#1A1A1A]/70'}`}>
         <MessageSquare className="h-4 w-4" />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-[#1A1A1A] truncate">
           {thread.contact_name || thread.contact_identifier}
         </p>
-        <p className="text-xs text-[#5A4A2E] truncate">{thread.last_message_preview}</p>
+        <p className="text-xs text-[#1A1A1A]/70 truncate">{thread.last_message_preview}</p>
       </div>
       {thread.unread_count > 0 && (
         <Badge className="bg-gold text-[#1A1A1A] text-xs">{thread.unread_count}</Badge>
       )}
-      <ChevronRight className="h-4 w-4 text-[#5A4A2E]" />
+      <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />
     </div>
   );
 }
@@ -574,7 +574,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-[#1A1A1A] truncate">{lead.full_name}</p>
-        <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+        <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
           {lead.email_lower && <span className="truncate">{lead.email_lower}</span>}
           {lead.phone_e164 && <span>{lead.phone_e164}</span>}
         </div>
@@ -582,7 +582,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
       <Badge variant="outline" className="text-xs border-gold/30">
         {lead.pipeline_stage || 'new'}
       </Badge>
-      <ChevronRight className="h-4 w-4 text-[#5A4A2E]" />
+      <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70" />
     </div>
   );
 }
@@ -591,7 +591,7 @@ function EmptyState({ icon, message }: { icon: React.ReactNode; message: string 
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       {icon}
-      <p className="text-[#5A4A2E] text-sm mt-2">{message}</p>
+      <p className="text-[#1A1A1A]/70 text-sm mt-2">{message}</p>
     </div>
   );
 }

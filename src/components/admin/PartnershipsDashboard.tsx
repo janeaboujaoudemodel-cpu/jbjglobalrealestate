@@ -246,7 +246,7 @@ export function PartnershipsDashboard() {
           <Card key={s.label} className="bg-[#FDFBF7]/80 border-[#B89555]/30">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-[#1A1A1A]">{s.value}</p>
-              <p className="text-xs text-[#5A4A2E]">{s.label}</p>
+              <p className="text-xs text-[#1A1A1A]/70">{s.label}</p>
             </CardContent>
           </Card>
         ))}
@@ -275,7 +275,7 @@ export function PartnershipsDashboard() {
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#B89555]" /></div>
       ) : filtered.length === 0 ? (
         <Card className="bg-[#FDFBF7]/80 border-[#B89555]/20">
-          <CardContent className="p-12 text-center text-[#5A4A2E]">No partnership applications found.</CardContent>
+          <CardContent className="p-12 text-center text-[#1A1A1A]/70">No partnership applications found.</CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -291,8 +291,8 @@ export function PartnershipsDashboard() {
                         <Building2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                         <h3 className="font-bold text-[#1A1A1A] truncate">{app.company_name}</h3>
                       </div>
-                      <p className="text-sm text-[#5A4A2E]">{app.contact_person} · {app.position} · {app.partnership_type}</p>
-                      <p className="text-xs text-[#5A4A2E] mt-1">{new Date(app.created_at).toLocaleDateString()}</p>
+                      <p className="text-sm text-[#1A1A1A]/70">{app.contact_person} · {app.position} · {app.partnership_type}</p>
+                      <p className="text-xs text-[#1A1A1A]/70 mt-1">{new Date(app.created_at).toLocaleDateString()}</p>
                     </div>
                     <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold ${stageInfo.color}`}>
                       <StageIcon className="w-3.5 h-3.5" />
@@ -325,13 +325,13 @@ export function PartnershipsDashboard() {
                 <div className="space-y-4 mt-4">
                   {/* Contact Info */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div><span className="text-[#5A4A2E]">Contact:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.contact_person}</span></div>
-                    <div><span className="text-[#5A4A2E]">Position:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.position}</span></div>
-                    <div><span className="text-[#5A4A2E]">Email:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.email}</span></div>
-                    <div><span className="text-[#5A4A2E]">Phone:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.phone}</span></div>
-                    <div><span className="text-[#5A4A2E]">Country:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.country}</span></div>
-                    <div><span className="text-[#5A4A2E]">Type:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.partnership_type}</span></div>
-                    {selectedApp.portfolio_size && <div><span className="text-[#5A4A2E]">Portfolio:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.portfolio_size}</span></div>}
+                    <div><span className="text-[#1A1A1A]/70">Contact:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.contact_person}</span></div>
+                    <div><span className="text-[#1A1A1A]/70">Position:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.position}</span></div>
+                    <div><span className="text-[#1A1A1A]/70">Email:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.email}</span></div>
+                    <div><span className="text-[#1A1A1A]/70">Phone:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.phone}</span></div>
+                    <div><span className="text-[#1A1A1A]/70">Country:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.country}</span></div>
+                    <div><span className="text-[#1A1A1A]/70">Type:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.partnership_type}</span></div>
+                    {selectedApp.portfolio_size && <div><span className="text-[#1A1A1A]/70">Portfolio:</span> <span className="text-[#1A1A1A] font-medium">{selectedApp.portfolio_size}</span></div>}
                   </div>
 
                   {/* Links */}
@@ -351,14 +351,14 @@ export function PartnershipsDashboard() {
                   {/* Company Profile */}
                   {selectedApp.company_profile && (
                     <div>
-                      <p className="text-xs text-[#5A4A2E] uppercase tracking-wider mb-1">Company Profile</p>
+                      <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wider mb-1">Company Profile</p>
                       <p className="text-sm text-[#1A1A1A] bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
                     </div>
                   )}
 
                   {/* Proposal */}
                   <div>
-                    <p className="text-xs text-[#5A4A2E] uppercase tracking-wider mb-1">Proposal</p>
+                    <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wider mb-1">Proposal</p>
                     <p className="text-sm text-[#1A1A1A] bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
                   </div>
 

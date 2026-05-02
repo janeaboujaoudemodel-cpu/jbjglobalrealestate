@@ -363,9 +363,9 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
         </div>
       ) : palettes.length === 0 ? (
         <div className="text-center py-6">
-          <FolderOpen className="w-10 h-10 text-[#5A4A2E] mx-auto mb-2" />
+          <FolderOpen className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-2" />
           <p className="text-white/90 text-sm">No custom palettes yet</p>
-          <p className="text-[#5A4A2E] text-xs">Create your first palette above</p>
+          <p className="text-[#1A1A1A]/70 text-xs">Create your first palette above</p>
         </div>
       ) : (
         <ScrollArea className="h-[250px]">

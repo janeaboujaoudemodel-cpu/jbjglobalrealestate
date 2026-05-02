@@ -266,7 +266,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
                     <div className="text-xl font-bold text-[#1A1A1A]">
                       {loading ? "..." : card.value}
                     </div>
-                    <p className="text-[10px] text-[#5A4A2E] mt-0.5 whitespace-nowrap">
+                    <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5 whitespace-nowrap">
                       {loading ? "" : card.subValue}
                     </p>
                   </CardContent>
@@ -295,7 +295,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
                     <div className="text-xl font-bold text-[#1A1A1A]">
                       {loading ? "..." : card.value}
                     </div>
-                    <p className="text-[10px] text-[#5A4A2E] mt-0.5 whitespace-nowrap">
+                    <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5 whitespace-nowrap">
                       {loading ? "" : card.subValue}
                     </p>
                   </CardContent>

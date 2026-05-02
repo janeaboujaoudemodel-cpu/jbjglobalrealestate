@@ -55,7 +55,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               {backTo && (
                 <button
                   onClick={() => navigate(backTo)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#5A4A2E] hover:text-gold transition-colors rounded-lg hover:bg-gold/5"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-[#1A1A1A]/70 hover:text-gold transition-colors rounded-lg hover:bg-gold/5"
                 >
                   <Home className="w-4 h-4" />
                   <span className="hidden sm:inline">{backLabel}</span>
@@ -64,7 +64,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               <div>
                 <h1 className="text-2xl font-bold text-[#1A1A1A]">{title}</h1>
                 {subtitle && (
-                  <p className="text-sm text-[#5A4A2E] mt-0.5">{subtitle}</p>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-0.5">{subtitle}</p>
                 )}
               </div>
             </div>
@@ -76,7 +76,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               {/* Search/Command Button */}
               <button
                 onClick={commandPalette.open}
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl text-[#5A4A2E] hover:text-gold hover:border-gold/40 transition-all shadow-sm"
+                className="flex items-center gap-2 px-4 py-2.5 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl text-[#1A1A1A]/70 hover:text-gold hover:border-gold/40 transition-all shadow-sm"
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline text-sm">Search...</span>
@@ -108,7 +108,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                       <User className="w-4 h-4 text-gold" />
                     </div>
                     <ChevronDown className={cn(
-                      "w-4 h-4 text-[#5A4A2E] transition-transform",
+                      "w-4 h-4 text-[#1A1A1A]/70 transition-transform",
                       userMenuOpen && "rotate-180"
                     )} />
                   </button>
@@ -117,25 +117,25 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                     <div className="absolute right-0 top-full mt-2 w-56 bg-[#FDFBF7] border-2 border-gold/20 rounded-xl shadow-lg shadow-gold/10 py-2 z-50">
                       <div className="px-4 py-2 border-b border-gold/10">
                         <p className="text-sm font-medium text-[#1A1A1A] truncate">{user.email}</p>
-                        <p className="text-xs text-[#5A4A2E]">Logged in</p>
+                        <p className="text-xs text-[#1A1A1A]/70">Logged in</p>
                       </div>
                       <button
                         onClick={() => navigate('/my-dashboard#tasks')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#5A4A2E] hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/5 transition-colors"
                       >
                         <Check className="w-4 h-4" />
                         My Tasks
                       </button>
                       <button
                         onClick={() => navigate('/broker-account')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#5A4A2E] hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/5 transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         Account Settings
                       </button>
                       <button
                         onClick={handleSignOut}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#5A4A2E] hover:text-red-500 hover:bg-red-50 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#1A1A1A]/70 hover:text-red-500 hover:bg-red-50 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         Sign Out

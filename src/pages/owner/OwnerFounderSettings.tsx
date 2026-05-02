@@ -19,7 +19,7 @@ const OwnerFounderSettings = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#1A1A1A]">Founder & Podcast Controls</h1>
-            <p className="text-sm text-[#5A4A2E]">Manage visibility toggles and podcast recording studio</p>
+            <p className="text-sm text-[#1A1A1A]/70">Manage visibility toggles and podcast recording studio</p>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@ const OwnerFounderSettings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-[#5A4A2E]">
+          <p className="text-sm text-[#1A1A1A]/70">
             Record, edit, and manage podcast episodes with integrated voice synthesis. Choose from premium voices, accents, and languages for professional audio production.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -81,10 +81,10 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-[#1A1A1A] text-sm">Founder Visibility</span>
             </div>
-            <p className="text-sm text-[#5A4A2E] leading-relaxed">
+            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">
               Controls all founder-related content across the website including biography, headshots, video footage, Press Kit page, and Company Profile page. The Digital Business Card remains always visible.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
               <Eye className="w-3.5 h-3.5" />
               <span>Affects: Homepage, About, Press Kit, Company Profile</span>
             </div>
@@ -96,10 +96,10 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-[#1A1A1A] text-sm">Podcast Visibility</span>
             </div>
-            <p className="text-sm text-[#5A4A2E] leading-relaxed">
+            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">
               Controls the JBJ Podcast section on the homepage. When hidden, only the owner can see it for testing purposes. Toggle to public when ready to launch episodes to all visitors.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
               <EyeOff className="w-3.5 h-3.5" />
               <span>Owner-only preview mode available when hidden</span>
             </div>
@@ -111,10 +111,10 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-[#1A1A1A] text-sm">Podcast Studio</span>
             </div>
-            <p className="text-sm text-[#5A4A2E] leading-relaxed">
+            <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">
               Access the full podcast recording studio with ElevenLabs voice integration. Record episodes, choose voices, control accents, and manage your podcast production workflow.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+            <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
               <Mic className="w-3.5 h-3.5" />
               <span>Integrated with ElevenLabs voice API</span>
             </div>

@@ -76,7 +76,7 @@ export function EmbeddedITDepartment() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Pending Applications</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Pending Applications</p>
                 <p className="text-2xl font-bold text-orange-600">{stats.pendingApplications}</p>
               </div>
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
@@ -90,7 +90,7 @@ export function EmbeddedITDepartment() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Open IT Tasks</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Open IT Tasks</p>
                 <p className="text-2xl font-bold text-blue-600">{stats.openTasks}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -104,7 +104,7 @@ export function EmbeddedITDepartment() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Completed Today</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Completed Today</p>
                 <p className="text-2xl font-bold text-green-600">{stats.completedToday}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -118,7 +118,7 @@ export function EmbeddedITDepartment() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Active Employees</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Active Employees</p>
                 <p className="text-2xl font-bold text-gold">{stats.activeEmployees}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -154,7 +154,7 @@ export function EmbeddedITDepartment() {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-48 h-9 text-sm placeholder:text-[#5A4A2E]"
+                className="pl-8 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] w-48 h-9 text-sm placeholder:text-[#1A1A1A]/70"
               />
             </div>
             <Button

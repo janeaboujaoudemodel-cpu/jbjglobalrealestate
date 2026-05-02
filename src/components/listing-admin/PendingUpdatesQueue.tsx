@@ -382,7 +382,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {migrationLog.length > 0 && (
               <div className="bg-zinc-950 border border-[#1A1A1A] rounded-xl overflow-hidden">
                 <div className="px-4 py-2 border-b border-[#1A1A1A]">
-                  <span className="text-[#5A4A2E] text-xs font-semibold">Migration Log</span>
+                  <span className="text-[#1A1A1A]/70 text-xs font-semibold">Migration Log</span>
                 </div>
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
                   {migrationLog.map((line, i) => (
@@ -391,7 +391,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
                       line.includes("[START]") ? "text-yellow-300" :
                       line.includes("[WARN]") ? "text-amber-400" :
-                      "text-[#5A4A2E]"
+                      "text-[#1A1A1A]/70"
                     }`}>{line}</div>
                   ))}
                 </div>
@@ -401,7 +401,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* New Project Discoveries */}
             {newProjects.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-[#5A4A2E] mb-3 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[#1A1A1A]/70 mb-3 flex items-center gap-2">
                   <Building className="h-4 w-4 text-gold" />
                   New Project Discoveries
                   <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
@@ -521,9 +521,9 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* Field Updates (if any) */}
             {fieldUpdates.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-[#5A4A2E] mb-3">
+                <h3 className="text-sm font-semibold text-[#1A1A1A]/70 mb-3">
                   Field Updates
-                  <Badge className="ml-2 bg-[#F7F2EA] text-[#5A4A2E] text-xs">{fieldUpdates.length}</Badge>
+                  <Badge className="ml-2 bg-[#F7F2EA] text-[#1A1A1A]/70 text-xs">{fieldUpdates.length}</Badge>
                 </h3>
                 <ScrollArea className="h-[300px] pr-2">
                   <div className="space-y-3">
@@ -533,20 +533,20 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <span className="font-medium text-[#1A1A1A] text-sm">
                             {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                           </span>
-                          <div className="flex items-center gap-1 text-xs text-[#5A4A2E]">
+                          <div className="flex items-center gap-1 text-xs text-[#1A1A1A]/70">
                             <Clock className="h-3 w-3" />
                             {format(new Date(update.created_at), "MMM d, h:mm a")}
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <p className="text-[10px] text-[#5A4A2E] mb-1">Current</p>
+                            <p className="text-[10px] text-[#1A1A1A]/70 mb-1">Current</p>
                             <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded p-2 text-xs text-[#1A1A1A]">
-                              {update.current_value || <span className="text-[#5A4A2E] italic">Empty</span>}
+                              {update.current_value || <span className="text-[#1A1A1A]/70 italic">Empty</span>}
                             </div>
                           </div>
                           <div>
-                            <p className="text-[10px] text-[#5A4A2E] mb-1">Proposed</p>
+                            <p className="text-[10px] text-[#1A1A1A]/70 mb-1">Proposed</p>
                             <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-[#1A1A1A]">
                               {update.proposed_value}
                             </div>

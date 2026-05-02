@@ -243,7 +243,7 @@ export function EnhancedAssignModal({
 
   const renderSelectionScreen = () => (
     <div className="space-y-4">
-      <p className="text-[#5A4A2E] text-sm text-center mb-6">
+      <p className="text-[#1A1A1A]/70 text-sm text-center mb-6">
         Who would you like to assign {leadName ? `"${leadName}"` : "this lead"} to?
       </p>
 
@@ -257,7 +257,7 @@ export function EnhancedAssignModal({
         </div>
         <div className="text-left">
           <p className="text-white font-medium">Employees</p>
-          <p className="text-[#5A4A2E] text-sm">Assign to a team member</p>
+          <p className="text-[#1A1A1A]/70 text-sm">Assign to a team member</p>
         </div>
       </Button>
 
@@ -271,7 +271,7 @@ export function EnhancedAssignModal({
         </div>
         <div className="text-left">
           <p className="text-white font-medium">Brokers</p>
-          <p className="text-[#5A4A2E] text-sm">Assign to human or AI broker</p>
+          <p className="text-[#1A1A1A]/70 text-sm">Assign to human or AI broker</p>
         </div>
       </Button>
     </div>
@@ -286,14 +286,14 @@ export function EnhancedAssignModal({
           variant="ghost"
           size="sm"
           onClick={() => setStep("select")}
-          className="text-[#5A4A2E] hover:text-white -ml-2"
+          className="text-[#1A1A1A]/70 hover:text-white -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
           <Input
             placeholder="Search employees..."
             value={searchQuery}
@@ -309,7 +309,7 @@ export function EnhancedAssignModal({
                 <Loader2 className="h-6 w-6 animate-spin text-gold" />
               </div>
             ) : filtered.length === 0 ? (
-              <p className="text-[#5A4A2E] text-center py-8">No employees found</p>
+              <p className="text-[#1A1A1A]/70 text-center py-8">No employees found</p>
             ) : (
               filtered.map((employee) => (
                   <button
@@ -334,7 +334,7 @@ export function EnhancedAssignModal({
                     </p>
                   </div>
                   {employee.crm_role && (
-                    <Badge variant="outline" className="border-[#1A1A1A] text-[#5A4A2E]">
+                    <Badge variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]/70">
                       {employee.crm_role}
                     </Badge>
                   )}
@@ -356,14 +356,14 @@ export function EnhancedAssignModal({
           variant="ghost"
           size="sm"
           onClick={() => setStep("select")}
-          className="text-[#5A4A2E] hover:text-white -ml-2"
+          className="text-[#1A1A1A]/70 hover:text-white -ml-2"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
 
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
           <Input
             placeholder="Search brokers..."
             value={searchQuery}
@@ -383,7 +383,7 @@ export function EnhancedAssignModal({
                 {/* Human Brokers */}
                 {filtered.jbj.length > 0 && (
                   <div>
-                    <h4 className="text-[#5A4A2E] text-xs uppercase tracking-wide mb-2">
+                    <h4 className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide mb-2">
                       Human Brokers
                     </h4>
                     <div className="space-y-2">
@@ -424,7 +424,7 @@ export function EnhancedAssignModal({
                                 {broker.name}
                               </p>
                               <div className="flex items-center gap-2">
-                                <span className="text-[#5A4A2E] text-sm">
+                                <span className="text-[#1A1A1A]/70 text-sm">
                                   {broker.active_leads}/{broker.capacity}
                                 </span>
                                 {isAtCapacity && (
@@ -444,7 +444,7 @@ export function EnhancedAssignModal({
                 {/* AI Brokers */}
                 {filtered.ai.length > 0 && (
                   <div>
-                    <h4 className="text-[#5A4A2E] text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <h4 className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
                       <Bot className="h-3 w-3" />
                       AI Brokers
                     </h4>
@@ -487,7 +487,7 @@ export function EnhancedAssignModal({
                                 <Bot className="h-3 w-3 text-emerald-400" />
                               </p>
                               <div className="flex items-center gap-2">
-                                <span className="text-[#5A4A2E] text-sm">
+                                <span className="text-[#1A1A1A]/70 text-sm">
                                   {broker.current_daily_interactions}/{broker.daily_interaction_limit} today
                                 </span>
                                 {isAtCapacity && (
@@ -505,7 +505,7 @@ export function EnhancedAssignModal({
                 )}
 
                 {filtered.jbj.length === 0 && filtered.ai.length === 0 && (
-                  <p className="text-[#5A4A2E] text-center py-8">No brokers found</p>
+                  <p className="text-[#1A1A1A]/70 text-center py-8">No brokers found</p>
                 )}
               </>
             )}
@@ -540,14 +540,14 @@ export function EnhancedAssignModal({
               <CheckCircle className="h-5 w-5 text-gold" />
               Confirm Assignment
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[#5A4A2E]">
+            <AlertDialogDescription className="text-[#1A1A1A]/70">
               Are you sure you want to assign{" "}
               <span className="text-white font-medium">{leadName || "this lead"}</span> to{" "}
               <span className="text-gold font-medium">{selectedPerson?.name}</span>?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]">
+            <AlertDialogCancel className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

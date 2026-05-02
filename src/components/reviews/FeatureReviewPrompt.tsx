@@ -120,7 +120,7 @@ export function FeatureReviewPrompt({
         </DialogHeader>
 
         <div className="space-y-5">
-          <p className="text-sm text-[#5A4A2E]">{question || `How would you rate your experience with ${featureLabel}?`}</p>
+          <p className="text-sm text-[#1A1A1A]/70">{question || `How would you rate your experience with ${featureLabel}?`}</p>
 
           <div className="flex gap-2 justify-center py-2">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -134,7 +134,7 @@ export function FeatureReviewPrompt({
               >
                 <Star
                   className={`h-10 w-10 transition-colors ${
-                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-[#5A4A2E]"
+                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-[#1A1A1A]/70"
                   }`}
                 />
               </button>
@@ -147,7 +147,7 @@ export function FeatureReviewPrompt({
           )}
 
           <div>
-            <Label className="text-[#5A4A2E] text-sm">Review title</Label>
+            <Label className="text-[#1A1A1A]/70 text-sm">Review title</Label>
             <Input
               value={reviewTitle}
               onChange={(e) => setReviewTitle(e.target.value)}
@@ -157,7 +157,7 @@ export function FeatureReviewPrompt({
           </div>
 
           <div>
-            <Label className="text-[#5A4A2E] text-sm">Your review (optional)</Label>
+            <Label className="text-[#1A1A1A]/70 text-sm">Your review (optional)</Label>
             <Textarea
               value={reviewText}
               onChange={(e) => setReviewText(e.target.value)}
@@ -168,7 +168,7 @@ export function FeatureReviewPrompt({
           </div>
 
           <div>
-            <Label className="text-[#5A4A2E] text-sm">What can we improve?</Label>
+            <Label className="text-[#1A1A1A]/70 text-sm">What can we improve?</Label>
             <Textarea
               value={improveText}
               onChange={(e) => setImproveText(e.target.value)}
@@ -180,16 +180,16 @@ export function FeatureReviewPrompt({
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-sm text-[#5A4A2E]">Publish anonymously</Label>
+              <Label className="text-sm text-[#1A1A1A]/70">Publish anonymously</Label>
               <Switch checked={isAnonymous} onCheckedChange={setIsAnonymous} />
             </div>
             <div className="flex items-center justify-between">
-              <Label className="text-sm text-[#5A4A2E]">Allow publishing on website</Label>
+              <Label className="text-sm text-[#1A1A1A]/70">Allow publishing on website</Label>
               <Switch checked={publishRequested} onCheckedChange={setPublishRequested} />
             </div>
           </div>
 
-          <p className="text-xs text-[#5A4A2E]">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
+          <p className="text-xs text-[#1A1A1A]/70">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
 
           <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-[#1A1A1A] font-bold">
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}

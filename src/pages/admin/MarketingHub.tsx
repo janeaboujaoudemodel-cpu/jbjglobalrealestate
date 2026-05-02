@@ -133,13 +133,13 @@ const MarketingHub: React.FC = () => {
 
   const getStatusColor = (status: CampaignStatus) => {
     switch (status) {
-      case 'draft': return 'bg-[#EFE6D6] text-[#5A4A2E]';
+      case 'draft': return 'bg-[#EFE6D6] text-[#1A1A1A]/70';
       case 'scheduled': return 'bg-blue-100 text-blue-700';
       case 'sending': return 'bg-amber-100 text-amber-700';
       case 'sent': return 'bg-green-100 text-green-700';
       case 'paused': return 'bg-orange-100 text-orange-700';
-      case 'archived': return 'bg-[#EFE6D6] text-[#5A4A2E]';
-      default: return 'bg-[#EFE6D6] text-[#5A4A2E]';
+      case 'archived': return 'bg-[#EFE6D6] text-[#1A1A1A]/70';
+      default: return 'bg-[#EFE6D6] text-[#1A1A1A]/70';
     }
   };
 
@@ -501,7 +501,7 @@ const MarketingHub: React.FC = () => {
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30">
                         <template.icon className="w-5 h-5 text-[#1A1A1A]" />
                       </div>
-                      <Badge className="text-[10px] bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30">{template.category}</Badge>
+                      <Badge className="text-[10px] bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30">{template.category}</Badge>
                     </div>
                     <h4 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">{template.name}</h4>
                     <p className="text-sm text-[#1A1A1A]/60 mt-1 line-clamp-2">{template.description}</p>

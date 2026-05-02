@@ -261,7 +261,7 @@ export default function PortfolioViews() {
           {/* Back Link */}
           <Link
             to="/investor-dashboard"
-            className="inline-flex items-center gap-2 text-[#5A4A2E] hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard

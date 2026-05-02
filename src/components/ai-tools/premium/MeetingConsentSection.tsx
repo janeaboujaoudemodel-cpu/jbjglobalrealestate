@@ -213,15 +213,15 @@ const MeetingConsentSection = ({
           </div>
           <div>
             <span className="font-semibold text-[#1A1A1A] text-sm">Client Recording Authorization</span>
-            <p className="text-[#5A4A2E] text-[11px]">Required before recording — for quality & review purposes</p>
+            <p className="text-[#1A1A1A]/70 text-[11px]">Required before recording — for quality & review purposes</p>
           </div>
         </div>
 
         {/* Agreement text */}
-        <div className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3.5 text-[#5A4A2E] text-xs leading-relaxed">
+        <div className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3.5 text-[#1A1A1A]/70 text-xs leading-relaxed">
           <p className="font-semibold text-[#1A1A1A] text-xs mb-1.5">Recording Consent Agreement</p>
           {CONSENT_TEXT}
-          <p className="text-[#5A4A2E] text-[10px] mt-2">
+          <p className="text-[#1A1A1A]/70 text-[10px] mt-2">
             Meeting: {meetingTitle || "Untitled"} · Type: {sessionType.replace(/_/g, " ")} · Participants: {participants || "N/A"}
           </p>
         </div>
@@ -229,7 +229,7 @@ const MeetingConsentSection = ({
         {/* Client details */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="space-y-1">
-            <Label className="text-[#5A4A2E] text-xs">Client Full Name *</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Client Full Name *</Label>
             <Input
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
@@ -238,7 +238,7 @@ const MeetingConsentSection = ({
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-[#5A4A2E] text-xs">Email (optional)</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Email (optional)</Label>
             <Input
               value={clientEmail}
               onChange={(e) => setClientEmail(e.target.value)}
@@ -247,7 +247,7 @@ const MeetingConsentSection = ({
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-[#5A4A2E] text-xs">Phone (optional)</Label>
+            <Label className="text-[#1A1A1A]/70 text-xs">Phone (optional)</Label>
             <Input
               value={clientPhone}
               onChange={(e) => setClientPhone(e.target.value)}
@@ -259,7 +259,7 @@ const MeetingConsentSection = ({
 
         {/* ID Photo Upload */}
         <div className="space-y-1.5">
-          <Label className="text-[#5A4A2E] text-xs flex items-center gap-1.5">
+          <Label className="text-[#1A1A1A]/70 text-xs flex items-center gap-1.5">
             <Upload className="h-3 w-3 text-gold" /> Client ID Photo (optional — for identity verification)
           </Label>
           {idPhotoPreview ? (
@@ -275,7 +275,7 @@ const MeetingConsentSection = ({
           ) : (
             <label className="flex items-center gap-2 p-3 border border-dashed border-gold/30 rounded-lg cursor-pointer hover:bg-gold/5 transition-colors">
               <Upload className="h-4 w-4 text-gold" />
-              <span className="text-[#5A4A2E] text-xs">Upload Emirates ID or Passport photo</span>
+              <span className="text-[#1A1A1A]/70 text-xs">Upload Emirates ID or Passport photo</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleIdUpload} />
             </label>
           )}
@@ -283,7 +283,7 @@ const MeetingConsentSection = ({
 
         {/* Signature Pad */}
         <div className="space-y-1.5">
-          <Label className="text-[#5A4A2E] text-xs flex items-center gap-1.5">
+          <Label className="text-[#1A1A1A]/70 text-xs flex items-center gap-1.5">
             <PenTool className="h-3 w-3 text-gold" /> Client Signature *
           </Label>
           <div className="relative bg-[#FDFBF7] border border-gold/30 rounded-lg overflow-hidden">
@@ -302,12 +302,12 @@ const MeetingConsentSection = ({
             />
             {!hasSigned && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[#5A4A2E] text-sm">Sign here</span>
+                <span className="text-[#1A1A1A]/70 text-sm">Sign here</span>
               </div>
             )}
           </div>
           <div className="flex justify-end">
-            <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs text-[#5A4A2E] hover:text-red-600">
+            <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs text-[#1A1A1A]/70 hover:text-red-600">
               Clear Signature
             </Button>
           </div>

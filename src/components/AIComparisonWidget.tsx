@@ -49,10 +49,10 @@ const AIComparisonWidget = () => {
             >
               AI Property Comparison
             </h3>
-            <p className="text-[#5A4A2E] max-w-md">
+            <p className="text-[#1A1A1A]/70 max-w-md">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <p className="text-[#5A4A2E] text-sm mt-2">
+            <p className="text-[#1A1A1A]/70 text-sm mt-2">
               Powered by JBJ Global Real Estate
             </p>
           </div>
@@ -73,7 +73,7 @@ const AIComparisonWidget = () => {
               </div>
               <div>
                 <p className="text-[#1A1A1A] font-medium text-sm">{feature.label}</p>
-                <p className="text-[#5A4A2E] text-xs">{feature.description}</p>
+                <p className="text-[#1A1A1A]/70 text-xs">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -81,7 +81,7 @@ const AIComparisonWidget = () => {
 
         {/* Sample comparison preview */}
         <div className="bg-[#EFE6D6] border border-gold/20 rounded-xl p-4 mb-6">
-          <div className="grid grid-cols-3 gap-2 text-xs text-[#5A4A2E] mb-3">
+          <div className="grid grid-cols-3 gap-2 text-xs text-[#1A1A1A]/70 mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
             <span className="text-right">Yield Est.</span>
@@ -93,7 +93,7 @@ const AIComparisonWidget = () => {
           ].map((item, i) => (
             <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-[#B89555]/30 text-sm">
               <span className="text-[#1A1A1A] font-medium">{item.name}</span>
-              <span className="text-center text-[#5A4A2E]">{item.price}</span>
+              <span className="text-center text-[#1A1A1A]/70">{item.price}</span>
               <span className="text-right text-green-600 font-medium">{item.roi}</span>
             </div>
           ))}

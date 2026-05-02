@@ -81,13 +81,13 @@ export const PremiumHeroButton = ({
     <>
       {iconPosition === "left" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-[#5A4A2E]" : "text-white/80 group-hover:text-[#1A1A1A]")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-[#1A1A1A]/70" : "text-white/80 group-hover:text-[#1A1A1A]")}
         />
       )}
       <span className={cn("transition-colors", isLight ? "text-[#1A1A1A]" : "text-white group-hover:text-[#1A1A1A]")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-[#5A4A2E]" : "text-white/80 group-hover:text-[#1A1A1A]")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-[#1A1A1A]/70" : "text-white/80 group-hover:text-[#1A1A1A]")}
         />
       )}
       {/* Hover fill effect (only for dark-bg variant) */}

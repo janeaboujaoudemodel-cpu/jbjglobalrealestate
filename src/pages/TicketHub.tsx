@@ -566,7 +566,7 @@ const TicketHub = () => {
                             className="hidden"
                             onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = ''; }}
                           />
-                          <Upload className="w-8 h-8 mx-auto mb-2 text-[#5A4A2E]" />
+                          <Upload className="w-8 h-8 mx-auto mb-2 text-[#1A1A1A]/70" />
                           <p className="text-sm text-muted-foreground">
                             Drag & drop files here or <span className="text-gold font-medium underline">browse</span>
                           </p>

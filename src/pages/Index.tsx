@@ -407,7 +407,7 @@ const Index = () => {
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-[#5A4A2E] text-xs text-center mt-4">
+              <p className="text-[#1A1A1A]/70 text-xs text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
@@ -422,7 +422,7 @@ const Index = () => {
                 
                 <Link to="/partners/mortgage">
                   <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]">
-                    <Users className="w-5 h-5 text-[#5A4A2E]" />
+                    <Users className="w-5 h-5 text-[#1A1A1A]/70" />
                     <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
                     <ArrowUpRight className="w-5 h-5" />
                   </Button>

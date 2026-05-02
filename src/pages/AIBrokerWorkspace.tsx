@@ -231,7 +231,7 @@ export default function AIBrokerWorkspace() {
                 size="sm"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+                className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
               >
                 <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
               </Button>
@@ -263,7 +263,7 @@ export default function AIBrokerWorkspace() {
                   )}
                 </div>
                 <h2 className="text-white font-semibold">{activeBroker.name}</h2>
-                <p className="text-[#5A4A2E] text-sm">{activeBroker.email}</p>
+                <p className="text-[#1A1A1A]/70 text-sm">{activeBroker.email}</p>
                 <Badge className="mt-2 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
                   Active
                 </Badge>
@@ -272,7 +272,7 @@ export default function AIBrokerWorkspace() {
               {/* Capacity Bar */}
               <div className="bg-zinc-900 rounded-lg p-4">
                 <div className="flex justify-between text-sm mb-2">
-                  <span className="text-[#5A4A2E]">Daily Capacity</span>
+                  <span className="text-[#1A1A1A]/70">Daily Capacity</span>
                   <span className="text-white">{capacityUsed}/{capacityLimit}</span>
                 </div>
                 <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
@@ -292,35 +292,35 @@ export default function AIBrokerWorkspace() {
               {/* Quick Stats */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#5A4A2E] flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/70 flex items-center gap-2">
                     <Users className="h-4 w-4" />
                     Leads Today
                   </span>
                   <span className="text-white font-medium">{dailyStats.leads_contacted}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#5A4A2E] flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/70 flex items-center gap-2">
                     <MessageSquare className="h-4 w-4" />
                     Messages
                   </span>
                   <span className="text-white font-medium">{dailyStats.messages_sent}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#5A4A2E] flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/70 flex items-center gap-2">
                     <Mail className="h-4 w-4" />
                     Emails
                   </span>
                   <span className="text-white font-medium">{dailyStats.emails_sent}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#5A4A2E] flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/70 flex items-center gap-2">
                     <Phone className="h-4 w-4" />
                     Calls
                   </span>
                   <span className="text-white font-medium">{dailyStats.calls_made}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-[#5A4A2E] flex items-center gap-2">
+                  <span className="text-[#1A1A1A]/70 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     Conversions
                   </span>
@@ -332,21 +332,21 @@ export default function AIBrokerWorkspace() {
               <nav className="space-y-1 pt-4 border-t border-[#1A1A1A]">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
+                  className="w-full justify-start text-[#1A1A1A]/70 hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <Users className="h-4 w-4 mr-3" />
                   My Leads
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
+                  className="w-full justify-start text-[#1A1A1A]/70 hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <MessageSquare className="h-4 w-4 mr-3" />
                   Conversations
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-[#5A4A2E] hover:text-white hover:bg-[#1A1A1A]"
+                  className="w-full justify-start text-[#1A1A1A]/70 hover:text-white hover:bg-[#1A1A1A]"
                 >
                   <BarChart3 className="h-4 w-4 mr-3" />
                   Analytics
@@ -386,7 +386,7 @@ export default function AIBrokerWorkspace() {
 
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
                   <Input
                     placeholder="Search leads..."
                     value={searchQuery}
@@ -394,7 +394,7 @@ export default function AIBrokerWorkspace() {
                     className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white w-64"
                   />
                 </div>
-                <Button variant="outline" className="border-[#1A1A1A] text-[#5A4A2E]">
+                <Button variant="outline" className="border-[#1A1A1A] text-[#1A1A1A]/70">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>
@@ -414,9 +414,9 @@ export default function AIBrokerWorkspace() {
 
                 {filteredLeads.length === 0 && (
                   <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                    <Users className="h-16 w-16 text-[#5A4A2E] mb-4" />
+                    <Users className="h-16 w-16 text-[#1A1A1A]/70 mb-4" />
                     <h3 className="text-white text-lg font-medium mb-2">No Leads Found</h3>
-                    <p className="text-[#5A4A2E]">
+                    <p className="text-[#1A1A1A]/70">
                       {searchQuery
                         ? "Try adjusting your search query"
                         : "Leads will appear here when assigned"}

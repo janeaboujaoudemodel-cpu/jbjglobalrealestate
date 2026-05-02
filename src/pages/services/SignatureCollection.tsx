@@ -190,7 +190,7 @@ const SignatureCollection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -213,7 +213,7 @@ const SignatureCollection = () => {
               What This Page Is For
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] text-lg leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                 This page is for signature requests tied to JBJ workflows where authorization, traceability, and document control matter.
               </p>
             </motion.div>
@@ -238,7 +238,7 @@ const SignatureCollection = () => {
             >
               Submit Signature Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8">
               Submit your request with the document attached. You will receive a request ID and status timeline.
             </motion.p>
             
@@ -247,7 +247,7 @@ const SignatureCollection = () => {
               <div className="jj-card-inner !bg-[#1A1A1A]/5 border border-gold/20">
                 <div className="flex flex-col gap-3">
                   {formHelperItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-sm text-[#5A4A2E]">
+                    <div key={idx} className="flex items-center gap-3 text-sm text-[#1A1A1A]/70">
                       <item.icon className="w-4 h-4 text-gold shrink-0" />
                       <span>{item.text}</span>
                     </div>
@@ -389,7 +389,7 @@ const SignatureCollection = () => {
                         <step.icon className="w-5 h-5 text-gold" />
                       </div>
                       <h3 className="font-semibold text-[#1A1A1A] mb-2">{step.label}</h3>
-                      <p className="text-sm text-[#5A4A2E]">{step.description}</p>
+                      <p className="text-sm text-[#1A1A1A]/70">{step.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -416,7 +416,7 @@ const SignatureCollection = () => {
             >
               Track a Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8">
               Enter your request ID and email to view the current status and any required actions.
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -487,7 +487,7 @@ const SignatureCollection = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#5A4A2E] pl-8">
+                    <AccordionContent className="text-[#1A1A1A]/70 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -515,7 +515,7 @@ const SignatureCollection = () => {
             >
               Submit a signature request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 mb-8">
               Upload your document and track status end-to-end.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -104,13 +104,13 @@ export function ListingApprovalCard({
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#5A4A2E] flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#5A4A2E] flex items-center justify-center shadow-lg transition-all z-10"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-gold hover:bg-gold/10 text-[#1A1A1A]/70 flex items-center justify-center shadow-lg transition-all z-10"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -156,7 +156,7 @@ export function ListingApprovalCard({
       )}
 
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg text-[#5A4A2E] flex items-start justify-between gap-2">
+        <CardTitle className="text-lg text-[#1A1A1A]/70 flex items-start justify-between gap-2">
           <span className="line-clamp-2">{project.name || "Untitled Project"}</span>
           {sourceUrl && (
             <a
@@ -165,12 +165,12 @@ export function ListingApprovalCard({
               rel="noopener noreferrer"
               className="flex-shrink-0 p-1 hover:bg-[#F7F2EA] rounded"
             >
-              <ExternalLink className="w-4 h-4 text-[#5A4A2E]" />
+              <ExternalLink className="w-4 h-4 text-[#1A1A1A]/70" />
             </a>
           )}
         </CardTitle>
         {sourceName && (
-          <p className="text-xs text-[#5A4A2E]">Source: {sourceName}</p>
+          <p className="text-xs text-[#1A1A1A]/70">Source: {sourceName}</p>
         )}
       </CardHeader>
 
@@ -178,22 +178,22 @@ export function ListingApprovalCard({
         {/* Project details grid */}
         <div className="grid grid-cols-2 gap-3 text-sm">
           {project.developer_name && (
-            <div className="flex items-center gap-2 text-[#5A4A2E]">
-              <Building2 className="w-4 h-4 text-[#5A4A2E]" />
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
+              <Building2 className="w-4 h-4 text-[#1A1A1A]/70" />
               <span className="truncate">{project.developer_name}</span>
             </div>
           )}
           
           {project.location && (
-            <div className="flex items-center gap-2 text-[#5A4A2E]">
-              <MapPin className="w-4 h-4 text-[#5A4A2E]" />
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
+              <MapPin className="w-4 h-4 text-[#1A1A1A]/70" />
               <span className="truncate">{project.location}</span>
             </div>
           )}
           
           {(project.price_from || project.price_text) && (
-            <div className="flex items-center gap-2 text-[#5A4A2E]">
-              <DollarSign className="w-4 h-4 text-[#5A4A2E]" />
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
+              <DollarSign className="w-4 h-4 text-[#1A1A1A]/70" />
               <span className="truncate font-medium text-gold">
                 {project.price_from ? formatPrice(project.price_from) : project.price_text}
               </span>
@@ -201,15 +201,15 @@ export function ListingApprovalCard({
           )}
           
           {project.bedrooms && (
-            <div className="flex items-center gap-2 text-[#5A4A2E]">
-              <Bed className="w-4 h-4 text-[#5A4A2E]" />
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
+              <Bed className="w-4 h-4 text-[#1A1A1A]/70" />
               <span className="truncate">{project.bedrooms}</span>
             </div>
           )}
           
           {project.handover_display && (
-            <div className="flex items-center gap-2 text-[#5A4A2E] col-span-2">
-              <Calendar className="w-4 h-4 text-[#5A4A2E]" />
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70 col-span-2">
+              <Calendar className="w-4 h-4 text-[#1A1A1A]/70" />
               <span className="truncate">Handover: {project.handover_display}</span>
             </div>
           )}

@@ -84,7 +84,7 @@ export const ModeSelectionModal = () => {
         toast.success(
           <div className="flex flex-col gap-1">
             <span className="font-semibold">Mode selected!</span>
-            <span className="text-sm text-[#5A4A2E]">
+            <span className="text-sm text-[#1A1A1A]/70">
               You can change your mode anytime from your profile menu →
             </span>
           </div>,
@@ -132,7 +132,7 @@ export const ModeSelectionModal = () => {
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-[#1A1A1A]">
             Welcome to JBJ Global
           </DialogTitle>
-          <p className="text-center text-[#5A4A2E] text-sm mt-2">
+          <p className="text-center text-[#1A1A1A]/70 text-sm mt-2">
             {isLoggedIn
               ? 'Please select your role to continue. You can change this anytime.'
               : 'Select your role to get started. Register for full access.'}
@@ -163,7 +163,7 @@ export const ModeSelectionModal = () => {
                       ? "bg-gold/20 border-gold"
                       : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-[#5A4A2E]")} />
+                    <Icon className={cn("w-6 h-6", isSelected ? "text-gold" : "text-[#1A1A1A]/70")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -177,7 +177,7 @@ export const ModeSelectionModal = () => {
                         <CheckCircle2 className="w-5 h-5 text-gold" />
                       )}
                     </div>
-                    <p className="text-sm text-[#5A4A2E] mt-1">
+                    <p className="text-sm text-[#1A1A1A]/70 mt-1">
                       {option.description}
                     </p>
                   </div>
@@ -208,7 +208,7 @@ export const ModeSelectionModal = () => {
             )}
           </Button>
           {!isLoggedIn && (
-            <p className="text-center text-[#5A4A2E] text-xs mt-3">
+            <p className="text-center text-[#1A1A1A]/70 text-xs mt-3">
               Already have an account?{' '}
               <button
                 onClick={() => { dismiss(); navigate('/auth'); }}

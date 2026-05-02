@@ -231,7 +231,7 @@ const AdminRoleManagement = () => {
                 <h1 className="text-[#1A1A1A] text-xl font-bold">
                   Role Management
                 </h1>
-                <span className="text-[#5A4A2E] text-sm">Assign and revoke admin roles</span>
+                <span className="text-[#1A1A1A]/70 text-sm">Assign and revoke admin roles</span>
               </div>
             </div>
           </div>
@@ -247,7 +247,7 @@ const AdminRoleManagement = () => {
                 <UserPlus className="w-5 h-5 text-gold" />
                 Add New Role
               </CardTitle>
-              <CardDescription className="text-[#5A4A2E]">
+              <CardDescription className="text-[#1A1A1A]/70">
                 Grant administrative access to users
               </CardDescription>
             </CardHeader>
@@ -272,7 +272,7 @@ const AdminRoleManagement = () => {
                       <SelectItem key={role.value} value={role.value}>
                         <div className="flex flex-col">
                           <span>{role.label}</span>
-                          <span className="text-xs text-[#5A4A2E]">{role.description}</span>
+                          <span className="text-xs text-[#1A1A1A]/70">{role.description}</span>
                         </div>
                       </SelectItem>
                     ))}
@@ -312,14 +312,14 @@ const AdminRoleManagement = () => {
                 <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
                   <div className="flex items-center gap-2 mb-2">
                     <Crown className="w-5 h-5 text-gold" />
-                    <span className="text-[#5A4A2E] text-sm">System Roles</span>
+                    <span className="text-[#1A1A1A]/70 text-sm">System Roles</span>
                   </div>
                   <p className="text-[#1A1A1A] text-2xl font-bold">{userRoles.length}</p>
                 </div>
                 <div className="p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
                   <div className="flex items-center gap-2 mb-2">
                     <Building2 className="w-5 h-5 text-gold" />
-                    <span className="text-[#5A4A2E] text-sm">Listing Admins</span>
+                    <span className="text-[#1A1A1A]/70 text-sm">Listing Admins</span>
                   </div>
                   <p className="text-[#1A1A1A] text-2xl font-bold">{listingAdmins.length}</p>
                 </div>
@@ -349,7 +349,7 @@ const AdminRoleManagement = () => {
               <TableBody>
                 {userRoles.map((role) => (
                   <TableRow key={role.id} className="border-gold/20">
-                    <TableCell className="text-[#5A4A2E] font-mono text-sm">
+                    <TableCell className="text-[#1A1A1A]/70 font-mono text-sm">
                       {role.user_id.slice(0, 8)}...
                     </TableCell>
                     <TableCell>
@@ -357,7 +357,7 @@ const AdminRoleManagement = () => {
                         {role.role}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E]">
+                    <TableCell className="text-[#1A1A1A]/70">
                       {new Date(role.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
@@ -390,7 +390,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {userRoles.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-[#5A4A2E] py-8">
+                    <TableCell colSpan={4} className="text-center text-[#1A1A1A]/70 py-8">
                       No system roles configured
                     </TableCell>
                   </TableRow>
@@ -425,19 +425,19 @@ const AdminRoleManagement = () => {
                     <TableCell className="text-[#1A1A1A] font-medium">
                       {admin.display_name}
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E]">
+                    <TableCell className="text-[#1A1A1A]/70">
                       {admin.email}
                     </TableCell>
                     <TableCell>
                       <Badge
-                        className={admin.is_active ? "bg-green-100 text-green-800" : "bg-[#F7F2EA] text-[#5A4A2E]"}
+                        className={admin.is_active ? "bg-green-100 text-green-800" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}
                         onClick={() => toggleListingAdminStatus(admin.id, admin.is_active)}
                         style={{ cursor: "pointer" }}
                       >
                         {admin.is_active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E]">
+                    <TableCell className="text-[#1A1A1A]/70">
                       {new Date(admin.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="text-right">
@@ -470,7 +470,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {listingAdmins.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-[#5A4A2E] py-8">
+                    <TableCell colSpan={5} className="text-center text-[#1A1A1A]/70 py-8">
                       No listing admins configured
                     </TableCell>
                   </TableRow>

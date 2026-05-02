@@ -143,7 +143,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
 
@@ -206,7 +206,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[100px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[100px]"
               />
             </div>
 

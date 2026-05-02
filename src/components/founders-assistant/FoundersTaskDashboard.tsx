@@ -60,7 +60,7 @@ interface FoundersTaskDashboardProps {
 }
 
 const priorityColors: Record<string, string> = {
-  low: 'bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30',
+  low: 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30',
   medium: 'bg-blue-50 text-blue-600 border-blue-200',
   high: 'bg-orange-50 text-orange-600 border-orange-200',
   urgent: 'bg-red-50 text-red-600 border-red-200',
@@ -256,11 +256,11 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                 <TrendingUp className="w-5 h-5 text-gold" />
                 Task Progress Overview
               </h3>
-              <p className="text-sm text-[#5A4A2E]">Synced with CRM • Your productivity dashboard</p>
+              <p className="text-sm text-[#1A1A1A]/70">Synced with CRM • Your productivity dashboard</p>
             </div>
             <div className="text-right">
               <p className="text-4xl font-bold text-gold">{completionRate}%</p>
-              <p className="text-xs text-[#5A4A2E]">{stats.completed} of {stats.total} tasks completed</p>
+              <p className="text-xs text-[#1A1A1A]/70">{stats.completed} of {stats.total} tasks completed</p>
             </div>
           </div>
           <Progress value={completionRate} className="h-3 bg-gold/20" />
@@ -272,28 +272,28 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
               className="text-center p-3 rounded-lg bg-gold/5 border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_15px_rgba(200,167,102,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-gold">{stats.total}</p>
-              <p className="text-xs text-[#5A4A2E]">🧭 Active</p>
+              <p className="text-xs text-[#1A1A1A]/70">🧭 Active</p>
             </button>
             <button 
               onClick={() => handleCardClick('completed')}
               className="text-center p-3 rounded-lg bg-green-50 border-2 border-green-200 hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
-              <p className="text-xs text-[#5A4A2E]">✅ Finished</p>
+              <p className="text-xs text-[#1A1A1A]/70">✅ Finished</p>
             </button>
             <button 
               onClick={() => handleCardClick('pending')}
               className="text-center p-3 rounded-lg bg-amber-50 border-2 border-amber-200 hover:border-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
-              <p className="text-xs text-[#5A4A2E]">⏳ Pending</p>
+              <p className="text-xs text-[#1A1A1A]/70">⏳ Pending</p>
             </button>
             <button 
               onClick={() => handleCardClick('approval')}
               className="text-center p-3 rounded-lg bg-orange-50 border-2 border-orange-200 hover:border-orange-400 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-orange-600">{stats.awaiting}</p>
-              <p className="text-xs text-[#5A4A2E]">⚠️ Approval</p>
+              <p className="text-xs text-[#1A1A1A]/70">⚠️ Approval</p>
             </button>
           </div>
         </CardContent>
@@ -308,7 +308,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
             onClick={() => setFilter(f as typeof filter)}
             className={filter === f 
               ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border-2 border-[#B89555]/50 shadow-md font-semibold' 
-              : 'bg-[#FDFBF7] text-[#5A4A2E] border-2 border-[#B89555]/30 hover:bg-[#B89555]/5 hover:border-[#B89555]/50'
+              : 'bg-[#FDFBF7] text-[#1A1A1A]/70 border-2 border-[#B89555]/30 hover:bg-[#B89555]/5 hover:border-[#B89555]/50'
             }
           >
             {f === 'all' && `All Tasks (${stats.total})`}
@@ -335,8 +335,8 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
               <CardContent className="p-8 text-center">
                 <CheckCircle2 className="w-16 h-16 text-[#8A7556] mx-auto mb-4" />
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">No Tasks Found</h4>
-                <p className="text-[#5A4A2E]">No tasks found in this category</p>
-                <p className="text-sm text-[#5A4A2E] mt-1">Ask Amanda to create tasks for you</p>
+                <p className="text-[#1A1A1A]/70">No tasks found in this category</p>
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">Ask Amanda to create tasks for you</p>
               </CardContent>
             </Card>
           ) : (
@@ -382,19 +382,19 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             {/* Progress Bar */}
                             <div className="mt-2 mb-2">
                               <div className="flex items-center justify-between text-xs mb-1">
-                                <span className="text-[#5A4A2E]">Progress</span>
+                                <span className="text-[#1A1A1A]/70">Progress</span>
                                 <span className={config.color}>{taskProgress}%</span>
                               </div>
                               <Progress value={taskProgress} className="h-1.5 bg-[#F7F2EA]" />
                             </div>
 
                             {task.description && (
-                              <p className={`text-sm text-[#5A4A2E] mt-1 ${isExpanded ? '' : 'line-clamp-2'}`}>
+                              <p className={`text-sm text-[#1A1A1A]/70 mt-1 ${isExpanded ? '' : 'line-clamp-2'}`}>
                                 {task.description}
                               </p>
                             )}
                             
-                            <div className="flex items-center gap-4 mt-3 text-xs text-[#5A4A2E] flex-wrap">
+                            <div className="flex items-center gap-4 mt-3 text-xs text-[#1A1A1A]/70 flex-wrap">
                               {'due_date' in task && task.due_date && (
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
@@ -415,7 +415,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             size="sm"
                             variant="ghost"
                             onClick={() => setExpandedTask(isExpanded ? null : task.id)}
-                            className="text-[#5A4A2E] hover:text-gold"
+                            className="text-[#1A1A1A]/70 hover:text-gold"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -461,20 +461,20 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                         >
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-[#5A4A2E]">Status</p>
+                              <p className="text-[#1A1A1A]/70">Status</p>
                               <p className={`font-medium ${config.color}`}>{task.status.replace('_', ' ')}</p>
                             </div>
                             <div>
-                              <p className="text-[#5A4A2E]">Priority</p>
+                              <p className="text-[#1A1A1A]/70">Priority</p>
                               <p className="text-[#1A1A1A] font-medium capitalize">{task.priority}</p>
                             </div>
                             <div>
-                              <p className="text-[#5A4A2E]">Created</p>
+                              <p className="text-[#1A1A1A]/70">Created</p>
                               <p className="text-[#1A1A1A]">{format(new Date(task.created_at), 'MMM d, yyyy h:mm a')}</p>
                             </div>
                             {task.completed_at && (
                               <div>
-                                <p className="text-[#5A4A2E]">Completed</p>
+                                <p className="text-[#1A1A1A]/70">Completed</p>
                                 <p className="text-green-600">{format(new Date(task.completed_at), 'MMM d, yyyy h:mm a')}</p>
                               </div>
                             )}

@@ -143,7 +143,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
           <Trash2 className="h-5 w-5 text-red-500" />
           Leads Management
         </CardTitle>
-        <CardDescription className="text-[#5A4A2E]">
+        <CardDescription className="text-[#1A1A1A]/70">
           Recently deleted leads — auto-purged after 30 days. Restore leads before they are permanently removed.
         </CardDescription>
       </CardHeader>
@@ -170,11 +170,11 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
 
         {/* Table */}
         {loading ? (
-          <div className="text-center py-12 text-[#5A4A2E]">Loading...</div>
+          <div className="text-center py-12 text-[#1A1A1A]/70">Loading...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12">
-            <Trash2 className="h-12 w-12 text-[#5A4A2E] mx-auto mb-3" />
-            <p className="text-[#5A4A2E]">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
+            <Trash2 className="h-12 w-12 text-[#1A1A1A]/70 mx-auto mb-3" />
+            <p className="text-[#1A1A1A]/70">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
           </div>
         ) : (
           <div className="overflow-auto">
@@ -193,8 +193,8 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                 {filtered.map((lead) => (
                   <TableRow key={lead.id} className="hover:bg-gold/5">
                     <TableCell className="font-medium text-[#1A1A1A]">{lead.full_name}</TableCell>
-                    <TableCell className="text-[#5A4A2E] text-sm">{lead.email_lower || "—"}</TableCell>
-                    <TableCell className="text-[#5A4A2E] text-sm">{lead.phone_e164 || "—"}</TableCell>
+                    <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.email_lower || "—"}</TableCell>
+                    <TableCell className="text-[#1A1A1A]/70 text-sm">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.source && (
                         <Badge variant="secondary" className="text-xs bg-gold/10 border-gold/20">
@@ -202,7 +202,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E] text-sm">
+                    <TableCell className="text-[#1A1A1A]/70 text-sm">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDisplayDate(lead.deleted_at)}

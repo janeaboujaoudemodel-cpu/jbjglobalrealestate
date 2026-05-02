@@ -41,7 +41,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30",
+  general: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -233,14 +233,14 @@ const CRMTasks = () => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className={`font-medium text-[#1A1A1A] ${
-              task.status === 'done' ? 'line-through text-[#5A4A2E]' : ''
+              task.status === 'done' ? 'line-through text-[#1A1A1A]/70' : ''
             }`}>
               {task.title}
             </span>
           </div>
           
           {task.description && (
-            <p className="text-sm text-[#5A4A2E] mb-2">{task.description}</p>
+            <p className="text-sm text-[#1A1A1A]/70 mb-2">{task.description}</p>
           )}
           
           <div className="flex items-center gap-2 flex-wrap">
@@ -253,7 +253,7 @@ const CRMTasks = () => {
               {task.priority}
             </Badge>
             {task.due_date && (
-              <span className="text-xs text-[#5A4A2E] flex items-center gap-1">
+              <span className="text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {format(new Date(task.due_date), 'MMM d, yyyy')}
               </span>
@@ -263,7 +263,7 @@ const CRMTasks = () => {
         
         <button
           onClick={() => deleteTask(task.id)}
-          className="text-[#5A4A2E] hover:text-red-500 transition-colors p-1"
+          className="text-[#1A1A1A]/70 hover:text-red-500 transition-colors p-1"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -278,7 +278,7 @@ const CRMTasks = () => {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
+              <Button variant="ghost" size="sm" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
@@ -290,7 +290,7 @@ const CRMTasks = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-[#1A1A1A]">My Tasks</h1>
-                <p className="text-xs text-[#5A4A2E]">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
+                <p className="text-xs text-[#1A1A1A]/70">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
               </div>
             </div>
           </div>
@@ -364,7 +364,7 @@ const CRMTasks = () => {
         {/* Filters */}
         <div className="flex items-center gap-4 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
             <Input
               placeholder="Search tasks..."
               value={searchQuery}
@@ -386,7 +386,7 @@ const CRMTasks = () => {
                 onClick={() => setFilterStatus(status.key)}
                 className={filterStatus === status.key 
                   ? "bg-gold text-[#1A1A1A]" 
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#5A4A2E] hover:border-gold"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A]/70 hover:border-gold"
                 }
               >
                 {status.label}
@@ -402,7 +402,7 @@ const CRMTasks = () => {
               <CheckCircle2 className="h-8 w-8 text-gold" />
             </div>
             <p className="text-[#1A1A1A] font-medium text-lg">No tasks found</p>
-            <p className="text-[#5A4A2E] mt-1">
+            <p className="text-[#1A1A1A]/70 mt-1">
               {searchQuery || filterStatus !== 'all' 
                 ? "Try adjusting your filters" 
                 : "Add your first task to get started"}
@@ -414,9 +414,9 @@ const CRMTasks = () => {
             {todoTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <Circle className="w-4 h-4 text-[#5A4A2E]" />
+                  <Circle className="w-4 h-4 text-[#1A1A1A]/70" />
                   <h2 className="text-lg font-semibold text-[#1A1A1A]">To Do</h2>
-                  <Badge className="bg-[#F7F2EA] text-[#5A4A2E]">{todoTasks.length}</Badge>
+                  <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70">{todoTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
                   {todoTasks.map(task => (

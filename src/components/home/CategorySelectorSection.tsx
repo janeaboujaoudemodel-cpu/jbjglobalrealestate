@@ -70,13 +70,13 @@ export default function CategorySelectorSection() {
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#5A4A2E] mb-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-[#1A1A1A]/70 mb-3">
             Get started in 30 seconds
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">
             Tell us who you are
           </h2>
-          <p className="mt-3 text-[#3A2D1D] max-w-2xl mx-auto">
+          <p className="mt-3 text-[#1A1A1A]/70 max-w-2xl mx-auto">
             Pick your category to unlock the right tools, dashboards, and a tailored
             registration flow.
           </p>
@@ -106,13 +106,13 @@ export default function CategorySelectorSection() {
                       style={{ color: "#FFFFFF", filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.35))" }}
                     />
                   </div>
-                  <span className="text-xs uppercase tracking-wider text-[#5A4A2E] group-hover:text-[#1A1A1A] transition-colors text-right">
+                  <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors text-right">
                     {cat.tagline}
                   </span>
                 </div>
 
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-2">{cat.label}</h3>
-                <p className="text-sm text-[#3A2D1D] mb-5 leading-relaxed">
+                <p className="text-sm text-[#1A1A1A]/70 mb-5 leading-relaxed">
                   {cat.description}
                 </p>
 
@@ -137,7 +137,7 @@ export default function CategorySelectorSection() {
           })}
         </div>
 
-        <p className="text-center text-xs text-[#5A4A2E] mt-8">
+        <p className="text-center text-xs text-[#1A1A1A]/70 mt-8">
           Your selection is saved to your account. You can change it any time from your profile.
         </p>
       </div>

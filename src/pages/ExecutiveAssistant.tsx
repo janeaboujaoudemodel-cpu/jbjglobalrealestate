@@ -392,7 +392,7 @@ export default function ExecutiveAssistant() {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-[#1A1A1A]">JBJ Admin Command Center</h1>
-                  <p className="text-[#5A4A2E]">Your intelligent command center for team management</p>
+                  <p className="text-[#1A1A1A]/70">Your intelligent command center for team management</p>
                 </div>
               </div>
               
@@ -400,7 +400,7 @@ export default function ExecutiveAssistant() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setShowCommandPalette(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#5A4A2E] hover:border-gold/50 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]/70 hover:border-gold/50 transition-all"
                 >
                   <Search className="h-4 w-4 text-gold" />
                   <span className="text-sm">Search across all tools...</span>
@@ -423,7 +423,7 @@ export default function ExecutiveAssistant() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-[#5A4A2E]">Total</p>
+                    <p className="text-sm text-[#1A1A1A]/70">Total</p>
                     <p className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</p>
                   </div>
                   <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
@@ -562,8 +562,8 @@ export default function ExecutiveAssistant() {
                             </div>
                             <div>
                               <p className="font-semibold text-[#1A1A1A]">{comm.sender_name || comm.sender_identifier}</p>
-                              <p className="text-sm text-[#5A4A2E] line-clamp-2">{comm.subject || comm.content}</p>
-                              <p className="text-xs text-[#5A4A2E] mt-1">
+                              <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{comm.subject || comm.content}</p>
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1">
                                 {new Date(comm.received_at).toLocaleString()}
                               </p>
                             </div>
@@ -574,7 +574,7 @@ export default function ExecutiveAssistant() {
                               {statusConfig[comm.ai_status].label}
                             </Badge>
                             {comm.ai_confidence_score && (
-                              <span className="text-xs text-[#5A4A2E]">
+                              <span className="text-xs text-[#1A1A1A]/70">
                                 {Math.round(comm.ai_confidence_score * 100)}% confident
                               </span>
                             )}
@@ -595,7 +595,7 @@ export default function ExecutiveAssistant() {
                     <Plus className="h-5 w-5 text-gold" />
                     Add Response Template
                   </CardTitle>
-                  <CardDescription className="text-[#5A4A2E]">
+                  <CardDescription className="text-[#1A1A1A]/70">
                     Teach the AI how to respond to specific types of messages
                   </CardDescription>
                 </CardHeader>
@@ -607,7 +607,7 @@ export default function ExecutiveAssistant() {
                         placeholder="e.g., price, availability, viewing"
                         value={newResponseKeywords}
                         onChange={(e) => setNewResponseKeywords(e.target.value)}
-                        className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                        className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                       />
                     </div>
                     <div className="space-y-2">
@@ -631,7 +631,7 @@ export default function ExecutiveAssistant() {
                       placeholder="Enter your response template..."
                       value={newResponseTemplate}
                       onChange={(e) => setNewResponseTemplate(e.target.value)}
-                      className="min-h-[100px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                      className="min-h-[100px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -665,8 +665,8 @@ export default function ExecutiveAssistant() {
                               <Badge className="bg-green-100 text-green-800 border-green-300">Auto-reply</Badge>
                             )}
                           </div>
-                          <p className="text-sm text-[#5A4A2E] line-clamp-2">{response.response_template}</p>
-                          <p className="text-xs text-[#5A4A2E] mt-2">Used {response.use_count} times</p>
+                          <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{response.response_template}</p>
+                          <p className="text-xs text-[#1A1A1A]/70 mt-2">Used {response.use_count} times</p>
                         </div>
                         <Button
                           variant="ghost"
@@ -753,10 +753,10 @@ export default function ExecutiveAssistant() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium text-[#1A1A1A]">{rule.rule_name}</p>
-                          <p className="text-sm text-[#5A4A2E]">
+                          <p className="text-sm text-[#1A1A1A]/70">
                             {rule.rule_type}: "{rule.rule_value}" → {rule.action}
                           </p>
-                          <p className="text-xs text-[#5A4A2E]">Matched {rule.match_count} times</p>
+                          <p className="text-xs text-[#1A1A1A]/70">Matched {rule.match_count} times</p>
                         </div>
                         <Button
                           variant="ghost"
@@ -820,7 +820,7 @@ export default function ExecutiveAssistant() {
                 </div>
 
                 <div className="flex items-center gap-2 pt-4 border-t border-gold/20">
-                  <span className="text-sm text-[#5A4A2E]">Quick actions:</span>
+                  <span className="text-sm text-[#1A1A1A]/70">Quick actions:</span>
                   <Button
                     variant="secondary"
                     size="sm"

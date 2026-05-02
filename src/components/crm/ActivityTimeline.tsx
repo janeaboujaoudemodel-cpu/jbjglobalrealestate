@@ -90,7 +90,7 @@ const ActivityTimeline = ({ userId, leadId, limit = 20, showLeadName = true }: A
       case "status_change":
         return <ArrowRight className="h-4 w-4 text-orange-400" />;
       case "note":
-        return <FileText className="h-4 w-4 text-[#5A4A2E]" />;
+        return <FileText className="h-4 w-4 text-[#1A1A1A]/70" />;
       case "followup_created":
         return <Calendar className="h-4 w-4 text-amber-400" />;
       case "followup_completed":

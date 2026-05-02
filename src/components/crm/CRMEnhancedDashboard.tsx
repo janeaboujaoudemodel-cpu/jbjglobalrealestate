@@ -224,7 +224,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
         {primaryCards.map((card, index) => (
           <Card key={index} className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)]/95 to-[hsl(36,25%,88%)]/80 shadow-[0_8px_30px_rgba(200,167,102,0.12)] overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#5A4A2E] truncate">
+              <CardTitle className="text-sm font-semibold text-[#1A1A1A]/70 truncate">
                 {card.title}
               </CardTitle>
               <div className={`p-2 rounded-lg flex-shrink-0 ${card.bgColor}`}>
@@ -237,7 +237,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] truncate">
                     {loading ? "..." : card.value}
                   </div>
-                  <p className="text-xs text-[#5A4A2E] mt-1 truncate">
+                  <p className="text-xs text-[#1A1A1A]/70 mt-1 truncate">
                     {loading ? "" : card.subValue}
                   </p>
                 </div>
@@ -261,7 +261,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             <CardTitle className="text-base font-semibold text-[#1A1A1A] flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
               Weekly Activity
-              <span className="text-xs font-normal text-[#5A4A2E] ml-2">Your weekly activity summary</span>
+              <span className="text-xs font-normal text-[#1A1A1A]/70 ml-2">Your weekly activity summary</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -357,7 +357,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.avgResponseTime}h</p>
-                <p className="text-xs text-[#5A4A2E]">Avg Response</p>
+                <p className="text-xs text-[#1A1A1A]/70">Avg Response</p>
               </div>
             </div>
           </CardContent>
@@ -370,7 +370,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.followupsCreated}</p>
-                <p className="text-xs text-[#5A4A2E]">Follow-ups</p>
+                <p className="text-xs text-[#1A1A1A]/70">Follow-ups</p>
               </div>
             </div>
           </CardContent>
@@ -383,7 +383,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.followupsCompleted}</p>
-                <p className="text-xs text-[#5A4A2E]">Completed</p>
+                <p className="text-xs text-[#1A1A1A]/70">Completed</p>
               </div>
             </div>
           </CardContent>
@@ -396,7 +396,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{stats.pipelineCounts['closed_won'] || 0}</p>
-                <p className="text-xs text-[#5A4A2E]">Deals Won</p>
+                <p className="text-xs text-[#1A1A1A]/70">Deals Won</p>
               </div>
             </div>
           </CardContent>

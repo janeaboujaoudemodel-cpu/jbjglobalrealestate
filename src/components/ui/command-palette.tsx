@@ -199,14 +199,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search commands, pages, or type a query..."
-            className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-[#1A1A1A] placeholder:text-[#5A4A2E] text-lg"
+            className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 text-lg"
             autoFocus
           />
           <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-gold/10 border border-gold/20">
             <Mic className="w-3.5 h-3.5 text-gold" />
             <span className="text-xs text-gold font-medium">Voice</span>
           </div>
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-[#F7F2EA] text-[#5A4A2E] text-xs font-medium">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-[#F7F2EA] text-[#1A1A1A]/70 text-xs font-medium">
             ESC
           </kbd>
         </div>
@@ -220,7 +220,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               return (
                 <div key={category} className="mb-4">
                   <div className="px-3 py-2 flex items-center gap-2">
-                    {category === 'Recent' && <Clock className="w-3.5 h-3.5 text-[#5A4A2E]" />}
+                    {category === 'Recent' && <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />}
                     <span className="text-xs uppercase tracking-wider text-gold font-semibold">
                       {category}
                     </span>
@@ -236,29 +236,29 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                           'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
                           isSelected 
                             ? 'bg-gradient-to-r from-gold/10 to-gold/5 text-[#1A1A1A]' 
-                            : 'hover:bg-gold/5 text-[#5A4A2E]'
+                            : 'hover:bg-gold/5 text-[#1A1A1A]/70'
                         )}
                       >
                         <div className={cn(
                           'p-2 rounded-lg transition-colors',
-                          isSelected ? 'bg-gold/20 text-gold' : 'bg-[#F7F2EA] text-[#5A4A2E]'
+                          isSelected ? 'bg-gold/20 text-gold' : 'bg-[#F7F2EA] text-[#1A1A1A]/70'
                         )}>
                           {item.icon}
                         </div>
                         <div className="flex-1 text-left">
                           <div className="font-medium">{item.title}</div>
                           {item.subtitle && (
-                            <div className="text-sm text-[#5A4A2E]">{item.subtitle}</div>
+                            <div className="text-sm text-[#1A1A1A]/70">{item.subtitle}</div>
                           )}
                         </div>
                         {item.shortcut && (
-                          <kbd className="px-2 py-1 rounded bg-[#F7F2EA] text-[#5A4A2E] text-xs font-medium">
+                          <kbd className="px-2 py-1 rounded bg-[#F7F2EA] text-[#1A1A1A]/70 text-xs font-medium">
                             {item.shortcut}
                           </kbd>
                         )}
                         <ChevronRight className={cn(
                           'w-4 h-4 transition-colors',
-                          isSelected ? 'text-gold' : 'text-[#5A4A2E]'
+                          isSelected ? 'text-gold' : 'text-[#1A1A1A]/70'
                         )} />
                       </button>
                     );
@@ -270,15 +270,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             {filteredCommands.length === 0 && (
               <div className="py-12 text-center">
                 <Sparkles className="w-12 h-12 mx-auto text-[#8A7556] mb-4" />
-                <p className="text-[#5A4A2E]">No commands found</p>
-                <p className="text-sm text-[#5A4A2E] mt-1">Try a different search term</p>
+                <p className="text-[#1A1A1A]/70">No commands found</p>
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">Try a different search term</p>
               </div>
             )}
           </div>
         </ScrollArea>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white text-xs text-[#5A4A2E]">
+        <div className="flex items-center justify-between px-4 py-2.5 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white text-xs text-[#1A1A1A]/70">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <kbd className="px-1.5 py-0.5 rounded bg-[#F7F2EA] font-medium">↑↓</kbd>

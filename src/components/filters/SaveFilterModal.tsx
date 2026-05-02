@@ -40,13 +40,13 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
               value={filterName}
               onChange={(e) => setFilterName(e.target.value)}
               placeholder="Enter filter name..."
-              className="h-12 pr-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+              className="h-12 pr-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
             {filterName && (
               <button
                 onClick={() => setFilterName("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

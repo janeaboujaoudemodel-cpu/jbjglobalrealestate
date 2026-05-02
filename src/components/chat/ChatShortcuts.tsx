@@ -32,7 +32,7 @@ const BASE_SHORTCUTS: ShortcutItem[] = [
   { id: 'guides', icon: Plane, label: 'Guides & Resources', description: 'Dubai guides, visa, golden visa', color: 'text-sky-500' },
   { id: 'ai_tools', icon: Compass, label: 'AI Tools & Features', description: 'Property finder, measure, explore', color: 'text-indigo-500' },
   { id: 'submit_cv', icon: FileText, label: 'Submit Your CV', description: 'Career opportunities with us', color: 'text-blue-500' },
-  { id: 'general_inquiry', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-[#5A4A2E]' },
+  { id: 'general_inquiry', icon: MessageCircle, label: 'General Inquiry', description: 'Other questions', color: 'text-[#1A1A1A]/70' },
 ];
 
 const OWNER_SHORTCUTS: ShortcutItem[] = [
@@ -108,7 +108,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1">
           <T>{`Hi ${userFullName}! 👋`}</T>
         </h4>
-        <p className="text-[#5A4A2E] text-sm">
+        <p className="text-[#1A1A1A]/70 text-sm">
           <T>What would you like help with today?</T>
         </p>
       </div>
@@ -129,7 +129,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
                 <h5 className="text-[#1A1A1A] text-sm font-semibold group-hover:text-gold transition-colors">
                   <T>{shortcut.label}</T>
                 </h5>
-                <p className="text-[#5A4A2E] text-xs">
+                <p className="text-[#1A1A1A]/70 text-xs">
                   <T>{shortcut.description}</T>
                 </p>
               </div>
@@ -141,7 +141,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
         })}
       </div>
 
-      <p className="text-center text-[#5A4A2E] text-xs mt-4">
+      <p className="text-center text-[#1A1A1A]/70 text-xs mt-4">
         <T>Select an option to get started</T>
       </p>
     </div>

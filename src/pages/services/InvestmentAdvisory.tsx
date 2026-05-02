@@ -203,7 +203,7 @@ const InvestmentAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -228,7 +228,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-[#5A4A2E] max-w-2xl mx-auto mb-12"
+              className="text-center text-[#1A1A1A]/70 max-w-2xl mx-auto mb-12"
             >
               Our advisory scope focuses on property investment guidance, not financial product sales.
             </motion.p>
@@ -246,16 +246,16 @@ const InvestmentAdvisory = () => {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{service.title}</h3>
-                      <p className="text-[#5A4A2E] mb-4">{service.description}</p>
+                      <p className="text-[#1A1A1A]/70 mb-4">{service.description}</p>
                       <ul className="space-y-2 mb-4">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
                             <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                            <span className="text-[#5A4A2E] text-sm">{item}</span>
+                            <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
-                      <p className="text-sm text-[#5A4A2E] italic">{service.footer}</p>
+                      <p className="text-sm text-[#1A1A1A]/70 italic">{service.footer}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -290,7 +290,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-[#5A4A2E] max-w-2xl mx-auto mb-8"
+              className="text-center text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8"
             >
               To maintain transparency and compliance:
             </motion.p>
@@ -303,7 +303,7 @@ const InvestmentAdvisory = () => {
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
                   <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                  <span className="text-[#5A4A2E]">{item}</span>
+                  <span className="text-[#1A1A1A]/70">{item}</span>
                 </motion.div>
               ))}
             </div>
@@ -338,7 +338,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-[#5A4A2E] max-w-2xl mx-auto mb-12"
+              className="text-center text-[#1A1A1A]/70 max-w-2xl mx-auto mb-12"
             >
               Our Investment Advisory is suitable for:
             </motion.p>
@@ -420,7 +420,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-[#5A4A2E] mb-10"
+              className="text-lg text-[#1A1A1A]/70 mb-10"
             >
               If you are considering investing in UAE real estate and want structured, informed guidance, our advisory team is ready to assist.
             </motion.p>

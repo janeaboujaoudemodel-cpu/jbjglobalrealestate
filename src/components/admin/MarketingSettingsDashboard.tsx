@@ -115,7 +115,7 @@ export const MarketingSettingsDashboard = () => {
   };
 
   const getStatus = (value: string) => {
-    if (!value) return <XCircle className="w-4 h-4 text-[#5A4A2E]" />;
+    if (!value) return <XCircle className="w-4 h-4 text-[#1A1A1A]/70" />;
     return <CheckCircle className="w-4 h-4 text-emerald-500" />;
   };
 
@@ -302,7 +302,7 @@ export const MarketingSettingsDashboard = () => {
                   {item.value ? (
                     <CheckCircle className="w-6 h-6 text-emerald-500" />
                   ) : (
-                    <XCircle className="w-6 h-6 text-[#5A4A2E]" />
+                    <XCircle className="w-6 h-6 text-[#1A1A1A]/70" />
                   )}
                 </div>
                 <span className="text-[#1A1A1A]/60 text-xs">{item.label}</span>

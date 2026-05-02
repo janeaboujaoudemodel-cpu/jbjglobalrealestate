@@ -83,7 +83,7 @@ const DeveloperGrid = () => {
       />
 
       {hasFiltersApplied && (
-        <p className="text-[#5A4A2E] mb-8">
+        <p className="text-[#1A1A1A]/70 mb-8">
           Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
         </p>
       )}
@@ -117,7 +117,7 @@ const DeveloperGrid = () => {
 
               {/* Developer Description */}
               {developer.description && (
-                <p className="text-[#5A4A2E] text-lg max-w-4xl mb-6 leading-relaxed">
+                <p className="text-[#1A1A1A]/70 text-lg max-w-4xl mb-6 leading-relaxed">
                   {developer.description}
                 </p>
               )}
@@ -125,31 +125,31 @@ const DeveloperGrid = () => {
               {/* Developer Stats */}
               <div className="flex flex-wrap gap-6 text-sm">
                 {developer.founded_year && (
-                  <div className="flex items-center gap-2 text-[#5A4A2E]">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                     <Calendar className="w-4 h-4 text-gold" />
                     <span>Est. {developer.founded_year}</span>
                   </div>
                 )}
                 {developer.completed_projects && (
-                  <div className="flex items-center gap-2 text-[#5A4A2E]">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                     <Building2 className="w-4 h-4 text-gold" />
                     <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
                   </div>
                 )}
                 {developer.offplan_projects && (
-                  <div className="flex items-center gap-2 text-[#5A4A2E]">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                     <Briefcase className="w-4 h-4 text-gold" />
                     <span>{developer.offplan_projects} Active Projects</span>
                   </div>
                 )}
                 {developer.portfolio_worth && (
-                  <div className="flex items-center gap-2 text-[#5A4A2E]">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                     <DollarSign className="w-4 h-4 text-gold" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
                 {developer.headquarters && (
-                  <div className="flex items-center gap-2 text-[#5A4A2E]">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                     <span className="text-gold">📍</span>
                     <span>{(() => {
                       const parts = developer.headquarters.split(',').map((s: string) => s.trim());
@@ -210,7 +210,7 @@ const DeveloperGrid = () => {
                       {project.name}
                     </h4>
                     {project.location && (
-                      <p className="text-[#5A4A2E] text-sm mb-3 flex items-center gap-1.5">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-3 flex items-center gap-1.5">
                         <svg className="w-4 h-4 flex-shrink-0 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -219,7 +219,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.bedrooms_min && (
-                      <p className="text-[#5A4A2E] text-sm mb-3">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-3">
                         {project.bedrooms_min === project.bedrooms_max
                           ? `${project.bedrooms_min} Bedrooms`
                           : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
@@ -254,7 +254,7 @@ const DeveloperGrid = () => {
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
           <div className="text-center py-20 bg-zinc-900 rounded-lg">
-            <p className="text-[#5A4A2E] text-lg mb-2">
+            <p className="text-[#1A1A1A]/70 text-lg mb-2">
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (

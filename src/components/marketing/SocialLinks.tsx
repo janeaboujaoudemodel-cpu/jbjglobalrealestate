@@ -37,7 +37,7 @@ export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
         // applied uniformly to all social icons).
         return 'inline-flex items-center justify-center w-9 h-9 rounded-full bg-[hsl(var(--gold))]/15 border border-[hsl(var(--gold))] text-[#1A1A1A] hover:bg-[hsl(var(--gold))] hover:text-[#1A1A1A] hover:border-[hsl(var(--gold))] hover:scale-[1.06] hover:shadow-[0_0_18px_rgba(200,167,102,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F2EA] transition-all duration-200';
       default:
-        return 'text-[#5A4A2E] hover:text-gold';
+        return 'text-[#1A1A1A]/70 hover:text-gold';
     }
   };
 

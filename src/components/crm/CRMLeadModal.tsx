@@ -189,7 +189,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
       <DialogContent className="sm:max-w-3xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] border border-[#1A1A1A]/10">
         <DialogHeader className="pt-2">
           <DialogTitle className="text-[#1A1A1A]">Add Lead / Client</DialogTitle>
-          <DialogDescription className="text-[#5A4A2E]">
+          <DialogDescription className="text-[#1A1A1A]/70">
             One unified record &mdash; works for buyers, investors, sellers, tenants, landlords, brokers and clients.
           </DialogDescription>
         </DialogHeader>

@@ -43,8 +43,8 @@ function LandingPreview({ data }: { data: LPData }) {
       {/* Hero */}
       <div className="px-6 py-10 text-center" style={{ background: `${data.primaryColor}18` }}>
         <h1 className="text-2xl font-black" style={{ color: data.primaryColor }}>{data.businessName || "Your Business Name"}</h1>
-        <p className="text-base text-[#5A4A2E] mt-2 max-w-sm mx-auto">{data.tagline || "Your compelling tagline goes here"}</p>
-        <p className="text-xs text-[#5A4A2E] mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
+        <p className="text-base text-[#1A1A1A]/70 mt-2 max-w-sm mx-auto">{data.tagline || "Your compelling tagline goes here"}</p>
+        <p className="text-xs text-[#1A1A1A]/70 mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
         <button className="mt-4 px-5 py-2 rounded-full text-white text-xs font-semibold" style={{ background: data.primaryColor }}>
           Get In Touch →
         </button>
@@ -56,7 +56,7 @@ function LandingPreview({ data }: { data: LPData }) {
           <h2 className="text-xs font-bold uppercase tracking-wider text-center mb-4" style={{ color: data.primaryColor }}>Our Services</h2>
           <div className="grid grid-cols-2 gap-2">
             {services.slice(0, 4).map((s, i) => (
-              <div key={i} className="bg-[#FDFBF7] rounded-lg p-3 border text-xs text-[#5A4A2E] font-medium shadow-sm">{s}</div>
+              <div key={i} className="bg-[#FDFBF7] rounded-lg p-3 border text-xs text-[#1A1A1A]/70 font-medium shadow-sm">{s}</div>
             ))}
           </div>
         </div>
@@ -64,7 +64,7 @@ function LandingPreview({ data }: { data: LPData }) {
 
       {/* Contact */}
       <div className="px-6 py-5 border-t border-[#B89555]/30">
-        <div className="flex flex-wrap gap-3 text-xs text-[#5A4A2E] justify-center">
+        <div className="flex flex-wrap gap-3 text-xs text-[#1A1A1A]/70 justify-center">
           {data.phone && <span>Phone: {data.phone}</span>}
           {data.email && <span>Email: {data.email}</span>}
           {data.address && <span>Address: {data.address}</span>}

@@ -181,11 +181,11 @@ export default function PaymentPlanVisualization({
 
       <Tabs defaultValue="installment" className="w-full">
         <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30">
-          <TabsTrigger value="installment" className="flex-1 text-[#5A4A2E] data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
+          <TabsTrigger value="installment" className="flex-1 text-[#1A1A1A]/70 data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {paymentPlan && `(${paymentPlan})`}
           </TabsTrigger>
-          <TabsTrigger value="full" className="flex-1 text-[#5A4A2E] data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
+          <TabsTrigger value="full" className="flex-1 text-[#1A1A1A]/70 data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/30 data-[state=active]:shadow-sm">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>
@@ -198,7 +198,7 @@ export default function PaymentPlanVisualization({
               <Wallet className="w-8 h-8 text-[#1A1A1A]" />
             </div>
             <p className="text-2xl font-bold text-[#1A1A1A] mb-2">100%</p>
-            <p className="text-sm text-[#5A4A2E]">Pay full amount upfront</p>
+            <p className="text-sm text-[#1A1A1A]/70">Pay full amount upfront</p>
             <p className="text-xs text-[#8A7556] mt-2">Contact us for special discounts on full payment</p>
           </div>
         </TabsContent>
@@ -213,7 +213,7 @@ export default function PaymentPlanVisualization({
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-[#1A1A1A]">{paymentPlan}</p>
-                  <p className="text-sm text-[#5A4A2E]">Flexible Payment Structure</p>
+                  <p className="text-sm text-[#1A1A1A]/70">Flexible Payment Structure</p>
                 </div>
               </div>
               
@@ -264,15 +264,15 @@ export default function PaymentPlanVisualization({
                 <div className="flex justify-between relative">
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-emerald-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">On Booking</span>
+                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-amber-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">During Construction</span>
+                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">During Construction</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <div className="w-6 h-6 rounded-full bg-blue-500 border-4 border-white shadow-lg z-10" />
-                    <span className="mt-2 text-xs text-[#5A4A2E] text-center">
+                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">
                       On Handover{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}
                     </span>
                   </div>
@@ -295,7 +295,7 @@ export default function PaymentPlanVisualization({
                     </span>
                   </div>
                   <milestone.icon className={cn("w-5 h-5 mx-auto mb-2", milestone.color)} />
-                  <p className="text-sm font-medium text-[#5A4A2E]">{milestone.label}</p>
+                  <p className="text-sm font-medium text-[#1A1A1A]/70">{milestone.label}</p>
                 </div>
               ))}
             </div>
@@ -362,7 +362,7 @@ export default function PaymentPlanVisualization({
                 <CreditCard className="w-10 h-10 text-[#1A1A1A]" />
               </div>
               <p className="text-xl font-semibold text-[#1A1A1A] mb-2">Interested in {projectName}?</p>
-              <p className="text-sm text-[#5A4A2E] mb-6 max-w-md mx-auto">
+              <p className="text-sm text-[#1A1A1A]/70 mb-6 max-w-md mx-auto">
                 Register your interest to learn more about {projectName}. Our team will provide you with the latest details.
               </p>
               {onRegisterInterest && (

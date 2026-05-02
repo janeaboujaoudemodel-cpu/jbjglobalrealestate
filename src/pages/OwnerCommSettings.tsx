@@ -204,7 +204,7 @@ export default function OwnerCommSettings() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#1A1A1A]">Communication Settings</h1>
-                <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
               </div>
             </div>
           </motion.div>
@@ -224,7 +224,7 @@ export default function OwnerCommSettings() {
                 <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
                   <CardHeader>
                     <CardTitle className="text-lg text-[#1A1A1A]">Connected Channels</CardTitle>
-                    <CardDescription className="text-[#5A4A2E]">
+                    <CardDescription className="text-[#1A1A1A]/70">
                       One-click connect. We auto-detect what's already linked at the workspace level.
                     </CardDescription>
                   </CardHeader>
@@ -250,7 +250,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Send Replies</Label>
-                        <p className="text-sm text-[#5A4A2E]">AI sends responses automatically without approval</p>
+                        <p className="text-sm text-[#1A1A1A]/70">AI sends responses automatically without approval</p>
                       </div>
                       <Switch
                         checked={settings?.auto_send_enabled || false}
@@ -261,7 +261,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Draft by Default</Label>
-                        <p className="text-sm text-[#5A4A2E]">Automatically generate AI drafts for new messages</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Automatically generate AI drafts for new messages</p>
                       </div>
                       <Switch
                         checked={settings?.ai_draft_by_default ?? true}
@@ -272,7 +272,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Link to CRM</Label>
-                        <p className="text-sm text-[#5A4A2E]">Automatically link conversations to matching leads</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Automatically link conversations to matching leads</p>
                       </div>
                       <Switch
                         checked={settings?.auto_link_leads ?? true}
@@ -283,7 +283,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Log to CRM</Label>
-                        <p className="text-sm text-[#5A4A2E]">Record all communications in CRM activity</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Record all communications in CRM activity</p>
                       </div>
                       <Switch
                         checked={settings?.auto_log_to_crm ?? true}
@@ -305,7 +305,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gold/5 border border-gold/20">
                       <div>
                         <p className="font-medium text-[#1A1A1A]">Learning Enabled</p>
-                        <p className="text-sm text-[#5A4A2E]">AI adapts to your writing style and preferences</p>
+                        <p className="text-sm text-[#1A1A1A]/70">AI adapts to your writing style and preferences</p>
                       </div>
                       <CheckCircle className="h-6 w-6 text-green-500" />
                     </div>
@@ -325,7 +325,7 @@ export default function OwnerCommSettings() {
                   <div>
                     <Label className="text-base mb-3 block">Formality Level</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-[#5A4A2E] w-16">Casual</span>
+                      <span className="text-sm text-[#1A1A1A]/70 w-16">Casual</span>
                       <Slider
                         value={[toneProfile?.formality_level || 3]}
                         min={1}
@@ -334,14 +334,14 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ formality_level: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-[#5A4A2E] w-16 text-right">Formal</span>
+                      <span className="text-sm text-[#1A1A1A]/70 w-16 text-right">Formal</span>
                     </div>
                   </div>
 
                   <div>
                     <Label className="text-base mb-3 block">Emoji Usage</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-[#5A4A2E] w-16">Never</span>
+                      <span className="text-sm text-[#1A1A1A]/70 w-16">Never</span>
                       <Slider
                         value={[toneProfile?.emoji_usage || 2]}
                         min={0}
@@ -350,7 +350,7 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ emoji_usage: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-[#5A4A2E] w-16 text-right">Often</span>
+                      <span className="text-sm text-[#1A1A1A]/70 w-16 text-right">Often</span>
                     </div>
                   </div>
 
@@ -383,7 +383,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Language Switching</Label>
-                      <p className="text-sm text-[#5A4A2E]">Reply in the same language as the sender</p>
+                      <p className="text-sm text-[#1A1A1A]/70">Reply in the same language as the sender</p>
                     </div>
                     <Switch
                       checked={toneProfile?.language_switching ?? true}
@@ -408,7 +408,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Voice Enabled</Label>
-                      <p className="text-sm text-[#5A4A2E]">Generate voice replies using your cloned voice</p>
+                      <p className="text-sm text-[#1A1A1A]/70">Generate voice replies using your cloned voice</p>
                     </div>
                     <Switch
                       checked={settings?.voice_enabled ?? true}
@@ -427,7 +427,7 @@ export default function OwnerCommSettings() {
                   </div>
 
                   <div className="p-4 rounded-xl bg-gold/5 border border-gold/20">
-                    <p className="text-sm text-[#5A4A2E]">
+                    <p className="text-sm text-[#1A1A1A]/70">
                       <Shield className="h-4 w-4 inline mr-1 text-gold" />
                       Your voice clone is used exclusively for generating voice notes. 
                       It is never used for phone calls or real-time conversations.

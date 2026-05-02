@@ -265,7 +265,7 @@ const Favorites = () => {
     <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-8 md:py-16">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <Link to="/" className="inline-flex items-center gap-2 text-[#5A4A2E] hover:text-gold transition-colors mb-8">
+        <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-gold transition-colors mb-8">
           <ChevronLeft className="w-5 h-5" />
           <span>Back to Properties</span>
         </Link>
@@ -362,7 +362,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto px-4">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-                    <Heart className="w-10 h-10 text-[#5A4A2E]" />
+                    <Heart className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">Your Favorites List is Empty</h3>
                   <p className="text-[#1A1A1A]/50 mb-3">Save properties you love by clicking the heart icon on any listing.</p>
@@ -395,7 +395,7 @@ const Favorites = () => {
               <>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-[#FDFBF7]/60 rounded-xl p-4 border border-gold/20">
                   <p className="text-[#1A1A1A]/50 text-sm">
-                    Rank your top properties with badges: <span className="text-yellow-600">🥇 Gold</span>, <span className="text-[#5A4A2E]">🥈 Silver</span>, <span className="text-amber-600">🥉 Bronze</span>
+                    Rank your top properties with badges: <span className="text-yellow-600">🥇 Gold</span>, <span className="text-[#1A1A1A]/70">🥈 Silver</span>, <span className="text-amber-600">🥉 Bronze</span>
                   </p>
                   <Button onClick={() => setShareModalOpen(true)} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] hover:brightness-95 border border-gold/30">
                     <Share2 className="w-4 h-4 mr-2" /> Share My Shortlist
@@ -427,7 +427,7 @@ const Favorites = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-[#FDFBF7] border-gold/20">
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-600 cursor-pointer font-medium">🥇 Top 1 (Gold)</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-[#5A4A2E] cursor-pointer font-medium">🥈 Top 2 (Silver)</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-[#1A1A1A]/70 cursor-pointer font-medium">🥈 Top 2 (Silver)</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-600 cursor-pointer font-medium">🥉 Top 3 (Bronze)</DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-[#1A1A1A]/40 cursor-pointer">
@@ -485,7 +485,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
-                    <ListPlus className="w-10 h-10 text-[#5A4A2E]" />
+                    <ListPlus className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">Your Shortlist is Empty</h3>
                   <p className="text-[#1A1A1A]/50 mb-3">Move your top property picks from Favorites to your Shortlist. Assign medals (🥇🥈🥉) to rank your best choices.</p>
@@ -513,7 +513,7 @@ const Favorites = () => {
               <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <div className="max-w-md mx-auto px-4">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
-                    <PenTool className="w-10 h-10 text-[#5A4A2E]" />
+                    <PenTool className="w-10 h-10 text-[#1A1A1A]/70" />
                   </div>
                   <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">No Saved Designs Yet</h3>
                   <p className="text-[#1A1A1A]/50 mb-8">Save your stamps, business cards, letterheads, CVs, and more from the toolkit by clicking the heart or shortlist icon.</p>
@@ -614,7 +614,7 @@ const Favorites = () => {
                   return (
                     <div key={p.id} className="flex items-center gap-2 text-sm py-1">
                       <span className="text-gold">#{i + 1}</span>
-                      {badge && <span className={`text-xs ${badge === "top1" ? "text-yellow-600" : badge === "top2" ? "text-amber-600" : "text-[#5A4A2E]"}`}>{badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}</span>}
+                      {badge && <span className={`text-xs ${badge === "top1" ? "text-yellow-600" : badge === "top2" ? "text-amber-600" : "text-[#1A1A1A]/70"}`}>{badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}</span>}
                       <span className="text-[#1A1A1A]">{p.name}</span>
                     </div>
                   );

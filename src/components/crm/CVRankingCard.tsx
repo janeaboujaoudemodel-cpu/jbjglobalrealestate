@@ -75,7 +75,7 @@ const CVRankingCard = ({
   const getRankBadge = () => {
     if (!rank) return null;
     if (rank === 1) return <Crown className="h-5 w-5 text-gold" />;
-    if (rank === 2) return <Star className="h-5 w-5 text-[#5A4A2E]" />;
+    if (rank === 2) return <Star className="h-5 w-5 text-[#1A1A1A]/70" />;
     if (rank === 3) return <Star className="h-5 w-5 text-gold-dark" />;
     return <span className="text-sm font-bold text-muted-foreground">#{rank}</span>;
   };

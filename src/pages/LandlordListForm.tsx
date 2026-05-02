@@ -162,7 +162,7 @@ const LandlordListForm = () => {
               
               <motion.p
                 variants={fadeInUp}
-                className="text-lg text-[#5A4A2E]"
+                className="text-lg text-[#1A1A1A]/70"
               >
                 Submit your rental details for review. Our team will contact you with next steps for tenant screening, 
                 contract coordination, and listing activation.
@@ -198,7 +198,7 @@ const LandlordListForm = () => {
                     <div className="w-8 h-8 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-gold font-bold text-sm">{index + 1}</span>
                     </div>
-                    <p className="text-[#5A4A2E] pt-1">{step}</p>
+                    <p className="text-[#1A1A1A]/70 pt-1">{step}</p>
                   </motion.div>
                 ))}
               </div>
@@ -234,7 +234,7 @@ const LandlordListForm = () => {
                   <h3 className="text-lg font-semibold text-white">Contact Details</h3>
                   
                   <div>
-                    <Label htmlFor="fullName" className="text-[#5A4A2E]">Full Name *</Label>
+                    <Label htmlFor="fullName" className="text-[#1A1A1A]/70">Full Name *</Label>
                     <Input
                       id="fullName"
                       value={formData.fullName}
@@ -245,7 +245,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="phone" className="text-[#5A4A2E]">Mobile Number (WhatsApp) *</Label>
+                    <Label htmlFor="phone" className="text-[#1A1A1A]/70">Mobile Number (WhatsApp) *</Label>
                     <Input
                       id="phone"
                       type="tel"
@@ -257,7 +257,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="email" className="text-[#5A4A2E]">Email</Label>
+                    <Label htmlFor="email" className="text-[#1A1A1A]/70">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -273,7 +273,7 @@ const LandlordListForm = () => {
                   <h3 className="text-lg font-semibold text-white">Property Details</h3>
                   
                   <div>
-                    <Label htmlFor="propertyType" className="text-[#5A4A2E]">Property Type *</Label>
+                    <Label htmlFor="propertyType" className="text-[#1A1A1A]/70">Property Type *</Label>
                     <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select property type" />
@@ -289,7 +289,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="area" className="text-[#5A4A2E]">Community / Area *</Label>
+                    <Label htmlFor="area" className="text-[#1A1A1A]/70">Community / Area *</Label>
                     <Input
                       id="area"
                       value={formData.area}
@@ -300,7 +300,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="buildingName" className="text-[#5A4A2E]">Building / Project Name</Label>
+                    <Label htmlFor="buildingName" className="text-[#1A1A1A]/70">Building / Project Name</Label>
                     <Input
                       id="buildingName"
                       value={formData.buildingName}
@@ -311,7 +311,7 @@ const LandlordListForm = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="bedrooms" className="text-[#5A4A2E]">Bedrooms</Label>
+                      <Label htmlFor="bedrooms" className="text-[#1A1A1A]/70">Bedrooms</Label>
                       <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select" />
@@ -328,7 +328,7 @@ const LandlordListForm = () => {
                     </div>
                     
                     <div>
-                      <Label htmlFor="size" className="text-[#5A4A2E]">Size (sq ft)</Label>
+                      <Label htmlFor="size" className="text-[#1A1A1A]/70">Size (sq ft)</Label>
                       <Input
                         id="size"
                         value={formData.size}
@@ -339,7 +339,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="furnishing" className="text-[#5A4A2E]">Furnishing</Label>
+                    <Label htmlFor="furnishing" className="text-[#1A1A1A]/70">Furnishing</Label>
                     <Select value={formData.furnishing} onValueChange={(v) => handleChange("furnishing", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select furnishing" />
@@ -358,7 +358,7 @@ const LandlordListForm = () => {
                   <h3 className="text-lg font-semibold text-white">Rental Details</h3>
                   
                   <div>
-                    <Label htmlFor="desiredRent" className="text-[#5A4A2E]">Desired Annual Rent (AED)</Label>
+                    <Label htmlFor="desiredRent" className="text-[#1A1A1A]/70">Desired Annual Rent (AED)</Label>
                     <Input
                       id="desiredRent"
                       value={formData.desiredRent}
@@ -368,7 +368,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="chequePreference" className="text-[#5A4A2E]">Cheque Preference</Label>
+                    <Label htmlFor="chequePreference" className="text-[#1A1A1A]/70">Cheque Preference</Label>
                     <Select value={formData.chequePreference} onValueChange={(v) => handleChange("chequePreference", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select cheques" />
@@ -384,7 +384,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="availabilityDate" className="text-[#5A4A2E]">Availability Date</Label>
+                    <Label htmlFor="availabilityDate" className="text-[#1A1A1A]/70">Availability Date</Label>
                     <Input
                       id="availabilityDate"
                       type="date"
@@ -394,7 +394,7 @@ const LandlordListForm = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="notes" className="text-[#5A4A2E]">Notes (Optional)</Label>
+                    <Label htmlFor="notes" className="text-[#1A1A1A]/70">Notes (Optional)</Label>
                     <Textarea
                       id="notes"
                       value={formData.notes}
@@ -412,7 +412,7 @@ const LandlordListForm = () => {
                     checked={formData.consentToPrivacy}
                     onCheckedChange={(checked) => handleChange("consentToPrivacy", checked as boolean)}
                   />
-                  <Label htmlFor="consent" className="text-sm text-[#5A4A2E] cursor-pointer">
+                  <Label htmlFor="consent" className="text-sm text-[#1A1A1A]/70 cursor-pointer">
                     I agree to the <a href="/privacy" className="text-gold hover:underline">Privacy Policy</a> and 
                     consent to being contacted regarding this rental listing.
                   </Label>
@@ -434,7 +434,7 @@ const LandlordListForm = () => {
         {/* Footer Notice */}
         <section className="py-8 border-t border-[#1A1A1A]">
           <div className="container mx-auto px-4">
-            <p className="text-center text-sm text-[#5A4A2E] max-w-2xl mx-auto">
+            <p className="text-center text-sm text-[#1A1A1A]/70 max-w-2xl mx-auto">
               All listings are subject to internal review and compliance checks prior to publication.
             </p>
           </div>

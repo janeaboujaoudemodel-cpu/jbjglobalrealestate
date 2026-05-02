@@ -89,7 +89,7 @@ const Philanthropy = () => {
               <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4">
                 Content <span className="text-gold">Coming Soon</span>
               </h2>
-              <p className="text-[#5A4A2E] mb-8">
+              <p className="text-[#1A1A1A]/70 mb-8">
                 We're currently preparing detailed information about our philanthropic initiatives 
                 and community involvement programs. Check back soon to learn more about how 
                 JBJ Global Real Estate is making a difference.

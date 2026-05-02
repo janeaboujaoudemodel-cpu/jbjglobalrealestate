@@ -53,7 +53,7 @@ export const CompanyProfileDownload = () => {
           </div>
           <div>
             <CardTitle className="text-[#1A1A1A] text-lg">Company Profile PDF</CardTitle>
-            <CardDescription className="text-[#5A4A2E]">
+            <CardDescription className="text-[#1A1A1A]/70">
               Download the official 18-page company profile
             </CardDescription>
           </div>
@@ -91,7 +91,7 @@ export const CompanyProfileDownload = () => {
           Open Page Baseline (no chrome)
         </Button>
 
-        <p className="text-xs text-[#5A4A2E] pt-1">
+        <p className="text-xs text-[#1A1A1A]/70 pt-1">
           Baseline mode hides cookie banner, sidebar, header, and popups for clean visual comparison.
         </p>
       </CardContent>

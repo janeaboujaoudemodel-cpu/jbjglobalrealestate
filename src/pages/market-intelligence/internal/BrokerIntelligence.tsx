@@ -172,7 +172,7 @@ const BrokerIntelligence = () => {
                   <LeadMarketContext leadArea={selectedArea} leadIntent={leadIntent} />
                   {!selectedArea && (
                     <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-[#1A1A1A]/50 text-center">
-                      <MapPin className="w-6 h-6 text-[#5A4A2E] mx-auto mb-2" />
+                      <MapPin className="w-6 h-6 text-[#1A1A1A]/70 mx-auto mb-2" />
                       <p className="text-white/90 text-sm">Select an area from the dropdown above to view market context</p>
                     </div>
                   )}

@@ -141,7 +141,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                   onClick={handleSkip}
                   className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
                 >
-                  <X className="w-4 h-4 text-[#5A4A2E]" />
+                  <X className="w-4 h-4 text-[#1A1A1A]/70" />
                 </button>
 
                 {/* Step indicator */}
@@ -165,7 +165,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                   <ArrowRight className="w-4 h-4 text-gold" />
                   {step.label}
                 </h4>
-                <p className="text-[#5A4A2E] text-xs mb-4">
+                <p className="text-[#1A1A1A]/70 text-xs mb-4">
                   {step.description}
                 </p>
 

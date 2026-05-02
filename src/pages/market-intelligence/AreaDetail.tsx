@@ -44,7 +44,7 @@ const MarketAreaDetail = () => {
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-lg px-4 py-1">Bearish</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30 text-lg px-4 py-1">Neutral</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30 text-lg px-4 py-1">Neutral</Badge>;
     }
   };
 
@@ -190,7 +190,7 @@ const MarketAreaDetail = () => {
                   const htmlContent = para.replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#1A1A1A]">$1</strong>');
                   const sanitizedHtml = sanitizeMarkdownHtml(htmlContent);
                   return (
-                    <p key={i} className="text-[#5A4A2E] mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
+                    <p key={i} className="text-[#1A1A1A]/70 mb-4" dangerouslySetInnerHTML={{ __html: sanitizedHtml }} />
                   );
                 })}
               </div>
@@ -211,7 +211,7 @@ const MarketAreaDetail = () => {
                 <div className="w-8 h-8 jj-icon-box-active rounded-lg shrink-0">
                   <span className="text-[#1A1A1A] font-bold text-sm">{i + 1}</span>
                 </div>
-                <p className="text-[#5A4A2E]">{highlight}</p>
+                <p className="text-[#1A1A1A]/70">{highlight}</p>
               </div>
             ))}
           </div>
@@ -223,7 +223,7 @@ const MarketAreaDetail = () => {
         <div className="jj-layer-2">
           <div className="max-w-2xl mx-auto text-center jj-card-inner p-8">
             <h3 className="text-[#1A1A1A] text-xl font-bold mb-4">Interested in {area.area}?</h3>
-            <p className="text-[#5A4A2E] mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
+            <p className="text-[#1A1A1A]/70 mb-6">Speak with our team for personalized guidance based on current market conditions.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/contact">
                 <Button variant="primary">
@@ -290,7 +290,7 @@ const MarketAreaDetail = () => {
                   <Shield className="w-4 h-4" />
                 </div>
               </div>
-              <p className="text-[#5A4A2E] text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
           </div>
         </div>

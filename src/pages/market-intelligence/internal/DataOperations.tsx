@@ -33,7 +33,7 @@ const DataOperations = () => {
       case 'error':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Error</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30">Unknown</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30">Unknown</Badge>;
     }
   };
 
@@ -104,7 +104,7 @@ const DataOperations = () => {
                       <span className="text-emerald-400">{source.lastUpdated}</span>
                     </div>
                     <div className="pt-2 border-t border-[#1A1A1A]">
-                      <p className="text-[#5A4A2E] text-xs">Data Types</p>
+                      <p className="text-[#1A1A1A]/70 text-xs">Data Types</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {source.dataTypes.map((type) => (
                           <span key={type} className="text-xs bg-zinc-800 text-white/70 px-2 py-0.5 rounded">
@@ -142,7 +142,7 @@ const DataOperations = () => {
                   <tr key={index} className="border-b border-zinc-900 hover:bg-[#1A1A1A]/50">
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#5A4A2E]" />
+                        <Clock className="w-4 h-4 text-[#1A1A1A]/70" />
                         <span className="text-white/70 text-sm font-mono">{log.timestamp}</span>
                       </div>
                     </td>

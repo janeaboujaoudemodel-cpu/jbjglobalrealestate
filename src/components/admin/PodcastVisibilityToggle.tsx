@@ -83,7 +83,7 @@ export const PodcastVisibilityToggle = () => {
             </div>
             <div>
               <CardTitle className="text-[#1A1A1A] text-lg">JBJ Podcast Visibility</CardTitle>
-              <CardDescription className="text-[#5A4A2E]">
+              <CardDescription className="text-[#1A1A1A]/70">
                 Control podcast section visibility on homepage
               </CardDescription>
             </div>
@@ -102,7 +102,7 @@ export const PodcastVisibilityToggle = () => {
                 <p className="font-medium text-[#1A1A1A]">
                   {isPodcastVisible ? "Visible on Homepage" : "Hidden from Homepage"}
                 </p>
-                <p className="text-sm text-[#5A4A2E]">
+                <p className="text-sm text-[#1A1A1A]/70">
                   {isPodcastVisible
                     ? "The JBJ Podcast section appears on the homepage for all viewers — including you."
                     : "The JBJ Podcast section is hidden from every homepage feed, including yours."
@@ -172,7 +172,7 @@ export const PodcastVisibilityToggle = () => {
                 </>
               )}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[#5A4A2E]">
+            <AlertDialogDescription className="text-[#1A1A1A]/70">
               {pendingValue ? (
                 <>
                   This will make the <strong>JBJ Podcast section visible</strong> to all website visitors:

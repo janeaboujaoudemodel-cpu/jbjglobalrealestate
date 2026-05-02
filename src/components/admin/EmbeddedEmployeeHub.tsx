@@ -101,7 +101,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Team Members</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Team Members</p>
                   <p className="text-2xl font-bold text-gold">{totalEmployees}</p>
                 </div>
                 <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -114,7 +114,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Online Now</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Online Now</p>
                   <p className="text-2xl font-bold text-green-600">{onlineCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -127,7 +127,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Departments</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Departments</p>
                   <p className="text-2xl font-bold text-blue-600">{departmentCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -140,7 +140,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Top Performers</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Top Performers</p>
                   <p className="text-2xl font-bold text-amber-600">{Object.keys(topPerformers).length}</p>
                 </div>
                 <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
@@ -161,7 +161,7 @@ export function EmbeddedEmployeeHub() {
                   placeholder="Search by name, role, department, or language..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-10"
+                  className="pl-10 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-10"
                 />
               </div>
               <div className="flex gap-2 flex-wrap">
@@ -227,7 +227,7 @@ export function EmbeddedEmployeeHub() {
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[#1A1A1A] font-bold text-sm truncate">{member.name}</h3>
                       <p className="text-gold text-xs font-semibold truncate">{member.role}</p>
-                      <p className="text-[#5A4A2E] text-[10px] truncate">{member.department}</p>
+                      <p className="text-[#1A1A1A]/70 text-[10px] truncate">{member.department}</p>
                     </div>
                   </div>
                   
@@ -240,10 +240,10 @@ export function EmbeddedEmployeeHub() {
                     </div>
                   )}
                   
-                  <p className="text-[#5A4A2E] text-[10px] line-clamp-2 mt-2">{member.bio}</p>
+                  <p className="text-[#1A1A1A]/70 text-[10px] line-clamp-2 mt-2">{member.bio}</p>
                   
                   {member.joinDate && (
-                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-[#5A4A2E]">
+                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-[#1A1A1A]/70">
                       <Calendar className="h-2.5 w-2.5" />
                       <span>Joined: {joinDateFormatted}</span>
                     </div>
@@ -251,14 +251,14 @@ export function EmbeddedEmployeeHub() {
                   
                   <div className="flex flex-wrap gap-1 mt-2">
                     {member.languages?.slice(0, 2).map((lang) => (
-                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-[#5A4A2E] bg-gold/5 px-1.5 py-0">
+                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-[#1A1A1A]/70 bg-gold/5 px-1.5 py-0">
                         {lang}
                       </Badge>
                     ))}
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gold/20">
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#5A4A2E] bg-[#FDFBF7]'}`}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-[#B89555]/30 text-[#1A1A1A]/70 bg-[#FDFBF7]'}`}>
                       {member.status === 'online' ? '● Online' : '○ Away'}
                     </Badge>
                     
@@ -289,8 +289,8 @@ export function EmbeddedEmployeeHub() {
 
         {filteredMembers.length === 0 && (
           <div className="text-center py-12">
-            <Users className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
-            <p className="text-[#5A4A2E]">No employees found matching your search.</p>
+            <Users className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
+            <p className="text-[#1A1A1A]/70">No employees found matching your search.</p>
           </div>
         )}
       </TabsContent>

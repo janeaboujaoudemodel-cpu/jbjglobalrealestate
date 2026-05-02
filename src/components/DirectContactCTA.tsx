@@ -117,7 +117,7 @@ const DirectContactCTA = ({
               <span className="text-[#1A1A1A]">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
               <span className="text-gold">{resolvedTitle.split(' ').slice(-1)[0]}</span>
             </h2>
-            <p className="text-center text-[#5A4A2E] text-sm md:text-base mb-8 max-w-2xl mx-auto">
+            <p className="text-center text-[#1A1A1A]/70 text-sm md:text-base mb-8 max-w-2xl mx-auto">
               {resolvedSubtitle}
             </p>
           </>

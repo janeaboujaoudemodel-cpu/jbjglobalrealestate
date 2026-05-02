@@ -227,18 +227,18 @@ const SupportTicketHub = () => {
           {/* Filters */}
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
               <input
                 type="text"
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-[#5A4A2E] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#5A4A2E]" />
+              <Filter className="w-4 h-4 text-[#1A1A1A]/70" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}

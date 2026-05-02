@@ -504,7 +504,7 @@ export const BulkSendDialog = ({
             <div className="flex items-center gap-2 text-xs text-[#1A1A1A] mb-2">
               <FlaskConical className="w-4 h-4" /> <strong>Step 1 — Send test to yourself first</strong>
             </div>
-            <div className="text-[11px] text-[#5A4A2E] mb-2">
+            <div className="text-[11px] text-[#1A1A1A]/70 mb-2">
               Test will be sent to your registered email:&nbsp;
               <strong className="text-[#1A1A1A]">{defaultTestEmail || "—"}</strong>
             </div>
@@ -523,7 +523,7 @@ export const BulkSendDialog = ({
             <button
               type="button"
               onClick={() => setUseCustomTestEmail((v) => !v)}
-              className="text-[10px] underline text-[#5A4A2E] mt-2 hover:text-[#1A1A1A]"
+              className="text-[10px] underline text-[#1A1A1A]/70 mt-2 hover:text-[#1A1A1A]"
             >
               {useCustomTestEmail ? "Use my registered email" : "Use a different address"}
             </button>
@@ -555,7 +555,7 @@ export const BulkSendDialog = ({
               <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
                 <UserCog className="w-4 h-4" /><strong>Personalization defaults</strong>
               </div>
-              <div className="text-[11px] text-[#5A4A2E]">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
+              <div className="text-[11px] text-[#1A1A1A]/70">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
               <div>
                 <Label className="text-[11px] text-[#1A1A1A]">Group / partnership status</Label>
                 <Select value={bulkGroupStatus || "__auto"} onValueChange={(v) => setBulkGroupStatus(v === "__auto" ? "" : (v as BrokerageGroupStatus))}>
@@ -603,7 +603,7 @@ export const BulkSendDialog = ({
               </div>
             )}
             {(skipBreakdown.noEmail > 0 || skipBreakdown.recent > 0) && (
-              <div className="pt-2 mt-2 border-t border-[#1A1A1A]/10 space-y-1 text-xs text-[#5A4A2E]">
+              <div className="pt-2 mt-2 border-t border-[#1A1A1A]/10 space-y-1 text-xs text-[#1A1A1A]/70">
                 <div className="font-semibold text-[#1A1A1A] mb-0.5">Skipped:</div>
                 {skipBreakdown.noEmail > 0 && (
                   <div className="flex justify-between"><span>Missing email</span><span className="font-bold">{skipBreakdown.noEmail}</span></div>
@@ -644,7 +644,7 @@ export const BulkSendDialog = ({
               <>
                 <div className="px-3 py-2 text-xs border-b border-[#1A1A1A]/10 bg-[#FDFBF7]">
                   <div className="text-[#1A1A1A]"><strong>Subject:</strong> {previewSubject}</div>
-                  <div className="text-[#5A4A2E] mt-0.5">
+                  <div className="text-[#1A1A1A]/70 mt-0.5">
                     <strong className="text-[#1A1A1A]">To:</strong> {(previewDev && getEmail(previewDev, entityType)) || "—"} · <strong className="text-[#1A1A1A]">Variant:</strong> {VARIANT_LABELS[variant]}
                   </div>
                 </div>
@@ -685,12 +685,12 @@ export const BulkSendDialog = ({
                 )}
               </div>
               {checkBrk.isPending ? (
-                <div className="px-3 py-4 flex items-center gap-2 text-xs text-[#5A4A2E]">
+                <div className="px-3 py-4 flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Checking each brokerage against existing CRM leads, clients, brokers and prior outreach…
                 </div>
               ) : Object.keys(checks).length === 0 ? (
-                <div className="px-3 py-3 text-xs text-[#5A4A2E] flex items-center justify-between gap-2">
+                <div className="px-3 py-3 text-xs text-[#1A1A1A]/70 flex items-center justify-between gap-2">
                   <span>Not yet run. Click "Review &amp; send" below to scan for duplicates.</span>
                   <Button size="sm" variant="outline" className="h-7 text-xs" onClick={runRegistrationCheck}>
                     Run check now
@@ -716,7 +716,7 @@ export const BulkSendDialog = ({
                             <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
                           </div>
                           {r.status === "warn" && (
-                            <label className="flex items-center gap-1 text-[10px] text-[#5A4A2E] cursor-pointer shrink-0">
+                            <label className="flex items-center gap-1 text-[10px] text-[#1A1A1A]/70 cursor-pointer shrink-0">
                               <input
                                 type="checkbox"
                                 checked={!!warnOverrides[t.id]}
@@ -751,7 +751,7 @@ export const BulkSendDialog = ({
                           <button
                             type="button"
                             onClick={() => setExpandedPersonalize((p) => ({ ...p, [t.id]: !p[t.id] }))}
-                            className="inline-flex items-center gap-1 text-[10px] text-[#5A4A2E] hover:text-[#1A1A1A]"
+                            className="inline-flex items-center gap-1 text-[10px] text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                           >
                             {expandedPersonalize[t.id] ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                             Customize for this recipient

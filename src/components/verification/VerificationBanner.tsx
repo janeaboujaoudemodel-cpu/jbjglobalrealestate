@@ -42,7 +42,7 @@ const VerificationBanner = () => {
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-5">
             {/* Shield icon */}
             <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-[#5A4A2E]" />
+              <ShieldCheck className="w-5 h-5 text-[#1A1A1A]/70" />
             </div>
             
             {/* Text */}

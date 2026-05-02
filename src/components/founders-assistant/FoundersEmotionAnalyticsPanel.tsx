@@ -63,7 +63,7 @@ export function FoundersEmotionAnalyticsPanel() {
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-500" />;
-    return <Minus className="h-4 w-4 text-[#5A4A2E]" />;
+    return <Minus className="h-4 w-4 text-[#1A1A1A]/70" />;
   };
 
   const getSentimentIcon = (sentiment: number) => {
@@ -83,7 +83,7 @@ export function FoundersEmotionAnalyticsPanel() {
             <Heart className="h-5 w-5 text-pink-500" />
             Emotion Analytics
           </h2>
-          <p className="text-[#5A4A2E] text-sm">AI-powered sentiment insights across all communications</p>
+          <p className="text-[#1A1A1A]/70 text-sm">AI-powered sentiment insights across all communications</p>
         </div>
         <div className="flex items-center gap-3">
           <Select value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
@@ -107,7 +107,7 @@ export function FoundersEmotionAnalyticsPanel() {
         <Card className="bg-[#FDFBF7] border-2 border-green-500/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-[#5A4A2E]">Positive</p><p className="text-2xl font-bold text-green-600">{overallSentiment.positive}%</p></div>
+              <div><p className="text-xs text-[#1A1A1A]/70">Positive</p><p className="text-2xl font-bold text-green-600">{overallSentiment.positive}%</p></div>
               <div className="h-12 w-12 rounded-full bg-green-500/10 flex items-center justify-center"><Smile className="h-6 w-6 text-green-600" /></div>
             </div>
             <div className="mt-2 flex items-center gap-1 text-xs text-green-600"><TrendingUp className="h-3 w-3" /><span>+5% from last week</span></div>
@@ -116,7 +116,7 @@ export function FoundersEmotionAnalyticsPanel() {
         <Card className="bg-[#FDFBF7] border-2 border-red-500/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-[#5A4A2E]">Negative</p><p className="text-2xl font-bold text-red-500">{overallSentiment.negative}%</p></div>
+              <div><p className="text-xs text-[#1A1A1A]/70">Negative</p><p className="text-2xl font-bold text-red-500">{overallSentiment.negative}%</p></div>
               <div className="h-12 w-12 rounded-full bg-red-500/10 flex items-center justify-center"><Frown className="h-6 w-6 text-red-500" /></div>
             </div>
             <div className="mt-2 flex items-center gap-1 text-xs text-green-600"><TrendingDown className="h-3 w-3" /><span>-3% from last week</span></div>
@@ -125,7 +125,7 @@ export function FoundersEmotionAnalyticsPanel() {
         <Card className="bg-[#FDFBF7] border-2 border-amber-500/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-[#5A4A2E]">Escalations</p><p className="text-2xl font-bold text-amber-600">19</p></div>
+              <div><p className="text-xs text-[#1A1A1A]/70">Escalations</p><p className="text-2xl font-bold text-amber-600">19</p></div>
               <div className="h-12 w-12 rounded-full bg-amber-500/10 flex items-center justify-center"><Zap className="h-6 w-6 text-amber-600" /></div>
             </div>
             <div className="mt-2 flex items-center gap-1 text-xs text-amber-600"><Minus className="h-3 w-3" /><span>Same as last week</span></div>
@@ -134,7 +134,7 @@ export function FoundersEmotionAnalyticsPanel() {
         <Card className="bg-[#FDFBF7] border-2 border-blue-500/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-[#5A4A2E]">Total Messages</p><p className="text-2xl font-bold text-blue-600">{overallSentiment.total}</p></div>
+              <div><p className="text-xs text-[#1A1A1A]/70">Total Messages</p><p className="text-2xl font-bold text-blue-600">{overallSentiment.total}</p></div>
               <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center"><MessageSquare className="h-6 w-6 text-blue-600" /></div>
             </div>
             <div className="mt-2 flex items-center gap-1 text-xs text-blue-600"><TrendingUp className="h-3 w-3" /><span>+12% from last week</span></div>
@@ -153,14 +153,14 @@ export function FoundersEmotionAnalyticsPanel() {
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
-              <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><PieChart className="h-5 w-5 text-[#B89555]" />Emotion Distribution</CardTitle><CardDescription className="text-[#5A4A2E]">Breakdown of detected emotions this {dateRange}</CardDescription></CardHeader>
+              <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><PieChart className="h-5 w-5 text-[#B89555]" />Emotion Distribution</CardTitle><CardDescription className="text-[#1A1A1A]/70">Breakdown of detected emotions this {dateRange}</CardDescription></CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {emotionStats.map(({ emotion, count, percentage, trend }) => (
                     <div key={emotion} className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2"><span className="capitalize text-[#1A1A1A] font-medium">{getEmotionLabel(emotion)}</span></div>
-                        <div className="flex items-center gap-2"><span className="text-[#5A4A2E]">{count} ({percentage}%)</span>{getTrendIcon(trend)}</div>
+                        <div className="flex items-center gap-2"><span className="text-[#1A1A1A]/70">{count} ({percentage}%)</span>{getTrendIcon(trend)}</div>
                       </div>
                       <Progress value={percentage} className="h-2" />
                     </div>
@@ -169,7 +169,7 @@ export function FoundersEmotionAnalyticsPanel() {
               </CardContent>
             </Card>
             <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
-              <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-amber-500" />Top Escalation Triggers</CardTitle><CardDescription className="text-[#5A4A2E]">Most frequent reasons for escalation</CardDescription></CardHeader>
+              <CardHeader><CardTitle className="text-[#1A1A1A] flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-amber-500" />Top Escalation Triggers</CardTitle><CardDescription className="text-[#1A1A1A]/70">Most frequent reasons for escalation</CardDescription></CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {topTriggers.map(({ trigger, count }, index) => (
@@ -186,7 +186,7 @@ export function FoundersEmotionAnalyticsPanel() {
 
         <TabsContent value="channels" className="mt-6">
           <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
-            <CardHeader><CardTitle className="text-[#1A1A1A]">Channel Performance</CardTitle><CardDescription className="text-[#5A4A2E]">Sentiment analysis across communication channels</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A]">Channel Performance</CardTitle><CardDescription className="text-[#1A1A1A]/70">Sentiment analysis across communication channels</CardDescription></CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {channelStats.map((ch) => (
@@ -199,12 +199,12 @@ export function FoundersEmotionAnalyticsPanel() {
                         {ch.channel === 'Phone' && <Phone className="h-5 w-5 text-amber-600" />}
                         <span className="font-semibold text-[#1A1A1A]">{ch.channel}</span>
                       </div>
-                      <Badge variant="outline" className="text-[#5A4A2E] border-[#B89555]/30">{ch.total} total</Badge>
+                      <Badge variant="outline" className="text-[#1A1A1A]/70 border-[#B89555]/30">{ch.total} total</Badge>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2"><span className="text-xs text-[#5A4A2E] w-16">Positive</span><Progress value={(ch.positive / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-green-600 w-8">{Math.round((ch.positive / ch.total) * 100)}%</span></div>
-                      <div className="flex items-center gap-2"><span className="text-xs text-[#5A4A2E] w-16">Neutral</span><Progress value={(ch.neutral / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-[#5A4A2E] w-8">{Math.round((ch.neutral / ch.total) * 100)}%</span></div>
-                      <div className="flex items-center gap-2"><span className="text-xs text-[#5A4A2E] w-16">Negative</span><Progress value={(ch.negative / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-red-500 w-8">{Math.round((ch.negative / ch.total) * 100)}%</span></div>
+                      <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Positive</span><Progress value={(ch.positive / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-green-600 w-8">{Math.round((ch.positive / ch.total) * 100)}%</span></div>
+                      <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Neutral</span><Progress value={(ch.neutral / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-[#1A1A1A]/70 w-8">{Math.round((ch.neutral / ch.total) * 100)}%</span></div>
+                      <div className="flex items-center gap-2"><span className="text-xs text-[#1A1A1A]/70 w-16">Negative</span><Progress value={(ch.negative / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-red-500 w-8">{Math.round((ch.negative / ch.total) * 100)}%</span></div>
                     </div>
                   </div>
                 ))}
@@ -215,7 +215,7 @@ export function FoundersEmotionAnalyticsPanel() {
 
         <TabsContent value="teams" className="mt-6">
           <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
-            <CardHeader><CardTitle className="text-[#1A1A1A]">Team Sentiment</CardTitle><CardDescription className="text-[#5A4A2E]">Sentiment analysis by department</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="text-[#1A1A1A]">Team Sentiment</CardTitle><CardDescription className="text-[#1A1A1A]/70">Sentiment analysis by department</CardDescription></CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {teamSentiment.map((team) => (
@@ -223,7 +223,7 @@ export function FoundersEmotionAnalyticsPanel() {
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         {getSentimentIcon(team.sentiment)}
-                        <div><h4 className="font-semibold text-[#1A1A1A]">{team.teamName}</h4><p className="text-xs text-[#5A4A2E]">Sentiment: {(team.sentiment * 100).toFixed(0)}%</p></div>
+                        <div><h4 className="font-semibold text-[#1A1A1A]">{team.teamName}</h4><p className="text-xs text-[#1A1A1A]/70">Sentiment: {(team.sentiment * 100).toFixed(0)}%</p></div>
                       </div>
                       <div className="flex items-center gap-2">{getTrendIcon(team.trend)}{team.escalationCount > 0 && <Badge className="bg-red-50 text-red-600 border border-red-200">{team.escalationCount} escalations</Badge>}</div>
                     </div>

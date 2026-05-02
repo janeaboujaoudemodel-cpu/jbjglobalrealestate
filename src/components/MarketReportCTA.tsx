@@ -41,7 +41,7 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
           <h3 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-4">
             <span className="text-[#1A1A1A]">Market Report</span>
           </h3>
-          <p className="text-[#5A4A2E] text-base leading-relaxed">
+          <p className="text-[#1A1A1A]/70 text-base leading-relaxed">
             Get exclusive insights into Dubai's property market with our comprehensive guide.
           </p>
         </div>
@@ -49,7 +49,7 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
         {/* Benefits */}
         <div className="space-y-3">
           {benefits.map((benefit, idx) => (
-            <div key={idx} className="flex items-center gap-3 text-[#5A4A2E]">
+            <div key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
               <CheckCircle className="w-5 h-5 text-gold flex-shrink-0" />
               <span>{benefit}</span>
             </div>
@@ -83,7 +83,7 @@ const MarketReportCTA = React.forwardRef<HTMLDivElement>((_, ref) => {
         </Link>
 
         {/* Attribution */}
-        <p className="text-[#5A4A2E] text-xs">
+        <p className="text-[#1A1A1A]/70 text-xs">
           Created by <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link>
         </p>
       </div>

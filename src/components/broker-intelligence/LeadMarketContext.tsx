@@ -90,7 +90,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
     return (
       <Card className="bg-zinc-900/50 border-[#1A1A1A]">
         <CardContent className="p-4 text-center">
-          <Info className="w-6 h-6 text-[#5A4A2E] mx-auto mb-2" />
+          <Info className="w-6 h-6 text-[#1A1A1A]/70 mx-auto mb-2" />
           <p className="text-white/90 text-sm">
             {leadArea ? `No market data available for "${leadArea}"` : "Select a location to view market context"}
           </p>
@@ -185,7 +185,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
         </div>
 
         {/* Disclaimer */}
-        <p className="text-[#5A4A2E] text-xs">
+        <p className="text-[#1A1A1A]/70 text-xs">
           Market context based on aggregated Open Data · For internal broker use only
         </p>
       </CardContent>

@@ -85,7 +85,7 @@ export default function InlineStatusSelect({
         ))}
         
         {/* NEUTRAL */}
-        <div className="px-2 py-1.5 text-xs font-bold text-[#5A4A2E] uppercase tracking-wide mt-1 flex items-center gap-2">
+        <div className="px-2 py-1.5 text-xs font-bold text-[#1A1A1A]/70 uppercase tracking-wide mt-1 flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-zinc-400" />
           Neutral
         </div>

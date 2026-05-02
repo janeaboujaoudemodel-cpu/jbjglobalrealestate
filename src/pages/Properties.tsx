@@ -666,7 +666,7 @@ const Properties = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
-              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-lg text-base shadow-sm w-full"
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg text-base shadow-sm w-full"
             />
 
           </div>
@@ -983,14 +983,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.sizeMin || ""}
                           onChange={(e) => updateFilter("sizeMin", parseInt(e.target.value) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                         />
                         <Input
                           type="number"
                           placeholder="Max"
                           value={filters.sizeMax < 50000 ? filters.sizeMax : ""}
                           onChange={(e) => updateFilter("sizeMax", parseInt(e.target.value) || 50000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                         />
                       </div>
                     </div>
@@ -1004,14 +1004,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.priceMin > 0 ? filters.priceMin.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMin", parseInt(e.target.value.replace(/,/g, '')) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                         />
                         <Input
                           type="text"
                           placeholder="Max"
                           value={filters.priceMax < 500000000 ? filters.priceMax.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMax", parseInt(e.target.value.replace(/,/g, '')) || 500000000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                         />
                       </div>
                     </div>
@@ -1128,7 +1128,7 @@ const Properties = () => {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                    className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                   >
                     Clear All
                   </Button>
@@ -1234,7 +1234,7 @@ const Properties = () => {
                   <div className="col-span-2 text-center py-20">
                     <Search className="w-10 h-10 text-gold mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">We Couldn't Find an Exact Match</h3>
-                    <p className="text-[#5A4A2E] mb-4">Try adjusting your filters to discover available properties</p>
+                    <p className="text-[#1A1A1A]/70 mb-4">Try adjusting your filters to discover available properties</p>
                     <Button onClick={clearFilters} variant="outline" className="border-gold/40 text-[#1A1A1A] hover:bg-gold/10">
                       <X className="w-4 h-4 mr-2" />
                       Clear All Filters
@@ -1293,7 +1293,7 @@ const Properties = () => {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                    className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Clear all filters
@@ -1350,7 +1350,7 @@ const Properties = () => {
                         <h3 className="text-2xl font-semibold text-[#1A1A1A] mb-3">
                           No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
                         </h3>
-                        <p className="text-[#5A4A2E] mb-6 max-w-md mx-auto">
+                        <p className="text-[#1A1A1A]/70 mb-6 max-w-md mx-auto">
                           We're currently adding properties from this developer to our portfolio. 
                           Register your interest to be notified when listings become available.
                         </p>
@@ -1385,7 +1385,7 @@ const Properties = () => {
                         <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
                           We Couldn't Find an Exact Match
                         </h3>
-                        <p className="text-[#5A4A2E] mb-6 max-w-lg mx-auto">
+                        <p className="text-[#1A1A1A]/70 mb-6 max-w-lg mx-auto">
                           No properties matched your current filters. Try adjusting your search, or explore our curated selection below.
                         </p>
                         <Button
@@ -1451,11 +1451,11 @@ const Properties = () => {
                   >
                     Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
                   </h2>
-                  <p className="text-[#5A4A2E] mb-6">
+                  <p className="text-[#1A1A1A]/70 mb-6">
                     Our experienced advisors help you navigate Dubai's dynamic real estate market. 
                     Get personalized recommendations based on your goals, budget, and timeline.
                   </p>
-                  <ul className="space-y-2 text-sm text-[#5A4A2E] mb-6">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]/70 mb-6">
                     <li className="flex items-center gap-2 justify-center md:justify-start">
                       <span className="w-1.5 h-1.5 rounded-full bg-gold" />
                       Flexible payment plans tailored to your investment timeline

@@ -124,7 +124,7 @@ const ClientMarketContext = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-[#5A4A2E] bg-[#F7F2EA] px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 bg-[#F7F2EA] px-2 py-1 rounded-full">
             <Clock className="w-3 h-3 text-gold" />
             <span className="font-medium">Updated {lastUpdated}</span>
           </div>
@@ -141,12 +141,12 @@ const ClientMarketContext = ({
         </div>
 
         {/* Plain-English Context */}
-        <p className="text-sm text-[#5A4A2E] leading-relaxed">
+        <p className="text-sm text-[#1A1A1A]/70 leading-relaxed">
           {getContextNarrative()}
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-[#5A4A2E] border-t border-[#B89555]/30 pt-3">
+        <p className="text-[10px] text-[#1A1A1A]/70 border-t border-[#B89555]/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

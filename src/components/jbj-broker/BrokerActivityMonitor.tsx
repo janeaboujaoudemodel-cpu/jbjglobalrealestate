@@ -136,7 +136,7 @@ export function BrokerActivityMonitor() {
       <Card className="bg-zinc-900 border-[#1A1A1A]">
         <CardContent className="p-8 text-center">
           <RefreshCw className="h-8 w-8 text-gold animate-spin mx-auto" />
-          <p className="text-[#5A4A2E] mt-4">Loading activity monitor...</p>
+          <p className="text-[#1A1A1A]/70 mt-4">Loading activity monitor...</p>
         </CardContent>
       </Card>
     );
@@ -152,7 +152,7 @@ export function BrokerActivityMonitor() {
             </div>
             <div>
               <CardTitle className="text-white">Broker Activity Monitor</CardTitle>
-              <p className="text-[#5A4A2E] text-sm mt-1">
+              <p className="text-[#1A1A1A]/70 text-sm mt-1">
                 Real-time performance tracking
               </p>
             </div>
@@ -163,7 +163,7 @@ export function BrokerActivityMonitor() {
               size="sm"
               onClick={refreshStats}
               disabled={refreshing}
-              className="border-[#1A1A1A] text-[#5A4A2E]"
+              className="border-[#1A1A1A] text-[#1A1A1A]/70"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
               Refresh
@@ -185,28 +185,28 @@ export function BrokerActivityMonitor() {
           <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
             <Users className="h-6 w-6 text-blue-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalLeads}</div>
-            <div className="text-xs text-[#5A4A2E]">Leads Contacted</div>
+            <div className="text-xs text-[#1A1A1A]/70">Leads Contacted</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
             <MessageSquare className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalMessages}</div>
-            <div className="text-xs text-[#5A4A2E]">Messages Sent</div>
+            <div className="text-xs text-[#1A1A1A]/70">Messages Sent</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
             <Phone className="h-6 w-6 text-purple-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalCalls}</div>
-            <div className="text-xs text-[#5A4A2E]">Calls Made</div>
+            <div className="text-xs text-[#1A1A1A]/70">Calls Made</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-[#1A1A1A] text-center">
             <TrendingUp className="h-6 w-6 text-gold mx-auto mb-2" />
             <div className="text-2xl font-bold text-gold">{todayTotals.avgConversion}%</div>
-            <div className="text-xs text-[#5A4A2E]">Conversion Rate</div>
+            <div className="text-xs text-[#1A1A1A]/70">Conversion Rate</div>
           </div>
         </div>
 
         {/* Individual Broker Stats */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-[#5A4A2E]">Broker Performance</h4>
+          <h4 className="text-sm font-medium text-[#1A1A1A]/70">Broker Performance</h4>
           
           {stats.map((stat) => (
             <div
@@ -233,7 +233,7 @@ export function BrokerActivityMonitor() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-[#5A4A2E]">
+                <div className="flex items-center gap-2 text-[#1A1A1A]/70">
                   <Clock className="h-4 w-4" />
                   <span className="text-sm">Avg: {formatTime(stat.avgResponseTime)}</span>
                 </div>
@@ -242,26 +242,26 @@ export function BrokerActivityMonitor() {
               <div className="grid grid-cols-4 gap-4 text-center">
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.leadsContacted}</div>
-                  <div className="text-xs text-[#5A4A2E]">Leads</div>
+                  <div className="text-xs text-[#1A1A1A]/70">Leads</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.messagesSent}</div>
-                  <div className="text-xs text-[#5A4A2E]">Messages</div>
+                  <div className="text-xs text-[#1A1A1A]/70">Messages</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.callsMade}</div>
-                  <div className="text-xs text-[#5A4A2E]">Calls</div>
+                  <div className="text-xs text-[#1A1A1A]/70">Calls</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-gold">{stat.conversionRate}%</div>
-                  <div className="text-xs text-[#5A4A2E]">Conversion</div>
+                  <div className="text-xs text-[#1A1A1A]/70">Conversion</div>
                 </div>
               </div>
             </div>
           ))}
 
           {stats.length === 0 && (
-            <div className="text-center py-8 text-[#5A4A2E]">
+            <div className="text-center py-8 text-[#1A1A1A]/70">
               No active brokers found
             </div>
           )}

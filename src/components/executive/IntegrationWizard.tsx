@@ -213,14 +213,14 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">{config.title}</h2>
-                  <p className="text-[#5A4A2E] text-sm">Step {currentStep + 1} of {config.steps.length}</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Step {currentStep + 1} of {config.steps.length}</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="w-8 h-8 rounded-full bg-[#FDFBF7]/5 hover:bg-[#FDFBF7]/10 flex items-center justify-center transition-colors"
               >
-                <X className="w-4 h-4 text-[#5A4A2E]" />
+                <X className="w-4 h-4 text-[#1A1A1A]/70" />
               </button>
             </div>
 
@@ -251,14 +251,14 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                   <CheckCircle className="w-8 h-8 text-green-500" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Connected Successfully!</h3>
-                <p className="text-[#5A4A2E]">Your {config.title.toLowerCase()} is now active.</p>
+                <p className="text-[#1A1A1A]/70">Your {config.title.toLowerCase()} is now active.</p>
               </motion.div>
             ) : (
               <>
                 <h3 className="text-lg font-semibold text-white mb-2">
                   {config.steps[currentStep].title}
                 </h3>
-                <p className="text-[#5A4A2E] mb-6">
+                <p className="text-[#1A1A1A]/70 mb-6">
                   {config.steps[currentStep].description}
                 </p>
 
@@ -272,7 +272,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                         className={`w-full p-4 rounded-xl border transition-all flex items-center justify-between ${
                           selectedProvider === option
                             ? 'border-gold bg-gold/10 text-white'
-                            : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-[#5A4A2E]'
+                            : 'border-[#1A1A1A] hover:border-[#1A1A1A] text-[#1A1A1A]/70'
                         }`}
                       >
                         <span>{option}</span>
@@ -286,7 +286,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                   <div className="space-y-4">
                     <div className="p-4 rounded-xl bg-[#1A1A1A] border border-gold/20">
                       <h4 className="text-white font-medium mb-2">VAPI.ai Account</h4>
-                      <p className="text-[#5A4A2E] text-sm mb-4">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-4">
                         VAPI.ai provides AI-powered call handling for your business.
                       </p>
                       <a
@@ -317,20 +317,20 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                       <h4 className="text-white font-medium mb-2">UAE Call Forwarding</h4>
                       <div className="space-y-3 text-sm">
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
-                          <span className="text-[#5A4A2E]">Etisalat:</span>
+                          <span className="text-[#1A1A1A]/70">Etisalat:</span>
                           <div className="flex items-center gap-2">
                             <code className="text-gold">*100*+971565911000#</code>
                             <button onClick={() => copyToClipboard('*100*+971565911000#')}>
-                              <Copy className="w-4 h-4 text-[#5A4A2E] hover:text-gold" />
+                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-gold" />
                             </button>
                           </div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-[#1A1A1A]/30 rounded-lg">
-                          <span className="text-[#5A4A2E]">Du:</span>
+                          <span className="text-[#1A1A1A]/70">Du:</span>
                           <div className="flex items-center gap-2">
                             <code className="text-gold">**21*+971565911000#</code>
                             <button onClick={() => copyToClipboard('**21*+971565911000#')}>
-                              <Copy className="w-4 h-4 text-[#5A4A2E] hover:text-gold" />
+                              <Copy className="w-4 h-4 text-[#1A1A1A]/70 hover:text-gold" />
                             </button>
                           </div>
                         </div>
@@ -343,7 +343,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
                   <div className="space-y-4">
                     <div className="p-4 rounded-xl bg-[#1A1A1A] border border-gold/20">
                       <h4 className="text-white font-medium mb-2">Meta Business Suite</h4>
-                      <p className="text-[#5A4A2E] text-sm mb-4">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-4">
                         You'll need a verified Meta Business Account to use the WhatsApp Business API.
                       </p>
                       <a
@@ -371,7 +371,7 @@ const IntegrationWizard: React.FC<IntegrationWizardProps> = ({
               <Button
                 variant="ghost"
                 onClick={() => currentStep > 0 ? setCurrentStep(prev => prev - 1) : onClose()}
-                className="text-[#5A4A2E] hover:text-white"
+                className="text-[#1A1A1A]/70 hover:text-white"
               >
                 {currentStep > 0 ? 'Back' : 'Cancel'}
               </Button>

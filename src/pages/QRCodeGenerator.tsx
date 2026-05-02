@@ -78,7 +78,7 @@ const QRCodeGenerator = () => {
               <span className="text-[#1A1A1A] text-sm font-medium">QR Code Generator</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">QR Code Generator</h1>
-            <p className="text-[#5A4A2E]">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
+            <p className="text-[#1A1A1A]/70">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ const QRCodeGenerator = () => {
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {QR_TYPES.map(t => (
                     <button key={t.id} onClick={() => { setQrType(t.id); setQrData(""); }}
-                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#5A4A2E] border-gold/30 hover:bg-gold/10'}`}>
+                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]' : 'bg-[#FDFBF7] text-[#1A1A1A]/70 border-gold/30 hover:bg-gold/10'}`}>
                       <t.icon className="h-3.5 w-3.5" />{t.label}
                     </button>
                   ))}

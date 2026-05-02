@@ -245,7 +245,7 @@ const Automations = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-[#1A1A1A]">Smart Automations</h1>
-                <p className="text-xs text-[#5A4A2E]">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
+                <p className="text-xs text-[#1A1A1A]/70">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
@@ -274,7 +274,7 @@ const Automations = () => {
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
                         : 'bg-[#F7F2EA] border-[#B89555]/30'
                     }`}>
-                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'}`} />
+                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -285,16 +285,16 @@ const Automations = () => {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-[#5A4A2E] mt-0.5">{rule.description}</p>
+                      <p className="text-sm text-[#1A1A1A]/70 mt-0.5">{rule.description}</p>
                       <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-[#5A4A2E]">
+                        <span className="text-xs text-[#1A1A1A]/70">
                           <strong className="text-[#1A1A1A]">Trigger:</strong> {rule.trigger}
                         </span>
-                        <span className="text-xs text-[#5A4A2E]">
+                        <span className="text-xs text-[#1A1A1A]/70">
                           <strong className="text-[#1A1A1A]">Action:</strong> {rule.action}
                         </span>
                         {rule.frequency && (
-                          <span className="text-xs text-[#5A4A2E]">
+                          <span className="text-xs text-[#1A1A1A]/70">
                             <strong className="text-[#1A1A1A]">Frequency:</strong> {rule.frequency}
                           </span>
                         )}
@@ -305,7 +305,7 @@ const Automations = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-[#5A4A2E] hover:text-gold hover:bg-gold/10"
+                      className="text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10"
                       onClick={() => toast.info(`Settings for "${rule.name}" - Configuration panel coming soon`)}
                     >
                       <Settings className="h-4 w-4" />
@@ -330,7 +330,7 @@ const Automations = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-[#1A1A1A]">About Smart Automations</h3>
-                <p className="text-sm text-[#5A4A2E] mt-1">
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">
                   Automations run in the background to help Jane Bou Jaoude work more efficiently. 
                   All automation triggers are approval-based by default. 
                   AI may suggest workflows but will NOT auto-activate without explicit Owner approval.

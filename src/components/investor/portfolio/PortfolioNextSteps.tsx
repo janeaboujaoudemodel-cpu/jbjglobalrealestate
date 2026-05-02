@@ -40,7 +40,7 @@ export default function PortfolioNextSteps() {
     <section className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <Lightbulb className="w-5 h-5 text-[#5A4A2E]" />
+          <Lightbulb className="w-5 h-5 text-[#1A1A1A]/70" />
           Next Step Recommendations
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
@@ -54,7 +54,7 @@ export default function PortfolioNextSteps() {
             <CardContent className="p-5">
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-10 h-10 bg-[#F7F2EA] rounded-lg flex items-center justify-center flex-shrink-0">
-                  <step.icon className="w-5 h-5 text-[#5A4A2E]" />
+                  <step.icon className="w-5 h-5 text-[#1A1A1A]/70" />
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground mb-1">{step.title}</h3>

@@ -188,7 +188,7 @@ export default function Studio() {
             </div>
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-[#1A1A1A] leading-none tracking-tight">Creative Suite™</p>
-              <p className="text-[10px] mt-0.5 leading-none text-[#5A4A2E]">JBJ Global Real Estate</p>
+              <p className="text-[10px] mt-0.5 leading-none text-[#1A1A1A]/70">JBJ Global Real Estate</p>
             </div>
           </Link>
 
@@ -198,11 +198,11 @@ export default function Studio() {
               <Home className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Projects</span>
             </Link>
-            <Link to="/studio/settings" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-[#5A4A2E] hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-all">
+            <Link to="/studio/settings" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-[#1A1A1A]/70 hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-all">
               <Settings className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
-            <Link to="/toolkit" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-[#5A4A2E] hover:bg-gold/10 transition-all">
+            <Link to="/toolkit" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-[#1A1A1A]/70 hover:bg-gold/10 transition-all">
               <Zap className="w-3.5 h-3.5" />
               <span className="hidden md:inline">AI Tools Hub</span>
             </Link>
@@ -223,7 +223,7 @@ export default function Studio() {
             <h1 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] leading-tight">
               Your <span className="text-gold">Projects</span>
             </h1>
-            <p className="mt-1.5 text-sm text-[#5A4A2E]">Create and manage your creative projects</p>
+            <p className="mt-1.5 text-sm text-[#1A1A1A]/70">Create and manage your creative projects</p>
           </div>
 
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -241,17 +241,17 @@ export default function Studio() {
               </DialogHeader>
               <div className="space-y-5 pt-2">
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-[#5A4A2E]">Project Name</label>
+                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-[#1A1A1A]/70">Project Name</label>
                   <input
                     value={newProjectName}
                     onChange={(e) => setNewProjectName(e.target.value)}
                     placeholder="My New Project..."
-                    className="w-full px-4 py-3 rounded-xl text-[#1A1A1A] text-sm placeholder:text-[#5A4A2E] outline-none transition-all bg-[#FDFBF7]/60 border border-gold/20 focus:border-gold/50"
+                    className="w-full px-4 py-3 rounded-xl text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 outline-none transition-all bg-[#FDFBF7]/60 border border-gold/20 focus:border-gold/50"
                     onKeyDown={(e) => e.key === "Enter" && handleCreate()}
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-[#5A4A2E]">Project Type</label>
+                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-[#1A1A1A]/70">Project Type</label>
                   <div className="grid grid-cols-2 gap-2">
                     {projectTypes.map((type) => {
                       const Icon = type.icon;
@@ -263,7 +263,7 @@ export default function Studio() {
                               ? "bg-gold/15 border-gold/50 shadow-[0_0_16px_rgba(201,168,76,0.15)]"
                               : "bg-[#FDFBF7]/30 border-gold/10 hover:border-gold/30"
                           }`}>
-                          <Icon className={`w-5 h-5 mb-2 ${isActive ? "text-gold" : "text-[#5A4A2E]"}`} />
+                          <Icon className={`w-5 h-5 mb-2 ${isActive ? "text-gold" : "text-[#1A1A1A]/70"}`} />
                           <p className="text-xs text-[#1A1A1A] font-medium leading-snug">{type.label}</p>
                         </button>
                       );
@@ -286,7 +286,7 @@ export default function Studio() {
               <Sparkles className="w-3.5 h-3.5 text-gold" />
               <span className="text-xs font-semibold uppercase tracking-wider text-gold">Creative Suites — Click to Open</span>
             </div>
-            <Link to="/toolkit" className="flex items-center gap-1 text-xs text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors">
+            <Link to="/toolkit" className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">
               All tools <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -302,7 +302,7 @@ export default function Studio() {
                   </div>
                   <div className="flex-1">
                     <p className="text-[#1A1A1A] font-semibold text-sm mb-0.5">{suite.label}</p>
-                    <p className="text-[11px] leading-snug text-[#5A4A2E]">{suite.desc}</p>
+                    <p className="text-[11px] leading-snug text-[#1A1A1A]/70">{suite.desc}</p>
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-semibold text-gold transition-colors">
                     Open Suite <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -330,8 +330,8 @@ export default function Studio() {
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-gold/15 border border-gold/30">
                       <Icon className="w-4 h-4 text-gold" />
                     </div>
-                    <span className="text-xs text-[#5A4A2E] group-hover:text-[#1A1A1A] transition-colors font-medium leading-snug flex-1">{tool.label}</span>
-                    <ChevronRight className="w-3 h-3 shrink-0 text-[#5A4A2E]" />
+                    <span className="text-xs text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] transition-colors font-medium leading-snug flex-1">{tool.label}</span>
+                    <ChevronRight className="w-3 h-3 shrink-0 text-[#1A1A1A]/70" />
                   </Link>
                 );
               })}
@@ -348,18 +348,18 @@ export default function Studio() {
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <div className="relative flex-1 sm:flex-none">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#5A4A2E]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#1A1A1A]/70" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search..."
-                  className="w-full sm:w-48 pl-9 pr-3 py-2 rounded-xl text-sm text-[#1A1A1A] placeholder:text-[#5A4A2E] outline-none transition-all bg-[#FDFBF7]/60 border border-gold/20 focus:border-gold/50"
+                  className="w-full sm:w-48 pl-9 pr-3 py-2 rounded-xl text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 outline-none transition-all bg-[#FDFBF7]/60 border border-gold/20 focus:border-gold/50"
                 />
               </div>
               <div className="flex items-center gap-0.5 p-1 rounded-lg bg-[#FDFBF7]/40 border border-gold/15">
                 {(["grid", "list"] as const).map((mode) => (
                   <button key={mode} onClick={() => setViewMode(mode)}
-                    className={`p-1.5 rounded-md transition-colors ${viewMode === mode ? "bg-gold/20 text-gold" : "text-[#5A4A2E]"}`}>
+                    className={`p-1.5 rounded-md transition-colors ${viewMode === mode ? "bg-gold/20 text-gold" : "text-[#1A1A1A]/70"}`}>
                     {mode === "grid" ? <Grid className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
                   </button>
                 ))}
@@ -370,7 +370,7 @@ export default function Studio() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <Loader2 className="w-8 h-8 animate-spin text-gold" />
-              <p className="text-sm text-[#5A4A2E]">Loading projects...</p>
+              <p className="text-sm text-[#1A1A1A]/70">Loading projects...</p>
             </div>
           ) : filteredProjects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl bg-[#FDFBF7]/40 border border-gold/20">
@@ -378,7 +378,7 @@ export default function Studio() {
                 <FolderOpen className="w-8 h-8 text-[#8A7556]" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No projects yet</h3>
-              <p className="mb-5 text-sm max-w-xs text-[#5A4A2E]">
+              <p className="mb-5 text-sm max-w-xs text-[#1A1A1A]/70">
                 Create your first project or use the Creative Suites above to get started
               </p>
               <Button className="font-semibold px-6 rounded-xl text-[#1A1A1A] h-10 bg-gold hover:bg-gold/90 border-0 shadow-[0_4px_16px_rgba(201,168,76,0.25)]"
@@ -397,7 +397,7 @@ export default function Studio() {
                     </div>
                     <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
                       <p className="text-[#1A1A1A] font-medium truncate text-sm">{project.name}</p>
-                      <p className="text-xs mt-0.5 text-[#5A4A2E]">{project.project_type} · {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
+                      <p className="text-xs mt-0.5 text-[#1A1A1A]/70">{project.project_type} · {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
                     </Link>
                     <ProjectMenu projectId={project.id} onRename={() => toast.info("Rename coming soon")} onDuplicate={() => handleDuplicate(project.id)} onShare={() => handleShare(project.id)} onDelete={() => handleDelete(project.id)} />
                   </div>
@@ -417,7 +417,7 @@ export default function Studio() {
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gold/10 border border-gold/25">
-                              <Icon className="w-7 h-7 text-[#5A4A2E]" />
+                              <Icon className="w-7 h-7 text-[#1A1A1A]/70" />
                             </div>
                           </div>
                         )}
@@ -436,7 +436,7 @@ export default function Studio() {
                     <div className="p-3.5 flex items-start justify-between gap-2">
                       <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
                         <h3 className="text-[#1A1A1A] font-semibold truncate text-sm">{project.name}</h3>
-                        <p className="text-xs mt-0.5 text-[#5A4A2E]">{formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
+                        <p className="text-xs mt-0.5 text-[#1A1A1A]/70">{formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
                       </Link>
                       <ProjectMenu projectId={project.id} onRename={() => toast.info("Rename coming soon")} onDuplicate={() => handleDuplicate(project.id)} onShare={() => handleShare(project.id)} onDelete={() => handleDelete(project.id)} />
                     </div>
@@ -451,10 +451,10 @@ export default function Studio() {
       {/* ─── Footer ─── */}
       <footer className="mt-12 border-t border-gold/20">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#5A4A2E]">JBJ Creative Suite™ — Free for all users</p>
+          <p className="text-xs text-[#1A1A1A]/70">JBJ Creative Suite™ — Free for all users</p>
           <div className="flex items-center gap-4">
-            <Link to="/toolkit" className="text-xs text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors">AI Tools Hub</Link>
-            <Link to="/studio/settings" className="text-xs text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors">Settings</Link>
+            <Link to="/toolkit" className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">AI Tools Hub</Link>
+            <Link to="/studio/settings" className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">Settings</Link>
           </div>
         </div>
       </footer>
@@ -467,13 +467,13 @@ function ProjectMenu({ projectId, onRename, onDuplicate, onShare, onDelete }: {
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-[#5A4A2E] hover:bg-gold/10">
+      <DropdownMenuTrigger className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-[#1A1A1A]/70 hover:bg-gold/10">
         <MoreVertical className="w-4 h-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="border border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
-        <DropdownMenuItem onClick={onRename} className="text-[#5A4A2E] focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Pencil className="w-3.5 h-3.5 mr-2" />Rename</DropdownMenuItem>
-        <DropdownMenuItem onClick={onDuplicate} className="text-[#5A4A2E] focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Copy className="w-3.5 h-3.5 mr-2" />Duplicate</DropdownMenuItem>
-        <DropdownMenuItem onClick={onShare} className="text-[#5A4A2E] focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Share2 className="w-3.5 h-3.5 mr-2" />Share</DropdownMenuItem>
+        <DropdownMenuItem onClick={onRename} className="text-[#1A1A1A]/70 focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Pencil className="w-3.5 h-3.5 mr-2" />Rename</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDuplicate} className="text-[#1A1A1A]/70 focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Copy className="w-3.5 h-3.5 mr-2" />Duplicate</DropdownMenuItem>
+        <DropdownMenuItem onClick={onShare} className="text-[#1A1A1A]/70 focus:text-[#1A1A1A] focus:bg-gold/10 text-xs"><Share2 className="w-3.5 h-3.5 mr-2" />Share</DropdownMenuItem>
         <DropdownMenuSeparator className="bg-gold/20" />
         <DropdownMenuItem onClick={onDelete} className="text-red-600 focus:text-red-700 focus:bg-red-50 text-xs"><Trash2 className="w-3.5 h-3.5 mr-2" />Delete</DropdownMenuItem>
       </DropdownMenuContent>

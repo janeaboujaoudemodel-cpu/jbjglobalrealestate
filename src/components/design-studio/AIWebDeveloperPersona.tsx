@@ -196,7 +196,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                   AI Web Developer
                 </Badge>
               </div>
-              <p className="text-[#5A4A2E] mb-4">
+              <p className="text-[#1A1A1A]/70 mb-4">
                 Full-stack web development specialist with expertise in modern frameworks, 
                 responsive design, and performance optimization. Works exclusively under 
                 Owner/Assistant approval with full version control.
@@ -215,7 +215,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
               {/* Languages */}
               <div className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-gold" />
-                <span className="text-sm text-[#5A4A2E]">
+                <span className="text-sm text-[#1A1A1A]/70">
                   {LANGUAGES.join(' • ')}
                 </span>
               </div>
@@ -227,7 +227,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-sm text-green-600 font-medium">Online</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+              <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                 <Lock className="w-3 h-3" />
                 Approval-Only Mode
               </div>
@@ -243,7 +243,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
               <FileCode className="w-5 h-5 text-gold" />
               Development Tasks
-              <Badge className="ml-auto bg-[#F7F2EA] text-[#5A4A2E]">
+              <Badge className="ml-auto bg-[#F7F2EA] text-[#1A1A1A]/70">
                 {tasks.filter(t => t.status !== 'completed').length} Active
               </Badge>
             </CardTitle>
@@ -264,9 +264,9 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                         <h4 className="font-medium text-[#1A1A1A]">{task.title}</h4>
                         {getStatusBadge(task.status)}
                       </div>
-                      <p className="text-sm text-[#5A4A2E] mb-3">{task.description}</p>
+                      <p className="text-sm text-[#1A1A1A]/70 mb-3">{task.description}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-[#5A4A2E]">
+                        <span className="text-xs text-[#1A1A1A]/70">
                           Assigned by: {task.assignedBy === 'owner' ? 'Founder' : 'Assistant'}
                         </span>
                         
@@ -309,7 +309,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             {/* Assign New Task */}
             {canAssignTasks && (
               <div className="mt-4 pt-4 border-t border-[#B89555]/30">
-                <Label className="text-sm text-[#5A4A2E] mb-2 block">Assign New Task</Label>
+                <Label className="text-sm text-[#1A1A1A]/70 mb-2 block">Assign New Task</Label>
                 <div className="flex gap-2">
                   <Textarea
                     value={newTaskDescription}
@@ -337,7 +337,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <CardTitle className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
               <GitBranch className="w-5 h-5 text-gold" />
               Version History
-              <Badge className="ml-auto bg-[#F7F2EA] text-[#5A4A2E]">
+              <Badge className="ml-auto bg-[#F7F2EA] text-[#1A1A1A]/70">
                 {versions.length} Versions
               </Badge>
             </CardTitle>
@@ -361,11 +361,11 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                           <Badge className="bg-green-500/20 text-green-600">Current</Badge>
                         )}
                       </div>
-                      <span className="text-xs text-[#5A4A2E]">
+                      <span className="text-xs text-[#1A1A1A]/70">
                         {version.date.toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-sm text-[#5A4A2E] mb-3">{version.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70 mb-3">{version.description}</p>
                     {index > 0 && isOwner && (
                       <Button 
                         size="sm" 
@@ -406,7 +406,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <Layers className="w-5 h-5 text-gold" />
             Connected AI Tools
           </CardTitle>
-          <p className="text-sm text-[#5A4A2E]">
+          <p className="text-sm text-[#1A1A1A]/70">
             Marcus works collaboratively with all creative and content tools
           </p>
         </CardHeader>

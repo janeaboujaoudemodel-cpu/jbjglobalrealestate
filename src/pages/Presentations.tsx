@@ -118,7 +118,7 @@ const Presentations = () => {
         <div className="flex items-center gap-3">
           <Link to="/ai-hub" className="p-1.5 hover:bg-[#1A1A1A] rounded-lg transition-colors"><ArrowLeft className="w-4 h-4 text-white/70" /></Link>
           <Presentation className="w-5 h-5 text-[#B89555]" />
-          <input value={h.presentationTitle} onChange={(e) => h.setPresentationTitle(e.target.value)} className="bg-transparent border-none text-base font-semibold text-white w-56 focus:outline-none focus:ring-0 placeholder:text-[#5A4A2E]" />
+          <input value={h.presentationTitle} onChange={(e) => h.setPresentationTitle(e.target.value)} className="bg-transparent border-none text-base font-semibold text-white w-56 focus:outline-none focus:ring-0 placeholder:text-[#1A1A1A]/70" />
         </div>
         <div className="flex items-center gap-1.5">
           <button onClick={() => h.setShowGrid(!h.showGrid)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/85 hover:text-white hover:bg-[#1A1A1A] rounded-lg transition-all"><LayoutGrid className="w-3.5 h-3.5" /> Grid</button>

@@ -206,7 +206,7 @@ const CVManagementCenter = () => {
       rejected: 'Rejected',
       hired: 'Hired',
     };
-    return <Badge className={styles[status] || 'bg-[#F7F2EA] text-[#5A4A2E]'}>{labels[status] || status}</Badge>;
+    return <Badge className={styles[status] || 'bg-[#F7F2EA] text-[#1A1A1A]/70'}>{labels[status] || status}</Badge>;
   };
 
   const getCategoryBadge = (category: string) => {
@@ -399,23 +399,23 @@ const CVManagementCenter = () => {
                   {/* Details Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                     <div>
-                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Email</p>
+                      <p className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide font-medium mb-1">Email</p>
                       <p className="text-white font-medium">{cv.email}</p>
                     </div>
                     <div>
-                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
+                      <p className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
                       <p className="text-white font-medium">{cv.phone || '—'}</p>
                     </div>
                     <div>
-                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
+                      <p className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
                       <p className="text-white font-medium">{cv.experience}</p>
                     </div>
                     <div>
-                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Education</p>
+                      <p className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide font-medium mb-1">Education</p>
                       <p className="text-white font-medium">{cv.education}</p>
                     </div>
                     <div>
-                      <p className="text-[#5A4A2E] text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
+                      <p className="text-[#1A1A1A]/70 text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
                       <p className="text-white font-medium">{cv.uploadDate}</p>
                     </div>
                   </div>
@@ -430,12 +430,12 @@ const CVManagementCenter = () => {
                       Ranking: {cv.ranking}/10
                     </Badge>
                     {cv.languages && cv.languages.length > 0 && (
-                      <Badge variant="outline" className="text-[#5A4A2E] border-[#1A1A1A]">
+                      <Badge variant="outline" className="text-[#1A1A1A]/70 border-[#1A1A1A]">
                         Languages: {cv.languages.join(', ')}
                       </Badge>
                     )}
                     {cv.gender && (
-                      <Badge variant="outline" className="text-[#5A4A2E] border-[#1A1A1A] capitalize">
+                      <Badge variant="outline" className="text-[#1A1A1A]/70 border-[#1A1A1A] capitalize">
                         <User className="h-3 w-3 mr-1" />
                         {cv.gender}
                       </Badge>

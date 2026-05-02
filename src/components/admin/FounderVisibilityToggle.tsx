@@ -82,7 +82,7 @@ export const FounderVisibilityToggle = () => {
             </div>
             <div>
               <CardTitle className="text-[#1A1A1A] text-lg">Founder Visibility Control</CardTitle>
-              <CardDescription className="text-[#5A4A2E]">
+              <CardDescription className="text-[#1A1A1A]/70">
                 Global toggle for all founder-related content
               </CardDescription>
             </div>
@@ -101,7 +101,7 @@ export const FounderVisibilityToggle = () => {
                 <p className="font-medium text-[#1A1A1A]">
                   {isFounderVisible ? "Founder Content Visible" : "Founder Content Hidden"}
                 </p>
-                <p className="text-sm text-[#5A4A2E]">
+                <p className="text-sm text-[#1A1A1A]/70">
                   {isFounderVisible 
                     ? "All founder references, images, and names are displayed" 
                     : "Founder content is hidden across the entire website"
@@ -173,7 +173,7 @@ export const FounderVisibilityToggle = () => {
                 </>
               )}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[#5A4A2E]">
+            <AlertDialogDescription className="text-[#1A1A1A]/70">
               {pendingValue ? (
                 <>
                   This will <strong>restore all founder-related content</strong> across the entire website, including:

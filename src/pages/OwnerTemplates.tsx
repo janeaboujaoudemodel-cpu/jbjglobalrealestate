@@ -236,7 +236,7 @@ export default function OwnerTemplates() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Message Templates</h1>
-                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
                 </div>
               </div>
               
@@ -378,7 +378,7 @@ export default function OwnerTemplates() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
               <Input
                 placeholder="Search templates..."
                 value={searchQuery}
@@ -425,8 +425,8 @@ export default function OwnerTemplates() {
             <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
               <CardContent className="p-12 text-center">
                 <FileText className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
-                <p className="text-[#5A4A2E] font-medium">No templates found</p>
-                <p className="text-[#5A4A2E] text-sm mt-1">Create your first template to get started</p>
+                <p className="text-[#1A1A1A]/70 font-medium">No templates found</p>
+                <p className="text-[#1A1A1A]/70 text-sm mt-1">Create your first template to get started</p>
               </CardContent>
             </Card>
           ) : (
@@ -482,11 +482,11 @@ export default function OwnerTemplates() {
                           </div>
                         </div>
 
-                        <p className="text-sm text-[#5A4A2E] line-clamp-3 mb-3">
+                        <p className="text-sm text-[#1A1A1A]/70 line-clamp-3 mb-3">
                           {template.content}
                         </p>
 
-                        <div className="flex items-center justify-between text-xs text-[#5A4A2E]">
+                        <div className="flex items-center justify-between text-xs text-[#1A1A1A]/70">
                           <div className="flex gap-1">
                             {template.channel_types.includes('whatsapp') && <MessageSquare className="h-3 w-3" />}
                             {(template.channel_types.includes('email') || template.channel_types.includes('email_gmail')) && <Mail className="h-3 w-3" />}
@@ -505,7 +505,7 @@ export default function OwnerTemplates() {
             </TabsContent>
 
             <TabsContent value="ingestion">
-              <Suspense fallback={<div className="text-sm text-[#5A4A2E]">Loading Media Ingestion…</div>}>
+              <Suspense fallback={<div className="text-sm text-[#1A1A1A]/70">Loading Media Ingestion…</div>}>
                 <MediaIngestionHub embedded />
               </Suspense>
             </TabsContent>

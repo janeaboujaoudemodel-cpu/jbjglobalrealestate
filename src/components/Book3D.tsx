@@ -193,7 +193,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                 >
                   JBJ
                 </span>
-                <span className="text-[#5A4A2E] text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
+                <span className="text-[#1A1A1A]/70 text-[7px] md:text-[8px] tracking-[0.3em] uppercase block mt-1">
                   Global Real Estate
                 </span>
               </div>
@@ -303,7 +303,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
           {/* Back cover minimal design */}
           <div className="absolute inset-0 border border-gold/20 rounded-l-md" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[#5A4A2E] text-xs uppercase tracking-[0.2em]">
+            <span className="text-[#1A1A1A]/70 text-xs uppercase tracking-[0.2em]">
               JBJ Global
             </span>
           </div>

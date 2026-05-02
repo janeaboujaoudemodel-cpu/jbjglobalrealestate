@@ -149,7 +149,7 @@ export function ComparisonPDFTemplate({
               </div>
               <div>
                 <CardTitle className="text-white">Property Comparison PDF</CardTitle>
-                <p className="text-[#5A4A2E] text-sm mt-1">
+                <p className="text-[#1A1A1A]/70 text-sm mt-1">
                   Generate branded comparison documents
                 </p>
               </div>
@@ -163,7 +163,7 @@ export function ComparisonPDFTemplate({
           {/* Selected Properties */}
           {selectedProperties.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-[#5A4A2E]">Selected Properties</h4>
+              <h4 className="text-sm font-medium text-[#1A1A1A]/70">Selected Properties</h4>
               <div className="grid grid-cols-2 gap-2">
                 {selectedProperties.map((property) => (
                   <div
@@ -177,7 +177,7 @@ export function ComparisonPDFTemplate({
                       <X className="h-3 w-3" />
                     </button>
                     <p className="text-white font-medium text-sm truncate">{property.name}</p>
-                    <p className="text-[#5A4A2E] text-xs">{property.location}</p>
+                    <p className="text-[#1A1A1A]/70 text-xs">{property.location}</p>
                     <p className="text-price-orange text-sm font-medium mt-1">{property.price}</p>
                   </div>
                 ))}
@@ -187,7 +187,7 @@ export function ComparisonPDFTemplate({
 
           {/* Available Properties */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-[#5A4A2E]">Add Properties</h4>
+            <h4 className="text-sm font-medium text-[#1A1A1A]/70">Add Properties</h4>
             <div className="space-y-2 max-h-48 overflow-y-auto">
               {availableProperties.map((property) => (
                 <div
@@ -195,10 +195,10 @@ export function ComparisonPDFTemplate({
                   className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-[#1A1A1A]/50 hover:bg-[#1A1A1A] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <Building2 className="h-4 w-4 text-[#5A4A2E]" />
+                    <Building2 className="h-4 w-4 text-[#1A1A1A]/70" />
                     <div>
                       <p className="text-white text-sm">{property.name}</p>
-                      <p className="text-[#5A4A2E] text-xs">{property.location} • {property.bedrooms}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs">{property.location} • {property.bedrooms}</p>
                     </div>
                   </div>
                   <Button
@@ -249,13 +249,13 @@ export function ComparisonPDFTemplate({
           
           <div className="space-y-4">
             <div className="p-3 rounded-lg bg-zinc-800 border border-[#1A1A1A]">
-              <p className="text-sm text-[#5A4A2E]">Sending to:</p>
+              <p className="text-sm text-[#1A1A1A]/70">Sending to:</p>
               <p className="text-white font-medium">{leadName || "Lead"}</p>
-              <p className="text-[#5A4A2E] text-sm">{leadEmail}</p>
+              <p className="text-[#1A1A1A]/70 text-sm">{leadEmail}</p>
             </div>
             
             <div>
-              <label className="text-sm text-[#5A4A2E] mb-2 block">Subject</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Subject</label>
               <Input
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
@@ -264,7 +264,7 @@ export function ComparisonPDFTemplate({
             </div>
             
             <div>
-              <label className="text-sm text-[#5A4A2E] mb-2 block">Personal Message (Optional)</label>
+              <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Personal Message (Optional)</label>
               <Textarea
                 value={emailMessage}
                 onChange={(e) => setEmailMessage(e.target.value)}
@@ -279,7 +279,7 @@ export function ComparisonPDFTemplate({
               </p>
               <ul className="mt-2 space-y-1">
                 {selectedProperties.map((p) => (
-                  <li key={p.id} className="text-xs text-[#5A4A2E]">• {p.name}</li>
+                  <li key={p.id} className="text-xs text-[#1A1A1A]/70">• {p.name}</li>
                 ))}
               </ul>
             </div>
@@ -289,7 +289,7 @@ export function ComparisonPDFTemplate({
             <Button
               variant="outline"
               onClick={() => setSendDialogOpen(false)}
-              className="border-[#1A1A1A] text-[#5A4A2E]"
+              className="border-[#1A1A1A] text-[#1A1A1A]/70"
             >
               Cancel
             </Button>

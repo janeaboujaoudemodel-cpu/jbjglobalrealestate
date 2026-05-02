@@ -474,7 +474,7 @@ const Compare = () => {
     return (
       <span className="text-gold">
         {"★".repeat(rating)}
-        <span className="text-[#5A4A2E]">{"☆".repeat(5 - rating)}</span>
+        <span className="text-[#1A1A1A]/70">{"☆".repeat(5 - rating)}</span>
       </span>
     );
   };
@@ -779,7 +779,7 @@ const Compare = () => {
                                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
                                   badge === 'top1' ? 'bg-gold/20 text-gold' :
                                   badge === 'top2' ? 'bg-gold/15 text-[#1A1A1A]' :
-                                  'bg-gold/10 text-[#5A4A2E]'
+                                  'bg-gold/10 text-[#1A1A1A]/70'
                                 }`}>
                                   {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                                 </span>
@@ -1002,7 +1002,7 @@ const Compare = () => {
                 <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-gold via-[#ECE2D2] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
                 </div>
-                <p className="text-[#5A4A2E] text-xs mt-3">This may take 15-30 seconds</p>
+                <p className="text-[#1A1A1A]/70 text-xs mt-3">This may take 15-30 seconds</p>
               </div>
             </div>
           ) : (
@@ -1040,7 +1040,7 @@ const Compare = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-[#5A4A2E] text-sm">Speak with our property consultants</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Speak with our property consultants</p>
               </div>
             </div>
 
@@ -1145,7 +1145,7 @@ const Compare = () => {
         </div>{/* end border wrapper */}
 
         {/* Footer Branding */}
-        <div className="text-center text-[#5A4A2E] text-sm py-6">
+        <div className="text-center text-[#1A1A1A]/70 text-sm py-6">
           Powered & Made by <span className="text-gold">JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
         <LegalDisclaimer variant="compact" className="pb-4" />

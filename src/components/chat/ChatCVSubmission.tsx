@@ -191,7 +191,7 @@ const ChatCVSubmission = ({
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>CV Submitted Successfully!</T>
         </h4>
-        <p className="text-[#5A4A2E] text-sm">
+        <p className="text-[#1A1A1A]/70 text-sm">
           <T>Thank you for your interest in joining JBJ Global. Our HR team will review your application and contact you soon.</T>
         </p>
       </div>
@@ -215,7 +215,7 @@ const ChatCVSubmission = ({
           <FileText className="w-7 h-7 text-blue-500" />
         </div>
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-1"><T>Submit Your CV</T></h4>
-        <p className="text-[#5A4A2E] text-sm"><T>Join our growing team at JBJ Global</T></p>
+        <p className="text-[#1A1A1A]/70 text-sm"><T>Join our growing team at JBJ Global</T></p>
       </div>
 
       <div className="space-y-3">
@@ -229,7 +229,7 @@ const ChatCVSubmission = ({
               placeholder="First"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5">{formErrors.firstName}</p>}
           </div>
@@ -241,7 +241,7 @@ const ChatCVSubmission = ({
               placeholder="Last"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5">{formErrors.lastName}</p>}
           </div>
@@ -257,7 +257,7 @@ const ChatCVSubmission = ({
             placeholder="your@email.com"
             inputMode="email"
             autoComplete="off"
-            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5">{formErrors.email}</p>}
         </div>
@@ -272,7 +272,7 @@ const ChatCVSubmission = ({
             placeholder="+971 50 123 4567"
             inputMode="tel"
             autoComplete="off"
-            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`w-full bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5">{formErrors.phone}</p>}
         </div>
@@ -307,7 +307,7 @@ const ChatCVSubmission = ({
               <>
                 <Upload className="w-6 h-6 text-gold" />
                 <span className="text-[#1A1A1A] text-sm font-medium"><T>Click to upload</T></span>
-                <span className="text-[#5A4A2E] text-xs">PDF or Word (max 5MB)</span>
+                <span className="text-[#1A1A1A]/70 text-xs">PDF or Word (max 5MB)</span>
               </>
             )}
           </button>
@@ -339,7 +339,7 @@ const ChatCVSubmission = ({
           )}
         </Button>
 
-        <p className="text-center text-[#5A4A2E] text-xs">
+        <p className="text-center text-[#1A1A1A]/70 text-xs">
           <T>Your information will be securely stored and reviewed by our HR team</T>
         </p>
       </div>

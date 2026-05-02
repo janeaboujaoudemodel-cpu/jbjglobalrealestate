@@ -81,7 +81,7 @@ const ALL_CATEGORIES = ['All', 'Communication', 'Lead & Sales', 'Property Intell
 const statusConfig = {
   connected: { label: 'Connected', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   available: { label: 'Available', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
-  coming_soon: { label: 'Coming Soon', color: 'bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30', icon: <AlertCircle className="w-3 h-3" /> },
+  coming_soon: { label: 'Coming Soon', color: 'bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30', icon: <AlertCircle className="w-3 h-3" /> },
 };
 
 const FoundersAIToolsPanel: React.FC = () => {
@@ -176,7 +176,7 @@ const FoundersAIToolsPanel: React.FC = () => {
       <Card className={`bg-[#FDFBF7] border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all h-full ${executingTool === tool.id ? 'ring-2 ring-[#B89555]/50' : ''}`}>
         <CardContent className="p-4 flex flex-col h-full">
           <div className="flex items-start justify-between mb-3">
-            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30'}`}>
+            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30'}`}>
               {tool.icon}
             </div>
             <Badge className={`${statusConfig[tool.status].color} border`}>
@@ -185,16 +185,16 @@ const FoundersAIToolsPanel: React.FC = () => {
             </Badge>
           </div>
           <h4 className="text-[#1A1A1A] font-semibold mb-1">{tool.name}</h4>
-          <p className="text-sm text-[#5A4A2E] flex-1">{tool.description}</p>
+          <p className="text-sm text-[#1A1A1A]/70 flex-1">{tool.description}</p>
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#B89555]/10">
-            <span className="text-xs text-[#5A4A2E]">{tool.category}</span>
+            <span className="text-xs text-[#1A1A1A]/70">{tool.category}</span>
             <Button
               size="sm"
               onClick={() => handleUseTool(tool)}
               disabled={tool.status === 'coming_soon' || executingTool === tool.id}
               className={tool.status === 'connected'
                 ? 'bg-[#FDFBF7] text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
-                : 'bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30'
+                : 'bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30'
               }
             >
               {executingTool === tool.id ? (
@@ -221,7 +221,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-[#B89555]">{connectedCount}</p>
-                <p className="text-xs text-[#5A4A2E]">Tools Connected</p>
+                <p className="text-xs text-[#1A1A1A]/70">Tools Connected</p>
               </div>
             </div>
           </CardContent>
@@ -234,7 +234,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-green-600">{usageStats.totalExecutions}</p>
-                <p className="text-xs text-[#5A4A2E]">Total Executions</p>
+                <p className="text-xs text-[#1A1A1A]/70">Total Executions</p>
               </div>
             </div>
           </CardContent>
@@ -247,7 +247,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-blue-600">{usageStats.totalExecutions > 0 ? `${usageStats.avgSuccessRate}%` : '--'}</p>
-                <p className="text-xs text-[#5A4A2E]">Avg Success Rate</p>
+                <p className="text-xs text-[#1A1A1A]/70">Avg Success Rate</p>
               </div>
             </div>
           </CardContent>
@@ -312,7 +312,7 @@ const FoundersAIToolsPanel: React.FC = () => {
           <div className="space-y-6">
             {Object.entries(groupedTools).map(([category, tools]) => (
               <div key={category}>
-                <h4 className="text-sm font-semibold text-[#5A4A2E] uppercase tracking-wider mb-3">{category}</h4>
+                <h4 className="text-sm font-semibold text-[#1A1A1A]/70 uppercase tracking-wider mb-3">{category}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tools.map((tool, index) => renderToolCard(tool, index))}
                 </div>

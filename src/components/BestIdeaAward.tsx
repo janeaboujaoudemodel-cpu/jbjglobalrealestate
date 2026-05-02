@@ -152,7 +152,7 @@ const BestIdeaAward = () => {
                     </div>
                   </div>
                   
-                  <p className="text-[#5A4A2E] text-sm mb-4 leading-relaxed">
+                  <p className="text-[#1A1A1A]/70 text-sm mb-4 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
@@ -257,28 +257,28 @@ const BestIdeaAward = () => {
                           
                           {!formData.isAnonymous && (
                             <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
-                              <p className="text-sm text-[#5A4A2E] mb-2">Your Draw Ticket Number</p>
+                              <p className="text-sm text-[#1A1A1A]/70 mb-2">Your Draw Ticket Number</p>
                               <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
-                              <p className="text-xs text-[#5A4A2E]">This ticket is linked to your account</p>
+                              <p className="text-xs text-[#1A1A1A]/70">This ticket is linked to your account</p>
                             </div>
                           )}
 
                           <div className="bg-[#F7F2EA] rounded-xl p-5 mb-5 text-left">
-                            <p className="text-[#5A4A2E] mb-3">
+                            <p className="text-[#1A1A1A]/70 mb-3">
                               <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
                             </p>
                             {!formData.isAnonymous ? (
                               <>
-                                <p className="text-[#5A4A2E] text-sm mb-2">
+                                <p className="text-[#1A1A1A]/70 text-sm mb-2">
                                   Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
                                 </p>
-                                <p className="text-[#5A4A2E] text-sm">
+                                <p className="text-[#1A1A1A]/70 text-sm">
                                   <Sparkles className="w-4 h-4 inline text-gold mr-1" />
                                   <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
                                 </p>
                               </>
                             ) : (
-                              <p className="text-[#5A4A2E] text-sm">
+                              <p className="text-[#1A1A1A]/70 text-sm">
                                 Note: Anonymous submissions don't enter the draw, but your idea will still be considered.
                               </p>
                             )}
@@ -297,13 +297,13 @@ const BestIdeaAward = () => {
                           <div className="flex items-center justify-between p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
                             <div className="flex items-center gap-3">
                               {formData.isAnonymous ? (
-                                <EyeOff className="w-5 h-5 text-[#5A4A2E]" />
+                                <EyeOff className="w-5 h-5 text-[#1A1A1A]/70" />
                               ) : (
                                 <Eye className="w-5 h-5 text-gold" />
                               )}
                               <div>
                                 <Label className="text-sm font-medium text-[#1A1A1A]">Post Anonymously</Label>
-                                <p className="text-xs text-[#5A4A2E]">
+                                <p className="text-xs text-[#1A1A1A]/70">
                                   {formData.isAnonymous 
                                     ? "Your details won't be visible, but you won't enter the draw"
                                     : "Enter your details to join the iPad draw"
@@ -326,7 +326,7 @@ const BestIdeaAward = () => {
                               className="space-y-4"
                             >
                               <div>
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -338,7 +338,7 @@ const BestIdeaAward = () => {
                                 />
                               </div>
                               <div>
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -351,7 +351,7 @@ const BestIdeaAward = () => {
                                 />
                               </div>
                               <div>
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <Phone className="w-4 h-4 text-gold" />
                                   Phone Number *
                                 </Label>
@@ -368,7 +368,7 @@ const BestIdeaAward = () => {
 
                           {/* Idea Field */}
                           <div>
-                            <Label className="text-[#5A4A2E] flex items-center gap-2">
+                            <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                               <Lightbulb className="w-4 h-4 text-gold" />
                               Your Idea *
                             </Label>

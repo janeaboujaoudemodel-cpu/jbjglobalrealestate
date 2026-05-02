@@ -420,7 +420,7 @@ export default function OwnerFeatureRegistry() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Feature Registry & Audit</h1>
-                  <p className="text-[#5A4A2E] text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
                 </div>
               </div>
               
@@ -457,7 +457,7 @@ export default function OwnerFeatureRegistry() {
               {/* Search & Filter */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
                   <Input
                     placeholder="Search features, descriptions, paths..."
                     value={searchQuery}
@@ -524,22 +524,22 @@ export default function OwnerFeatureRegistry() {
                                   <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
                                 )}
                                 {feature.isManual && (
-                                  <Badge className="bg-[#F7F2EA] text-[#5A4A2E] text-[10px] px-1.5">Manual</Badge>
+                                  <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 text-[10px] px-1.5">Manual</Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-[#5A4A2E] mt-0.5">{feature.description}</p>
+                              <p className="text-sm text-[#1A1A1A]/70 mt-0.5">{feature.description}</p>
                               <div className="flex items-center gap-2 mt-2 text-xs">
                                 <Badge variant="outline" className="border-gold/30 font-normal">
                                   {feature.category}
                                 </Badge>
-                                <span className="text-[#5A4A2E]">→</span>
+                                <span className="text-[#1A1A1A]/70">→</span>
                                 <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
                                   {feature.navigationPath}
                                 </code>
                               </div>
                             </div>
                             
-                            <ChevronRight className="h-4 w-4 text-[#5A4A2E] group-hover:text-gold transition-colors flex-shrink-0" />
+                            <ChevronRight className="h-4 w-4 text-[#1A1A1A]/70 group-hover:text-gold transition-colors flex-shrink-0" />
                           </div>
                         </motion.div>
                       ))}
@@ -618,10 +618,10 @@ export default function OwnerFeatureRegistry() {
                       </div>
                       <div className="p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
                         <div className="flex items-center gap-2 mb-2">
-                          <Wrench className="h-4 w-4 text-[#5A4A2E]" />
-                          <span className="font-medium text-[#5A4A2E]">Manual ({manualCount})</span>
+                          <Wrench className="h-4 w-4 text-[#1A1A1A]/70" />
+                          <span className="font-medium text-[#1A1A1A]/70">Manual ({manualCount})</span>
                         </div>
-                        <p className="text-sm text-[#5A4A2E]">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -660,14 +660,14 @@ export default function OwnerFeatureRegistry() {
                                   <div className="text-gold">{feature.icon}</div>
                                   <div>
                                     <p className="font-medium text-[#1A1A1A] text-sm">{feature.name}</p>
-                                    <code className="text-[11px] text-[#5A4A2E]">{feature.path}</code>
+                                    <code className="text-[11px] text-[#1A1A1A]/70">{feature.path}</code>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded max-w-[300px] truncate">
                                     {feature.navigationPath}
                                   </code>
-                                  <ExternalLink className="h-3 w-3 text-[#5A4A2E]" />
+                                  <ExternalLink className="h-3 w-3 text-[#1A1A1A]/70" />
                                 </div>
                               </div>
                             ))}
@@ -687,19 +687,19 @@ export default function OwnerFeatureRegistry() {
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-purple-100 text-purple-700 text-xs">AI</Badge>
-                <span className="text-[#5A4A2E]">AI-powered feature (drafts/suggestions)</span>
+                <span className="text-[#1A1A1A]/70">AI-powered feature (drafts/suggestions)</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-blue-100 text-blue-700 text-xs">Approval</Badge>
-                <span className="text-[#5A4A2E]">Requires Owner approval before action</span>
+                <span className="text-[#1A1A1A]/70">Requires Owner approval before action</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 text-xs">Auto</Badge>
-                <span className="text-[#5A4A2E]">Runs automatically (configurable)</span>
+                <span className="text-[#1A1A1A]/70">Runs automatically (configurable)</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-[#F7F2EA] text-[#5A4A2E] text-xs">Manual</Badge>
-                <span className="text-[#5A4A2E]">Owner-initiated only</span>
+                <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 text-xs">Manual</Badge>
+                <span className="text-[#1A1A1A]/70">Owner-initiated only</span>
               </div>
             </div>
           </div>
@@ -739,7 +739,7 @@ function StatsCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-[#5A4A2E]">{label}</p>
+            <p className="text-xs text-[#1A1A1A]/70">{label}</p>
             <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
@@ -769,7 +769,7 @@ function AuditItem({
 
   return (
     <div className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] border border-green-200">
-      <span className="text-sm text-[#5A4A2E]">{label}</span>
+      <span className="text-sm text-[#1A1A1A]/70">{label}</span>
       <div className="flex items-center gap-2">
         <span className="font-semibold text-[#1A1A1A]">{value}</span>
         {icons[status]}

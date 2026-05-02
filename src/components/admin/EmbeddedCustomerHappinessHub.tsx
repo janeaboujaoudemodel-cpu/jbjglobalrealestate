@@ -271,7 +271,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       case "in_progress":
         return <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/40"><Clock className="w-3 h-3 mr-1" />In Progress</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/40">{status}</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40">{status}</Badge>;
     }
   };
 
@@ -281,7 +281,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-[#5A4A2E]"}`}
+            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-[#1A1A1A]/70"}`}
           />
         ))}
       </div>
@@ -302,7 +302,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Ticket className="w-5 h-5 text-emerald-500" />
               </div>
               <div>
-                <p className="text-xs text-[#5A4A2E]">Support Tickets</p>
+                <p className="text-xs text-[#1A1A1A]/70">Support Tickets</p>
                 <p className="text-xl font-bold text-[#1A1A1A]">View Tab</p>
               </div>
             </div>
@@ -318,7 +318,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <MessageSquareHeart className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <p className="text-xs text-[#5A4A2E]">Pending Reviews</p>
+                <p className="text-xs text-[#1A1A1A]/70">Pending Reviews</p>
                 <p className="text-xl font-bold text-[#1A1A1A]">{pendingReviews}</p>
               </div>
             </div>
@@ -334,7 +334,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <AlertCircle className="w-5 h-5 text-red-500" />
               </div>
               <div>
-                <p className="text-xs text-[#5A4A2E]">Open Issues</p>
+                <p className="text-xs text-[#1A1A1A]/70">Open Issues</p>
                 <p className="text-xl font-bold text-[#1A1A1A]">{openIssues}</p>
               </div>
             </div>
@@ -350,7 +350,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Lightbulb className="w-5 h-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-xs text-[#5A4A2E]">Pending Ideas</p>
+                <p className="text-xs text-[#1A1A1A]/70">Pending Ideas</p>
                 <p className="text-xl font-bold text-[#1A1A1A]">{pendingIdeas}</p>
               </div>
             </div>
@@ -470,14 +470,14 @@ export const EmbeddedCustomerHappinessHub = () => {
                               <span className="font-semibold text-[#1A1A1A]">{review.full_name}</span>
                               {renderStars(review.rating)}
                               {getStatusBadge(review.status)}
-                              {review.is_anonymous && <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30 text-xs">Anonymous</Badge>}
+                              {review.is_anonymous && <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30 text-xs">Anonymous</Badge>}
                               {review.feature_key && <Badge className="bg-blue-50 text-blue-600 border-blue-200 text-xs">{review.feature_key}</Badge>}
                             </div>
-                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{review.review_text}</p>
+                            <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{review.review_text}</p>
                             {review.improve_text && (
-                              <p className="text-xs text-[#5A4A2E] mt-1 italic">Suggestion: {review.improve_text}</p>
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1 italic">Suggestion: {review.improve_text}</p>
                             )}
-                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#1A1A1A]/70">
                               <span>{review.service_type}</span>
                               <span>•</span>
                               <span>{new Date(review.created_at).toLocaleDateString()}</span>
@@ -491,7 +491,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {filteredReviews.length === 0 && (
-                      <p className="text-center text-[#5A4A2E] py-8">No reviews match this filter</p>
+                      <p className="text-center text-[#1A1A1A]/70 py-8">No reviews match this filter</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -528,11 +528,11 @@ export const EmbeddedCustomerHappinessHub = () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <span className="font-semibold text-[#1A1A1A]">{issue.user_name}</span>
-                              <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30">{issue.issue_category}</Badge>
+                              <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30">{issue.issue_category}</Badge>
                               {getStatusBadge(issue.status)}
                             </div>
-                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{issue.issue_description}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
+                            <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{issue.issue_description}</p>
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#1A1A1A]/70">
                               <span>{issue.tool_name}</span>
                               <span>•</span>
                               <span>{new Date(issue.created_at).toLocaleDateString()}</span>
@@ -542,7 +542,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {(!issues || issues.length === 0) && (
-                      <p className="text-center text-[#5A4A2E] py-8">No issue reports yet</p>
+                      <p className="text-center text-[#1A1A1A]/70 py-8">No issue reports yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -602,8 +602,8 @@ export const EmbeddedCustomerHappinessHub = () => {
                             {idea.idea_title && (
                               <p className="font-medium text-[#1A1A1A] mb-1">{idea.idea_title}</p>
                             )}
-                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{idea.idea}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-[#5A4A2E]">
+                            <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{idea.idea}</p>
+                            <div className="flex items-center gap-4 mt-2 text-xs text-[#1A1A1A]/70">
                               <span>{new Date(idea.created_at).toLocaleDateString()}</span>
                               {idea.email && <span>{idea.email}</span>}
                             </div>
@@ -615,7 +615,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {(!ideas || ideas.length === 0) && (
-                      <p className="text-center text-[#5A4A2E] py-8">No ideas submitted yet</p>
+                      <p className="text-center text-[#1A1A1A]/70 py-8">No ideas submitted yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -636,12 +636,12 @@ export const EmbeddedCustomerHappinessHub = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-[#1A1A1A]">{selectedReview.full_name}</p>
-                  <p className="text-sm text-[#5A4A2E]">{selectedReview.email}</p>
-                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30 text-xs">Anonymous</Badge>}
+                  <p className="text-sm text-[#1A1A1A]/70">{selectedReview.email}</p>
+                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30 text-xs">Anonymous</Badge>}
                 </div>
                 <div className="text-right">
                   {renderStars(selectedReview.rating)}
-                  <p className="text-xs text-[#5A4A2E] mt-1">{selectedReview.service_type}</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mt-1">{selectedReview.service_type}</p>
                   {selectedReview.feature_key && (
                     <Badge className="mt-1 bg-blue-50 text-blue-600 border-blue-200 text-xs">{selectedReview.feature_key}</Badge>
                   )}
@@ -654,13 +654,13 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {selectedReview.improve_text && (
                 <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-[#5A4A2E] mb-1">Improvement suggestion</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mb-1">Improvement suggestion</p>
                   <p className="text-sm text-[#1A1A1A]">{selectedReview.improve_text}</p>
                 </div>
               )}
 
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm text-[#5A4A2E]">Would recommend:</span>
+                <span className="text-sm text-[#1A1A1A]/70">Would recommend:</span>
                 <Badge className="bg-gold/20 text-gold border-gold/40">{selectedReview.would_recommend}</Badge>
                 {selectedReview.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
               </div>
@@ -669,7 +669,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {/* Action buttons for any non-approved status */}
               <div>
-                <label className="text-sm text-[#5A4A2E] mb-2 block">Admin Notes (optional)</label>
+                <label className="text-sm text-[#1A1A1A]/70 mb-2 block">Admin Notes (optional)</label>
                 <Textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
@@ -718,7 +718,7 @@ export const EmbeddedCustomerHappinessHub = () => {
             <div className="space-y-4">
               <div>
                 <p className="font-semibold text-[#1A1A1A]">{selectedIdea.is_anonymous ? "Anonymous" : selectedIdea.full_name}</p>
-                {selectedIdea.email && <p className="text-sm text-[#5A4A2E]">{selectedIdea.email}</p>}
+                {selectedIdea.email && <p className="text-sm text-[#1A1A1A]/70">{selectedIdea.email}</p>}
                 {selectedIdea.idea_category && (
                   <Badge className="mt-2 bg-purple-100 text-purple-700 border-purple-300">{selectedIdea.idea_category}</Badge>
                 )}
@@ -726,19 +726,19 @@ export const EmbeddedCustomerHappinessHub = () => {
               
               {selectedIdea.idea_title && (
                 <div>
-                  <p className="text-xs text-[#5A4A2E] mb-1">Title</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mb-1">Title</p>
                   <p className="font-medium text-[#1A1A1A]">{selectedIdea.idea_title}</p>
                 </div>
               )}
               
               <div>
-                <p className="text-xs text-[#5A4A2E] mb-1">Idea</p>
+                <p className="text-xs text-[#1A1A1A]/70 mb-1">Idea</p>
                 <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg">{selectedIdea.idea}</p>
               </div>
               
               {selectedIdea.expected_benefit && (
                 <div>
-                  <p className="text-xs text-[#5A4A2E] mb-1">Expected Benefit</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mb-1">Expected Benefit</p>
                   <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
                 </div>
               )}
@@ -746,7 +746,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               {selectedIdea.status === "pending" && (
                 <>
                   <div>
-                    <p className="text-xs text-[#5A4A2E] mb-1">Admin Notes</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mb-1">Admin Notes</p>
                     <Textarea
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}

@@ -116,7 +116,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                 onClick={action.action}
                 className="flex items-center gap-2 px-3.5 py-2 rounded-xl font-medium text-sm transition-all duration-200 bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/30 hover:bg-[#F7F2EA] hover:shadow-sm active:translate-y-0"
               >
-                <span className="text-[#5A4A2E]">{action.icon}</span>
+                <span className="text-[#1A1A1A]/70">{action.icon}</span>
                 <span className="hidden sm:inline">{action.label}</span>
               </motion.button>
             ))}
@@ -130,7 +130,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               'p-2 rounded-xl transition-all duration-200',
               isListening
                 ? 'bg-[#1A1A1A] text-white animate-pulse'
-                : 'text-[#5A4A2E] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]'
+                : 'text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:text-[#1A1A1A]'
             )}
             title="Voice Command"
           >
@@ -143,7 +143,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               'p-2 rounded-xl transition-all duration-200',
               isExpanded
                 ? 'bg-[#1A1A1A] text-white rotate-45'
-                : 'text-[#5A4A2E] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]'
+                : 'text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:text-[#1A1A1A]'
             )}
           >
             <Plus className="w-4 h-4 transition-transform" />
@@ -159,7 +159,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl shadow-xl p-2"
             >
-              <div className="text-[10px] uppercase tracking-wider text-[#5A4A2E] font-semibold px-3 py-2">
+              <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold px-3 py-2">
                 AI Quick Actions
               </div>
               {[
@@ -173,7 +173,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                   onClick={() => { item.action(); setIsExpanded(false); }}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors"
                 >
-                  <span className="text-[#5A4A2E]">{item.icon}</span>
+                  <span className="text-[#1A1A1A]/70">{item.icon}</span>
                   <span className="text-sm font-medium">{item.label}</span>
                 </button>
               ))}

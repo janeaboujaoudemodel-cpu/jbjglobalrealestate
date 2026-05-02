@@ -62,7 +62,7 @@ export const EmergencyMirrorPanel = () => {
         <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-[#1A1A1A] font-semibold text-sm">Emergency Data Mirror — Use Before API Key Expires</p>
-          <p className="text-[#5A4A2E] text-xs mt-1">
+          <p className="text-[#1A1A1A]/70 text-xs mt-1">
             This tool extracts ALL missing data from the Reelly API (bedrooms, prices, images, documents, amenities) and mirrors everything to local storage. 
             Run this immediately to ensure all project data is preserved before the API key is disconnected.
           </p>
@@ -86,13 +86,13 @@ export const EmergencyMirrorPanel = () => {
           {status && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
               <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 text-center">
-                <p className="text-[#5A4A2E] text-xs mb-1">Total Reelly Projects</p>
+                <p className="text-[#1A1A1A]/70 text-xs mb-1">Total Reelly Projects</p>
                 <p className="text-[#1A1A1A] text-2xl font-bold">{status.total_reelly_projects?.toLocaleString()}</p>
               </div>
               <div className={`rounded-lg p-4 text-center border ${status.needs_bedrooms > 0 ? 'bg-red-50 border-red-300' : 'bg-emerald-50 border-emerald-300'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <BedDouble className="w-3 h-3 text-[#5A4A2E]" />
-                  <p className="text-[#5A4A2E] text-xs">Missing Bedrooms</p>
+                  <BedDouble className="w-3 h-3 text-[#1A1A1A]/70" />
+                  <p className="text-[#1A1A1A]/70 text-xs">Missing Bedrooms</p>
                 </div>
                 <p className={`text-2xl font-bold ${status.needs_bedrooms > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                   {status.needs_bedrooms?.toLocaleString()}
@@ -100,8 +100,8 @@ export const EmergencyMirrorPanel = () => {
               </div>
               <div className={`rounded-lg p-4 text-center border ${status.needs_price > 0 ? 'bg-red-50 border-red-300' : 'bg-emerald-50 border-emerald-300'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <DollarSign className="w-3 h-3 text-[#5A4A2E]" />
-                  <p className="text-[#5A4A2E] text-xs">Missing Price</p>
+                  <DollarSign className="w-3 h-3 text-[#1A1A1A]/70" />
+                  <p className="text-[#1A1A1A]/70 text-xs">Missing Price</p>
                 </div>
                 <p className={`text-2xl font-bold ${status.needs_price > 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                   {status.needs_price?.toLocaleString()}
@@ -109,8 +109,8 @@ export const EmergencyMirrorPanel = () => {
               </div>
               <div className={`rounded-lg p-4 text-center border ${status.needs_cover > 0 ? 'bg-amber-50 border-amber-300' : 'bg-emerald-50 border-emerald-300'}`}>
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <Image className="w-3 h-3 text-[#5A4A2E]" />
-                  <p className="text-[#5A4A2E] text-xs">Missing Cover</p>
+                  <Image className="w-3 h-3 text-[#1A1A1A]/70" />
+                  <p className="text-[#1A1A1A]/70 text-xs">Missing Cover</p>
                 </div>
                 <p className={`text-2xl font-bold ${status.needs_cover > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
                   {status.needs_cover?.toLocaleString()}
@@ -120,7 +120,7 @@ export const EmergencyMirrorPanel = () => {
           )}
 
           {status && status.needs_bedrooms > 0 && (
-            <p className="text-[#5A4A2E] text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               Estimated <span className="text-[#1A1A1A] font-semibold">{status.estimated_batches_needed}</span> orchestrator calls needed 
               ({Math.ceil(status.estimated_batches_needed / 10)} runs of this tool) to fully enrich all projects.
             </p>
@@ -141,7 +141,7 @@ export const EmergencyMirrorPanel = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-[#5A4A2E] text-sm">
+          <p className="text-[#1A1A1A]/70 text-sm">
             This will fire up to <strong className="text-[#1A1A1A]">100 projects</strong> per run with full image mirroring enabled. 
             Run this multiple times to process all projects. Each run takes ~10 minutes to complete in the background.
           </p>
@@ -161,7 +161,7 @@ export const EmergencyMirrorPanel = () => {
           {lastResult && (
             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 space-y-2">
               <p className="text-emerald-700 text-sm font-semibold">Mirror Dispatched Successfully</p>
-              <div className="text-[#5A4A2E] text-xs space-y-1">
+              <div className="text-[#1A1A1A]/70 text-xs space-y-1">
                 <p>Projects queued: <span className="text-[#1A1A1A] font-medium">{lastResult.projects_queued}</span></p>
                 <p>Batches fired: <span className="text-[#1A1A1A] font-medium">{lastResult.batches_fired}</span></p>
                 {lastResult.status_before && (
@@ -171,7 +171,7 @@ export const EmergencyMirrorPanel = () => {
                   </>
                 )}
               </div>
-              <p className="text-[#5A4A2E] text-xs">Batches are running in background. Check status again in ~5 minutes.</p>
+              <p className="text-[#1A1A1A]/70 text-xs">Batches are running in background. Check status again in ~5 minutes.</p>
             </div>
           )}
         </CardContent>

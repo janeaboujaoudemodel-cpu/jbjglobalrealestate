@@ -82,19 +82,19 @@ const TeamMemberDetailDialog = ({
               >
                 {member.role}
               </p>
-              <p className="text-[#5A4A2E] text-sm mt-1">{member.department}</p>
+              <p className="text-[#1A1A1A]/70 text-sm mt-1">{member.department}</p>
             </div>
 
             {/* Experience and Nationality */}
             <div className="flex flex-wrap items-center gap-4">
               {typeof member.yearsExperience === "number" && (
-                <div className="flex items-center gap-1.5 text-[#5A4A2E] text-sm">
+                <div className="flex items-center gap-1.5 text-[#1A1A1A]/70 text-sm">
                   <Clock className="w-4 h-4 text-gold" />
                   <span>{member.yearsExperience} years experience</span>
                 </div>
               )}
               {member.nationality && (
-                <div className="flex items-center gap-1.5 text-[#5A4A2E] text-sm">
+                <div className="flex items-center gap-1.5 text-[#1A1A1A]/70 text-sm">
                   <MapPin className="w-4 h-4 text-gold" />
                   <span>{member.nationality}</span>
                 </div>
@@ -138,14 +138,14 @@ const TeamMemberDetailDialog = ({
                 )}
               </div>
               {member.email && (
-                <p className="text-[#5A4A2E] text-xs mt-2">{member.email}</p>
+                <p className="text-[#1A1A1A]/70 text-xs mt-2">{member.email}</p>
               )}
             </div>
 
             {/* Reporting Structure */}
             {reportsToMember && (
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-2 flex items-center gap-1.5">
                   <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
                   Reports To
                 </h4>
@@ -169,7 +169,7 @@ const TeamMemberDetailDialog = ({
             {/* Direct Reports */}
             {directReportsMembers.length > 0 && (
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-2 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-gold" />
                   Direct Reports ({directReportsMembers.length})
                 </h4>
@@ -189,7 +189,7 @@ const TeamMemberDetailDialog = ({
                   ))}
                   {directReportsMembers.length > 6 && (
                     <div className="flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] rounded-lg px-2 py-1.5 border border-gold/20">
-                      <span className="text-[#5A4A2E] text-xs">+{directReportsMembers.length - 6} more</span>
+                      <span className="text-[#1A1A1A]/70 text-xs">+{directReportsMembers.length - 6} more</span>
                     </div>
                   )}
                 </div>
@@ -197,12 +197,12 @@ const TeamMemberDetailDialog = ({
             )}
 
             {member.bio && (
-              <p className="text-[#5A4A2E] leading-relaxed">{member.bio}</p>
+              <p className="text-[#1A1A1A]/70 leading-relaxed">{member.bio}</p>
             )}
 
             {member.specializations && member.specializations.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-2 flex items-center gap-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-gold" />
                   Specializations
                 </h4>
@@ -221,7 +221,7 @@ const TeamMemberDetailDialog = ({
 
             {member.languages && member.languages.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-2 flex items-center gap-1.5">
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-2 flex items-center gap-1.5">
                   <Globe className="w-3.5 h-3.5 text-gold" />
                   Languages
                 </h4>

@@ -42,7 +42,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
 };
 
 const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-[#F7F2EA]', text: 'text-[#5A4A2E]', border: 'border-[#B89555]/30' };
+  const colors = CATEGORY_COLORS[category] || { bg: 'bg-[#F7F2EA]', text: 'text-[#1A1A1A]/70', border: 'border-[#B89555]/30' };
   return (
     <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
       {category}
@@ -166,10 +166,10 @@ const News = () => {
             <Building2 className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Transaction Type</span>
           </div>
-          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
+          <span className="text-[10px] text-[#1A1A1A]/70">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-[#5A4A2E]">Off-plan</span>
+              <span className="text-sm text-[#1A1A1A]/70">Off-plan</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{offPlanPct}%</span>
@@ -179,10 +179,10 @@ const News = () => {
               <div className="bg-gold rounded-full h-2" style={{ width: `${offPlanPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-[#5A4A2E]">Secondary</span>
+              <span className="text-sm text-[#1A1A1A]/70">Secondary</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
-                <span className="text-xs text-[#5A4A2E] font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{secondaryPct}%</span>
+                <span className="text-xs text-[#1A1A1A]/70 font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{secondaryPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -197,10 +197,10 @@ const News = () => {
             <Banknote className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Payment Method</span>
           </div>
-          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
+          <span className="text-[10px] text-[#1A1A1A]/70">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-[#5A4A2E]">Cash</span>
+              <span className="text-sm text-[#1A1A1A]/70">Cash</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{cashPct}%</span>
@@ -210,10 +210,10 @@ const News = () => {
               <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${cashPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-[#5A4A2E]">Mortgage</span>
+              <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
-                <span className="text-xs text-[#5A4A2E] font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{mortgagePct}%</span>
+                <span className="text-xs text-[#1A1A1A]/70 font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{mortgagePct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -228,11 +228,11 @@ const News = () => {
             <Gift className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wide">Gift Transactions</span>
           </div>
-          <span className="text-[10px] text-[#5A4A2E]">{dateLabel}</span>
+          <span className="text-[10px] text-[#1A1A1A]/70">{dateLabel}</span>
           <div className="flex flex-col items-center justify-center h-[calc(100%-2.5rem)] mt-2">
             <p className="text-4xl font-bold text-gold">~{isDaily ? gifts : gifts.toLocaleString()}</p>
-            <p className="text-sm text-[#5A4A2E] mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
-            <p className="text-xs text-[#5A4A2E] mt-2">{giftPct}% of total volume</p>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">{giftPct}% of total volume</p>
           </div>
         </div>
       </div>
@@ -245,16 +245,16 @@ const News = () => {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gold/20">
-            <th className="text-left py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">#</th>
-            <th className="text-left py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">Area</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">Transactions</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-[#5A4A2E] uppercase tracking-wider">YoY Change</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">#</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Area</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">Transactions</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wider">YoY Change</th>
           </tr>
         </thead>
         <tbody>
           {areas.map((area, i) => (
             <tr key={area.area} className="border-b border-[#B89555]/30 last:border-0 hover:bg-champagne-light/30 transition-colors">
-              <td className="py-3 px-2 text-[#5A4A2E] font-medium">{i + 1}</td>
+              <td className="py-3 px-2 text-[#1A1A1A]/70 font-medium">{i + 1}</td>
               <td className="py-3 px-2 text-[#1A1A1A] font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-gold font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
@@ -363,7 +363,7 @@ const News = () => {
                               fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3';
                               const cat = filteredNews[0]?.category || 'News';
                               const src = filteredNews[0]?.source || '';
-                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#5A4A2E] text-xs">${src}</span>`;
+                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#1A1A1A]/70 text-xs">${src}</span>`;
                               parent.insertBefore(fallback, e.currentTarget);
                             }
                           }}
@@ -438,7 +438,7 @@ const News = () => {
                           fallback.className = 'w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4';
                           const cat = article.category || 'News';
                           const src = article.source || '';
-                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#5A4A2E] text-[10px]">${src}</span>`;
+                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-[#1A1A1A] text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-[#1A1A1A]/70 text-[10px]">${src}</span>`;
                           parent.insertBefore(fallback, e.currentTarget);
                         }
                       }}
@@ -463,7 +463,7 @@ const News = () => {
                       <Calendar className="w-3 h-3" />
                       {new Date(article.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
-                    <span className="text-[#5A4A2E]">•</span>
+                    <span className="text-[#1A1A1A]/70">•</span>
                     <span className="flex items-center gap-1">
                       <Landmark className="w-3 h-3" />
                       {article.source}
@@ -515,7 +515,7 @@ const News = () => {
                       <h3 className="text-xl font-bold text-[#1A1A1A]">
                         Key Market Statistics — 2026
                       </h3>
-                      <p className="text-xs text-[#5A4A2E] mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
+                      <p className="text-xs text-[#1A1A1A]/70 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
@@ -538,19 +538,19 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.value}</p>
-                        <p className="text-sm text-[#5A4A2E]">YTD Transaction Value</p>
+                        <p className="text-sm text-[#1A1A1A]/70">YTD Transaction Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.transactions.toLocaleString()}+</p>
-                        <p className="text-sm text-[#5A4A2E]">YTD Transactions</p>
+                        <p className="text-sm text-[#1A1A1A]/70">YTD Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.growth}</p>
-                        <p className="text-sm text-[#5A4A2E]">YoY Volume Growth</p>
+                        <p className="text-sm text-[#1A1A1A]/70">YoY Volume Growth</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-[#5A4A2E]">Top Performing Area</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Top Performing Area</p>
                       </div>
                     </div>
 
@@ -575,19 +575,19 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daily2026.valuePerDay}</p>
-                        <p className="text-sm text-[#5A4A2E]">Avg Daily Value</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Avg Daily Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">~{daily2026.transactions}</p>
-                        <p className="text-sm text-[#5A4A2E]">Avg Daily Transactions</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Avg Daily Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daysElapsed2026}</p>
-                        <p className="text-sm text-[#5A4A2E]">Days Elapsed in 2026</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Days Elapsed in 2026</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-[#5A4A2E]">Top Performing Area</p>
+                        <p className="text-sm text-[#1A1A1A]/70">Top Performing Area</p>
                       </div>
                     </div>
 
@@ -609,7 +609,7 @@ const News = () => {
                   </TabsContent>
                 </Tabs>
 
-                <p className="text-xs text-[#5A4A2E] mt-6 text-center">
+                <p className="text-xs text-[#1A1A1A]/70 mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}
                 </p>
               </div>
@@ -628,7 +628,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-[#5A4A2E]">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#1A1A1A]/70">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2026} yearLabel="2026" />
@@ -648,13 +648,13 @@ const News = () => {
                     <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top Buyer Nationalities
                     </h3>
-                    <p className="text-xs text-[#5A4A2E]">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#1A1A1A]/70">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   {topNationalities.map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
-                      <span className="text-[#5A4A2E] font-medium text-sm w-5 text-right">{i + 1}</span>
+                      <span className="text-[#1A1A1A]/70 font-medium text-sm w-5 text-right">{i + 1}</span>
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-[#1A1A1A] flex-1">{nat.country}</span>
                       <div className="flex-1 max-w-[200px]">
@@ -663,7 +663,7 @@ const News = () => {
                         </div>
                       </div>
                       <span className="text-sm font-bold text-gold w-14 text-right">{nat.percentage}%</span>
-                      <span className="text-xs text-[#5A4A2E] w-16 text-right">{nat.transactions.toLocaleString()}</span>
+                      <span className="text-xs text-[#1A1A1A]/70 w-16 text-right">{nat.transactions.toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -673,7 +673,7 @@ const News = () => {
 
           {/* Premium Separator */}
           <div className="mt-8 text-center">
-            <p className="text-[#5A4A2E] text-sm italic tracking-wide">
+            <p className="text-[#1A1A1A]/70 text-sm italic tracking-wide">
               Looking back at last year's performance?
             </p>
           </div>
@@ -690,7 +690,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-[#1A1A1A]">
                       2025 Full Year Recap
                     </h3>
-                    <p className="text-xs text-[#5A4A2E]">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#1A1A1A]/70">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
 
@@ -698,19 +698,19 @@ const News = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">AED 761B</p>
-                    <p className="text-sm text-[#5A4A2E]">Total Transaction Value</p>
+                    <p className="text-sm text-[#1A1A1A]/70">Total Transaction Value</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">226,000+</p>
-                    <p className="text-sm text-[#5A4A2E]">Total Transactions</p>
+                    <p className="text-sm text-[#1A1A1A]/70">Total Transactions</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">+36%</p>
-                    <p className="text-sm text-[#5A4A2E]">YoY Growth vs 2024</p>
+                    <p className="text-sm text-[#1A1A1A]/70">YoY Growth vs 2024</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">Record Year</p>
-                    <p className="text-sm text-[#5A4A2E]">Highest Ever Recorded</p>
+                    <p className="text-sm text-[#1A1A1A]/70">Highest Ever Recorded</p>
                   </div>
                 </div>
 
@@ -730,7 +730,7 @@ const News = () => {
                   />
                 </div>
 
-                <p className="text-xs text-[#5A4A2E] mt-6 text-center">
+                <p className="text-xs text-[#1A1A1A]/70 mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Full Year 2025 Closed Figures
                 </p>
               </div>
@@ -749,7 +749,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-[#1A1A1A]">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-[#5A4A2E]">Full Year 2025 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-[#1A1A1A]/70">Full Year 2025 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2025} yearLabel="2025" />
@@ -772,7 +772,7 @@ const News = () => {
                   <div>
                     <h3 className="text-[#1A1A1A] font-semibold text-lg mb-1">Victoria Hayes</h3>
                     <p className="text-gold text-sm mb-3">Senior News Reporter, JBJ Global Real Estate</p>
-                    <p className="text-[#5A4A2E] text-sm mb-3">
+                    <p className="text-[#1A1A1A]/70 text-sm mb-3">
                       Victoria curates the latest real estate news from official UAE government sources 
                       including Dubai Media Office, Dubai Land Department, Abu Dhabi Media Office, and Ministry of Economy. 
                       With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.

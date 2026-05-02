@@ -178,7 +178,7 @@ const PressKit = () => {
               Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Kit</span>
             </motion.h1>
             <motion.p 
-              className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto mb-6"
+              className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto mb-6"
               variants={fadeInUp}
             >
               Official media resources for JBJ Global Real Estate
@@ -190,7 +190,7 @@ const PressKit = () => {
               variants={fadeInUp}
             >
               <Lock className="w-4 h-4 text-gold" />
-              <span className="text-[#5A4A2E] text-sm">Protected Content • Contact for Access</span>
+              <span className="text-[#1A1A1A]/70 text-sm">Protected Content • Contact for Access</span>
             </motion.div>
           </motion.div>
         </div>
@@ -218,16 +218,16 @@ const PressKit = () => {
                   </div>
                   <div>
                     <h3 className="text-[#1A1A1A] text-xl font-semibold">Official Biography</h3>
-                    <p className="text-[#5A4A2E] text-sm">Short bio for press releases</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">Short bio for press releases</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 bg-[#1A1A1A]/10 border border-gold/30 rounded-full px-3 py-1">
                   <Shield className="w-3 h-3 text-gold" />
-                  <span className="text-xs text-[#5A4A2E]">Protected</span>
+                  <span className="text-xs text-[#1A1A1A]/70">Protected</span>
                 </div>
               </div>
               
-              <p className="text-[#5A4A2E] leading-relaxed">
+              <p className="text-[#1A1A1A]/70 leading-relaxed">
                 <span className="text-gold font-semibold">Jane Bou Jaoude (جاين بو جودة)</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
                 a Dubai-based Real Estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
@@ -261,7 +261,7 @@ const PressKit = () => {
                 </h2>
               </div>
               <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-                <p className="text-[#5A4A2E] text-sm">
+                <p className="text-[#1A1A1A]/70 text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>
                 </p>
@@ -300,14 +300,14 @@ const PressKit = () => {
                       <div className="text-center px-4">
                         <Shield className="w-8 h-8 text-gold mx-auto mb-2" />
                         <p className="text-white text-sm font-medium mb-1">Protected Content</p>
-                        <p className="text-[#5A4A2E] text-xs">Contact media@JBJ.ae for access</p>
+                        <p className="text-[#1A1A1A]/70 text-xs">Contact media@JBJ.ae for access</p>
                       </div>
                     </div>
                   </div>
                   
                   <div className="p-5">
                     <h4 className="text-[#1A1A1A] font-semibold mb-1">{asset.name}</h4>
-                    <p className="text-[#5A4A2E] text-sm">{asset.description}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">{asset.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -352,23 +352,23 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Company Name</span>
+                    <span className="text-[#1A1A1A]/70">Company Name</span>
                     <span className="text-[#1A1A1A] font-medium">JBJ GLOBAL REAL ESTATE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Founded</span>
+                    <span className="text-[#1A1A1A]/70">Founded</span>
                     <span className="text-[#1A1A1A] font-medium">2025</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Headquarters</span>
+                    <span className="text-[#1A1A1A]/70">Headquarters</span>
                     <span className="text-[#1A1A1A] font-medium">Downtown Dubai, UAE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Industry</span>
+                    <span className="text-[#1A1A1A]/70">Industry</span>
                     <span className="text-[#1A1A1A] font-medium">Real Estate Brokerage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#5A4A2E]">Website</span>
+                    <span className="text-[#1A1A1A]/70">Website</span>
                     <a href="https://jbj.ae" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline flex items-center gap-1">
                       jbj.ae
                       <ExternalLink className="w-3 h-3" />
@@ -388,19 +388,19 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Industry Experience</span>
+                    <span className="text-[#1A1A1A]/70">Industry Experience</span>
                     <span className="text-gold font-bold">12+ Years</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Brokers Trained</span>
+                    <span className="text-[#1A1A1A]/70">Brokers Trained</span>
                     <span className="text-gold font-bold">{`${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`}</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-[#5A4A2E]">Team Members</span>
+                    <span className="text-[#1A1A1A]/70">Team Members</span>
                     <span className="text-gold font-bold">10+</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#5A4A2E]">Client Satisfaction</span>
+                    <span className="text-[#1A1A1A]/70">Client Satisfaction</span>
                     <span className="text-gold font-bold">98%</span>
                   </div>
                 </div>
@@ -433,7 +433,7 @@ const PressKit = () => {
               >
                 Media <span className="text-gold">Contact</span>
               </h2>
-              <p className="text-[#5A4A2E] text-lg mb-10">
+              <p className="text-[#1A1A1A]/70 text-lg mb-10">
                 For press inquiries, interview requests, or additional assets, please contact our media relations team.
               </p>
 
@@ -473,7 +473,7 @@ const PressKit = () => {
               <AlertDialogContent className="bg-[#FDFBF7] border border-gold/30">
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-[#1A1A1A]">Contact Options</AlertDialogTitle>
-                  <AlertDialogDescription className="text-[#5A4A2E]">
+                  <AlertDialogDescription className="text-[#1A1A1A]/70">
                     Choose how you would like to contact JBJ GLOBAL REAL ESTATE.
                   </AlertDialogDescription>
                 </AlertDialogHeader>

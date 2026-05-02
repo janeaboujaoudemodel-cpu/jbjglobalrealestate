@@ -123,7 +123,7 @@ const LeadJourneyTracker = ({
         {/* Last Interaction */}
         {lastInteraction && (
           <div className="p-3 bg-gold/10 border border-gold/20 rounded-lg">
-            <p className="text-xs text-[#5A4A2E] mb-1">Last Interaction</p>
+            <p className="text-xs text-[#1A1A1A]/70 mb-1">Last Interaction</p>
             <p className="text-white text-sm">
               {format(new Date(lastInteraction), "MMM d, yyyy 'at' h:mm a")}
             </p>
@@ -169,7 +169,7 @@ const LeadJourneyTracker = ({
                   <span className="text-white/70 flex-1 truncate">
                     {event.event_type.replace(/_/g, ' ')} - {event.page_path}
                   </span>
-                  <span className="text-[#5A4A2E]">
+                  <span className="text-[#1A1A1A]/70">
                     {format(new Date(event.created_at), "h:mm a")}
                   </span>
                 </div>

@@ -354,7 +354,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What needs to be done?"
-              className="h-11 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+              className="h-11 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
               autoFocus
             />
           </div>
@@ -383,7 +383,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add details, notes, or instructions..."
-              className="min-h-[100px] bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E] resize-y"
+              className="min-h-[100px] bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 resize-y"
             />
           </div>
 
@@ -403,7 +403,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                       "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                       priority === p.value
                         ? cn(p.color, "ring-1 ring-offset-1 ring-gold/40")
-                        : "bg-[#FDFBF7]/60 border-gold/20 text-[#5A4A2E] hover:border-gold/40"
+                        : "bg-[#FDFBF7]/60 border-gold/20 text-[#1A1A1A]/70 hover:border-gold/40"
                     )}
                   >
                     {p.label}
@@ -441,7 +441,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   onBlur={handleDateBlur}
                   onKeyDown={(e) => { if (e.key === "Enter") handleDateBlur(); }}
                   placeholder="DD/MM/YYYY"
-                  className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E] flex-1"
+                  className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 flex-1"
                 />
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
@@ -465,7 +465,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 </Popover>
               </div>
               {dueDate && (
-                <p className="text-xs text-[#5A4A2E]">Saved: {formatDateDisplay(dueDate)}</p>
+                <p className="text-xs text-[#1A1A1A]/70">Saved: {formatDateDisplay(dueDate)}</p>
               )}
             </div>
 
@@ -477,7 +477,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 value={clientContact}
                 onChange={(e) => setClientContact(e.target.value)}
                 placeholder="+971 50 123 4567"
-                className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
               />
             </div>
           </div>
@@ -504,7 +504,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                     leadMode === mode
                       ? "bg-gold/20 border-gold text-[#1A1A1A]"
-                      : "bg-[#FDFBF7]/60 border-gold/20 text-[#5A4A2E] hover:border-gold/40"
+                      : "bg-[#FDFBF7]/60 border-gold/20 text-[#1A1A1A]/70 hover:border-gold/40"
                   )}
                 >
                   {mode === "none" ? "No Lead" : mode === "select" ? "Select Lead" : "Add New Lead"}
@@ -515,12 +515,12 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
             {leadMode === "select" && (
               <div className="space-y-2">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                   <Input
                     value={leadSearch}
                     onChange={(e) => setLeadSearch(e.target.value)}
                     placeholder="Search by name, phone, or email..."
-                    className="h-10 pl-9 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                    className="h-10 pl-9 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                   />
                 </div>
                 {selectedLeadId && (
@@ -528,7 +528,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     <Users className="w-4 h-4 text-gold" />
                     <span className="text-sm text-[#1A1A1A] font-medium">{selectedLeadName}</span>
                     <button type="button" onClick={() => { setSelectedLeadId(null); setSelectedLeadName(""); }} className="ml-auto">
-                      <X className="w-3.5 h-3.5 text-[#5A4A2E] hover:text-red-500" />
+                      <X className="w-3.5 h-3.5 text-[#1A1A1A]/70 hover:text-red-500" />
                     </button>
                   </div>
                 )}
@@ -547,37 +547,37 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                         className="w-full text-left px-3 py-2 hover:bg-gold/10 border-b border-gold/10 last:border-0 text-sm"
                       >
                         <span className="font-medium text-[#1A1A1A]">{lead.full_name || "—"}</span>
-                        {lead.phone_raw && <span className="text-[#5A4A2E] ml-2">{lead.phone_raw}</span>}
-                        {lead.email_normalized && <span className="text-[#5A4A2E] ml-2 text-xs">{lead.email_normalized}</span>}
+                        {lead.phone_raw && <span className="text-[#1A1A1A]/70 ml-2">{lead.phone_raw}</span>}
+                        {lead.email_normalized && <span className="text-[#1A1A1A]/70 ml-2 text-xs">{lead.email_normalized}</span>}
                       </button>
                     ))}
                   </div>
                 )}
-                {leadSearching && <p className="text-xs text-[#5A4A2E]">Searching...</p>}
+                {leadSearching && <p className="text-xs text-[#1A1A1A]/70">Searching...</p>}
               </div>
             )}
 
             {leadMode === "new" && (
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs text-[#5A4A2E]">Lead Name *</Label>
+                  <Label className="text-xs text-[#1A1A1A]/70">Lead Name *</Label>
                   <Input
                     value={newLeadName}
                     onChange={(e) => setNewLeadName(e.target.value)}
                     placeholder="Full name"
-                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] text-sm"
+                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 text-sm"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs text-[#5A4A2E]">Phone</Label>
+                  <Label className="text-xs text-[#1A1A1A]/70">Phone</Label>
                   <Input
                     value={newLeadPhone}
                     onChange={(e) => setNewLeadPhone(e.target.value)}
                     placeholder="+971 50 123 4567"
-                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] text-sm"
+                    className="h-9 bg-[#FDFBF7]/80 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 text-sm"
                   />
                 </div>
-                <p className="col-span-2 text-xs text-[#5A4A2E] flex items-center gap-1">
+                <p className="col-span-2 text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                   <UserPlus className="w-3 h-3" /> This lead will be added to your CRM under "Manual — Task Source"
                 </p>
               </div>
@@ -593,7 +593,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={referenceUrl}
               onChange={(e) => setReferenceUrl(e.target.value)}
               placeholder="https://..."
-              className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+              className="h-10 bg-[#FDFBF7]/80 border-gold/30 focus:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
             />
           </div>
 
@@ -620,8 +620,8 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   <span className="text-sm">Uploading...</span>
                 </div>
               ) : (
-                <div className="text-[#5A4A2E] text-sm">
-                  <Upload className="w-5 h-5 mx-auto mb-1 text-[#5A4A2E]" />
+                <div className="text-[#1A1A1A]/70 text-sm">
+                  <Upload className="w-5 h-5 mx-auto mb-1 text-[#1A1A1A]/70" />
                   Click to upload documents (PDF, images, spreadsheets)
                 </div>
               )}

@@ -212,7 +212,7 @@ const Testimonials = () => {
       <Card className="jj-card-inner h-full">
         <CardContent className="p-6">
           <Quote className="w-8 h-8 text-[#8A7556] mb-4" />
-          <p className="text-[#5A4A2E] mb-6 italic">
+          <p className="text-[#1A1A1A]/70 mb-6 italic">
             "{testimonial.content}"
           </p>
           <div className="flex items-center justify-between">
@@ -251,9 +251,9 @@ const Testimonials = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <Star className="w-12 h-12 text-[#5A4A2E]" />
+                <Star className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
-              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">Client Stories</p>
+              <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">Client Stories</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -303,7 +303,7 @@ const Testimonials = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -326,7 +326,7 @@ const Testimonials = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-[#5A4A2E] text-center max-w-3xl mx-auto mb-12"
+              className="text-[#1A1A1A]/70 text-center max-w-3xl mx-auto mb-12"
             >
               A selection of verified client experiences across buying, selling, rentals, and advisory support. Testimonials may be anonymized upon request.
             </motion.p>
@@ -420,7 +420,7 @@ const Testimonials = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-[#5A4A2E] text-center max-w-2xl mx-auto mb-12"
+              className="text-[#1A1A1A]/70 text-center max-w-2xl mx-auto mb-12"
             >
               Video testimonials appear here.
             </motion.p>
@@ -436,7 +436,7 @@ const Testimonials = () => {
                     </div>
                     <CardContent className="p-4">
                       <h3 className="font-semibold text-[#1A1A1A]">{video.title}</h3>
-                      <p className="text-sm text-[#5A4A2E]">{video.client}</p>
+                      <p className="text-sm text-[#1A1A1A]/70">{video.client}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -547,7 +547,7 @@ const Testimonials = () => {
                           setFormData({ ...formData, consentToPublish: checked as boolean })
                         }
                       />
-                      <Label htmlFor="consent" className="text-sm text-[#5A4A2E] leading-relaxed">
+                      <Label htmlFor="consent" className="text-sm text-[#1A1A1A]/70 leading-relaxed">
                         I confirm this testimonial reflects my genuine experience and I allow JBJ Global Real Estate to publish it on the website. I understand personal details can be anonymized upon request. *
                       </Label>
                     </div>
@@ -587,7 +587,7 @@ const Testimonials = () => {
                   <Lock className="w-7 h-7 text-gold" />
                 </div>
                 <div>
-                  <p className="text-[#5A4A2E] leading-relaxed">
+                  <p className="text-[#1A1A1A]/70 leading-relaxed">
                     We verify submissions for authenticity and remove sensitive data. If you request anonymization, your testimonial can be published without identifying details.
                   </p>
                 </div>
@@ -625,7 +625,7 @@ const Testimonials = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
+                    <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -654,7 +654,7 @@ const Testimonials = () => {
               >
                 Share Your Experience
               </h2>
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Submit a testimonial and help future clients choose with confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

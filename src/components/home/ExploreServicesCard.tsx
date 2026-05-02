@@ -228,7 +228,7 @@ const ExploreServicesCard = () => {
         <h3 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
           Explore Our Services
         </h3>
-        <p className="text-sm md:text-base text-[#5A4A2E] mt-1">Premium real estate solutions tailored to your needs</p>
+        <p className="text-sm md:text-base text-[#1A1A1A]/70 mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
       {/* Slideshow - Persistent image stack (no AnimatePresence) */}
@@ -293,7 +293,7 @@ const ExploreServicesCard = () => {
                 )}
               </div>
             ) : (
-              <Button variant="default" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm bg-[#EFE6D6] text-[#5A4A2E] border border-[#B89555]/30 cursor-not-allowed">
+              <Button variant="default" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm bg-[#EFE6D6] text-[#1A1A1A]/70 border border-[#B89555]/30 cursor-not-allowed">
                 {CTA_LABELS[currentService.id] ?? "Coming Soon"}
               </Button>
             )}

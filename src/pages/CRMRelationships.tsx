@@ -55,7 +55,7 @@ const SOURCE_STYLES: Record<string, string> = {
   perplexity: "bg-blue-50 text-blue-800 border-blue-200",
   firecrawl: "bg-indigo-50 text-indigo-800 border-indigo-200",
   ai_inference: "bg-amber-50 text-amber-900 border-amber-200",
-  manual: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30",
+  manual: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30",
 };
 
 const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
@@ -355,12 +355,12 @@ const BrokeragesTab = () => {
             <Building2 className="w-4 h-4 text-[#B89555]" />
             Directory status
           </div>
-          <div><span className="text-[#5A4A2E]">All:</span> <b>{data.length}</b></div>
-          <div><span className="text-[#5A4A2E]">UAE Directory:</span> <b>{directoryCount}</b></div>
-          <div><span className="text-[#5A4A2E]">My Additions:</span> <b>{ownerCount}</b></div>
-          <div><span className="text-[#5A4A2E]">Existing Matches:</span> <b>{existingCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
+          <div><span className="text-[#1A1A1A]/70">UAE Directory:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
         </div>
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#5A4A2E]">
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#1A1A1A]/70">
           {EMIRATES.map((e) => (
             <span key={e}>
               {e}: <b className="text-[#1A1A1A]">{emirateCounts[e] || 0}</b>
@@ -474,7 +474,7 @@ const BrokeragesTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#5A4A2E]">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => {
@@ -508,7 +508,7 @@ const BrokeragesTab = () => {
                       )}
                       {!isDirectory && <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />}
                     </div>
-                    <div className="text-xs text-[#5A4A2E] space-y-0.5">
+                    <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
                       {(r.office_address || r.office_location) && <div>{r.office_address || r.office_location}</div>}
@@ -537,7 +537,7 @@ const BrokeragesTab = () => {
                         { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
                       ].map((k) => (
                         <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
-                          <div className="text-[9px] uppercase tracking-wider text-[#5A4A2E] font-semibold">{k.label}</div>
+                          <div className="text-[9px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold">{k.label}</div>
                           <div className="text-sm font-bold text-[#1A1A1A]">{k.value}</div>
                         </div>
                       ))}
@@ -713,7 +713,7 @@ const ClientsTab = () => {
                       <h3 className="font-bold text-base text-[#1A1A1A]">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
                       <InlineStatusSelect entityType="client" id={r.id} value={r.status} options={STATUS_CLIENT} />
                     </div>
-                    <div className="text-xs text-[#5A4A2E] space-y-0.5">
+                    <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.email && <div>{r.email}</div>}
                       {r.phone && <div>{r.phone}</div>}
                       {(r.budget_min || r.budget_max) && <div>Budget: {r.currency} {(r.budget_min || 0).toLocaleString()} – {(r.budget_max || 0).toLocaleString()}</div>}
@@ -798,7 +798,7 @@ const DocumentPackPanel = () => {
           <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
           <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
-        <p className="text-xs text-[#5A4A2E] mb-4">
+        <p className="text-xs text-[#1A1A1A]/70 mb-4">
           Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
@@ -1075,7 +1075,7 @@ const DeveloperRegistryTab = () => {
               {queuePool.length}
             </span>
           </div>
-          <span className="text-[11px] text-[#5A4A2E]">
+          <span className="text-[11px] text-[#1A1A1A]/70">
             Always expanded — Document Pack &amp; Outreach Settings stay collapsible
           </span>
         </div>
@@ -1215,7 +1215,7 @@ const DeveloperRegistryTab = () => {
               <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
                 <CardContent className="p-3 text-center">
                   <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                  <div className="text-[10px] uppercase text-[#5A4A2E] mt-1">{s.label}</div>
+                  <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1">{s.label}</div>
                 </CardContent>
               </Card>
             ))}
@@ -1387,7 +1387,7 @@ const DeveloperRegistryTab = () => {
                         {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
                           <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#1A1A1A]">
                             <span className="font-semibold">{r.developer_contact?.name || "—"}</span>
-                            {r.developer_contact?.role && <span className="text-[#5A4A2E]">· {r.developer_contact.role}</span>}
+                            {r.developer_contact?.role && <span className="text-[#1A1A1A]/70">· {r.developer_contact.role}</span>}
                             {r.developer_contact?.phone && (
                               <a href={`tel:${r.developer_contact.phone}`} className="underline flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                                 <Phone className="w-3 h-3" />{r.developer_contact.phone}
@@ -1421,7 +1421,7 @@ const DeveloperRegistryTab = () => {
                       ) : (
                         <button
                           onClick={() => setNoteEditing(r.id)}
-                          className="mt-1 text-xs text-left text-[#5A4A2E] hover:text-[#1A1A1A] italic block w-full"
+                          className="mt-1 text-xs text-left text-[#1A1A1A]/70 hover:text-[#1A1A1A] italic block w-full"
                         >
                           {r.notes ? `📝 ${r.notes}` : "+ Add note"}
                         </button>
@@ -1540,7 +1540,7 @@ const CRMRelationships = () => {
             </Button>
             <div className="flex-1 min-w-[240px]">
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">Relationships Hub</h1>
-              <p className="text-sm text-[#5A4A2E] mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-[#1A1A1A]">Leads &amp; Clients</span>.</p>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-[#1A1A1A]">Leads &amp; Clients</span>.</p>
             </div>
             <Button
               variant="gold"
@@ -1555,7 +1555,7 @@ const CRMRelationships = () => {
           {/* Clients tab intentionally removed — all client + lead records now live in the unified
               "Leads & Clients" workspace at /crm/leads (powered by crm_leads). Do NOT re-add a Clients tab here. */}
           <div className="mb-6 rounded-xl border border-[#1A1A1A]/10 bg-[#FDFBF7] p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div className="text-sm text-[#5A4A2E]">
+            <div className="text-sm text-[#1A1A1A]/70">
               <span className="font-semibold text-[#1A1A1A]">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
             </div>
             <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">

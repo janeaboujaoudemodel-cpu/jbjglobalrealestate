@@ -263,7 +263,7 @@ const PartnerCompanySetup = () => {
                   <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <p className="text-center text-[#5A4A2E]">
+                  <p className="text-center text-[#1A1A1A]/70">
                     Looking to establish a business in the UAE? We'll connect you with a licensed 
                     corporate service provider who can guide you through the formation process.
                   </p>
@@ -275,7 +275,7 @@ const PartnerCompanySetup = () => {
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
                     />
-                    <Label htmlFor="company-consent" className="text-sm text-[#5A4A2E] cursor-pointer">
+                    <Label htmlFor="company-consent" className="text-sm text-[#1A1A1A]/70 cursor-pointer">
                       I understand this service is provided by an independent licensed corporate service provider. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide company formation services directly.
                     </Label>

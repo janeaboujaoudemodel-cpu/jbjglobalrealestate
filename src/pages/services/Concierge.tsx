@@ -172,7 +172,7 @@ const Concierge = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -195,7 +195,7 @@ const Concierge = () => {
               What Concierge Means Here
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner text-center">
-              <p className="text-[#5A4A2E] text-lg leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                 Concierge support is designed for clients who want smoother execution—less chasing, more structure, and clearer outcomes.
               </p>
             </motion.div>
@@ -228,7 +228,7 @@ const Concierge = () => {
                       <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <span className="text-[#5A4A2E] pt-2">{item.text}</span>
+                      <span className="text-[#1A1A1A]/70 pt-2">{item.text}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -302,7 +302,7 @@ const Concierge = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {serviceStandards.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
+                  <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -344,7 +344,7 @@ const Concierge = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#5A4A2E] pl-8">
+                    <AccordionContent className="text-[#1A1A1A]/70 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -372,7 +372,7 @@ const Concierge = () => {
             >
               Let us handle the coordination
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 mb-8">
               Submit one request and we'll structure the execution plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

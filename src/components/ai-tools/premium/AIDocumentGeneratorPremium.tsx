@@ -281,7 +281,7 @@ const AIDocumentGeneratorPremium = () => {
   const renderField = (field: FieldConfig) => {
     const value = typeFields[field.key] || "";
     const baseInputClass =
-      "bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-[#5A4A2E]";
+      "bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-[#1A1A1A]/70";
 
     if (field.type === "input") {
       return (
@@ -721,7 +721,7 @@ const AIDocumentGeneratorPremium = () => {
                   <Loader2 size={18} className="animate-spin text-white/90" />
                 </div>
               ) : brandAssets.length === 0 ? (
-                <p className="text-xs text-[#5A4A2E] text-center py-4">No brand assets saved yet.</p>
+                <p className="text-xs text-[#1A1A1A]/70 text-center py-4">No brand assets saved yet.</p>
               ) : (
                 <div className="grid grid-cols-4 gap-2">
                   {brandAssets.slice(0, 8).map((asset: any) => (

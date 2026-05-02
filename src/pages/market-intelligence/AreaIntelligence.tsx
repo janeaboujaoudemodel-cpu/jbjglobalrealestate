@@ -35,7 +35,7 @@ const AreaIntelligence = () => {
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Bearish</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30">Neutral</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30">Neutral</Badge>;
     }
   };
 
@@ -100,7 +100,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                       No assumptions, projections, or guarantees are used. All insights are descriptive and based on registered activity from official government sources.
                     </p>
                   </div>
@@ -126,7 +126,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">What</span> "Area Intelligence" Means
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       Area Intelligence refers to the structured analysis of a specific location based on:
                     </p>
                     <ul className="grid md:grid-cols-2 gap-3">
@@ -138,14 +138,14 @@ const AreaIntelligence = () => {
                         "Approved service charges",
                         "Official rental benchmarks"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#5A4A2E]">
+                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
                           <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="mt-6 p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
-                      <p className="text-[#5A4A2E] text-sm italic">
+                      <p className="text-[#1A1A1A]/70 text-sm italic">
                         Each area is assessed independently. No two locations behave the same, even within the same district.
                       </p>
                     </div>
@@ -172,7 +172,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">Official</span> Data Sources Used Per Area
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       All area-level analysis relies only on data published or recognized by the Dubai Land Department (DLD) and RERA, including:
                     </p>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -192,7 +192,7 @@ const AreaIntelligence = () => {
                           <div className="flex items-start justify-between">
                             <div>
                               <h4 className="font-semibold text-[#1A1A1A] group-hover:text-gold transition-colors">{source.title}</h4>
-                              <p className="text-[#5A4A2E] text-sm mt-1">{source.desc}</p>
+                              <p className="text-[#1A1A1A]/70 text-sm mt-1">{source.desc}</p>
                             </div>
                             <ExternalLink className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
@@ -222,7 +222,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">How</span> an Area Is Evaluated
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       Each area is reviewed using the same structured framework:
                     </p>
                     <div className="space-y-4">
@@ -239,7 +239,7 @@ const AreaIntelligence = () => {
                           </div>
                           <div>
                             <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>
-                            <p className="text-[#5A4A2E] text-sm mt-1">{item.desc}</p>
+                            <p className="text-[#1A1A1A]/70 text-sm mt-1">{item.desc}</p>
                           </div>
                         </div>
                       ))}
@@ -267,7 +267,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">What</span> Area Intelligence Does Not Do
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       Area Intelligence does not:
                     </p>
                     <ul className="space-y-3 mb-6">
@@ -277,7 +277,7 @@ const AreaIntelligence = () => {
                         "Assign scores or ratings",
                         "Provide guarantees or forecasts"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#5A4A2E]">
+                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
                           <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0">
                             <span className="text-red-500 text-xs font-bold">✕</span>
                           </div>
@@ -286,7 +286,7 @@ const AreaIntelligence = () => {
                       ))}
                     </ul>
                     <div className="p-4 bg-red-500/5 rounded-xl border border-red-500/20">
-                      <p className="text-[#5A4A2E] text-sm font-medium">
+                      <p className="text-[#1A1A1A]/70 text-sm font-medium">
                         Any area discussion that promises returns or future appreciation is not compliant with Dubai real estate regulations.
                       </p>
                     </div>
@@ -313,7 +313,7 @@ const AreaIntelligence = () => {
                       <span className="text-gold">Why</span> Area-Level Analysis Matters
                     </h2>
                   </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       Dubai's real estate market is not uniform. Performance, demand, and tenant behavior vary significantly between areas due to:
                     </p>
                     <ul className="grid md:grid-cols-2 gap-3 mb-6">
@@ -324,14 +324,14 @@ const AreaIntelligence = () => {
                         "Tenant profiles",
                         "Approved pricing benchmarks"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#5A4A2E]">
+                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
                           <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="p-4 bg-[#1A1A1A]/5 rounded-xl border border-gold/20">
-                      <p className="text-[#5A4A2E] text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         Understanding these differences helps buyers, sellers, landlords, and tenants make informed decisions based on where a property is located—not just the property itself.
                       </p>
                     </div>
@@ -358,7 +358,7 @@ const AreaIntelligence = () => {
                         <span className="text-gold">How</span> JBJ Global Real Estate Uses Area Intelligence
                       </h2>
                     </div>
-                    <p className="text-[#5A4A2E] text-lg leading-relaxed mb-6">
+                    <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
                       JBJ Global Real Estate uses area intelligence to:
                     </p>
                     <ul className="space-y-3 mb-6">
@@ -368,19 +368,19 @@ const AreaIntelligence = () => {
                         "Align properties with client objectives",
                         "Avoid misrepresentation or over-marketing"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#5A4A2E]">
+                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
                           <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                     <div className="p-4 bg-gold/10 rounded-xl border border-gold/30">
-                      <p className="text-[#5A4A2E] text-sm font-medium">
+                      <p className="text-[#1A1A1A]/70 text-sm font-medium">
                         All explanations are grounded in registered data and official benchmarks.
                       </p>
                     </div>
                     <div className="mt-6 p-4 bg-[#1A1A1A] rounded-xl">
-                      <p className="text-[#5A4A2E] text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-gold hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
                       </p>
                     </div>
@@ -437,21 +437,21 @@ const AreaIntelligence = () => {
                                         {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                                       </span>
                                     </div>
-                                    <p className="text-[#5A4A2E] text-xs">YoY</p>
+                                    <p className="text-[#1A1A1A]/70 text-xs">YoY</p>
                                   </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                   <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-2">
-                                    <p className="text-[#5A4A2E] text-xs">Price Index</p>
+                                    <p className="text-[#1A1A1A]/70 text-xs">Price Index</p>
                                     <p className="text-[#1A1A1A] font-semibold">{area.priceIndex}</p>
                                   </div>
                                   <div className="bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-2">
-                                    <p className="text-[#5A4A2E] text-xs">Rental Index</p>
+                                    <p className="text-[#1A1A1A]/70 text-xs">Rental Index</p>
                                     <p className="text-[#1A1A1A] font-semibold">{area.rentalIndex}</p>
                                   </div>
                                   <div>
-                                    <p className="text-[#5A4A2E] text-xs">Demand</p>
+                                    <p className="text-[#1A1A1A]/70 text-xs">Demand</p>
                                     <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-emerald-500 h-1.5 rounded-full" 
@@ -460,7 +460,7 @@ const AreaIntelligence = () => {
                                     </div>
                                   </div>
                                   <div>
-                                    <p className="text-[#5A4A2E] text-xs">Supply</p>
+                                    <p className="text-[#1A1A1A]/70 text-xs">Supply</p>
                                     <div className="w-full bg-[#1A1A1A]/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-gold h-1.5 rounded-full" 
@@ -473,7 +473,7 @@ const AreaIntelligence = () => {
                                 <div className="border-t border-gold/30 pt-4">
                                   <ul className="space-y-1">
                                     {area.highlights.slice(0, 2).map((highlight, i) => (
-                                      <li key={i} className="text-[#5A4A2E] text-xs flex items-start gap-2">
+                                      <li key={i} className="text-[#1A1A1A]/70 text-xs flex items-start gap-2">
                                         <span className="text-gold">•</span>
                                         {highlight}
                                       </li>
@@ -513,7 +513,7 @@ const AreaIntelligence = () => {
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />
               </div>
-              <p className="text-[#5A4A2E] text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+              <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
             </div>
           </div>
         </div>

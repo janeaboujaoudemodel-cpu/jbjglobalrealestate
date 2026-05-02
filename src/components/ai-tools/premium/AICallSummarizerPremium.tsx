@@ -133,7 +133,7 @@ const AICallSummarizerPremium = () => {
     if (s === "positive") return "text-emerald-400 bg-emerald-500/20 border-emerald-500/30";
     if (s === "negative") return "text-red-400 bg-red-500/20 border-red-500/30";
     if (s === "mixed") return "text-amber-400 bg-amber-500/20 border-amber-500/30";
-    return "text-[#5A4A2E] bg-[#B89555]/20 border-[#B89555]/30/30";
+    return "text-[#1A1A1A]/70 bg-[#B89555]/20 border-[#B89555]/30/30";
   };
 
   return (
@@ -173,7 +173,7 @@ const AICallSummarizerPremium = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-[#5A4A2E]">Client Name</Label>
+                <Label className="text-[#1A1A1A]/70">Client Name</Label>
                 <Input
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
@@ -182,7 +182,7 @@ const AICallSummarizerPremium = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-[#5A4A2E]">Audio Recording (Optional)</Label>
+                <Label className="text-[#1A1A1A]/70">Audio Recording (Optional)</Label>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     type="button"
@@ -234,7 +234,7 @@ const AICallSummarizerPremium = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[#5A4A2E]">Call Notes</Label>
+              <Label className="text-[#1A1A1A]/70">Call Notes</Label>
               <Textarea
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
@@ -302,7 +302,7 @@ const AICallSummarizerPremium = () => {
                     <CheckCircle className="h-4 w-4 text-orange-400" />
                     <span className="text-sm font-semibold text-white">Call Summary</span>
                   </div>
-                  <p className="text-[#5A4A2E] leading-relaxed">{result.summary}</p>
+                  <p className="text-[#1A1A1A]/70 leading-relaxed">{result.summary}</p>
                 </CardContent>
               </Card>
 
@@ -315,7 +315,7 @@ const AICallSummarizerPremium = () => {
                   </div>
                   <ul className="space-y-2">
                     {result.actionItems.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-[#5A4A2E] text-sm">
+                      <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/70 text-sm">
                         <ArrowRight className="w-4 h-4 text-orange-400 mt-0.5 flex-shrink-0" />
                         {item}
                       </li>
@@ -334,7 +334,7 @@ const AICallSummarizerPremium = () => {
                     </div>
                     <ul className="space-y-2">
                       {result.clientNeeds.map((need, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[#5A4A2E] text-sm">
+                        <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/70 text-sm">
                           <User className="w-3 h-3 text-orange-400 mt-1 flex-shrink-0" />
                           {need}
                         </li>
@@ -351,7 +351,7 @@ const AICallSummarizerPremium = () => {
                     </div>
                     <ul className="space-y-2">
                       {result.nextSteps.map((step, i) => (
-                        <li key={i} className="flex items-start gap-2 text-[#5A4A2E] text-sm">
+                        <li key={i} className="flex items-start gap-2 text-[#1A1A1A]/70 text-sm">
                           <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 text-xs flex items-center justify-center flex-shrink-0">
                             {i + 1}
                           </span>
@@ -373,8 +373,8 @@ const AICallSummarizerPremium = () => {
               <div className="p-6 rounded-full bg-orange-500/10 mb-4">
                 <Phone className="h-12 w-12 text-orange-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-[#5A4A2E]">Ready to Summarize</h3>
-              <p className="text-sm text-[#5A4A2E] mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-[#1A1A1A]/70">Ready to Summarize</h3>
+              <p className="text-sm text-[#1A1A1A]/70 mt-2 max-w-sm">
                 Enter call details above to generate an AI-powered summary with action items and next steps
               </p>
             </motion.div>

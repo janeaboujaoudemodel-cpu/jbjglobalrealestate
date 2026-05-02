@@ -27,17 +27,17 @@ export default function ReferralContract({
       {/* Header - Large logo only, no duplicate company name */}
       <div className="text-center border-b-2 border-gold pb-6 mb-8">
         <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-28 mx-auto mb-4" />
-        <p className="text-sm text-[#5A4A2E] mt-1">Real Estate Brokerage</p>
-        <p className="text-xs text-[#5A4A2E] mt-2">Dubai, United Arab Emirates</p>
+        <p className="text-sm text-[#1A1A1A]/70 mt-1">Real Estate Brokerage</p>
+        <p className="text-xs text-[#1A1A1A]/70 mt-2">Dubai, United Arab Emirates</p>
       </div>
 
       {/* Title */}
       <div className="text-center mb-8">
         <h2 className="text-xl font-bold uppercase tracking-widest">Referral Partner Agreement</h2>
-        <p className="text-sm text-[#5A4A2E] mt-2">
+        <p className="text-sm text-[#1A1A1A]/70 mt-2">
           Agreement Date: {format(contractDate, "MMMM d, yyyy")}
         </p>
-        <p className="text-sm text-[#5A4A2E]">
+        <p className="text-sm text-[#1A1A1A]/70">
           Reference No: JJ-REF-{format(contractDate, "yyyyMMdd")}-{Math.random().toString(36).substring(2, 8).toUpperCase()}
         </p>
       </div>
@@ -162,7 +162,7 @@ export default function ReferralContract({
         <div>
           <p className="font-semibold text-sm mb-4">For JBJ Global Real Estate:</p>
           <div className="h-20 border-b border-[#B89555]/30 mb-2 flex items-end justify-center pb-2">
-            <span className="text-[#5A4A2E] italic text-sm">Authorized Signatory</span>
+            <span className="text-[#1A1A1A]/70 italic text-sm">Authorized Signatory</span>
           </div>
           <p className="text-sm">Name: ________________________</p>
           <p className="text-sm mt-2">Date: {format(contractDate, "dd/MM/yyyy")}</p>
@@ -173,7 +173,7 @@ export default function ReferralContract({
             {signatureDataUrl ? (
               <img src={signatureDataUrl} alt="Signature" className="h-16 max-w-full object-contain" />
             ) : (
-              <span className="text-[#5A4A2E] italic text-sm">Sign here</span>
+              <span className="text-[#1A1A1A]/70 italic text-sm">Sign here</span>
             )}
           </div>
           <p className="text-sm">Name: {partnerName}</p>
@@ -182,7 +182,7 @@ export default function ReferralContract({
       </section>
 
       {/* Footer */}
-      <div className="mt-12 pt-4 border-t border-[#B89555]/30 text-center text-xs text-[#5A4A2E]">
+      <div className="mt-12 pt-4 border-t border-[#B89555]/30 text-center text-xs text-[#1A1A1A]/70">
         <p>JBJ Global Real Estate L.L.C. | Dubai, United Arab Emirates</p>
         <p>www.JBJ.ae | Contact@JBJ.ae</p>
         <p className="mt-2">This document is electronically generated and valid without physical stamp.</p>

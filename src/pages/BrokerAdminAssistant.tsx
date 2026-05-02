@@ -119,7 +119,7 @@ export default function BrokerAdminAssistant() {
                       Broker's Admin
                     </Badge>
                   </h1>
-                  <p className="text-[#5A4A2E] text-sm">Your dedicated broker network administrator • Available 24/7</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Your dedicated broker network administrator • Available 24/7</p>
                 </div>
               </div>
               
@@ -147,7 +147,7 @@ export default function BrokerAdminAssistant() {
             <Card className="bg-[#0E0E0E] border-emerald-500/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-[#5A4A2E]">👥 Total Brokers</p>
+                  <p className="text-xs text-[#1A1A1A]/70">👥 Total Brokers</p>
                   <p className="text-2xl font-bold text-emerald-400">{stats.totalBrokers}</p>
                 </div>
                 <Users className="h-8 w-8 text-emerald-500/30" />
@@ -156,7 +156,7 @@ export default function BrokerAdminAssistant() {
             <Card className="bg-[#0E0E0E] border-green-500/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-[#5A4A2E]">✅ Active</p>
+                  <p className="text-xs text-[#1A1A1A]/70">✅ Active</p>
                   <p className="text-2xl font-bold text-green-400">{stats.activeBrokers}</p>
                 </div>
                 <Shield className="h-8 w-8 text-green-500/30" />
@@ -165,7 +165,7 @@ export default function BrokerAdminAssistant() {
             <Card className="bg-[#0E0E0E] border-yellow-500/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-[#5A4A2E]">⏳ Pending Onboarding</p>
+                  <p className="text-xs text-[#1A1A1A]/70">⏳ Pending Onboarding</p>
                   <p className="text-2xl font-bold text-yellow-400">{stats.pendingOnboarding}</p>
                 </div>
                 <UserPlus className="h-8 w-8 text-yellow-500/30" />
@@ -174,7 +174,7 @@ export default function BrokerAdminAssistant() {
             <Card className="bg-[#0E0E0E] border-orange-500/20">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-[#5A4A2E]">⚠️ RERA Expiring</p>
+                  <p className="text-xs text-[#1A1A1A]/70">⚠️ RERA Expiring</p>
                   <p className="text-2xl font-bold text-orange-400">{stats.reraExpiringThisMonth}</p>
                 </div>
                 <ClipboardCheck className="h-8 w-8 text-orange-500/30" />
@@ -296,7 +296,7 @@ export default function BrokerAdminAssistant() {
                                 <div className="flex items-center justify-between">
                                   <div>
                                     <p className="text-white font-medium">{broker.name}</p>
-                                    <p className="text-xs text-[#5A4A2E]">{broker.email}</p>
+                                    <p className="text-xs text-[#1A1A1A]/70">{broker.email}</p>
                                   </div>
                                   <Badge 
                                     variant={broker.status === 'completed' ? 'default' : broker.status === 'in_progress' ? 'secondary' : 'outline'}
@@ -337,7 +337,7 @@ export default function BrokerAdminAssistant() {
                             </div>
                             <div className="flex-1">
                               <p className="text-white text-sm">Completed onboarding for <strong>Sarah Johnson</strong></p>
-                              <p className="text-xs text-[#5A4A2E]">2 hours ago</p>
+                              <p className="text-xs text-[#1A1A1A]/70">2 hours ago</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 p-3 bg-zinc-900 rounded-lg">
@@ -346,7 +346,7 @@ export default function BrokerAdminAssistant() {
                             </div>
                             <div className="flex-1">
                               <p className="text-white text-sm">Sent RERA renewal reminder to <strong>3 brokers</strong></p>
-                              <p className="text-xs text-[#5A4A2E]">4 hours ago</p>
+                              <p className="text-xs text-[#1A1A1A]/70">4 hours ago</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3 p-3 bg-zinc-900 rounded-lg">
@@ -355,7 +355,7 @@ export default function BrokerAdminAssistant() {
                             </div>
                             <div className="flex-1">
                               <p className="text-white text-sm">Updated broker handbook with Q1 2026 compliance updates</p>
-                              <p className="text-xs text-[#5A4A2E]">5 hours ago</p>
+                              <p className="text-xs text-[#1A1A1A]/70">5 hours ago</p>
                             </div>
                           </div>
                         </div>
@@ -373,7 +373,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">Broker Onboarding Pipeline</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Manage broker onboarding from application to activation. Track progress, documentation, and training completion.</p>
+                      <p className="text-[#1A1A1A]/70">Manage broker onboarding from application to activation. Track progress, documentation, and training completion.</p>
                       <div className="mt-4 space-y-4">
                         {pendingBrokers.map((broker) => (
                           <div key={broker.id} className="p-4 bg-zinc-900 rounded-lg border border-[#1A1A1A]">
@@ -383,7 +383,7 @@ export default function BrokerAdminAssistant() {
                                 {broker.status}
                               </Badge>
                             </div>
-                            <p className="text-sm text-[#5A4A2E]">Start Date: {broker.startDate}</p>
+                            <p className="text-sm text-[#1A1A1A]/70">Start Date: {broker.startDate}</p>
                             <div className="flex gap-2 mt-3">
                               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
                                 Continue Onboarding
@@ -407,7 +407,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">RERA & Compliance Management</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Track RERA licenses, compliance documents, and renewal deadlines for all brokers.</p>
+                      <p className="text-[#1A1A1A]/70">Track RERA licenses, compliance documents, and renewal deadlines for all brokers.</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -428,7 +428,7 @@ export default function BrokerAdminAssistant() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Complete directory of all active and inactive brokers with contact information and performance metrics.</p>
+                      <p className="text-[#1A1A1A]/70">Complete directory of all active and inactive brokers with contact information and performance metrics.</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -441,7 +441,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">Training & Certification</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Manage broker training modules, track completion, and issue certifications.</p>
+                      <p className="text-[#1A1A1A]/70">Manage broker training modules, track completion, and issue certifications.</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -454,7 +454,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">Broker Communications</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Send announcements, reminders, and individual messages to brokers.</p>
+                      <p className="text-[#1A1A1A]/70">Send announcements, reminders, and individual messages to brokers.</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -467,7 +467,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">Document Management</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Manage broker contracts, licenses, and compliance documentation.</p>
+                      <p className="text-[#1A1A1A]/70">Manage broker contracts, licenses, and compliance documentation.</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -480,7 +480,7 @@ export default function BrokerAdminAssistant() {
                       <CardTitle className="text-white">Scheduling & Appointments</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-[#5A4A2E]">Schedule onboarding sessions, training, and broker meetings.</p>
+                      <p className="text-[#1A1A1A]/70">Schedule onboarding sessions, training, and broker meetings.</p>
                     </CardContent>
                   </Card>
                 </motion.div>

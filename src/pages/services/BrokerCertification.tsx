@@ -226,9 +226,9 @@ const BrokerCertification = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <GraduationCap className="w-12 h-12 text-[#5A4A2E]" />
+                <GraduationCap className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
-              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
+              <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">JBJ Standards Program Overview</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -278,7 +278,7 @@ const BrokerCertification = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -321,7 +321,7 @@ const BrokerCertification = () => {
                       <item.icon className="w-7 h-7 text-gold" />
                     </div>
                     <h3 className="font-semibold text-[#1A1A1A] mb-2">{item.title}</h3>
-                    <p className="text-sm text-[#5A4A2E]">{item.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -354,7 +354,7 @@ const BrokerCertification = () => {
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-[#5A4A2E] pt-2">{item.text}</span>
+                    <span className="text-[#1A1A1A]/70 pt-2">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -379,7 +379,7 @@ const BrokerCertification = () => {
             >
               Program Modules
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-12 max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-12 max-w-2xl mx-auto">
               Use "Book/Module" style cards — content is not downloadable
             </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
@@ -408,7 +408,7 @@ const BrokerCertification = () => {
                           <p className="text-xs text-white/90 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
+                              <li key={idx} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
                                 <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                                 <span>{topic}</span>
                               </li>
@@ -418,7 +418,7 @@ const BrokerCertification = () => {
                         
                         <div className="bg-[#1A1A1A]/10 rounded-lg p-3 border border-gold/20">
                           <p className="text-xs text-white/90 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
-                          <p className="text-sm text-[#5A4A2E]">{module.completionCheck}</p>
+                          <p className="text-sm text-[#1A1A1A]/70">{module.completionCheck}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -447,7 +447,7 @@ const BrokerCertification = () => {
             >
               Certificate Preview
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8">
               On-screen preview only — certificate is not downloadable publicly
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -564,18 +564,18 @@ const BrokerCertification = () => {
             >
               Admin Issuance Workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8">
               Back-office administration capabilities
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] mb-6 font-medium">Admin can:</p>
+              <p className="text-[#1A1A1A]/70 mb-6 font-medium">Admin can:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {adminWorkflow.map((item, index) => (
                   <div key={index} className="flex items-center gap-3 bg-[#1A1A1A]/5 rounded-lg p-4">
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-[#5A4A2E] text-sm">{item.text}</span>
+                    <span className="text-[#1A1A1A]/70 text-sm">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -612,7 +612,7 @@ const BrokerCertification = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
+                    <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -641,7 +641,7 @@ const BrokerCertification = () => {
               >
                 Join the Standards Program
               </h2>
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Request enrollment and receive the program pathway and requirements.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

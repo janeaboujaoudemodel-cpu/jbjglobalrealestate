@@ -81,7 +81,7 @@ const SectionHeadline = ({ children, className = "" }: { children: React.ReactNo
 // Content text wrapper for readability - now defaults to dark text on pearl background
 const ContentText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div 
-    className={`max-w-[680px] space-y-4 text-[#5A4A2E] ${className}`}
+    className={`max-w-[680px] space-y-4 text-[#1A1A1A]/70 ${className}`}
     style={{ fontSize: '17px', lineHeight: 1.75 }}
   >
     {children}
@@ -106,7 +106,7 @@ const FeatureCard = ({
       <Icon className="w-7 h-7 text-gold" />
     </div>
     <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-[#5A4A2E] text-base leading-relaxed">{description}</p>
+    <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
   </motion.div>
 );
 
@@ -166,7 +166,7 @@ const About = () => {
               A Licensed Brokerage Built on Structure, Clarity, and Accountability
             </motion.p>
             <motion.p 
-              className="text-[#5A4A2E] text-base md:text-lg max-w-3xl mx-auto mb-10"
+              className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl mx-auto mb-10"
               style={{ lineHeight: 1.7 }}
               variants={fadeInUp}
             >
@@ -576,7 +576,7 @@ const About = () => {
                     Not Sure Where to Start?
                   </motion.h2>
                   <motion.p 
-                    className="text-[#5A4A2E] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
                     Whether you are buying, renting, investing, or simply seeking clarity — our role is to guide you with precision, not pressure.

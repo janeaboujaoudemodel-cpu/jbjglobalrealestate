@@ -51,7 +51,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>Thank You!</T>
         </h4>
-        <p className="text-[#5A4A2E] text-sm mb-4">
+        <p className="text-[#1A1A1A]/70 text-sm mb-4">
           <T>Your feedback helps us improve our service</T>
         </p>
         <Button
@@ -74,7 +74,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2 text-center">
           <T>How was your chat experience?</T>
         </h4>
-        <p className="text-[#5A4A2E] text-sm text-center mb-6">
+        <p className="text-[#1A1A1A]/70 text-sm text-center mb-6">
           <T>Your feedback helps us serve you better</T>
         </p>
 
@@ -94,9 +94,9 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
             className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-[#B89555]/30 hover:border-[#B89555]/30 hover:bg-[#F7F2EA] transition-all"
           >
             <div className="w-12 h-12 rounded-full bg-[#F7F2EA] flex items-center justify-center">
-              <Minus className="w-6 h-6 text-[#5A4A2E]" />
+              <Minus className="w-6 h-6 text-[#1A1A1A]/70" />
             </div>
-            <span className="text-sm font-medium text-[#5A4A2E]"><T>Neutral</T></span>
+            <span className="text-sm font-medium text-[#1A1A1A]/70"><T>Neutral</T></span>
           </button>
 
           <button
@@ -112,7 +112,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
 
         <button
           onClick={onSkip}
-          className="text-[#5A4A2E] text-sm hover:text-gold transition-colors"
+          className="text-[#1A1A1A]/70 text-sm hover:text-gold transition-colors"
         >
           <T>Skip feedback</T>
         </button>
@@ -127,7 +127,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">
           <T>Tell us more</T>
         </h4>
-        <p className="text-[#5A4A2E] text-sm">
+        <p className="text-[#1A1A1A]/70 text-sm">
           <T>Rate your experience</T>
         </p>
       </div>
@@ -146,7 +146,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
               className={`w-8 h-8 ${
                 star <= (hoveredRating || rating)
                   ? 'text-gold fill-gold'
-                  : 'text-[#5A4A2E]'
+                  : 'text-[#1A1A1A]/70'
               }`}
             />
           </button>
@@ -159,7 +159,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your thoughts with us... (optional)"
-          className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] resize-none h-24"
+          className="bg-[#FDFBF7] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 resize-none h-24"
         />
       </div>
 

@@ -122,7 +122,7 @@ const ChatMessages = React.memo(({
                     await navigator.clipboard.writeText(message.content);
                     toast.success(t('chat.messageCopied') || 'Message copied');
                   }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                     message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                   }`}
                 >
@@ -162,7 +162,7 @@ const ChatMessages = React.memo(({
               <p className="text-sm font-semibold text-[#1A1A1A]">
                 <T>Describe your inquiry</T>
               </p>
-              <button onClick={() => setShowSubmitPanel(false)} className="text-[#5A4A2E] hover:text-[#1A1A1A]">
+              <button onClick={() => setShowSubmitPanel(false)} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -183,7 +183,7 @@ const ChatMessages = React.memo(({
               <Button
                 variant="outline"
                 onClick={() => setShowSubmitPanel(false)}
-                className="border-gold/30 text-[#5A4A2E]"
+                className="border-gold/30 text-[#1A1A1A]/70"
               >
                 <T>Cancel</T>
               </Button>

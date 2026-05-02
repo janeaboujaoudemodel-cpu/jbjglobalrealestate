@@ -65,7 +65,7 @@ export function BrokerToolkitGrowth() {
             <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
               Level Up Your <span className="text-gold">Career</span>
             </h2>
-            <p className="text-[#5A4A2E] max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
               Earn points for every action, unlock rewards, and climb the leaderboard.
             </p>
           </motion.div>
@@ -122,7 +122,7 @@ export function BrokerToolkitGrowth() {
                           <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
                             <activity.icon className="w-4 h-4 text-gold" />
                           </div>
-                          <span className="text-[#5A4A2E] text-sm">{activity.activity}</span>
+                          <span className="text-[#1A1A1A]/70 text-sm">{activity.activity}</span>
                         </div>
                         <span className="text-gold font-semibold">+{activity.points}</span>
                       </div>

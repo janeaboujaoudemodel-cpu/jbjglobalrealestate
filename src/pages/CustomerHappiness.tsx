@@ -196,7 +196,7 @@ const SupportTicketForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
             placeholder="John Smith"
           />
         </div>
@@ -210,7 +210,7 @@ const SupportTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
             placeholder="john@example.com"
           />
         </div>
@@ -224,7 +224,7 @@ const SupportTicketForm = () => {
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
             placeholder="+971 50 123 4567"
           />
         </div>
@@ -266,7 +266,7 @@ const SupportTicketForm = () => {
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
           placeholder="Brief description of your inquiry"
         />
       </div>
@@ -297,7 +297,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
@@ -452,7 +452,7 @@ const FeedbackForm = () => {
               className="transition-transform hover:scale-110"
             >
               <Star
-                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-[#5A4A2E]"}`}
+                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-[#1A1A1A]/70"}`}
               />
             </button>
           ))}
@@ -485,7 +485,7 @@ const FeedbackForm = () => {
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
@@ -520,7 +520,7 @@ const FeedbackForm = () => {
         <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
         <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Review</span>
       </button>
-      <p className="text-xs text-[#5A4A2E] text-center">
+      <p className="text-xs text-[#1A1A1A]/70 text-center">
         Reviews are moderated before being published on our website.
       </p>
     </form>
@@ -654,7 +654,7 @@ const IssueReportForm = () => {
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
@@ -666,7 +666,7 @@ const IssueReportForm = () => {
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Copy and paste any error message you see"
         />
       </div>
@@ -679,7 +679,7 @@ const IssueReportForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Describe what's not working..."
         />
       </div>
@@ -691,7 +691,7 @@ const IssueReportForm = () => {
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
@@ -708,7 +708,7 @@ const IssueReportForm = () => {
           />
           <label htmlFor="screenshot-upload" className="cursor-pointer">
             <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
-            <p className="text-[#5A4A2E] text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               {screenshot ? screenshot.name : "Click to upload a screenshot"}
             </p>
           </label>
@@ -900,7 +900,7 @@ const IdeaBoxForm = () => {
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Give your idea a catchy title"
         />
       </div>
@@ -913,7 +913,7 @@ const IdeaBoxForm = () => {
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
@@ -925,7 +925,7 @@ const IdeaBoxForm = () => {
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
@@ -944,7 +944,7 @@ const IdeaBoxForm = () => {
         <span className="text-[#1A1A1A] group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
         <span className="text-gold group-hover:text-[#1A1A1A] transition-colors">Enter Draw</span>
       </button>
-      <p className="text-xs text-[#5A4A2E] text-center">
+      <p className="text-xs text-[#1A1A1A]/70 text-center">
         By submitting, you agree to enter the monthly draw. Winners will be notified via email.
       </p>
     </form>
@@ -1000,7 +1000,7 @@ const CustomerHappiness = () => {
               </motion.h1>
 
               <motion.p
-                className="text-[#5A4A2E] text-lg max-w-2xl mx-auto mb-8"
+                className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-8"
                 variants={fadeInUp}
               >
                 Your satisfaction is our priority. Whether you need support, want to share feedback, 
@@ -1053,7 +1053,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-[#1A1A1A]">Create Support Ticket</CardTitle>
-                        <CardDescription className="text-[#5A4A2E]">
+                        <CardDescription className="text-[#1A1A1A]/70">
                           Need help? Our team typically responds within 24 hours.
                         </CardDescription>
                       </div>
@@ -1074,7 +1074,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-[#1A1A1A]">Write a Review</CardTitle>
-                        <CardDescription className="text-[#5A4A2E]">
+                        <CardDescription className="text-[#1A1A1A]/70">
                           Share your experience! Approved reviews will be featured on our website.
                         </CardDescription>
                       </div>
@@ -1095,7 +1095,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-[#1A1A1A]">Report an Issue</CardTitle>
-                        <CardDescription className="text-[#5A4A2E]">
+                        <CardDescription className="text-[#1A1A1A]/70">
                           Found a bug or something not working? Help us fix it!
                         </CardDescription>
                       </div>
@@ -1116,7 +1116,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-[#1A1A1A]">Idea Box — We Value Your Creativity!</CardTitle>
-                        <CardDescription className="text-[#5A4A2E]">
+                        <CardDescription className="text-[#1A1A1A]/70">
                           Share your innovative ideas and win amazing prizes!
                         </CardDescription>
                       </div>
@@ -1153,7 +1153,7 @@ const CustomerHappiness = () => {
                       <Phone className="w-7 h-7 text-blue-500" />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-[#5A4A2E] hover:text-blue-500 transition-colors font-medium">
+                    <a href="tel:+971565911000" className="text-[#1A1A1A]/70 hover:text-blue-500 transition-colors font-medium">
                       +971 56 591 1000
                     </a>
                   </CardContent>
@@ -1165,7 +1165,7 @@ const CustomerHappiness = () => {
                       <Mail className="w-7 h-7 text-purple-500" />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">Email Us</p>
-                    <a href="mailto:CONTACT@JBJ.AE" className="text-[#5A4A2E] hover:text-purple-500 transition-colors font-medium">
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-[#1A1A1A]/70 hover:text-purple-500 transition-colors font-medium">
                       CONTACT@JBJ.AE
                     </a>
                   </CardContent>
@@ -1177,7 +1177,7 @@ const CustomerHappiness = () => {
                       <Calendar className="w-7 h-7 text-gold" />
                     </div>
                     <p className="text-[#1A1A1A] font-semibold mb-1">Office Hours</p>
-                    <p className="text-[#5A4A2E] font-medium">Mon–Sun: 9AM–9PM</p>
+                    <p className="text-[#1A1A1A]/70 font-medium">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>

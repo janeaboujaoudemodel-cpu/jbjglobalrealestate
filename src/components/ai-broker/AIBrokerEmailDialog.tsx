@@ -188,7 +188,7 @@ export function AIBrokerEmailDialog({
           )}
 
           <div>
-            <Label className="text-[#5A4A2E]">Use Template (Optional)</Label>
+            <Label className="text-[#1A1A1A]/70">Use Template (Optional)</Label>
             <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
               <SelectTriggerDark className="mt-1">
                 <SelectValue placeholder="Select a template..." />
@@ -204,16 +204,16 @@ export function AIBrokerEmailDialog({
           </div>
 
           <div>
-            <Label className="text-[#5A4A2E]">To</Label>
+            <Label className="text-[#1A1A1A]/70">To</Label>
             <Input
               value={lead.email || ""}
               disabled
-              className="bg-zinc-800 border-[#1A1A1A] text-[#5A4A2E] mt-1"
+              className="bg-zinc-800 border-[#1A1A1A] text-[#1A1A1A]/70 mt-1"
             />
           </div>
 
           <div>
-            <Label className="text-[#5A4A2E]">Subject</Label>
+            <Label className="text-[#1A1A1A]/70">Subject</Label>
             <Input
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
@@ -223,7 +223,7 @@ export function AIBrokerEmailDialog({
           </div>
 
           <div>
-            <Label className="text-[#5A4A2E]">Message</Label>
+            <Label className="text-[#1A1A1A]/70">Message</Label>
             <Textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -236,7 +236,7 @@ export function AIBrokerEmailDialog({
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-[#1A1A1A] text-[#5A4A2E]"
+              className="border-[#1A1A1A] text-[#1A1A1A]/70"
             >
               Cancel
             </Button>

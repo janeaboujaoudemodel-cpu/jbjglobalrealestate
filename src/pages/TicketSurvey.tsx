@@ -97,10 +97,10 @@ const StarRating = ({ value, onChange, label }: { value: number; onChange: (v: n
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button key={star} type="button" onClick={() => onChange(star)} className="transition-transform hover:scale-110">
-          <Star className={`w-8 h-8 ${star <= value ? "fill-[#C8A766] text-[#C8A766]" : "text-[#5A4A2E]"}`} />
+          <Star className={`w-8 h-8 ${star <= value ? "fill-[#C8A766] text-[#C8A766]" : "text-[#1A1A1A]/70"}`} />
         </button>
       ))}
-      {value > 0 && <span className="ml-2 text-sm text-[#5A4A2E] self-center">{ratingLabels[value - 1]}</span>}
+      {value > 0 && <span className="ml-2 text-sm text-[#1A1A1A]/70 self-center">{ratingLabels[value - 1]}</span>}
     </div>
   </div>
 );
@@ -182,11 +182,11 @@ const TicketSurvey = () => {
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Thank You!</h2>
-          <p className="text-[#5A4A2E] mb-4">Your feedback helps us improve our service.</p>
+          <p className="text-[#1A1A1A]/70 mb-4">Your feedback helps us improve our service.</p>
           <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-4 border border-[#C8A766]">
             <Gift className="w-6 h-6 text-[#C8A766] mx-auto mb-2" />
             <p className="text-lg font-bold text-[#C8A766]">+{pointsAwarded} Points Earned!</p>
-            <p className="text-xs text-[#5A4A2E]">Thank you for your feedback</p>
+            <p className="text-xs text-[#1A1A1A]/70">Thank you for your feedback</p>
           </div>
         </motion.div>
       </div>
@@ -198,7 +198,7 @@ const TicketSurvey = () => {
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">{surveyCopy.title}</h1>
-          <p className="text-[#5A4A2E]">
+          <p className="text-[#1A1A1A]/70">
             Context: <span className="font-semibold text-[#C8A766]">{surveyCopy.badge}</span>
             {ticketNumber ? <span> · Ticket: <span className="font-mono text-[#C8A766] font-bold">{ticketNumber}</span></span> : null}
           </p>

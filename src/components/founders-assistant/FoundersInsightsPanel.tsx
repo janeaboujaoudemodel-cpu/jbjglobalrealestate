@@ -152,7 +152,7 @@ const FoundersInsightsPanel: React.FC = () => {
                 ) : (
                   <TrendingDown className="h-4 w-4 text-destructive" />
                 )}
-                <span className="text-xs text-[#5A4A2E] font-medium">Efficiency</span>
+                <span className="text-xs text-[#1A1A1A]/70 font-medium">Efficiency</span>
               </div>
               <p className={cn(
                 "text-2xl font-bold",
@@ -187,7 +187,7 @@ const FoundersInsightsPanel: React.FC = () => {
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="h-4 w-4 text-[#B89555]" />
-                <span className="text-xs text-[#5A4A2E] font-medium">Optimized</span>
+                <span className="text-xs text-[#1A1A1A]/70 font-medium">Optimized</span>
               </div>
               <p className="text-2xl font-bold text-[#B89555]">{weeklySummary.optimizationsApplied}</p>
             </CardContent>
@@ -412,7 +412,7 @@ const FoundersInsightsPanel: React.FC = () => {
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="font-bold text-[#8B6914]">{emp.averageScore}%</p>
-                        <p className="text-xs text-[#5A4A2E]">{emp.tasksCompleted} tasks</p>
+                        <p className="text-xs text-[#1A1A1A]/70">{emp.tasksCompleted} tasks</p>
                       </div>
                     </div>
                   ))}

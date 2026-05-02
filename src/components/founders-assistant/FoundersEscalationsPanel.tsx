@@ -65,7 +65,7 @@ const getEmotionLucideIcon = (emotion: string) => {
     case 'frustrated': return <AlertCircle className="h-5 w-5 text-amber-500" />;
     case 'positive': return <Smile className="h-5 w-5 text-green-500" />;
     case 'grateful': return <Heart className="h-5 w-5 text-pink-500" />;
-    default: return <Bell className="h-5 w-5 text-[#5A4A2E]" />;
+    default: return <Bell className="h-5 w-5 text-[#1A1A1A]/70" />;
   }
 };
 
@@ -157,7 +157,7 @@ export function FoundersEscalationsPanel() {
       case 'critical': return <Badge className="bg-red-100 text-red-700 border border-red-200 whitespace-nowrap">Critical</Badge>;
       case 'high': return <Badge className="bg-orange-100 text-orange-700 border border-orange-200 whitespace-nowrap">High</Badge>;
       case 'normal': return <Badge className="bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">Normal</Badge>;
-      case 'low': return <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30 whitespace-nowrap">Low</Badge>;
+      case 'low': return <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30 whitespace-nowrap">Low</Badge>;
       default: return null;
     }
   };
@@ -168,7 +168,7 @@ export function FoundersEscalationsPanel() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <CardContent className="p-4 text-center">
-            <p className="text-xs text-[#5A4A2E]">Total</p>
+            <p className="text-xs text-[#1A1A1A]/70">Total</p>
             <p className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</p>
           </CardContent>
         </Card>
@@ -176,7 +176,7 @@ export function FoundersEscalationsPanel() {
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <AlertTriangle className="h-3 w-3 text-red-500" />
-              <p className="text-xs text-[#5A4A2E]">Critical</p>
+              <p className="text-xs text-[#1A1A1A]/70">Critical</p>
             </div>
             <p className="text-2xl font-bold text-red-600">{stats.critical}</p>
           </CardContent>
@@ -185,7 +185,7 @@ export function FoundersEscalationsPanel() {
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Clock className="h-3 w-3 text-amber-500" />
-              <p className="text-xs text-[#5A4A2E]">Pending</p>
+              <p className="text-xs text-[#1A1A1A]/70">Pending</p>
             </div>
             <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
           </CardContent>
@@ -194,7 +194,7 @@ export function FoundersEscalationsPanel() {
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <Eye className="h-3 w-3 text-blue-500" />
-              <p className="text-xs text-[#5A4A2E]">Acknowledged</p>
+              <p className="text-xs text-[#1A1A1A]/70">Acknowledged</p>
             </div>
             <p className="text-2xl font-bold text-blue-600">{stats.acknowledged}</p>
           </CardContent>
@@ -203,7 +203,7 @@ export function FoundersEscalationsPanel() {
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center gap-1 mb-1">
               <CheckCircle className="h-3 w-3 text-green-500" />
-              <p className="text-xs text-[#5A4A2E]">Resolved</p>
+              <p className="text-xs text-[#1A1A1A]/70">Resolved</p>
             </div>
             <p className="text-2xl font-bold text-green-600">{stats.resolved}</p>
           </CardContent>
@@ -215,7 +215,7 @@ export function FoundersEscalationsPanel() {
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-4">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
               <Input
                 placeholder="Search escalations..."
                 value={searchQuery}
@@ -270,8 +270,8 @@ export function FoundersEscalationsPanel() {
               <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/20">
                 <CardContent className="p-12 text-center">
                   <Zap className="h-12 w-12 text-[#B89555]/30 mx-auto mb-4" />
-                  <p className="text-[#5A4A2E]">No escalations found</p>
-                  <p className="text-sm text-[#5A4A2E] mt-1">
+                  <p className="text-[#1A1A1A]/70">No escalations found</p>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">
                     {statusFilter !== 'all' || urgencyFilter !== 'all' || searchQuery
                       ? 'Try adjusting your filters'
                       : 'All systems running smoothly'}
@@ -312,7 +312,7 @@ export function FoundersEscalationsPanel() {
                               <span className="font-semibold text-[#1A1A1A]">
                                 {event.senderName || 'Unknown Sender'}
                               </span>
-                              <Badge variant="outline" className="text-xs text-[#5A4A2E] border-[#B89555]/30">
+                              <Badge variant="outline" className="text-xs text-[#1A1A1A]/70 border-[#B89555]/30">
                                 {getChannelIcon(event.sourceChannel)}
                                 <span className="ml-1 capitalize">{event.sourceChannel}</span>
                               </Badge>
@@ -320,19 +320,19 @@ export function FoundersEscalationsPanel() {
                               {getStatusBadge(event.status)}
                             </div>
 
-                            <p className="text-sm text-[#5A4A2E] mt-2 line-clamp-2">
+                            <p className="text-sm text-[#1A1A1A]/70 mt-2 line-clamp-2">
                               &ldquo;{event.originalMessage}&rdquo;
                             </p>
 
-                            <div className="flex items-center gap-4 mt-3 text-xs text-[#5A4A2E]">
+                            <div className="flex items-center gap-4 mt-3 text-xs text-[#1A1A1A]/70">
                               <span className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {formatDistanceToNow(event.triggeredAt, { addSuffix: true })}
                               </span>
-                              <span className="text-[#5A4A2E]">
+                              <span className="text-[#1A1A1A]/70">
                                 Confidence: {event.emotionAnalysis.confidence}%
                               </span>
-                              <span className="text-[#5A4A2E]">
+                              <span className="text-[#1A1A1A]/70">
                                 Assigned to: {event.escalatedTo.join(', ')}
                               </span>
                             </div>
@@ -343,7 +343,7 @@ export function FoundersEscalationsPanel() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setExpandedId(expandedId === event.id ? null : event.id)}
-                          className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                          className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                         >
                           {expandedId === event.id ? (
                             <ChevronUp className="h-4 w-4" />
@@ -363,32 +363,32 @@ export function FoundersEscalationsPanel() {
                             className="mt-4 pt-4 border-t border-[#B89555]/10"
                           >
                             <div className="bg-[#F7F2EA] rounded-lg p-4 mb-4 border border-[#B89555]/30">
-                              <p className="text-sm text-[#5A4A2E] mb-1">Original Message:</p>
+                              <p className="text-sm text-[#1A1A1A]/70 mb-1">Original Message:</p>
                               <p className="text-[#1A1A1A]">{event.originalMessage}</p>
                             </div>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                               <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/30">
-                                <p className="text-xs text-[#5A4A2E]">Emotion</p>
+                                <p className="text-xs text-[#1A1A1A]/70">Emotion</p>
                                 <p className="text-lg font-semibold text-[#1A1A1A] capitalize">
                                   {event.emotionAnalysis.emotion}
                                 </p>
                               </div>
                               <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/30">
-                                <p className="text-xs text-[#5A4A2E]">Confidence</p>
+                                <p className="text-xs text-[#1A1A1A]/70">Confidence</p>
                                 <p className="text-lg font-semibold text-[#B89555]">
                                   {event.emotionAnalysis.confidence}%
                                 </p>
                               </div>
                               <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/30">
-                                <p className="text-xs text-[#5A4A2E]">Sentiment</p>
+                                <p className="text-xs text-[#1A1A1A]/70">Sentiment</p>
                                 <p className="text-lg font-semibold text-[#1A1A1A]">
                                   {event.emotionAnalysis.sentiment > 0 ? '+' : ''}
                                   {(event.emotionAnalysis.sentiment * 100).toFixed(0)}%
                                 </p>
                               </div>
                               <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/30">
-                                <p className="text-xs text-[#5A4A2E]">Keywords</p>
+                                <p className="text-xs text-[#1A1A1A]/70">Keywords</p>
                                 <p className="text-sm text-[#1A1A1A] truncate">
                                   {event.emotionAnalysis.keywords.slice(0, 3).join(', ')}
                                 </p>
@@ -406,9 +406,9 @@ export function FoundersEscalationsPanel() {
 
                             {event.status === 'resolved' && event.resolutionNotes && (
                               <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                                <p className="text-xs text-[#5A4A2E] mb-1">Resolution:</p>
+                                <p className="text-xs text-[#1A1A1A]/70 mb-1">Resolution:</p>
                                 <p className="text-sm text-green-700">{event.resolutionNotes}</p>
-                                <p className="text-xs text-[#5A4A2E] mt-2">
+                                <p className="text-xs text-[#1A1A1A]/70 mt-2">
                                   Resolved by {event.resolvedBy} {event.resolvedAt && formatDistanceToNow(event.resolvedAt, { addSuffix: true })}
                                 </p>
                               </div>
@@ -475,7 +475,7 @@ export function FoundersEscalationsPanel() {
             <Heart className="h-5 w-5 text-[#B89555]" />
             Customer Happiness Center
           </CardTitle>
-          <CardDescription className="text-[#5A4A2E]">
+          <CardDescription className="text-[#1A1A1A]/70">
             Track satisfaction scores and client sentiment across all interactions
           </CardDescription>
         </CardHeader>
@@ -486,28 +486,28 @@ export function FoundersEscalationsPanel() {
               <p className="text-2xl font-bold text-green-700">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment > 0).length}
               </p>
-              <p className="text-xs text-[#5A4A2E]">Positive</p>
+              <p className="text-xs text-[#1A1A1A]/70">Positive</p>
             </div>
             <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/30 text-center">
-              <Bell className="h-6 w-6 text-[#5A4A2E] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#5A4A2E]">
+              <Bell className="h-6 w-6 text-[#1A1A1A]/70 mx-auto mb-2" />
+              <p className="text-2xl font-bold text-[#1A1A1A]/70">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment === 0).length}
               </p>
-              <p className="text-xs text-[#5A4A2E]">Neutral</p>
+              <p className="text-xs text-[#1A1A1A]/70">Neutral</p>
             </div>
             <div className="bg-amber-50 rounded-lg p-4 border border-amber-200 text-center">
               <AlertCircle className="h-6 w-6 text-amber-600 mx-auto mb-2" />
               <p className="text-2xl font-bold text-amber-700">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment < 0 && e.emotionAnalysis.sentiment >= -0.5).length}
               </p>
-              <p className="text-xs text-[#5A4A2E]">Concerned</p>
+              <p className="text-xs text-[#1A1A1A]/70">Concerned</p>
             </div>
             <div className="bg-red-50 rounded-lg p-4 border border-red-200 text-center">
               <AlertTriangle className="h-6 w-6 text-red-600 mx-auto mb-2" />
               <p className="text-2xl font-bold text-red-700">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment < -0.5).length}
               </p>
-              <p className="text-xs text-[#5A4A2E]">Unhappy</p>
+              <p className="text-xs text-[#1A1A1A]/70">Unhappy</p>
             </div>
           </div>
         </CardContent>
@@ -518,7 +518,7 @@ export function FoundersEscalationsPanel() {
         <DialogContent className="bg-[#FDFBF7] border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">Resolve Escalation</DialogTitle>
-            <DialogDescription className="text-[#5A4A2E]">
+            <DialogDescription className="text-[#1A1A1A]/70">
               Add resolution notes for this escalation from {selectedEscalation?.senderName}
             </DialogDescription>
           </DialogHeader>
@@ -526,12 +526,12 @@ export function FoundersEscalationsPanel() {
           {selectedEscalation && (
             <div className="space-y-4">
               <div className="bg-[#F7F2EA] rounded-lg p-3 border border-[#B89555]/30">
-                <p className="text-sm text-[#5A4A2E] mb-1">Original Message:</p>
+                <p className="text-sm text-[#1A1A1A]/70 mb-1">Original Message:</p>
                 <p className="text-[#1A1A1A] text-sm">{selectedEscalation.originalMessage}</p>
               </div>
 
               <div>
-                <label className="text-sm text-[#5A4A2E] mb-1 block">Resolution Notes</label>
+                <label className="text-sm text-[#1A1A1A]/70 mb-1 block">Resolution Notes</label>
                 <Textarea
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}

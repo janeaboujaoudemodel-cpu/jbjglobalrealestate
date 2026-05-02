@@ -245,7 +245,7 @@ const AIToolPremiumLayout = ({
             </p>
 
             {/* Powered by AI */}
-            <p className="text-[#5A4A2E] text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               <Sparkles className="inline h-4 w-4 mr-1 text-[#B89555]" />
               Powered by AI • Data-driven insights • Real-time analysis
             </p>

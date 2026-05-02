@@ -149,9 +149,9 @@ const ComplaintProcedures = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <AlertTriangle className="w-12 h-12 text-[#5A4A2E]" />
+                <AlertTriangle className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
-              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">How Complaints Are Handled</p>
+              <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">How Complaints Are Handled</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -201,7 +201,7 @@ const ComplaintProcedures = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -224,7 +224,7 @@ const ComplaintProcedures = () => {
               What Qualifies as a Complaint
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] leading-relaxed">
+              <p className="text-[#1A1A1A]/70 leading-relaxed">
                 A complaint is any formal issue related to service quality, communication breakdown, process deviation, or misconduct concerns that requires structured review and resolution.
               </p>
             </motion.div>
@@ -267,7 +267,7 @@ const ComplaintProcedures = () => {
                           <step.icon className="w-6 h-6 text-gold shrink-0 mt-1" />
                           <div>
                             <h3 className="font-semibold text-[#1A1A1A]">{step.title}</h3>
-                            <p className="text-sm text-[#5A4A2E] mt-1">{step.description}</p>
+                            <p className="text-sm text-[#1A1A1A]/70 mt-1">{step.description}</p>
                           </div>
                         </div>
                       </div>
@@ -304,7 +304,7 @@ const ComplaintProcedures = () => {
                     <div className="w-12 h-12 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <span className="text-[#5A4A2E]">{item.text}</span>
+                    <span className="text-[#1A1A1A]/70">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -330,14 +330,14 @@ const ComplaintProcedures = () => {
             >
               How to Submit
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8">
               Good Complaint Format
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] mb-6 font-medium">Include:</p>
+              <p className="text-[#1A1A1A]/70 mb-6 font-medium">Include:</p>
               <ul className="space-y-4">
                 {goodComplaintFormat.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
+                  <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -376,7 +376,7 @@ const ComplaintProcedures = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
+                    <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -405,7 +405,7 @@ const ComplaintProcedures = () => {
               >
                 Submit a Complaint with Clarity
               </h2>
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Use the form to log the issue and receive a trackable ticket ID.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -166,7 +166,7 @@ const ThankYou = () => {
               {/* Message */}
               <motion.p
                 variants={fadeInUp}
-                className="text-lg text-[#5A4A2E] mb-8"
+                className="text-lg text-[#1A1A1A]/70 mb-8"
               >
                 {content.message}
               </motion.p>
@@ -183,7 +183,7 @@ const ThankYou = () => {
                       <div className="w-6 h-6 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-gold text-xs font-bold">{index + 1}</span>
                       </div>
-                      <span className="text-[#5A4A2E]">{step}</span>
+                      <span className="text-[#1A1A1A]/70">{step}</span>
                     </li>
                   ))}
                 </ul>

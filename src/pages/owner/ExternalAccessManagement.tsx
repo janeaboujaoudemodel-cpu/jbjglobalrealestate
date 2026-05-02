@@ -103,7 +103,7 @@ const ExternalAccessManagement = () => {
   const getStatusBadge = (auditor: any) => {
     if (auditor.is_suspended) return <Badge className="bg-red-500/20 text-red-600 border-red-500/40">Suspended</Badge>;
     if (auditor.access_expires_at && new Date(auditor.access_expires_at) < new Date())
-      return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/40">Expired</Badge>;
+      return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40">Expired</Badge>;
     return <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/40">Active</Badge>;
   };
 
@@ -156,7 +156,7 @@ const ExternalAccessManagement = () => {
                         {getStatusBadge(auditor)}
                       </div>
                       <p className="text-white/90 text-sm">{auditor.email}</p>
-                      <div className="flex items-center gap-4 mt-1 text-xs text-[#5A4A2E]">
+                      <div className="flex items-center gap-4 mt-1 text-xs text-[#1A1A1A]/70">
                         <span>Logins: {auditor.total_logins}</span>
                         <span>Last: {formatDate(auditor.last_login_at)}</span>
                         <span>{getDaysRemaining(auditor.access_expires_at)}</span>
@@ -196,7 +196,7 @@ const ExternalAccessManagement = () => {
                         Session History
                       </h3>
                       {!sessions?.length ? (
-                        <p className="text-[#5A4A2E] text-sm">No sessions recorded yet</p>
+                        <p className="text-[#1A1A1A]/70 text-sm">No sessions recorded yet</p>
                       ) : (
                         <div className="space-y-2 max-h-60 overflow-y-auto">
                           {sessions.map((s: any) => (
@@ -270,7 +270,7 @@ const ExternalAccessManagement = () => {
                         }>
                           {f.feedback_type === "task" ? "Task" : f.feedback_type === "screenshot_note" ? "Screenshot" : "Message"}
                         </Badge>
-                        <span className="text-[#5A4A2E] text-xs">{formatDate(f.created_at)}</span>
+                        <span className="text-[#1A1A1A]/70 text-xs">{formatDate(f.created_at)}</span>
                         {f.status === "new" && <Badge className="bg-red-500 text-white text-[10px]">New</Badge>}
                       </div>
 
@@ -296,7 +296,7 @@ const ExternalAccessManagement = () => {
                         <audio controls src={f.voice_message_url} className="mt-2 w-full h-8" />
                       )}
 
-                      <p className="text-[#5A4A2E] text-xs mt-1">Page: {f.page_url}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-1">Page: {f.page_url}</p>
                     </div>
 
                     {f.status === "new" && (

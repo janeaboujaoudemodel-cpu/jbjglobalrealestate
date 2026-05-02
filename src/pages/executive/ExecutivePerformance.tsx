@@ -263,7 +263,7 @@ const ExecutivePerformance = () => {
                   Performance Snapshot • Trends and patterns, not individual broker rankings
                 </p>
                 <FounderContent>
-                  <p className="text-xs text-[#5A4A2E] mt-1">
+                  <p className="text-xs text-[#1A1A1A]/70 mt-1">
                     Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
                   </p>
                 </FounderContent>

@@ -82,14 +82,14 @@ const MonthlyMarketBrief = () => {
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-600" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
-    return <Activity className="w-4 h-4 text-[#5A4A2E]" />;
+    return <Activity className="w-4 h-4 text-[#1A1A1A]/70" />;
   };
 
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
     switch (momentum) {
       case "high": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
       case "medium": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
-      default: return "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30";
+      default: return "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30";
     }
   };
 
@@ -113,7 +113,7 @@ const MonthlyMarketBrief = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-[#5A4A2E] hover:text-[#1A1A1A] mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -128,7 +128,7 @@ const MonthlyMarketBrief = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
                   {data.period}
                 </h1>
-                <p className="text-[#5A4A2E] mt-2 flex items-center gap-2">
+                <p className="text-[#1A1A1A]/70 mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -157,7 +157,7 @@ const MonthlyMarketBrief = () => {
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[#5A4A2E] leading-relaxed">{data.summary}</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed">{data.summary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -172,7 +172,7 @@ const MonthlyMarketBrief = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Building className="w-4 h-4" />
                   Transaction Volume
                 </CardTitle>
@@ -184,7 +184,7 @@ const MonthlyMarketBrief = () => {
                   </span>
                   {getTrendIcon(data.transactionVolume.change)}
                 </div>
-                <p className="text-xs text-[#5A4A2E] mt-1">
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">
                   {data.transactionVolume.change > 0 ? "+" : ""}
                   {data.transactionVolume.change}% vs. previous month
                 </p>
@@ -193,7 +193,7 @@ const MonthlyMarketBrief = () => {
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Key className="w-4 h-4" />
                   RENT Trend
                 </CardTitle>
@@ -202,18 +202,18 @@ const MonthlyMarketBrief = () => {
                 <div className="flex items-center gap-2">
                   {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-emerald-600" />}
                   {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-600" />}
-                  {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-[#5A4A2E]" />}
+                  {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-[#1A1A1A]/70" />}
                   <span className="text-lg font-semibold text-[#1A1A1A] capitalize">
                     {data.rentTrend.direction}
                   </span>
                 </div>
-                <p className="text-xs text-[#5A4A2E] mt-1">{data.rentTrend.description}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">{data.rentTrend.description}</p>
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Home className="w-4 h-4" />
                   Avg. Price/sqft
                 </CardTitle>
@@ -225,7 +225,7 @@ const MonthlyMarketBrief = () => {
                   </span>
                   {getTrendIcon(data.avgPricePerSqft.change)}
                 </div>
-                <p className="text-xs text-[#5A4A2E] mt-1">
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">
                   {data.avgPricePerSqft.change > 0 ? "+" : ""}
                   {data.avgPricePerSqft.change}% vs. previous month
                 </p>
@@ -257,7 +257,7 @@ const MonthlyMarketBrief = () => {
                     >
                       <div>
                         <p className="text-[#1A1A1A] font-medium">{area.name}</p>
-                        <p className="text-sm text-[#5A4A2E]">{area.note}</p>
+                        <p className="text-sm text-[#1A1A1A]/70">{area.note}</p>
                       </div>
                       <Badge className={getMomentumColor(area.momentum)}>
                         {area.momentum.toUpperCase()}
@@ -279,11 +279,11 @@ const MonthlyMarketBrief = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-[#5A4A2E] mb-4">
+                <p className="text-sm text-[#1A1A1A]/70 mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-[#5A4A2E]">
+                <div className="flex flex-wrap gap-4 text-xs text-[#1A1A1A]/70">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Monthly</span>
@@ -293,7 +293,7 @@ const MonthlyMarketBrief = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-[#5A4A2E]">
+                  <p className="text-xs text-[#1A1A1A]/70">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>

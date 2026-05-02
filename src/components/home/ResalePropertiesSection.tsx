@@ -31,7 +31,7 @@ const ResalePropertiesSection = () => {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
               <div>
-                <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30 mb-3">
+                <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30 mb-3">
                   <Crown className="w-3 h-3 mr-1" />
                   Investor Network
                 </Badge>
@@ -40,7 +40,7 @@ const ResalePropertiesSection = () => {
                 >
                   Resale Properties
                 </h2>
-                <p className="text-sm text-[#5A4A2E] mt-1.5 max-w-md">
+                <p className="text-sm text-[#1A1A1A]/70 mt-1.5 max-w-md">
                   Premium properties from verified JBJ investors — ready for immediate purchase.
                 </p>
               </div>
@@ -80,7 +80,7 @@ const ResalePropertiesSection = () => {
                               loading="lazy"
                             />
                           ) : (
-                            <Building2 className="w-10 h-10 text-[#5A4A2E]" />
+                            <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
                           )}
                           {listing.handover_status && (
                             <Badge className="absolute top-2 left-2 bg-[#1A1A1A] text-white text-[10px] font-semibold">
@@ -91,35 +91,35 @@ const ResalePropertiesSection = () => {
 
                         {/* Content */}
                         <div className="p-3.5">
-                          <h3 className="font-bold text-[#1A1A1A] text-sm mb-1 group-hover:text-[#5A4A2E] transition-colors line-clamp-1">
+                          <h3 className="font-bold text-[#1A1A1A] text-sm mb-1 group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
                             {listing.title}
                           </h3>
                           {listing.project_name && (
-                            <p className="text-xs text-[#5A4A2E] mb-2 line-clamp-1">{listing.project_name}</p>
+                            <p className="text-xs text-[#1A1A1A]/70 mb-2 line-clamp-1">{listing.project_name}</p>
                           )}
-                          <div className="flex items-center gap-2.5 text-xs text-[#5A4A2E] mb-2.5 flex-wrap">
+                          <div className="flex items-center gap-2.5 text-xs text-[#1A1A1A]/70 mb-2.5 flex-wrap">
                             {listing.area_name && (
                               <span className="flex items-center gap-1">
-                                <MapPin className="w-3 h-3 text-[#5A4A2E]" />
+                                <MapPin className="w-3 h-3 text-[#1A1A1A]/70" />
                                 {listing.area_name}
                               </span>
                             )}
                             {listing.bedrooms != null && (
                               <span className="flex items-center gap-1">
-                                <BedDouble className="w-3 h-3 text-[#5A4A2E]" />
+                                <BedDouble className="w-3 h-3 text-[#1A1A1A]/70" />
                                 {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} BR`}
                               </span>
                             )}
                             {listing.size_sqft && (
                               <span className="flex items-center gap-1">
-                                <Maximize className="w-3 h-3 text-[#5A4A2E]" />
+                                <Maximize className="w-3 h-3 text-[#1A1A1A]/70" />
                                 {Number(listing.size_sqft).toLocaleString()} sqft
                               </span>
                             )}
                           </div>
                           {listing.asking_price && (
                             <div className="flex items-center gap-1">
-                              <DollarSign className="w-3.5 h-3.5 text-[#5A4A2E]" />
+                              <DollarSign className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
                               <span className="text-base font-bold text-[#1A1A1A]">
                                 {listing.currency || "AED"} {Number(listing.asking_price).toLocaleString()}
                               </span>

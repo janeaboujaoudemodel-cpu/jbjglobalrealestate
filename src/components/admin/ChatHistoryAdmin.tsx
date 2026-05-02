@@ -63,7 +63,7 @@ const SOURCE_COLORS: Record<string, string> = {
   'executive_assistant': 'bg-gold/20 text-gold',
   'video_meeting': 'bg-red-100 text-red-700',
   'ai_broker': 'bg-cyan-100 text-cyan-700',
-  'default': 'bg-[#F7F2EA] text-[#5A4A2E]'
+  'default': 'bg-[#F7F2EA] text-[#1A1A1A]/70'
 };
 
 export function ChatHistoryAdmin() {

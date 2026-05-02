@@ -77,7 +77,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex items-center gap-3 text-xs text-[#5A4A2E] mb-3">
+      <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70 mb-3">
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
@@ -85,7 +85,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -139,7 +139,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
         {yieldMetrics.map((m) => (
           <span key={m.name} className="flex items-center gap-1">
             <div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} />
-            <span className="text-[#5A4A2E]">{m.name}</span>
+            <span className="text-[#1A1A1A]/70">{m.name}</span>
           </span>
         ))}
       </div>
@@ -147,7 +147,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -283,11 +283,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} />
-          <span className="text-[#5A4A2E]">Supply (New Units)</span>
+          <span className="text-[#1A1A1A]/70">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full bg-emerald-500" />
-          <span className="text-[#5A4A2E]">Demand (Absorption)</span>
+          <span className="text-[#1A1A1A]/70">Demand (Absorption)</span>
         </div>
       </div>
 
@@ -295,7 +295,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#5A4A2E] text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -339,7 +339,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
             <div className="flex-1 min-w-0">
               <p className="text-[#1A1A1A] font-semibold text-sm truncate">{dev.name}</p>
               {dev.projects && (
-                <p className="text-[#5A4A2E] text-xs mt-0.5 truncate">{dev.projects}</p>
+                <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
             <ArrowUpRight className="w-3.5 h-3.5 text-[#8A7556] flex-shrink-0 mt-1" />
@@ -348,7 +348,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       </div>
 
       {devEntries.length === 0 && (
-        <div className="text-[#5A4A2E] text-sm leading-relaxed whitespace-pre-line">
+        <div className="text-[#1A1A1A]/70 text-sm leading-relaxed whitespace-pre-line">
           {text}
         </div>
       )}
@@ -482,22 +482,22 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
-              <div className="text-[#5A4A2E] text-xs mt-1">Active Projects</div>
+              <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
             <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
-              <div className="text-[#5A4A2E] text-xs mt-1">Developers</div>
+              <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
               <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                <div className="text-[#5A4A2E] text-xs mt-1">Avg. Starting Price</div>
+                <div className="text-[#1A1A1A]/70 text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
               <div className="bg-[#FDFBF7] border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-price-orange">AED {stats.pricePerSqft.toLocaleString()}</div>
-                <div className="text-[#5A4A2E] text-xs mt-1">Est. Price/sqft</div>
+                <div className="text-[#1A1A1A]/70 text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}
           </div>
@@ -516,7 +516,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
-                <p className="text-[#5A4A2E] text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -525,7 +525,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             ) : (
               <>
                 <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-                <p className="text-[#5A4A2E] text-sm">Analyzing {areaName}...</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Analyzing {areaName}...</p>
               </>
             )}
           </div>
@@ -543,10 +543,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       </div>
                       <div>
                         <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
-                        <span className="text-[#5A4A2E] text-xs">{areaName} Community Profile</span>
+                        <span className="text-[#1A1A1A]/70 text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
-                    <p className="text-[#5A4A2E] text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
                     
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -554,28 +554,28 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Home className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.totalProjects}</div>
-                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Projects</div>
+                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.developers.length}</div>
-                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Developers</div>
+                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{stats.pricePerSqft.toLocaleString()}</div>
-                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">AED/sqft</div>
+                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#1A1A1A]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                          <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">Avg Price</div>
+                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
                         </div>
                       )}
                     </div>
@@ -585,7 +585,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
                     <div className="border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-[10px] text-[#5A4A2E] uppercase tracking-widest font-semibold">Status Mix</span>
+                        <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
@@ -593,7 +593,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                               status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
                               status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-zinc-400'
                             }`} />
-                            <span className="text-xs text-[#5A4A2E]">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
+                            <span className="text-xs text-[#1A1A1A]/70">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
                           </div>
                         ))}
                       </div>
@@ -639,9 +639,9 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     </div>
                   </div>
                   
-                  <div className="text-[#5A4A2E] text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-[#1A1A1A]/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-[#5A4A2E] text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
@@ -705,7 +705,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-[#5A4A2E] text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

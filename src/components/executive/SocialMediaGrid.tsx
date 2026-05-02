@@ -197,7 +197,7 @@ const SocialMediaGrid: React.FC<SocialMediaGridProps> = ({ onConnectPlatform }) 
                 </Badge>
                 <button
                   onClick={() => handleDisconnect(platform.id)}
-                  className="text-xs text-[#5A4A2E] hover:text-red-400 transition-colors"
+                  className="text-xs text-[#1A1A1A]/70 hover:text-red-400 transition-colors"
                 >
                   Disconnect
                 </button>

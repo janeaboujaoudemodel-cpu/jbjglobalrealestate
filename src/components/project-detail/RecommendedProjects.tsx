@@ -231,7 +231,7 @@ export default function RecommendedProjects({
 
                   {/* Description */}
                   {shortDescription && (
-                    <p className="text-[#5A4A2E] text-xs leading-relaxed mt-2 line-clamp-2">
+                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed mt-2 line-clamp-2">
                       {shortDescription}
                     </p>
                   )}

@@ -86,7 +86,7 @@ export default function Welcome() {
       toast.success(
         <div className="flex flex-col gap-1">
           <span className="font-semibold">Welcome to JBJ Global!</span>
-          <span className="text-sm text-[#5A4A2E]">
+          <span className="text-sm text-[#1A1A1A]/70">
             Your {CATEGORIES.find(c => c.id === selected)?.label} experience is ready.
           </span>
         </div>,
@@ -128,7 +128,7 @@ export default function Welcome() {
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-2">
             Welcome to <span className="text-gold">JBJ Global</span>
           </h1>
-          <p className="text-[#5A4A2E] text-sm">
+          <p className="text-[#1A1A1A]/70 text-sm">
             {user.email && (
               <span>Signed in as <span className="font-medium text-[#1A1A1A]">{user.email}</span> · </span>
             )}
@@ -160,7 +160,7 @@ export default function Welcome() {
                       ? "bg-gold/20 border-gold"
                       : "bg-gold/5 border-gold/20"
                   )}>
-                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-[#5A4A2E]")} />
+                    <Icon className={cn("w-5 h-5", isSelected ? "text-gold" : "text-[#1A1A1A]/70")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -169,13 +169,13 @@ export default function Welcome() {
                       </h3>
                       {isSelected && <CheckCircle2 className="w-4 h-4 text-gold" />}
                     </div>
-                    <p className="text-xs text-[#5A4A2E] mt-0.5">{cat.description}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-0.5">{cat.description}</p>
                   </div>
                 </div>
                 {/* Features */}
                 <div className="space-y-1">
                   {cat.features.map((f) => (
-                    <div key={f} className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+                    <div key={f} className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                       <Sparkles className="w-3 h-3 text-[#8A7556] flex-shrink-0" />
                       <span>{f}</span>
                     </div>
@@ -202,10 +202,10 @@ export default function Welcome() {
           )}
         </Button>
 
-        <p className="text-center text-[#5A4A2E] text-xs mt-6">
+        <p className="text-center text-[#1A1A1A]/70 text-xs mt-6">
           You can change your category anytime from your profile settings.
         </p>
-        <p className="text-center text-[#5A4A2E] text-xs mt-2">
+        <p className="text-center text-[#1A1A1A]/70 text-xs mt-2">
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

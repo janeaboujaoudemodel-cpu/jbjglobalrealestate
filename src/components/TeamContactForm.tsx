@@ -129,7 +129,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               <DialogTitle className="text-xl font-bold text-[#1A1A1A]">
                 Contact Us
               </DialogTitle>
-              <DialogDescription className="text-[#5A4A2E]">
+              <DialogDescription className="text-[#1A1A1A]/70">
                 Fill in your details and our team will get back to you shortly.
               </DialogDescription>
             </div>
@@ -144,7 +144,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Your full name"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -168,7 +168,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 50 XXX XXXX"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/30"
               />
             </div>
             <div className="space-y-2">
@@ -210,7 +210,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.currentLocation}
                 onChange={(e) => setFormData(prev => ({ ...prev, currentLocation: e.target.value }))}
                 placeholder="City, Country"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/30"
               />
             </div>
           </div>
@@ -237,7 +237,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               value={formData.inquiry}
               onChange={(e) => setFormData(prev => ({ ...prev, inquiry: e.target.value }))}
               placeholder="Tell us about your requirements, budget, preferred areas, or any questions..."
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
             />
           </div>
 

@@ -452,7 +452,7 @@ const PropertiesReelly = () => {
                   <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                 </div>
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No Properties Found</h3>
-                <p className="text-[#5A4A2E] mb-4">Try adjusting your search filters or browse all properties.</p>
+                <p className="text-[#1A1A1A]/70 mb-4">Try adjusting your search filters or browse all properties.</p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button onClick={() => setShortcutFilters(defaultShortcutFilters)} variant="primary" className="h-12 px-8">
                     Browse All Properties

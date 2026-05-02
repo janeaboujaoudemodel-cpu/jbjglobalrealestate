@@ -393,7 +393,7 @@ const BuyerGuide = () => {
                   <item.icon className="w-6 h-6" />
                 </div>
                 <p className="font-medium text-[#1A1A1A] mb-1">{item.label}</p>
-                <p className="text-sm text-[#5A4A2E]">{item.desc}</p>
+                <p className="text-sm text-[#1A1A1A]/70">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -431,7 +431,7 @@ const BuyerGuide = () => {
                           {step.items.map((item, itemIndex) => (
                             <li key={itemIndex} className="flex items-start gap-3">
                               <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                              <span className="text-[#5A4A2E] text-sm">{item}</span>
+                              <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                             </li>
                           ))}
                         </ul>
@@ -445,7 +445,7 @@ const BuyerGuide = () => {
                               {step.offPlan?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -456,7 +456,7 @@ const BuyerGuide = () => {
                               {step.ready?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -472,7 +472,7 @@ const BuyerGuide = () => {
                               {step.readyOffer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -483,7 +483,7 @@ const BuyerGuide = () => {
                               {step.offPlanOffer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -499,7 +499,7 @@ const BuyerGuide = () => {
                               {step.readyTransfer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -510,7 +510,7 @@ const BuyerGuide = () => {
                               {step.offPlanTransfer?.points.map((point, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
                                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                  <span className="text-[#5A4A2E] text-sm">{point}</span>
+                                  <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                                 </li>
                               ))}
                             </ul>
@@ -543,23 +543,23 @@ const BuyerGuide = () => {
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">No agency fees are paid by the buyer</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">No agency fees are paid by the buyer</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Developers pay the brokerage commission</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Developers pay the brokerage commission</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Buyer pays only: Unit price as per payment plan</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Buyer pays only: Unit price as per payment plan</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Dubai Land Department (DLD) registration fees</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Dubai Land Department (DLD) registration fees</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Oqood registration (for off-plan)</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Oqood registration (for off-plan)</span>
                 </li>
               </ul>
               <div className="jj-card-inner rounded-lg p-4 border-gold/50">
@@ -581,27 +581,27 @@ const BuyerGuide = () => {
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Buyer pays agency commission</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Buyer pays agency commission</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Standard market rate: 2% + VAT</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Standard market rate: 2% + VAT</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">This fee covers: Property sourcing & shortlisting</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">This fee covers: Property sourcing & shortlisting</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Negotiation support</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Negotiation support</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Transaction coordination</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Transaction coordination</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm">Legal & transfer guidance</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">Legal & transfer guidance</span>
                 </li>
               </ul>
             </div>
@@ -628,7 +628,7 @@ const BuyerGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-[#1A1A1A] font-semibold mb-1">{fee.title}</h4>
-                      <p className="text-[#5A4A2E] text-sm leading-relaxed">{fee.description}</p>
+                      <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{fee.description}</p>
                     </div>
                   </div>
                 </div>
@@ -650,7 +650,7 @@ const BuyerGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-[#1A1A1A] font-semibold mb-1">{cost.title}</h4>
-                      <p className="text-[#5A4A2E] text-sm leading-relaxed">{cost.description}</p>
+                      <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{cost.description}</p>
                     </div>
                   </div>
                 </div>
@@ -669,7 +669,7 @@ const BuyerGuide = () => {
               {mortgagePoints.map((point, index) => (
                 <div key={index} className="flex items-start gap-3 jj-card-inner rounded-lg p-4">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-[#5A4A2E] text-sm leading-relaxed">{point}</span>
+                  <span className="text-[#1A1A1A]/70 text-sm leading-relaxed">{point}</span>
                 </div>
               ))}
             </div>
@@ -689,13 +689,13 @@ const BuyerGuide = () => {
                 className="jj-card-inner p-6 hover:border-gold transition-all"
               >
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">{item.title}</h4>
-                <p className="text-[#5A4A2E] text-sm">{item.description}</p>
+                <p className="text-[#1A1A1A]/70 text-sm">{item.description}</p>
               </div>
             ))}
           </div>
 
           <div className="jj-card-inner rounded-xl p-6">
-            <p className="text-[#5A4A2E] text-sm leading-relaxed">
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
               <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Mortgage, legal, and advisory services are introduced through licensed third-party partners.
             </p>
           </div>
@@ -714,7 +714,7 @@ const BuyerGuide = () => {
                   <AccordionTrigger className="text-left text-[#1A1A1A] font-medium hover:text-gold py-4">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-[#5A4A2E] pb-4">
+                  <AccordionContent className="text-[#1A1A1A]/70 pb-4">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -735,7 +735,7 @@ const BuyerGuide = () => {
           <div className="max-w-3xl mx-auto">
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-gold/50">
               <GuideSectionHeader icon={Sparkles} title="Next Step" centered />
-              <p className="text-lg text-[#5A4A2E] mb-10 max-w-2xl mx-auto">
+              <p className="text-lg text-[#1A1A1A]/70 mb-10 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
               </p>
               
@@ -782,7 +782,7 @@ const BuyerGuide = () => {
                 <Shield className="w-4 h-4 text-gold" />
                 Important Disclaimer
               </h4>
-              <p className="text-[#5A4A2E] text-sm leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
                 This guide is provided for general educational and informational purposes only. It does not constitute legal, 
                 mortgage, or professional advice. JBJ Global Real Estate is a licensed 
                 real estate brokerage providing buying, selling, and rental services. We do not provide legal or investment advisory services. 

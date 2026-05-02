@@ -181,7 +181,7 @@ const WelcomeModal = () => {
             </p>
 
             {/* Footer text with copyright */}
-            <p className="text-center text-[#5A4A2E] text-[10px] mt-4">
+            <p className="text-center text-[#1A1A1A]/70 text-[10px] mt-4">
               © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
             </p>
           </div>

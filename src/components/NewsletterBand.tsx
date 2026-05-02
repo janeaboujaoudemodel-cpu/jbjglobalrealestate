@@ -17,7 +17,7 @@ const NewsletterBand = ({ className = "" }: NewsletterBandProps) => {
         <h3 className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em] text-[#1A1A1A]">
           ✦ Stay in the Loop ✦
         </h3>
-        <p className="text-center text-[#5A4A2E] text-sm md:text-base mb-6 max-w-xl mx-auto">
+        <p className="text-center text-[#1A1A1A]/70 text-sm md:text-base mb-6 max-w-xl mx-auto">
           Be the first to access new listings, market updates, and personalized brokerage guidance.
         </p>
         <div className="max-w-lg mx-auto">

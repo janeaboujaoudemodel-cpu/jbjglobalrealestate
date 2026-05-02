@@ -110,7 +110,7 @@ export function VideoCallPanel({
               </div>
               <div>
                 <CardTitle className="text-white">Video Call Center</CardTitle>
-                <p className="text-[#5A4A2E] text-sm mt-1">
+                <p className="text-[#1A1A1A]/70 text-sm mt-1">
                   Voice and video calls with leads
                 </p>
               </div>
@@ -118,7 +118,7 @@ export function VideoCallPanel({
             <Badge 
               className={isCallActive 
                 ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" 
-                : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30"
+                : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30"
               }
             >
               {isCallActive ? "In Call" : "Available"}
@@ -150,15 +150,15 @@ export function VideoCallPanel({
           <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[#1A1A1A]">
             <div className="text-center">
               <div className="text-2xl font-bold text-white">12</div>
-              <div className="text-xs text-[#5A4A2E]">Calls Today</div>
+              <div className="text-xs text-[#1A1A1A]/70">Calls Today</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-gold">8:45</div>
-              <div className="text-xs text-[#5A4A2E]">Avg Duration</div>
+              <div className="text-xs text-[#1A1A1A]/70">Avg Duration</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-emerald-400">85%</div>
-              <div className="text-xs text-[#5A4A2E]">Answer Rate</div>
+              <div className="text-xs text-[#1A1A1A]/70">Answer Rate</div>
             </div>
           </div>
 
@@ -167,13 +167,13 @@ export function VideoCallPanel({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-sm text-[#5A4A2E]">Twilio Integration</span>
+                <span className="text-sm text-[#1A1A1A]/70">Twilio Integration</span>
               </div>
               <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
                 Setup Required
               </Badge>
             </div>
-            <p className="text-xs text-[#5A4A2E] mt-2">
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">
               Connect your Twilio account for live voice and video calling
             </p>
           </div>
@@ -196,13 +196,13 @@ export function VideoCallPanel({
               <div className="absolute inset-0 flex items-center justify-center">
                 {isVideoEnabled ? (
                   <div className="text-center">
-                    <Users className="h-16 w-16 text-[#5A4A2E] mx-auto mb-4" />
-                    <p className="text-[#5A4A2E]">Video feed will appear here</p>
+                    <Users className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
+                    <p className="text-[#1A1A1A]/70">Video feed will appear here</p>
                   </div>
                 ) : (
                   <div className="text-center">
-                    <VideoOff className="h-16 w-16 text-[#5A4A2E] mx-auto mb-4" />
-                    <p className="text-[#5A4A2E]">Camera is disabled</p>
+                    <VideoOff className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
+                    <p className="text-[#1A1A1A]/70">Camera is disabled</p>
                   </div>
                 )}
               </div>
@@ -223,7 +223,7 @@ export function VideoCallPanel({
               {/* Self Preview */}
               <div className="absolute bottom-4 right-4 w-32 h-24 bg-zinc-700 rounded-lg border-2 border-[#1A1A1A] overflow-hidden">
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-xs text-[#5A4A2E]">You</span>
+                  <span className="text-xs text-[#1A1A1A]/70">You</span>
                 </div>
               </div>
             </div>

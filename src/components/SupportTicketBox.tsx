@@ -446,7 +446,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-[#5A4A2E] mb-6 leading-relaxed">
+                  <p className="text-[#1A1A1A]/70 mb-6 leading-relaxed">
                     Experiencing an issue with our services? Create a support ticket and our team will 
                     assist you promptly. You can attach screenshots or screen recordings to help us 
                     understand the problem better.
@@ -460,7 +460,7 @@ const SupportTicketBox = () => {
                         <AlertCircle className="w-5 h-5 text-gold" />
                         <span className="text-gold font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-[#5A4A2E]">
+                      <ul className="space-y-2 text-sm text-[#1A1A1A]/70">
                         <li className="flex items-center gap-2">
                           <span className="text-gold">✓</span>
                           Response within 24 hours
@@ -481,7 +481,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#5A4A2E]">
+                  <p className="text-xs text-[#1A1A1A]/70">
                     All tickets are reviewed by our support team and forwarded to the relevant department.
                   </p>
                 </div>
@@ -555,7 +555,7 @@ const SupportTicketBox = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                className="text-[#5A4A2E] mb-6"
+                                className="text-[#1A1A1A]/70 mb-6"
                               >
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
@@ -568,10 +568,10 @@ const SupportTicketBox = () => {
                                  className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
                                >
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
-                                   <span className="text-sm text-[#5A4A2E]">Your Ticket Number</span>
-                                   <span className="text-sm text-[#5A4A2E]">|</span>
-                                   <span className="text-sm text-[#5A4A2E]" dir="rtl">رقم التذكرة</span>
-                                   <span className="text-sm text-[#5A4A2E]">—</span>
+                                   <span className="text-sm text-[#1A1A1A]/70">Your Ticket Number</span>
+                                   <span className="text-sm text-[#1A1A1A]/70">|</span>
+                                   <span className="text-sm text-[#1A1A1A]/70" dir="rtl">رقم التذكرة</span>
+                                   <span className="text-sm text-[#1A1A1A]/70">—</span>
                                    <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
                                    <button
                                      onClick={copyTicketNumber}
@@ -600,19 +600,19 @@ const SupportTicketBox = () => {
                                  </p>
                                  <div className="space-y-2 text-xs">
                                    <div className="flex justify-between">
-                                     <span className="text-[#5A4A2E]">Ticket #</span>
+                                     <span className="text-[#1A1A1A]/70">Ticket #</span>
                                      <span className="text-[#1A1A1A] font-semibold">{ticketNumber}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-[#5A4A2E]">Category</span>
+                                     <span className="text-[#1A1A1A]/70">Category</span>
                                      <span className="text-[#1A1A1A] font-medium">{formData.serviceCategory}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-[#5A4A2E]">Subject</span>
+                                     <span className="text-[#1A1A1A]/70">Subject</span>
                                      <span className="text-[#1A1A1A] font-medium truncate max-w-[180px]">{formData.subject}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-[#5A4A2E]">Priority</span>
+                                     <span className="text-[#1A1A1A]/70">Priority</span>
                                      <span className={`font-medium ${
                                        formData.priority === 'critical' ? 'text-red-500' :
                                        formData.priority === 'high' ? 'text-orange-500' :
@@ -622,12 +622,12 @@ const SupportTicketBox = () => {
                                      </span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-[#5A4A2E]">Submitted</span>
+                                     <span className="text-[#1A1A1A]/70">Submitted</span>
                                      <span className="text-[#1A1A1A] font-medium">{new Date().toLocaleDateString()}</span>
                                    </div>
                                    {attachments.length > 0 && (
                                      <div className="flex justify-between">
-                                       <span className="text-[#5A4A2E]">Attachments</span>
+                                       <span className="text-[#1A1A1A]/70">Attachments</span>
                                        <span className="text-[#1A1A1A] font-medium">{attachments.length} file(s)</span>
                                      </div>
                                    )}
@@ -654,7 +654,7 @@ const SupportTicketBox = () => {
                                  className="mb-4"
                                >
                                  {emailWasSent || emailResent ? (
-                                   <p className="text-sm text-[#5A4A2E] flex items-center justify-center gap-2">
+                                   <p className="text-sm text-[#1A1A1A]/70 flex items-center justify-center gap-2">
                                      <MailCheck className="w-4 h-4 text-green-500" />
                                      Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
                                    </p>
@@ -779,7 +779,7 @@ const SupportTicketBox = () => {
                                           {attachments.map((file, idx) => (
                                             <div key={idx} className="flex items-center gap-2 text-xs">
                                               {getUploadStatusIcon(idx)}
-                                              <span className="text-[#5A4A2E] truncate flex-1 text-left">{file.name}</span>
+                                              <span className="text-[#1A1A1A]/70 truncate flex-1 text-left">{file.name}</span>
                                             </div>
                                           ))}
                                         </div>
@@ -793,7 +793,7 @@ const SupportTicketBox = () => {
                                       >
                                         {STEP_MESSAGES[submissionStep]}
                                       </motion.p>
-                                      <p className="text-sm text-[#5A4A2E] mt-2">Please wait...</p>
+                                      <p className="text-sm text-[#1A1A1A]/70 mt-2">Please wait...</p>
                                       
                                       {/* Animated progress bar */}
                                       <div className="w-full mt-4 h-1.5 bg-gold/20 rounded-full overflow-hidden">
@@ -811,7 +811,7 @@ const SupportTicketBox = () => {
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -824,7 +824,7 @@ const SupportTicketBox = () => {
                                 />
                               </div>
                               <div>
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -840,7 +840,7 @@ const SupportTicketBox = () => {
                             </div>
 
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center gap-2">
+                              <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                 <Phone className="w-4 h-4 text-gold" />
                                 Phone Number (Optional)
                               </Label>
@@ -855,7 +855,7 @@ const SupportTicketBox = () => {
 
                             {/* Service Category */}
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center gap-2">
+                              <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-red-500" />
                                 Service with Issue *
                               </Label>
@@ -896,7 +896,7 @@ const SupportTicketBox = () => {
                                   <MessageCircle className="w-4 h-4 text-gold" />
                                   Inquiry Details
                                 </p>
-                                <p className="text-xs text-[#5A4A2E]">
+                                <p className="text-xs text-[#1A1A1A]/70">
                                   This inquiry will be tracked in the Inquiry Management Hub for follow-up.
                                 </p>
                               </motion.div>
@@ -909,7 +909,7 @@ const SupportTicketBox = () => {
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                               >
-                                <Label className="text-[#5A4A2E] flex items-center gap-2">
+                                <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                   <FileText className="w-4 h-4 text-gold" />
                                   Please Specify Your Issue *
                                 </Label>
@@ -920,7 +920,7 @@ const SupportTicketBox = () => {
                                   className="mt-1 bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                   required
                                 />
-                                <p className="text-xs text-[#5A4A2E] mt-1">
+                                <p className="text-xs text-[#1A1A1A]/70 mt-1">
                                   This helps us route your ticket to the right team.
                                 </p>
                               </motion.div>
@@ -928,7 +928,7 @@ const SupportTicketBox = () => {
 
                             {/* Subject with Voice Note */}
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center gap-2">
+                              <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-gold" />
                                 Subject *
                               </Label>
@@ -950,14 +950,14 @@ const SupportTicketBox = () => {
                                   }}
                                 />
                               </div>
-                              <p className="text-xs text-[#5A4A2E] mt-1 flex items-center gap-1">
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated
                               </p>
                             </div>
 
                             {/* Priority Selection */}
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center gap-2">
+                              <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-500" />
                                 Priority Level
                               </Label>
@@ -972,19 +972,19 @@ const SupportTicketBox = () => {
                                   {PRIORITY_LEVELS.map((level) => (
                                     <SelectItem key={level.value} value={level.value}>
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>
-                                      <span className="text-[#5A4A2E] text-xs ml-2">- {level.description}</span>
+                                      <span className="text-[#1A1A1A]/70 text-xs ml-2">- {level.description}</span>
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <p className="text-xs text-[#5A4A2E] mt-1">
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1">
                                 Our AI will verify and adjust priority based on issue analysis.
                               </p>
                             </div>
 
                             {/* Description with Voice Note */}
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center justify-between">
+                              <Label className="text-[#1A1A1A]/70 flex items-center justify-between">
                                 <span>Detailed Description *</span>
                                 <VoiceNoteRecorder
                                   onTranscript={(text) => handleVoiceTranscript(text, 'description')}
@@ -1006,7 +1006,7 @@ const SupportTicketBox = () => {
                                 className="mt-1 min-h-[120px] bg-[#FDFBF7] border-2 border-gold/40 focus:border-gold text-[#1A1A1A] rounded-lg"
                                 required
                               />
-                              <p className="text-xs text-[#5A4A2E] mt-1 flex items-center gap-1">
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated to English
                               </p>
                             </div>
@@ -1015,7 +1015,7 @@ const SupportTicketBox = () => {
 
                             {/* File Upload */}
                             <div>
-                              <Label className="text-[#5A4A2E] flex items-center gap-2">
+                              <Label className="text-[#1A1A1A]/70 flex items-center gap-2">
                                 <Upload className="w-4 h-4 text-gold" />
                                 Attachments (Optional)
                               </Label>
@@ -1032,11 +1032,11 @@ const SupportTicketBox = () => {
                                   htmlFor="file-upload"
                                   className="cursor-pointer flex flex-col items-center gap-2"
                                 >
-                                  <Upload className="w-8 h-8 text-[#5A4A2E]" />
-                                  <span className="text-sm text-[#5A4A2E]">
+                                  <Upload className="w-8 h-8 text-[#1A1A1A]/70" />
+                                  <span className="text-sm text-[#1A1A1A]/70">
                                     Click to upload screenshots, videos, or documents
                                   </span>
-                                  <span className="text-xs text-[#5A4A2E]">
+                                  <span className="text-xs text-[#1A1A1A]/70">
                                     Max 10MB per file, up to 5 files
                                   </span>
                                 </label>
@@ -1067,10 +1067,10 @@ const SupportTicketBox = () => {
                                             getFileIcon(file)
                                           )}
                                           <div className="min-w-0">
-                                            <span className="text-sm text-[#5A4A2E] truncate block max-w-[140px]">
+                                            <span className="text-sm text-[#1A1A1A]/70 truncate block max-w-[140px]">
                                               {file.name}
                                             </span>
-                                            <span className="text-xs text-[#5A4A2E]">
+                                            <span className="text-xs text-[#1A1A1A]/70">
                                               {(file.size / 1024 / 1024).toFixed(2)}MB
                                             </span>
                                           </div>
@@ -1108,8 +1108,8 @@ const SupportTicketBox = () => {
                                                     <source src={URL.createObjectURL(file)} type={file.type} />
                                                   </video>
                                                 ) : (
-                                                  <div className="text-center py-10 text-[#5A4A2E]">
-                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-[#5A4A2E]" />
+                                                  <div className="text-center py-10 text-[#1A1A1A]/70">
+                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-[#1A1A1A]/70" />
                                                     <p className="text-sm">Preview not available for this file type</p>
                                                     <p className="text-xs mt-1">{file.type || 'Unknown type'} • {(file.size / 1024 / 1024).toFixed(2)}MB</p>
                                                   </div>
@@ -1234,7 +1234,7 @@ const SupportTicketBox = () => {
                     </DialogContent>
                   </Dialog>
 
-                  <p className="text-sm text-[#5A4A2E] mt-4">
+                  <p className="text-sm text-[#1A1A1A]/70 mt-4">
                     Email:{" "}
                     <a
                       href={`mailto:${CONTACT_INFO.supportEmail}`}

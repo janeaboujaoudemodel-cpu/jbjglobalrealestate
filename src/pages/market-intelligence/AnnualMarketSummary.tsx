@@ -152,7 +152,7 @@ const AnnualMarketSummary = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-[#5A4A2E] hover:text-[#1A1A1A] mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -166,7 +166,7 @@ const AnnualMarketSummary = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
                   {data.year} Year in Review
                 </h1>
-                <p className="text-[#5A4A2E] mt-2 flex items-center gap-2">
+                <p className="text-[#1A1A1A]/70 mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -195,7 +195,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[#5A4A2E] leading-relaxed">{data.executiveSummary}</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed">{data.executiveSummary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -218,7 +218,7 @@ const AnnualMarketSummary = () => {
               <CardContent>
                 <ul className="space-y-3">
                   {data.yearInReview.map((point, index) => (
-                    <li key={index} className="flex gap-3 text-[#5A4A2E]">
+                    <li key={index} className="flex gap-3 text-[#1A1A1A]/70">
                       <span className="text-gold">•</span>
                       <span>{point}</span>
                     </li>
@@ -238,7 +238,7 @@ const AnnualMarketSummary = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Building className="w-4 h-4" />
                   BUY Transactions
                 </CardTitle>
@@ -247,13 +247,13 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-[#1A1A1A]">
                   {data.totalTransactions.buy.toLocaleString()}
                 </span>
-                <p className="text-xs text-[#5A4A2E] mt-1">Full year {data.year}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Home className="w-4 h-4" />
                   SELL Transactions
                 </CardTitle>
@@ -262,13 +262,13 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-[#1A1A1A]">
                   {data.totalTransactions.sell.toLocaleString()}
                 </span>
-                <p className="text-xs text-[#5A4A2E] mt-1">Full year {data.year}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-[#5A4A2E] flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Key className="w-4 h-4" />
                   RENT Transactions
                 </CardTitle>
@@ -277,7 +277,7 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-[#1A1A1A]">
                   {data.totalTransactions.rent.toLocaleString()}
                 </span>
-                <p className="text-xs text-[#5A4A2E] mt-1">Full year {data.year}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -300,7 +300,7 @@ const AnnualMarketSummary = () => {
               <CardContent>
                 <ul className="space-y-3">
                   {data.structuralShifts.map((shift, index) => (
-                    <li key={index} className="flex gap-3 text-[#5A4A2E]">
+                    <li key={index} className="flex gap-3 text-[#1A1A1A]/70">
                       <span className="text-gold">•</span>
                       <span>{shift}</span>
                     </li>
@@ -326,7 +326,7 @@ const AnnualMarketSummary = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-[#5A4A2E] leading-relaxed">{data.rentBehavior}</p>
+                <p className="text-[#1A1A1A]/70 leading-relaxed">{data.rentBehavior}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -344,7 +344,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Regulatory Context</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-[#5A4A2E]">{data.regulatoryContext}</p>
+                <p className="text-sm text-[#1A1A1A]/70">{data.regulatoryContext}</p>
               </CardContent>
             </Card>
 
@@ -353,7 +353,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Demographic Context</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-[#5A4A2E]">{data.demographicContext}</p>
+                <p className="text-sm text-[#1A1A1A]/70">{data.demographicContext}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -375,7 +375,7 @@ const AnnualMarketSummary = () => {
                 <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{area.name}</h3>
-                    <p className="text-[#5A4A2E]">{area.narrative}</p>
+                    <p className="text-[#1A1A1A]/70">{area.narrative}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -392,12 +392,12 @@ const AnnualMarketSummary = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-[#5A4A2E] mb-4">
+                <p className="text-sm text-[#1A1A1A]/70 mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                   This document contains historical information only and no forward-looking statements.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-[#5A4A2E]">
+                <div className="flex flex-wrap gap-4 text-xs text-[#1A1A1A]/70">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Annual</span>
@@ -407,7 +407,7 @@ const AnnualMarketSummary = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-[#5A4A2E]">
+                  <p className="text-xs text-[#1A1A1A]/70">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>

@@ -181,7 +181,7 @@ export default function ResearchUsersPanel() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-[#1A1A1A]">JBJ Global Research Users</h2>
-            <p className="text-sm text-[#5A4A2E]">{filtered.length} users found</p>
+            <p className="text-sm text-[#1A1A1A]/70">{filtered.length} users found</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -200,12 +200,12 @@ export default function ResearchUsersPanel() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
           <Input
             placeholder="Search by email, name, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+            className="pl-9 bg-[#FDFBF7]/80 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           />
         </div>
         <Select value={segmentFilter} onValueChange={setSegmentFilter}>
@@ -252,11 +252,11 @@ export default function ResearchUsersPanel() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-[#5A4A2E] py-12">Loading...</TableCell>
+                    <TableCell colSpan={10} className="text-center text-[#1A1A1A]/70 py-12">Loading...</TableCell>
                   </TableRow>
                 ) : filtered.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-[#5A4A2E] py-12">
+                    <TableCell colSpan={10} className="text-center text-[#1A1A1A]/70 py-12">
                       No user summaries yet. Run the profile summarization job to populate data.
                     </TableCell>
                   </TableRow>
@@ -264,27 +264,27 @@ export default function ResearchUsersPanel() {
                   filtered.map((u) => (
                     <TableRow key={u.id} className="hover:bg-gold/5 border-b border-gold/10">
                       <TableCell className="text-[#1A1A1A] text-sm">{u.email}</TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm">{u.full_name || "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-sm">{u.full_name || "—"}</TableCell>
                       <TableCell>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-[#F7F2EA] text-[#5A4A2E]"}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}`}>
                           {u.subscribed ? "Yes" : "No"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm">{u.segment_tag || "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-sm">{u.segment_tag || "—"}</TableCell>
                       <TableCell>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
                           u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
                           u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
-                          "bg-[#F7F2EA] text-[#5A4A2E]"
+                          "bg-[#F7F2EA] text-[#1A1A1A]/70"
                         }`}>
                           {u.intent_score || "—"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm">{u.engagement_score ?? "—"}</TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm">{u.sessions_count ?? "—"}</TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
-                      <TableCell className="text-[#5A4A2E] text-sm">{u.avg_budget_estimate || "—"}</TableCell>
-                      <TableCell className="text-[#5A4A2E] text-xs">
+                      <TableCell className="text-[#1A1A1A]/70 text-sm">{u.engagement_score ?? "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-sm">{u.sessions_count ?? "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70 text-xs">
                         {u.last_active_at ? new Date(u.last_active_at).toLocaleDateString() : "—"}
                       </TableCell>
                     </TableRow>

@@ -193,7 +193,7 @@ const InvestorDashboard = () => {
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
       default:
-        return 'bg-[#B89555]/10 text-[#5A4A2E] border-[#B89555]/30/30';
+        return 'bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30/30';
     }
   };
 
@@ -221,12 +221,12 @@ const InvestorDashboard = () => {
               <h1 className="text-2xl font-bold text-[#1A1A1A] mb-1">
                 {profile?.full_name || 'Welcome, Investor'}
               </h1>
-              <p className="text-[#5A4A2E] text-sm flex items-center justify-center md:justify-start gap-2">
+              <p className="text-[#1A1A1A]/70 text-sm flex items-center justify-center md:justify-start gap-2">
                 <Mail className="h-4 w-4" />
                 {user?.email}
               </p>
               {profile?.phone && (
-                <p className="text-[#5A4A2E] text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
+                <p className="text-[#1A1A1A]/70 text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
                   <Phone className="h-4 w-4" />
                   {profile.phone}
                 </p>
@@ -266,7 +266,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{propertyBuy}</p>
-                <p className="text-xs text-[#5A4A2E]">Properties Bought</p>
+                <p className="text-xs text-[#1A1A1A]/70">Properties Bought</p>
               </div>
             </div>
           </CardContent>
@@ -280,7 +280,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{propertySell}</p>
-                <p className="text-xs text-[#5A4A2E]">Properties Listed</p>
+                <p className="text-xs text-[#1A1A1A]/70">Properties Listed</p>
               </div>
             </div>
           </CardContent>
@@ -294,7 +294,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{careerSubmitted ? '1' : '0'}</p>
-                <p className="text-xs text-[#5A4A2E]">CV Submitted</p>
+                <p className="text-xs text-[#1A1A1A]/70">CV Submitted</p>
               </div>
             </div>
           </CardContent>
@@ -308,7 +308,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{tickets.length}</p>
-                <p className="text-xs text-[#5A4A2E]">Support Tickets</p>
+                <p className="text-xs text-[#1A1A1A]/70">Support Tickets</p>
               </div>
             </div>
           </CardContent>
@@ -389,7 +389,7 @@ const InvestorDashboard = () => {
               </CardHeader>
               <CardContent>
                 {tickets.length === 0 && ideas.length === 0 ? (
-                  <div className="text-center py-6 text-[#5A4A2E]">
+                  <div className="text-center py-6 text-[#1A1A1A]/70">
                     <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
                     <p>No recent activity</p>
                     <p className="text-sm mt-1">Start exploring our tools and services</p>
@@ -402,7 +402,7 @@ const InvestorDashboard = () => {
                           <MessageCircle className="h-4 w-4 text-gold" />
                           <div>
                             <p className="text-sm font-medium text-[#1A1A1A]">{ticket.subject}</p>
-                            <p className="text-xs text-[#5A4A2E]">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-xs text-[#1A1A1A]/70">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(ticket.status)}>{ticket.status}</Badge>
@@ -414,7 +414,7 @@ const InvestorDashboard = () => {
                           <Lightbulb className="h-4 w-4 text-gold" />
                           <div>
                             <p className="text-sm font-medium text-[#1A1A1A]">Idea Submission</p>
-                            <p className="text-xs text-[#5A4A2E]">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-xs text-[#1A1A1A]/70">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(idea.status)}>{idea.status}</Badge>
@@ -435,13 +435,13 @@ const InvestorDashboard = () => {
                 <MessageCircle className="h-5 w-5 text-gold" />
                 My Support Tickets
               </CardTitle>
-              <CardDescription className="text-[#5A4A2E]">
+              <CardDescription className="text-[#1A1A1A]/70">
                 Track all your support requests and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {tickets.length === 0 ? (
-                <div className="text-center py-12 text-[#5A4A2E]">
+                <div className="text-center py-12 text-[#1A1A1A]/70">
                   <MessageCircle className="h-12 w-12 mx-auto mb-4 opacity-30" />
                   <p className="text-lg font-medium text-[#1A1A1A] mb-2">No Support Tickets</p>
                   <p className="text-sm mb-4">You haven't created any support tickets yet</p>
@@ -459,7 +459,7 @@ const InvestorDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium text-[#1A1A1A]">{ticket.subject}</p>
-                          <p className="text-sm text-[#5A4A2E]">
+                          <p className="text-sm text-[#1A1A1A]/70">
                             {ticket.ticket_number} • {format(new Date(ticket.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -481,13 +481,13 @@ const InvestorDashboard = () => {
                 <Lightbulb className="h-5 w-5 text-gold" />
                 My Ideas & Suggestions
               </CardTitle>
-              <CardDescription className="text-[#5A4A2E]">
+              <CardDescription className="text-[#1A1A1A]/70">
                 Track your submitted ideas and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {ideas.length === 0 ? (
-                <div className="text-center py-12 text-[#5A4A2E]">
+                <div className="text-center py-12 text-[#1A1A1A]/70">
                   <Lightbulb className="h-12 w-12 mx-auto mb-4 opacity-30" />
                   <p className="text-lg font-medium text-[#1A1A1A] mb-2">No Ideas Submitted</p>
                   <p className="text-sm mb-4">Share your ideas to help us improve</p>
@@ -505,7 +505,7 @@ const InvestorDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium text-[#1A1A1A]">Idea Submission</p>
-                          <p className="text-sm text-[#5A4A2E]">
+                          <p className="text-sm text-[#1A1A1A]/70">
                             {idea.draw_ticket_number || 'Processing'} • {format(new Date(idea.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -578,19 +578,19 @@ const InvestorDashboard = () => {
                 ) : (
                   <>
                     <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
-                      <span className="text-[#5A4A2E]">Full Name</span>
+                      <span className="text-[#1A1A1A]/70">Full Name</span>
                       <span className="font-medium text-[#1A1A1A]">{profile?.full_name || 'Not set'}</span>
                     </div>
                     <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
-                      <span className="text-[#5A4A2E]">Email</span>
+                      <span className="text-[#1A1A1A]/70">Email</span>
                       <span className="font-medium text-[#1A1A1A]">{user?.email}</span>
                     </div>
                     <div className="flex items-center justify-between py-2 border-b border-[#B89555]/30">
-                      <span className="text-[#5A4A2E]">Phone</span>
+                      <span className="text-[#1A1A1A]/70">Phone</span>
                       <span className="font-medium text-[#1A1A1A]">{profile?.phone || 'Not set'}</span>
                     </div>
                     <div className="flex items-center justify-between py-2">
-                      <span className="text-[#5A4A2E]">Date of Birth</span>
+                      <span className="text-[#1A1A1A]/70">Date of Birth</span>
                       <span className="font-medium text-[#1A1A1A]">{profile?.date_of_birth || 'Not set'}</span>
                     </div>
                   </>

@@ -104,7 +104,7 @@ export function WarningsPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-[#1A1A1A]">Employee Warnings</h2>
-          <p className="text-[#5A4A2E] text-sm">Issue and track employee disciplinary warnings</p>
+          <p className="text-[#1A1A1A]/70 text-sm">Issue and track employee disciplinary warnings</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -225,7 +225,7 @@ export function WarningsPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Pending Signature</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Pending Signature</p>
                 <p className="text-2xl font-bold text-amber-600">{pendingWarnings.length}</p>
               </div>
               <Clock className="h-8 w-8 text-amber-500/50" />
@@ -236,7 +236,7 @@ export function WarningsPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Acknowledged</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Acknowledged</p>
                 <p className="text-2xl font-bold text-emerald-600">{acknowledgedWarnings.length}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-emerald-500/50" />
@@ -247,7 +247,7 @@ export function WarningsPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Verbal Warnings</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Verbal Warnings</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {warnings.filter(w => w.warning_type === 'verbal').length}
                 </p>
@@ -260,7 +260,7 @@ export function WarningsPanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Written/Final</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Written/Final</p>
                 <p className="text-2xl font-bold text-red-600">
                   {warnings.filter(w => w.warning_type === 'written' || w.warning_type === 'final').length}
                 </p>
@@ -281,7 +281,7 @@ export function WarningsPanel() {
         </CardHeader>
         <CardContent>
           {warnings.length === 0 ? (
-            <div className="text-center py-12 text-[#5A4A2E]">
+            <div className="text-center py-12 text-[#1A1A1A]/70">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-400" />
               <p>No warnings on record.</p>
             </div>
@@ -303,10 +303,10 @@ export function WarningsPanel() {
                   <TableRow key={warning.id} className="border-gold/20 hover:bg-gold/5">
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-[#5A4A2E]" />
+                        <User className="h-4 w-4 text-[#1A1A1A]/70" />
                         <div>
                           <p className="font-medium text-[#1A1A1A]">{warning.employee_name}</p>
-                          <p className="text-xs text-[#5A4A2E]">{warning.department}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">{warning.department}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -316,10 +316,10 @@ export function WarningsPanel() {
                     <TableCell className="max-w-[200px]">
                       <p className="font-medium text-[#1A1A1A] truncate">{warning.subject}</p>
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E]">
+                    <TableCell className="text-[#1A1A1A]/70">
                       {warning.incident_date ? format(new Date(warning.incident_date), 'MMM dd, yyyy') : '-'}
                     </TableCell>
-                    <TableCell className="text-[#5A4A2E]">
+                    <TableCell className="text-[#1A1A1A]/70">
                       {warning.issued_by_name || 'System'}
                     </TableCell>
                     <TableCell>
@@ -334,7 +334,7 @@ export function WarningsPanel() {
                           </span>
                         </div>
                       ) : (
-                        <span className="text-[#5A4A2E] text-sm">Pending</span>
+                        <span className="text-[#1A1A1A]/70 text-sm">Pending</span>
                       )}
                     </TableCell>
                   </TableRow>

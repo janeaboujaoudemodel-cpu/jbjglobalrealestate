@@ -107,7 +107,7 @@ const AdditionalServicesGrid = () => {
                 <h4 className="text-lg font-bold text-[#1A1A1A] mb-2 group-hover:text-gold transition-colors">
                   {service.title}
                 </h4>
-                <p className="text-sm text-[#5A4A2E] mb-3">
+                <p className="text-sm text-[#1A1A1A]/70 mb-3">
                   {service.description}
                 </p>
                 <div className="flex items-center gap-1 text-gold text-sm font-medium">
@@ -124,10 +124,10 @@ const AdditionalServicesGrid = () => {
               <h4 className="text-lg font-bold text-[#1A1A1A] mb-2">
                 {service.title}
               </h4>
-              <p className="text-sm text-[#5A4A2E] mb-3">
+              <p className="text-sm text-[#1A1A1A]/70 mb-3">
                 {service.description}
               </p>
-              <span className="text-xs text-[#5A4A2E] font-medium uppercase tracking-wide">
+              <span className="text-xs text-[#1A1A1A]/70 font-medium uppercase tracking-wide">
                 Coming Soon
               </span>
             </div>

@@ -276,7 +276,7 @@ const ExecutiveAIInsights = () => {
                       {insight.details && (
                         <p className="text-white/90 text-xs">{insight.details}</p>
                       )}
-                      <p className="text-[#5A4A2E] text-xs mt-2">
+                      <p className="text-[#1A1A1A]/70 text-xs mt-2">
                         Generated: {new Date(insight.timestamp).toLocaleString()}
                       </p>
                     </div>
@@ -322,7 +322,7 @@ const ExecutiveAIInsights = () => {
             <p className="text-xs text-white/90">
               AI Strategic Insights • Supports judgment, does not replace it • All insights logged and explainable
             </p>
-            <p className="text-xs text-[#5A4A2E] mt-1">
+            <p className="text-xs text-[#1A1A1A]/70 mt-1">
               Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
             </p>
           </div>

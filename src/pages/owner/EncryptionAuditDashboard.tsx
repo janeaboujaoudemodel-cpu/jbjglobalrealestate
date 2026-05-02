@@ -69,7 +69,7 @@ const dataClassIcon = (cls: string) => {
     case "storage": return <HardDrive className="w-4 h-4 text-cyan-400" />;
     case "transport": return <Globe className="w-4 h-4 text-green-400" />;
     case "secrets": return <ShieldCheck className="w-4 h-4 text-emerald-400" />;
-    default: return <Shield className="w-4 h-4 text-[#5A4A2E]" />;
+    default: return <Shield className="w-4 h-4 text-[#1A1A1A]/70" />;
   }
 };
 

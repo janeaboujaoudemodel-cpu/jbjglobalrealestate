@@ -1078,7 +1078,7 @@ const VideoMeeting = () => {
             {participants.length === 0 && (
               <div className="flex items-center justify-center bg-zinc-900/50 rounded-2xl border-2 border-dashed border-[#1A1A1A]">
                 <div className="text-center p-8">
-                  <Users className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                  <Users className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                   <p className="text-white/70 mb-2">Waiting for others to join...</p>
                   <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
                     <Share2 className="w-4 h-4 mr-2" />

@@ -229,7 +229,7 @@ export default function AcademyGraduates() {
                           <h3 className="font-semibold text-[#1A1A1A] text-sm">{cert.full_name.split(" ")[0]}</h3>
                           <p className="text-[#1A1A1A]/40 text-xs mt-1">{cert.track}</p>
                           <div className="flex items-center justify-center gap-1.5 mt-2">
-                            <Hash className="w-3 h-3 text-[#5A4A2E]" />
+                            <Hash className="w-3 h-3 text-[#1A1A1A]/70" />
                             <span className="text-xs text-[#1A1A1A] font-mono">{cert.certificate_number}</span>
                           </div>
                           <div className="flex items-center justify-center gap-1.5 mt-1.5">

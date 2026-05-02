@@ -25,7 +25,7 @@ const OverseasInvestorsBanner = () => {
         {/* Badge */}
         <div className="text-center mb-6 md:mb-8">
           <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Globe className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#5A4A2E]" />
+            <Globe className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#1A1A1A]/70" />
             <span className="text-[#1A1A1A]">Global Investment Hub</span>
           </span>
         </div>
@@ -35,7 +35,7 @@ const OverseasInvestorsBanner = () => {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Invest in Dubai From Anywhere in the World
           </h2>
-          <p className="text-[#5A4A2E] text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[#1A1A1A]/70 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
             Strategic location, world-class infrastructure, and long-term government execution
             make Dubai the most investable city in the region — with zero income tax, full foreign
             ownership, and a 10-year Golden Visa for qualifying investors.
@@ -58,7 +58,7 @@ const OverseasInvestorsBanner = () => {
                 <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-none tabular-nums">
                   {s.value}
                 </div>
-                <div className="mt-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.14em] font-semibold text-[#5A4A2E] whitespace-nowrap">
+                <div className="mt-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]/70 whitespace-nowrap">
                   {s.label}
                 </div>
               </div>
@@ -75,17 +75,17 @@ const OverseasInvestorsBanner = () => {
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               <div className="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-xl bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center mb-3">
-                <item.icon className="w-5 h-5 md:w-6 md:h-6 text-[#5A4A2E]" />
+                <item.icon className="w-5 h-5 md:w-6 md:h-6 text-[#1A1A1A]/70" />
               </div>
               <h4 className="text-[#1A1A1A] text-xs md:text-sm font-bold mb-1">{item.label}</h4>
-              <p className="text-[#5A4A2E] text-[10px] md:text-xs leading-tight">{item.desc}</p>
+              <p className="text-[#1A1A1A]/70 text-[10px] md:text-xs leading-tight">{item.desc}</p>
             </div>
           ))}
         </div>
 
         {/* Reassurance text */}
         <div className="max-w-3xl mx-auto text-center mb-8 animate-fade-in-up">
-          <p className="text-[#5A4A2E] text-xs md:text-sm italic leading-relaxed">
+          <p className="text-[#1A1A1A]/70 text-xs md:text-sm italic leading-relaxed">
             "From your first inquiry to key collection — our multilingual team guides international investors through every step. 
             Property selection, legal structuring, visa processing, and ongoing asset management. You don't need to be in Dubai. We are."
           </p>

@@ -347,7 +347,7 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
               to={link.href}
               className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-gold/10 transition-colors"
             >
-              <span className="text-[#5A4A2E] group-hover:text-[#1A1A1A] text-sm transition-colors">
+              <span className="text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] text-sm transition-colors">
                 {link.label}
               </span>
               <ArrowRight className="w-3.5 h-3.5 text-gold opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
@@ -513,7 +513,7 @@ const Sitemap = () => {
               <h2 className="text-[#1A1A1A] text-2xl sm:text-3xl font-bold mb-3">
                 Complete <span className="text-gold">Directory</span>
               </h2>
-              <p className="text-[#5A4A2E] text-sm sm:text-base max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 text-sm sm:text-base max-w-xl mx-auto">
                 All pages organized by category for easy navigation
               </p>
             </motion.div>
@@ -561,7 +561,7 @@ const Sitemap = () => {
                     className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-4 h-4 text-gold" />
-                    <span className="text-[#5A4A2E] group-hover:text-[#1A1A1A] text-sm transition-colors">
+                    <span className="text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] text-sm transition-colors">
                       {link.label}
                     </span>
                   </Link>
@@ -583,7 +583,7 @@ const Sitemap = () => {
               <h2 className="text-[#1A1A1A] text-xl sm:text-2xl font-bold mb-2">
                 Get <span className="text-gold">In Touch</span>
               </h2>
-              <p className="text-[#5A4A2E] text-sm">Choose your preferred way to connect with us</p>
+              <p className="text-[#1A1A1A]/70 text-sm">Choose your preferred way to connect with us</p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 max-w-4xl mx-auto">
@@ -600,7 +600,7 @@ const Sitemap = () => {
                     <Headphones className="w-7 h-7 text-gold" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Support Ticket</h3>
-                  <p className="text-[#5A4A2E] text-sm mb-4">Get help with any questions or issues</p>
+                  <p className="text-[#1A1A1A]/70 text-sm mb-4">Get help with any questions or issues</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Submit Ticket <ArrowRight className="w-4 h-4" />
                   </span>
@@ -620,7 +620,7 @@ const Sitemap = () => {
                     <Calendar className="w-7 h-7 text-gold" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Free Consultation</h3>
-                  <p className="text-[#5A4A2E] text-sm mb-4">Book a call with our expert advisors</p>
+                  <p className="text-[#1A1A1A]/70 text-sm mb-4">Book a call with our expert advisors</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Book Now <ArrowRight className="w-4 h-4" />
                   </span>
@@ -640,7 +640,7 @@ const Sitemap = () => {
                     <Phone className="w-7 h-7 text-gold" />
                   </div>
                   <h3 className="text-[#1A1A1A] font-bold text-lg mb-2">Contact Us</h3>
-                  <p className="text-[#5A4A2E] text-sm mb-4">Reach our team directly via phone or email</p>
+                  <p className="text-[#1A1A1A]/70 text-sm mb-4">Reach our team directly via phone or email</p>
                   <span className="inline-flex items-center gap-2 text-gold font-semibold text-sm">
                     Get in Touch <ArrowRight className="w-4 h-4" />
                   </span>

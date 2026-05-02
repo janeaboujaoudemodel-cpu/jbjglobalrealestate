@@ -45,7 +45,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
       {/* Header - centered */}
       <div className="mb-5">
         <h4 className="text-gold text-xl font-bold mb-2">Connect With Our Team</h4>
-        <p className="text-[#5A4A2E] text-sm">Share your details to receive personalized assistance</p>
+        <p className="text-[#1A1A1A]/70 text-sm">Share your details to receive personalized assistance</p>
       </div>
 
       {/* Form fields - full width, centered */}
@@ -60,7 +60,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-11 w-full"
+            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
           />
         </div>
 
@@ -75,7 +75,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
             onChange={(e) => setEmail(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleCheckEmail()}
             placeholder="your@email.com"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-11 w-full"
+            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
             autoFocus
           />
         </div>
@@ -83,14 +83,14 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
         <div className="text-left">
           <Label className="text-[#1A1A1A] text-sm flex items-center gap-2 mb-1.5">
             <Phone className="w-4 h-4 text-gold" />
-            Phone Number <span className="text-[#5A4A2E] text-xs">(optional)</span>
+            Phone Number <span className="text-[#1A1A1A]/70 text-xs">(optional)</span>
           </Label>
           <Input
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+971 XX XXX XXXX"
-            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] h-11 w-full"
+            className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 h-11 w-full"
           />
         </div>
 
@@ -112,7 +112,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
           )}
         </Button>
 
-        <p className="text-[#5A4A2E] text-xs text-center mt-3">
+        <p className="text-[#1A1A1A]/70 text-xs text-center mt-3">
           Your information is secure and will only be used to provide you with the best service.
         </p>
       </div>

@@ -69,7 +69,7 @@ const OwnerSafetyPage = () => {
                 </Badge>
               )}
             </div>
-            <p className="text-sm text-[#5A4A2E]">{feature.description}</p>
+            <p className="text-sm text-[#1A1A1A]/70">{feature.description}</p>
           </div>
         </div>
         <Switch
@@ -93,7 +93,7 @@ const OwnerSafetyPage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#1A1A1A]">AI & Automation Safety Panel</h1>
-                <p className="text-[#5A4A2E]">Control what AI can and cannot do</p>
+                <p className="text-[#1A1A1A]/70">Control what AI can and cannot do</p>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ const OwnerSafetyPage = () => {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-[#1A1A1A]">Master Emergency Kill Switch</h2>
-                    <p className="text-[#5A4A2E]">
+                    <p className="text-[#1A1A1A]/70">
                       {masterKillSwitch 
                         ? 'All AI and automation features are DISABLED' 
                         : 'Instantly disable all AI and automation'}
@@ -146,7 +146,7 @@ const OwnerSafetyPage = () => {
                 {['Read and categorize incoming messages', 'Draft text and voice reply suggestions', 'Score and prioritize leads', 'Create task and follow-up suggestions', 'Log interactions to CRM (with approval)'].map(text => (
                   <div key={text} className="flex items-start gap-3 text-sm">
                     <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                    <span className="text-[#5A4A2E]">{text}</span>
+                    <span className="text-[#1A1A1A]/70">{text}</span>
                   </div>
                 ))}
               </CardContent>
@@ -163,7 +163,7 @@ const OwnerSafetyPage = () => {
                 {['Send messages without explicit owner approval', 'Make calls or initiate communications', 'Delete or modify existing data', 'Access financial or payment systems', 'Take any action autonomously'].map(text => (
                   <div key={text} className="flex items-start gap-3 text-sm">
                     <X className="w-4 h-4 text-red-500 mt-0.5" />
-                    <span className="text-[#5A4A2E]">{text}</span>
+                    <span className="text-[#1A1A1A]/70">{text}</span>
                   </div>
                 ))}
               </CardContent>
@@ -176,7 +176,7 @@ const OwnerSafetyPage = () => {
               <Eye className="w-5 h-5 text-purple-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-purple-700">Approval-First Hybrid Mode</h3>
-                <p className="text-sm text-[#5A4A2E] mt-1">
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">
                   The AI operates in <strong>Hybrid Mode</strong>. It can read, draft, and suggest, 
                   but <strong>NEVER sends messages or takes actions without explicit manual approval</strong> from the Owner.
                   Features marked with a badge require individual approval for each action.
@@ -236,17 +236,17 @@ const OwnerSafetyPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className="text-2xl font-bold text-[#1A1A1A]">{features.filter(f => f.enabled).length}</div>
-                <div className="text-[#5A4A2E]">Features Enabled</div>
+                <div className="text-[#1A1A1A]/70">Features Enabled</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-purple-50 border border-purple-100">
                 <div className="text-2xl font-bold text-purple-700">{features.filter(f => f.requiresApproval).length}</div>
-                <div className="text-[#5A4A2E]">Require Approval</div>
+                <div className="text-[#1A1A1A]/70">Require Approval</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className={`text-2xl font-bold ${masterKillSwitch ? 'text-red-600' : 'text-green-600'}`}>
                   {masterKillSwitch ? 'ACTIVE' : 'OFF'}
                 </div>
-                <div className="text-[#5A4A2E]">Kill Switch</div>
+                <div className="text-[#1A1A1A]/70">Kill Switch</div>
               </div>
             </div>
           </div>

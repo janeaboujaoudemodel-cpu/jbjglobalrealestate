@@ -244,7 +244,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
       </div>
-      <ArrowRight className="w-3 h-3 text-[#5A4A2E] flex-shrink-0" />
+      <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
     </button>
   );
 
@@ -300,7 +300,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search projects, developers, tools & more..."
-            className="w-full h-12 pl-12 pr-4 bg-[#FDFBF7]/80 border border-gold/30 rounded-xl text-[#1A1A1A] text-base placeholder:text-[#5A4A2E] focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all duration-200"
+            className="w-full h-12 pl-12 pr-4 bg-[#FDFBF7]/80 border border-gold/30 rounded-xl text-[#1A1A1A] text-base placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all duration-200"
           />
         </div>
         {/* Content */}
@@ -327,14 +327,14 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.label}</p>
                           {item.category && <p className="text-xs text-gold">{item.category}</p>}
                         </div>
-                        <ArrowRight className="w-3 h-3 text-[#5A4A2E]" />
+                        <ArrowRight className="w-3 h-3 text-[#1A1A1A]/70" />
                       </button>
                     ))}
                   </div>
                 </div>
               )}
               {totalResults === 0 && (
-                <p className="text-sm text-[#5A4A2E] text-center py-4">No results found for "{query}"</p>
+                <p className="text-sm text-[#1A1A1A]/70 text-center py-4">No results found for "{query}"</p>
               )}
             </div>
           ) : (
@@ -378,7 +378,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Recent Searches</p>
-                    <button onClick={handleClearRecent} className="text-xs text-[#5A4A2E] hover:text-[#5A4A2E] transition-colors">Clear</button>
+                    <button onClick={handleClearRecent} className="text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors">Clear</button>
                   </div>
                   <div className="space-y-1">
                     {recentSearches.map((search, i) => (
@@ -387,7 +387,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                         onClick={() => handleRecentSearchClick(search)}
                         className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                       >
-                        <Clock className="w-3.5 h-3.5 text-[#5A4A2E]" />
+                        <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
                         <span className="text-xs text-[#1A1A1A] font-medium">{search}</span>
                       </button>
                     ))}
@@ -433,7 +433,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search by keyword... Search anything"
-                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-[#1A1A1A] text-xl placeholder:text-[#5A4A2E] focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="w-full h-16 pl-14 pr-14 bg-transparent border-0 text-[#1A1A1A] text-xl placeholder:text-[#1A1A1A]/70 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
@@ -488,8 +488,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
 
                     {totalResults === 0 && (
                       <div className="p-8 text-center">
-                        <p className="text-[#5A4A2E]">No results found for "{query}"</p>
-                        <p className="text-sm text-[#5A4A2E] mt-1">Try a different search term</p>
+                        <p className="text-[#1A1A1A]/70">No results found for "{query}"</p>
+                        <p className="text-sm text-[#1A1A1A]/70 mt-1">Try a different search term</p>
                       </div>
                     )}
                   </div>
@@ -547,7 +547,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           </p>
                           <button 
                             onClick={handleClearRecent}
-                            className="flex items-center gap-1 text-xs text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
+                            className="flex items-center gap-1 text-xs text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                             Clear
@@ -560,7 +560,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                               onClick={() => handleRecentSearchClick(search)}
                               className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#FDFBF7]/50 border border-gold/10 hover:bg-[#FDFBF7] hover:border-gold/30 transition-all"
                             >
-                              <Clock className="w-3.5 h-3.5 text-[#5A4A2E]" />
+                              <Clock className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
                               <span className="text-sm font-medium text-[#1A1A1A]">{search}</span>
                             </button>
                           ))}
@@ -627,7 +627,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
 
               {/* Footer hint */}
               <div className="p-4 border-t border-gold/30 bg-[#FDFBF7]/50 flex-shrink-0">
-                <p className="text-[#5A4A2E] text-sm text-center">
+                <p className="text-[#1A1A1A]/70 text-sm text-center">
                   <kbd className="px-2 py-1 bg-[#1A1A1A]/10 rounded text-[#1A1A1A] font-mono text-xs">Enter</kbd> to select first result 
                   <span className="mx-3">•</span>
                   <kbd className="px-2 py-1 bg-[#1A1A1A]/10 rounded text-[#1A1A1A] font-mono text-xs">Esc</kbd> to close
