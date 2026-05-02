@@ -87,7 +87,7 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
           </a>
         )}
         {meta.fetched_at && (
-          <div className="text-[#8A7556] mt-1">
+          <div className="text-[#1A1A1A]/70 mt-1">
             Fetched {new Date(meta.fetched_at).toLocaleString()}
           </div>
         )}
@@ -418,7 +418,7 @@ const BrokeragesTab = () => {
 
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
         </div>
         <Select value={emirateFilter} onValueChange={setEmirateFilter}>
@@ -681,7 +681,7 @@ const ClientsTab = () => {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search client" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -701,7 +701,7 @@ const ClientsTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#8A7556]">No clients yet.</CardContent></Card>
+        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No clients yet.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
@@ -1082,7 +1082,7 @@ const DeveloperRegistryTab = () => {
         <div className="space-y-5">
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -1196,7 +1196,7 @@ const DeveloperRegistryTab = () => {
                     active
                       ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
                       : n === 0
-                      ? "bg-[#FDFBF7] text-[#8A7556] border-[#1A1A1A]/10 cursor-not-allowed"
+                      ? "bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#1A1A1A]/10 cursor-not-allowed"
                       : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
                   }`}
                 >
@@ -1224,7 +1224,7 @@ const DeveloperRegistryTab = () => {
       )}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#8A7556] space-y-4">
+        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70 space-y-4">
           {data.length === 0 ? (
             <div className="space-y-3">
               <p>No developers in your registry yet.</p>
@@ -1321,13 +1321,13 @@ const DeveloperRegistryTab = () => {
                       </div>
                       <div className="grid sm:grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-[#1A1A1A]">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Building2 className="w-3 h-3 text-[#8A7556] shrink-0" />
-                          <span className="text-[#8A7556] shrink-0">Company:</span>
+                          <Building2 className="w-3 h-3 text-[#1A1A1A]/70 shrink-0" />
+                          <span className="text-[#1A1A1A]/70 shrink-0">Company:</span>
                           <span className="font-medium text-[#1A1A1A] truncate">{r.developer_name || "—"}</span>
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <MapPin className="w-3 h-3 text-[#8A7556] shrink-0" />
-                          <span className="text-[#8A7556] shrink-0">Office:</span>
+                          <MapPin className="w-3 h-3 text-[#1A1A1A]/70 shrink-0" />
+                          <span className="text-[#1A1A1A]/70 shrink-0">Office:</span>
                           {r.office_address ? (
                             <a
                               href={r.office_map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${r.office_address} ${r.developer_name || ""}`)}`}
@@ -1345,8 +1345,8 @@ const DeveloperRegistryTab = () => {
                           <FieldSource meta={r.field_sources?.emirate} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Phone className="w-3 h-3 text-[#8A7556] shrink-0" />
-                          <span className="text-[#8A7556] shrink-0">Phone:</span>
+                          <Phone className="w-3 h-3 text-[#1A1A1A]/70 shrink-0" />
+                          <span className="text-[#1A1A1A]/70 shrink-0">Phone:</span>
                           {r.phone ? (
                             <a href={`tel:${r.phone}`} className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.phone}</a>
                           ) : (
@@ -1355,8 +1355,8 @@ const DeveloperRegistryTab = () => {
                           <FieldSource meta={r.field_sources?.phone} />
                         </div>
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <Mail className="w-3 h-3 text-[#8A7556] shrink-0" />
-                          <span className="text-[#8A7556] shrink-0">Email:</span>
+                          <Mail className="w-3 h-3 text-[#1A1A1A]/70 shrink-0" />
+                          <span className="text-[#1A1A1A]/70 shrink-0">Email:</span>
                           {r.developer_email ? (
                             <a href={`mailto:${r.developer_email}`} className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.developer_email}</a>
                           ) : (
@@ -1366,15 +1366,15 @@ const DeveloperRegistryTab = () => {
                         </div>
                         {r.website && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
-                            <LinkIcon className="w-3 h-3 text-[#8A7556] shrink-0" />
-                            <span className="text-[#8A7556] shrink-0">Website:</span>
+                            <LinkIcon className="w-3 h-3 text-[#1A1A1A]/70 shrink-0" />
+                            <span className="text-[#1A1A1A]/70 shrink-0">Website:</span>
                             <a href={r.website} target="_blank" rel="noopener noreferrer" className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.website}</a>
                             <FieldSource meta={r.field_sources?.website} />
                           </div>
                         )}
                         {r.agency_code && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
-                            <span className="text-[#8A7556] shrink-0">Agency code:</span>
+                            <span className="text-[#1A1A1A]/70 shrink-0">Agency code:</span>
                             <span className="font-medium text-[#1A1A1A]">{r.agency_code}</span>
                           </div>
                         )}

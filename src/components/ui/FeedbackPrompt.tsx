@@ -139,7 +139,7 @@ export const FeedbackPrompt = ({
                       className={`w-8 h-8 ${
                         star <= rating
                           ? "fill-gold text-gold"
-                          : "text-[#1A1A1A]/70 hover:text-[#8A7556]"
+                          : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]/70"
                       } transition-colors`}
                     />
                   </button>

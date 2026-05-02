@@ -355,7 +355,7 @@ export const RateLimitDashboard = () => {
           </div>
         ) : rateLimits.length === 0 ? (
           <div className="text-center py-12">
-            <Shield className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+            <Shield className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
             <p className="text-[#1A1A1A]/60">No rate limit entries found</p>
             <p className="text-[#1A1A1A]/40 text-sm mt-1">
               Rate limit data will appear here when API requests are made

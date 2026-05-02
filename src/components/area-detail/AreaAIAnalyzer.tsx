@@ -342,7 +342,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-[#8A7556] flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#1A1A1A]/70 flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
@@ -635,7 +635,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-4xl font-bold text-gold">{ratingScore}</span>
-                      <span className="text-[#8A7556] text-[10px] font-medium">/10</span>
+                      <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
                   

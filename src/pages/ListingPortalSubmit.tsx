@@ -1017,7 +1017,7 @@ const ListingPortalSubmit = () => {
                               <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover" />
                             ) : (
                               <div className="w-full h-48 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] flex items-center justify-center">
-                                <Image className="w-12 h-12 text-[#8A7556]" />
+                                <Image className="w-12 h-12 text-[#1A1A1A]/70" />
                               </div>
                             )}
                             {form.listing_category && (

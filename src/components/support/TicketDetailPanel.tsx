@@ -284,7 +284,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
     return (
       <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
         <div className="text-center text-[#1A1A1A]/70">
-          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-[#8A7556]" />
+          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-[#1A1A1A]/70" />
           <p>Select a ticket to view details</p>
         </div>
       </div>
@@ -663,7 +663,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
               onChange={(e) => setReplyMessage(e.target.value)}
               placeholder="Type your reply to the customer..."
               rows={2}
-              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+              className="w-full min-h-[56px] px-3 py-2 pr-16 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
             />
             <div className="absolute top-2 right-2 flex items-center gap-1">
               <VoiceInputButton
@@ -723,7 +723,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 value={replyMessage}
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply to the customer..."
-                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
+                className="w-full h-[45vh] px-4 py-3 rounded-lg bg-[#FDFBF7]/80 border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all leading-relaxed"
                 autoFocus
               />
             </div>

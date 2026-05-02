@@ -259,7 +259,7 @@ const CRMNotes = () => {
             {filteredNotes.length === 0 ? (
               <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardContent className="py-12 text-center">
-                  <StickyNote className="h-12 w-12 mx-auto mb-4 text-[#8A7556]" />
+                  <StickyNote className="h-12 w-12 mx-auto mb-4 text-[#1A1A1A]/70" />
                   <p className="text-[#1A1A1A] font-medium">No notes yet</p>
                   <p className="text-sm text-[#1A1A1A]/70 mt-1">Create your first note to get started</p>
                   <Button onClick={() => addNote()} variant="primary" className="mt-4">

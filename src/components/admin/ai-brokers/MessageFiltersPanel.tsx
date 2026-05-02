@@ -317,7 +317,7 @@ export function MessageFiltersPanel() {
         {filters.length === 0 && (
           <Card className="bg-[#FDFBF7] border-2 border-gold/30 border-dashed">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <Shield className="h-12 w-12 text-[#8A7556] mb-4" />
+              <Shield className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
               <p className="text-[#1A1A1A]/60 text-center">
                 No message filters configured.
                 <br />

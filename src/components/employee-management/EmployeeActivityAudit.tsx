@@ -142,7 +142,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                 <p className="text-xs text-[#1A1A1A]/70">Total Employees</p>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{summaries.length}</p>
               </div>
-              <Users className="w-8 h-8 text-[#8A7556]" />
+              <Users className="w-8 h-8 text-[#1A1A1A]/70" />
             </div>
           </CardContent>
         </Card>
@@ -334,7 +334,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
               </div>
             ) : (
               <div className="text-center py-12">
-                <Eye className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                <Eye className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <p className="text-sm text-[#1A1A1A]/70">Select an employee to view details</p>
               </div>
             )}

@@ -232,7 +232,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               </div>
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <Clock className="h-12 w-12 text-[#8A7556] mb-4" />
+                <Clock className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
                 <p className="text-[#1A1A1A]/70">No messages yet</p>
               </div>
             ) : (
@@ -421,7 +421,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <LinkIcon className="h-12 w-12 text-[#8A7556] mb-4" />
+              <LinkIcon className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
               <p className="text-[#1A1A1A]/70 font-medium">Not linked to a lead</p>
               <p className="text-[#1A1A1A]/70 text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
               <div className="flex gap-2 mt-4">
@@ -438,7 +438,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
         <TabsContent value="activity" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <FileText className="h-12 w-12 text-[#8A7556] mb-4" />
+            <FileText className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
             <p className="text-[#1A1A1A]/70">Activity timeline coming soon</p>
           </div>
         </TabsContent>

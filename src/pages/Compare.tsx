@@ -672,7 +672,7 @@ const Compare = () => {
                   </div>
                   <div>
                     <p className="text-white font-medium">{f.title}</p>
-                    <p className="text-[#8A7556] text-sm">{f.sub}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">{f.sub}</p>
                   </div>
                 </div>
               ))}

@@ -424,7 +424,7 @@ export default function OwnerTemplates() {
           ) : filteredTemplates.length === 0 ? (
             <Card className="border-2 border-gold/20 bg-[#FDFBF7]/90">
               <CardContent className="p-12 text-center">
-                <FileText className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                <FileText className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <p className="text-[#1A1A1A]/70 font-medium">No templates found</p>
                 <p className="text-[#1A1A1A]/70 text-sm mt-1">Create your first template to get started</p>
               </CardContent>

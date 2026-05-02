@@ -101,7 +101,7 @@ const StartingPointSection = () => {
                   </div>
                   <div className="text-center">
                     <h4 className="text-[#1A1A1A] group-hover:text-[#1A1A1A] text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-[#8A7556] text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <p className="text-[#1A1A1A]/70 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>

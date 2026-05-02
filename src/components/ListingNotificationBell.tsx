@@ -168,7 +168,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         <div className="max-h-[300px] overflow-y-auto bg-[#FDFBF7]">
           {notifications.length === 0 ? (
             <div className="p-6 text-center text-stone-400 text-sm">
-              <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#8A7556]" />
+              <Bell className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#1A1A1A]/70" />
               No notifications yet
             </div>
           ) : (

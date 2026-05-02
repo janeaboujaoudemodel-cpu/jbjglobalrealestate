@@ -69,7 +69,7 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
             }}
           />
         ) : (
-          <div className="text-[#8A7556]">{getDesignTypeIcon(item.item_type)}</div>
+          <div className="text-[#1A1A1A]/70">{getDesignTypeIcon(item.item_type)}</div>
         )}
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}

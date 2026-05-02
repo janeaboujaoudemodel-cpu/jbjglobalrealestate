@@ -343,7 +343,7 @@ export function ChatHistoryAdmin() {
 
             {filteredSessions.length === 0 && (
               <div className="text-center py-12">
-                <MessageSquare className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                <MessageSquare className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                 <p className="text-[#1A1A1A]/50">No chat history found</p>
               </div>
             )}

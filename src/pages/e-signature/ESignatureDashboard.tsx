@@ -204,7 +204,7 @@ export default function ESignatureDashboard() {
                     <p className="text-sm text-muted-foreground">Total</p>
                     <p className="text-2xl font-bold text-foreground">{envelopes?.length || 0}</p>
                   </div>
-                  <FileSignature className="w-8 h-8 text-[#8A7556]" />
+                  <FileSignature className="w-8 h-8 text-[#1A1A1A]/70" />
                 </div>
               </CardContent>
             </Card>

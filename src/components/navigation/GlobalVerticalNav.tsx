@@ -1144,7 +1144,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-[#1A1A1A]/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
-                  <Sparkles className="w-3 h-3 text-[#8A7556]" />
+                  <Sparkles className="w-3 h-3 text-[#1A1A1A]/70" />
                 )}
               </Link>
             );

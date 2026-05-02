@@ -205,7 +205,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
 
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A7556]" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -234,7 +234,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
       </div>
 
       {filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#8A7556]">
+        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">
           {tab === "deleted"
             ? "No recently deleted developers."
             : tab === "inbox"

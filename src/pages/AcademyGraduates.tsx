@@ -205,7 +205,7 @@ export default function AcademyGraduates() {
             ) : filteredCerts.length === 0 ? (
               <Card className="border-gold/20 bg-[#FDFBF7]/80">
                 <CardContent className="p-8 text-center">
-                  <GraduationCap className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+                  <GraduationCap className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/50">
                     {searchQuery ? "No graduates match your search." : "No graduates yet. Complete the certification program to be the first!"}
                   </p>

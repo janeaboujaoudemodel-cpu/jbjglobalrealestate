@@ -536,7 +536,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
                   placeholder="Private notes for the team only"
                 />
               </div>
-              <p className="text-xs text-[#8A7556]">
+              <p className="text-xs text-[#1A1A1A]/70">
                 Documents &amp; attachments can be uploaded from the lead profile after creation.
               </p>
             </TabsContent>

@@ -147,7 +147,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                         {/* Status Icon */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isLocked
-                            ? 'bg-gold/10 border border-gold/30 text-[#8A7556]'
+                            ? 'bg-gold/10 border border-gold/30 text-[#1A1A1A]/70'
                             : isCompleted 
                               ? 'bg-emerald-500 text-white' 
                               : isCurrentModule 
@@ -169,7 +169,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                             <Clock className="w-3 h-3" />
                             {module.estimated_minutes} min
                             {isLocked && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-[#8A7556]">
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-gold/30 text-[#1A1A1A]/70">
                                 Locked
                               </Badge>
                             )}

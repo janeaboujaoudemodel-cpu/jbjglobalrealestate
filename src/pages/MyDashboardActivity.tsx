@@ -330,7 +330,7 @@ const MyDashboardActivity = () => {
                     </ScrollArea>
                   ) : (
                     <div className="text-center py-12">
-                      <Activity className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
+                      <Activity className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                       <p className="text-stone-600">Activity is being recorded live.</p>
                       <p className="text-sm text-stone-400 mt-1">Browse the platform to see your activity appear here.</p>
                     </div>

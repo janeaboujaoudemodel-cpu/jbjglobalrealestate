@@ -269,7 +269,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
 
             {filteredCommands.length === 0 && (
               <div className="py-12 text-center">
-                <Sparkles className="w-12 h-12 mx-auto text-[#8A7556] mb-4" />
+                <Sparkles className="w-12 h-12 mx-auto text-[#1A1A1A]/70 mb-4" />
                 <p className="text-[#1A1A1A]/70">No commands found</p>
                 <p className="text-sm text-[#1A1A1A]/70 mt-1">Try a different search term</p>
               </div>

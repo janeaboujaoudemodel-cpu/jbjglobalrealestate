@@ -995,7 +995,7 @@ const HeroSearchBar = () => {
                     value={mainEmirateSearch}
                     onChange={(e) => setMainEmirateSearch(e.target.value)}
                     placeholder="Search emirate..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-gold/60"
                   />
                   <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
@@ -1125,7 +1125,7 @@ const HeroSearchBar = () => {
                     value={advancedDeveloperSearch}
                     onChange={(e) => setAdvancedDeveloperSearch(e.target.value)}
                     placeholder="Search developer..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-gold/60"
                   />
                   <div className="max-h-48 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
@@ -1162,7 +1162,7 @@ const HeroSearchBar = () => {
                     value={advancedAreaSearch}
                     onChange={(e) => setAdvancedAreaSearch(e.target.value)}
                     placeholder="Search area or community..."
-                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
+                    className="w-full h-10 px-3 mb-2 rounded-xl bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-gold/60"
                   />
                   <div className="max-h-52 overflow-y-auto jj-scrollbar-gold rounded-xl border border-gold/30 bg-[#FDFBF7]">
                     <button
@@ -1241,7 +1241,7 @@ const HeroSearchBar = () => {
                       onChange={(e) => setSaveFilterName(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveFilter()}
                       placeholder="Filter name..."
-                      className="flex-1 h-10 px-3 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#8A7556] focus:outline-none focus:border-gold/60"
+                      className="flex-1 h-10 px-3 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 focus:outline-none focus:border-gold/60"
                       style={{ fontSize: '16px' }}
                     />
                     <Button onClick={handleSaveFilter} disabled={!saveFilterName.trim()} className="h-10 px-4 bg-gold text-[#1A1A1A] font-bold rounded-xl">

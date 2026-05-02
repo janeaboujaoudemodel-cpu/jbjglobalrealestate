@@ -427,7 +427,7 @@ const Developers = () => {
               </div>
             ) : filteredDevelopers.length === 0 ? (
               <div className="text-center py-20 border border-dashed border-gold/30 rounded-xl bg-premium-card/50">
-                <Building2 className="w-20 h-20 text-[#8A7556] mx-auto mb-6" />
+                <Building2 className="w-20 h-20 text-[#1A1A1A]/70 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
                   {activeFilterCount > 0 

@@ -518,7 +518,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                   onDrop={(e) => { e.preventDefault(); handleFileSelect(e.dataTransfer.files); }}
                   onDragOver={(e) => e.preventDefault()}
                 >
-                  <Upload className="h-14 w-14 mx-auto mb-4 text-[#8A7556]" />
+                  <Upload className="h-14 w-14 mx-auto mb-4 text-[#1A1A1A]/70" />
                   <p className="text-foreground font-semibold text-lg mb-1">Drop images here or click to upload</p>
                   <p className="text-muted-foreground text-sm">JPG, PNG, WebP — unlimited photos</p>
                   <input ref={fileInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileSelect(e.target.files)} />

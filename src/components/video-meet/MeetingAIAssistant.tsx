@@ -235,7 +235,7 @@ export function MeetingAIAssistant({
           <ScrollArea className="flex-1 h-[340px] p-4" ref={scrollRef}>
             {messages.length === 0 ? (
               <div className="text-center py-6">
-                <Sparkles className="w-8 h-8 text-[#8A7556] mx-auto mb-3" />
+                <Sparkles className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 text-sm mb-4">AI assistant + CRM</p>
                 <div className="space-y-2">
                   {[

@@ -466,9 +466,9 @@ export function EmbeddedSupportTickets() {
               </div>
             ) : (
               <CardContent className="p-12 text-center">
-                <Ticket className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+                <Ticket className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 font-medium">No tickets found</p>
-                <p className="text-[#8A7556] text-sm mt-1">
+                <p className="text-[#1A1A1A]/70 text-sm mt-1">
                   Try adjusting your filters
                 </p>
               </CardContent>

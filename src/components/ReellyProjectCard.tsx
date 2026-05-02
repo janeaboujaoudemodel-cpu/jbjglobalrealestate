@@ -295,7 +295,7 @@ const ReellyProjectCard = ({
                )}
                {project.emirate && (
                  <>
-                   <span className="text-[#8A7556]">|</span>
+                   <span className="text-[#1A1A1A]/70">|</span>
                    <span>{project.emirate}</span>
                  </>
                )}

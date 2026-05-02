@@ -589,7 +589,7 @@ export const BulkSendDialog = ({
               <ListChecks className="w-4 h-4" /><strong>Recipient breakdown</strong>
             </div>
             {statusBreakdown.length === 0 ? (
-              <div className="text-xs text-[#8A7556] py-1">No eligible recipients to send to.</div>
+              <div className="text-xs text-[#1A1A1A]/70 py-1">No eligible recipients to send to.</div>
             ) : (
               <div className="space-y-1.5">
                 {statusBreakdown.map(([s, n]) => (
@@ -713,7 +713,7 @@ export const BulkSendDialog = ({
                           <div className="flex items-center gap-2 min-w-0">
                             <Icon className={`w-4 h-4 ${tone}`} />
                             <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
-                            <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
+                            <span className="text-[#1A1A1A]/70 truncate">{getEmail(t, entityType)}</span>
                           </div>
                           {r.status === "warn" && (
                             <label className="flex items-center gap-1 text-[10px] text-[#1A1A1A]/70 cursor-pointer shrink-0">
@@ -822,18 +822,18 @@ export const BulkSendDialog = ({
                     s === "ok" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> :
                     s === "fail" ? <XCircle className="w-4 h-4 text-red-600" /> :
                     s === "sending" ? <Clock className="w-4 h-4 text-amber-600 animate-pulse" /> :
-                    <Clock className="w-4 h-4 text-[#8A7556]" />;
+                    <Clock className="w-4 h-4 text-[#1A1A1A]/70" />;
                   return (
                     <div key={t.id} className="flex items-center justify-between px-3 py-2 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         {icon}
                         <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
-                        <span className="text-[#8A7556] truncate">{getEmail(t, entityType)}</span>
+                        <span className="text-[#1A1A1A]/70 truncate">{getEmail(t, entityType)}</span>
                       </div>
                       <span className={`uppercase tracking-wider font-bold ${
                         s === "ok" ? "text-emerald-700" :
                         s === "fail" ? "text-red-700" :
-                        s === "sending" ? "text-amber-700" : "text-[#8A7556]"
+                        s === "sending" ? "text-amber-700" : "text-[#1A1A1A]/70"
                       }`}>
                         {s === "ok" ? "sent" : s === "fail" ? (err || "failed") : s}
                       </span>

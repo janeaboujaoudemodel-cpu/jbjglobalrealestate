@@ -32,9 +32,9 @@ export const EmailLogDialog = ({
         </DialogHeader>
         <div className="text-xs text-[#1A1A1A]/70 mb-2">{recipientEmail}</div>
         {isLoading ? (
-          <div className="text-sm text-[#8A7556]">Loading…</div>
+          <div className="text-sm text-[#1A1A1A]/70">Loading…</div>
         ) : history.length === 0 ? (
-          <div className="text-sm text-[#8A7556] py-4 text-center">No email log entries yet.</div>
+          <div className="text-sm text-[#1A1A1A]/70 py-4 text-center">No email log entries yet.</div>
         ) : (
           <div className="max-h-[60vh] overflow-y-auto space-y-2">
             {history.map((row, i) => (

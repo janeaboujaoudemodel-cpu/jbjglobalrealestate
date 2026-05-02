@@ -787,7 +787,7 @@ export const SecurityDashboardSummary = () => {
         
         {securityEvents.length === 0 ? (
           <div className="text-center py-12">
-            <Shield className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
+            <Shield className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
             <p className="text-[#1A1A1A]/70">No security events recorded</p>
             <p className="text-[#1A1A1A]/70 text-sm mt-1">
               Events will appear here when threats are detected
