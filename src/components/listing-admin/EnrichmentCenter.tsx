@@ -546,6 +546,8 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
         </p>
       </div>
 
+      <HandoverBackfillCard />
+
       <Tabs defaultValue={defaultTab} className="space-y-4">
         <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 p-1">
           <TabsTrigger
