@@ -319,9 +319,7 @@ export const useSeedUaeBrokerageDirectory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { emirates?: string[]; target_per_emirate?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("seed-uae-brokerage-directory", { body: input });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      const data = await invokeWithTimeout<any>("seed-uae-brokerage-directory", input, 120_000);
       return data as { ok: true; summary: Record<string, { fetched: number; inserted: number; updated: number; skipped: number }> };
     },
     onSuccess: (data) => {
