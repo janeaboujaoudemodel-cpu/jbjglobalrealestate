@@ -70,10 +70,11 @@ const OwnerDashboardShell = () => {
       <OwnerSidebarNav collapsed={collapsed} onNavigate={() => setMobileOpen(false)} />
 
       {/* Bottom Actions */}
-      <div className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#FDFBF7]">
+      <div data-no-contrast-guard className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#FDFBF7]">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#1A1A1A] hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+          style={{ color: "#1A1A1A" }}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:!text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
           aria-label="Return to main site"
         >
           <Home className="w-5 h-5 flex-shrink-0" />
@@ -81,7 +82,8 @@ const OwnerDashboardShell = () => {
         </button>
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#1A1A1A] hover:text-red-700 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          style={{ color: "#1A1A1A" }}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:!text-red-700 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
           aria-label="Sign out"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
