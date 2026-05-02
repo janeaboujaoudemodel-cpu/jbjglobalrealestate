@@ -560,16 +560,6 @@ const BrokeragesTab = () => {
                     >
                       <Send className="w-3 h-3 mr-1" />Message
                     </Button>
-
-                    {r.ai_next_action && (
-                      <div className="mt-2 p-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded text-xs">
-                        <Sparkles className="w-3 h-3 inline mr-1 text-[#B89555]" />
-                        <span className="font-medium text-[#1A1A1A]">{r.ai_next_action}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 items-start">
-                    <LeadAIStar entityType="brokerage" entityId={r.id} entityName={r.company_name} />
                     <Button size="sm" variant="secondary" onClick={() => aiRecommend("brokerage", r.id, refetch)}>
                       <Sparkles className="w-3 h-3 mr-1" />AI
                     </Button>
