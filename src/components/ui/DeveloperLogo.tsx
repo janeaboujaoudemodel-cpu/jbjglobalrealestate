@@ -95,6 +95,42 @@ export function DeveloperLogo({
     );
   }
 
+  // ── Card variant — Reelly-style hero plate (developer directory) ──
+  if (variant === "card") {
+    if (!valid) {
+      return (
+        <div
+          className={cn(
+            "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6",
+            className,
+          )}
+          aria-label={`${alt} (logo unavailable)`}
+        >
+          <Building2 className="w-12 h-12 text-[#1A1A1A]/50" />
+        </div>
+      );
+    }
+    return (
+      <div
+        className={cn(
+          "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6 overflow-hidden",
+          className,
+        )}
+      >
+        <img
+          src={src as string}
+          alt={alt}
+          loading={loading}
+          onError={() => {
+            setError(true);
+            onError?.();
+          }}
+          className="block max-h-full max-w-full w-auto h-auto object-contain"
+        />
+      </div>
+    );
+  }
+
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   if (!valid) {
     if (!renderFallback) return null;
