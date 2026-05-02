@@ -602,6 +602,145 @@ All colors MUST be HSL.
   [data-surface="dark"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950) {
     color: hsl(var(--foreground)) !important;
   }
+
+  /* ============================================================
+   * GLOBAL SURFACE THEME — 4 canonical tones
+   * Any container with [data-surface="page|champagne|gold|ink"]
+   * rebinds a small set of variables consumed by the rules below
+   * AND remaps semantic Tailwind tokens (text-foreground, bg-card,
+   * text-muted-foreground, border-border) so descendants render
+   * with safe, AA-compliant contrast — no per-component effort.
+   *
+   * HSL values match the Champagne-Gold standard:
+   *   page        #FDFBF7  fg #1A1A1A
+   *   champagne   #F7F2EA  fg #1A1A1A
+   *   gold        #B89555  fg #FFFFFF
+   *   ink         #1A1A1A  fg #F7F2EA
+   * ============================================================ */
+  [data-surface="page"] {
+    --surface-bg: 36 47% 98%;
+    --surface-fg: 0 0% 10%;
+    --surface-fg-muted: 0 0% 30%;
+    --surface-border: 36 25% 86%;
+    --surface-icon: 36 33% 43%;
+    --surface-link: 36 33% 43%;
+    --surface-cta-bg: 0 0% 10%;
+    --surface-cta-fg: 36 47% 98%;
+    /* Remap semantic tokens so bg-card/text-foreground/etc. inherit */
+    --background: var(--surface-bg);
+    --foreground: var(--surface-fg);
+    --card: 36 41% 95%;
+    --card-foreground: var(--surface-fg);
+    --muted-foreground: var(--surface-fg-muted);
+    --border: var(--surface-border);
+    color: hsl(var(--surface-fg));
+  }
+  [data-surface="champagne"] {
+    --surface-bg: 36 41% 95%;
+    --surface-fg: 0 0% 10%;
+    --surface-fg-muted: 0 0% 30%;
+    --surface-border: 36 25% 80%;
+    --surface-icon: 36 33% 43%;
+    --surface-link: 36 33% 43%;
+    --surface-cta-bg: 0 0% 10%;
+    --surface-cta-fg: 36 47% 98%;
+    --background: var(--surface-bg);
+    --foreground: var(--surface-fg);
+    --card: 36 47% 98%;
+    --card-foreground: var(--surface-fg);
+    --muted-foreground: var(--surface-fg-muted);
+    --border: var(--surface-border);
+    color: hsl(var(--surface-fg));
+  }
+  [data-surface="gold"] {
+    --surface-bg: 36 33% 43%;
+    --surface-fg: 0 0% 100%;
+    --surface-fg-muted: 0 0% 95%;
+    --surface-border: 36 33% 33%;
+    --surface-icon: 0 0% 100%;
+    --surface-link: 0 0% 100%;
+    --surface-cta-bg: 0 0% 100%;
+    --surface-cta-fg: 36 33% 25%;
+    --background: var(--surface-bg);
+    --foreground: var(--surface-fg);
+    --card: 36 33% 38%;
+    --card-foreground: var(--surface-fg);
+    --muted-foreground: var(--surface-fg-muted);
+    --border: var(--surface-border);
+    color: hsl(var(--surface-fg));
+  }
+  [data-surface="ink"] {
+    --surface-bg: 0 0% 10%;
+    --surface-fg: 36 41% 95%;
+    --surface-fg-muted: 36 25% 80%;
+    --surface-border: 0 0% 22%;
+    --surface-icon: 36 33% 60%;
+    --surface-link: 36 33% 60%;
+    --surface-cta-bg: 36 33% 50%;
+    --surface-cta-fg: 0 0% 10%;
+    --background: var(--surface-bg);
+    --foreground: var(--surface-fg);
+    --card: 0 0% 13%;
+    --card-foreground: var(--surface-fg);
+    --muted-foreground: var(--surface-fg-muted);
+    --border: var(--surface-border);
+    color: hsl(var(--surface-fg));
+  }
+
+  /* Auto-inherit a sensible surface when authors forgot data-surface
+     but used a known background utility/inline color. Scoped to
+     containers with rounded corners so we don't hijack arbitrary divs. */
+  :where([class*="rounded-"]):is(
+    .bg-white, .bg-card, .bg-background, .bg-\[\#FDFBF7\], .bg-\[\#fdfbf7\]
+  ):not([data-surface]) {
+    --surface-bg: 36 47% 98%;
+    --surface-fg: 0 0% 10%;
+    --surface-fg-muted: 0 0% 30%;
+    --surface-border: 36 25% 86%;
+    --surface-icon: 36 33% 43%;
+  }
+  :where([class*="rounded-"]):is(
+    .bg-\[\#F7F2EA\], .bg-\[\#f7f2ea\], .bg-muted, .bg-secondary
+  ):not([data-surface]) {
+    --surface-bg: 36 41% 95%;
+    --surface-fg: 0 0% 10%;
+    --surface-fg-muted: 0 0% 30%;
+    --surface-border: 36 25% 80%;
+    --surface-icon: 36 33% 43%;
+  }
+  :where([class*="rounded-"]):is(
+    .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-neutral-900, .bg-neutral-950,
+    .bg-gray-900, .bg-gray-950, .bg-stone-900, .bg-\[\#1A1A1A\], .bg-\[\#1a1a1a\]
+  ):not([data-surface]) {
+    --surface-bg: 0 0% 10%;
+    --surface-fg: 36 41% 95%;
+    --surface-fg-muted: 36 25% 80%;
+    --surface-border: 0 0% 22%;
+    --surface-icon: 36 33% 60%;
+  }
+
+  /* Universal text-on-surface guards — applied to every named surface.
+     These mirror the dark-only/light-only PASS rules but cover the full
+     four-tone matrix so authors no longer need to remember which color
+     class is "safe" for which background. */
+  [data-surface="page"] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]),
+  [data-surface="champagne"] :is(.text-white, [class*="text-white/"]):not([data-no-contrast-guard]) {
+    color: hsl(var(--surface-fg)) !important;
+  }
+  [data-surface="ink"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]),
+  [data-surface="gold"] :is(.text-black, [class*="text-black/"], .text-zinc-900, .text-zinc-950, .text-neutral-900, .text-neutral-950):not([data-no-contrast-guard]) {
+    color: hsl(var(--surface-fg)) !important;
+  }
+
+  /* Border floor — faint hairlines disappear against same-tone surfaces.
+     Lift any low-alpha border on a card-like node to the surface border. */
+  [data-surface] :where([class*="rounded-"]):is(
+    [class*="border-white/0"], [class*="border-white/1"], [class*="border-white/2"],
+    [class*="border-black/0"], [class*="border-black/1"], [class*="border-black/2"],
+    [class*="border-foreground/0"], [class*="border-foreground/1"], [class*="border-foreground/2"]
+  ) {
+    border-color: hsl(var(--surface-border)) !important;
+  }
 }
 
 @media (max-width: 767px) {
