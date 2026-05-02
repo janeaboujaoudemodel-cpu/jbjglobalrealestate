@@ -4182,3 +4182,54 @@ a[class*="bg-red-"]:hover {
 [aria-labelledby="pending-tasks-title"] :is(h1, h2, h3, h4, h5, h6, p, span, b, strong) {
   color: #1A1A1A !important;
 }
+
+/* ============================================================
+   PREMIUM PRICE PILL — square, transparent core, orange border.
+   Used on property cards (ProjectCard / ReellyProjectCard /
+   FeaturedListings) to render the "From AED 2.4M" label as a
+   premium element rather than a candy pill. Orange ink only.
+   ============================================================ */
+.price-pill-premium {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  border-radius: 0.375rem; /* rounded-md — square corners, not full pill */
+  padding: 0.375rem 0.625rem;
+  background: rgba(0, 0, 0, 0.32); /* subtle dark scrim for AA over photos */
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  backdrop-filter: blur(6px) saturate(140%);
+  border: 1.5px solid hsl(var(--price-orange));
+  box-shadow:
+    0 6px 18px hsl(0 0% 0% / 0.35),
+    inset 0 0 0 1px hsl(var(--price-orange) / 0.18);
+  color: hsl(var(--price-orange));
+  white-space: nowrap;
+}
+.price-pill-premium .price-pill-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: hsl(var(--price-orange));
+  opacity: 0.92;
+}
+.price-pill-premium .price-pill-value {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 800;
+  font-size: 0.875rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: hsl(var(--price-orange));
+}
+
+/* Handover line — orange, semibold, matches the price pill identity. */
+.handover-orange {
+  color: hsl(var(--price-orange)) !important;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.handover-orange .handover-label {
+  color: hsl(var(--price-orange) / 0.78);
+  font-weight: 500;
+}
