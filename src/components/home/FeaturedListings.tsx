@@ -186,13 +186,11 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             </div>
 
-            {/* Price overlay — bottom-right of photo */}
+            {/* Premium price label — square, transparent core, orange border + ink */}
             {typeof project.price_from === 'number' && project.price_from > 0 && (
-              <div className="absolute bottom-3 right-3 z-20 inline-flex items-baseline gap-1 rounded-full bg-price-orange px-2.5 py-1 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
-                <span className="text-[9px] uppercase tracking-[0.14em] font-semibold text-white/85">
-                  From
-                </span>
-                <span className="text-white font-bold text-xs md:text-[13px] tabular-nums leading-none">
+              <div className="absolute bottom-3 right-3 z-20 price-pill-premium" data-price-badge>
+                <span className="price-pill-eyebrow">From</span>
+                <span className="price-pill-value">
                   {formatPrice(project.price_from)}
                 </span>
               </div>
