@@ -352,23 +352,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const toggleArray = (arr: string[], val: string) =>
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
-  // Pill styling
-  // `touch-manipulation` removes the 300ms double-tap-zoom delay on iOS/Android
-  // so chip taps fire instantly even mid-scroll, eliminating accidental
-  // "swallowed" taps when the user starts a horizontal pan and lifts on a pill.
-  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation";
-  const pillInactive = isDark
-    ? "bg-[#FDFBF7]/10 backdrop-blur-md border border-white/20 text-white hover:bg-[#FDFBF7]/20"
-    : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] font-semibold hover:border-[#B89555] hover:bg-[#F7F2EA] hover:-translate-y-0.5 transition-all";
-  const pillActive = isDark
-    ? "bg-[#FDFBF7] text-[#1A1A1A] border border-white shadow-lg"
-    : "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-md hover:bg-[#A68444] hover:border-[#A68444]";
-
-  const popoverClass = "bg-[#FDFBF7] border border-[#B89555]/30 z-[10200] shadow-xl";
-
-  const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer";
-  const togglePillOff = "border-[#B89555]/50 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
-  const togglePillOn = "border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold";
+  // Pill styling — sourced from filterStyles so every filter surface looks identical.
+  // The `pillBase` token already handles touch-manipulation and the focus-visible ring.
+  const pillBase = filterPillBase;
+  const pillInactiveClass = pillInactive(isDark ? "dark" : "light");
+  const pillActiveClass = filterPillActive;
+  const popoverClass = filterPopoverSurface;
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
