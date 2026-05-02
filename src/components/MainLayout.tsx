@@ -269,7 +269,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <Suspense fallback={
               <div
                 aria-hidden="true"
-                className="h-screen bg-[#F7F2EA] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
+                className="h-screen bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] border-r border-[hsl(var(--gold)/0.25)] [body.jj-vertical-nav-active_&]:w-[200px] [body.jj-vertical-nav-collapsed_&]:w-[48px] w-[200px]"
               />
             }>
               <GlobalVerticalNav />
