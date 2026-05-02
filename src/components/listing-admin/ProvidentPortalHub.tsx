@@ -301,6 +301,9 @@ export function ProvidentPortalHub() {
         </Card>
       </div>
 
+      {/* Handover date repair */}
+      <HandoverRepairPanel />
+
       {/* Enrichment Status */}
       <Card className="border-gold/20">
         <CardHeader className="pb-3">
