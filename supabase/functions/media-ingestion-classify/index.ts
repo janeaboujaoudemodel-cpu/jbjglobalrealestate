@@ -4,6 +4,7 @@
 // confidence, and document type.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { z } from "https://esm.sh/zod@3.23.8";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,8 +16,17 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-interface ClassifyRequest {
-  job_ids: string[];
+const RequestSchema = z.object({
+  job_ids: z.array(z.string().uuid()).min(1).max(100),
+});
+
+async function hasOwnerOrAdmin(supabase: ReturnType<typeof createClient>, userId: string) {
+  const { data } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .in("role", ["admin", "owner", "listing_admin"]);
+  return (data?.length ?? 0) > 0;
 }
 
 const DOC_TYPES = [
