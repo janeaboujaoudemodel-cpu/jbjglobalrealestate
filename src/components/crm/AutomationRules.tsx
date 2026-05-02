@@ -182,14 +182,14 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
   }
 
   return (
-    <div className="p-4 space-y-3">
+    <div data-no-contrast-guard className="p-4 space-y-3 min-w-0 overflow-hidden">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {syncing && <RefreshCw className="h-3 w-3 text-[#1A1A1A]/70 animate-spin" />}
+        <div className="flex items-center gap-2 min-w-0">
+          {syncing && <RefreshCw className="h-3 w-3 text-[#1A1A1A] animate-spin" />}
           <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 text-xs">
             {activeCount} Active
           </Badge>
-          <Badge variant="secondary" className="bg-[#F7F2EA] text-[#1A1A1A]/70 text-xs">
+          <Badge variant="secondary" className="bg-[#F7F2EA] text-[#1A1A1A] text-xs">
             {rules.length} Total
           </Badge>
         </div>
@@ -199,29 +199,29 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
         {rules.map((rule) => (
           <div
             key={rule.id}
-            className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
+            className={`flex items-start gap-3 p-3 rounded-xl border transition-all min-w-0 overflow-hidden ${
               rule.is_active
                 ? "bg-[#FDFBF7] border-gold/30 shadow-sm"
-                : "bg-[#F7F2EA] border-[#B89555]/30 opacity-60"
+                : "bg-[#F7F2EA] border-[#B89555]/30"
             }`}
           >
-            <div className="p-2 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30">
+            <div className="p-2 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex-shrink-0">
               {getIcon(rule.action_type)}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <h4 className="text-sm font-semibold text-[#1A1A1A]">{rule.name}</h4>
+                <h4 className="text-sm font-semibold text-[#1A1A1A] break-words">{rule.name}</h4>
               </div>
               {rule.description && (
-                <p className="text-xs text-[#1A1A1A]/70 mb-2">{rule.description}</p>
+                <p className={`text-xs text-[#1A1A1A]/80 mb-2 break-words ${!rule.is_active ? "opacity-70" : ""}`}>{rule.description}</p>
               )}
-              <div className="flex items-center gap-2 text-xs flex-wrap">
-                <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-2 text-[10px]">
+              <div className="flex items-center gap-2 text-xs flex-wrap min-w-0">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-2 text-[10px] font-semibold max-w-full truncate">
                   {rule.trigger_event}
                 </Badge>
-                <ArrowRight className="h-3 w-3 text-[#1A1A1A]/70" />
-                <Badge variant="secondary" className="bg-purple-100 text-purple-700 px-2 text-[10px]">
+                <ArrowRight className="h-3 w-3 text-[#1A1A1A] flex-shrink-0" />
+                <Badge variant="secondary" className="bg-purple-100 text-purple-800 px-2 text-[10px] font-semibold max-w-full truncate">
                   {rule.action_type}
                 </Badge>
               </div>
@@ -229,7 +229,14 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
 
             <div className="flex items-center gap-2 shrink-0">
               {isOwner && (
-                <Button size="icon" variant="ghost" className="h-7 w-7 text-red-400 hover:text-red-600 hover:bg-red-50" onClick={() => deleteRule(rule.id)}>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  style={{ color: "#1A1A1A" }}
+                  className="h-7 w-7 hover:!text-red-700 hover:bg-red-50"
+                  onClick={() => deleteRule(rule.id)}
+                  aria-label="Delete automation rule"
+                >
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               )}
