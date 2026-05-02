@@ -153,11 +153,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
 
   return (
-    <nav className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
+    <nav data-no-contrast-guard className="p-2 space-y-4 overflow-y-auto flex-1 jj-scrollbar-gold">
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           {!collapsed && (
-            <p className="text-[10px] uppercase tracking-widest text-[#B89555] font-semibold px-3 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/75 font-bold px-3 mb-1.5">
               {section.label}
             </p>
           )}
@@ -168,23 +168,23 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                 ref={setActiveRefCallback(item.path)}
                 onClick={() => handleNavClick(item.path)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                   item.premium
                     ? isActivePath(item.path)
-                      ? "bg-gradient-to-r from-[#B89555]/20 via-[#E8D5A3]/15 to-[#B89555]/20 text-[#B89555] border border-[#B89555]/40 shadow-[0_0_12px_rgba(201,168,76,0.25)]"
-                      : "bg-gradient-to-r from-[#B89555]/8 via-transparent to-[#B89555]/8 text-[#B89555]/90 border border-[#B89555]/15 hover:border-[#B89555]/40 hover:shadow-[0_0_12px_rgba(201,168,76,0.2)] hover:from-[#B89555]/15 hover:to-[#B89555]/15"
+                      ? "bg-[#1A1A1A] text-[#B89555] border border-[#B89555] shadow-[0_0_12px_rgba(184,149,85,0.35)]"
+                      : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#1A1A1A] hover:text-[#B89555] hover:border-[#B89555]"
                     : isActivePath(item.path)
-                      ? "bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/20"
-                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#B89555]/10"
+                      ? "bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] shadow-sm"
+                      : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6] border border-transparent"
                 )}
                 title={collapsed ? item.label : undefined}
               >
-                <item.icon className={cn("w-4 h-4 flex-shrink-0", item.premium && "drop-shadow-[0_0_4px_rgba(201,168,76,0.6)]")} />
+                <item.icon className={cn("w-4 h-4 flex-shrink-0", item.premium && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")} />
                 {!collapsed && (
                   <>
                     <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")}>{item.label}</span>
                     {item.badge && (
-                      <span className="bg-[#B89555]/20 text-[#B89555] text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="bg-[#1A1A1A] text-[#B89555] text-xs px-1.5 py-0.5 rounded-full font-semibold">
                         {item.badge}
                       </span>
                     )}
