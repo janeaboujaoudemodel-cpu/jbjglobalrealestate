@@ -74,10 +74,12 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 <img 
                   src={developer.logo_url as string} 
                   alt={`${developer.name} logo`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-2"
                 />
               ) : (
-                <Building2 className="w-12 h-12 text-[#1A1A1A]/70" />
+                <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
+                  {developer.name}
+                </span>
               )}
             </div>
 

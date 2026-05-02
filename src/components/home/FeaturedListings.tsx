@@ -176,15 +176,16 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Developer Logo — canonical only; if unavailable, render approved Building2 fallback via DeveloperLogo */}
-            <div className="absolute top-3 left-3 z-20">
-              <DeveloperLogo
-                src={logoUrl}
-                alt={devName}
-                loading={isAboveFold ? "eager" : "lazy"}
-                renderFallback
-              />
-            </div>
+            {/* Developer Logo — real logos only, no fallback icon */}
+            {logoUrl && (
+              <div className="absolute top-3 left-3 z-20">
+                <DeveloperLogo
+                  src={logoUrl}
+                  alt={devName}
+                  loading={isAboveFold ? "eager" : "lazy"}
+                />
+              </div>
+            )}
 
             {/* Premium price label — square, transparent core, orange border + ink */}
             {typeof project.price_from === 'number' && project.price_from > 0 && (

@@ -44,7 +44,7 @@ export function DeveloperLogo({
     return (
       <div
         className={cn(
-          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-2.5 shadow-sm border border-[#B89555]/30",
+          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/30",
           className,
         )}
         aria-label={`${alt} (logo unavailable)`}
@@ -57,7 +57,7 @@ export function DeveloperLogo({
   return (
     <div
       className={cn(
-        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-2.5 shadow-sm border border-[#B89555]/30",
+        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/30 overflow-hidden",
         className,
       )}
     >
@@ -69,7 +69,7 @@ export function DeveloperLogo({
           setError(true);
           onError?.();
         }}
-        className="block h-full w-full rounded-md object-contain"
+        className="block max-h-full max-w-full w-auto h-auto rounded-sm object-contain"
       />
     </div>
   );
