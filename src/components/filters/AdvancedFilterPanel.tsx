@@ -179,11 +179,20 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
     setLocalFilters({ ...defaultShortcutFilters });
   };
 
-  const togglePillBase = "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer";
-  const togglePillOff = "border-gold/25 text-[#1A1A1A]/70 bg-[#FDFBF7]/80 hover:bg-gold/10 hover:border-gold/50 hover:shadow-sm";
-  const togglePillOn = "border-2 border-gold bg-gradient-to-r from-[#C8A766]/20 via-[#D4AF37]/15 to-[#C8A766]/20 text-[#1A1A1A] font-bold shadow-[0_2px_8px_rgba(200,167,102,0.2)]";
+  // Tokens — match the canonical filter UI styling. Active state uses solid
+  // ink + white label with a gold ring (high contrast, on-brand).
+  const togglePillBase =
+    "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer " +
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
+  const togglePillOff =
+    "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
+  const togglePillOn =
+    "border border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555]";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
-  const inputClass = "w-full h-10 px-3 bg-[#FDFBF7]/90 border border-gold/25 rounded-xl text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/35 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all";
+  const inputClass =
+    "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
+    "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
+    "focus:outline-none focus:border-[#1A1A1A] focus:ring-2 focus:ring-[#B89555]/30 transition-all";
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
     !emirateSearch || e.label.toLowerCase().includes(emirateSearch.toLowerCase())
