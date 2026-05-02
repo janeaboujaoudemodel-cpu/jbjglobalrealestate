@@ -1,30 +1,67 @@
 ## Goal
-Fix the bottom of the global vertical sidebar in `src/components/navigation/GlobalVerticalNav.tsx`:
+Guarantee that on every page, every card, every button and every text block remains readable, no matter which background it lands on — without authors having to remember per-component contrast rules.
 
-1. Make the **Contact** and **Support** tiles smaller and use a finer red border.
-2. Stop the **Sign Out** button text from flickering between red and white.
+The site already has many partial guards (`scripts/contrast/*`, `src/utils/contrastGuard.ts`, the PASS guards in `src/index.css`). They cover specific failure modes. This plan unifies them behind a single, predictable **surface theme system**.
+
+## Architecture: 4 named surfaces
+
+Every container declares one of four surfaces. Descendants inherit safe colors automatically.
+
+```text
+surface-page       FDFBF7  ink #1A1A1A   (default — everywhere)
+surface-champagne  F7F2EA  ink #1A1A1A   (cards on page)
+surface-gold       B89555  white #FFFFFF (gold CTAs / accent tiles)
+surface-ink        1A1A1A  champagne #F7F2EA (dark hero / footer / dark cards)
+```
+
+Each surface rebinds the same set of CSS variables: `--surface-bg`, `--surface-fg`, `--surface-fg-muted`, `--surface-border`, `--surface-icon`, `--surface-link`, `--surface-cta-bg`, `--surface-cta-fg`. So `text-foreground`, `border-border`, `bg-card`, `text-muted-foreground` all "just work" on any surface.
 
 ## Changes
 
-### 1. Shrink Contact + Support tiles (lines ~1247-1268)
-- Reduce vertical padding: `py-2` → `py-1.5`
-- Reduce font size: `text-[11px]` → `text-[10px]`
-- Reduce icon size: `w-4 h-4` → `w-3.5 h-3.5`, lower `strokeWidth` from `2.5` to `2`
-- Tighter gap between icon + label: `gap-1` → `gap-0.5`
-- Replace heavy `border-2` with finer `border` (1px) and soften the red: `borderColor: '#DC2626'` → `'rgba(220,38,38,0.45)'`
-- Hover keeps solid red fill (unchanged behavior, just thinner resting border)
-- Reduce wrapper container padding: `px-2.5 py-2.5` → `px-2 py-2`, and `gap-2` → `gap-1.5` between the two tiles
+### 1. `src/index.css` — new global layer (added near existing `.surface-light` / `.surface-dark` block)
 
-### 2. Fix Sign Out flicker (lines ~1270-1280)
-Root cause: the Sign Out button is missing `data-no-contrast-guard`, so the runtime contrast guard in `src/utils/contrastGuard.ts` periodically rewrites its color (red on light champagne is treated as a same-tone/low-contrast risk in some passes), producing the white→red→white flicker the user sees.
+- Add `[data-surface="page"|"champagne"|"gold"|"ink"]` selectors that rebind the token set above (HSL, in `@layer base`).
+- Add aliases so existing `.surface-light` and `.surface-dark` keep working (no breaking change).
+- Strengthen the global text floors so any descendant of a `data-surface` ancestor that uses `text-white` / `text-black` / `text-gray-*` is auto-corrected to the surface's foreground color (extends the existing PASS rules for all four surfaces, not just light/dark).
+- Add a new utility selector group: cards built with `bg-card`, `bg-white`, `bg-[#FDFBF7]`, `bg-[#F7F2EA]`, `bg-black`, `bg-[#1A1A1A]`, gold backgrounds → automatically inherit the matching `data-surface` so descendant text/icons/borders are corrected even when the author forgot to add the attribute.
+- Border floor: any `border-*/0…20` on a text-bearing card is lifted to `--surface-border`, so faint hairlines never disappear against same-tone backgrounds.
 
-Fix:
-- Add `data-no-contrast-guard` to both the signed-in `<button>` and the signed-out `<Link to="/auth">` so the guard leaves them alone.
-- Keep the resting state explicitly red text + red exit icon + faint red tint background, so it stays red without requiring hover.
-- Keep the existing hover (solid red fill, white text) behavior intact.
-- Apply the same finer `border` (1px) treatment for visual consistency with the shrunk Contact/Support tiles above.
+### 2. `src/utils/contrastGuard.ts` — broaden runtime coverage
 
-### Files touched
-- `src/components/navigation/GlobalVerticalNav.tsx` (only the bottom block, ~lines 1242-1292)
+Currently scans only `button, a, [role=button]…`. Expand to also scan text-bearing nodes that commonly fail:
+- `h1-h6, p, li, span.font-*, [data-card], .card`
+- For each, compute fg/bg luminance the same way; if the WCAG AA ratio for normal text (4.5:1) fails, force `--surface-fg` (or its inverse) via the existing `jbj-contrast-fix` class.
+- Keep the `[data-no-contrast-guard]` opt-out and the existing 250 ms / 1 s / mutation-observer schedule.
+- Add a small throttle (max 4 scans/sec) to keep the cost flat on large pages.
 
-No other files, no DB, no new dependencies.
+### 3. New small primitive: `src/components/ui/Surface.tsx`
+
+```tsx
+<Surface tone="champagne" as="section">…</Surface>
+```
+
+Thin wrapper that renders `<section data-surface={tone} className="bg-[var(--surface-bg)] text-[var(--surface-fg)] border-[var(--surface-border)]">`. Optional, non-breaking — existing components keep working through the auto-mapping in step 1.
+
+### 4. CI: extend the existing contrast scripts
+
+- `scripts/contrast/check-tokens.mjs` — add the 4 new surface pairs to the matrix it already validates (4.5:1 normal text, 3:1 UI).
+- `scripts/contrast/check-rendered.mjs` — add 5 routes to the rendered Playwright sweep: `/`, `/properties`, `/jbj-broker-dashboard`, `/owner-dashboard`, `/contact`.
+- `scripts/contrast/allowlist.json` — no new entries; existing decorative selectors remain.
+
+### 5. Memory
+
+Save a `mem://ui-ux/visual-standards/global-surface-theme-standard` rule with:
+- The 4-tone model and which token each surface rebinds.
+- The "set `data-surface` on any new container; never hardcode `text-white`/`text-black` directly" instruction.
+- Pointer to `Surface.tsx` and the auto-mapping fallback.
+
+## Files touched
+
+- `src/index.css` — add the surface-tone block and auto-mapping rules (~80 lines, additive)
+- `src/utils/contrastGuard.ts` — broaden selector + add throttle (~20 lines changed)
+- `src/components/ui/Surface.tsx` — new (~30 lines)
+- `scripts/contrast/check-tokens.mjs` — add 4 token pairs
+- `scripts/contrast/check-rendered.mjs` — add 5 routes
+- `mem://ui-ux/visual-standards/global-surface-theme-standard.md` — new memory
+
+No DB changes. No new dependencies. No removals. Fully backward-compatible: pages that don't opt in still get the existing PASS guards plus the broader runtime coverage.
