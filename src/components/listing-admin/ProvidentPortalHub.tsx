@@ -12,6 +12,7 @@ import {
   FileText, Image, Building2, Calendar, ShieldCheck, Trash2, Upload
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
+import { HandoverRepairPanel } from "./HandoverRepairPanel";
 
 interface EnrichmentStats {
   total: number;
