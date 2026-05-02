@@ -211,6 +211,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <DeveloperLogo
                 src={getDeveloperLogoUrl(project.developer)}
                 alt={project.developer?.name || "Developer"}
+                variant="bare"
               />
             </div>
           )}
@@ -382,9 +383,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                   .filter((p: any) => typeof p === 'number');
                 if (percentages.length === 0) return null;
                 return (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FFFFFF] bg-[#B89555] border border-[#A68444] rounded-full px-2.5 py-1 shadow-sm">
+                  <span className="payment-plan-square" aria-label={`Payment plan ${percentages.join('/')}`}>
                     <CreditCard className="w-3 h-3" aria-hidden="true" />
-                    {percentages.join('/')}
+                    <span className="payment-plan-eyebrow">Plan</span>
+                    <span className="payment-plan-value">{percentages.join('/')}</span>
                   </span>
                 );
               })()}
