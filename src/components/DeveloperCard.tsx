@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import type { Developer } from "@/hooks/useProjects";
 
 interface DeveloperCardProps {
