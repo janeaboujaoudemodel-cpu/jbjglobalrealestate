@@ -830,7 +830,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
             className={cn(
               pillBase, "px-2.5 py-1.5",
-              filters.sortBy === opt.value ? pillActive : pillInactive
+              filters.sortBy === opt.value ? pillActive : pillInactiveCls
             )}
           >
             {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
