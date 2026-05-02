@@ -9,6 +9,24 @@ import { ChevronDown, X, Bookmark, Building2, Bed, Calendar, DollarSign, CreditC
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
+import {
+  filterPillBase,
+  filterPillActive,
+  pillInactive,
+  togglePillBase,
+  togglePillOff,
+  togglePillOn,
+  filterPopoverSurface,
+  filterInput,
+  filterLabel,
+  filterHelpText,
+  filterPrimaryButton,
+  filterSecondaryButton,
+  filterSearchPillWrapper,
+  filterSearchPillInput,
+  filterDivider,
+  resetAllPill,
+} from "./filterStyles";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
