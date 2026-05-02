@@ -91,9 +91,8 @@ const StartingPointSection = () => {
           {activeCards.map((card) => (
             <Link key={card.to + card.label} to={card.to} className="group">
               <div className={cn(
-                "bg-[#F7F2EA] border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
-                tier.borderColor,
-                "hover:shadow-xl hover:-translate-y-1"
+                "bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
+                "hover:border-[#B89555] hover:shadow-xl hover:-translate-y-1"
               )}
             >
               <div className="flex flex-col items-center gap-3">
