@@ -58,9 +58,15 @@ for (const file of files) {
   const content = readFileSync(file, "utf8");
   const lines = content.split("\n");
   lines.forEach((line, i) => {
-    const match = line.match(PATTERN);
-    if (match) {
-      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: match[0] });
+    const tailwindMatch = line.match(PATTERN);
+    if (tailwindMatch) {
+      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: tailwindMatch[0] });
+    }
+    // Reset state for global regex
+    HEX_PATTERN.lastIndex = 0;
+    const hexMatch = line.match(HEX_PATTERN);
+    if (hexMatch) {
+      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: hexMatch[0] });
     }
   });
 }
