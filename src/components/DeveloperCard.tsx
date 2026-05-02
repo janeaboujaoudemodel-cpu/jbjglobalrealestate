@@ -61,7 +61,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
       >
         {/* Logo plate — uniform white surface, full-fit logo, no crops */}
         <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25 flex items-center justify-center p-8">
-          {developer.logo_url ? (
+          {isValidDeveloperLogoUrl(developer.logo_url) ? (
             <img
               src={developer.logo_url}
               alt={`${developer.name} logo`}
