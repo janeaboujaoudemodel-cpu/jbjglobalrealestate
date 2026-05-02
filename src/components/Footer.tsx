@@ -694,6 +694,8 @@ const Footer = () => {
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
       {/* Bottom hairline */}
       <AdaptiveHairline variant="accent" />
