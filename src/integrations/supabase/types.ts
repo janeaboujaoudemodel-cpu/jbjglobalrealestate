@@ -5150,11 +5150,13 @@ export type Database = {
           created_at: string
           deal_count: number
           deal_count_cached: number
+          directory_rank: number | null
           dnc_reason: string | null
           do_not_contact: boolean
           email: string | null
           emirate: string | null
           entry_source: string
+          estimated_agent_count: number | null
           field_sources: Json
           first_contact_at: string | null
           health_score: number | null
@@ -5163,6 +5165,7 @@ export type Database = {
           is_existing_match: boolean
           last_auto_reply_at: string | null
           last_deal_at: string | null
+          last_directory_sync_at: string | null
           last_email_synced_at: string | null
           last_interaction_at: string | null
           last_outreach_at: string | null
@@ -5191,6 +5194,7 @@ export type Database = {
           secondary_contact: Json | null
           source: Database["public"]["Enums"]["outreach_source"]
           source_detail: string | null
+          star_rating: number | null
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
           total_deal_value: number
@@ -5211,11 +5215,13 @@ export type Database = {
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
+          directory_rank?: number | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
           entry_source?: string
+          estimated_agent_count?: number | null
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
@@ -5224,6 +5230,7 @@ export type Database = {
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_deal_at?: string | null
+          last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
@@ -5252,6 +5259,7 @@ export type Database = {
           secondary_contact?: Json | null
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
@@ -5272,11 +5280,13 @@ export type Database = {
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
+          directory_rank?: number | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
           entry_source?: string
+          estimated_agent_count?: number | null
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
@@ -5285,6 +5295,7 @@ export type Database = {
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
           last_deal_at?: string | null
+          last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
@@ -5313,6 +5324,7 @@ export type Database = {
           secondary_contact?: Json | null
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
           total_deal_value?: number
