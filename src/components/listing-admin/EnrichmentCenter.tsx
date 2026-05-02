@@ -12,6 +12,7 @@ import {
   FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff, Eye, Info
 } from "lucide-react";
 import { EnrichmentAuditPanel } from "./EnrichmentAuditPanel";
+import { HandoverBackfillCard } from "./HandoverBackfillCard";
 
 interface EnrichStats {
   total_projects: number;
