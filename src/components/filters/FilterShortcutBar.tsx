@@ -428,7 +428,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Price */}
         <Popover open={priceOpen} onOpenChange={handlePriceOpenChange}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactiveCls)}>
               {t('filter.price')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -517,7 +517,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Payments */}
         <Popover open={paymentsOpen} onOpenChange={handlePaymentsOpenChange}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactiveCls)}>
               {t('filter.payments')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -583,7 +583,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Handover */}
         <Popover open={handoverOpen} onOpenChange={setHandoverOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, pillInactive)}>
+            <button className={cn(pillBase, pillInactiveCls)}>
               {t('filter.handover')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -652,7 +652,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Property Type */}
         <Popover open={propertyTypeOpen} onOpenChange={setPropertyTypeOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
               {getPropertyTypeLabel()}
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -688,7 +688,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Bedrooms */}
         <Popover open={bedroomsOpen} onOpenChange={setBedroomsOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.bedrooms')}
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -716,7 +716,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Status */}
         <Popover open={statusOpen} onOpenChange={setStatusOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.status')}
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -749,7 +749,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Construction Status */}
         <Popover open={constructionOpen} onOpenChange={setConstructionOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.construction')}
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -777,7 +777,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Views */}
         <Popover open={viewsOpen} onOpenChange={setViewsOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactiveCls)}>
               <Eye className="w-3.5 h-3.5" />
               {t('filter.views')}
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
@@ -843,7 +843,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Map toggle */}
         <button
           onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-          className={cn(pillBase, "px-2.5 py-1.5", isMapMode ? pillActive : pillInactive)}
+          className={cn(pillBase, "px-2.5 py-1.5", isMapMode ? pillActive : pillInactiveCls)}
           title={t('filter.map')}
         >
           <Map className="w-3.5 h-3.5" />
