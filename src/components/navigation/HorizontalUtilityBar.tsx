@@ -189,7 +189,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-b from-[#F7F1E6] to-[#ECE2D2] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
+        className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.25)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
       >
         {/* ── ROW 1 (48px): Navigation controls ── */}
         <div className="h-[48px] flex items-center shrink-0 relative">
