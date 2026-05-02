@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
@@ -9,9 +10,9 @@ interface DeveloperLogoProps {
   loading?: "eager" | "lazy";
   onError?: () => void;
   /**
-   * @deprecated Placeholder slots are no longer rendered anywhere on the site.
-   * If a developer has no canonical `logo_url`, the component renders nothing.
-   * Kept on the prop type only to avoid breaking call sites.
+   * When true, render the approved Building2 icon fallback instead of
+   * returning null if no valid logo is available. Use this when the caller
+   * wants a guaranteed slot (e.g. for layout stability).
    */
   renderFallback?: boolean;
 }
@@ -23,8 +24,7 @@ interface DeveloperLogoProps {
  *  - Only canonical `logo_url` values pass through.
  *  - Project photos, screenshots, WhatsApp images, initials,
  *    or any other substitute is forbidden and will be rejected.
- *  - There is NO placeholder fallback. If no real logo exists,
- *    this component renders `null` and the slot collapses.
+ *  - The only approved fallback is the `Building2` icon.
  *  - DO NOT MODIFY without explicit Founder authorization.
  */
 export function DeveloperLogo({
@@ -33,11 +33,26 @@ export function DeveloperLogo({
   className,
   loading = "lazy",
   onError,
+  renderFallback = false,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
   const valid = isValidDeveloperLogoUrl(src) && !error;
-  if (!valid) return null;
+
+  if (!valid) {
+    if (!renderFallback) return null;
+    return (
+      <div
+        className={cn(
+          "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-2.5 shadow-sm border border-[#B89555]/30",
+          className,
+        )}
+        aria-label={`${alt} (logo unavailable)`}
+      >
+        <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
+      </div>
+    );
+  }
 
   return (
     <div
