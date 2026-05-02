@@ -167,24 +167,28 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                 key={item.path}
                 ref={setActiveRefCallback(item.path)}
                 onClick={() => handleNavClick(item.path)}
+                data-no-contrast-guard
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border",
                   item.premium
                     ? isActivePath(item.path)
-                      ? "bg-[#1A1A1A] text-[#B89555] border border-[#B89555] shadow-[0_0_12px_rgba(184,149,85,0.35)]"
-                      : "bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#1A1A1A] hover:text-[#B89555] hover:border-[#B89555]"
+                      ? "bg-gradient-to-r from-[#B89555] to-[#A68444] !text-[#1A1A1A] border-[#B89555] shadow-[0_2px_14px_rgba(184,149,85,0.5)] font-semibold"
+                      : "bg-[#F7F2EA] !text-[#1A1A1A] border-[#B89555]/40 hover:!bg-gradient-to-r hover:from-[#B89555]/30 hover:to-[#B89555]/15 hover:border-[#B89555] hover:!text-[#1A1A1A]"
                     : isActivePath(item.path)
-                      ? "bg-[#1A1A1A] text-[#FDFBF7] border border-[#1A1A1A] shadow-sm"
-                      : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6] border border-transparent"
+                      ? "bg-gradient-to-r from-[#B89555] to-[#A68444] !text-[#1A1A1A] border-[#B89555] shadow-[0_2px_10px_rgba(184,149,85,0.4)] font-semibold"
+                      : "!text-[#1A1A1A] border-transparent hover:!bg-gradient-to-r hover:from-[#B89555]/22 hover:to-[#B89555]/10 hover:border-[#B89555]/45 hover:!text-[#1A1A1A]"
                 )}
                 title={collapsed ? item.label : undefined}
               >
-                <item.icon className={cn("w-4 h-4 flex-shrink-0", item.premium && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")} />
+                <item.icon className={cn("w-4 h-4 flex-shrink-0", item.premium && !isActivePath(item.path) && "drop-shadow-[0_0_4px_rgba(184,149,85,0.6)]")} style={{ color: '#1A1A1A' }} />
                 {!collapsed && (
                   <>
-                    <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")}>{item.label}</span>
+                    <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")} style={{ color: '#1A1A1A' }}>{item.label}</span>
                     {item.badge && (
-                      <span className="bg-[#1A1A1A] text-[#B89555] text-xs px-1.5 py-0.5 rounded-full font-semibold">
+                      <span className={cn(
+                        "text-xs px-1.5 py-0.5 rounded-full font-semibold",
+                        isActivePath(item.path) ? "bg-[#1A1A1A] text-[#B89555]" : "bg-[#B89555] text-[#1A1A1A]"
+                      )}>
                         {item.badge}
                       </span>
                     )}
