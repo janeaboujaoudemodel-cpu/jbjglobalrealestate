@@ -347,17 +347,8 @@ const Index = () => {
         </Suspense>
       </div>
 
-      {/* DIVIDER — single divider (removed double) */}
       <SectionDivider fullWidth />
 
-      {/* FIND YOUR STARTING POINT */}
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
-          <StartingPointSection />
-        </Suspense>
-      </div>
-
-      <SectionDivider fullWidth />
 
       {/* OVERSEAS INVESTORS */}
       <div className="cv-auto">
@@ -397,62 +388,6 @@ const Index = () => {
 
       <SectionDivider fullWidth />
 
-      {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-8 md:py-10 min-h-[340px] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1052 50%, #130728 100%)' }}>
-        {/* Purple glow orbs */}
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(139, 92, 246, 0.15)' }} />
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(167, 139, 250, 0.1)' }} />
-        <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
-          <div className="flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30, rotateX: 8, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              whileHover={{ y: -6, rotateX: -2, scale: 1.01 }}
-              className="text-center relative max-w-2xl"
-              style={{ transformStyle: 'preserve-3d' }}
-            >
-              <div className="relative z-10 rounded-2xl px-8 md:px-14 py-8 md:py-10 transition-all duration-300"
-                style={{ 
-                  transform: 'translateZ(20px)',
-                  background: '#ffffff',
-                  border: '1px solid #c4b5fd',
-                  boxShadow: '0 10px 40px rgba(139, 92, 246, 0.2)',
-                }}
-              >
-                {/* Label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs uppercase tracking-[0.2em] mb-5 font-semibold" style={{ background: '#ede9fe', border: '1px solid #c4b5fd', color: '#6d28d9' }}>
-                  <Sparkles className="w-3 h-3" style={{ color: '#7c3aed' }} />
-                  {t('home.aiPowered', 'AI-Powered')}
-                </div>
-                <Link to="/quiz" className="block group">
-                  <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center group-hover:opacity-90 transition-all duration-500" style={{ background: '#7c3aed', boxShadow: '0 8px 24px rgba(124, 58, 237, 0.35)' }}>
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7" style={{ color: '#ffffff' }} strokeWidth={1.5} />
-                    </div>
-                    <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide"
-                      style={{ color: '#4c1d95' }}
-                    >
-                      {t('hero.aiFinder')}
-                    </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" style={{ color: '#7c3aed' }} />
-                  </div>
-                  <p className="text-sm md:text-base max-w-lg mx-auto" style={{ color: '#4b5563' }}>
-                    {t('hero.aiFinderDesc')}
-                  </p>
-                  <p className="text-xs mt-3 font-medium" style={{ color: '#8b5cf6' }}>
-                    {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
-                  </p>
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider fullWidth />
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section>
@@ -498,14 +433,6 @@ const Index = () => {
         </div>
       </section>
 
-      <SectionDivider fullWidth />
-
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
-          <WhyDubaiCapitalSection />
-        </Suspense>
-      </div>
-
       <PodcastVisibilityGate>
         <SectionDivider fullWidth />
         <div className="cv-auto">
@@ -519,21 +446,7 @@ const Index = () => {
 
       <div className="cv-auto">
         <Suspense fallback={<SectionLoader />}>
-          <WhyChooseUs />
-        </Suspense>
-      </div>
-
-      <SectionDivider fullWidth />
-
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
           <AreasWeCover />
-        </Suspense>
-      </div>
-
-      <div className="cv-auto">
-        <Suspense fallback={<SectionLoader />}>
-          <TestimonialsSection />
         </Suspense>
       </div>
 
