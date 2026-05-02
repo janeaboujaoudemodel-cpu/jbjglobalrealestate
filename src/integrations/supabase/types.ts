@@ -5705,8 +5705,10 @@ export type Database = {
           response_count: number
           source: Database["public"]["Enums"]["outreach_source"]
           source_detail: string | null
+          star_rating: number | null
           status: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags: string[] | null
+          tier: string | null
           uae_developer_id: string | null
           updated_at: string
           website: string | null
@@ -5767,8 +5769,10 @@ export type Database = {
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
+          tier?: string | null
           uae_developer_id?: string | null
           updated_at?: string
           website?: string | null
@@ -5829,8 +5833,10 @@ export type Database = {
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
+          tier?: string | null
           uae_developer_id?: string | null
           updated_at?: string
           website?: string | null
