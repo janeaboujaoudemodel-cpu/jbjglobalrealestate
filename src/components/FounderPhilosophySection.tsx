@@ -61,7 +61,7 @@ export const FounderPhilosophySection = () => {
                   <Link to="/founder" className="text-gold font-semibold text-lg hover:underline">
                     Jane Bou Jaoude
                   </Link>
-                  <p className="text-[#5A4A2E] text-sm">Founder &amp; CEO</p>
+                  <p className="text-[#1A1A1A]/70 text-sm">Founder &amp; CEO</p>
                 </div>
               </div>
               
@@ -96,12 +96,12 @@ export const FounderPhilosophySection = () => {
                 <p className="text-[#1A1A1A] text-base leading-relaxed mb-4">
                   <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
                 </p>
-                <p className="text-[#5A4A2E] text-sm leading-relaxed">
+                <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
                   Founded by <Link to="/founder" className="text-gold hover:underline">Jane Bou Jaoude</Link>, our approach combines deep market expertise with personalized service, ensuring every client receives the attention and insight they deserve.
                 </p>
               </div>
               
-              <p className="text-[#5A4A2E] text-xs">
+              <p className="text-[#1A1A1A]/70 text-xs">
                 Learn more about our <Link to="/about" className="text-gold hover:underline">company values</Link> and <Link to="/founder" className="text-gold hover:underline">leadership</Link>.
               </p>
             </motion.div>

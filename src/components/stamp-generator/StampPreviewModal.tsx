@@ -356,11 +356,11 @@ export function StampPreviewModal({
                     <div className={`flex-1 flex flex-col justify-between ${stampAlign === 'left' ? 'order-2 pl-6' : ''}`}>
                       <div>
                         <p className="text-[#1A1A1A] font-bold text-xl leading-tight tracking-tight">{companyName}</p>
-                        {arabicName && <p className="text-[#5A4A2E] text-sm mt-1" dir="rtl">{arabicName}</p>}
+                        {arabicName && <p className="text-[#1A1A1A]/70 text-sm mt-1" dir="rtl">{arabicName}</p>}
                       </div>
                       <div className="space-y-1">
-                        <p className="text-[#5A4A2E] text-xs font-medium uppercase tracking-widest">Chief Executive Officer</p>
-                        <p className="text-[#5A4A2E] text-xs">{city}</p>
+                        <p className="text-[#1A1A1A]/70 text-xs font-medium uppercase tracking-widest">Chief Executive Officer</p>
+                        <p className="text-[#1A1A1A]/70 text-xs">{city}</p>
                       </div>
                     </div>
                     <div className={`flex items-center ${stampAlign === 'left' ? 'order-1 pr-6' : stampAlign === 'center' ? 'absolute inset-0 justify-center items-center' : 'justify-end pl-6'}`}>
@@ -418,7 +418,7 @@ export function StampPreviewModal({
                     </div>
                   </div>
                   <div style={{ backgroundColor: `${tintColor}22` }} className="px-8 py-2 border-t border-[#B89555]/30">
-                    <p className="text-xs text-[#5A4A2E] text-center">{companyName} · {city}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 text-center">{companyName} · {city}</p>
                   </div>
                 </div>
               </div>
@@ -433,8 +433,8 @@ export function StampPreviewModal({
                     <div style={{ width: 0, height: 0, borderLeft: '50vw solid transparent', borderRight: '50vw solid transparent', borderTop: '80px solid rgba(200,185,160,0.5)' }}/>
                   </div>
                   <div className="absolute top-5 left-7 space-y-0.5">
-                    <p className="text-[#5A4A2E] font-bold text-xs">{companyName}</p>
-                    <p className="text-[#5A4A2E] text-[10px]">{city}</p>
+                    <p className="text-[#1A1A1A]/70 font-bold text-xs">{companyName}</p>
+                    <p className="text-[#1A1A1A]/70 text-[10px]">{city}</p>
                   </div>
                   <div className={`absolute top-5 opacity-90 ${stampAlign === 'left' ? 'left-7' : stampAlign === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-7'}`}>
                     <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={72}/>
@@ -463,7 +463,7 @@ export function StampPreviewModal({
                         <div className="h-2.5 w-28 rounded bg-[#1A1A1A] mb-1.5"/>
                         <div className="h-1.5 w-16 rounded bg-[#EFE6D6]"/>
                       </div>
-                      <p className="text-[10px] text-[#5A4A2E] font-mono">DOC-2024-001</p>
+                      <p className="text-[10px] text-[#1A1A1A]/70 font-mono">DOC-2024-001</p>
                     </div>
                     <div className="space-y-1.5 mb-4">
                       {[0.92, 0.78, 0.88, 0.65, 0.83, 0.7, 0.9, 0.6, 0.85, 0.72, 0.88, 0.58].map((w, i) => (
@@ -479,7 +479,7 @@ export function StampPreviewModal({
                       <div className="space-y-1">
                         <div className="h-px w-28 bg-[#B89555]"/>
                         <div className="h-1.5 w-20 rounded bg-[#EFE6D6]"/>
-                        <p className="text-[9px] text-[#5A4A2E]">Authorized Signature</p>
+                        <p className="text-[9px] text-[#1A1A1A]/70">Authorized Signature</p>
                       </div>
                       <div className="relative flex items-center justify-center" style={{ transform: 'rotate(-8deg)' }}>
                         <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} inkMode={true} size={80}/>
@@ -487,7 +487,7 @@ export function StampPreviewModal({
                     </div>
                   </div>
                   <div style={{ backgroundColor: `${tintColor}11` }} className="px-8 py-2 border-t border-[#B89555]/30">
-                    <p className="text-[9px] text-[#5A4A2E] text-center">{companyName} · {city} · Official Document</p>
+                    <p className="text-[9px] text-[#1A1A1A]/70 text-center">{companyName} · {city} · Official Document</p>
                   </div>
                 </div>
               </div>

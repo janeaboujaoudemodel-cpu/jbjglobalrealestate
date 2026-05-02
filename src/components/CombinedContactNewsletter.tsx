@@ -25,7 +25,7 @@ const CombinedContactNewsletter = ({
       value: CONTACT_INFO.phone,
       href: getWhatsAppUrl(),
       iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#5A4A2E]",
+      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Phone,
@@ -33,7 +33,7 @@ const CombinedContactNewsletter = ({
       value: CONTACT_INFO.phone,
       href: getCallUrl(),
       iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#5A4A2E]",
+      iconColor: "text-[#1A1A1A]/70",
     },
     {
       icon: Mail,
@@ -41,7 +41,7 @@ const CombinedContactNewsletter = ({
       value: CONTACT_INFO.email,
       href: `mailto:${CONTACT_INFO.email}`,
       iconBg: "bg-[#FDFBF7]",
-      iconColor: "text-[#5A4A2E]",
+      iconColor: "text-[#1A1A1A]/70",
     },
   ];
 
@@ -54,7 +54,7 @@ const CombinedContactNewsletter = ({
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-[#1A1A1A]">
               {title}
             </h2>
-            <p className="text-[#5A4A2E] text-sm md:text-base max-w-xl mx-auto">
+            <p className="text-[#1A1A1A]/70 text-sm md:text-base max-w-xl mx-auto">
               {subtitle}
             </p>
           </div>
@@ -73,8 +73,8 @@ const CombinedContactNewsletter = ({
                   <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="text-xs uppercase tracking-wider text-[#5A4A2E] font-medium mb-0.5">{card.label}</p>
-                  <p className="text-sm font-semibold text-[#1A1A1A] group-hover:text-[#5A4A2E] transition-colors">{card.value}</p>
+                  <p className="text-xs uppercase tracking-wider text-[#1A1A1A]/70 font-medium mb-0.5">{card.label}</p>
+                  <p className="text-sm font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{card.value}</p>
                 </div>
               </a>
             ))}
@@ -83,7 +83,7 @@ const CombinedContactNewsletter = ({
           {/* Divider */}
           <div className="flex items-center gap-4 max-w-2xl mx-auto mb-8">
             <div className="flex-1 h-px bg-[#EFE6D6]" />
-            <span className="text-[#5A4A2E] text-sm">✦</span>
+            <span className="text-[#1A1A1A]/70 text-sm">✦</span>
             <div className="flex-1 h-px bg-[#EFE6D6]" />
           </div>
 
@@ -92,7 +92,7 @@ const CombinedContactNewsletter = ({
             <h3 className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em] text-[#1A1A1A]">
               ✦ Stay in the Loop ✦
             </h3>
-            <p className="text-[#5A4A2E] text-sm md:text-base mb-5">
+            <p className="text-[#1A1A1A]/70 text-sm md:text-base mb-5">
               Be the first to access new listings, market updates, and personalized brokerage guidance.
             </p>
             <NewsletterBrevo variant="compact" source="combined_cta" />

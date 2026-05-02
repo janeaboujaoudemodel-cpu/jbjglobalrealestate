@@ -303,7 +303,7 @@ const AdminCRM = () => {
           {/* Search */}
           <button
             onClick={() => setShowCommandPalette(true)}
-            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#5A4A2E] hover:border-gold/50 transition-all"
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]/70 hover:border-gold/50 transition-all"
           >
             <Search className="h-4 w-4 text-gold" />
             <span className="text-sm">Search...</span>
@@ -385,11 +385,11 @@ const AdminCRM = () => {
                         <TableCell>
                           <div>
                             <p className="font-medium text-[#1A1A1A]">{broker.display_name || "No name"}</p>
-                            <p className="text-xs text-[#5A4A2E]">{broker.user_id.slice(0, 8)}...</p>
+                            <p className="text-xs text-[#1A1A1A]/70">{broker.user_id.slice(0, 8)}...</p>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-[#F7F2EA] text-[#5A4A2E]"}>
+                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-[#F7F2EA] text-[#1A1A1A]/70"}>
                             {broker.crm_role}
                           </Badge>
                         </TableCell>
@@ -444,7 +444,7 @@ const AdminCRM = () => {
                         <TableCell>
                           <div>
                             <p className="font-medium text-[#1A1A1A]">{lead.full_name}</p>
-                            <p className="text-xs text-[#5A4A2E]">
+                            <p className="text-xs text-[#1A1A1A]/70">
                               {lead.nationality}
                             </p>
                           </div>
@@ -453,7 +453,7 @@ const AdminCRM = () => {
                           <div className="text-sm">
                             {lead.email_lower && <p className="text-[#1A1A1A]">{lead.email_lower}</p>}
                             {lead.phone_e164 && (
-                              <p className="text-[#5A4A2E]">{lead.phone_e164}</p>
+                              <p className="text-[#1A1A1A]/70">{lead.phone_e164}</p>
                             )}
                           </div>
                         </TableCell>
@@ -464,7 +464,7 @@ const AdminCRM = () => {
                           <Badge variant="outline" className="border-gold/30 text-[#1A1A1A]">{lead.owner_type}</Badge>
                         </TableCell>
                         <TableCell className="text-[#1A1A1A]">{lead.source || "-"}</TableCell>
-                        <TableCell className="text-sm text-[#5A4A2E]">
+                        <TableCell className="text-sm text-[#1A1A1A]/70">
                           {new Date(lead.created_at).toLocaleDateString()}
                         </TableCell>
                       </TableRow>
@@ -472,7 +472,7 @@ const AdminCRM = () => {
                   </TableBody>
                 </Table>
                 {allLeads.length > 50 && (
-                  <p className="text-center text-sm text-[#5A4A2E] mt-4">
+                  <p className="text-center text-sm text-[#1A1A1A]/70 mt-4">
                     Showing 50 of {allLeads.length} leads. Export for full list.
                   </p>
                 )}
@@ -503,7 +503,7 @@ const AdminCRM = () => {
                         <TableCell className="text-sm text-[#1A1A1A]">
                           {new Date(log.created_at).toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-sm font-mono text-[#5A4A2E]">
+                        <TableCell className="text-sm font-mono text-[#1A1A1A]/70">
                           {log.actor_user_id?.slice(0, 8)}...
                         </TableCell>
                         <TableCell>
@@ -512,7 +512,7 @@ const AdminCRM = () => {
                         <TableCell className="text-sm text-[#1A1A1A]">
                           {log.entity_type}
                         </TableCell>
-                        <TableCell className="text-xs text-[#5A4A2E] max-w-xs truncate">
+                        <TableCell className="text-xs text-[#1A1A1A]/70 max-w-xs truncate">
                           {JSON.stringify(log.details)}
                         </TableCell>
                       </TableRow>

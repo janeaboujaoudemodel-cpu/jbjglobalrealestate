@@ -93,7 +93,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
               <span className="text-[#1A1A1A] text-sm font-medium">Job Offer Template</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">Job Offer Generator</h1>
-            <p className="text-[#5A4A2E]">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
+            <p className="text-[#1A1A1A]/70">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
           </div>
         </div>
       </div>

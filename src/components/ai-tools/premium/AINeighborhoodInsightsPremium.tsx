@@ -169,7 +169,7 @@ const AINeighborhoodInsightsPremium = () => {
                               className={`h-5 w-5 ${
                                 star <= Math.round(response.score / 2)
                                   ? "text-teal-400 fill-teal-400"
-                                  : "text-[#5A4A2E]"
+                                  : "text-[#1A1A1A]/70"
                               }`}
                             />
                           ))}

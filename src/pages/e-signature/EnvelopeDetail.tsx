@@ -34,18 +34,18 @@ type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 
 type AuditAction = 'created' | 'sent' | 'viewed' | 'signed' | 'declined' | 'reminder_sent' | 'downloaded' | 'voided' | 'expired' | 'completed';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30", icon: <FileSignature className="w-4 h-4" /> },
+  draft: { label: "Draft", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
-  expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
-  voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30", icon: <XCircle className="w-4 h-4" /> },
+  expired: { label: "Expired", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <Clock className="w-4 h-4" /> },
+  voided: { label: "Voided", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30", icon: <XCircle className="w-4 h-4" /> },
 };
 
 const recipientStatusConfig: Record<RecipientStatus, { label: string; color: string }> = {
-  pending: { label: "Pending", color: "bg-[#F7F2EA] text-[#5A4A2E] border border-[#B89555]/30" },
+  pending: { label: "Pending", color: "bg-[#F7F2EA] text-[#1A1A1A]/70 border border-[#B89555]/30" },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
@@ -155,7 +155,7 @@ export default function EnvelopeDetail() {
         <div className="max-w-5xl mx-auto text-center py-12">
           <FileSignature className="w-16 h-16 text-[#C8A766]/40 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2 text-white">Envelope Not Found</h2>
-          <p className="text-[#5A4A2E] mb-4">
+          <p className="text-[#1A1A1A]/70 mb-4">
             This envelope may have been deleted or you don't have access.
           </p>
           <Link to="/e-signature">
@@ -195,7 +195,7 @@ export default function EnvelopeDetail() {
                   </Badge>
                 </div>
                 {envelope.description && (
-                  <p className="text-[#5A4A2E] mt-1">{envelope.description}</p>
+                  <p className="text-[#1A1A1A]/70 mt-1">{envelope.description}</p>
                 )}
               </div>
             </div>
@@ -274,7 +274,7 @@ export default function EnvelopeDetail() {
                       Recipients
                     </span>
                     {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
-                      <span className="text-xs font-normal text-[#5A4A2E]">
+                      <span className="text-xs font-normal text-[#1A1A1A]/70">
                         {envelope.reminders_sent || 0} reminder{(envelope.reminders_sent || 0) !== 1 ? "s" : ""} sent
                       </span>
                     )}
@@ -298,7 +298,7 @@ export default function EnvelopeDetail() {
                             </div>
                             <div className="min-w-0">
                               <p className="font-medium text-[#1A1A1A]">{recipient.name}</p>
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#5A4A2E]">
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#1A1A1A]/70">
                                 <span className="flex items-center gap-1">
                                   <Mail className="w-3 h-3 shrink-0" />
                                   <span className="truncate max-w-[200px]">{recipient.email}</span>
@@ -372,7 +372,7 @@ export default function EnvelopeDetail() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm text-[#1A1A1A]">{log.description}</p>
-                            <div className="flex items-center gap-3 text-xs text-[#5A4A2E] mt-1">
+                            <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70 mt-1">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
                                 {format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}
@@ -389,7 +389,7 @@ export default function EnvelopeDetail() {
                       );
                     })}
                     {(!auditLogs || auditLogs.length === 0) && (
-                      <p className="text-[#5A4A2E] text-center py-4">
+                      <p className="text-[#1A1A1A]/70 text-center py-4">
                         No activity recorded yet
                       </p>
                     )}
@@ -412,29 +412,29 @@ export default function EnvelopeDetail() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#5A4A2E]">File Name</span>
+                    <span className="text-[#1A1A1A]/70">File Name</span>
                     <span className="font-medium truncate max-w-[150px] text-[#1A1A1A]" title={envelope.document_filename}>
                       {envelope.document_filename}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#5A4A2E]">Created</span>
+                    <span className="text-[#1A1A1A]/70">Created</span>
                     <span className="text-[#1A1A1A]">{format(new Date(envelope.created_at), "MMM d, yyyy")}</span>
                   </div>
                   {envelope.expires_at && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#5A4A2E]">Expires</span>
+                      <span className="text-[#1A1A1A]/70">Expires</span>
                       <span className="text-[#1A1A1A]">{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span>
                     </div>
                   )}
                   {envelope.completed_at && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-[#5A4A2E]">Completed</span>
+                      <span className="text-[#1A1A1A]/70">Completed</span>
                       <span className="text-[#1A1A1A]">{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
-                    <span className="text-[#5A4A2E]">Reminders Sent</span>
+                    <span className="text-[#1A1A1A]/70">Reminders Sent</span>
                     <span className="text-[#1A1A1A]">{envelope.reminders_sent || 0}</span>
                   </div>
                 </CardContent>
@@ -452,13 +452,13 @@ export default function EnvelopeDetail() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <p className="text-sm text-[#5A4A2E]">
+                    <p className="text-sm text-[#1A1A1A]/70">
                       This document has been electronically signed. The audit certificate contains timestamps, IP addresses, and signature images for every signer.
                     </p>
 
                     <div className="space-y-1.5">
                       {(signedDoc.certificate_data as any)?.signers?.map((s: any, i: number) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+                        <div key={i} className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                           <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
                           <span className="font-medium text-[#1A1A1A]">{s.name}</span>
                           {s.signed_at && (
@@ -480,7 +480,7 @@ export default function EnvelopeDetail() {
                         Download Audit Certificate
                       </Button>
                     ) : (
-                      <p className="text-xs text-[#5A4A2E] italic">
+                      <p className="text-xs text-[#1A1A1A]/70 italic">
                         Certificate PDF is being generated…
                       </p>
                     )}

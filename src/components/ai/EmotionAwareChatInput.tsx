@@ -79,7 +79,7 @@ export function EmotionAwareChatInput({
     if (emotion === 'urgent') {
       return { icon: <Zap className="h-4 w-4" />, color: 'text-red-500' };
     }
-    return { icon: <Meh className="h-4 w-4" />, color: 'text-[#5A4A2E]' };
+    return { icon: <Meh className="h-4 w-4" />, color: 'text-[#1A1A1A]/70' };
   };
   
   return (

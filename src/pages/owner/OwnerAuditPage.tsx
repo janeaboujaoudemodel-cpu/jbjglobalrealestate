@@ -145,7 +145,7 @@ const OwnerAuditPage = () => {
       case 'broker': return <Badge className="bg-blue-100 text-blue-700 border-blue-300">Broker</Badge>;
       case 'investor': return <Badge className="bg-green-100 text-green-700 border-green-300">Investor</Badge>;
       case 'authenticated': return <Badge className="bg-amber-100 text-amber-700 border-amber-300">Auth Required</Badge>;
-      case 'public': return <Badge className="bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30">Public</Badge>;
+      case 'public': return <Badge className="bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30">Public</Badge>;
     }
   };
 
@@ -184,7 +184,7 @@ const OwnerAuditPage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-[#1A1A1A]">Owner Audit</h1>
-                <p className="text-[#5A4A2E]">Complete route inventory with visibility tracking</p>
+                <p className="text-[#1A1A1A]/70">Complete route inventory with visibility tracking</p>
               </div>
             </div>
           </div>
@@ -213,37 +213,37 @@ const OwnerAuditPage = () => {
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-[#1A1A1A]">{stats.total}</div>
-                    <div className="text-xs text-[#5A4A2E]">Total Routes</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Total Routes</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{stats.ownerRoutes}</div>
-                    <div className="text-xs text-[#5A4A2E]">Owner Only</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Owner Only</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{stats.brokerRoutes}</div>
-                    <div className="text-xs text-[#5A4A2E]">Broker</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Broker</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
-                    <div className="text-2xl font-bold text-[#5A4A2E]">{stats.publicRoutes}</div>
-                    <div className="text-xs text-[#5A4A2E]">Public</div>
+                    <div className="text-2xl font-bold text-[#1A1A1A]/70">{stats.publicRoutes}</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Public</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{stats.visibleRoutes}</div>
-                    <div className="text-xs text-[#5A4A2E]">Linked in UI</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Linked in UI</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{stats.orphanRoutes}</div>
-                    <div className="text-xs text-[#5A4A2E]">Orphan Routes</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Orphan Routes</div>
                   </CardContent>
                 </Card>
               </div>
@@ -252,7 +252,7 @@ const OwnerAuditPage = () => {
               <div className="flex flex-wrap gap-4 mb-6">
                 <div className="flex-1 min-w-[200px]">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                     <Input
                       placeholder="Search routes..."
                       value={searchQuery}
@@ -318,7 +318,7 @@ const OwnerAuditPage = () => {
                             >
                               <td className="p-4">
                                 <div className="font-medium text-[#1A1A1A]">{route.name}</div>
-                                <div className="text-xs text-[#5A4A2E] font-mono">{route.path}</div>
+                                <div className="text-xs text-[#1A1A1A]/70 font-mono">{route.path}</div>
                               </td>
                               <td className="p-4">
                                 {getAccessBadge(route.access as AccessLevel)}
@@ -327,21 +327,21 @@ const OwnerAuditPage = () => {
                                 {route.dashboard ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-[#5A4A2E] mx-auto" />
+                                  <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.sidebar ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-[#5A4A2E] mx-auto" />
+                                  <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.registry ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-[#5A4A2E] mx-auto" />
+                                  <X className="w-4 h-4 text-[#1A1A1A]/70 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
@@ -385,19 +385,19 @@ const OwnerAuditPage = () => {
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <Layout className="w-4 h-4 text-[#8A7356]" />
-                    <span className="text-[#5A4A2E]">Dashboard = Visible on dashboard page</span>
+                    <span className="text-[#1A1A1A]/70">Dashboard = Visible on dashboard page</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Menu className="w-4 h-4 text-[#8A7356]" />
-                    <span className="text-[#5A4A2E]">Sidebar = Visible in navigation sidebar</span>
+                    <span className="text-[#1A1A1A]/70">Sidebar = Visible in navigation sidebar</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-[#8A7356]" />
-                    <span className="text-[#5A4A2E]">Registry = Listed in Feature Registry</span>
+                    <span className="text-[#1A1A1A]/70">Registry = Listed in Feature Registry</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-red-500" />
-                    <span className="text-[#5A4A2E]">Orphan = Not linked anywhere in UI</span>
+                    <span className="text-[#1A1A1A]/70">Orphan = Not linked anywhere in UI</span>
                   </div>
                 </div>
               </div>
@@ -409,25 +409,25 @@ const OwnerAuditPage = () => {
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-[#1A1A1A]">{aiStats.total}</div>
-                    <div className="text-xs text-[#5A4A2E]">Total AI Tools</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Total AI Tools</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{aiStats.working}</div>
-                    <div className="text-xs text-[#5A4A2E]">Working</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Working</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-amber-700">{aiStats.partial}</div>
-                    <div className="text-xs text-[#5A4A2E]">Partial</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Partial</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{aiStats.missing}</div>
-                    <div className="text-xs text-[#5A4A2E]">404 Missing</div>
+                    <div className="text-xs text-[#1A1A1A]/70">404 Missing</div>
                   </CardContent>
                 </Card>
               </div>
@@ -435,25 +435,25 @@ const OwnerAuditPage = () => {
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-pink-700">{aiStats.apiMissing}</div>
-                    <div className="text-xs text-[#5A4A2E]">API Missing</div>
+                    <div className="text-xs text-[#1A1A1A]/70">API Missing</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-orange-700">{aiStats.componentOnly}</div>
-                    <div className="text-xs text-[#5A4A2E]">Component Only</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Component Only</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{aiStats.comingSoon}</div>
-                    <div className="text-xs text-[#5A4A2E]">Coming Soon</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Coming Soon</div>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{aiStats.withEdgeFunction}</div>
-                    <div className="text-xs text-[#5A4A2E]">Edge Functions</div>
+                    <div className="text-xs text-[#1A1A1A]/70">Edge Functions</div>
                   </CardContent>
                 </Card>
               </div>
@@ -494,13 +494,13 @@ const OwnerAuditPage = () => {
                             </td>
                             <td className="p-4">
                               {tool.route ? (
-                                <span className="text-xs text-[#5A4A2E] font-mono">{tool.route}</span>
+                                <span className="text-xs text-[#1A1A1A]/70 font-mono">{tool.route}</span>
                               ) : (
-                                <span className="text-xs text-[#5A4A2E] italic">N/A</span>
+                                <span className="text-xs text-[#1A1A1A]/70 italic">N/A</span>
                               )}
                             </td>
                             <td className="p-4">
-                              <span className="text-xs text-[#5A4A2E]">{tool.navPath}</span>
+                              <span className="text-xs text-[#1A1A1A]/70">{tool.navPath}</span>
                             </td>
                             <td className="p-4">
                               {getAIStatusBadge(tool.status)}
@@ -511,7 +511,7 @@ const OwnerAuditPage = () => {
                                   {tool.edgeFunction}
                                 </Badge>
                               ) : (
-                                <span className="text-xs text-[#5A4A2E]">—</span>
+                                <span className="text-xs text-[#1A1A1A]/70">—</span>
                               )}
                             </td>
                             <td className="p-4">
@@ -540,7 +540,7 @@ const OwnerAuditPage = () => {
                               ) : tool.status === '404' ? (
                                 <Badge className="bg-red-100 text-red-700 border-red-300">Route Missing</Badge>
                               ) : (
-                                <span className="text-xs text-[#5A4A2E]">—</span>
+                                <span className="text-xs text-[#1A1A1A]/70">—</span>
                               )}
                             </td>
                           </tr>
@@ -557,27 +557,27 @@ const OwnerAuditPage = () => {
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <Badge className="bg-green-100 text-green-700 border-green-300">Working</Badge>
-                    <span className="text-[#5A4A2E]">Fully functional</span>
+                    <span className="text-[#1A1A1A]/70">Fully functional</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-amber-100 text-amber-700 border-amber-300">Partial</Badge>
-                    <span className="text-[#5A4A2E]">Missing features</span>
+                    <span className="text-[#1A1A1A]/70">Missing features</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-red-100 text-red-700 border-red-300">404</Badge>
-                    <span className="text-[#5A4A2E]">Route missing</span>
+                    <span className="text-[#1A1A1A]/70">Route missing</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-orange-100 text-orange-700 border-orange-300">Component Only</Badge>
-                    <span className="text-[#5A4A2E]">No route assigned</span>
+                    <span className="text-[#1A1A1A]/70">No route assigned</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-blue-100 text-blue-700 border-blue-300">Coming Soon</Badge>
-                    <span className="text-[#5A4A2E]">Planned feature</span>
+                    <span className="text-[#1A1A1A]/70">Planned feature</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-pink-100 text-pink-700 border-pink-300">API Missing</Badge>
-                    <span className="text-[#5A4A2E]">Needs API integration</span>
+                    <span className="text-[#1A1A1A]/70">Needs API integration</span>
                   </div>
                 </div>
               </div>

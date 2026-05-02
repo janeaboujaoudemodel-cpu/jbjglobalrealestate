@@ -133,7 +133,7 @@ const MortgageCalculatorPage = () => {
       <div className="py-16 border-t border-gold/20 bg-[#1A1A1A]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <p className="text-[#5A4A2E] text-sm uppercase tracking-wider mb-2">Partnered With</p>
+            <p className="text-[#1A1A1A]/70 text-sm uppercase tracking-wider mb-2">Partnered With</p>
             <h3 className="text-xl font-semibold text-white">Leading UAE Banks</h3>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">

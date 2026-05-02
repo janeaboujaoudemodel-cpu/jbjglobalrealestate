@@ -261,7 +261,7 @@ const Developers = () => {
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>
@@ -275,7 +275,7 @@ const Developers = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+            <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
             <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
           </motion.div>
         </section>

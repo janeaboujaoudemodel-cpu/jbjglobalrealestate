@@ -224,7 +224,7 @@ export const TemplateEditorDialog = ({
                 <Send className="w-4 h-4 text-[#1A1A1A]" />
                 <h4 className="text-sm font-semibold text-[#1A1A1A]">Send a test to your inbox</h4>
               </div>
-              <p className="text-xs text-[#5A4A2E]">
+              <p className="text-xs text-[#1A1A1A]/70">
                 Sends the live template (placeholders filled in) to the address below. The subject is prefixed with <span className="font-mono">[TEST]</span> and nothing is logged against any {isBrokerage ? "brokerage" : "developer"} record.
               </p>
               <div className="grid sm:grid-cols-2 gap-3">
@@ -269,7 +269,7 @@ export const TemplateEditorDialog = ({
           {/* Preview column */}
           {showPreview && (
             <div className="min-h-0 flex flex-col bg-[#FAF5EA]">
-              <div className="text-[10px] uppercase tracking-wider text-[#5A4A2E] px-4 py-2 bg-[#FDFBF7] border-b border-[#1A1A1A]/10 truncate">
+              <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 px-4 py-2 bg-[#FDFBF7] border-b border-[#1A1A1A]/10 truncate">
                 Preview · {VARIANT_LABELS[variant]} · Subject:{" "}
                 <span className="normal-case font-medium text-[#1A1A1A]">{subject || "—"}</span>
               </div>

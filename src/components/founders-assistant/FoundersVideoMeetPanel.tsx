@@ -70,7 +70,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
               <Plus className="w-6 h-6 text-[#B89555]" />
             </div>
             <h3 className="text-[#1A1A1A] font-semibold">New Meeting</h3>
-            <p className="text-sm text-[#5A4A2E] mt-1">Create instant JBJ Meet</p>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">Create instant JBJ Meet</p>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all cursor-pointer group" onClick={() => navigate('/video-meeting/calendar')}>
@@ -79,7 +79,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
               <Calendar className="w-6 h-6 text-purple-600" />
             </div>
             <h3 className="text-[#1A1A1A] font-semibold">Schedule Meeting</h3>
-            <p className="text-sm text-[#5A4A2E] mt-1">Plan for later</p>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">Plan for later</p>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/50 transition-all cursor-pointer group" onClick={() => navigate('/video-meeting/test')}>
@@ -88,7 +88,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
               <Settings className="w-6 h-6 text-blue-600" />
             </div>
             <h3 className="text-[#1A1A1A] font-semibold">Test Setup</h3>
-            <p className="text-sm text-[#5A4A2E] mt-1">Check camera & mic</p>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">Check camera & mic</p>
           </CardContent>
         </Card>
       </div>
@@ -106,21 +106,21 @@ const FoundersVideoMeetPanel: React.FC = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-[#5A4A2E]">Meeting Title</Label>
+                  <Label className="text-[#1A1A1A]/70">Meeting Title</Label>
                   <Input value={meetingTitle} onChange={(e) => setMeetingTitle(e.target.value)} placeholder="e.g., Property Viewing with Mr. Ahmed" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[#5A4A2E]">Participants (emails, comma-separated)</Label>
+                  <Label className="text-[#1A1A1A]/70">Participants (emails, comma-separated)</Label>
                   <Input value={participants} onChange={(e) => setParticipants(e.target.value)} placeholder="e.g., client@email.com" className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-[#5A4A2E]">Date (optional)</Label>
+                  <Label className="text-[#1A1A1A]/70">Date (optional)</Label>
                   <Input type="date" value={meetingDate} onChange={(e) => setMeetingDate(e.target.value)} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[#5A4A2E]">Time</Label>
+                  <Label className="text-[#1A1A1A]/70">Time</Label>
                   <Input type="time" value={meetingTime} onChange={(e) => setMeetingTime(e.target.value)} className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]" />
                 </div>
               </div>
@@ -128,7 +128,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                 <Button onClick={handleCreateMeeting} disabled={isGenerating || !meetingTitle} className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:opacity-90 text-white">
                   {isGenerating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Creating...</> : <><Video className="w-4 h-4 mr-2" />Create Meeting</>}
                 </Button>
-                <Button variant="outline" onClick={() => setIsCreating(false)} className="border-[#B89555]/30 text-[#5A4A2E] hover:text-[#1A1A1A]">Cancel</Button>
+                <Button variant="outline" onClick={() => setIsCreating(false)} className="border-[#B89555]/30 text-[#1A1A1A]/70 hover:text-[#1A1A1A]">Cancel</Button>
               </div>
 
               {generatedLink && (
@@ -165,8 +165,8 @@ const FoundersVideoMeetPanel: React.FC = () => {
           {scheduledMeetings.length === 0 ? (
             <div className="text-center py-8">
               <Video className="w-12 h-12 text-[#B89555]/30 mx-auto mb-4" />
-              <p className="text-[#5A4A2E]">No scheduled meetings</p>
-              <p className="text-sm text-[#5A4A2E] mt-1">Create a meeting to get started</p>
+              <p className="text-[#1A1A1A]/70">No scheduled meetings</p>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1">Create a meeting to get started</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -176,7 +176,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="text-[#1A1A1A] font-medium">{meeting.title}</h4>
-                        <div className="flex items-center gap-3 mt-1 text-sm text-[#5A4A2E]">
+                        <div className="flex items-center gap-3 mt-1 text-sm text-[#1A1A1A]/70">
                           <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{meeting.date.toLocaleDateString()}</span>
                           <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{meeting.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                           <span className="flex items-center gap-1"><Users className="w-3 h-3" />{meeting.participants.length || 0} participants</span>

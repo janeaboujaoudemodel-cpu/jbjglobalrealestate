@@ -326,7 +326,7 @@ const ExecutiveOverview = () => {
                   Executive Dashboard • Data sourced from CRM (anonymized) and Open Data (aggregated) • 
                   AI insights are descriptive only, not predictive
                 </p>
-                <p className="text-xs text-[#5A4A2E] mt-1">
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">
                   All access logged and auditable • Jane Bou Jaoude Founder & CEO JBJ Global Real Estate
                 </p>
               </div>

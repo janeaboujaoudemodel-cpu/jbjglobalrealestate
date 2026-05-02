@@ -216,28 +216,28 @@ const FoundersActivityCenter: React.FC = () => {
           <CardContent className="p-4 text-center">
             <Activity className="w-6 h-6 text-gold mx-auto mb-2" />
             <p className="text-2xl font-bold text-gold">{stats.total}</p>
-            <p className="text-xs text-[#5A4A2E]">Total Activities</p>
+            <p className="text-xs text-[#1A1A1A]/70">Total Activities</p>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
             <CheckCircle className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
-            <p className="text-xs text-[#5A4A2E]">Completed</p>
+            <p className="text-xs text-[#1A1A1A]/70">Completed</p>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-amber-500/30 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
           <CardContent className="p-4 text-center">
             <Clock className="w-6 h-6 text-amber-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
-            <p className="text-xs text-[#5A4A2E]">Pending</p>
+            <p className="text-xs text-[#1A1A1A]/70">Pending</p>
           </CardContent>
         </Card>
         <Card className="bg-[#FDFBF7] border-2 border-blue-500/30 shadow-[0_4px_20px_rgba(59,130,246,0.1)]">
           <CardContent className="p-4 text-center">
             <TrendingUp className="w-6 h-6 text-blue-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-blue-600">{stats.today}</p>
-            <p className="text-xs text-[#5A4A2E]">Today</p>
+            <p className="text-xs text-[#1A1A1A]/70">Today</p>
           </CardContent>
         </Card>
       </div>
@@ -250,7 +250,7 @@ const FoundersActivityCenter: React.FC = () => {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#1A1A1A]">Activity Center</h3>
-            <p className="text-sm text-[#5A4A2E]">All recent activities across your workspace</p>
+            <p className="text-sm text-[#1A1A1A]/70">All recent activities across your workspace</p>
           </div>
         </div>
         <Button
@@ -293,8 +293,8 @@ const FoundersActivityCenter: React.FC = () => {
               <CardContent className="p-8 text-center">
                 <Activity className="w-16 h-16 text-[#8A7556] mx-auto mb-4" />
                 <h4 className="text-[#1A1A1A] font-semibold mb-2">Activity Center</h4>
-                <p className="text-[#5A4A2E]">No activities found</p>
-                <p className="text-sm text-[#5A4A2E] mt-1">Activities will appear here as you work</p>
+                <p className="text-[#1A1A1A]/70">No activities found</p>
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">Activities will appear here as you work</p>
                 <Button
                   size="sm"
                   variant="primary"
@@ -345,16 +345,16 @@ const FoundersActivityCenter: React.FC = () => {
                                 <h4 className="text-sm font-medium text-[#1A1A1A] truncate group-hover:text-gold transition-colors">
                                   {activity.title}
                                 </h4>
-                                <span className="text-xs text-[#5A4A2E] flex-shrink-0">
+                                <span className="text-xs text-[#1A1A1A]/70 flex-shrink-0">
                                   {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
                                 </span>
                               </div>
-                              <p className="text-xs text-[#5A4A2E] mt-1 line-clamp-1">
+                              <p className="text-xs text-[#1A1A1A]/70 mt-1 line-clamp-1">
                                 {activity.description}
                               </p>
                               <div className="flex items-center gap-2 mt-2">
                                 {activity.actor && (
-                                  <Badge variant="outline" className="text-xs border-gold/30 text-[#5A4A2E]">
+                                  <Badge variant="outline" className="text-xs border-gold/30 text-[#1A1A1A]/70">
                                     <User className="w-3 h-3 mr-1" />
                                     {activity.actor}
                                   </Badge>

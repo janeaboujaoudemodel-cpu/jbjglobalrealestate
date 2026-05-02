@@ -172,7 +172,7 @@ const CurrencyExchange = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -195,7 +195,7 @@ const CurrencyExchange = () => {
               What This Service Is
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner text-center">
-              <p className="text-[#5A4A2E] text-lg leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                 Currency exchange can create delays if documentation and routing are unclear. This service provides coordination support so buyers understand what is required and can move efficiently with the right licensed providers.
               </p>
             </motion.div>
@@ -227,7 +227,7 @@ const CurrencyExchange = () => {
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-[#5A4A2E]">{item.text}</span>
+                    <span className="text-[#1A1A1A]/70">{item.text}</span>
                   </div>
                 </motion.div>
               ))}
@@ -253,7 +253,7 @@ const CurrencyExchange = () => {
             >
               What We Do Not Do
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8 max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8 max-w-2xl mx-auto">
               (Clear Scope)
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
@@ -261,7 +261,7 @@ const CurrencyExchange = () => {
                 <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] flex items-center justify-center shrink-0">
                   <AlertCircle className="w-6 h-6 text-white/70" />
                 </div>
-                <p className="text-[#5A4A2E] leading-relaxed">
+                <p className="text-[#1A1A1A]/70 leading-relaxed">
                   We do not provide banking services or regulated financial advice. Where required, we introduce clients to properly licensed providers who operate under their own terms and compliance requirements.
                 </p>
               </div>
@@ -287,13 +287,13 @@ const CurrencyExchange = () => {
             >
               Typical Documents
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center mb-8 max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center mb-8 max-w-2xl mx-auto">
               (May Be Requested by Providers)
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
+                  <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                     <FileText className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -379,7 +379,7 @@ const CurrencyExchange = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#5A4A2E] pl-8">
+                    <AccordionContent className="text-[#1A1A1A]/70 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -407,7 +407,7 @@ const CurrencyExchange = () => {
             >
               Move funds with clarity and control
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 mb-8">
               Send your timing and currency requirements to receive the correct checklist and routing plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -233,7 +233,7 @@ const AIInsights = () => {
                         </div>
                       ) : (
                         <div className="text-center py-12">
-                          <Brain className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                          <Brain className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                           <p className="text-white/90 text-sm">
                             Click "Generate" to create AI-powered execution intelligence for this category.
                           </p>

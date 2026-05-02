@@ -121,7 +121,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Meeting title"
                     value={quickEvent.title}
                     onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
                   />
                 </div>
                 <div className="space-y-1">
@@ -155,7 +155,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Client name"
                     value={quickEvent.client}
                     onChange={(e) => setQuickEvent({ ...quickEvent, client: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
                   />
                 </div>
               </div>
@@ -226,7 +226,7 @@ export function BrokerCalendarWidget() {
                 <p className="text-white/90 text-xs">Manage all events, sync with Google Calendar</p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#5A4A2E]" />
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A]/70" />
           </CardContent>
         </Card>
       </Link>

@@ -262,7 +262,7 @@ const BrokerPartnerDashboard = () => {
                       
                       {MOCK_SHORTLIST.length === 0 && (
                         <div className="text-center py-8">
-                          <Users className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                          <Users className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                           <p className="text-white/70 mb-4">No client shortlists yet</p>
                           <Link to="/favorites">
                             <Button className="bg-purple-600 hover:bg-purple-700">
@@ -408,7 +408,7 @@ const BrokerPartnerDashboard = () => {
 
           {/* Footer Note */}
           <motion.div variants={fadeInUp} className="mt-12 text-center">
-            <p className="text-xs text-[#5A4A2E]">
+            <p className="text-xs text-[#1A1A1A]/70">
               External Broker Partner access. CRM features are available to JBJ Internal Brokers only.
             </p>
           </motion.div>

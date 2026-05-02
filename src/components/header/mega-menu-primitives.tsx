@@ -163,7 +163,7 @@ export function MegaMenuCTAButton({
       <span className="text-[#1A1A1A] font-bold text-base group-hover:text-[#1A1A1A] transition-colors">
         {title}
       </span>
-      <ArrowRight className="w-5 h-5 text-[#5A4A2E] ml-auto" />
+      <ArrowRight className="w-5 h-5 text-[#1A1A1A]/70 ml-auto" />
     </Link>
   );
 }
@@ -180,7 +180,7 @@ export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSec
       <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
           <h4 className="text-[#1A1A1A] font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
-            <Icon className="w-4 h-4 text-[#5A4A2E] shrink-0" />
+            <Icon className="w-4 h-4 text-[#1A1A1A]/70 shrink-0" />
             {title}
           </h4>
           {rightSlot}
@@ -236,7 +236,7 @@ export function MegaMenuIconLink({
           "transition-colors duration-300",
           emphasis
             ? "text-white w-5 h-5"
-            : "text-[#5A4A2E] group-hover:text-[#1A1A1A]",
+            : "text-[#1A1A1A]/70 group-hover:text-[#1A1A1A]",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
@@ -245,13 +245,13 @@ export function MegaMenuIconLink({
           "block font-bold transition-colors duration-300",
           emphasis
             ? "text-[#1A1A1A] group-hover:text-[#1A1A1A] text-base"
-            : "text-[#5A4A2E] group-hover:text-[#1A1A1A]",
+            : "text-[#1A1A1A]/70 group-hover:text-[#1A1A1A]",
           !emphasis && compact ? "text-[13px]" : !emphasis ? "text-sm" : ""
         )}>
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-[#5A4A2E] group-hover:text-[#5A4A2E] truncate transition-colors">
+          <span className="block text-xs text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] truncate transition-colors">
             {description}
           </span>
         ) : null}

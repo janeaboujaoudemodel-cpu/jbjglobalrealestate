@@ -123,7 +123,7 @@ const LeadCaptureModal = ({
             <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">
               {isInterestOnly ? "Thank You!" : "Download Ready!"}
             </h3>
-            <p className="text-sm text-[#5A4A2E] text-center">
+            <p className="text-sm text-[#1A1A1A]/70 text-center">
               {isInterestOnly ? "Our team will contact you shortly." : "Your download will start automatically."}
             </p>
           </div>

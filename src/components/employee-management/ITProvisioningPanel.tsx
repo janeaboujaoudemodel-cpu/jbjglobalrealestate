@@ -181,7 +181,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-[#5A4A2E]">Awaiting Setup</p>
+                <p className="text-xs text-[#1A1A1A]/70">Awaiting Setup</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {applications.filter(a => a.status === 'hr_approved').length}
                 </p>
@@ -194,7 +194,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-[#5A4A2E]">In Progress</p>
+                <p className="text-xs text-[#1A1A1A]/70">In Progress</p>
                 <p className="text-2xl font-bold text-purple-600">
                   {applications.filter(a => a.status === 'it_processing').length}
                 </p>
@@ -207,7 +207,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-[#5A4A2E]">Completed Today</p>
+                <p className="text-xs text-[#1A1A1A]/70">Completed Today</p>
                 <p className="text-2xl font-bold text-green-600">0</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500/50" />
@@ -224,7 +224,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               <Key className="w-5 h-5 text-gold" />
               IT Provisioning Queue
             </CardTitle>
-            <CardDescription className="text-[#5A4A2E]">
+            <CardDescription className="text-[#1A1A1A]/70">
               HR-approved joiners ready for email, credentials, and CRM access
             </CardDescription>
           </div>
@@ -240,7 +240,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           ) : filteredApps.length === 0 ? (
             <div className="text-center py-12">
               <CheckCircle className="w-12 h-12 text-green-500/30 mx-auto mb-4" />
-              <p className="text-[#5A4A2E]">All caught up! No pending provisioning tasks.</p>
+              <p className="text-[#1A1A1A]/70">All caught up! No pending provisioning tasks.</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -256,14 +256,14 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                       </div>
                       <div>
                         <p className="font-medium text-[#1A1A1A]">{app.full_name}</p>
-                        <div className="flex items-center gap-2 text-xs text-[#5A4A2E]">
+                        <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
                           <Briefcase className="w-3 h-3" />
                           <span>{app.job_title}</span>
                           <span>•</span>
                           <Building2 className="w-3 h-3" />
                           <span>{app.department}</span>
                         </div>
-                        <p className="text-xs text-[#5A4A2E] mt-1">
+                        <p className="text-xs text-[#1A1A1A]/70 mt-1">
                           HR approved: {app.hr_approved_at ? format(new Date(app.hr_approved_at), 'MMM d, yyyy') : 'Pending'}
                         </p>
                       </div>
@@ -301,7 +301,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               <Key className="w-5 h-5 text-gold" />
               Provision Employee: {selectedApp?.full_name}
             </DialogTitle>
-            <DialogDescription className="text-[#5A4A2E]">
+            <DialogDescription className="text-[#1A1A1A]/70">
               Generate email, password, signature, and grant system access
             </DialogDescription>
           </DialogHeader>
@@ -338,7 +338,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-[#5A4A2E]">Employee must change on first login</p>
+              <p className="text-xs text-[#1A1A1A]/70">Employee must change on first login</p>
             </div>
 
             {/* Email Signature Preview */}
@@ -358,7 +358,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   checked={grantCRM} 
                   onCheckedChange={(v) => setGrantCRM(v as boolean)} 
                 />
-                <label htmlFor="grantCRM" className="text-sm text-[#5A4A2E]">
+                <label htmlFor="grantCRM" className="text-sm text-[#1A1A1A]/70">
                   Grant CRM access based on role ({selectedApp?.crm_role})
                 </label>
               </div>
@@ -368,7 +368,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   checked={sendWelcomeEmail} 
                   onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)} 
                 />
-                <label htmlFor="sendWelcome" className="text-sm text-[#5A4A2E]">
+                <label htmlFor="sendWelcome" className="text-sm text-[#1A1A1A]/70">
                   Send welcome email with credentials
                 </label>
               </div>

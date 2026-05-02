@@ -116,7 +116,7 @@ export const FeedbackPrompt = ({
               </div>
               <button
                 onClick={handleDismiss}
-                className="text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -139,7 +139,7 @@ export const FeedbackPrompt = ({
                       className={`w-8 h-8 ${
                         star <= rating
                           ? "fill-gold text-gold"
-                          : "text-[#5A4A2E] hover:text-[#8A7556]"
+                          : "text-[#1A1A1A]/70 hover:text-[#8A7556]"
                       } transition-colors`}
                     />
                   </button>
@@ -178,7 +178,7 @@ export const FeedbackPrompt = ({
                 )}
               </Button>
 
-              <p className="text-xs text-[#5A4A2E] text-center">
+              <p className="text-xs text-[#1A1A1A]/70 text-center">
                 Your feedback helps us improve
               </p>
             </div>

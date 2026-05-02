@@ -286,7 +286,7 @@ const RentGuide = () => {
                   <item.icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-medium text-[#1A1A1A] mb-2">{item.title}</h3>
-                <p className="text-sm text-[#5A4A2E]">{item.desc}</p>
+                <p className="text-sm text-[#1A1A1A]/70">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -317,12 +317,12 @@ const RentGuide = () => {
                         {step.title}
                       </h3>
                     </div>
-                    <p className="text-[#5A4A2E] mb-4">{step.description}</p>
+                    <p className="text-[#1A1A1A]/70 mb-4">{step.description}</p>
                     <ul className="grid md:grid-cols-2 gap-3">
                       {step.items.map((item, itemIndex) => (
                         <li key={itemIndex} className="flex items-start gap-3">
                           <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                          <span className="text-[#5A4A2E] text-sm">{item}</span>
+                          <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -349,7 +349,7 @@ const RentGuide = () => {
                   <structure.icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-lg font-medium text-[#1A1A1A] mb-2">{structure.title}</h3>
-                <p className="text-sm text-[#5A4A2E]">{structure.description}</p>
+                <p className="text-sm text-[#1A1A1A]/70">{structure.description}</p>
               </div>
             ))}
           </div>
@@ -373,7 +373,7 @@ const RentGuide = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-[#1A1A1A] mb-1">{cost.title}</h3>
-                    <p className="text-sm text-[#5A4A2E]">{cost.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70">{cost.description}</p>
                   </div>
                 </div>
               </div>
@@ -403,7 +403,7 @@ const RentGuide = () => {
                   {support.points.map((point, pointIndex) => (
                     <li key={pointIndex} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-[#5A4A2E] text-sm">{point}</span>
+                      <span className="text-[#1A1A1A]/70 text-sm">{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -418,7 +418,7 @@ const RentGuide = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-4">Related Guides</h2>
-            <p className="text-[#5A4A2E]">Explore more resources for tenants and landlords</p>
+            <p className="text-[#1A1A1A]/70">Explore more resources for tenants and landlords</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             <Link 

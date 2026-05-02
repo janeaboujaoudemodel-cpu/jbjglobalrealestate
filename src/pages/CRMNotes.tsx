@@ -203,7 +203,7 @@ const CRMNotes = () => {
                   </div>
                   <div>
                     <h1 className="text-lg font-bold text-[#1A1A1A]">Notes</h1>
-                    <p className="text-xs text-[#5A4A2E]">{notes.length} notes</p>
+                    <p className="text-xs text-[#1A1A1A]/70">{notes.length} notes</p>
                   </div>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const CRMNotes = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-[#5A4A2E] mb-4">
+                  <p className="text-sm text-[#1A1A1A]/70 mb-4">
                     Click the microphone to record a voice note. Your speech will be transcribed and saved as a note.
                   </p>
                   <VoiceNoteRecorder onTranscript={handleVoiceTranscript} />
@@ -261,7 +261,7 @@ const CRMNotes = () => {
                 <CardContent className="py-12 text-center">
                   <StickyNote className="h-12 w-12 mx-auto mb-4 text-[#8A7556]" />
                   <p className="text-[#1A1A1A] font-medium">No notes yet</p>
-                  <p className="text-sm text-[#5A4A2E] mt-1">Create your first note to get started</p>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">Create your first note to get started</p>
                   <Button onClick={() => addNote()} variant="primary" className="mt-4">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Note
@@ -310,7 +310,7 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => extractTasks(note.id)}
-                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-[#B89555]"
+                                className="h-7 w-7 p-0 text-[#1A1A1A]/70 hover:text-[#B89555]"
                                 title="Extract tasks from note"
                               >
                                 <ListChecks className="h-3 w-3" />
@@ -319,7 +319,7 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => startEditing(note)}
-                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-gold"
+                                className="h-7 w-7 p-0 text-[#1A1A1A]/70 hover:text-gold"
                               >
                                 <Edit2 className="h-3 w-3" />
                               </Button>
@@ -327,16 +327,16 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => deleteNote(note.id)}
-                                className="h-7 w-7 p-0 text-[#5A4A2E] hover:text-red-600"
+                                className="h-7 w-7 p-0 text-[#1A1A1A]/70 hover:text-red-600"
                               >
                                 <Trash2 className="h-3 w-3" />
                               </Button>
                             </div>
                           </div>
-                          <p className="text-sm text-[#5A4A2E] whitespace-pre-wrap line-clamp-6">
+                          <p className="text-sm text-[#1A1A1A]/70 whitespace-pre-wrap line-clamp-6">
                             {note.content || 'Empty note...'}
                           </p>
-                          <p className="text-xs text-[#5A4A2E] mt-3">
+                          <p className="text-xs text-[#1A1A1A]/70 mt-3">
                             Updated {format(note.updatedAt, 'MMM d, yyyy')}
                           </p>
                         </>

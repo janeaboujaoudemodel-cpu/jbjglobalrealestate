@@ -37,7 +37,7 @@ const SOURCE_CONFIG: Record<string, { icon: any; label: string; color: string }>
 };
 
 const IMPACT_COLORS: Record<string, string> = {
-  low: "bg-[#F7F2EA] text-[#5A4A2E]",
+  low: "bg-[#F7F2EA] text-[#1A1A1A]/70",
   medium: "bg-amber-100 text-amber-700",
   high: "bg-orange-100 text-orange-700",
   critical: "bg-red-100 text-red-700",
@@ -134,7 +134,7 @@ const OwnerRecommendations = () => {
                 <span className="text-[#1A1A1A] text-sm font-medium">AI Intelligence</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">Global Recommendations</h1>
-              <p className="text-[#5A4A2E] mt-1">Cross-department AI-driven insights with preview, apply, and revert controls</p>
+              <p className="text-[#1A1A1A]/70 mt-1">Cross-department AI-driven insights with preview, apply, and revert controls</p>
             </div>
             <Button onClick={generateRecs} disabled={generating} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A] self-start">
               {generating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</> : <><Sparkles className="h-4 w-4 mr-2" /> Generate New Recommendations</>}
@@ -149,13 +149,13 @@ const OwnerRecommendations = () => {
           {[
             { label: "Pending", count: counts.pending, icon: AlertTriangle, color: "text-amber-600" },
             { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-emerald-600" },
-            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-[#5A4A2E]" },
+            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-[#1A1A1A]/70" },
           ].map(s => (
             <div key={s.label} className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-4 flex items-center gap-3">
               <s.icon className={`h-6 w-6 ${s.color}`} />
               <div>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{s.count}</p>
-                <p className="text-xs text-[#5A4A2E]">{s.label}</p>
+                <p className="text-xs text-[#1A1A1A]/70">{s.label}</p>
               </div>
             </div>
           ))}
@@ -169,7 +169,7 @@ const OwnerRecommendations = () => {
               const SrcIcon = cfg?.icon;
               return (
                 <button key={s} onClick={() => setFilterSource(s)}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#5A4A2E] hover:bg-gold/10"}`}>
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-gold/10"}`}>
                   {SrcIcon && <SrcIcon className="w-3 h-3 flex-shrink-0" />}
                   {s === "all" ? "All Sources" : cfg?.label || s}
                 </button>
@@ -179,7 +179,7 @@ const OwnerRecommendations = () => {
           <div className="flex flex-wrap gap-1 bg-[#FDFBF7]/60 border border-gold/20 rounded-lg p-1">
             {["all", "pending", "applied", "reverted", "dismissed"].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#5A4A2E] hover:bg-gold/10"}`}>
+                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-[#1A1A1A] border border-gold/40 shadow-sm" : "text-[#1A1A1A]/70 hover:bg-gold/10"}`}>
                 {s === "all" ? "All Status" : s}
               </button>
             ))}
@@ -195,7 +195,7 @@ const OwnerRecommendations = () => {
           <div className="text-center py-20 bg-[#FDFBF7]/60 border border-gold/20 rounded-2xl">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-[#8A7556]" />
             <p className="text-lg font-semibold text-[#1A1A1A]">No Recommendations Yet</p>
-            <p className="text-sm text-[#5A4A2E] mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
+            <p className="text-sm text-[#1A1A1A]/70 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -215,9 +215,9 @@ const OwnerRecommendations = () => {
                         <Badge className={`text-[10px] ${IMPACT_COLORS[rec.impact_level]}`}>{rec.impact_level}</Badge>
                         <Badge variant="outline" className="text-[10px] capitalize">{rec.status}</Badge>
                       </div>
-                      <p className="text-xs text-[#5A4A2E] line-clamp-2">{rec.description}</p>
+                      <p className="text-xs text-[#1A1A1A]/70 line-clamp-2">{rec.description}</p>
                     </div>
-                    <Eye className={`h-4 w-4 text-[#5A4A2E] flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                    <Eye className={`h-4 w-4 text-[#1A1A1A]/70 flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                   </div>
 
                   {isExpanded && (
@@ -228,13 +228,13 @@ const OwnerRecommendations = () => {
                           {rec.before_preview && (
                             <div className="rounded-lg border border-red-200 bg-red-50/50 p-4">
                               <p className="text-[10px] font-bold uppercase text-red-500 mb-2">Before</p>
-                              <p className="text-xs text-[#5A4A2E]">{rec.before_preview}</p>
+                              <p className="text-xs text-[#1A1A1A]/70">{rec.before_preview}</p>
                             </div>
                           )}
                           {rec.after_preview && (
                             <div className="rounded-lg border border-green-200 bg-green-50/50 p-4">
                               <p className="text-[10px] font-bold uppercase text-green-600 mb-2">After</p>
-                              <p className="text-xs text-[#5A4A2E]">{rec.after_preview}</p>
+                              <p className="text-xs text-[#1A1A1A]/70">{rec.after_preview}</p>
                             </div>
                           )}
                         </div>
@@ -242,7 +242,7 @@ const OwnerRecommendations = () => {
                       {rec.side_effects && (
                         <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3 mb-4">
                           <p className="text-[10px] font-bold uppercase text-amber-600 mb-1">Potential Side Effects</p>
-                          <p className="text-xs text-[#5A4A2E]">{rec.side_effects}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">{rec.side_effects}</p>
                         </div>
                       )}
                       {/* Actions */}

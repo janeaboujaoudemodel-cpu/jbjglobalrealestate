@@ -239,7 +239,7 @@ const LeadFormModule = ({
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           {t('form.thankYou', 'Thank You!')}
         </h3>
-        <p className="text-[#5A4A2E] text-sm">
+        <p className="text-[#1A1A1A]/70 text-sm">
           {t('form.weWillContact', 'We\'ll be in touch with you shortly.')}
         </p>
       </motion.div>
@@ -254,7 +254,7 @@ const LeadFormModule = ({
             {title}
           </h3>
           {subtitle && (
-            <p className="text-[#5A4A2E] text-sm">{subtitle}</p>
+            <p className="text-[#1A1A1A]/70 text-sm">{subtitle}</p>
           )}
         </div>
       )}
@@ -317,7 +317,7 @@ const LeadFormModule = ({
               onCheckedChange={(checked) => setPrivacyAccepted(checked as boolean)}
               className="mt-0.5"
             />
-            <label htmlFor="privacy" className="text-xs text-[#5A4A2E] leading-tight cursor-pointer">
+            <label htmlFor="privacy" className="text-xs text-[#1A1A1A]/70 leading-tight cursor-pointer">
               {t('form.privacyConsent', 'I agree to the')}{' '}
               <a href="/privacy" target="_blank" className="text-gold hover:underline">
                 {t('form.privacyPolicy', 'Privacy Policy')}
@@ -336,7 +336,7 @@ const LeadFormModule = ({
               onCheckedChange={(checked) => setMarketingOptIn(checked as boolean)}
               className="mt-0.5"
             />
-            <label htmlFor="marketing" className="text-xs text-[#5A4A2E] leading-tight cursor-pointer">
+            <label htmlFor="marketing" className="text-xs text-[#1A1A1A]/70 leading-tight cursor-pointer">
               {t('form.marketingConsent', 'I\'d like to receive market updates and property alerts')}
             </label>
           </div>

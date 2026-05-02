@@ -233,7 +233,7 @@ export default function JBJBrokerMessages() {
               </Button>
               <div>
                 <h1 className="text-[#1A1A1A] text-xl font-bold">Messages</h1>
-                <span className="text-[#5A4A2E] text-sm">Communicate with your leads</span>
+                <span className="text-[#1A1A1A]/70 text-sm">Communicate with your leads</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -285,7 +285,7 @@ export default function JBJBrokerMessages() {
           <div className="p-4 border-b border-gold/20">
             <h2 className="font-semibold text-[#1A1A1A] mb-3">Conversations</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
@@ -312,7 +312,7 @@ export default function JBJBrokerMessages() {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-[#1A1A1A] truncate">{lead.name}</p>
-                    <p className="text-sm text-[#5A4A2E] truncate">
+                    <p className="text-sm text-[#1A1A1A]/70 truncate">
                       {lead.email || lead.phone || "No contact"}
                     </p>
                   </div>
@@ -323,7 +323,7 @@ export default function JBJBrokerMessages() {
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
                         ? "border-green-500 text-green-500"
-                        : "border-[#B89555]/30 text-[#5A4A2E]"
+                        : "border-[#B89555]/30 text-[#1A1A1A]/70"
                     }
                   >
                     {lead.status}
@@ -348,7 +348,7 @@ export default function JBJBrokerMessages() {
                   </Avatar>
                   <div>
                     <h3 className="font-semibold text-[#1A1A1A]">{selectedLead.name}</h3>
-                    <p className="text-sm text-[#5A4A2E]">
+                    <p className="text-sm text-[#1A1A1A]/70">
                       {selectedLead.phone || selectedLead.email}
                     </p>
                   </div>
@@ -395,7 +395,7 @@ export default function JBJBrokerMessages() {
                             await navigator.clipboard.writeText(msg.content);
                             toast.success(t('chat.messageCopied') || "Message copied");
                           }}
-                          className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                             msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
                           }`}
                         >
@@ -453,7 +453,7 @@ export default function JBJBrokerMessages() {
                 <h3 className="text-lg font-medium text-[#1A1A1A]">
                   Select a conversation
                 </h3>
-                <p className="text-[#5A4A2E]">
+                <p className="text-[#1A1A1A]/70">
                   Choose a lead from the list to start messaging
                 </p>
               </div>

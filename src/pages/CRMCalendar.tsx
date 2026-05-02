@@ -123,7 +123,7 @@ const CRMCalendar = () => {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
+              <Button variant="ghost" size="sm" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
@@ -135,7 +135,7 @@ const CRMCalendar = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-[#1A1A1A]">Calendar</h1>
-                <p className="text-xs text-[#5A4A2E]">{events.length} events this month</p>
+                <p className="text-xs text-[#1A1A1A]/70">{events.length} events this month</p>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const CRMCalendar = () => {
               {/* Day Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="text-center text-xs font-semibold text-[#5A4A2E] py-2">
+                  <div key={day} className="text-center text-xs font-semibold text-[#1A1A1A]/70 py-2">
                     {day}
                   </div>
                 ))}
@@ -227,7 +227,7 @@ const CRMCalendar = () => {
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
-                          <span className="text-xs text-[#5A4A2E]">+{dayEvents.length - 2} more</span>
+                          <span className="text-xs text-[#1A1A1A]/70">+{dayEvents.length - 2} more</span>
                         )}
                       </div>
                     </button>
@@ -247,8 +247,8 @@ const CRMCalendar = () => {
             <CardContent className="space-y-3">
               {todayEvents.length === 0 ? (
                 <div className="text-center py-8">
-                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-[#5A4A2E]" />
-                  <p className="text-sm text-[#5A4A2E]">No events scheduled</p>
+                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-[#1A1A1A]/70" />
+                  <p className="text-sm text-[#1A1A1A]/70">No events scheduled</p>
                 </div>
               ) : (
                 todayEvents.map(event => {
@@ -261,7 +261,7 @@ const CRMCalendar = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-[#1A1A1A] truncate">{event.title}</p>
-                          <p className="text-xs text-[#5A4A2E]">{event.time}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">{event.time}</p>
                           {event.leadName && (
                             <Badge variant="outline" className="mt-1 text-xs">
                               {event.leadName}

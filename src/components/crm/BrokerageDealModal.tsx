@@ -175,7 +175,7 @@ export const BrokerageDealModal = ({
                   ))}
                 </SelectContent>
               </Select>
-              <p className="text-[10px] text-[#5A4A2E] mt-1">
+              <p className="text-[10px] text-[#1A1A1A]/70 mt-1">
                 Defaults to City Developments — searchable across all developers.
               </p>
             </div>

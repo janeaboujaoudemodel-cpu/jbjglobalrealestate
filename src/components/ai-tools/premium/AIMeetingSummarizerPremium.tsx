@@ -596,7 +596,7 @@ const AIMeetingSummarizerPremium = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <Label className="text-[#5A4A2E] text-sm flex items-center gap-1.5">
+                <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-gold" />
                   Meeting Title
                 </Label>
@@ -604,11 +604,11 @@ const AIMeetingSummarizerPremium = () => {
                   placeholder="Client Discovery Call - Palm Jumeirah"
                   value={formData.meetingTitle}
                   onChange={(e) => handleChange("meetingTitle", e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/20"
+                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[#5A4A2E] text-sm flex items-center gap-1.5">
+                <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
                   <Video className="h-3.5 w-3.5 text-gold" />
                   Session Type
                 </Label>
@@ -626,7 +626,7 @@ const AIMeetingSummarizerPremium = () => {
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-[#5A4A2E] text-sm flex items-center gap-1.5">
+                <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5 text-gold" />
                   Participants
                 </Label>
@@ -634,7 +634,7 @@ const AIMeetingSummarizerPremium = () => {
                   placeholder="John Smith (Client), Sarah Ahmed (Agent)"
                   value={formData.participants}
                   onChange={(e) => handleChange("participants", e.target.value)}
-                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/20"
+                  className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
                 />
               </div>
             </div>
@@ -655,13 +655,13 @@ const AIMeetingSummarizerPremium = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-[#1A1A1A] font-medium text-sm">{linkedLead.full_name}</p>
-                    <p className="text-[#5A4A2E] text-xs">{linkedLead.phone_e164 || linkedLead.email_lower || "No contact"}</p>
+                    <p className="text-[#1A1A1A]/70 text-xs">{linkedLead.phone_e164 || linkedLead.email_lower || "No contact"}</p>
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setLinkedLead(null)}
-                    className="text-[#5A4A2E] hover:text-red-600 hover:bg-red-50"
+                    className="text-[#1A1A1A]/70 hover:text-red-600 hover:bg-red-50"
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -669,12 +669,12 @@ const AIMeetingSummarizerPremium = () => {
               ) : (
                 <>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
                     <Input
                       placeholder="Search by name or phone..."
                       value={leadSearch}
                       onChange={(e) => setLeadSearch(e.target.value)}
-                      className="pl-10 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                      className="pl-10 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                     />
                     {searchingLeads && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gold animate-spin" />}
                   </div>
@@ -688,7 +688,7 @@ const AIMeetingSummarizerPremium = () => {
                           className="w-full text-left p-2 rounded-lg hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-colors"
                         >
                           <p className="text-[#1A1A1A] font-medium text-sm">{lead.full_name}</p>
-                          <p className="text-[#5A4A2E] text-xs">{lead.phone_e164 || lead.email_lower || "No contact"}</p>
+                          <p className="text-[#1A1A1A]/70 text-xs">{lead.phone_e164 || lead.email_lower || "No contact"}</p>
                         </button>
                       ))}
                     </div>
@@ -696,7 +696,7 @@ const AIMeetingSummarizerPremium = () => {
 
                   {showAddLead && (
                     <div className="p-3 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg space-y-2">
-                      <p className="text-[#5A4A2E] text-xs font-medium">No lead found — Add new lead:</p>
+                      <p className="text-[#1A1A1A]/70 text-xs font-medium">No lead found — Add new lead:</p>
                       <div className="grid grid-cols-2 gap-2">
                         <Input
                           placeholder="Full Name"
@@ -822,7 +822,7 @@ const AIMeetingSummarizerPremium = () => {
                     <Clock className="h-5 w-5 text-emerald-600" />
                     <div className="flex-1">
                       <p className="text-[#1A1A1A] font-medium text-sm">Session Recorded</p>
-                      <p className="text-[#5A4A2E] text-xs">Duration: {sessionDuration} · {sessionDate}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
                     </div>
                   </div>
                   
@@ -865,7 +865,7 @@ const AIMeetingSummarizerPremium = () => {
                     <div key={i} className="text-sm space-y-0.5">
                       {entry.translated ? (
                         <>
-                          <p className="text-[#5A4A2E]">
+                          <p className="text-[#1A1A1A]/70">
                             <span className="text-gold text-xs font-medium">[{entry.lang || 'Original'}]</span> {entry.original}
                           </p>
                           <p className="text-[#1A1A1A] font-medium">
@@ -880,7 +880,7 @@ const AIMeetingSummarizerPremium = () => {
                 </div>
               )}
 
-              <p className="text-[#5A4A2E] text-xs leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
                 Records audio, transcribes every ~4 seconds, and auto-translates non-English speech. 
                 Works with Zoom, phone calls, live meetings — any audio your mic picks up.
               </p>
@@ -908,7 +908,7 @@ const AIMeetingSummarizerPremium = () => {
                   </div>
                   {generatedResponse && (
                     <div className="bg-[#FDFBF7] border border-gold/15 p-4 rounded-lg space-y-2">
-                      <p className="text-[#5A4A2E] text-sm whitespace-pre-wrap">{generatedResponse}</p>
+                      <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{generatedResponse}</p>
                       <Button
                         variant="outline"
                         size="sm"
@@ -929,16 +929,16 @@ const AIMeetingSummarizerPremium = () => {
                 <CardContent className="p-5">
                   <Tabs defaultValue="properties">
                     <TabsList className="bg-[#FDFBF7] border border-gold/20 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#5A4A2E]">
+                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#1A1A1A]/70">
                         <Home className="h-4 w-4 mr-1" /> Properties
                       </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#5A4A2E]">
+                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-gold text-[#1A1A1A]/70">
                         <Calculator className="h-4 w-4 mr-1" /> Mortgage
                       </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="properties" className="mt-4 space-y-3">
-                      <p className="text-[#5A4A2E] text-xs">Auto-detect property preferences from meeting notes:</p>
+                      <p className="text-[#1A1A1A]/70 text-xs">Auto-detect property preferences from meeting notes:</p>
                       <Button
                         onClick={handlePropertySearch}
                         disabled={searchingProperties}
@@ -955,7 +955,7 @@ const AIMeetingSummarizerPremium = () => {
                               <div className="flex justify-between items-start">
                                 <div>
                                   <p className="text-[#1A1A1A] text-sm font-medium">{p.name}</p>
-                                  <p className="text-[#5A4A2E] text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
+                                  <p className="text-[#1A1A1A]/70 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
                                 </div>
                                 <Badge className="bg-orange-500/10 text-price-orange border border-orange-500/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
                               </div>
@@ -980,11 +980,11 @@ const AIMeetingSummarizerPremium = () => {
                       {mortgageResult && (
                         <div className="bg-[#FDFBF7] border border-gold/15 rounded-lg p-3 space-y-1 text-sm">
                           <p className="text-[#1A1A1A] font-medium">Mortgage Estimate</p>
-                          <p className="text-[#5A4A2E]">Property: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
-                          <p className="text-[#5A4A2E]">Down Payment (20%): <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
-                          <p className="text-[#5A4A2E]">Loan: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
-                          <p className="text-[#5A4A2E]">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
-                          <p className="text-[#5A4A2E] text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
+                          <p className="text-[#1A1A1A]/70">Property: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.price.toLocaleString()}</span></p>
+                          <p className="text-[#1A1A1A]/70">Down Payment (20%): <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.down.toLocaleString()}</span></p>
+                          <p className="text-[#1A1A1A]/70">Loan: <span className="text-[#1A1A1A] font-medium">AED {mortgageResult.loan.toLocaleString()}</span></p>
+                          <p className="text-[#1A1A1A]/70">Monthly: <span className="text-emerald-600 font-bold">AED {mortgageResult.monthly.toLocaleString()}</span></p>
+                          <p className="text-[#1A1A1A]/70 text-xs mt-1">Rate: {mortgageResult.rate}% · {mortgageResult.years} years · Estimate only</p>
                         </div>
                       )}
                     </TabsContent>
@@ -995,13 +995,13 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* Notes Textarea */}
             <div className="space-y-1.5">
-              <Label className="text-[#5A4A2E] text-sm">Meeting Notes / Transcript *</Label>
+              <Label className="text-[#1A1A1A]/70 text-sm">Meeting Notes / Transcript *</Label>
               <Textarea
                 placeholder="Paste meeting notes, or use the recorder above to capture audio..."
                 value={formData.notes}
                 onChange={(e) => handleChange("notes", e.target.value)}
                 rows={8}
-                className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold focus:ring-gold/20"
+                className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold focus:ring-gold/20"
               />
             </div>
 
@@ -1051,7 +1051,7 @@ const AIMeetingSummarizerPremium = () => {
                       {response.actionItems.map((item: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-[#1A1A1A] flex items-center justify-center flex-shrink-0 text-xs text-gold font-semibold">{idx + 1}</span>
-                          <span className="text-[#5A4A2E]">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
+                          <span className="text-[#1A1A1A]/70">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
                         </li>
                       ))}
                     </ul>
@@ -1076,7 +1076,7 @@ const AIMeetingSummarizerPremium = () => {
                     </div>
                     <ul className="space-y-2">
                       {response.keyDecisions.map((decision: any, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-[#5A4A2E]">
+                        <li key={idx} className="flex items-start gap-2 text-sm text-[#1A1A1A]/70">
                           <span className="text-emerald-600 font-bold">[OK]</span>
                           {typeof decision === "string" ? decision : decision.decision || JSON.stringify(decision)}
                         </li>
@@ -1097,7 +1097,7 @@ const AIMeetingSummarizerPremium = () => {
                   </div>
                   <ul className="space-y-2">
                     {response.followUps.map((followUp: string, idx: number) => (
-                      <li key={idx} className="text-sm text-[#5A4A2E] flex items-start gap-2">
+                      <li key={idx} className="text-sm text-[#1A1A1A]/70 flex items-start gap-2">
                         <Clock className="h-4 w-4 mt-0.5 text-gold flex-shrink-0" />
                         {followUp}
                       </li>
@@ -1120,7 +1120,7 @@ const AIMeetingSummarizerPremium = () => {
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-[#FDFBF7] border border-gold/15 p-4 rounded-lg text-[#5A4A2E] whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-[#FDFBF7] border border-gold/15 p-4 rounded-lg text-[#1A1A1A]/70 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.summary || response.executiveSummary || "No summary generated."}
                   </div>
                 </CardContent>
@@ -1132,7 +1132,7 @@ const AIMeetingSummarizerPremium = () => {
                 <Brain className="h-12 w-12 text-gold" />
               </div>
               <h3 className="text-lg font-semibold text-[#1A1A1A]">Meeting Intelligence + CRM</h3>
-              <p className="text-sm text-[#5A4A2E] mt-2 max-w-sm">
+              <p className="text-sm text-[#1A1A1A]/70 mt-2 max-w-sm">
                 Record a live session or paste notes to get AI summaries, action items with follow-up scheduling, property recommendations, and auto-generated client responses
               </p>
             </motion.div>

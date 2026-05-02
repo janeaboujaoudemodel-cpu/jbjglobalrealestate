@@ -195,9 +195,9 @@ export function NewProjectDetector() {
               <div className="p-3 flex flex-col gap-1 flex-1">
                 <p className="text-sm font-semibold text-[#1A1A1A] line-clamp-1">{project.name}</p>
                 {project.developer_name && (
-                  <p className="text-xs text-[#5A4A2E]">{project.developer_name}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">{project.developer_name}</p>
                 )}
-                <div className="flex items-center gap-1 text-[11px] text-[#5A4A2E]">
+                <div className="flex items-center gap-1 text-[11px] text-[#1A1A1A]/70">
                   {(project.area_name || project.location) && (
                     <>
                       <MapPin className="w-3 h-3 flex-shrink-0" />
@@ -232,7 +232,7 @@ export function NewProjectDetector() {
           ))}
         </div>
         {totalCount > projects.length && (
-          <p className="text-center text-xs text-[#5A4A2E] mt-3">
+          <p className="text-center text-xs text-[#1A1A1A]/70 mt-3">
             Showing {projects.length} of {totalCount} new projects. Use "Publish All" to publish everything.
           </p>
         )}

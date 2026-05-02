@@ -534,10 +534,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]"
       : "text-[#1A1A1A] hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-[#1A1A1A]";
     const commandEmptyStyles = isLight
-      ? "text-[#5A4A2E]"
-      : "text-[#5A4A2E]";
+      ? "text-[#1A1A1A]/70"
+      : "text-[#1A1A1A]/70";
     const helperTextStyles = isLight
-      ? "text-[#5A4A2E]"
+      ? "text-[#1A1A1A]/70"
       : "text-white/90";
     const countryNameStyles = isLight
       ? "text-gold font-medium"

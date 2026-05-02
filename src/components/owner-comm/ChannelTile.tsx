@@ -96,10 +96,10 @@ function fmtRel(ts: string | null | undefined) {
 function ChannelActivityPanel({ channelId }: { channelId: string }) {
   const { data: events, isLoading } = useChannelAuditEvents(channelId);
   if (isLoading) {
-    return <p className="text-[11px] text-[#5A4A2E] mt-1">Loading activity…</p>;
+    return <p className="text-[11px] text-[#1A1A1A]/70 mt-1">Loading activity…</p>;
   }
   if (!events || events.length === 0) {
-    return <p className="text-[11px] text-[#5A4A2E] mt-1">No activity recorded yet.</p>;
+    return <p className="text-[11px] text-[#1A1A1A]/70 mt-1">No activity recorded yet.</p>;
   }
   return (
     <ul className="mt-1 space-y-1 max-h-48 overflow-y-auto pr-1">
@@ -109,7 +109,7 @@ function ChannelActivityPanel({ channelId }: { channelId: string }) {
           className="flex items-center justify-between gap-2 text-[11px] text-[#1A1A1A]"
         >
           <span className="font-medium">{EVENT_LABELS[ev.event_type] ?? ev.event_type}</span>
-          <span className="text-[#5A4A2E]">{fmtRel(ev.created_at)}</span>
+          <span className="text-[#1A1A1A]/70">{fmtRel(ev.created_at)}</span>
         </li>
       ))}
     </ul>
@@ -133,7 +133,7 @@ function ToneAggregatePill({ aggregate }: { aggregate: ProviderState["autoReplyA
   }
   // all_off (or no rows; the parent only renders this when status === connected)
   return (
-    <Badge variant="outline" className="bg-[#FDFBF7] text-[#5A4A2E] border-[#B89555]/40">
+    <Badge variant="outline" className="bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#B89555]/40">
       <Sparkles className="h-3 w-3 mr-1" /> Reply tone: Inactive
     </Badge>
   );
@@ -171,7 +171,7 @@ export default function ChannelTile({
       );
     }
     return (
-      <Badge variant="outline" className="bg-[#FDFBF7] text-[#5A4A2E] border-[#B89555]/40">
+      <Badge variant="outline" className="bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#B89555]/40">
         <Circle className="h-3 w-3 mr-1" /> Not Connected
       </Badge>
     );
@@ -205,7 +205,7 @@ export default function ChannelTile({
           <IconTile icon={Icon} tone="gold" size="md" />
           <div>
             <h3 className="font-semibold text-[#1A1A1A] text-base leading-tight">{provider.label}</h3>
-            <p className="text-xs text-[#5A4A2E] mt-0.5">{provider.description}</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-0.5">{provider.description}</p>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1.5">
@@ -217,17 +217,17 @@ export default function ChannelTile({
       {status === "connected" && (
         <div className="space-y-2 mt-3 pt-3 border-t border-[#B89555]/15">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#5A4A2E]">Accounts</span>
+            <span className="text-[#1A1A1A]/70">Accounts</span>
             <span className="font-medium text-[#1A1A1A]">{channelCount}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#5A4A2E]">Last sync</span>
+            <span className="text-[#1A1A1A]/70">Last sync</span>
             <span className="font-medium text-[#1A1A1A]">
               {lastSyncAt ? formatDistanceToNow(new Date(lastSyncAt), { addSuffix: true }) : "—"}
             </span>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[#5A4A2E]">Training samples</span>
+            <span className="text-[#1A1A1A]/70">Training samples</span>
             <span className="font-medium text-[#1A1A1A]">{trainingSamples}</span>
           </div>
           {lastError && (
@@ -241,7 +241,7 @@ export default function ChannelTile({
       {/* Per-account reply-tone controls */}
       {status === "connected" && channelRows.length > 0 && (
         <div className="mt-3 pt-3 border-t border-[#B89555]/15 space-y-3">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-[#5A4A2E] font-semibold">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/70 font-semibold">
             Reply tone per account
           </p>
           {channelRows.map((row) => {
@@ -258,7 +258,7 @@ export default function ChannelTile({
                     <p className="text-xs font-medium text-[#1A1A1A] truncate">
                       {row.display_name || row.identifier}
                     </p>
-                    <p className="text-[11px] text-[#5A4A2E] mt-0.5">
+                    <p className="text-[11px] text-[#1A1A1A]/70 mt-0.5">
                       {isOn ? "Auto-reply active" : "Auto-reply paused"}
                     </p>
                   </div>
@@ -270,7 +270,7 @@ export default function ChannelTile({
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] text-[#5A4A2E] shrink-0">Tone profile</span>
+                  <span className="text-[11px] text-[#1A1A1A]/70 shrink-0">Tone profile</span>
                   <Select
                     value={profileValue}
                     onValueChange={(v) => handleProfileChange(row.id, v)}
@@ -296,13 +296,13 @@ export default function ChannelTile({
                   return (
                     <div className="border-t border-[#B89555]/20 pt-2 mt-1 space-y-1">
                       <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
-                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Link2 className="h-3 w-3" /> Connected</div>
+                        <div className="flex items-center gap-1 text-[#1A1A1A]/70"><Link2 className="h-3 w-3" /> Connected</div>
                         <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_connected_at)}</div>
-                        <div className="flex items-center gap-1 text-[#5A4A2E]"><RefreshCw className="h-3 w-3" /> Synced</div>
+                        <div className="flex items-center gap-1 text-[#1A1A1A]/70"><RefreshCw className="h-3 w-3" /> Synced</div>
                         <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_synced_at)}</div>
-                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Sparkles className="h-3 w-3" /> Auto-reply</div>
+                        <div className="flex items-center gap-1 text-[#1A1A1A]/70"><Sparkles className="h-3 w-3" /> Auto-reply</div>
                         <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_auto_reply_at)}</div>
-                        <div className="flex items-center gap-1 text-[#5A4A2E]"><Inbox className="h-3 w-3" /> Inbound</div>
+                        <div className="flex items-center gap-1 text-[#1A1A1A]/70"><Inbox className="h-3 w-3" /> Inbound</div>
                         <div className="text-[#1A1A1A] font-medium text-right">{fmtRel(summary?.last_inbound_at)}</div>
                       </div>
                       <button

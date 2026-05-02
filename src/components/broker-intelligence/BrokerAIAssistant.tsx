@@ -148,7 +148,7 @@ export function BrokerAIAssistant() {
               placeholder="Add context about the client's inquiry (optional)..."
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[80px]"
+              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
 
@@ -157,7 +157,7 @@ export function BrokerAIAssistant() {
               placeholder="What objection has the client raised? e.g., 'The prices seem too high'"
               value={clientObjection}
               onChange={(e) => setClientObjection(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[80px]"
+              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
 
@@ -172,7 +172,7 @@ export function BrokerAIAssistant() {
               placeholder="Describe the meeting context, e.g., 'First meeting with investor looking for rental yield'"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[80px]"
+              className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
             />
           </TabsContent>
         </Tabs>
@@ -224,7 +224,7 @@ export function BrokerAIAssistant() {
         {/* Compliance Reminder */}
         <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
           <Shield className="w-4 h-4 text-white/90 shrink-0 mt-0.5" />
-          <p className="text-[#5A4A2E] text-xs">
+          <p className="text-[#1A1A1A]/70 text-xs">
             AI guidance is descriptive only. Never use predictions, guarantees, or investment advice language with clients.
           </p>
         </div>

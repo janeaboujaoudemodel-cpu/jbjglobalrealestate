@@ -105,7 +105,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             </p>
 
             {/* Department and details - allow text wrapping, no truncation */}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[#5A4A2E] text-xs mb-2">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[#1A1A1A]/70 text-xs mb-2">
               <span className="whitespace-normal">{member.department}</span>
               {typeof member.yearsExperience === "number" && (
                 <>
@@ -123,7 +123,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
             {/* Short Bio */}
             {member.bio && (
-              <p className="text-[#5A4A2E] text-xs line-clamp-2 mb-3">
+              <p className="text-[#1A1A1A]/70 text-xs line-clamp-2 mb-3">
                 {member.bio}
               </p>
             )}
@@ -328,7 +328,7 @@ const MeetTheTeam: React.FC = () => {
                 </motion.h1>
 
                 <motion.p
-                  className="text-[#5A4A2E] text-lg max-w-2xl mx-auto mb-4"
+                  className="text-[#1A1A1A]/70 text-lg max-w-2xl mx-auto mb-4"
                   variants={fadeInUp}
                 >
                   A world-class team of professionals dedicated to delivering
@@ -337,7 +337,7 @@ const MeetTheTeam: React.FC = () => {
 
                 {/* Company Summary */}
                 <motion.p
-                  className="text-[#5A4A2E] text-sm max-w-3xl mx-auto mb-6 italic"
+                  className="text-[#1A1A1A]/70 text-sm max-w-3xl mx-auto mb-6 italic"
                   variants={fadeInUp}
                 >
                   {companySummary}
@@ -401,7 +401,7 @@ const MeetTheTeam: React.FC = () => {
                             <h2 className="text-[#1A1A1A] text-2xl font-semibold">
                             {deptName}
                           </h2>
-                          <p className="text-[#5A4A2E] text-sm">
+                          <p className="text-[#1A1A1A]/70 text-sm">
                             {total} member{total > 1 ? "s" : ""}
                           </p>
                         </div>
@@ -424,7 +424,7 @@ const MeetTheTeam: React.FC = () => {
                                 <h3 className="text-[#1A1A1A] text-lg font-semibold">
                                   {category}
                                 </h3>
-                                <p className="text-[#5A4A2E] text-sm">
+                                <p className="text-[#1A1A1A]/70 text-sm">
                                   {categoryMembers.length} member
                                   {categoryMembers.length > 1 ? "s" : ""}
                                 </p>
@@ -478,7 +478,7 @@ const MeetTheTeam: React.FC = () => {
                         <h2 className="text-[#1A1A1A] text-2xl font-semibold">
                           {deptName}
                         </h2>
-                        <p className="text-[#5A4A2E] text-sm">
+                        <p className="text-[#1A1A1A]/70 text-sm">
                           {visibleMembers.length} member{visibleMembers.length > 1 ? "s" : ""}
                         </p>
                       </div>
@@ -537,7 +537,7 @@ const MeetTheTeam: React.FC = () => {
                     Ready to Work With Our Experts?
                   </motion.h3>
                   <motion.p 
-                    className="text-[#5A4A2E] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
                     Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.

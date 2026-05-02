@@ -98,7 +98,7 @@ export function BrokerNotesWidget() {
       case "meeting":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"><Clock className="w-3 h-3 mr-1" />Meeting</Badge>;
       case "general":
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
     }
   };
 
@@ -138,7 +138,7 @@ export function BrokerNotesWidget() {
                 placeholder="Write your note here..."
                 value={newNote.content}
                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[80px]"
+                className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[80px]"
               />
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -164,7 +164,7 @@ export function BrokerNotesWidget() {
                     placeholder="Lead or property name"
                     value={newNote.linkedTo}
                     onChange={(e) => setNewNote({ ...newNote, linkedTo: e.target.value })}
-                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9"
+                    className="bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export function BrokerNotesWidget() {
               placeholder="Search notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] pl-10"
+              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 pl-10"
             />
           </div>
 
@@ -207,7 +207,7 @@ export function BrokerNotesWidget() {
                   <div className="flex items-start justify-between mb-2">
                     {getCategoryBadge(note.category)}
                     <div className="flex items-center gap-2">
-                      <span className="text-[#5A4A2E] text-xs">{getTimeAgo(note.createdAt)}</span>
+                      <span className="text-[#1A1A1A]/70 text-xs">{getTimeAgo(note.createdAt)}</span>
                       <Button
                         variant="dark-ghost"
                         size="icon"
@@ -243,7 +243,7 @@ export function BrokerNotesWidget() {
                 <p className="text-white/90 text-xs">Access all notes, AI summaries, and linked items</p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-[#5A4A2E]" />
+            <ChevronRight className="w-5 h-5 text-[#1A1A1A]/70" />
           </CardContent>
         </Card>
       </Link>

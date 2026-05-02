@@ -99,7 +99,7 @@ export const GuideCTA = ({
                 {title}
               </h3>
               
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 {description}
               </p>
               

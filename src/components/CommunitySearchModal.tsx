@@ -37,7 +37,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             placeholder="Search communities..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-12 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold rounded-xl"
+            className="pl-12 h-12 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-xl"
           />
           {searchQuery && (
             <button
@@ -58,7 +58,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             </div>
           ) : filteredCommunities?.length === 0 ? (
             <div className="text-center py-12">
-              <MapPin className="w-12 h-12 text-[#5A4A2E] mx-auto mb-3" />
+              <MapPin className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-3" />
               <p className="text-white/90">No communities found</p>
             </div>
           ) : (

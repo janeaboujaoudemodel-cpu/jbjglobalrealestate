@@ -221,7 +221,7 @@ export const AIMarketAnalyzer = ({
             </div>
             <div className="text-left">
               <p className="text-xs font-semibold text-[#1A1A1A]">JBJ AI Market Analysis</p>
-              <p className="text-[10px] text-[#5A4A2E]">
+              <p className="text-[10px] text-[#1A1A1A]/70">
                 {insights ? 'View insights' : 'Click to analyze'}
               </p>
             </div>
@@ -258,7 +258,7 @@ export const AIMarketAnalyzer = ({
           </div>
           <div>
             <h3 className="text-lg font-bold text-[#1A1A1A]">JBJ AI Market Intelligence</h3>
-            <p className="text-sm text-[#5A4A2E]">Powered by advanced market analysis</p>
+            <p className="text-sm text-[#1A1A1A]/70">Powered by advanced market analysis</p>
           </div>
         </div>
       </div>
@@ -279,10 +279,10 @@ export const AIMarketAnalyzer = ({
             </div>
             <div className="h-16 bg-gold/10 rounded-xl" />
           </div>
-          <p className="text-[#5A4A2E] text-sm text-center">Loading market intelligence for {name}...</p>
+          <p className="text-[#1A1A1A]/70 text-sm text-center">Loading market intelligence for {name}...</p>
           {isTimedOut && (
             <div className="text-center mt-4">
-              <p className="text-[#5A4A2E] text-sm mb-2">Taking longer than expected...</p>
+              <p className="text-[#1A1A1A]/70 text-sm mb-2">Taking longer than expected...</p>
               <Button variant="secondary" size="sm" onClick={fetchAnalysis}>
                 Retry Analysis
               </Button>
@@ -312,17 +312,17 @@ export const AIMarketAnalyzer = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <TrendingUp className={`w-6 h-6 mx-auto mb-2 ${getDemandColor(insights.supplyDemandScore)}`} />
-              <p className="text-xs text-[#5A4A2E] mb-1">Supply/Demand</p>
+              <p className="text-xs text-[#1A1A1A]/70 mb-1">Supply/Demand</p>
               <p className="text-lg font-bold text-[#1A1A1A]">{insights.supplyDemandLabel}</p>
             </div>
             <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <BarChart3 className={`w-6 h-6 mx-auto mb-2 ${getPriceComparisonColor(insights.priceComparisonPercent)}`} />
-              <p className="text-xs text-[#5A4A2E] mb-1">Price Position</p>
+              <p className="text-xs text-[#1A1A1A]/70 mb-1">Price Position</p>
               <p className="text-lg font-bold text-[#1A1A1A]">{insights.priceComparisonLabel}</p>
             </div>
             <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
               <Target className="w-6 h-6 mx-auto mb-2 text-gold" />
-              <p className="text-xs text-[#5A4A2E] mb-1">Area Avg/sqft</p>
+              <p className="text-xs text-[#1A1A1A]/70 mb-1">Area Avg/sqft</p>
               <p className="text-lg font-bold text-price-orange">AED {insights.avgAreaPriceSqft.toLocaleString()}</p>
             </div>
             <div className="p-4 bg-[#FDFBF7]/60 rounded-xl border border-gold/20 text-center">
@@ -331,7 +331,7 @@ export const AIMarketAnalyzer = ({
               ) : (
                 <TrendingUp className="w-6 h-6 mx-auto mb-2 text-orange-500" />
               )}
-              <p className="text-xs text-[#5A4A2E] mb-1">vs Market</p>
+              <p className="text-xs text-[#1A1A1A]/70 mb-1">vs Market</p>
               <p className="text-lg font-bold text-[#1A1A1A]">
                 {insights.priceComparisonPercent > 0 ? '+' : ''}{insights.priceComparisonPercent}%
               </p>
@@ -344,7 +344,7 @@ export const AIMarketAnalyzer = ({
               <Brain className="w-4 h-4 text-purple-600" />
               Executive Summary
             </h4>
-            <p className="text-[#5A4A2E] leading-relaxed">{insights.summary}</p>
+            <p className="text-[#1A1A1A]/70 leading-relaxed">{insights.summary}</p>
           </div>
 
           {/* Insights & Risks */}
@@ -396,7 +396,7 @@ export const AIMarketAnalyzer = ({
                     handleChatSubmit();
                   }}
                   disabled={isChatLoading}
-                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-[#5A4A2E] hover:border-gold hover:bg-gold/10 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-[#1A1A1A]/70 hover:border-gold hover:bg-gold/10 transition-colors"
                 >
                   {q}
                 </button>
@@ -414,7 +414,7 @@ export const AIMarketAnalyzer = ({
                     <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
                       msg.role === 'user' 
                         ? 'bg-purple-600 text-white' 
-                        : 'bg-[#FDFBF7] border border-gold/20 text-[#5A4A2E]'
+                        : 'bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A]/70'
                     }`}>
                       {msg.content}
                     </div>
@@ -453,9 +453,9 @@ export const AIMarketAnalyzer = ({
           {/* Disclaimer */}
           <div className="p-4 bg-[#F7F2EA]/50 rounded-xl border border-[#B89555]/30">
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-[#5A4A2E] mt-0.5 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-[#1A1A1A]/70 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs text-[#5A4A2E] leading-relaxed">
+                <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">
                   <strong>AI Disclosure:</strong> This analysis is generated by artificial intelligence based on market data patterns. 
                   It does not constitute financial or investment advice.{" "}
                   <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

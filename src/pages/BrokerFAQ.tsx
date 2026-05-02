@@ -257,7 +257,7 @@ const BrokerFAQ = () => {
                           <AccordionTrigger className="text-[#1A1A1A] text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}
                           </AccordionTrigger>
-                          <AccordionContent className="text-[#5A4A2E] pb-5 leading-relaxed whitespace-pre-line">
+                          <AccordionContent className="text-[#1A1A1A]/70 pb-5 leading-relaxed whitespace-pre-line">
                             {faq.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -288,7 +288,7 @@ const BrokerFAQ = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
                 Still Have Questions?
               </h2>
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto leading-relaxed">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto leading-relaxed">
                 Our team is here to help. Whether you're seeking clarity on professional standards or ready to elevate your practice, 
                 we're here to provide guidance.
               </p>
@@ -322,7 +322,7 @@ const BrokerFAQ = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
-              <p className="text-center text-[#5A4A2E] text-sm leading-relaxed">
+              <p className="text-center text-[#1A1A1A]/70 text-sm leading-relaxed">
                 <span className="text-[#1A1A1A] font-medium">Disclaimer:</span> This FAQ is educational in nature 
                 and does not replace regulatory obligations. Brokers remain responsible for ensuring full compliance 
                 with UAE laws and licensing requirements at all times.

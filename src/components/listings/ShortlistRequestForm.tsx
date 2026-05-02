@@ -128,7 +128,7 @@ export const ShortlistRequestForm = ({
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
         </h3>
-        <p className="text-[#5A4A2E]">
+        <p className="text-[#1A1A1A]/70">
           Our team will curate a personalized shortlist and reach out within 24 hours.
         </p>
       </motion.div>
@@ -151,7 +151,7 @@ export const ShortlistRequestForm = ({
         <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
           Get a <span className="text-gold">Curated Shortlist</span>
         </h3>
-        <p className="text-[#5A4A2E] text-sm mt-2">
+        <p className="text-[#1A1A1A]/70 text-sm mt-2">
           Tell us what you're looking for and we'll send you matching properties.
         </p>
       </div>
@@ -162,7 +162,7 @@ export const ShortlistRequestForm = ({
           placeholder="Full Name *"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           required
         />
         
@@ -171,7 +171,7 @@ export const ShortlistRequestForm = ({
           placeholder="Phone Number *"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           required
         />
 
@@ -180,13 +180,13 @@ export const ShortlistRequestForm = ({
             placeholder={transactionType === 'buy' ? 'Budget (AED)' : 'Max Rent (AED)'}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           />
           <Input
             placeholder="Bedrooms (e.g. 2-3)"
             value={formData.bedrooms}
             onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+            className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
           />
         </div>
 
@@ -194,14 +194,14 @@ export const ShortlistRequestForm = ({
           placeholder="Preferred Areas (e.g. Downtown, Marina)"
           value={formData.preferredAreas}
           onChange={(e) => setFormData({ ...formData, preferredAreas: e.target.value })}
-          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+          className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
         />
 
         <Select
           value={formData.timeline}
           onValueChange={(value) => setFormData({ ...formData, timeline: value as LeadTimeline })}
         >
-          <SelectTrigger className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#5A4A2E]">
+          <SelectTrigger className="h-12 bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A]/70">
             <SelectValue placeholder={transactionType === 'buy' ? 'When do you want to buy?' : 'When do you need to move?'} />
           </SelectTrigger>
           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30">

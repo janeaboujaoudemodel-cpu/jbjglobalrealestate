@@ -482,7 +482,7 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 1: Fixes ── */}
                         <TabsContent value="fixes">
                           {toolRecs.length === 0 ? (
-                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No pending recommendations for this tool.</div>
+                            <div className="text-center py-8 text-[#1A1A1A]/70 text-sm">No pending recommendations for this tool.</div>
                           ) : (
                             <div className="space-y-3">
                               {toolRecs.map(rec => (
@@ -522,7 +522,7 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 2: Version History ── */}
                         <TabsContent value="history">
                           {toolVersions.length === 0 ? (
-                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No version history yet.</div>
+                            <div className="text-center py-8 text-[#1A1A1A]/70 text-sm">No version history yet.</div>
                           ) : (
                             <div className="space-y-2">
                               {toolVersions.map(v => (
@@ -547,7 +547,7 @@ export default function AIToolsControlPanel() {
                                     <div className="flex items-center gap-1 mt-1">
                                       {v.test_result === "pass" ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <XCircle className="w-3 h-3 text-red-400" />}
                                       <span className="text-xs text-white/90">Test: {v.test_result}</span>
-                                      {v.test_notes && <span className="text-xs text-[#5A4A2E]"> — {v.test_notes}</span>}
+                                      {v.test_notes && <span className="text-xs text-[#1A1A1A]/70"> — {v.test_notes}</span>}
                                     </div>
                                   )}
                                   {/* Before/After */}
@@ -576,7 +576,7 @@ export default function AIToolsControlPanel() {
                         {/* ── Tab 3: Test Logs ── */}
                         <TabsContent value="tests">
                           {toolTestLogs.length === 0 ? (
-                            <div className="text-center py-8 text-[#5A4A2E] text-sm">No test logs yet.</div>
+                            <div className="text-center py-8 text-[#1A1A1A]/70 text-sm">No test logs yet.</div>
                           ) : (
                             <div className="space-y-2">
                               {toolTestLogs.map(t => (
@@ -589,8 +589,8 @@ export default function AIToolsControlPanel() {
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
-                                    {t.tool_url && <code className="text-[10px] text-[#5A4A2E] font-mono">{t.tool_url}</code>}
-                                    <span className="text-[10px] text-[#5A4A2E]">{new Date(t.created_at).toLocaleString()}</span>
+                                    {t.tool_url && <code className="text-[10px] text-[#1A1A1A]/70 font-mono">{t.tool_url}</code>}
+                                    <span className="text-[10px] text-[#1A1A1A]/70">{new Date(t.created_at).toLocaleString()}</span>
                                   </div>
                                 </div>
                               ))}
@@ -631,7 +631,7 @@ function FixCard({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-white">{rec.title}</span>
             {rec.impact_level && (
-              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/40"}`}>
+              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/40"}`}>
                 {rec.impact_level}
               </Badge>
             )}

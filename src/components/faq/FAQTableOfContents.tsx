@@ -201,9 +201,9 @@ export const FAQTableOfContents = ({
           aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
         >
           {isMinimized ? (
-            <ChevronDown className="w-4 h-4 text-[#5A4A2E]" />
+            <ChevronDown className="w-4 h-4 text-[#1A1A1A]/70" />
           ) : (
-            <ChevronUp className="w-4 h-4 text-[#5A4A2E]" />
+            <ChevronUp className="w-4 h-4 text-[#1A1A1A]/70" />
           )}
         </button>
       </div>
@@ -220,7 +220,7 @@ export const FAQTableOfContents = ({
           >
             {/* Search Bar */}
             <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
               <Input
                 ref={searchInputRef}
                 type="text"
@@ -239,7 +239,7 @@ export const FAQTableOfContents = ({
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFE6D6] hover:bg-[#EFE6D6] flex items-center justify-center transition-colors"
                 >
-                  <X className="w-3 h-3 text-[#5A4A2E]" />
+                  <X className="w-3 h-3 text-[#1A1A1A]/70" />
                 </button>
               )}
             </div>
@@ -247,13 +247,13 @@ export const FAQTableOfContents = ({
             {/* Search Results */}
             {searchResults.length > 0 && (
               <div className="mb-4 p-2 bg-gold/5 rounded-lg border border-gold/20">
-                <p className="text-xs text-[#5A4A2E] mb-2">{searchResults.length} result(s) found:</p>
+                <p className="text-xs text-[#1A1A1A]/70 mb-2">{searchResults.length} result(s) found:</p>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {searchResults.map((result, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleResultClick(result.categoryIndex, result.questionIndex)}
-                      className="w-full text-left text-sm text-[#5A4A2E] hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
+                      className="w-full text-left text-sm text-[#1A1A1A]/70 hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
                     >
                       {result.question}
                     </button>
@@ -269,7 +269,7 @@ export const FAQTableOfContents = ({
                   <HelpCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-[#1A1A1A]">Question not found</p>
-                    <p className="text-xs text-[#5A4A2E] mt-1">
+                    <p className="text-xs text-[#1A1A1A]/70 mt-1">
                       Would you like to submit this question? We'll add it to our FAQ and contact you with the answer.
                     </p>
                   </div>
@@ -340,7 +340,7 @@ export const FAQTableOfContents = ({
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
                       ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-gold/40"
-                      : "text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <category.icon className={cn(

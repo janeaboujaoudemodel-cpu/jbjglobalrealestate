@@ -251,7 +251,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
         </div>
       ) : filteredProjects.length === 0 ? (
         <div className="text-center py-12">
-          <FolderOpen className="w-16 h-16 text-[#5A4A2E] mx-auto mb-4" />
+          <FolderOpen className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
           <h4 className="text-white font-medium mb-2">No projects found</h4>
           <p className="text-white/90 text-sm mb-4">
             {searchQuery ? 'Try a different search term' : 'Create your first design project'}
@@ -291,7 +291,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <FolderOpen className="w-8 h-8 text-[#5A4A2E]" />
+                            <FolderOpen className="w-8 h-8 text-[#1A1A1A]/70" />
                           </div>
                         )}
                         <DropdownMenu>
@@ -339,7 +339,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <FolderOpen className="w-5 h-5 text-[#5A4A2E]" />
+                            <FolderOpen className="w-5 h-5 text-[#1A1A1A]/70" />
                           </div>
                         )}
                       </div>

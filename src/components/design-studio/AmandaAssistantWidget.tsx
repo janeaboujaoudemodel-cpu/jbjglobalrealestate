@@ -187,7 +187,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               className="overflow-hidden"
             >
               <div className="p-4 border-b border-gold/10">
-                <div className="flex items-center gap-2 text-sm text-[#5A4A2E]">
+                <div className="flex items-center gap-2 text-sm text-[#1A1A1A]/70">
                   <Sparkles className="w-4 h-4 text-gold" />
                   <span>Currently monitoring: <strong className="text-[#1A1A1A]">{toolName}</strong></span>
                 </div>
@@ -207,7 +207,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                       className={`p-3 rounded-lg text-sm ${
                         note.type === 'task' 
                           ? 'bg-blue-50 border border-blue-100 text-blue-800' 
-                          : 'bg-[#F7F2EA] border border-[#B89555]/30 text-[#5A4A2E]'
+                          : 'bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70'
                       }`}
                     >
                       <p>{note.content}</p>
@@ -254,7 +254,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
         {/* Quick status bar when collapsed */}
         {!isExpanded && (
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2 text-[#5A4A2E]">
+            <div className="flex items-center gap-2 text-[#1A1A1A]/70">
               <NotebookPen className="w-4 h-4 text-gold" />
               <span>Notes: {notes.length}</span>
             </div>

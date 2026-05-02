@@ -157,7 +157,7 @@ const EmployeeManagementHub: React.FC = () => {
       completed: { color: 'bg-green-500/20 text-green-700 border-green-500/30', label: 'Completed' },
       rejected: { color: 'bg-red-500/20 text-red-700 border-red-500/30', label: 'Rejected' }
     };
-    const config = statusConfig[status] || { color: 'bg-[#B89555]/20 text-[#5A4A2E]', label: status };
+    const config = statusConfig[status] || { color: 'bg-[#B89555]/20 text-[#1A1A1A]/70', label: status };
     return <Badge className={`${config.color} border`}>{config.label}</Badge>;
   };
 
@@ -177,7 +177,7 @@ const EmployeeManagementHub: React.FC = () => {
             <Shield className="w-10 h-10 text-gold" />
           </div>
           <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">Access Restricted</h1>
-          <p className="text-[#5A4A2E] mb-8">
+          <p className="text-[#1A1A1A]/70 mb-8">
             This area is restricted to HR, IT Department personnel, and administrators.
           </p>
           <Button variant="primary" onClick={() => navigate('/crm')}>
@@ -208,7 +208,7 @@ const EmployeeManagementHub: React.FC = () => {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-[#1A1A1A]">Employee Management Hub</h1>
-                  <p className="text-sm text-[#5A4A2E]">HR + IT Unified Onboarding & Audit System</p>
+                  <p className="text-sm text-[#1A1A1A]/70">HR + IT Unified Onboarding & Audit System</p>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Clock className="w-5 h-5 text-amber-600" />
                 <span className="text-2xl font-bold text-amber-700">{stats.pendingHR}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">Pending HR</p>
+              <p className="text-xs text-[#1A1A1A]/70">Pending HR</p>
             </CardContent>
           </Card>
 
@@ -245,7 +245,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Monitor className="w-5 h-5 text-purple-600" />
                 <span className="text-2xl font-bold text-purple-700">{stats.pendingIT}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">IT Queue</p>
+              <p className="text-xs text-[#1A1A1A]/70">IT Queue</p>
             </CardContent>
           </Card>
 
@@ -255,7 +255,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Zap className="w-5 h-5 text-blue-600" />
                 <span className="text-2xl font-bold text-blue-700">{stats.inProgress}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">In Progress</p>
+              <p className="text-xs text-[#1A1A1A]/70">In Progress</p>
             </CardContent>
           </Card>
 
@@ -265,7 +265,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <span className="text-2xl font-bold text-green-700">{stats.completedThisMonth}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">This Month</p>
+              <p className="text-xs text-[#1A1A1A]/70">This Month</p>
             </CardContent>
           </Card>
 
@@ -275,7 +275,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <Users className="w-5 h-5 text-gold" />
                 <span className="text-2xl font-bold text-[#1A1A1A]">{stats.activeEmployees}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">Active Staff</p>
+              <p className="text-xs text-[#1A1A1A]/70">Active Staff</p>
             </CardContent>
           </Card>
 
@@ -285,7 +285,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <AlertCircle className="w-5 h-5 text-orange-600" />
                 <span className="text-2xl font-bold text-orange-700">{stats.onProbation}</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">On Probation</p>
+              <p className="text-xs text-[#1A1A1A]/70">On Probation</p>
             </CardContent>
           </Card>
 
@@ -295,7 +295,7 @@ const EmployeeManagementHub: React.FC = () => {
                 <TrendingUp className="w-5 h-5 text-cyan-600" />
                 <span className="text-2xl font-bold text-cyan-700">{stats.avgOnboardingDays}d</span>
               </div>
-              <p className="text-xs text-[#5A4A2E]">Avg Onboard</p>
+              <p className="text-xs text-[#1A1A1A]/70">Avg Onboard</p>
             </CardContent>
           </Card>
         </div>
@@ -335,7 +335,7 @@ const EmployeeManagementHub: React.FC = () => {
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] w-64 placeholder:text-[#5A4A2E]"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] w-64 placeholder:text-[#1A1A1A]/70"
                 />
               </div>
             </div>
@@ -366,19 +366,19 @@ const EmployeeManagementHub: React.FC = () => {
                             </div>
                             <div>
                               <p className="font-medium text-[#1A1A1A]">{item.full_name}</p>
-                              <p className="text-xs text-[#5A4A2E]">{item.department}</p>
+                              <p className="text-xs text-[#1A1A1A]/70">{item.department}</p>
                             </div>
                           </div>
                           <div className="text-right">
                             {getStatusBadge(item.status)}
-                            <p className="text-xs text-[#5A4A2E] mt-1">
+                            <p className="text-xs text-[#1A1A1A]/70 mt-1">
                               {new Date(item.updated_at).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
                       ))}
                       {recentActivity.length === 0 && (
-                        <p className="text-center text-[#5A4A2E] py-8">No recent activity</p>
+                        <p className="text-center text-[#1A1A1A]/70 py-8">No recent activity</p>
                       )}
                     </div>
                   </ScrollArea>
@@ -436,7 +436,7 @@ const EmployeeManagementHub: React.FC = () => {
                     <Briefcase className="w-5 h-5 text-gold" />
                     Onboarding Pipeline
                   </CardTitle>
-                  <CardDescription className="text-[#5A4A2E]">
+                  <CardDescription className="text-[#1A1A1A]/70">
                     Visual workflow from application to fully onboarded employee
                   </CardDescription>
                 </CardHeader>
@@ -454,7 +454,7 @@ const EmployeeManagementHub: React.FC = () => {
                           <div className={`w-12 h-12 mx-auto rounded-full ${stage.color} text-white flex items-center justify-center text-lg font-bold`}>
                             {stage.count}
                           </div>
-                          <p className="text-xs text-[#5A4A2E] mt-2">{stage.label}</p>
+                          <p className="text-xs text-[#1A1A1A]/70 mt-2">{stage.label}</p>
                         </div>
                         {idx < 4 && (
                           <div className="w-8 h-0.5 bg-gold/30" />

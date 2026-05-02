@@ -249,7 +249,7 @@ const ResaleProperties = () => {
                 placeholder="Search by property name, project, area..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-lg text-base shadow-sm w-full"
+                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg text-base shadow-sm w-full"
               />
             </div>
 

@@ -284,7 +284,7 @@ const BriefingRequestForm = ({ representativeId, developerName }: BriefingReques
             className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
             onClick={() => fileInputRef.current?.click()}
           >
-            <Upload className="w-8 h-8 mx-auto text-[#5A4A2E] mb-2" />
+            <Upload className="w-8 h-8 mx-auto text-[#1A1A1A]/70 mb-2" />
             <p className="text-sm font-medium text-foreground">Upload brochures, fact sheets, renders</p>
             <p className="text-xs text-muted-foreground mt-1">PDF, images, presentations</p>
             <input ref={fileInputRef} type="file" className="hidden" multiple

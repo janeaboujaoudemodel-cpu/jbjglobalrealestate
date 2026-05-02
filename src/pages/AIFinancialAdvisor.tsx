@@ -539,7 +539,7 @@ const AIFinancialAdvisor = () => {
             ) : (
               <Card className="bg-zinc-900/50 border-[#1A1A1A] h-full min-h-[500px] flex items-center justify-center">
                 <CardContent className="text-center">
-                  <Calculator className="w-16 h-16 text-[#5A4A2E] mx-auto mb-4" />
+                  <Calculator className="w-16 h-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                   <h3 className="text-white text-lg font-medium mb-2">Enter Your Financial Details</h3>
                   <p className="text-white/90 text-sm max-w-md">
                     Fill in your income and expenses on the left, then click "Generate AI Analysis" 

@@ -438,7 +438,7 @@ export default function StampProjectsDashboard() {
                     </div>
                     <div className="h-32 rounded-t-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border-b border-[hsl(var(--border))]">
                       <div className="w-20 h-20 rounded-full border-2 border-[#B89555]/30 flex items-center justify-center opacity-50">
-                        <p className="text-[#5A4A2E] font-bold text-lg">{project.company_name.slice(0,2).toUpperCase()}</p>
+                        <p className="text-[#1A1A1A]/70 font-bold text-lg">{project.company_name.slice(0,2).toUpperCase()}</p>
                       </div>
                     </div>
                     <div className="p-4 space-y-3">

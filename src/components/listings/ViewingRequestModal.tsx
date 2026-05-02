@@ -123,11 +123,11 @@ export const ViewingRequestModal = ({
                   <h3 className="text-lg font-semibold text-[#1A1A1A]">
                     Book a Viewing
                   </h3>
-                  <p className="text-sm text-[#5A4A2E] truncate max-w-[280px]">{listingName}</p>
+                  <p className="text-sm text-[#1A1A1A]/70 truncate max-w-[280px]">{listingName}</p>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="w-8 h-8 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center text-[#5A4A2E] hover:text-[#1A1A1A] hover:border-[#B89555]/30 transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:border-[#B89555]/30 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -141,7 +141,7 @@ export const ViewingRequestModal = ({
                       <CheckCircle className="w-8 h-8 text-gold" />
                     </div>
                     <h4 className="text-xl font-semibold text-[#1A1A1A] mb-2">Request Submitted!</h4>
-                    <p className="text-[#5A4A2E] mb-6">
+                    <p className="text-[#1A1A1A]/70 mb-6">
                       Our team will confirm your viewing appointment within 24 hours.
                     </p>
                     <Button onClick={handleClose} variant="primary">
@@ -177,7 +177,7 @@ export const ViewingRequestModal = ({
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                         <Input
                           type="date"
                           value={formData.preferredDate}
@@ -187,7 +187,7 @@ export const ViewingRequestModal = ({
                         />
                       </div>
                       <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                         <Input
                           placeholder="Time (e.g. 2pm)"
                           value={formData.preferredTime}
@@ -202,7 +202,7 @@ export const ViewingRequestModal = ({
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={3}
-                      className="w-full px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] rounded-lg resize-none focus:outline-none focus:border-gold"
+                      className="w-full px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg resize-none focus:outline-none focus:border-gold"
                     />
 
                     <div className="flex items-start gap-3">

@@ -646,7 +646,7 @@ const AIHub = () => {
                     </Badge>
                   )}
                 </div>
-                <p className="text-[#5A4A2E] text-sm line-clamp-2">{tool.description}</p>
+                <p className="text-[#1A1A1A]/70 text-sm line-clamp-2">{tool.description}</p>
               </div>
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <ArrowUpRight className="w-5 h-5 text-gold opacity-60 group-hover:opacity-100 transition-all" />
@@ -835,7 +835,7 @@ const AIHub = () => {
                       <benefit.icon className="w-6 h-6 text-gold" />
                     </div>
                     <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1">{benefit.title}</h3>
-                    <p className="text-[#5A4A2E] text-xs">{benefit.desc}</p>
+                    <p className="text-[#1A1A1A]/70 text-xs">{benefit.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -864,7 +864,7 @@ const AIHub = () => {
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Discover All <span className="text-sky-300">Free AI Tools</span>
                 </h2>
-                <p className="text-[#5A4A2E] max-w-2xl mx-auto">
+                <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
                   All tools in one place — each with its unique theme. Scroll down to see them organized by category.
                 </p>
               </motion.div>
@@ -877,7 +877,7 @@ const AIHub = () => {
                     value={toolSearch}
                     onChange={(e) => setToolSearch(e.target.value)}
                     placeholder="Search tools..."
-                    className="w-full px-4 py-3 rounded-xl bg-[#1A1A1A]/60 border border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold/50 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-[#1A1A1A]/60 border border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold/50 focus:outline-none transition-colors"
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -1022,7 +1022,7 @@ const AIHub = () => {
               <div className="bg-gradient-to-br from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
                 <GraduationCap className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
                 <h3 className="text-xl font-bold text-white mb-2">JBJ Broker Hub</h3>
-                <p className="text-[#5A4A2E] text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-4">Training, education, books, certifications, listing portal, and CRM tools for brokers.</p>
                 <button 
                   onClick={() => navigate('/broker-hub')}
                   className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white hover:opacity-90 transition-all"
@@ -1035,7 +1035,7 @@ const AIHub = () => {
               <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 border border-emerald-500/20 rounded-2xl p-8 text-center">
                 <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
                 <h3 className="text-xl font-bold text-white mb-2">JBJ Investor Hub</h3>
-                <p className="text-[#5A4A2E] text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
+                <p className="text-[#1A1A1A]/70 text-sm mb-4">Portfolio, market intelligence, guides, books, and investment tools for investors.</p>
                 <button 
                   onClick={() => navigate('/investor-hub')}
                   className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:opacity-90 transition-all"
@@ -1063,7 +1063,7 @@ const AIHub = () => {
                     <>Start Using <span className="text-gold">All Free Tools</span></>
                   )}
                 </h2>
-                <p className="text-[#5A4A2E] mb-6 max-w-lg mx-auto">
+                <p className="text-[#1A1A1A]/70 mb-6 max-w-lg mx-auto">
                   30+ free tools for property analysis, corporate documents, creative design, and productivity.
                 </p>
                 {user ? (

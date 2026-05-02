@@ -420,7 +420,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                     Online
                   </Badge>
                 </h3>
-                <p className="text-[#5A4A2E] text-xs">Your Personal Executive Assistant</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Your Personal Executive Assistant</p>
               </div>
             </>
           )}
@@ -429,7 +429,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-[#1A1A1A]/70 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={handleNewChat}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -438,7 +438,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-[#1A1A1A]/70 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={() => setShowHistoryDialog(true)}
           >
             <History className="w-3.5 h-3.5" />
@@ -452,7 +452,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-[#5A4A2E] hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
+            className="text-xs text-[#1A1A1A]/70 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
             onClick={handleSummarize}
             disabled={isSummarizing || localMessages.length < 3}
             title="Summarize & save chat"
@@ -545,7 +545,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="w-4 h-4 text-[hsl(var(--gold))]" />
-              <span className="text-xs text-[#5A4A2E] font-medium">Quick Actions & Suggested Prompts</span>
+              <span className="text-xs text-[#1A1A1A]/70 font-medium">Quick Actions & Suggested Prompts</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
@@ -575,7 +575,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showCommands && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3">
-            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
+            <p className="text-xs text-[#1A1A1A]/70 mb-2 flex items-center gap-2">
               <Command className="w-3 h-3 text-[hsl(var(--gold))]" />
               Available Commands
             </p>
@@ -586,7 +586,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   <cmd.icon className="w-4 h-4 text-[hsl(var(--gold))] mt-0.5" />
                   <div>
                     <p className="text-sm text-[#1A1A1A] group-hover:text-[hsl(var(--gold))] transition-colors">{cmd.label}</p>
-                    <p className="text-xs text-[#5A4A2E]">{cmd.description}</p>
+                    <p className="text-xs text-[#1A1A1A]/70">{cmd.description}</p>
                   </div>
                 </button>
               ))}
@@ -597,7 +597,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showMentions && filteredMembers.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3 max-h-48 overflow-y-auto">
-            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
+            <p className="text-xs text-[#1A1A1A]/70 mb-2 flex items-center gap-2">
               <AtSign className="w-3 h-3 text-[hsl(var(--gold))]" />
               Mention Team Member
             </p>
@@ -611,7 +611,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   </div>
                   <div className="text-left flex-1">
                     <p className="text-sm text-[#1A1A1A]">{member.name}</p>
-                    <p className="text-xs text-[#5A4A2E]">{member.role}</p>
+                    <p className="text-xs text-[#1A1A1A]/70">{member.role}</p>
                   </div>
                   {member.isAI && <Sparkles className="w-4 h-4 text-[hsl(var(--gold))] flex-shrink-0" />}
                 </button>
@@ -624,7 +624,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
       {/* Pending files */}
       {pendingFiles.length > 0 && (
         <div className="px-4 py-2 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-          <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-2">
+          <p className="text-xs text-[#1A1A1A]/70 mb-2 flex items-center gap-2">
             <Upload className="w-3 h-3 text-[hsl(var(--gold))]" /> Files ready to send ({pendingFiles.length})
           </p>
           <div className="flex flex-wrap gap-2">
@@ -632,8 +632,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               <div key={file.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[hsl(var(--gold))]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
                 {getFileIcon(file.type)}
                 <span className="text-[#1A1A1A] truncate max-w-[120px]">{file.name}</span>
-                <span className="text-[#5A4A2E]">{formatFileSize(file.size)}</span>
-                <button onClick={() => removePendingFile(file.id)} className="text-[#5A4A2E] hover:text-red-500 transition-colors">
+                <span className="text-[#1A1A1A]/70">{formatFileSize(file.size)}</span>
+                <button onClick={() => removePendingFile(file.id)} className="text-[#1A1A1A]/70 hover:text-red-500 transition-colors">
                   <X className="w-3 h-3" />
                 </button>
               </div>
@@ -656,10 +656,10 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <div className="relative flex-1">
             <Input ref={inputRef} value={input} onChange={handleInputChange} onKeyPress={handleKeyPress}
               placeholder="Type your message or command..."
-              className="flex-1 bg-[#FDFBF7] border-2 border-[hsl(var(--gold))]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-[hsl(var(--gold))] pr-10 h-11"
+              className="flex-1 bg-[#FDFBF7] border-2 border-[hsl(var(--gold))]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[hsl(var(--gold))] pr-10 h-11"
               disabled={isLoading} />
             <button onClick={() => setShowCommands(!showCommands)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4A2E] hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
               <Command className="w-4 h-4" />
             </button>
           </div>
@@ -668,7 +668,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </Button>
         </div>
-        <p className="text-[#5A4A2E] text-xs text-center mt-3 opacity-80">
+        <p className="text-[#1A1A1A]/70 text-xs text-center mt-3 opacity-80">
           Use <span className="text-[hsl(var(--gold))] font-semibold">@name</span> to mention | <span className="text-[hsl(var(--gold))] font-semibold">/command</span> for actions | <span className="text-[hsl(var(--gold))] font-semibold">Attach files</span> (no size limit)
         </p>
       </div>
@@ -694,7 +694,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   </>
                 ) : (
                   <>
-                    <Button variant="ghost" size="sm" className="h-7 text-xs text-[#5A4A2E]" onClick={() => setSelectMode(true)}>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-[#1A1A1A]/70" onClick={() => setSelectMode(true)}>
                       <CheckSquare className="w-3 h-3 mr-1" /> Select
                     </Button>
                     {sessions.length > 0 && (
@@ -712,8 +712,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {sessions.length === 0 ? (
               <div className="text-center py-12">
                 <MessageSquare className="w-10 h-10 text-[hsl(var(--gold))]/30 mx-auto mb-3" />
-                <p className="text-sm text-[#5A4A2E]">No chat history yet</p>
-                <p className="text-xs text-[#5A4A2E] mt-1">Start a conversation with Amanda</p>
+                <p className="text-sm text-[#1A1A1A]/70">No chat history yet</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">Start a conversation with Amanda</p>
               </div>
             ) : (
               <div className="space-y-2 pb-4">
@@ -746,11 +746,11 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       </div>
                     )}
                     <MessageSquare className={`w-4 h-4 flex-shrink-0 ${
-                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-[#5A4A2E]'
+                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-[#1A1A1A]/70'
                     }`} />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-[#1A1A1A] truncate">{session.title}</p>
-                      <p className="text-[10px] text-[#5A4A2E] flex items-center gap-1 mt-0.5">
+                      <p className="text-[10px] text-[#1A1A1A]/70 flex items-center gap-1 mt-0.5">
                         <Clock className="w-2.5 h-2.5" />
                         {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
                         {session.message_count > 0 && (
@@ -762,7 +762,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-[#5A4A2E] hover:text-red-500 flex-shrink-0"
+                        className="h-7 w-7 text-[#1A1A1A]/70 hover:text-red-500 flex-shrink-0"
                         onClick={(e) => { e.stopPropagation(); deleteSession(session.id); }}
                       >
                         <Trash2 className="w-3.5 h-3.5" />

@@ -38,7 +38,7 @@ const TrustAndCompliance = () => {
           <li><strong className="text-[#1A1A1A]">Consumer Protection Frameworks</strong> — Adherence to fair trading practices.</li>
           <li><strong className="text-[#1A1A1A]">Data Protection Compliance</strong> — Alignment with UAE Federal Decree-Law No. 45 of 2021.</li>
         </ul>
-        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#5A4A2E] text-sm">Final regulatory authority rests with the relevant UAE government bodies.</p></div>
+        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#1A1A1A]/70 text-sm">Final regulatory authority rests with the relevant UAE government bodies.</p></div>
       </>
     )},
     { id: "due-diligence", num: 2, title: "Due Diligence Standards", content: (
@@ -63,14 +63,14 @@ const TrustAndCompliance = () => {
       <>
         <p>Your data is handled with the highest standards:</p>
         <ul className="list-disc pl-6 space-y-2 mt-4"><li>Encrypted communication channels</li><li>Controlled access to personal and financial data</li><li>Role-based permissions</li><li>No resale or commercial exploitation of personal data</li></ul>
-        <p className="text-sm text-[#5A4A2E] mt-4">For full details, refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
+        <p className="text-sm text-[#1A1A1A]/70 mt-4">For full details, refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
       </>
     )},
     { id: "professional-network", num: 5, title: "Professional Network", content: (
       <>
         <p>We work with a vetted network of licensed professionals:</p>
         <ul className="list-disc pl-6 space-y-2 mt-4"><li>Licensed real estate developers</li><li>Qualified legal advisors</li><li>Certified valuation experts</li><li>Government-approved immigration partners</li></ul>
-        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#5A4A2E] text-sm">Partner services are provided by independent licensed professionals who contract directly with clients.</p></div>
+        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-[#1A1A1A]/70 text-sm">Partner services are provided by independent licensed professionals who contract directly with clients.</p></div>
       </>
     )},
     { id: "audit-monitoring", num: 6, title: "Continuous Audit & Monitoring", content: (
@@ -113,7 +113,7 @@ const TrustAndCompliance = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Institutional Standards. Transparent Operations. Verified Processes.
               </p>
-              <p className="text-[#5A4A2E] text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed">
                 We operate with full commitment to transparency, regulatory alignment, and professional standards.
               </p>
             </motion.div>
@@ -127,7 +127,7 @@ const TrustAndCompliance = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-[#5A4A2E] hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-[#1A1A1A]/70 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -136,22 +136,22 @@ const TrustAndCompliance = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-[#5A4A2E] hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
             {sections.map((s, i) => (
               <div key={s.id}>
                 <section id={s.id} className="scroll-mt-8">
                   <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">{s.num}.</span>{s.title}</h2>
-                  <CCard className="space-y-4 text-[#5A4A2E] leading-relaxed">{s.content}</CCard>
+                  <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">{s.content}</CCard>
                 </section>
                 {i < sections.length - 1 && <GoldDivider />}
               </div>
             ))}
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-[#5A4A2E] text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-[#1A1A1A]/70 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-[#5A4A2E]">|</span>
+                <span className="text-[#1A1A1A]/70">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

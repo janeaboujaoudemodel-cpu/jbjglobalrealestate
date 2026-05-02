@@ -159,7 +159,7 @@ export default function JBJBrokerDashboard() {
                 <h1 className="text-[#1A1A1A] text-xl font-bold tracking-wide">
                   My Leads
                 </h1>
-                <p className="text-[#5A4A2E] text-sm">
+                <p className="text-[#1A1A1A]/70 text-sm">
                   Manage and contact your assigned leads
                 </p>
               </div>
@@ -213,7 +213,7 @@ export default function JBJBrokerDashboard() {
                   <Users className="h-5 w-5 text-[#1A1A1A]" />
                 </div>
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Total Leads</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Total Leads</p>
                   <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.totalLeads}
                   </p>
@@ -229,7 +229,7 @@ export default function JBJBrokerDashboard() {
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Contacted Today</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Contacted Today</p>
                   <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.contactedToday}
                   </p>
@@ -245,7 +245,7 @@ export default function JBJBrokerDashboard() {
                   <Clock className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Pending Follow-up</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Pending Follow-up</p>
                   <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.pendingFollowUp}
                   </p>
@@ -261,7 +261,7 @@ export default function JBJBrokerDashboard() {
                   <AlertCircle className="h-5 w-5 text-gold" />
                 </div>
                 <div>
-                  <p className="text-[#5A4A2E] text-xs">Converted</p>
+                  <p className="text-[#1A1A1A]/70 text-xs">Converted</p>
                   <p className="text-2xl font-bold text-[#1A1A1A]">
                     {stats.converted}
                   </p>
@@ -274,7 +274,7 @@ export default function JBJBrokerDashboard() {
         {/* Search */}
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
             <Input
               placeholder="Search leads..."
               value={searchQuery}
@@ -322,11 +322,11 @@ export default function JBJBrokerDashboard() {
 
           {filteredLeads.length === 0 && (
             <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
-              <Users className="h-16 w-16 text-[#5A4A2E] mb-4" />
+              <Users className="h-16 w-16 text-[#1A1A1A]/70 mb-4" />
               <h3 className="text-[#1A1A1A] text-lg font-medium mb-2">
                 No Leads Found
               </h3>
-              <p className="text-[#5A4A2E]">
+              <p className="text-[#1A1A1A]/70">
                 {searchQuery
                   ? "Try adjusting your search or filters"
                   : "No leads assigned to you yet"}

@@ -50,7 +50,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
           <h2 className="text-xl md:text-2xl font-bold text-[#1A1A1A]">
             Developers in {areaName}
           </h2>
-          <span className="text-[#5A4A2E] text-sm">({developers.length})</span>
+          <span className="text-[#1A1A1A]/70 text-sm">({developers.length})</span>
         </div>
 
         <div className="flex flex-wrap gap-3">
@@ -73,7 +73,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
               ) : (
                 <div className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border border-gold/20 rounded-xl">
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-8 h-8" renderFallback />
-                  <span className="text-sm font-medium text-[#5A4A2E]">{dev.name}</span>
+                  <span className="text-sm font-medium text-[#1A1A1A]/70">{dev.name}</span>
                 </div>
               )}
             </motion.div>

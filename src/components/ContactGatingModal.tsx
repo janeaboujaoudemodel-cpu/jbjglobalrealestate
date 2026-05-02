@@ -248,7 +248,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             {step === 'verification' && 'Verify Your Email'}
             {step === 'complete' && 'Welcome!'}
           </DialogTitle>
-          <DialogDescription className="text-[#5A4A2E]">
+          <DialogDescription className="text-[#1A1A1A]/70">
             {step === 'form' && 'One-time registration to unlock all features and personalized services.'}
             {step === 'verification' && 'Enter the verification code sent to your email.'}
             {step === 'complete' && 'You now have full access to all our features!'}
@@ -369,7 +369,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
               </Select>
             </div>
 
-            <p className="text-xs text-[#5A4A2E] mt-4">
+            <p className="text-xs text-[#1A1A1A]/70 mt-4">
               By continuing, you confirm you have reviewed our Terms of Service and Privacy Policy. 
               Your information is handled confidentially and used solely to support your inquiry and experience.
             </p>
@@ -383,7 +383,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
         {step === 'verification' && (
           <div className="space-y-4 mt-4">
             <div className="text-center">
-              <p className="text-[#5A4A2E] mb-4">
+              <p className="text-[#1A1A1A]/70 mb-4">
                 We've sent a verification code to <strong>{formData.email}</strong>
               </p>
             </div>
@@ -419,7 +419,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
             <button 
               onClick={() => setStep('form')}
-              className="w-full text-sm text-[#5A4A2E] hover:text-[#5A4A2E]"
+              className="w-full text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
             >
               ← Back to form
             </button>
@@ -432,7 +432,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
               <CheckCircle className="h-10 w-10 text-gold" />
             </div>
             <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">Welcome, {formData.fullName}!</h3>
-            <p className="text-[#5A4A2E]">
+            <p className="text-[#1A1A1A]/70">
               You now have full access to all our features and personalized services.
             </p>
           </div>

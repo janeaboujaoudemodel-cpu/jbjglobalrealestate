@@ -71,7 +71,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return <Phone className="h-4 w-4 text-purple-500" />;
       default:
-        return <MessageSquare className="h-4 w-4 text-[#5A4A2E]" />;
+        return <MessageSquare className="h-4 w-4 text-[#1A1A1A]/70" />;
     }
   };
 
@@ -115,9 +115,9 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
     return (
       <Card className="bg-zinc-900 border-[#1A1A1A] border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-16">
-          <MessageSquare className="h-16 w-16 text-[#5A4A2E] mb-4" />
+          <MessageSquare className="h-16 w-16 text-[#1A1A1A]/70 mb-4" />
           <h3 className="text-white text-lg font-medium mb-2">No Conversations Yet</h3>
-          <p className="text-[#5A4A2E] text-center">
+          <p className="text-[#1A1A1A]/70 text-center">
             Start contacting leads to see conversations here
           </p>
         </CardContent>
@@ -152,10 +152,10 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#5A4A2E]">
+                    <span className="text-[#1A1A1A]/70">
                       {conv.message_count || 0} messages
                     </span>
-                    <span className="text-[#5A4A2E] flex items-center gap-1">
+                    <span className="text-[#1A1A1A]/70 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {formatTime(conv.last_message_at)}
                     </span>
@@ -174,8 +174,8 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
         ) : (
           <Card className="bg-zinc-900 border-[#1A1A1A] h-[600px]">
             <CardContent className="flex flex-col items-center justify-center h-full">
-              <ChevronRight className="h-12 w-12 text-[#5A4A2E] mb-4" />
-              <p className="text-[#5A4A2E]">Select a conversation to view details</p>
+              <ChevronRight className="h-12 w-12 text-[#1A1A1A]/70 mb-4" />
+              <p className="text-[#1A1A1A]/70">Select a conversation to view details</p>
             </CardContent>
           </Card>
         )}
@@ -246,7 +246,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   <p
                     className={`text-xs mt-1 ${
-                      msg.direction === "outbound" ? "text-[#1A1A1A]/60" : "text-[#5A4A2E]"
+                      msg.direction === "outbound" ? "text-[#1A1A1A]/60" : "text-[#1A1A1A]/70"
                     }`}
                   >
                     {new Date(msg.created_at).toLocaleTimeString()}
@@ -257,7 +257,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
 
             {messages.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-[#5A4A2E]">No messages in this conversation</p>
+                <p className="text-[#1A1A1A]/70">No messages in this conversation</p>
               </div>
             )}
           </div>

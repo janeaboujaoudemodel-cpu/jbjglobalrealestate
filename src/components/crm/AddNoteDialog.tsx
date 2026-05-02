@@ -87,7 +87,7 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
             placeholder="Enter your note..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="min-h-[120px] bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+            className="min-h-[120px] bg-zinc-800 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
             autoFocus
           />
           <div className="flex justify-end gap-2">

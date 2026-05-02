@@ -202,7 +202,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                   setShowReportViewer(false);
                   setReportHtml(null);
                 }}
-                className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
               >
                 <ArrowLeft className="w-4 h-4 mr-1" />
                 Back
@@ -253,7 +253,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             </div>
             Property Report & Share
           </DialogTitle>
-          <DialogDescription className="text-[#5A4A2E]">
+          <DialogDescription className="text-[#1A1A1A]/70">
             View the complete property report or share it with others.
           </DialogDescription>
         </DialogHeader>
@@ -262,7 +262,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           {/* Property Info Summary */}
           <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/30">
             <h3 className="font-semibold text-[#1A1A1A] mb-1">{project.name}</h3>
-            <p className="text-sm text-[#5A4A2E]">
+            <p className="text-sm text-[#1A1A1A]/70">
               {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
             </p>
             <p className="text-gold font-medium mt-2">
@@ -312,14 +312,14 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
 
           {/* Send to Email */}
           <div className="space-y-2">
-            <Label className="text-[#5A4A2E] text-sm">Share via Email</Label>
+            <Label className="text-[#1A1A1A]/70 text-sm">Share via Email</Label>
             <div className="flex gap-2">
               <Input
                 type="email"
                 placeholder="Enter email address"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
-                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] flex-1"
+                className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 flex-1"
               />
               <Button
                 onClick={handleShareToEmail}
@@ -345,7 +345,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           {/* Individual Documents */}
           {project.documents && project.documents.length > 0 && (
             <div className="pt-4 border-t border-[#B89555]/30">
-              <Label className="text-[#5A4A2E] text-sm mb-3 block">Individual Materials</Label>
+              <Label className="text-[#1A1A1A]/70 text-sm mb-3 block">Individual Materials</Label>
               <div className="space-y-2">
                 {project.documents.map((doc, idx) => (
                   <button
@@ -358,7 +358,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[#1A1A1A] text-sm font-medium truncate">{doc.file_name}</p>
-                      <p className="text-[#5A4A2E] text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
                     </div>
                     <Download className="w-4 h-4 text-gold" />
                   </button>

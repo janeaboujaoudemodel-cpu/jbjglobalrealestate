@@ -25,13 +25,24 @@ if (existsSync(ALLOWLIST_PATH)) {
   }
 }
 
+// Original tailwind faded-gold pattern (text-gold/00 … text-gold/79)
 const PATTERN = /\btext-gold\/(?:[1-7]\d?)\b/g;
+
+// Banned faded gold-tone HEX equivalents used as text colour. These muddy
+// browns (#5A4A2E, #3A2D1D, plus their close siblings) sit at ~3:1 contrast
+// on the #FDFBF7 champagne page and read as "champagne on champagne". They
+// are the non-tailwind equivalent of `text-gold/40` and are forbidden in
+// the same way. Decorative borders / backgrounds (`border-[#5A4A2E]`,
+// `bg-[#5A4A2E]`) are fine — only `text-` (and its variants) is banned.
+const HEX_PATTERN =
+  /\b(?:hover:|focus:|group-hover:|placeholder:)?text-\[#(5A4A2E|3A2D1D|6B5A3E|7A6747|8A7556)\]/gi;
 
 let files = [];
 try {
-  files = execSync(`rg -l "text-gold/" src/ --type-add 'tsx:*.{ts,tsx,jsx,js}' -ttsx`, {
-    encoding: "utf8",
-  })
+  files = execSync(
+    `rg -l "text-gold/|text-\\[#(5A4A2E|3A2D1D|6B5A3E|7A6747|8A7556)\\]" src/ --type-add 'tsx:*.{ts,tsx,jsx,js}' -ttsx`,
+    { encoding: "utf8" },
+  )
     .trim()
     .split("\n")
     .filter(Boolean);
@@ -47,9 +58,15 @@ for (const file of files) {
   const content = readFileSync(file, "utf8");
   const lines = content.split("\n");
   lines.forEach((line, i) => {
-    const match = line.match(PATTERN);
-    if (match) {
-      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: match[0] });
+    const tailwindMatch = line.match(PATTERN);
+    if (tailwindMatch) {
+      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: tailwindMatch[0] });
+    }
+    // Reset state for global regex
+    HEX_PATTERN.lastIndex = 0;
+    const hexMatch = line.match(HEX_PATTERN);
+    if (hexMatch) {
+      violations.push({ file, line: i + 1, text: line.trim().slice(0, 120), match: hexMatch[0] });
     }
   });
 }

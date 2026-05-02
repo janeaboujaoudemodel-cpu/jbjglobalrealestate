@@ -285,7 +285,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                             {lessonAccess ? (
                               <PlayCircle className="w-5 h-5 text-gold" />
                             ) : (
-                              <Lock className="w-4 h-4 text-[#5A4A2E]" />
+                              <Lock className="w-4 h-4 text-[#1A1A1A]/70" />
                             )}
                           </div>
                         </div>

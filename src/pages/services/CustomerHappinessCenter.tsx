@@ -101,9 +101,9 @@ const CustomerHappinessCenter = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center">
-                <Heart className="w-12 h-12 text-[#5A4A2E]" />
+                <Heart className="w-12 h-12 text-[#1A1A1A]/70" />
               </div>
-              <p className="text-[#5A4A2E] text-sm tracking-widest uppercase">Support That Actually Works</p>
+              <p className="text-[#1A1A1A]/70 text-sm tracking-widest uppercase">Support That Actually Works</p>
               <p className="text-white/90 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
@@ -153,7 +153,7 @@ const CustomerHappinessCenter = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -176,7 +176,7 @@ const CustomerHappinessCenter = () => {
               What This Center Does
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] leading-relaxed text-center">
+              <p className="text-[#1A1A1A]/70 leading-relaxed text-center">
                 The Happiness Center exists to ensure support requests don't get lost. Every request becomes a tracked ticket with clear routing and accountability.
               </p>
             </motion.div>
@@ -213,7 +213,7 @@ const CustomerHappinessCenter = () => {
                   <Mail className="w-7 h-7 text-gold" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm text-[#5A4A2E]">Happiness Center Email</p>
+                  <p className="text-sm text-[#1A1A1A]/70">Happiness Center Email</p>
                   <a 
                     href="mailto:HAPPINESS@JBJ.AE" 
                     className="text-gold font-semibold text-lg hover:underline"
@@ -229,7 +229,7 @@ const CustomerHappinessCenter = () => {
                   <MessageCircle className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm text-[#5A4A2E]">WhatsApp Support</p>
+                  <p className="text-sm text-[#1A1A1A]/70">WhatsApp Support</p>
                   <a 
                     href={whatsappUrl}
                     target="_blank"
@@ -241,7 +241,7 @@ const CustomerHappinessCenter = () => {
                 </div>
               </div>
 
-              <p className="text-[#5A4A2E] text-center mt-4">
+              <p className="text-[#1A1A1A]/70 text-center mt-4">
                 For urgent routing, email the Happiness Center with your ticket ID in the subject line.
               </p>
             </motion.div>
@@ -273,7 +273,7 @@ const CustomerHappinessCenter = () => {
                     <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-[#5A4A2E]">{item.text}</span>
+                    <span className="text-[#1A1A1A]/70">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -310,7 +310,7 @@ const CustomerHappinessCenter = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-[#1A1A1A] font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
+                    <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -339,7 +339,7 @@ const CustomerHappinessCenter = () => {
               >
                 Get Support in One Workflow
               </h2>
-              <p className="text-[#5A4A2E] mb-8 max-w-xl mx-auto">
+              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
                 Create a ticket to get routed and tracked properly.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

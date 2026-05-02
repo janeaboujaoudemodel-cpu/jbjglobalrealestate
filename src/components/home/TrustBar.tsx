@@ -94,7 +94,7 @@ const TrustBar = () => {
                 {item.text}
               </span>
               {item.subtext && (
-                <span className="text-[10px] md:text-xs text-[#5A4A2E] font-medium tracking-wide transition-colors duration-300 break-words">
+                <span className="text-[10px] md:text-xs text-[#1A1A1A]/70 font-medium tracking-wide transition-colors duration-300 break-words">
                   {item.subtext}
                 </span>
               )}

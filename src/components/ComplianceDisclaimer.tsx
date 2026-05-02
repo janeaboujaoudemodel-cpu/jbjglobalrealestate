@@ -84,7 +84,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
         </div>
 
         <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
-          <p className="text-[#5A4A2E] text-xs text-center">
+          <p className="text-[#1A1A1A]/70 text-xs text-center">
             © {currentYear} JBJ Global Real Estate Brokerage | 
             <Link to="/privacy" className="text-gold hover:underline ml-1">Privacy Policy</Link> | 
             <Link to="/terms" className="text-gold hover:underline ml-1">Terms of Service</Link>
@@ -157,7 +157,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
   // Default compact variant
   return (
     <div className={`text-center ${className}`}>
-      <p className="text-[#5A4A2E] text-xs leading-relaxed">
+      <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
         © {currentYear} JBJ Global Real Estate Brokerage. All Rights Reserved.
         <span className="block mt-1">
           Licensed brokerage services. Partner services via independent professionals.

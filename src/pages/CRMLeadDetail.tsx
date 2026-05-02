@@ -337,7 +337,7 @@ const CRMLeadDetail = () => {
           </Button>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-[#1A1A1A] truncate">{lead.full_name}</h1>
-            <p className="text-xs text-[#5A4A2E]">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
+            <p className="text-xs text-[#1A1A1A]/70">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
           </div>
           <Select value={currentStatus} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[160px]">

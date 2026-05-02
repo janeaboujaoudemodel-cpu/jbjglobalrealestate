@@ -246,7 +246,7 @@ const PartnerMortgage = () => {
                   <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <p className="text-center text-[#5A4A2E]">
+                  <p className="text-center text-[#1A1A1A]/70">
                     Ready to explore mortgage options? We'll connect you with a licensed mortgage professional 
                     who can assess your needs and guide you through the financing process.
                   </p>
@@ -258,7 +258,7 @@ const PartnerMortgage = () => {
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
                     />
-                    <Label htmlFor="mortgage-consent" className="text-sm text-[#5A4A2E] cursor-pointer">
+                    <Label htmlFor="mortgage-consent" className="text-sm text-[#1A1A1A]/70 cursor-pointer">
                       I understand this service is provided by an independent licensed partner. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide mortgage services directly.
                     </Label>

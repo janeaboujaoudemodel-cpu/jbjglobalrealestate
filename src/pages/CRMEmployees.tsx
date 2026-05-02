@@ -77,7 +77,7 @@ const CRMEmployees = () => {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-[#5A4A2E] hover:text-[#1A1A1A]">
+              <Button variant="ghost" size="sm" className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
@@ -89,7 +89,7 @@ const CRMEmployees = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-[#1A1A1A]">Employees Hub</h1>
-                <p className="text-xs text-[#5A4A2E]">HR, Brokers & Team Management</p>
+                <p className="text-xs text-[#1A1A1A]/70">HR, Brokers & Team Management</p>
               </div>
             </div>
           </div>

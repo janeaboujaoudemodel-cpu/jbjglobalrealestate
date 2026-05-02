@@ -22,7 +22,7 @@ const StarDisplay = ({ rating }: { rating: number }) => (
     {[1, 2, 3, 4, 5].map((s) => (
       <Star
         key={s}
-        className={`w-4 h-4 ${s <= rating ? 'fill-yellow-500 text-yellow-500' : 'text-[#5A4A2E]'}`}
+        className={`w-4 h-4 ${s <= rating ? 'fill-yellow-500 text-yellow-500' : 'text-[#1A1A1A]/70'}`}
       />
     ))}
   </div>

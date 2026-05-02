@@ -293,7 +293,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                       />
                     )}
                   </div>
-                  <p className="text-[#5A4A2E] text-[10px] mt-1">
+                  <p className="text-[#1A1A1A]/70 text-[10px] mt-1">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>

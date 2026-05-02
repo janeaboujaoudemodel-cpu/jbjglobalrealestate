@@ -52,7 +52,7 @@ function CenteredAudioPreview({ src, label, onRemove }: { src: string | null; la
   return (
     <div className="mx-auto max-w-xl w-full">
       <div className="rounded-2xl bg-gradient-to-br from-[#1a1708]/80 via-[#1c1a0e]/60 to-[#0d0c08]/80 border border-gold/20 p-5 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
-        {label && <p className="text-xs text-[#5A4A2E] font-medium mb-3 tracking-wider uppercase">{label}</p>}
+        {label && <p className="text-xs text-[#1A1A1A]/70 font-medium mb-3 tracking-wider uppercase">{label}</p>}
         <audio controls src={src} className="w-full [&::-webkit-media-controls-panel]:bg-transparent" />
         {onRemove && (
           <Button variant="ghost" size="sm" onClick={onRemove} className="mt-2 text-red-400/70 hover:text-red-400 hover:bg-red-400/10 text-xs">
@@ -110,7 +110,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/90 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
-          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E] min-h-[60px]" rows={3} />
+          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[60px]" rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-white/70 text-xs">Tone</Label>
@@ -265,8 +265,8 @@ function VoiceStudioPanel() {
               <div className="relative">
                 <Textarea value={script} onChange={e => setScript(e.target.value.slice(0, 5000))}
                   placeholder="Type or generate your script..."
-                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E] min-h-[150px]" rows={6} />
-                <span className="absolute bottom-2 right-3 text-[10px] text-[#5A4A2E]">{script.length}/5000</span>
+                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70 min-h-[150px]" rows={6} />
+                <span className="absolute bottom-2 right-3 text-[10px] text-[#1A1A1A]/70">{script.length}/5000</span>
               </div>
 
               {script && (
@@ -622,7 +622,7 @@ function AudioEnhancePanel() {
                 }`}>
                 <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/90'}`} />
                 <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
-                <p className="text-[10px] text-[#5A4A2E] mt-0.5">{m.desc}</p>
+                <p className="text-[10px] text-[#1A1A1A]/70 mt-0.5">{m.desc}</p>
               </button>
             ))}
           </div>
@@ -951,7 +951,7 @@ function VoiceCloningPanel() {
           <div className="space-y-3">
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
             <Input value={voiceName} onChange={e => setVoiceName(e.target.value)} placeholder="Voice name..."
-              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E]" />
+              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70" />
             <Button onClick={cloneVoice} disabled={cloning || recordings.length === 0}
               className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-[#1A1A1A] font-bold hover:brightness-110">
               {cloning ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Cloning...</> : <><MicVocal className="w-4 h-4 mr-2" />Clone Voice</>}
@@ -964,7 +964,7 @@ function VoiceCloningPanel() {
               <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
               <p className="text-[10px] text-emerald-400">✓ Voice ID: {clonedVoiceId}</p>
               <Textarea value={ttsText} onChange={e => setTtsText(e.target.value)} placeholder="Enter text to speak..."
-                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#5A4A2E]" rows={3} />
+                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-[#1A1A1A]/70" rows={3} />
               <Button onClick={generateTTS} disabled={ttsGenerating || !ttsText.trim()}
                 className="w-full bg-gold text-[#1A1A1A] hover:bg-gold/90 font-semibold">
                 {ttsGenerating ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Generating...</> : <><Play className="w-4 h-4 mr-2" />Generate</>}

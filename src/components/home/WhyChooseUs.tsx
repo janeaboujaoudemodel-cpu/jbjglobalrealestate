@@ -31,13 +31,13 @@ const WhyChooseUs = () => {
           {/* Section Header */}
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              <Award className="w-3.5 h-3.5 text-[#5A4A2E]" />
+              <Award className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
               <span className="text-[#1A1A1A]">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
             </span>
             <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-3">
               {t('whyUs.title', 'Why Choose Us')}
             </h2>
-            <p className="text-[#5A4A2E] text-sm max-w-md mx-auto">
+            <p className="text-[#1A1A1A]/70 text-sm max-w-md mx-auto">
               {t('whyUs.subtitle', 'We focus on what matters most—getting you results.')}
             </p>
           </div>
@@ -51,12 +51,12 @@ const WhyChooseUs = () => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <prop.icon className="w-6 h-6 text-[#5A4A2E]" />
+                  <prop.icon className="w-6 h-6 text-[#1A1A1A]/70" />
                 </div>
-                <h3 className="text-[#1A1A1A] font-bold text-base mb-2 group-hover:text-[#5A4A2E] transition-colors">
+                <h3 className="text-[#1A1A1A] font-bold text-base mb-2 group-hover:text-[#1A1A1A] transition-colors">
                   {prop.title}
                 </h3>
-                <p className="text-[#5A4A2E] text-sm leading-relaxed">{prop.text}</p>
+                <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{prop.text}</p>
                 <div className="flex items-center gap-1.5 mt-4">
                   <Check className="w-4 h-4 text-green-600" />
                   <span className="text-xs uppercase tracking-wider text-green-600 font-semibold">

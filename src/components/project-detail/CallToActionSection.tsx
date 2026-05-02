@@ -142,7 +142,7 @@ export function CallToActionSection({ projectName, projectId }: CallToActionSect
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">Thank You!</h3>
-                <p className="text-[#5A4A2E]">We'll call you back shortly.</p>
+                <p className="text-[#1A1A1A]/70">We'll call you back shortly.</p>
                 <Button 
                   onClick={() => setIsSuccess(false)}
                   variant="primary"

@@ -202,7 +202,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors"
+                  className="p-1.5 rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -222,7 +222,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                       'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                       filter === f.value
                         ? 'bg-gold text-white'
-                        : 'bg-[#F7F2EA] text-[#5A4A2E] hover:bg-[#EFE6D6]'
+                        : 'bg-[#F7F2EA] text-[#1A1A1A]/70 hover:bg-[#EFE6D6]'
                     )}
                   >
                     {f.label}
@@ -269,8 +269,8 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                 {filteredNotifications.length === 0 && (
                   <div className="py-12 text-center">
                     <Bell className="w-12 h-12 mx-auto text-gray-200 mb-4" />
-                    <p className="text-[#5A4A2E]">No notifications</p>
-                    <p className="text-sm text-[#5A4A2E] mt-1">You're all caught up!</p>
+                    <p className="text-[#1A1A1A]/70">No notifications</p>
+                    <p className="text-sm text-[#1A1A1A]/70 mt-1">You're all caught up!</p>
                   </div>
                 )}
               </div>
@@ -280,7 +280,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
             <div className="p-3 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white flex items-center justify-between">
               <button
                 onClick={onMarkAllRead}
-                className="text-sm text-[#5A4A2E] hover:text-gold transition-colors flex items-center gap-1"
+                className="text-sm text-[#1A1A1A]/70 hover:text-gold transition-colors flex items-center gap-1"
               >
                 <Check className="w-4 h-4" />
                 Mark all as read
@@ -320,15 +320,15 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
           <div className="flex items-start justify-between gap-2">
             <h4 className={cn(
               'text-sm truncate',
-              notification.read ? 'text-[#5A4A2E]' : 'font-medium text-[#1A1A1A]'
+              notification.read ? 'text-[#1A1A1A]/70' : 'font-medium text-[#1A1A1A]'
             )}>
               {notification.title}
             </h4>
-            <span className="text-xs text-[#5A4A2E] flex-shrink-0">
+            <span className="text-xs text-[#1A1A1A]/70 flex-shrink-0">
               {formatTimestamp(notification.timestamp)}
             </span>
           </div>
-          <p className="text-xs text-[#5A4A2E] mt-0.5 line-clamp-2">
+          <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-2">
             {notification.description}
           </p>
           {notification.action && (
@@ -359,7 +359,7 @@ export const NotificationBell: React.FC<{
     <button
       onClick={onClick}
       className={cn(
-        'relative p-2 rounded-xl bg-[#FDFBF7] border border-gold/20 text-[#5A4A2E] hover:text-gold hover:border-gold/40 transition-all',
+        'relative p-2 rounded-xl bg-[#FDFBF7] border border-gold/20 text-[#1A1A1A]/70 hover:text-gold hover:border-gold/40 transition-all',
         className
       )}
     >

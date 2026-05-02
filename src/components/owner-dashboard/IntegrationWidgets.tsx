@@ -95,7 +95,7 @@ export default function IntegrationWidgets() {
                 onClick={() => navigate('/crm/calendar')}
               >
                 <p className="text-sm text-[#1A1A1A] truncate flex-1">{event.title}</p>
-                <span className="text-xs text-[#5A4A2E] ml-2">
+                <span className="text-xs text-[#1A1A1A]/70 ml-2">
                   {event.due_at ? formatEventDate(event.due_at) : 'No date'}
                 </span>
               </div>
@@ -104,7 +104,7 @@ export default function IntegrationWidgets() {
         ) : (
           <div className="text-center py-6">
             <Calendar className="h-8 w-8 text-[#B89555]/40 mx-auto mb-2" />
-            <p className="text-xs text-[#5A4A2E]">No upcoming events</p>
+            <p className="text-xs text-[#1A1A1A]/70">No upcoming events</p>
           </div>
         )}
       </div>
@@ -143,7 +143,7 @@ export default function IntegrationWidgets() {
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-sm text-[#5A4A2E]">Active Automations</span>
+              <span className="text-sm text-[#1A1A1A]/70">Active Automations</span>
             </div>
             <span className="text-sm font-medium text-[#B89555]">
               {loadingAutomations ? '...' : automationsCount}

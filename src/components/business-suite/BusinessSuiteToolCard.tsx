@@ -39,7 +39,7 @@ const BusinessSuiteToolCard = ({
         <h3 className={`text-base font-bold text-[#1A1A1A] group-hover:text-gold mb-2 transition-colors`}>
           {title}
         </h3>
-        <p className="text-sm text-[#5A4A2E] leading-relaxed flex-grow min-h-[60px]">
+        <p className="text-sm text-[#1A1A1A]/70 leading-relaxed flex-grow min-h-[60px]">
           {description}
         </p>
         <div className="mt-4 text-sm font-semibold text-gold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">

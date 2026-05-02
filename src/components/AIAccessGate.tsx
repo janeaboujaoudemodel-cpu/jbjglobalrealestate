@@ -243,7 +243,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           </div>
 
           {/* Footer note */}
-          <p className="text-[#5A4A2E] text-xs mt-8">
+          <p className="text-[#1A1A1A]/70 text-xs mt-8">
             By signing in, you agree to our Terms of Service and Privacy Policy.
           </p>
         </motion.div>

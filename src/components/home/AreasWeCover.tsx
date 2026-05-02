@@ -43,7 +43,7 @@ const AreasWeCover = () => {
         {/* Section Header */}
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-            <MapPin className="w-3.5 h-3.5 text-[#5A4A2E]" />
+            <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
             <span className="text-[#1A1A1A]">{t('areas.topLabel', 'Top Areas')}</span>
           </span>
           <h2
@@ -51,7 +51,7 @@ const AreasWeCover = () => {
           >
             {t('areas.topTitle', 'Top Areas in Dubai')}
           </h2>
-          <p className="mt-3 text-sm text-[#5A4A2E] max-w-xl mx-auto">
+          <p className="mt-3 text-sm text-[#1A1A1A]/70 max-w-xl mx-auto">
             {t('areas.topSubtitle', 'The four most trending and high-demand neighbourhoods our investors are watching right now.')}
           </p>
         </div>

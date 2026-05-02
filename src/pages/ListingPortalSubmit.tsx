@@ -553,7 +553,7 @@ const ListingPortalSubmit = () => {
             <h1 className="text-3xl font-bold text-[#1A1A1A] mb-4">
               {isOwner ? 'Listing Approved & Published!' : 'Listing Submitted for Approval!'}
             </h1>
-            <p className="text-[#5A4A2E] mb-8">
+            <p className="text-[#1A1A1A]/70 mb-8">
               {isOwner 
                 ? 'Your listing has been approved and is now live on the portal.'
                 : 'Your listing has been submitted for review. You will receive notifications as it progresses through approval stages.'}
@@ -571,7 +571,7 @@ const ListingPortalSubmit = () => {
                       </div>
                       <div className="flex-1">
                         <p className="text-[#1A1A1A] text-sm font-medium">{step.name}</p>
-                        <p className="text-[#5A4A2E] text-xs">{step.approverName} — {step.approverTitle}</p>
+                        <p className="text-[#1A1A1A]/70 text-xs">{step.approverName} — {step.approverTitle}</p>
                       </div>
                       <Badge className="bg-gold/10 text-gold border-gold/30 text-xs">Pending</Badge>
                     </div>
@@ -599,7 +599,7 @@ const ListingPortalSubmit = () => {
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div ref={creatorRef} className="max-w-3xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#5A4A2E] hover:text-[#1A1A1A] mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
 
@@ -611,7 +611,7 @@ const ListingPortalSubmit = () => {
               <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
                 Smart Listing Creator
               </h1>
-              <p className="text-[#5A4A2E] text-sm">
+              <p className="text-[#1A1A1A]/70 text-sm">
                 Upload your documents and let AI create a professional listing for you
               </p>
             </div>
@@ -655,7 +655,7 @@ const ListingPortalSubmit = () => {
                 return (
                   <div key={step} className="flex-1">
                     <div className={`h-1.5 rounded-full transition-all ${i <= stepIndex ? 'bg-gold' : 'bg-gold/20'}`} />
-                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-gold' : 'text-[#5A4A2E]'}`}>{step}</p>
+                    <p className={`text-[9px] mt-1 text-center ${i <= stepIndex ? 'text-gold' : 'text-[#1A1A1A]/70'}`}>{step}</p>
                   </div>
                 );
               })}
@@ -688,7 +688,7 @@ const ListingPortalSubmit = () => {
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
                                   isSelected
                                     ? 'bg-gold/10 border-gold/50 text-[#1A1A1A] shadow-lg shadow-gold/15'
-                                    : 'bg-[#FDFBF7]/60 border-gold/15 text-[#5A4A2E] hover:border-gold/30'
+                                    : 'bg-[#FDFBF7]/60 border-gold/15 text-[#1A1A1A]/70 hover:border-gold/30'
                                 }`}
                               >
                                 {isSelected && (
@@ -696,9 +696,9 @@ const ListingPortalSubmit = () => {
                                     <Check className="w-3.5 h-3.5 text-white" />
                                   </div>
                                 )}
-                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-gold' : 'text-[#5A4A2E]'}`} />
+                                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-gold' : 'text-[#1A1A1A]/70'}`} />
                                 <div className="font-medium text-sm">{cat.label}</div>
-                                <div className="text-xs text-[#5A4A2E]">{cat.desc}</div>
+                                <div className="text-xs text-[#1A1A1A]/70">{cat.desc}</div>
                               </button>
                             );
                           })}
@@ -708,7 +708,7 @@ const ListingPortalSubmit = () => {
                       {/* Upload Zone */}
                       <div className="bg-[#FDFBF7]/70 border-2 border-gold/20 rounded-2xl p-6">
                         <h2 className="text-[#1A1A1A] font-semibold mb-2">Upload Documents</h2>
-                        <p className="text-[#5A4A2E] text-xs mb-4">
+                        <p className="text-[#1A1A1A]/70 text-xs mb-4">
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
                         </p>
                         
@@ -720,7 +720,7 @@ const ListingPortalSubmit = () => {
                         >
                           <Upload className="w-10 h-10 text-gold mx-auto mb-3" />
                           <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
-                          <p className="text-[#5A4A2E] text-xs">
+                          <p className="text-[#1A1A1A]/70 text-xs">
                             PDF, JPG, PNG, DOCX, XLSX — up to 100MB each
                           </p>
                           <input
@@ -750,12 +750,12 @@ const ListingPortalSubmit = () => {
                                 )}
                                 <div className="flex-1 min-w-0">
                                   <p className="text-[#1A1A1A] text-sm truncate">{doc.name}</p>
-                                  <p className="text-[#5A4A2E] text-xs">
+                                  <p className="text-[#1A1A1A]/70 text-xs">
                                     {(doc.file.size / 1024 / 1024).toFixed(1)} MB
                                   </p>
                                 </div>
                                 <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-gold/10 rounded-lg">
-                                  <X className="w-4 h-4 text-[#5A4A2E]" />
+                                  <X className="w-4 h-4 text-[#1A1A1A]/70" />
                                 </button>
                               </div>
                             ))}
@@ -769,7 +769,7 @@ const ListingPortalSubmit = () => {
                           <Globe className="w-4 h-4 text-gold" />
                           Paste Any Link
                         </h2>
-                        <p className="text-[#5A4A2E] text-xs mb-3">
+                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
                           Google Drive folders/files, property portals, PDFs, brochures, MOUs — AI extracts everything automatically
                         </p>
                         <Input
@@ -791,7 +791,7 @@ const ListingPortalSubmit = () => {
                           <FileTextIcon className="w-4 h-4 text-gold" />
                           Paste Text / Description (Optional)
                         </h2>
-                        <p className="text-[#5A4A2E] text-xs mb-3">
+                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
                           Paste any property description, spec sheet, or text content for AI to analyze
                         </p>
                         <Textarea
@@ -836,7 +836,7 @@ const ListingPortalSubmit = () => {
                 >
                   <BrandedLoader variant="light" text="AI is analyzing..." className="min-h-0 py-8" />
                   <h2 className="text-[#1A1A1A] text-xl font-bold mb-2 mt-4">AI is analyzing your documents...</h2>
-                  <p className="text-[#5A4A2E] text-sm mb-6">
+                  <p className="text-[#1A1A1A]/70 text-sm mb-6">
                     Extracting property details, images, floor plans, and generating your listing
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center">
@@ -869,7 +869,7 @@ const ListingPortalSubmit = () => {
                           </div>
                           <div>
                             <h2 className="text-[#1A1A1A] font-bold text-lg">AI Price Predictor</h2>
-                            <p className="text-[#5A4A2E] text-xs">Get an AI-powered market price estimate based on location, size, and market data</p>
+                            <p className="text-[#1A1A1A]/70 text-xs">Get an AI-powered market price estimate based on location, size, and market data</p>
                           </div>
                         </div>
 
@@ -878,22 +878,22 @@ const ListingPortalSubmit = () => {
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <MapPin className="w-4 h-4 text-gold mx-auto mb-1" />
-                              <p className="text-xs text-[#5A4A2E]">Location</p>
+                              <p className="text-xs text-[#1A1A1A]/70">Location</p>
                               <p className="text-[#1A1A1A] text-sm font-medium truncate">{form.location || 'N/A'}</p>
                             </div>
                             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Bed className="w-4 h-4 text-gold mx-auto mb-1" />
-                              <p className="text-xs text-[#5A4A2E]">Bedrooms</p>
+                              <p className="text-xs text-[#1A1A1A]/70">Bedrooms</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.bedrooms || 'N/A'}</p>
                             </div>
                             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Maximize className="w-4 h-4 text-gold mx-auto mb-1" />
-                              <p className="text-xs text-[#5A4A2E]">Area</p>
+                              <p className="text-xs text-[#1A1A1A]/70">Area</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.area_sqft ? `${parseInt(form.area_sqft).toLocaleString()} sqft` : 'N/A'}</p>
                             </div>
                             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Building className="w-4 h-4 text-gold mx-auto mb-1" />
-                              <p className="text-xs text-[#5A4A2E]">Type</p>
+                              <p className="text-xs text-[#1A1A1A]/70">Type</p>
                               <p className="text-[#1A1A1A] text-sm font-medium capitalize">{form.property_type || 'N/A'}</p>
                             </div>
                           </div>
@@ -921,15 +921,15 @@ const ListingPortalSubmit = () => {
                               </h3>
                               <div className="grid grid-cols-3 gap-4 text-center">
                                 <div>
-                                  <p className="text-[#5A4A2E] text-xs mb-1">Low</p>
+                                  <p className="text-[#1A1A1A]/70 text-xs mb-1">Low</p>
                                   <p className="text-[#1A1A1A] font-bold text-lg">AED {pricePrediction.estimatedValue.low.toLocaleString()}</p>
                                 </div>
                                 <div className="border-x border-emerald-200">
-                                  <p className="text-[#5A4A2E] text-xs mb-1">Recommended</p>
+                                  <p className="text-[#1A1A1A]/70 text-xs mb-1">Recommended</p>
                                   <p className="text-emerald-700 font-bold text-xl">AED {pricePrediction.estimatedValue.mid.toLocaleString()}</p>
                                 </div>
                                 <div>
-                                  <p className="text-[#5A4A2E] text-xs mb-1">High</p>
+                                  <p className="text-[#1A1A1A]/70 text-xs mb-1">High</p>
                                   <p className="text-[#1A1A1A] font-bold text-lg">AED {pricePrediction.estimatedValue.high.toLocaleString()}</p>
                                 </div>
                               </div>
@@ -937,7 +937,7 @@ const ListingPortalSubmit = () => {
 
                             {pricePrediction.marketInsights && (
                               <div className="bg-[#FDFBF7]/80 border border-gold/20 rounded-xl p-4">
-                                <p className="text-[#5A4A2E] text-sm">{pricePrediction.marketInsights}</p>
+                                <p className="text-[#1A1A1A]/70 text-sm">{pricePrediction.marketInsights}</p>
                               </div>
                             )}
                           </div>
@@ -992,7 +992,7 @@ const ListingPortalSubmit = () => {
                             <p className="text-[#1A1A1A] text-sm font-medium">
                               AI Confidence: {extractedData.confidence_score}%
                             </p>
-                            <p className="text-[#5A4A2E] text-xs">
+                            <p className="text-[#1A1A1A]/70 text-xs">
                               {extractedData.confidence_score >= 80 
                                 ? 'High confidence — review and continue' 
                                 : 'Please review and edit the details below'}
@@ -1002,7 +1002,7 @@ const ListingPortalSubmit = () => {
                             size="sm"
                             variant="ghost"
                             onClick={() => { setPhase('upload'); }}
-                            className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                            className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                           >
                             <RefreshCw className="w-4 h-4 mr-1" /> Re-extract
                           </Button>
@@ -1028,10 +1028,10 @@ const ListingPortalSubmit = () => {
                           </div>
                           <div className="p-4">
                             <h3 className="text-[#1A1A1A] font-bold text-lg mb-1">{form.title || 'Untitled Listing'}</h3>
-                            <p className="text-[#5A4A2E] text-sm flex items-center gap-1 mb-3">
+                            <p className="text-[#1A1A1A]/70 text-sm flex items-center gap-1 mb-3">
                               <MapPin className="w-3.5 h-3.5" /> {form.location || form.emirate}
                             </p>
-                            <div className="flex items-center gap-4 text-[#5A4A2E] text-sm mb-3">
+                            <div className="flex items-center gap-4 text-[#1A1A1A]/70 text-sm mb-3">
                               {form.bedrooms && <span className="flex items-center gap-1"><Bed className="w-3.5 h-3.5" /> {form.bedrooms} BR</span>}
                               {form.bathrooms && <span className="flex items-center gap-1"><Bath className="w-3.5 h-3.5" /> {form.bathrooms} BA</span>}
                               {form.area_sqft && <span className="flex items-center gap-1"><Maximize className="w-3.5 h-3.5" /> {parseInt(form.area_sqft).toLocaleString()} sqft</span>}
@@ -1065,7 +1065,7 @@ const ListingPortalSubmit = () => {
                         <h3 className="text-[#1A1A1A] font-semibold mb-1">Listing Details</h3>
                         
                         <div>
-                          <label className="text-xs text-[#5A4A2E] mb-1 block">Title *</label>
+                          <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Title *</label>
                           <Input
                             value={form.title}
                             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
@@ -1075,7 +1075,7 @@ const ListingPortalSubmit = () => {
                         </div>
 
                         <div>
-                          <label className="text-xs text-[#5A4A2E] mb-1 block">Description</label>
+                          <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Description</label>
                           <Textarea
                             value={form.description}
                             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
@@ -1086,7 +1086,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Category</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Category</label>
                             <Select value={form.listing_category} onValueChange={v => setForm(f => ({ ...f, listing_category: v }))}>
                               <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
                                 <SelectValue />
@@ -1097,7 +1097,7 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Property Type</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Property Type</label>
                             <Select value={form.property_type} onValueChange={v => setForm(f => ({ ...f, property_type: v }))}>
                               <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
@@ -1111,7 +1111,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Developer</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Developer</label>
                             <Input
                               value={form.developer_name}
                               onChange={e => setForm(f => ({ ...f, developer_name: e.target.value }))}
@@ -1120,7 +1120,7 @@ const ListingPortalSubmit = () => {
                             />
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Project / Building</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Project / Building</label>
                             <Input
                               value={form.project_name}
                               onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))}
@@ -1132,7 +1132,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Emirate</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Emirate</label>
                             <Select value={form.emirate} onValueChange={v => setForm(f => ({ ...f, emirate: v }))}>
                               <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
                                 <SelectValue />
@@ -1143,7 +1143,7 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Location / Area</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Location / Area</label>
                             <Input
                               value={form.location}
                               onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
@@ -1155,26 +1155,26 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-4 gap-3">
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Price (AED)</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Price (AED)</label>
                             <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Bedrooms</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bedrooms</label>
                             <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Bathrooms</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Bathrooms</label>
                             <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Area (sqft)</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Area (sqft)</label>
                             <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-3 gap-3">
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Furnishing</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Furnishing</label>
                             <Select value={form.furnishing} onValueChange={v => setForm(f => ({ ...f, furnishing: v }))}>
                               <SelectTrigger className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]">
                                 <SelectValue placeholder="Select" />
@@ -1185,11 +1185,11 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Handover</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Handover</label>
                             <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                           <div>
-                            <label className="text-xs text-[#5A4A2E] mb-1 block">Payment Plan</label>
+                            <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Payment Plan</label>
                             <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-[#FDFBF7] border-gold/30 text-[#1A1A1A]" />
                           </div>
                         </div>
@@ -1221,7 +1221,7 @@ const ListingPortalSubmit = () => {
                           <h3 className="text-[#1A1A1A] font-semibold mb-3">Amenities</h3>
                           <div className="flex flex-wrap gap-2">
                             {form.amenities.map((a, i) => (
-                              <Badge key={i} className="bg-[#FDFBF7] border-gold/20 text-[#5A4A2E] px-3 py-1">
+                              <Badge key={i} className="bg-[#FDFBF7] border-gold/20 text-[#1A1A1A]/70 px-3 py-1">
                                 {a}
                                 <button onClick={() => setForm(prev => ({ ...prev, amenities: prev.amenities.filter((_, idx) => idx !== i) }))} className="ml-2">
                                   <X className="w-3 h-3" />
@@ -1289,7 +1289,7 @@ const ListingPortalSubmit = () => {
                           <CreditCard className="w-4 h-4 text-gold" />
                           Listing Contact & Pricing
                         </h3>
-                        <p className="text-[#5A4A2E] text-xs mb-4">Choose how enquiries are handled for your listing</p>
+                        <p className="text-[#1A1A1A]/70 text-xs mb-4">Choose how enquiries are handled for your listing</p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Direct Contact Option */}
@@ -1311,7 +1311,7 @@ const ListingPortalSubmit = () => {
                               <span className="text-[#1A1A1A] font-semibold text-sm">Direct Contact</span>
                             </div>
                             <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
-                            <p className="text-[#5A4A2E] text-xs">{LISTING_FEES.direct.description}</p>
+                            <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.direct.description}</p>
                             <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-2">
                               <p className="text-emerald-700 text-xs font-medium">50% less than Property Finder & Bayut</p>
                             </div>
@@ -1336,7 +1336,7 @@ const ListingPortalSubmit = () => {
                               <span className="text-[#1A1A1A] font-semibold text-sm">Commission-Based</span>
                             </div>
                             <p className="text-gold font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
-                            <p className="text-[#5A4A2E] text-xs">{LISTING_FEES.commission.description}</p>
+                            <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.commission.description}</p>
                             <div className="mt-3 bg-gold/5 border border-gold/20 rounded-2xl p-2">
                               <p className="text-gold text-xs font-medium">JBJ handles all enquiries professionally</p>
                             </div>
@@ -1351,14 +1351,14 @@ const ListingPortalSubmit = () => {
                             <Shield className="w-4 h-4 text-gold" />
                             Approval Workflow
                           </h3>
-                          <p className="text-[#5A4A2E] text-xs mb-4">Your listing will go through these approval stages before publishing</p>
+                          <p className="text-[#1A1A1A]/70 text-xs mb-4">Your listing will go through these approval stages before publishing</p>
                           <div className="space-y-3">
                             {UNIFIED_APPROVAL_WORKFLOW.map((step) => (
                               <div key={step.step} className="flex items-center gap-3">
                                 <img src={step.approverPhoto} alt="" className="w-9 h-9 rounded-full object-cover border border-gold/30" />
                                 <div className="flex-1">
                                   <p className="text-[#1A1A1A] text-sm font-medium">{step.name}</p>
-                                  <p className="text-[#5A4A2E] text-xs">{step.approverName} — {step.approverTitle}</p>
+                                  <p className="text-[#1A1A1A]/70 text-xs">{step.approverName} — {step.approverTitle}</p>
                                 </div>
                                 <Badge className="bg-gold/10 text-gold border-gold/30 text-xs flex items-center gap-1"><Check className="w-3 h-3" /> Step {step.step}</Badge>
                               </div>
@@ -1373,7 +1373,7 @@ const ListingPortalSubmit = () => {
                             <CheckCircle2 className="w-6 h-6 text-emerald-600" />
                             <div>
                               <p className="text-[#1A1A1A] font-semibold text-sm">Owner Auto-Approval</p>
-                              <p className="text-[#5A4A2E] text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>
+                              <p className="text-[#1A1A1A]/70 text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>
                             </div>
                           </div>
                         </div>

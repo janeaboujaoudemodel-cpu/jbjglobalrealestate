@@ -906,7 +906,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           >
                             <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
                             <span className="flex-1">{link.label}</span>
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'}`} />
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                           </Link>
                         );
                       })}
@@ -979,7 +979,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     >
                       <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'}`} />
+                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     </Link>
                   );
                 })}
@@ -1003,7 +1003,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <BookOpen className="w-4 h-4 text-gold flex-shrink-0" />
                     <span className="flex-1">Read Area Guides</span>
-                    <ChevronRight className="w-3 h-3 text-[#5A4A2E] flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
                   </Link>
                 )}
               </div>
@@ -1064,7 +1064,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   >
                     <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                   </Link>
                 );
               })}
@@ -1083,7 +1083,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
             <span className="text-[11px] font-extrabold text-[#1A1A1A] tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-            <span className="text-[9px] font-bold text-[#3A2D1D] tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+            <span className="text-[9px] font-bold text-[#1A1A1A]/70 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
           </div>
         </Link>
         <button
@@ -1114,7 +1114,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <Zap className="w-3.5 h-3.5 text-gold" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-[#3A2D1D]"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-[#1A1A1A]/70"}`} />
           </button>
         </div>
 
@@ -1188,7 +1188,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       <SectionIcon className="w-3 h-3 text-[hsl(var(--gold))]" />
                     </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#3A2D1D]'}`} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
                     )}

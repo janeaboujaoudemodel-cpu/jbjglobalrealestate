@@ -73,7 +73,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         <p className="text-sm flex flex-wrap items-center justify-center gap-1">
           <span className="text-gold">💡</span>
           <span className="text-[#1A1A1A] font-bold">{t('chat.tip', 'Tip:')}</span>
-          <span className="text-[#5A4A2E]">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
+          <span className="text-[#1A1A1A]/70">{t('chat.tipText', "Most of your questions can be answered through the chat with our team section for faster response.")}</span>
         </p>
       </div>
     </div>

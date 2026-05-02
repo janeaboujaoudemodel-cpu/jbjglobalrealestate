@@ -71,11 +71,11 @@ const STATUS_COLORS: { [key: string]: string } = {
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
-  expired: "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30",
+  expired: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
 };
 
 const TIER_COLORS: { [key: string]: string } = {
-  starter: "bg-zinc-700 text-[#5A4A2E]",
+  starter: "bg-zinc-700 text-[#1A1A1A]/70",
   professional: "bg-gold/20 text-gold",
   enterprise: "bg-purple-500/20 text-purple-400",
 };
@@ -347,28 +347,28 @@ export default function BrokerSubscriptionsDashboard() {
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-gold" />
-            <span className="text-[#5A4A2E] text-sm">Total Subscriptions</span>
+            <span className="text-[#1A1A1A]/70 text-sm">Total Subscriptions</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{totalSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-green-600" />
-            <span className="text-[#5A4A2E] text-sm">Active</span>
+            <span className="text-[#1A1A1A]/70 text-sm">Active</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{activeSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Calendar className="w-5 h-5 text-blue-600" />
-            <span className="text-[#5A4A2E] text-sm">On Trial</span>
+            <span className="text-[#1A1A1A]/70 text-sm">On Trial</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">{trialSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <CreditCard className="w-5 h-5 text-gold" />
-            <span className="text-[#5A4A2E] text-sm">Active Revenue</span>
+            <span className="text-[#1A1A1A]/70 text-sm">Active Revenue</span>
           </div>
           <p className="text-[#1A1A1A] text-3xl font-bold">${totalRevenue.toLocaleString()}</p>
         </Card>
@@ -443,7 +443,7 @@ export default function BrokerSubscriptionsDashboard() {
             <TableBody>
               {filteredSubscriptions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-[#5A4A2E] py-10">
+                  <TableCell colSpan={8} className="text-center text-[#1A1A1A]/70 py-10">
                     No subscriptions found
                   </TableCell>
                 </TableRow>
@@ -453,17 +453,17 @@ export default function BrokerSubscriptionsDashboard() {
                     <TableCell>
                       <div>
                         <p className="text-white font-medium">{sub.full_name || "—"}</p>
-                        <p className="text-[#5A4A2E] text-xs">{sub.user_role || "broker"}</p>
+                        <p className="text-[#1A1A1A]/70 text-xs">{sub.user_role || "broker"}</p>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-[#5A4A2E] text-sm">
+                        <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
                           <Mail className="w-3 h-3" />
                           <span className="truncate max-w-40">{sub.email}</span>
                         </div>
                         {sub.phone && (
-                          <div className="flex items-center gap-2 text-[#5A4A2E] text-xs">
+                          <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs">
                             <Phone className="w-3 h-3" />
                             {sub.phone}
                           </div>
@@ -472,12 +472,12 @@ export default function BrokerSubscriptionsDashboard() {
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-[#5A4A2E] text-sm">
+                        <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
                           <Building2 className="w-3 h-3" />
                           <span className="truncate max-w-32">{sub.company_name || "—"}</span>
                         </div>
                         {sub.rera_number && (
-                          <p className="text-[#5A4A2E] text-xs">RERA: {sub.rera_number}</p>
+                          <p className="text-[#1A1A1A]/70 text-xs">RERA: {sub.rera_number}</p>
                         )}
                       </div>
                     </TableCell>
@@ -492,13 +492,13 @@ export default function BrokerSubscriptionsDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="text-[#5A4A2E] text-xs space-y-1">
+                      <div className="text-[#1A1A1A]/70 text-xs space-y-1">
                         <p>AI: {sub.ai_credits_used}/{sub.ai_credits_limit || "∞"}</p>
                         <p>PDFs: {sub.pdf_downloads}</p>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="text-[#5A4A2E] text-sm">
+                      <p className="text-[#1A1A1A]/70 text-sm">
                         {format(new Date(sub.created_at), "MMM d, yyyy")}
                       </p>
                     </TableCell>
@@ -533,54 +533,54 @@ export default function BrokerSubscriptionsDashboard() {
             <div className="space-y-6 mt-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">Full Name</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">Full Name</p>
                   <p className="text-white">{selectedSubscription.full_name || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">Email</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">Email</p>
                   <p className="text-white">{selectedSubscription.email}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">Phone</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">Phone</p>
                   <p className="text-white">{selectedSubscription.phone || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">Company</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">Company</p>
                   <p className="text-white">{selectedSubscription.company_name || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">RERA Number</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">RERA Number</p>
                   <p className="text-white">{selectedSubscription.rera_number || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[#5A4A2E] text-xs uppercase">User Role</p>
+                  <p className="text-[#1A1A1A]/70 text-xs uppercase">User Role</p>
                   <p className="text-white capitalize">{selectedSubscription.user_role || "broker"}</p>
                 </div>
               </div>
 
               <div className="border-t border-[#1A1A1A] pt-4">
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-3">Subscription Details</h4>
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-3">Subscription Details</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <p className="text-[#5A4A2E] text-xs uppercase">Tier</p>
+                    <p className="text-[#1A1A1A]/70 text-xs uppercase">Tier</p>
                     <Badge className={TIER_COLORS[selectedSubscription.tier] || "bg-zinc-700"}>
                       {selectedSubscription.tier}
                     </Badge>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[#5A4A2E] text-xs uppercase">Status</p>
+                    <p className="text-[#1A1A1A]/70 text-xs uppercase">Status</p>
                     <Badge className={STATUS_COLORS[selectedSubscription.status] || "bg-zinc-700"}>
                       {selectedSubscription.status}
                     </Badge>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[#5A4A2E] text-xs uppercase">Price</p>
+                    <p className="text-[#1A1A1A]/70 text-xs uppercase">Price</p>
                     <p className="text-white">
                       ${selectedSubscription.price_usd} {selectedSubscription.currency}
                     </p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[#5A4A2E] text-xs uppercase">Expires</p>
+                    <p className="text-[#1A1A1A]/70 text-xs uppercase">Expires</p>
                     <p className="text-white">
                       {selectedSubscription.expires_at
                         ? format(new Date(selectedSubscription.expires_at), "PPP")
@@ -591,33 +591,33 @@ export default function BrokerSubscriptionsDashboard() {
               </div>
 
               <div className="border-t border-[#1A1A1A] pt-4">
-                <h4 className="text-sm font-medium text-[#5A4A2E] mb-3">Usage Statistics</h4>
+                <h4 className="text-sm font-medium text-[#1A1A1A]/70 mb-3">Usage Statistics</h4>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.ai_credits_used}</p>
-                    <p className="text-xs text-[#5A4A2E]">AI Credits Used</p>
+                    <p className="text-xs text-[#1A1A1A]/70">AI Credits Used</p>
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">
                       {selectedSubscription.ai_credits_limit || "∞"}
                     </p>
-                    <p className="text-xs text-[#5A4A2E]">Credit Limit</p>
+                    <p className="text-xs text-[#1A1A1A]/70">Credit Limit</p>
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.pdf_downloads}</p>
-                    <p className="text-xs text-[#5A4A2E]">PDF Downloads</p>
+                    <p className="text-xs text-[#1A1A1A]/70">PDF Downloads</p>
                   </div>
                 </div>
               </div>
 
               <div className="border-t border-[#1A1A1A] pt-4">
-                <p className="text-xs text-[#5A4A2E]">
-                  Subscription ID: <code className="text-[#5A4A2E]">{selectedSubscription.id}</code>
+                <p className="text-xs text-[#1A1A1A]/70">
+                  Subscription ID: <code className="text-[#1A1A1A]/70">{selectedSubscription.id}</code>
                 </p>
-                <p className="text-xs text-[#5A4A2E]">
-                  User ID: <code className="text-[#5A4A2E]">{selectedSubscription.user_id}</code>
+                <p className="text-xs text-[#1A1A1A]/70">
+                  User ID: <code className="text-[#1A1A1A]/70">{selectedSubscription.user_id}</code>
                 </p>
-                <p className="text-xs text-[#5A4A2E] mt-2">
+                <p className="text-xs text-[#1A1A1A]/70 mt-2">
                   Created: {format(new Date(selectedSubscription.created_at), "PPpp")}
                 </p>
               </div>

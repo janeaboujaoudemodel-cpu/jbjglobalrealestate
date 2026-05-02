@@ -38,7 +38,7 @@ const themeMap = {
     bar: 'bg-zinc-900/60 border border-[#1A1A1A]/50',
     icon: 'text-gold',
     save: 'bg-gold text-[#1A1A1A] hover:bg-gold/90',
-    newBtn: 'border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]',
+    newBtn: 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]',
   },
 };
 

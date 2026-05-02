@@ -61,7 +61,7 @@ const StartingPointSection = () => {
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
           <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#5A4A2E]" />
+            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#1A1A1A]/70" />
             <span className="text-[#1A1A1A]">{t('hero.findStartingPoint')}</span>
           </span>
         </div>
@@ -77,7 +77,7 @@ const StartingPointSection = () => {
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 border",
                   activeTab === tab.key
                     ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30 shadow-sm font-bold"
-                    : "bg-transparent text-[#5A4A2E] border-transparent hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A]"
+                    : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#FDFBF7]/60 hover:text-[#1A1A1A]"
                 )}
               >
                 {tab.label}
@@ -100,7 +100,7 @@ const StartingPointSection = () => {
                     <card.icon className="w-7 h-7 text-[#1A1A1A]" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
-                    <h4 className="text-[#1A1A1A] group-hover:text-[#5A4A2E] text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <h4 className="text-[#1A1A1A] group-hover:text-[#1A1A1A] text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
                     <p className="text-[#8A7556] text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>

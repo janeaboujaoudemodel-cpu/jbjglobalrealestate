@@ -1698,7 +1698,7 @@ export const SyncDashboard = ({ onClose }: SyncDashboardProps) => {
                  )}
 
                  {!isSyncing && !isPaused && (
-                   <Button onClick={runTestPageOne} variant="outline" className="border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA]">
+                   <Button onClick={runTestPageOne} variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]">
                      Test Page 1 Only
                    </Button>
                  )}

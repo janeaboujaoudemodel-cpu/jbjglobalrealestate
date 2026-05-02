@@ -269,7 +269,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
             I Understand - Reload Page
           </button>
           
-          <p className="text-xs text-[#5A4A2E] mt-4">
+          <p className="text-xs text-[#1A1A1A]/70 mt-4">
             If you believe this is an error, contact legal@jbj.ae with Incident ID: {violation?.incidentId}
           </p>
         </div>

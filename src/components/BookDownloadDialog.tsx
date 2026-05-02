@@ -139,7 +139,7 @@ export default function BookDownloadDialog({
             <p className="text-[#1A1A1A]/60 text-sm">
               Your copy of <span className="font-semibold text-[#1A1A1A]">{bookTitle}</span> is being prepared. Redirecting you now...
             </p>
-            <div className="flex items-center justify-center gap-2 text-[#5A4A2E]">
+            <div className="flex items-center justify-center gap-2 text-[#1A1A1A]/70">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="text-xs">Preparing book...</span>
             </div>
@@ -153,7 +153,7 @@ export default function BookDownloadDialog({
                 <DialogTitle className="text-lg font-bold text-white tracking-tight">Free Download</DialogTitle>
               </div>
               <p className="text-gold text-sm font-semibold">{bookTitle}</p>
-              <p className="text-[#5A4A2E] text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
+              <p className="text-[#1A1A1A]/70 text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
             </div>
 
             {/* Form */}
@@ -164,7 +164,7 @@ export default function BookDownloadDialog({
 
               <div className="space-y-3">
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                   <Input
                     type="text"
                     placeholder="Your name (optional)"
@@ -175,7 +175,7 @@ export default function BookDownloadDialog({
                 </div>
 
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                   <Input
                     type="email"
                     placeholder="Your email address"

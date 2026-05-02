@@ -47,7 +47,7 @@ const MeetingCenter = () => {
             Meeting <span className="text-gold">Center</span>
           </h1>
           
-          <p className="text-lg text-[#5A4A2E] max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8">
             Central hub for all your meeting summaries, call notes, and voice AI interactions. 
             Track action items and client communications in one place.
           </p>
@@ -73,12 +73,12 @@ const MeetingCenter = () => {
         {/* Search */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5A4A2E]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by client name or content..."
-              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+              className="pl-10 bg-[#FDFBF7] border-gold/20 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
             />
           </div>
         </div>
@@ -108,13 +108,13 @@ const MeetingCenter = () => {
             {isLoading ? (
               <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
-                <p className="text-[#5A4A2E]">Loading summaries...</p>
+                <p className="text-[#1A1A1A]/70">Loading summaries...</p>
               </div>
             ) : filteredSummaries.length === 0 ? (
               <div className="text-center py-16 bg-[#FDFBF7]/60 rounded-2xl border border-gold/20">
                 <Calendar className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">No summaries yet</h3>
-                <p className="text-[#5A4A2E] mb-6">
+                <p className="text-[#1A1A1A]/70 mb-6">
                   {activeTab === "all" 
                     ? "Start by summarizing a meeting or call"
                     : `No ${activeTab === "voice" ? "voice AI calls" : activeTab + "s"} recorded yet`

@@ -148,7 +148,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
             </div>
             <div>
               <CardTitle className="text-white">Capacity Automation</CardTitle>
-              <p className="text-[#5A4A2E] text-sm mt-1">
+              <p className="text-[#1A1A1A]/70 text-sm mt-1">
                 Auto-manage lead distribution when capacity is reached
               </p>
             </div>
@@ -156,7 +156,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <span className="text-[#5A4A2E] text-sm">Auto-reassign</span>
+              <span className="text-[#1A1A1A]/70 text-sm">Auto-reassign</span>
               <Switch
                 checked={autoReassign}
                 onCheckedChange={setAutoReassign}
@@ -168,7 +168,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
               size="sm"
               onClick={sendCapacityAlert}
               disabled={loading || alerts.length === 0}
-              className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+              className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -185,7 +185,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
         {/* Status Summary */}
         <div className="grid grid-cols-3 gap-4">
           <div className="bg-zinc-800 rounded-lg p-4 text-center">
-            <p className="text-[#5A4A2E] text-xs mb-1">ACTIVE BROKERS</p>
+            <p className="text-[#1A1A1A]/70 text-xs mb-1">ACTIVE BROKERS</p>
             <p className="text-white text-2xl font-bold">
               {brokers.filter((b) => b.status === "active").length}
             </p>
@@ -239,7 +239,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
                         <p className="text-white font-medium">
                           {alert.brokerName}
                         </p>
-                        <p className="text-[#5A4A2E] text-sm">
+                        <p className="text-[#1A1A1A]/70 text-sm">
                           {alert.activeLeads}/{alert.capacity} leads (
                           {Math.round(alert.usage)}%)
                         </p>
@@ -277,7 +277,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
           <div className="text-center py-8">
             <Users className="h-12 w-12 text-emerald-400 mx-auto mb-3" />
             <p className="text-emerald-400 font-medium">All brokers operating normally</p>
-            <p className="text-[#5A4A2E] text-sm mt-1">
+            <p className="text-[#1A1A1A]/70 text-sm mt-1">
               No capacity alerts at this time
             </p>
           </div>
@@ -285,13 +285,13 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
 
         {/* Default Capacity Info */}
         <div className="mt-4 p-4 bg-zinc-800/50 rounded-lg border border-[#1A1A1A]">
-          <div className="flex items-center gap-2 text-[#5A4A2E] text-sm">
+          <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-sm">
             <Settings className="h-4 w-4" />
             <span>
               Default daily capacity: <strong className="text-white">150 leads/day</strong>
             </span>
           </div>
-          <p className="text-[#5A4A2E] text-xs mt-2">
+          <p className="text-[#1A1A1A]/70 text-xs mt-2">
             When a broker reaches 100% capacity, new leads are automatically
             assigned to the next available broker with the lowest load.
           </p>

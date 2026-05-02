@@ -47,7 +47,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30",
+  general: "bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -215,7 +215,7 @@ export function AdminTasksPanel() {
           <div>
             <h3 className="font-semibold text-[#1A1A1A]">My Tasks</h3>
             {pendingTasks.length > 0 && (
-              <p className="text-xs text-[#5A4A2E]">{pendingTasks.length} pending</p>
+              <p className="text-xs text-[#1A1A1A]/70">{pendingTasks.length} pending</p>
             )}
           </div>
         </div>
@@ -289,7 +289,7 @@ export function AdminTasksPanel() {
             <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <CheckCircle2 className="w-6 h-6 text-gold" />
             </div>
-            <p className="text-[#5A4A2E] text-sm">No pending tasks</p>
+            <p className="text-[#1A1A1A]/70 text-sm">No pending tasks</p>
           </div>
         ) : (
           pendingTasks.map((task) => (
@@ -307,7 +307,7 @@ export function AdminTasksPanel() {
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-[#1A1A1A] text-sm">{task.title}</p>
                   {task.description && (
-                    <p className="text-xs text-[#5A4A2E] mt-0.5 line-clamp-1">{task.description}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-1">{task.description}</p>
                   )}
                   <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                     <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${CATEGORY_COLORS[task.category] || CATEGORY_COLORS.general}`}>
@@ -317,7 +317,7 @@ export function AdminTasksPanel() {
                       {task.priority}
                     </Badge>
                     {task.due_date && (
-                      <span className="text-[10px] text-[#5A4A2E] flex items-center gap-0.5">
+                      <span className="text-[10px] text-[#1A1A1A]/70 flex items-center gap-0.5">
                         <Calendar className="w-2.5 h-2.5" />
                         {format(new Date(task.due_date), "MMM d")}
                       </span>
@@ -326,7 +326,7 @@ export function AdminTasksPanel() {
                 </div>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-[#5A4A2E] hover:text-red-500 transition-colors p-1"
+                  className="text-[#1A1A1A]/70 hover:text-red-500 transition-colors p-1"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -338,7 +338,7 @@ export function AdminTasksPanel() {
         {/* Completed Tasks */}
         {completedTasks.length > 0 && (
           <div className="pt-3 border-t border-gold/20">
-            <p className="text-xs text-[#5A4A2E] mb-2 flex items-center gap-1">
+            <p className="text-xs text-[#1A1A1A]/70 mb-2 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3 text-green-500" />
               Completed ({completedTasks.length})
             </p>
@@ -353,10 +353,10 @@ export function AdminTasksPanel() {
                 >
                   <CheckCircle2 className="w-3 h-3 text-[#1A1A1A]" />
                 </button>
-                <span className="line-through text-[#5A4A2E] text-xs flex-1">{task.title}</span>
+                <span className="line-through text-[#1A1A1A]/70 text-xs flex-1">{task.title}</span>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  className="text-[#5A4A2E] hover:text-red-500 transition-colors"
+                  className="text-[#1A1A1A]/70 hover:text-red-500 transition-colors"
                 >
                   <Trash2 className="w-3 h-3" />
                 </button>

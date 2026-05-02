@@ -158,8 +158,8 @@ const FoundersDraftsPanel: React.FC = () => {
               {drafts.length === 0 ? (
                 <div className="text-center py-8">
                   <FileEdit className="w-12 h-12 text-[#8A7556] mx-auto mb-4" />
-                  <p className="text-[#5A4A2E]">No drafts yet</p>
-                  <p className="text-sm text-[#5A4A2E] mt-1">Ask Amanda to draft messages for you</p>
+                  <p className="text-[#1A1A1A]/70">No drafts yet</p>
+                  <p className="text-sm text-[#1A1A1A]/70 mt-1">Ask Amanda to draft messages for you</p>
                 </div>
               ) : (
                 drafts.map((draft) => (
@@ -188,17 +188,17 @@ const FoundersDraftsPanel: React.FC = () => {
                         className={`text-xs border ${
                           draft.status === 'sent' 
                             ? 'border-green-200 text-green-600 bg-green-50' 
-                            : 'border-gold/30 text-[#5A4A2E] bg-[#F7F2EA]'
+                            : 'border-gold/30 text-[#1A1A1A]/70 bg-[#F7F2EA]'
                         }`}
                       >
                         {draft.status === 'sent' ? 'Sent' : 'Draft'}
                       </Badge>
                     </div>
                     {draft.subject && (
-                      <p className="text-sm text-[#5A4A2E] mt-2 truncate">{draft.subject}</p>
+                      <p className="text-sm text-[#1A1A1A]/70 mt-2 truncate">{draft.subject}</p>
                     )}
-                    <p className="text-xs text-[#5A4A2E] mt-2 line-clamp-2">{draft.content}</p>
-                    <div className="flex items-center gap-1 mt-2 text-xs text-[#5A4A2E]">
+                    <p className="text-xs text-[#1A1A1A]/70 mt-2 line-clamp-2">{draft.content}</p>
+                    <div className="flex items-center gap-1 mt-2 text-xs text-[#1A1A1A]/70">
                       <Clock className="w-3 h-3" />
                       {format(new Date(draft.created_at), 'MMM d, h:mm a')}
                     </div>
@@ -253,18 +253,18 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="space-y-4">
               {selectedDraft.subject && (
                 <div>
-                  <label className="text-xs text-[#5A4A2E] mb-1 block">Subject</label>
+                  <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Subject</label>
                   <p className="text-[#1A1A1A] bg-[#F7F2EA] p-3 rounded-lg border-2 border-gold/20">
                     {selectedDraft.subject}
                   </p>
                 </div>
               )}
               <div>
-                <label className="text-xs text-[#5A4A2E] mb-1 block">Content</label>
+                <label className="text-xs text-[#1A1A1A]/70 mb-1 block">Content</label>
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
-                  className="min-h-[300px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] resize-none placeholder:text-[#5A4A2E]"
+                  className="min-h-[300px] bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] resize-none placeholder:text-[#1A1A1A]/70"
                   placeholder="Draft content..."
                 />
               </div>
@@ -273,8 +273,8 @@ const FoundersDraftsPanel: React.FC = () => {
             <div className="flex items-center justify-center h-[350px] text-center">
               <div>
                 <FileEdit className="w-16 h-16 text-[#8A7556] mx-auto mb-4" />
-                <p className="text-[#5A4A2E]">Select a draft to edit</p>
-                <p className="text-sm text-[#5A4A2E] mt-1">Or ask Amanda to create a new one</p>
+                <p className="text-[#1A1A1A]/70">Select a draft to edit</p>
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">Or ask Amanda to create a new one</p>
               </div>
             </div>
           )}

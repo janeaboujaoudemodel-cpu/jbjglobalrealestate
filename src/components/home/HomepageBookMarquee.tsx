@@ -57,7 +57,7 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
             <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-[#B89555]/30 shadow-sm transition-transform duration-300 group-hover:scale-105">
               <BookCoverFace book={book} size="thumb" bare />
             </div>
-            <p className="text-center text-[10px] md:text-xs text-[#5A4A2E] mt-2 truncate px-1 group-hover:text-[#1A1A1A] transition-colors">
+            <p className="text-center text-[10px] md:text-xs text-[#1A1A1A]/70 mt-2 truncate px-1 group-hover:text-[#1A1A1A] transition-colors">
               {book.title}
             </p>
           </Link>
@@ -75,18 +75,18 @@ export default function HomepageBookMarquee() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-[#5A4A2E]" />
+              <BookOpen className="w-5 h-5 text-[#1A1A1A]/70" />
             </div>
             <div>
               <h2 className="text-[#1A1A1A] text-lg md:text-xl font-bold">
                 Explore Our Guides & Reports
               </h2>
-              <p className="text-[#5A4A2E] text-xs">Free educational resources for investors</p>
+              <p className="text-[#1A1A1A]/70 text-xs">Free educational resources for investors</p>
             </div>
           </div>
           <Link
             to="/guides"
-            className="hidden sm:flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#5A4A2E] transition-colors"
+            className="hidden sm:flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#1A1A1A] transition-colors"
           >
             View Library
             <ArrowRight className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function HomepageBookMarquee() {
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
-            className="inline-flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#5A4A2E] transition-colors"
+            className="inline-flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium hover:text-[#1A1A1A] transition-colors"
           >
             View Full Library
             <ArrowRight className="w-4 h-4" />

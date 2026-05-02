@@ -526,7 +526,7 @@ const JBJDesignStudio: React.FC = () => {
                       ) : (
                         <div className="text-center p-8">
                           <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
-                            <ImagePlus className="w-10 h-10 text-[#5A4A2E]" />
+                            <ImagePlus className="w-10 h-10 text-[#1A1A1A]/70" />
                           </div>
                           <h3 className="text-white/70 font-medium mb-2">Select a Template</h3>
                           <p className="text-white/90 text-sm">Choose a template from the left panel to get started</p>
@@ -580,7 +580,7 @@ const JBJDesignStudio: React.FC = () => {
                                 value={websiteUploadPrompt}
                                 onChange={(e) => setWebsiteUploadPrompt(e.target.value)}
                                 placeholder="e.g., Replace the book in the 'Download Free Market Report' section on the homepage with this new design. Make it 3D style."
-                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-[#1A1A1A] rounded-lg text-white placeholder:text-[#5A4A2E] resize-none"
+                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-[#1A1A1A] rounded-lg text-white placeholder:text-[#1A1A1A]/70 resize-none"
                               />
                               <Button
                                 onClick={handleUploadToWebsite}

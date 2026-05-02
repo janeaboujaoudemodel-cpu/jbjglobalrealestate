@@ -147,7 +147,7 @@ const MarketReport = () => {
                   { icon: Star, text: "AI Matchmaker Access" },
                   { icon: BookOpen, text: "Expert Insights" },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-[#5A4A2E] text-sm">
+                  <div key={i} className="flex items-center gap-3 text-[#1A1A1A]/70 text-sm">
                     <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-gold" />
                     </div>
@@ -207,12 +207,12 @@ const MarketReport = () => {
                     </div>
                     <div>
                       <h2 className="text-[#1A1A1A] text-2xl font-bold">Unlock Your Book</h2>
-                      <p className="text-[#5A4A2E] mt-1">Complete the form below to unlock instant access to the UAE Market Intelligence book.</p>
+                      <p className="text-[#1A1A1A]/70 mt-1">Complete the form below to unlock instant access to the UAE Market Intelligence book.</p>
                     </div>
                   </div>
                   <div className="space-y-5">
                     <div>
-                      <Label className="text-[#5A4A2E] text-sm font-medium">Full Name *</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm font-medium">Full Name *</Label>
                       <Input value={form.fullName} onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))} placeholder="Enter your full name" className="mt-2 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -249,7 +249,7 @@ const MarketReport = () => {
                       )}
                     </Button>
                   </div>
-                  <p className="text-[#5A4A2E] text-xs leading-relaxed text-center mt-4">
+                  <p className="text-[#1A1A1A]/70 text-xs leading-relaxed text-center mt-4">
                     By downloading, you agree your details may be used to contact you about UAE real estate opportunities.
                   </p>
                 </>
@@ -264,14 +264,14 @@ const MarketReport = () => {
                   {["Structured market overview (educational)", "Developer & community comparison frameworks", "Investment due diligence checklist", "Complimentary AI Home Finder access", "Expert insights from the founder"].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-[#5A4A2E] text-sm">{item}</span>
+                      <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
-                <p className="text-[#5A4A2E] text-xs mb-1">Created by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span></p>
-                <p className="text-[#5A4A2E] text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
+                <p className="text-[#1A1A1A]/70 text-xs mb-1">Created by <span className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</span></p>
+                <p className="text-[#1A1A1A]/70 text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
                 <p className="text-white/90 text-[10px] mt-2 uppercase tracking-widest">Real Estate Brokerage • Dubai, UAE</p>
               </div>
             </motion.aside>

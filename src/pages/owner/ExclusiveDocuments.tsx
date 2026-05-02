@@ -175,7 +175,7 @@ const ExclusiveDocuments = () => {
               JBJ <span className="text-gold">Exclusive Documents</span>
             </h1>
           </div>
-          <p className="text-[#5A4A2E] ml-[52px]">
+          <p className="text-[#1A1A1A]/70 ml-[52px]">
             Contracts, HR letters, NDAs, and RERA forms — AI-generated and ready for signature.
           </p>
         </div>

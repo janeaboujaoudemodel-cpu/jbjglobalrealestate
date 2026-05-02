@@ -118,7 +118,7 @@ export const LeadAIStar = ({
               <Sparkles className="w-5 h-5 text-[#B89555]" />
               {entityName}
             </SheetTitle>
-            <p className="text-xs text-[#5A4A2E] capitalize">{entityType}</p>
+            <p className="text-xs text-[#1A1A1A]/70 capitalize">{entityType}</p>
           </SheetHeader>
 
           <div className="mt-4 space-y-3">
@@ -194,7 +194,7 @@ export const LeadAIStar = ({
               </div>
             )}
 
-            <p className="text-[10px] text-[#5A4A2E]">
+            <p className="text-[10px] text-[#1A1A1A]/70">
               Notes, calendar events and tasks created here are linked to{" "}
               <strong>{entityName}</strong>.
             </p>

@@ -21,9 +21,9 @@ const STEP_STYLES = {
     border: "border-[#B89555]/30/30",
     bg: "bg-[#B89555]/10",
     icon: Clock,
-    iconColor: "text-[#5A4A2E]",
+    iconColor: "text-[#1A1A1A]/70",
     label: "Pending",
-    badgeClass: "bg-[#B89555]/10 text-[#5A4A2E] border-[#B89555]/30/30",
+    badgeClass: "bg-[#B89555]/10 text-[#1A1A1A]/70 border-[#B89555]/30/30",
   },
   in_review: {
     border: "border-amber-400/40",

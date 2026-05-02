@@ -74,7 +74,7 @@ const TestimonialsSection = () => {
           >
             {t('testimonials.title', 'What Our Clients Say')}
           </h2>
-          <p className="text-[#5A4A2E] text-sm">
+          <p className="text-[#1A1A1A]/70 text-sm">
             {t('testimonials.subtitle', 'Real experiences from real clients')}
           </p>
         </div>
@@ -116,7 +116,7 @@ const TestimonialsSection = () => {
                   <p className="text-[#1A1A1A] font-semibold text-base">
                     {currentTestimonial.name}
                   </p>
-                  <p className="text-[#5A4A2E] text-sm">
+                  <p className="text-[#1A1A1A]/70 text-sm">
                     {currentTestimonial.area}
                   </p>
                 </div>

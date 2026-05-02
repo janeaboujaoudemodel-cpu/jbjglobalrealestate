@@ -1305,9 +1305,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
               <div className="p-3 bg-[#B89555]/10 border border-[#B89555]/30/30 rounded-lg text-center">
-                <AlertCircle className="h-5 w-5 text-[#5A4A2E] mx-auto mb-1" />
-                <p className="text-lg font-bold text-[#5A4A2E]">{analyzedData.skipped.length}</p>
-                <p className="text-xs text-[#5A4A2E]">Duplicates</p>
+                <AlertCircle className="h-5 w-5 text-[#1A1A1A]/70 mx-auto mb-1" />
+                <p className="text-lg font-bold text-[#1A1A1A]/70">{analyzedData.skipped.length}</p>
+                <p className="text-xs text-[#1A1A1A]/70">Duplicates</p>
               </div>
             </div>
 
@@ -1468,8 +1468,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-xs text-amber-300">Flagged</p>
                 </div>
                 <div className="p-3 bg-[#B89555]/10 rounded-lg">
-                  <p className="text-xl font-bold text-[#5A4A2E]">{result.duplicates}</p>
-                  <p className="text-xs text-[#5A4A2E]">Skipped</p>
+                  <p className="text-xl font-bold text-[#1A1A1A]/70">{result.duplicates}</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Skipped</p>
                 </div>
               </div>
             </div>

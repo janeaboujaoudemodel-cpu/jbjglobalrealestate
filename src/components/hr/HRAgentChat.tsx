@@ -135,7 +135,7 @@ export default function HRAgentChat() {
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-gold mx-auto" />
-            <p className="text-[#5A4A2E]">Connecting to Jessica...</p>
+            <p className="text-[#1A1A1A]/70">Connecting to Jessica...</p>
           </div>
         </CardContent>
       </Card>
@@ -152,7 +152,7 @@ export default function HRAgentChat() {
             </div>
             <div>
               <CardTitle className="text-lg text-[#1A1A1A]">Jessica</CardTitle>
-              <p className="text-sm text-[#5A4A2E]">Available 24/7 to support you</p>
+              <p className="text-sm text-[#1A1A1A]/70">Available 24/7 to support you</p>
             </div>
           </div>
           <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>
@@ -200,7 +200,7 @@ export default function HRAgentChat() {
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#5A4A2E] hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-[#1A1A1A]/70 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -253,7 +253,7 @@ export default function HRAgentChat() {
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
-            <p className="text-xs text-[#5A4A2E] mt-2 text-center">
+            <p className="text-xs text-[#1A1A1A]/70 mt-2 text-center">
               Press Enter to send • AI-powered interview assistant
             </p>
           </div>

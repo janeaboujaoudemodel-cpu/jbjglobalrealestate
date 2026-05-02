@@ -291,7 +291,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
                   </TableCell>
                   <TableCell className="text-[#1A1A1A]/70">{subscriber.source || 'Direct'}</TableCell>
                   <TableCell>
-                    <Badge className={subscriber.is_active ? 'bg-green-100 text-green-700' : 'bg-[#F7F2EA] text-[#5A4A2E]'}>
+                    <Badge className={subscriber.is_active ? 'bg-green-100 text-green-700' : 'bg-[#F7F2EA] text-[#1A1A1A]/70'}>
                       {subscriber.is_active ? 'Active' : 'Inactive'}
                     </Badge>
                   </TableCell>

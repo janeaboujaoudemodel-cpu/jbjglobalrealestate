@@ -602,7 +602,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
                           ? "bg-[#1A1A1A] text-white border border-[#1A1A1A] shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA] hover:border-[#B89555]/30"
+                          : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:border-[#B89555]/30"
                       )}
                     >
                       {q}
@@ -629,7 +629,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
                           ? "bg-[#1A1A1A] text-white border border-[#1A1A1A] shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA] hover:border-[#B89555]/30"
+                          : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:border-[#B89555]/30"
                       )}
                     >
                       {q}
@@ -814,7 +814,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             pillBase, "px-3 py-1.5",
             filters.hideSoldOut
               ? "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-sm"
-              : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#5A4A2E] hover:border-[#B89555]/30"
+              : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30"
           )}
         >
           {t('filter.hideSold')}

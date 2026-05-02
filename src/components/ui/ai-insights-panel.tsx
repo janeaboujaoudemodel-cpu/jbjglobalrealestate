@@ -124,14 +124,14 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             </div>
             <div>
               <h3 className="font-semibold text-[#1A1A1A]">AI Insights</h3>
-              <p className="text-xs text-[#5A4A2E]">Real-time intelligence</p>
+              <p className="text-xs text-[#1A1A1A]/70">Real-time intelligence</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
             <button
               onClick={onRefresh}
               className={cn(
-                'p-2 rounded-lg text-[#5A4A2E] hover:text-gold hover:bg-gold/10 transition-colors',
+                'p-2 rounded-lg text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 transition-colors',
                 isLoading && 'animate-spin'
               )}
             >
@@ -140,7 +140,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-2 rounded-lg text-[#5A4A2E] hover:text-gold hover:bg-gold/10 transition-colors"
+                className="p-2 rounded-lg text-[#1A1A1A]/70 hover:text-gold hover:bg-gold/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -161,7 +161,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               {stat.icon}
               {stat.value}
             </div>
-            <div className="text-[10px] text-[#5A4A2E] uppercase tracking-wider">{stat.label}</div>
+            <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">{stat.label}</div>
           </div>
         ))}
       </div>

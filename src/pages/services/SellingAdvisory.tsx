@@ -269,7 +269,7 @@ const SellingAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -295,7 +295,7 @@ const SellingAdvisory = () => {
               variants={fadeInUp}
               className="jj-card-inner"
             >
-              <p className="text-lg text-[#5A4A2E] leading-relaxed">
+              <p className="text-lg text-[#1A1A1A]/70 leading-relaxed">
                 Selling advisory is a professional service where JBJ represents
                 the seller throughout the sales process. Unlike general
                 educational guides, advisory includes{" "}
@@ -336,7 +336,7 @@ const SellingAdvisory = () => {
                     <h3 className="font-semibold text-[#1A1A1A] mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-[#5A4A2E]">{item.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -377,7 +377,7 @@ const SellingAdvisory = () => {
                     {offPlanFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-[#5A4A2E]"
+                        className="flex items-start gap-3 text-[#1A1A1A]/70"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -402,7 +402,7 @@ const SellingAdvisory = () => {
                     {resaleFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-[#5A4A2E]"
+                        className="flex items-start gap-3 text-[#1A1A1A]/70"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -490,21 +490,21 @@ const SellingAdvisory = () => {
                 <h3 className="text-xl font-bold text-[#1A1A1A]">Important Notice</h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-[#5A4A2E]">
+                <li className="flex items-start gap-3 text-[#1A1A1A]/70">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>Selling advisory fees are disclosed upfront</span>
                 </li>
-                <li className="flex items-start gap-3 text-[#5A4A2E]">
+                <li className="flex items-start gap-3 text-[#1A1A1A]/70">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>
                     Commission structures align with UAE regulations
                   </span>
                 </li>
-                <li className="flex items-start gap-3 text-[#5A4A2E]">
+                <li className="flex items-start gap-3 text-[#1A1A1A]/70">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>No hidden charges or undisclosed markups</span>
                 </li>
-                <li className="flex items-start gap-3 text-[#5A4A2E]">
+                <li className="flex items-start gap-3 text-[#1A1A1A]/70">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>Final terms confirmed before engagement</span>
                 </li>
@@ -538,7 +538,7 @@ const SellingAdvisory = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-lg text-[#5A4A2E] leading-relaxed"
+              className="text-lg text-[#1A1A1A]/70 leading-relaxed"
             >
               JBJ Global Real Estate operates as a licensed UAE brokerage.
               Selling advisory services are delivered within applicable
@@ -589,7 +589,7 @@ const SellingAdvisory = () => {
                   {comparisonData.map((row, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 text-[#1A1A1A] font-medium">{row.aspect}</td>
-                      <td className="px-6 py-4 text-[#5A4A2E]">{row.guide}</td>
+                      <td className="px-6 py-4 text-[#1A1A1A]/70">{row.guide}</td>
                       <td className="px-6 py-4 text-gold font-semibold">
                         {row.advisory}
                       </td>
@@ -635,7 +635,7 @@ const SellingAdvisory = () => {
                     <AccordionTrigger className="px-6 py-4 text-left font-semibold text-[#1A1A1A] hover:text-gold hover:no-underline">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-[#5A4A2E]">
+                    <AccordionContent className="px-6 pb-4 text-[#1A1A1A]/70">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -665,7 +665,7 @@ const SellingAdvisory = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-[#5A4A2E] text-lg mb-8"
+              className="text-[#1A1A1A]/70 text-lg mb-8"
             >
               Let our experienced team maximize your property value through
               strategic positioning and expert negotiation.

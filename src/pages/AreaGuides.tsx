@@ -203,7 +203,7 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-[#5A4A2E] text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto mb-10"
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -413,7 +413,7 @@ const AreaGuides = () => {
 
                           <div className="flex-1 min-h-[40px]">
                             {area.description ? (
-                              <p className="text-[#5A4A2E] text-xs line-clamp-2">
+                              <p className="text-[#1A1A1A]/70 text-xs line-clamp-2">
                                 {area.description
                                   .replace(/!\[.*?\]\(.*?\)/g, "")
                                   .replace(/provident\s*(estate)?/gi, "")
@@ -422,14 +422,14 @@ const AreaGuides = () => {
                                   .trim()}
                               </p>
                             ) : (
-                              <p className="text-[#5A4A2E] text-xs italic">
+                              <p className="text-[#1A1A1A]/70 text-xs italic">
                                 Explore properties in {area.name}
                               </p>
                             )}
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-[#5A4A2E] text-xs mt-3 pt-3 border-t border-gold/20">
+                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-gold/20">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5 text-gold" />
@@ -438,7 +438,7 @@ const AreaGuides = () => {
                             )}
                             {(area.developer_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <span className="text-[#5A4A2E]">{area.developer_count} Developers</span>
+                                <span className="text-[#1A1A1A]/70">{area.developer_count} Developers</span>
                               </div>
                             )}
                             {area.is_trending && (
@@ -454,7 +454,7 @@ const AreaGuides = () => {
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                              <span className="text-[#5A4A2E] text-xs">View area details</span>
+                              <span className="text-[#1A1A1A]/70 text-xs">View area details</span>
                             )}
                           </div>
                         </div>
@@ -522,7 +522,7 @@ const AreaGuides = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
             Can't Find What You're Looking For?
           </h2>
-          <p className="text-[#5A4A2E] mb-6 max-w-xl mx-auto">
+          <p className="text-[#1A1A1A]/70 mb-6 max-w-xl mx-auto">
             Our team can help you discover the perfect area based on your lifestyle and investment goals.
           </p>
           <Link

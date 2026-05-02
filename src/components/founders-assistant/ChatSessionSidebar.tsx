@@ -77,7 +77,7 @@ export function ChatSessionSidebar({
 
       {/* Actions bar */}
       <div className="px-3 py-2 flex items-center justify-between border-b border-[#B89555]/10">
-        <span className="text-[10px] text-[#5A4A2E] uppercase tracking-wider font-medium">
+        <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider font-medium">
           History ({sessions.length})
         </span>
         <div className="flex items-center gap-1">
@@ -95,7 +95,7 @@ export function ChatSessionSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-[#5A4A2E] hover:bg-[#F7F2EA]"
+                className="h-6 w-6 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
                 onClick={() => { setSelectMode(false); setSelected(new Set()); }}
               >
                 <X className="w-3 h-3" />
@@ -106,7 +106,7 @@ export function ChatSessionSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-[#5A4A2E] hover:text-[#B89555] hover:bg-[#B89555]/10"
+                className="h-6 w-6 text-[#1A1A1A]/70 hover:text-[#B89555] hover:bg-[#B89555]/10"
                 onClick={() => setSelectMode(true)}
                 title="Select chats"
               >
@@ -116,7 +116,7 @@ export function ChatSessionSidebar({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6 text-[#5A4A2E] hover:text-red-500 hover:bg-red-50"
+                  className="h-6 w-6 text-[#1A1A1A]/70 hover:text-red-500 hover:bg-red-50"
                   onClick={onClearAll}
                   title="Clear all chats"
                 >
@@ -134,8 +134,8 @@ export function ChatSessionSidebar({
           {sessions.length === 0 ? (
             <div className="text-center py-8">
               <MessageSquare className="w-8 h-8 text-[#B89555]/30 mx-auto mb-2" />
-              <p className="text-xs text-[#5A4A2E]">No chats yet</p>
-              <p className="text-[10px] text-[#5A4A2E]">Start a new conversation</p>
+              <p className="text-xs text-[#1A1A1A]/70">No chats yet</p>
+              <p className="text-[10px] text-[#1A1A1A]/70">Start a new conversation</p>
             </div>
           ) : (
             sessions.map((session) => (
@@ -168,15 +168,15 @@ export function ChatSessionSidebar({
                   </div>
                 )}
                 <MessageSquare className={`w-3.5 h-3.5 flex-shrink-0 ${
-                  activeSessionId === session.id ? 'text-[#B89555]' : 'text-[#5A4A2E]'
+                  activeSessionId === session.id ? 'text-[#B89555]' : 'text-[#1A1A1A]/70'
                 }`} />
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-medium truncate ${
-                    activeSessionId === session.id ? 'text-[#1A1A1A]' : 'text-[#5A4A2E]'
+                    activeSessionId === session.id ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/70'
                   }`}>
                     {session.title}
                   </p>
-                  <p className="text-[10px] text-[#5A4A2E] flex items-center gap-1">
+                  <p className="text-[10px] text-[#1A1A1A]/70 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5" />
                     {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
                   </p>
@@ -187,7 +187,7 @@ export function ChatSessionSidebar({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-[#5A4A2E] hover:text-[#5A4A2E]"
+                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <MoreVertical className="w-3 h-3" />

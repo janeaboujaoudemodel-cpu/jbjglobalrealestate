@@ -121,7 +121,7 @@ const DesignHistoryList = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Palette className="w-6 h-6 text-[#5A4A2E]" />
+                            <Palette className="w-6 h-6 text-[#1A1A1A]/70" />
                           </div>
                         )}
                       </div>
@@ -148,7 +148,7 @@ const DesignHistoryList = ({
                           {formatDate(item.createdAt)}
                           {item.designStyle && (
                             <>
-                              <span className="text-[#5A4A2E]">•</span>
+                              <span className="text-[#1A1A1A]/70">•</span>
                               <span className="capitalize">{item.designStyle}</span>
                             </>
                           )}

@@ -145,7 +145,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
   if (loading) {
     return (
       <Card className="border-border bg-[#FDFBF7]">
-        <CardContent className="py-8 text-center text-[#5A4A2E]">
+        <CardContent className="py-8 text-center text-[#1A1A1A]/70">
           Calculating pipeline...
         </CardContent>
       </Card>
@@ -161,9 +161,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
       {hasNoData && (
         <Card className="border-border bg-[#FDFBF7]">
           <CardContent className="py-8 text-center">
-            <Briefcase className="h-12 w-12 mx-auto mb-4 text-[#5A4A2E]" />
+            <Briefcase className="h-12 w-12 mx-auto mb-4 text-[#1A1A1A]/70" />
             <p className="text-[#1A1A1A] font-semibold mb-1">No active data yet</p>
-            <p className="text-[#5A4A2E] text-sm">Start adding leads to see your pipeline metrics.</p>
+            <p className="text-[#1A1A1A]/70 text-sm">Start adding leads to see your pipeline metrics.</p>
           </CardContent>
         </Card>
       )}
@@ -184,7 +184,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-[#1A1A1A] tracking-tight flex-1">
               {hasNoData ? "—" : `${stats.totalPipeline} leads`}
             </p>
-            <p className="text-xs text-[#5A4A2E] mt-2">Active in pipeline</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Active in pipeline</p>
           </CardContent>
         </Card>
 
@@ -202,7 +202,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-emerald-600 tracking-tight flex-1">
               {hasNoData || stats.forecastedRevenue === 0 ? "—" : formatValue(stats.forecastedRevenue, true)}
             </p>
-            <p className="text-xs text-[#5A4A2E] mt-2">Requires deal values</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Requires deal values</p>
           </CardContent>
         </Card>
 
@@ -220,7 +220,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-amber-600 tracking-tight flex-1">
               {hasNoData ? "—" : `${stats.conversionRate.toFixed(1)}%`}
             </p>
-            <p className="text-xs text-[#5A4A2E] mt-2">Won vs Lost</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Won vs Lost</p>
           </CardContent>
         </Card>
 
@@ -239,7 +239,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
               <p className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">{stats.wonDeals}</p>
               <span className="text-sm text-red-500 font-medium">/ {stats.lostDeals} lost</span>
             </div>
-            <p className="text-xs text-[#5A4A2E] mt-2">Closed deals</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Closed deals</p>
           </CardContent>
         </Card>
       </div>
@@ -254,7 +254,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         </CardHeader>
         <CardContent>
           {stats.stageBreakdown.length === 0 ? (
-            <div className="text-center text-[#5A4A2E] py-4">
+            <div className="text-center text-[#1A1A1A]/70 py-4">
               No active deals in pipeline
             </div>
           ) : (
@@ -269,7 +269,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                         <span className="text-sm font-medium text-[#1A1A1A] capitalize">
                           {stage.stage.replace(/_/g, " ")}
                         </span>
-                        <Badge variant="secondary" className="text-xs bg-[#F7F2EA] text-[#5A4A2E]">
+                        <Badge variant="secondary" className="text-xs bg-[#F7F2EA] text-[#1A1A1A]/70">
                           {stage.count} leads
                         </Badge>
                       </div>

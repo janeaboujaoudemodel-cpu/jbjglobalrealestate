@@ -102,7 +102,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               </Avatar>
               <div>
                 <h3 className="text-white font-medium">{lead.full_name}</h3>
-                <p className="text-[#5A4A2E] text-sm flex items-center gap-1">
+                <p className="text-[#1A1A1A]/70 text-sm flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {getTimeAgo(lead.created_at)}
                 </p>
@@ -111,12 +111,12 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-[#5A4A2E] h-8 w-8">
+                <Button variant="ghost" size="icon" className="text-[#1A1A1A]/70 h-8 w-8">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-zinc-900 border-[#1A1A1A]">
-                <DropdownMenuItem className="text-[#5A4A2E] focus:bg-zinc-800">
+                <DropdownMenuItem className="text-[#1A1A1A]/70 focus:bg-zinc-800">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Details
                 </DropdownMenuItem>
@@ -126,7 +126,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
           {/* Interest Note */}
           {lead.interest_note && (
-            <p className="text-[#5A4A2E] text-sm mb-3 line-clamp-2">
+            <p className="text-[#1A1A1A]/70 text-sm mb-3 line-clamp-2">
               {lead.interest_note}
             </p>
           )}
@@ -134,10 +134,10 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
           {/* Contact Info */}
           <div className="space-y-1 mb-4 text-sm">
             {lead.email && (
-              <p className="text-[#5A4A2E] truncate">{lead.email}</p>
+              <p className="text-[#1A1A1A]/70 truncate">{lead.email}</p>
             )}
             {lead.phone && (
-              <p className="text-[#5A4A2E]">{lead.phone}</p>
+              <p className="text-[#1A1A1A]/70">{lead.phone}</p>
             )}
           </div>
 
@@ -166,7 +166,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               onClick={handleCallClick}
               disabled={!lead.phone}
               variant="outline"
-              className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+              className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
             >
               <Phone className="h-4 w-4" />
             </Button>

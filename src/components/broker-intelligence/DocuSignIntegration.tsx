@@ -137,7 +137,7 @@ export function DocuSignIntegration() {
                 placeholder="Full name"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
 
@@ -151,7 +151,7 @@ export function DocuSignIntegration() {
                 placeholder="email@example.com"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export function DocuSignIntegration() {
               placeholder="e.g., JBJ-2024-001"
               value={propertyRef}
               onChange={(e) => setPropertyRef(e.target.value)}
-              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+              className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
             />
           </div>
 
@@ -212,7 +212,7 @@ export function DocuSignIntegration() {
                     <FileText className="w-4 h-4 text-white/90" />
                     <span className="text-white/70 text-xs">{sig.template}</span>
                   </div>
-                  <span className="text-[#5A4A2E] text-xs">
+                  <span className="text-[#1A1A1A]/70 text-xs">
                     {new Date(sig.sentAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -233,7 +233,7 @@ export function DocuSignIntegration() {
         <Shield className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
         <div>
           <p className="text-emerald-400 text-xs font-medium">DocuSign Connected</p>
-          <p className="text-[#5A4A2E] text-xs">
+          <p className="text-[#1A1A1A]/70 text-xs">
             Contracts are legally binding and stored securely. All signatures comply with UAE electronic signature regulations.
           </p>
         </div>

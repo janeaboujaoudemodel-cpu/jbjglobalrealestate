@@ -720,7 +720,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   color: '#FFFFFF',
                   textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
-                  color: '#3A2D1D',
+                  color: 'rgba(26, 26, 26, 0.72)',
                 }}
               >
                 Excellence in Real Estate
@@ -799,32 +799,32 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <div className="px-4 pt-4 pb-2">
                   <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#1A1A1A] mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <Cpu className="w-4 h-4 text-[#5A4A2E]" />AI Tools Hub
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Cpu className="w-4 h-4 text-[#1A1A1A]/70" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <ClipboardCheck className="w-4 h-4 text-[#5A4A2E]" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <ClipboardCheck className="w-4 h-4 text-[#1A1A1A]/70" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <GraduationCap className="w-4 h-4 text-[#5A4A2E]" />Careers
+                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <GraduationCap className="w-4 h-4 text-[#1A1A1A]/70" />Careers
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <Home className="w-4 h-4 text-[#5A4A2E]" />Resale Properties
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Home className="w-4 h-4 text-[#1A1A1A]/70" />Resale Properties
                     </Link>
-                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <Heart className="w-4 h-4 text-[#5A4A2E]" />My Favorites
+                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Heart className="w-4 h-4 text-[#1A1A1A]/70" />My Favorites
                     </Link>
-                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <LayoutDashboard className="w-4 h-4 text-[#5A4A2E]" />My Dashboard
+                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70" />My Dashboard
                     </Link>
-                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <CalendarClock className="w-4 h-4 text-[#5A4A2E]" />AI Calendar
+                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <CalendarClock className="w-4 h-4 text-[#1A1A1A]/70" />AI Calendar
                     </Link>
-                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <Sparkles className="w-4 h-4 text-[#5A4A2E]" />AI Home Finder
+                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Sparkles className="w-4 h-4 text-[#1A1A1A]/70" />AI Home Finder
                     </Link>
-                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#5A4A2E] hover:text-[#5A4A2E] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
-                      <Calculator className="w-4 h-4 text-[#5A4A2E]" />Property Evaluator
+                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                      <Calculator className="w-4 h-4 text-[#1A1A1A]/70" />Property Evaluator
                     </Link>
                   </div>
                 </div>
@@ -1124,7 +1124,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         onClick={() => setShowWalkthrough(false)}
                         className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#EFE6D6] transition-colors"
                       >
-                        <span className="text-[#5A4A2E] text-xl">×</span>
+                        <span className="text-[#1A1A1A]/70 text-xl">×</span>
                       </button>
                       <div className="flex justify-center mb-4">
                         <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
@@ -1132,21 +1132,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <h3 className="text-[#1A1A1A] font-bold text-xl text-center mb-3">
                         Welcome to JBJ Global Real Estate
                       </h3>
-                      <p className="text-[#5A4A2E] text-sm text-center mb-6 leading-relaxed">
+                      <p className="text-[#1A1A1A]/70 text-sm text-center mb-6 leading-relaxed">
                         Navigate our platform with ease. Use the menu sections above to explore properties, services, guides, and more.
                       </p>
                       <div className="space-y-3 mb-6">
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">1</span>
-                          <span className="text-[#5A4A2E]"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
+                          <span className="text-[#1A1A1A]/70"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">2</span>
-                          <span className="text-[#5A4A2E]"><strong>Services</strong> – Explore our brokerage services</span>
+                          <span className="text-[#1A1A1A]/70"><strong>Services</strong> – Explore our brokerage services</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-bold text-xs shrink-0">3</span>
-                          <span className="text-[#5A4A2E]"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
+                          <span className="text-[#1A1A1A]/70"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
                         </div>
                       </div>
                       <button
@@ -1341,7 +1341,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Search"
               >
                 <Search 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'search' ? '!text-[#1A1A1A]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'search' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
@@ -1357,7 +1357,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Language"
               >
                 <Globe 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'language' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
@@ -1385,7 +1385,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
               >
                 <User 
-                  className={`w-5 h-5 transition-colors duration-300 text-[#5A4A2E] group-hover:text-[#1A1A1A] ${activeMegaMenu === 'account' ? '!text-[#1A1A1A]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-300 text-[#1A1A1A]/70 group-hover:text-[#1A1A1A] ${activeMegaMenu === 'account' ? '!text-[#1A1A1A]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (

@@ -177,9 +177,9 @@ const JBJPodcastSection = () => {
             <T>JBJ Podcast</T>
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1A1A1A] mb-4">
-            <T>The JBJ</T> <span className="text-[#5A4A2E]"><T>Perspective</T></span>
+            <T>The JBJ</T> <span className="text-[#1A1A1A]/70"><T>Perspective</T></span>
           </h2>
-          <p className="text-lg md:text-xl text-[#5A4A2E] max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-[#1A1A1A]/70 max-w-2xl mx-auto">
             <T>Real Estate, Power & Global Opportunity</T>
           </p>
         </motion.div>
@@ -269,7 +269,7 @@ const JBJPodcastSection = () => {
                 <h3 className="text-xl md:text-2xl font-bold text-[#1A1A1A] leading-tight">
                   <T>{selectedEpisode.title}</T>
                 </h3>
-                <p className="text-sm text-[#5A4A2E] mt-1">
+                <p className="text-sm text-[#1A1A1A]/70 mt-1">
                   <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
 
@@ -400,7 +400,7 @@ const JBJPodcastSection = () => {
               <div className="jj-card-inner rounded-2xl border border-[#B89555]/30 overflow-hidden h-full">
                 <div className="p-4 border-b border-[#B89555]/30">
                   <h3 className="text-lg font-semibold text-[#1A1A1A]"><T>All Episodes</T></h3>
-                  <p className="text-sm text-[#5A4A2E]"><T>20 episodes available</T></p>
+                  <p className="text-sm text-[#1A1A1A]/70"><T>20 episodes available</T></p>
                 </div>
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">

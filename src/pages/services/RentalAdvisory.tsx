@@ -183,7 +183,7 @@ const RentalAdvisory = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -219,12 +219,12 @@ const RentalAdvisory = () => {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{service.title}</h3>
-                      <p className="text-[#5A4A2E] mb-4">{service.description}</p>
+                      <p className="text-[#1A1A1A]/70 mb-4">{service.description}</p>
                       <ul className="space-y-2">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
                             <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                            <span className="text-[#5A4A2E] text-sm">{item}</span>
+                            <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -303,13 +303,13 @@ const RentalAdvisory = () => {
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-[#5A4A2E]">
+                  <p className="text-[#1A1A1A]/70">
                     <span className="font-semibold text-[#1A1A1A]">Rental Advisory</span> focuses on strategic guidance and transaction execution.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
-                  <p className="text-[#5A4A2E]">
+                  <p className="text-[#1A1A1A]/70">
                     If you require ongoing property management, we introduce licensed third-party partners where appropriate.
                   </p>
                 </div>
@@ -378,7 +378,7 @@ const RentalAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-[#5A4A2E] mb-10"
+              className="text-lg text-[#1A1A1A]/70 mb-10"
             >
               Whether you're leasing a single unit or managing a portfolio, our advisory ensures your rental performs efficiently and compliantly.
             </motion.p>

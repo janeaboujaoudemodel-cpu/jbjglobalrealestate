@@ -222,7 +222,7 @@ const InquiryManagementHub: React.FC = () => {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     {cfg.icon}
-                    <span className="text-xs font-semibold text-[#5A4A2E] uppercase tracking-wide">{cfg.label}</span>
+                    <span className="text-xs font-semibold text-[#1A1A1A]/70 uppercase tracking-wide">{cfg.label}</span>
                   </div>
                   <p className="text-3xl font-bold text-[#1A1A1A]">{counts[stage] || 0}</p>
                 </button>
@@ -233,7 +233,7 @@ const InquiryManagementHub: React.FC = () => {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3 bg-[#FDFBF7]/80 backdrop-blur rounded-2xl border-2 border-gold/15 p-4">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
               <Input
                 placeholder="Search by name, email, subject, property..."
                 value={search}
@@ -271,17 +271,17 @@ const InquiryManagementHub: React.FC = () => {
 
             <TabsContent value={activeTab} className="mt-4">
               {isLoading ? (
-                <div className="text-center py-20 text-[#5A4A2E]">Loading inquiries...</div>
+                <div className="text-center py-20 text-[#1A1A1A]/70">Loading inquiries...</div>
               ) : isError ? (
                 <div className="text-center py-20">
                   <AlertTriangle className="w-12 h-12 mx-auto text-red-400 mb-3" />
-                  <p className="text-[#5A4A2E]">Could not load inquiries.</p>
-                  <p className="text-xs text-[#5A4A2E] mt-1">{error instanceof Error ? error.message : 'Please try again.'}</p>
+                  <p className="text-[#1A1A1A]/70">Could not load inquiries.</p>
+                  <p className="text-xs text-[#1A1A1A]/70 mt-1">{error instanceof Error ? error.message : 'Please try again.'}</p>
                 </div>
               ) : filtered.length === 0 ? (
                 <div className="text-center py-20">
-                  <Archive className="w-12 h-12 mx-auto text-[#5A4A2E] mb-3" />
-                  <p className="text-[#5A4A2E]">No inquiries found</p>
+                  <Archive className="w-12 h-12 mx-auto text-[#1A1A1A]/70 mb-3" />
+                  <p className="text-[#1A1A1A]/70">No inquiries found</p>
                 </div>
               ) : (
                 <div className="bg-[#FDFBF7] rounded-2xl border-2 border-gold/15 overflow-hidden shadow-sm">
@@ -309,13 +309,13 @@ const InquiryManagementHub: React.FC = () => {
                             <TableCell>
                               <div>
                                 <p className="font-semibold text-[#1A1A1A]">{inq.full_name}</p>
-                                <p className="text-xs text-[#5A4A2E]">{inq.email}</p>
-                                {inq.phone && <p className="text-xs text-[#5A4A2E]">{inq.phone}</p>}
+                                <p className="text-xs text-[#1A1A1A]/70">{inq.email}</p>
+                                {inq.phone && <p className="text-xs text-[#1A1A1A]/70">{inq.phone}</p>}
                               </div>
                             </TableCell>
                             <TableCell>
                               <p className="font-medium text-[#1A1A1A] line-clamp-1">{inq.subject}</p>
-                              {inq.message && <p className="text-xs text-[#5A4A2E] line-clamp-1 mt-0.5">{inq.message}</p>}
+                              {inq.message && <p className="text-xs text-[#1A1A1A]/70 line-clamp-1 mt-0.5">{inq.message}</p>}
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline" className="capitalize text-xs">
@@ -329,7 +329,7 @@ const InquiryManagementHub: React.FC = () => {
                                   <span className="line-clamp-1">{inq.property_name}</span>
                                 </div>
                               ) : (
-                                <span className="text-xs text-[#5A4A2E]">—</span>
+                                <span className="text-xs text-[#1A1A1A]/70">—</span>
                               )}
                             </TableCell>
                             <TableCell>
@@ -339,7 +339,7 @@ const InquiryManagementHub: React.FC = () => {
                               </Badge>
                             </TableCell>
                             <TableCell>
-                              <div className="text-xs text-[#5A4A2E]">
+                              <div className="text-xs text-[#1A1A1A]/70">
                                 <p>{formatSafeDate(inq.created_at, 'MMM d, yyyy')}</p>
                                 <p>{formatSafeDistance(inq.created_at)}</p>
                               </div>
@@ -397,31 +397,31 @@ const InquiryManagementHub: React.FC = () => {
                   {/* Contact Card */}
                   <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-gold/5 to-gold/10 rounded-xl border border-gold/20">
                     <div>
-                      <p className="text-xs text-[#5A4A2E] uppercase tracking-wide mb-1">Contact</p>
+                      <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-1">Contact</p>
                       <p className="font-semibold text-[#1A1A1A]">{selectedInquiry.full_name}</p>
-                      <div className="flex items-center gap-1.5 mt-1 text-sm text-[#5A4A2E]">
+                      <div className="flex items-center gap-1.5 mt-1 text-sm text-[#1A1A1A]/70">
                         <Mail className="w-3.5 h-3.5" />
                         <a href={`mailto:${selectedInquiry.email}`} className="hover:text-gold">{selectedInquiry.email}</a>
                       </div>
                       {selectedInquiry.phone && (
-                        <div className="flex items-center gap-1.5 mt-1 text-sm text-[#5A4A2E]">
+                        <div className="flex items-center gap-1.5 mt-1 text-sm text-[#1A1A1A]/70">
                           <Phone className="w-3.5 h-3.5" />
                           <span>{selectedInquiry.phone}</span>
                         </div>
                       )}
                     </div>
                     <div>
-                      <p className="text-xs text-[#5A4A2E] uppercase tracking-wide mb-1">Details</p>
+                      <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-1">Details</p>
                       <div className="space-y-1 text-sm">
-                        <p><span className="text-[#5A4A2E]">Type:</span> <span className="capitalize">{(selectedInquiry.inquiry_type || 'general').replace(/_/g, ' ')}</span></p>
-                        <p><span className="text-[#5A4A2E]">Source:</span> {selectedInquiry.source || '—'}</p>
+                        <p><span className="text-[#1A1A1A]/70">Type:</span> <span className="capitalize">{(selectedInquiry.inquiry_type || 'general').replace(/_/g, ' ')}</span></p>
+                        <p><span className="text-[#1A1A1A]/70">Source:</span> {selectedInquiry.source || '—'}</p>
                         {selectedInquiry.property_name && (
                           <p className="flex items-center gap-1">
                             <Building2 className="w-3.5 h-3.5 text-gold" />
                             {selectedInquiry.property_name}
                           </p>
                         )}
-                        <p className="flex items-center gap-1 text-[#5A4A2E]">
+                        <p className="flex items-center gap-1 text-[#1A1A1A]/70">
                           <Calendar className="w-3.5 h-3.5" />
                           {formatSafeDate(selectedInquiry.created_at, 'PPpp')}
                         </p>
@@ -432,7 +432,7 @@ const InquiryManagementHub: React.FC = () => {
                   {/* Message */}
                   {selectedInquiry.message && (
                     <div className="p-4 bg-[#FDFBF7] rounded-xl border-2 border-gold/15">
-                      <p className="text-xs text-[#5A4A2E] uppercase tracking-wide mb-2">Message</p>
+                      <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-2">Message</p>
                       <p className="text-sm text-[#1A1A1A] whitespace-pre-wrap">{selectedInquiry.message}</p>
                     </div>
                   )}
@@ -486,7 +486,7 @@ const InquiryManagementHub: React.FC = () => {
 
                   {/* Admin Notes */}
                   <div>
-                    <p className="text-xs text-[#5A4A2E] uppercase tracking-wide mb-2">Owner Notes</p>
+                    <p className="text-xs text-[#1A1A1A]/70 uppercase tracking-wide mb-2">Owner Notes</p>
                     <Textarea
                       value={adminNotes}
                       onChange={e => setAdminNotes(e.target.value)}
@@ -525,7 +525,7 @@ const InquiryManagementHub: React.FC = () => {
                   </div>
 
                   {selectedInquiry.whatsapp_clicked_at && (
-                    <p className="text-xs text-[#5A4A2E] flex items-center gap-1">
+                    <p className="text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                       <MessageCircle className="w-3 h-3" />
                       WhatsApp contacted {formatSafeDistance(selectedInquiry.whatsapp_clicked_at)}
                     </p>

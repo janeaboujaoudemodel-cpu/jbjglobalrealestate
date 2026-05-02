@@ -110,7 +110,7 @@ const OwnerCreativeSuite = () => {
               <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide">Owner Creative Suite</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-3">Creative Suite</h1>
-            <p className="text-[#5A4A2E] text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
+            <p className="text-[#1A1A1A]/70 text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ const OwnerCreativeSuite = () => {
                     <h3 className="font-bold text-[#1A1A1A] text-sm">{tool.title}</h3>
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8A7356]">{tool.badge}</span>
                   </div>
-                  <p className="text-xs text-[#5A4A2E] leading-relaxed">{tool.description}</p>
+                  <p className="text-xs text-[#1A1A1A]/70 leading-relaxed">{tool.description}</p>
                 </div>
               </div>
               <div className="flex justify-end mt-3">

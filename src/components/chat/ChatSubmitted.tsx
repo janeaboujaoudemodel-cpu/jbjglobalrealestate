@@ -11,10 +11,10 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
   return (
     <div className="flex-1 p-6 flex flex-col items-center justify-center">
       <div className="w-16 h-16 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
-        <CheckCircle2 className="w-8 h-8 text-[#5A4A2E]" />
+        <CheckCircle2 className="w-8 h-8 text-[#1A1A1A]/70" />
       </div>
       <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2">Submitted to Our Team!</h4>
-      <p className="text-[#5A4A2E] text-sm text-center mb-6 max-w-[280px]">
+      <p className="text-[#1A1A1A]/70 text-sm text-center mb-6 max-w-[280px]">
         Our team will review your inquiry and get back to you within 24 hours.
       </p>
       
@@ -32,7 +32,7 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
         <Button
           variant="outline"
           onClick={onStartNewChat}
-          className="w-full border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA]"
+          className="w-full border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
         >
           Start New Chat
         </Button>

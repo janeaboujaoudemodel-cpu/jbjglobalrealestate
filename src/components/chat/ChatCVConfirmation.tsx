@@ -17,7 +17,7 @@ const ChatCVConfirmation = ({ userFirstName, onStartNewChat, onGoToShortcuts }: 
       <h4 className="text-[#1A1A1A] text-lg font-semibold mb-2 text-center">
         <T>Thank You! Your CV Has Been Received</T>
       </h4>
-      <p className="text-[#5A4A2E] text-sm text-center mb-6 max-w-[280px]">
+      <p className="text-[#1A1A1A]/70 text-sm text-center mb-6 max-w-[280px]">
         <T>Your application has been submitted successfully. Our HR team will review your CV and contact you soon.</T>
       </p>
       
@@ -33,7 +33,7 @@ const ChatCVConfirmation = ({ userFirstName, onStartNewChat, onGoToShortcuts }: 
         <Button
           variant="outline"
           onClick={onStartNewChat}
-          className="w-full border-[#B89555]/30 text-[#5A4A2E] hover:bg-[#F7F2EA]"
+          className="w-full border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#F7F2EA]"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           <T>Start New Chat</T>

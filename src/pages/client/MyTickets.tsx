@@ -247,7 +247,7 @@ const MyTickets = () => {
   const renderTicketDetail = () => {
     if (!selectedTicket) {
       return (
-        <div className="h-[450px] flex items-center justify-center text-[#5A4A2E]">
+        <div className="h-[450px] flex items-center justify-center text-[#1A1A1A]/70">
           <div className="text-center">
             <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-40" />
             <p>Select a ticket to view details</p>
@@ -281,7 +281,7 @@ const MyTickets = () => {
             )}
           </div>
           <h3 className="font-semibold text-[#1A1A1A] mt-2 truncate">{selectedTicket.subject}</h3>
-          <p className="text-xs text-[#5A4A2E] mt-1">
+          <p className="text-xs text-[#1A1A1A]/70 mt-1">
             {format(new Date(selectedTicket.created_at), "MMM d, yyyy h:mm a")} · {selectedTicket.service_category}
           </p>
         </div>
@@ -291,7 +291,7 @@ const MyTickets = () => {
             {/* Original Description */}
             <div className="bg-[#FDFBF7] rounded-lg p-3 border border-gold/10">
               <p className="text-[10px] text-gold uppercase tracking-wide mb-1 font-semibold">Your Message</p>
-              <p className="text-[#5A4A2E] text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
+              <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
             </div>
 
             {/* Messages */}
@@ -308,15 +308,15 @@ const MyTickets = () => {
                 <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-gold">
                   {msg.sender_type === "staff" ? "📩 Staff Reply" : "You"}
                 </p>
-                <p className="text-[#5A4A2E] text-sm whitespace-pre-wrap">{msg.message}</p>
-                <p className="text-xs text-[#5A4A2E] mt-1">
+                <p className="text-[#1A1A1A]/70 text-sm whitespace-pre-wrap">{msg.message}</p>
+                <p className="text-xs text-[#1A1A1A]/70 mt-1">
                   {format(new Date(msg.created_at), "MMM d, h:mm a")}
                 </p>
               </div>
             ))}
 
             {selectedTicket.messages.length === 0 && (
-              <p className="text-center text-[#5A4A2E] text-sm py-4">
+              <p className="text-center text-[#1A1A1A]/70 text-sm py-4">
                 Waiting for staff response...
               </p>
             )}
@@ -343,7 +343,7 @@ const MyTickets = () => {
             </Button>
           )}
 
-          <p className="text-[10px] text-[#5A4A2E] mb-1 flex items-center gap-1">
+          <p className="text-[10px] text-[#1A1A1A]/70 mb-1 flex items-center gap-1">
             <Mic className="w-3 h-3" /> Speak in any language — auto-translated
           </p>
           <div className="flex gap-2">
@@ -353,7 +353,7 @@ const MyTickets = () => {
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply..."
                 rows={2}
-                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#5A4A2E] resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-[#FDFBF7] border border-gold/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/70 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
               />
               <div className="absolute top-2 right-2">
                 <VoiceInputButton
@@ -366,7 +366,7 @@ const MyTickets = () => {
                   }}
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 text-[#5A4A2E] hover:text-gold"
+                  className="h-6 w-6 text-[#1A1A1A]/70 hover:text-gold"
                 />
               </div>
             </div>
@@ -398,7 +398,7 @@ const MyTickets = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-2">
               My Support Tickets
             </h1>
-            <p className="text-[#5A4A2E]">
+            <p className="text-[#1A1A1A]/70">
               {user
                 ? "View, track, and reply to your support tickets"
                 : "Enter your details to track your support ticket"}
@@ -415,9 +415,9 @@ const MyTickets = () => {
 
               <div className="space-y-4">
                 <div>
-                  <Label className="text-[#5A4A2E]">Email Address</Label>
+                  <Label className="text-[#1A1A1A]/70">Email Address</Label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                     <Input
                       type="email"
                       value={trackEmail}
@@ -429,9 +429,9 @@ const MyTickets = () => {
                 </div>
 
                 <div>
-                  <Label className="text-[#5A4A2E]">Ticket Number</Label>
+                  <Label className="text-[#1A1A1A]/70">Ticket Number</Label>
                   <div className="relative mt-1">
-                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
                     <Input
                       value={trackTicketNumber}
                       onChange={(e) => setTrackTicketNumber(e.target.value.toUpperCase())}
@@ -535,7 +535,7 @@ const MyTickets = () => {
                                   )}
                                 </div>
                                 <p className="text-[#1A1A1A] font-medium truncate text-sm">{ticket.subject}</p>
-                                <p className="text-[#5A4A2E] text-xs mt-1">
+                                <p className="text-[#1A1A1A]/70 text-xs mt-1">
                                   {format(new Date(ticket.created_at), "MMM d, yyyy")}
                                 </p>
                               </button>
@@ -544,7 +544,7 @@ const MyTickets = () => {
                         </div>
                       </ScrollArea>
                     ) : (
-                      <div className="p-8 text-center text-[#5A4A2E]">
+                      <div className="p-8 text-center text-[#1A1A1A]/70">
                         <Ticket className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No tickets found</p>
                       </div>
@@ -591,15 +591,15 @@ const MyTickets = () => {
                                 {msg.support_tickets?.ticket_number || ""}
                               </span>
                             </div>
-                            <p className="text-sm text-[#5A4A2E] line-clamp-2">{msg.message}</p>
-                            <p className="text-xs text-[#5A4A2E] mt-1">
+                            <p className="text-sm text-[#1A1A1A]/70 line-clamp-2">{msg.message}</p>
+                            <p className="text-xs text-[#1A1A1A]/70 mt-1">
                               {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                             </p>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <div className="p-12 text-center text-[#5A4A2E]">
+                      <div className="p-12 text-center text-[#1A1A1A]/70">
                         <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No JBJ messages yet</p>
                         <p className="text-xs mt-1">Only direct JBJ replies appear here</p>

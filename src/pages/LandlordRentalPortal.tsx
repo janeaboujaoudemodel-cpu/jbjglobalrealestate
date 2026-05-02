@@ -94,14 +94,14 @@ export default function LandlordRentalPortal() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { label: string; className: string }> = {
-      draft: { label: 'Draft', className: 'bg-[#F7F2EA] text-[#5A4A2E]' },
+      draft: { label: 'Draft', className: 'bg-[#F7F2EA] text-[#1A1A1A]/70' },
       pending_review: { label: 'Pending Review', className: 'bg-amber-100 text-amber-700' },
       admin_approved: { label: 'Admin Approved', className: 'bg-blue-100 text-blue-700' },
       assistant_approved: { label: 'Executive Approved', className: 'bg-purple-100 text-purple-700' },
       founder_approved: { label: 'CEO Approved', className: 'bg-green-100 text-green-700' },
       live: { label: 'Live', className: 'bg-green-500 text-white' },
       rejected: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
-      withdrawn: { label: 'Withdrawn', className: 'bg-[#F7F2EA] text-[#5A4A2E]' },
+      withdrawn: { label: 'Withdrawn', className: 'bg-[#F7F2EA] text-[#1A1A1A]/70' },
     };
     const config = statusConfig[status] || statusConfig.draft;
     return <Badge className={config.className}>{config.label}</Badge>;
@@ -175,7 +175,7 @@ export default function LandlordRentalPortal() {
                       <benefit.icon className="h-6 w-6 text-gold" />
                     </div>
                     <h3 className="font-semibold mb-2 text-[#1A1A1A]">{benefit.title}</h3>
-                    <p className="text-sm text-[#5A4A2E]">{benefit.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -216,7 +216,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Why List With Us?</CardTitle>
-                    <CardDescription className="text-[#5A4A2E]">
+                    <CardDescription className="text-[#1A1A1A]/70">
                       JBJ Global Real Estate offers unparalleled exposure and service
                     </CardDescription>
                   </CardHeader>
@@ -240,7 +240,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Approval Process</CardTitle>
-                    <CardDescription className="text-[#5A4A2E]">
+                    <CardDescription className="text-[#1A1A1A]/70">
                       Our quality assurance workflow
                     </CardDescription>
                   </CardHeader>
@@ -253,7 +253,7 @@ export default function LandlordRentalPortal() {
                           </div>
                           <div>
                             <h4 className="font-medium text-[#1A1A1A]">{step.title}</h4>
-                            <p className="text-sm text-[#5A4A2E]">{step.description}</p>
+                            <p className="text-sm text-[#1A1A1A]/70">{step.description}</p>
                           </div>
                         </div>
                       ))}
@@ -279,7 +279,7 @@ export default function LandlordRentalPortal() {
               <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A]">Complete Landlord Guide</CardTitle>
-                  <CardDescription className="text-[#5A4A2E]">
+                  <CardDescription className="text-[#1A1A1A]/70">
                     Everything you need to know about listing your rental property
                   </CardDescription>
                 </CardHeader>
@@ -301,7 +301,7 @@ export default function LandlordRentalPortal() {
                         </div>
                         <div className="flex-1 pb-8">
                           <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{step.title}</h3>
-                          <p className="text-[#5A4A2E]">{step.description}</p>
+                          <p className="text-[#1A1A1A]/70">{step.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -330,7 +330,7 @@ export default function LandlordRentalPortal() {
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                       Sign In to List Your Property
                     </h3>
-                    <p className="text-[#5A4A2E] mb-6">
+                    <p className="text-[#1A1A1A]/70 mb-6">
                       Create an account or sign in to submit your rental listing
                     </p>
                     <Button
@@ -345,7 +345,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-[#1A1A1A]">Submit Your Rental Listing</CardTitle>
-                    <CardDescription className="text-[#5A4A2E]">
+                    <CardDescription className="text-[#1A1A1A]/70">
                       Complete the form below to list your property for rent
                     </CardDescription>
                   </CardHeader>
@@ -362,7 +362,7 @@ export default function LandlordRentalPortal() {
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
-                    <p className="text-[#5A4A2E] mt-4">Loading your listings...</p>
+                    <p className="text-[#1A1A1A]/70 mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
                   <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
@@ -371,7 +371,7 @@ export default function LandlordRentalPortal() {
                       <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                         No Listings Yet
                       </h3>
-                      <p className="text-[#5A4A2E] mb-6">
+                      <p className="text-[#1A1A1A]/70 mb-6">
                         You haven't submitted any rental listings yet
                       </p>
                       <Button
@@ -397,7 +397,7 @@ export default function LandlordRentalPortal() {
                                     <h3 className="text-lg font-semibold text-[#1A1A1A]">
                                       {listing.property_title}
                                     </h3>
-                                    <p className="text-[#5A4A2E] text-sm">
+                                    <p className="text-[#1A1A1A]/70 text-sm">
                                       {listing.community}, {listing.emirate}
                                     </p>
                                   </div>
@@ -406,19 +406,19 @@ export default function LandlordRentalPortal() {
                                 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                                   <div>
-                                    <p className="text-xs text-[#5A4A2E]">Type</p>
+                                    <p className="text-xs text-[#1A1A1A]/70">Type</p>
                                     <p className="text-[#1A1A1A] capitalize">{listing.property_type}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-[#5A4A2E]">Bedrooms</p>
+                                    <p className="text-xs text-[#1A1A1A]/70">Bedrooms</p>
                                     <p className="text-[#1A1A1A]">{listing.bedrooms || 'N/A'}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-[#5A4A2E]">Annual Rent</p>
+                                    <p className="text-xs text-[#1A1A1A]/70">Annual Rent</p>
                                     <p className="text-[#1A1A1A]">AED {listing.annual_rent?.toLocaleString()}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-[#5A4A2E]">Submitted</p>
+                                    <p className="text-xs text-[#1A1A1A]/70">Submitted</p>
                                     <p className="text-[#1A1A1A]">{format(new Date(listing.created_at), 'PP')}</p>
                                   </div>
                                 </div>

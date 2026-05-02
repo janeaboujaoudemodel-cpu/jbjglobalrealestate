@@ -132,7 +132,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
         </div>
         
         {/* Label */}
-        <div className="text-[#5A4A2E] text-xs md:text-sm font-medium">
+        <div className="text-[#1A1A1A]/70 text-xs md:text-sm font-medium">
           {getTranslatedLabel()}
         </div>
       </div>
@@ -172,7 +172,7 @@ const StatsCounter = () => {
               <span className="text-gold">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
               <span className="text-[#1A1A1A]"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
             </span>
-            <p className="text-[#5A4A2E] text-sm">{t('founder.experience', 'Founder experience')}</p>
+            <p className="text-[#1A1A1A]/70 text-sm">{t('founder.experience', 'Founder experience')}</p>
           </div>
           
           {/* Stats Grid - Pearl Cards inside Champagne Layer */}

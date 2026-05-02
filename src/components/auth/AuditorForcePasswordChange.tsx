@@ -64,7 +64,7 @@ const AuditorForcePasswordChange = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password (min 8 characters)"
-              className="pl-10 pr-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+              className="pl-10 pr-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               required
               minLength={8}
             />
@@ -84,7 +84,7 @@ const AuditorForcePasswordChange = ({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
-              className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E]"
+              className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70"
               required
             />
           </div>
@@ -98,7 +98,7 @@ const AuditorForcePasswordChange = ({
           </Button>
         </form>
 
-        <p className="text-[#5A4A2E] text-xs text-center mt-6">
+        <p className="text-[#1A1A1A]/70 text-xs text-center mt-6">
           Read-Only Audit Access • You can view all pages but cannot make changes
         </p>
       </div>

@@ -155,7 +155,7 @@ const AccessDenied = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-[#5A4A2E] text-xs mt-12">
+        <p className="text-[#1A1A1A]/70 text-xs mt-12">
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

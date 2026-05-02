@@ -294,12 +294,12 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
                             <span className="text-xs text-emerald-700 font-semibold">×{d.outreach_count} sends</span>
                           )}
                         </div>
-                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#5A4A2E]">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-[#1A1A1A]/70">
                           {d.developer_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{d.developer_email}</span>}
                           {d.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{d.phone}</span>}
                           {d.emirate && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{d.emirate}</span>}
                         </div>
-                        <div className="mt-1.5 text-xs text-[#5A4A2E]">
+                        <div className="mt-1.5 text-xs text-[#1A1A1A]/70">
                           {sentDate && (
                             <span title={sentDate.toLocaleString()}>
                               Last sent: <strong className="text-[#1A1A1A]">{sentDays === 0 ? "today" : `${sentDays}d ago`}</strong>

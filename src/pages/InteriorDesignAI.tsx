@@ -304,7 +304,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="Project name (optional)"
-            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-[#5A4A2E] max-w-xs focus:border-gold/50"
+            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-[#1A1A1A]/70 max-w-xs focus:border-gold/50"
           />
           <div className="flex gap-2">
             {modeConfig.map(m => {
@@ -573,7 +573,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
+                    className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
                     disabled={isProcessing}
                   />
                   <Button
@@ -599,7 +599,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] min-h-[60px] text-xs focus:border-gold/50"
+                className="bg-zinc-800/50 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 min-h-[60px] text-xs focus:border-gold/50"
                 maxLength={500}
               />
             </div>

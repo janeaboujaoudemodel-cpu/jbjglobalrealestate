@@ -106,8 +106,8 @@ export function EscalationAlertButton({
           {pendingEscalations.length === 0 ? (
             <div className="p-8 text-center">
               <CheckCircle className="h-12 w-12 text-green-500/40 mx-auto mb-3" />
-              <p className="text-[#5A4A2E] font-medium">No pending escalations</p>
-              <p className="text-sm text-[#5A4A2E]">All systems running smoothly</p>
+              <p className="text-[#1A1A1A]/70 font-medium">No pending escalations</p>
+              <p className="text-sm text-[#1A1A1A]/70">All systems running smoothly</p>
             </div>
           ) : (
             <div className="divide-y divide-[#B89555]/10">
@@ -138,12 +138,12 @@ export function EscalationAlertButton({
                         </Badge>
                       </div>
                       
-                      <p className="text-sm text-[#5A4A2E] line-clamp-2 mb-2">
+                      <p className="text-sm text-[#1A1A1A]/70 line-clamp-2 mb-2">
                         "{event.originalMessage}"
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-[#5A4A2E] flex items-center gap-1">
+                        <span className="text-xs text-[#1A1A1A]/70 flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {formatDistanceToNow(event.triggeredAt, { addSuffix: true })}
                         </span>

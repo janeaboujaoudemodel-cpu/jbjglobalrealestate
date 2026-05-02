@@ -175,7 +175,7 @@ export function TodaysMarketSignals() {
         )}
 
         <div className="pt-3 border-t border-[#1A1A1A]">
-          <p className="text-[#5A4A2E] text-xs text-center">
+          <p className="text-[#1A1A1A]/70 text-xs text-center">
             Internal signals based on aggregated Open Data · Descriptive only, not advice
           </p>
         </div>

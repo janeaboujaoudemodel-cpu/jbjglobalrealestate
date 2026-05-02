@@ -314,7 +314,7 @@ const BrokerHub = () => {
                   <CardContent className="p-6">
                     {supportTickets.length === 0 ? (
                       <div className="text-center py-8">
-                        <Ticket className="w-8 h-8 text-[#5A4A2E] mx-auto mb-3" />
+                        <Ticket className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-3" />
                         <p className="text-white/90">No support tickets</p>
                         <Button
                           className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"

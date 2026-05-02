@@ -239,7 +239,7 @@ const ListingAdmin = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-gold" />
-          <p className="text-[#5A4A2E] text-sm">Verifying access permissions...</p>
+          <p className="text-[#1A1A1A]/70 text-sm">Verifying access permissions...</p>
         </div>
         <div className="w-80 space-y-3">
           <div className="h-2 bg-zinc-800 rounded-full animate-pulse" />
@@ -675,7 +675,7 @@ const ListingAdmin = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate(-1)}
-                className="text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#F7F2EA]"
+                className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -687,7 +687,7 @@ const ListingAdmin = () => {
                   <h1 className="text-[#1A1A1A] text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
-                  <span className="text-[#5A4A2E] text-sm">{t('listingAdmin.propertyManager')}</span>
+                  <span className="text-[#1A1A1A]/70 text-sm">{t('listingAdmin.propertyManager')}</span>
                 </div>
               </div>
             </div>
@@ -753,7 +753,7 @@ const ListingAdmin = () => {
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-sm text-[#1A1A1A] font-medium">{totalCount ?? 0} Published</span>
-                <span className="text-xs text-[#5A4A2E]">/ {allProjectsCount ?? 0} Total</span>
+                <span className="text-xs text-[#1A1A1A]/70">/ {allProjectsCount ?? 0} Total</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
@@ -918,7 +918,7 @@ const ListingAdmin = () => {
                     // Compute source + enrichment inline
                     const src = (project as any).import_source || project.source || "manual";
                     const srcLabel = src?.includes("provident") ? "PROVIDENT" : src?.includes("reelly") ? "REELLY" : "MANUAL";
-                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30";
+                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30";
                     const hasDesc = !!project.description && project.description.length > 20;
                     const hasImages = (project.images?.length ?? 0) >= 3;
                     const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
@@ -1000,7 +1000,7 @@ const ListingAdmin = () => {
                     );
                   })}
                   {filteredProjects?.length === 0 && (
-                    <div className="col-span-full text-center py-16 text-[#5A4A2E]">
+                    <div className="col-span-full text-center py-16 text-[#1A1A1A]/70">
                       <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
                       <p className="text-lg">{t('listingAdmin.noProjectsFound')}</p>
                     </div>
@@ -1077,7 +1077,7 @@ const ListingAdmin = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
-                        className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                        className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                       >
                         <ExternalLink className="w-4 h-4 mr-1" />
                         {t('listingAdmin.view')}
@@ -1092,7 +1092,7 @@ const ListingAdmin = () => {
                         setSelectedProject(null);
                         setActiveView('projects');
                       }}
-                      className="text-[#5A4A2E] hover:text-[#1A1A1A]"
+                      className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -1102,19 +1102,19 @@ const ListingAdmin = () => {
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
                   <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30">
-                    <TabsTrigger value="details" className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]"
+                      className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="tab-trigger-champagne text-[#5A4A2E] data-[state=active]:text-[#1A1A1A]"
+                      className="tab-trigger-champagne text-[#1A1A1A]/70 data-[state=active]:text-[#1A1A1A]"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}
@@ -1125,7 +1125,7 @@ const ListingAdmin = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Name */}
                       <div className="md:col-span-2">
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.projectName')} *</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.projectName')} *</Label>
                         <Input
                           value={formData.name}
                           onChange={(e) => {
@@ -1156,7 +1156,7 @@ const ListingAdmin = () => {
 
                       {/* Developer */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.developer')} *</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.developer')} *</Label>
                         <Select
                           value={formData.developer_id}
                           onValueChange={(value) =>
@@ -1178,7 +1178,7 @@ const ListingAdmin = () => {
 
                       {/* Community */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.community')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.community')}</Label>
                         <Select
                           value={formData.community_id}
                           onValueChange={(value) =>
@@ -1200,7 +1200,7 @@ const ListingAdmin = () => {
 
                       {/* Location */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.location')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.location')}</Label>
                         <Input
                           value={formData.location}
                           onChange={(e) =>
@@ -1213,7 +1213,7 @@ const ListingAdmin = () => {
 
                       {/* Emirate */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.emirate')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.emirate')}</Label>
                         <Select
                           value={formData.emirate}
                           onValueChange={(value) =>
@@ -1235,7 +1235,7 @@ const ListingAdmin = () => {
 
                       {/* Price Range */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.priceFrom')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.priceFrom')}</Label>
                         <Input
                           type="number"
                           value={formData.price_from}
@@ -1248,7 +1248,7 @@ const ListingAdmin = () => {
                       </div>
 
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.priceTo')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.priceTo')}</Label>
                         <Input
                           type="number"
                           value={formData.price_to}
@@ -1262,7 +1262,7 @@ const ListingAdmin = () => {
 
                       {/* Bedrooms */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.bedroomsMin')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.bedroomsMin')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_min}
@@ -1275,7 +1275,7 @@ const ListingAdmin = () => {
                       </div>
 
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.bedroomsMax')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.bedroomsMax')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_max}
@@ -1289,7 +1289,7 @@ const ListingAdmin = () => {
 
                       {/* Handover & Service Charge */}
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.handoverDate')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.handoverDate')}</Label>
                         <Input
                           value={formData.handover_date}
                           onChange={(e) =>
@@ -1301,7 +1301,7 @@ const ListingAdmin = () => {
                       </div>
 
                       <div>
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.serviceCharge')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.serviceCharge')}</Label>
                         <Input
                           value={formData.service_charge}
                           onChange={(e) =>
@@ -1314,7 +1314,7 @@ const ListingAdmin = () => {
 
                       {/* Payment Plan */}
                       <div className="md:col-span-2">
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.paymentPlan')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.paymentPlan')}</Label>
                         <Input
                           value={formData.payment_plan}
                           onChange={(e) =>
@@ -1327,7 +1327,7 @@ const ListingAdmin = () => {
 
                       {/* Description */}
                       <div className="md:col-span-2">
-                        <Label className="text-[#5A4A2E]">{t('listingAdmin.description')}</Label>
+                        <Label className="text-[#1A1A1A]/70">{t('listingAdmin.description')}</Label>
                         <Textarea
                           value={formData.description}
                           onChange={(e) =>
@@ -1345,7 +1345,7 @@ const ListingAdmin = () => {
                             <Crown className="w-4 h-4 text-gold" />
                             {t('listingAdmin.premiumListing')}
                           </Label>
-                          <p className="text-[#5A4A2E] text-sm">
+                          <p className="text-[#1A1A1A]/70 text-sm">
                             {t('listingAdmin.premiumDesc')}
                           </p>
                         </div>
@@ -1364,7 +1364,7 @@ const ListingAdmin = () => {
                             <X className="w-4 h-4 text-destructive" />
                             {t('listingAdmin.soldOut')}
                           </Label>
-                          <p className="text-[#5A4A2E] text-sm">
+                          <p className="text-[#1A1A1A]/70 text-sm">
                             {t('listingAdmin.soldOutDesc')}
                           </p>
                         </div>
@@ -1455,10 +1455,10 @@ const ListingAdmin = () => {
                           className="flex items-center justify-between p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30"
                         >
                           <div className="flex items-center gap-3">
-                            <File className="w-5 h-5 text-[#5A4A2E]" />
+                            <File className="w-5 h-5 text-[#1A1A1A]/70" />
                             <div>
                               <p className="text-[#1A1A1A] text-sm font-medium">{doc.file_name}</p>
-                              <p className="text-[#5A4A2E] text-xs">
+                              <p className="text-[#1A1A1A]/70 text-xs">
                                 {doc.document_type} • {formatFileSize(doc.file_size)}
                               </p>
                             </div>
@@ -1483,7 +1483,7 @@ const ListingAdmin = () => {
                         </div>
                       ))}
                       {projectDocuments.length === 0 && (
-                        <div className="text-center py-12 text-[#5A4A2E]">
+                        <div className="text-center py-12 text-[#1A1A1A]/70">
                           <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
                           <p>{t('listingAdmin.noDocuments')}</p>
                         </div>

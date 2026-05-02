@@ -172,7 +172,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Building2 className="w-10 h-10 text-[#5A4A2E]" />
+                <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
               </div>
             )}
 
@@ -201,8 +201,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
           <div className="p-4 flex flex-col flex-grow min-h-[140px]">
             <div className="min-h-[20px] mb-2">
               {(project.area_name || project.location) ? (
-                <div className="flex items-center gap-1.5 text-[#5A4A2E] text-xs">
-                  <MapPin className="w-3.5 h-3.5 text-[#5A4A2E] flex-shrink-0" />
+                <div className="flex items-center gap-1.5 text-[#1A1A1A]/70 text-xs">
+                  <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]/70 flex-shrink-0" />
                   <span className="truncate">{project.area_name || project.location}</span>
                 </div>
               ) : (
@@ -210,28 +210,28 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               )}
             </div>
 
-            <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#5A4A2E] transition-colors min-h-[40px]">
+            <h3 className="text-[#1A1A1A] font-semibold text-sm mb-2 line-clamp-2 group-hover:text-[#1A1A1A] transition-colors min-h-[40px]">
               {project.name}
             </h3>
             {project.developer?.slug ? (
               <span className="text-xs mb-1 block">
-                <span className="text-[#5A4A2E] font-medium">by </span>
+                <span className="text-[#1A1A1A]/70 font-medium">by </span>
                 <Link
                   to={`/developer/${project.developer.slug}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-[#1A1A1A] font-medium hover:text-[#5A4A2E] hover:underline transition-colors"
+                  className="text-[#1A1A1A] font-medium hover:text-[#1A1A1A] hover:underline transition-colors"
                 >
                   {project.developer_name}
                 </Link>
               </span>
             ) : project.developer_name ? (
-              <span className="text-xs font-medium mb-1 block"><span className="text-[#5A4A2E]">by </span><span className="text-[#1A1A1A]">{project.developer_name}</span></span>
+              <span className="text-xs font-medium mb-1 block"><span className="text-[#1A1A1A]/70">by </span><span className="text-[#1A1A1A]">{project.developer_name}</span></span>
             ) : null}
 
             {(project as any).description && (() => {
               const cleanDesc = sanitizeForDisplay((project as any).description);
               return cleanDesc ? (
-                <p className="text-[#5A4A2E] text-xs line-clamp-2 mb-2">{cleanDesc}</p>
+                <p className="text-[#1A1A1A]/70 text-xs line-clamp-2 mb-2">{cleanDesc}</p>
               ) : null;
             })()}
 
@@ -283,7 +283,7 @@ const FeaturedListings = () => {
         {/* Section Header */}
         <div className="text-center mb-8">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-            <Home className="w-3.5 h-3.5 text-[#5A4A2E]" />
+            <Home className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
             <span className="text-[#1A1A1A]">{t('featured.title', 'Featured Properties')}</span>
           </span>
           <h2
@@ -296,14 +296,14 @@ const FeaturedListings = () => {
           <div className="flex items-center justify-center gap-3 mt-4">
             <Link
               to="/favorites"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#5A4A2E] hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
             >
               <Heart className="w-4 h-4" />
               {t('featured.myFavorites', 'My Favorites')}
             </Link>
             <Link
               to="/compare"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#5A4A2E] hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30 hover:bg-[#EFE6D6] transition-all text-sm font-medium"
             >
               <Star className="w-4 h-4" />
               {t('featured.myShortlist', 'My Shortlist')}
@@ -329,8 +329,8 @@ const FeaturedListings = () => {
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">
-              <Building2 className="w-10 h-10 text-[#5A4A2E] mx-auto mb-3" />
-              <p className="text-[#5A4A2E] text-sm">Featured projects coming soon</p>
+              <Building2 className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-3" />
+              <p className="text-[#1A1A1A]/70 text-sm">Featured projects coming soon</p>
             </div>
           )}
         </div>

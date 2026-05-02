@@ -31,7 +31,7 @@ const ACTION_COLORS: Record<string, string> = {
   update: "bg-yellow-100 text-yellow-700 border-yellow-200",
   delete: "bg-red-100 text-red-700 border-red-200",
   login: "bg-purple-100 text-purple-700 border-purple-200",
-  logout: "bg-[#F7F2EA] text-[#5A4A2E] border-[#B89555]/30",
+  logout: "bg-[#F7F2EA] text-[#1A1A1A]/70 border-[#B89555]/30",
   export: "bg-cyan-100 text-cyan-700 border-cyan-200",
   import: "bg-indigo-100 text-indigo-700 border-indigo-200",
   approve: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -294,7 +294,7 @@ export default function AuditLogDashboard() {
                       <TableCell>
                         <Badge 
                           variant="outline" 
-                          className={ACTION_COLORS[log.action_type] || "bg-[#F7F2EA] text-[#5A4A2E]"}
+                          className={ACTION_COLORS[log.action_type] || "bg-[#F7F2EA] text-[#1A1A1A]/70"}
                         >
                           {log.action_type}
                         </Badge>

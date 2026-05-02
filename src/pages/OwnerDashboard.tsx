@@ -128,7 +128,7 @@ const OwnerDashboard = () => {
       case 'sold':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sold</Badge>;
       default:
-        return <Badge className="bg-[#B89555]/20 text-[#5A4A2E] border-[#B89555]/30/30">{status}</Badge>;
+        return <Badge className="bg-[#B89555]/20 text-[#1A1A1A]/70 border-[#B89555]/30/30">{status}</Badge>;
     }
   };
 
@@ -287,7 +287,7 @@ const OwnerDashboard = () => {
                       
                       {MOCK_LISTINGS.length === 0 && (
                         <div className="text-center py-8">
-                          <Home className="w-12 h-12 text-[#5A4A2E] mx-auto mb-4" />
+                          <Home className="w-12 h-12 text-[#1A1A1A]/70 mx-auto mb-4" />
                           <p className="text-white/70">No listings yet</p>
                           <Link to="/seller-listing">
                             <Button className="mt-4 bg-gold hover:bg-gold/90 text-[#1A1A1A]">

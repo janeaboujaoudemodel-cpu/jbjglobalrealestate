@@ -168,7 +168,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
       {isAnalyzing && (
         <div className="flex items-center gap-3 p-4 bg-[#FDFBF7] rounded-lg border border-gold/20">
           <Loader2 className="w-5 h-5 text-gold animate-spin" />
-          <span className="text-[#5A4A2E]">Analyzing document...</span>
+          <span className="text-[#1A1A1A]/70">Analyzing document...</span>
         </div>
       )}
 
@@ -210,7 +210,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
               <div className="flex items-center gap-2 text-[#1A1A1A]">
                 <ArrowRight className="w-4 h-4 text-gold" />
                 <span className="font-medium">{matchResult.projectName}</span>
-                <span className="text-[#5A4A2E]">by {matchResult.developerName}</span>
+                <span className="text-[#1A1A1A]/70">by {matchResult.developerName}</span>
               </div>
 
               {matchResult.matchedKeywords.length > 0 && (
@@ -218,7 +218,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
                   {matchResult.matchedKeywords.map((kw) => (
                     <span
                       key={kw}
-                      className="px-2 py-0.5 bg-gold/10 text-[#5A4A2E] text-xs rounded border border-gold/20"
+                      className="px-2 py-0.5 bg-gold/10 text-[#1A1A1A]/70 text-xs rounded border border-gold/20"
                     >
                       {kw}
                     </span>
@@ -231,7 +231,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           {/* Manual Project Selection */}
           {(!matchResult || matchResult.confidence === "low") && (
             <div className="space-y-2">
-              <Label className="text-[#5A4A2E]">Select Project Manually</Label>
+              <Label className="text-[#1A1A1A]/70">Select Project Manually</Label>
               <Select value={manualProjectId} onValueChange={setManualProjectId}>
                 <SelectTrigger className="bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A]">
                   <SelectValue placeholder="Choose project..." />
@@ -287,10 +287,10 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
       {/* Empty State */}
       {!selectedFile && (
-        <div className="text-center py-8 text-[#5A4A2E]">
+        <div className="text-center py-8 text-[#1A1A1A]/70">
           <Upload className="w-12 h-12 mx-auto mb-2 text-[#8A7556]" />
-          <p className="text-[#5A4A2E]">Select a document to automatically detect the project</p>
-          <p className="text-sm mt-1 text-[#5A4A2E]">Duplicates will be blocked</p>
+          <p className="text-[#1A1A1A]/70">Select a document to automatically detect the project</p>
+          <p className="text-sm mt-1 text-[#1A1A1A]/70">Duplicates will be blocked</p>
         </div>
       )}
     </div>

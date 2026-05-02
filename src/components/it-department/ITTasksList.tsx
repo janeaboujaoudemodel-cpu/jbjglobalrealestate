@@ -55,7 +55,7 @@ const STATUS_CONFIG = {
 };
 
 const PRIORITY_CONFIG = {
-  low: { label: 'Low', color: 'text-[#5A4A2E]' },
+  low: { label: 'Low', color: 'text-[#1A1A1A]/70' },
   medium: { label: 'Medium', color: 'text-yellow-600' },
   high: { label: 'High', color: 'text-orange-500' },
   critical: { label: 'Critical', color: 'text-red-500' }

@@ -237,18 +237,18 @@ const BrokerResources = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A] mb-3">{section.title}</h3>
-                        <p className="text-[#5A4A2E] mb-4">{section.description}</p>
+                        <p className="text-[#1A1A1A]/70 mb-4">{section.description}</p>
                         <div className="bg-[#1A1A1A]/5 rounded-xl p-4 mb-4">
                           <ul className="space-y-2">
                             {section.items.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-3">
                                 <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                <span className="text-[#5A4A2E] text-sm">{item}</span>
+                                <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <p className="text-sm text-[#5A4A2E] italic">{section.footer}</p>
+                        <p className="text-sm text-[#1A1A1A]/70 italic">{section.footer}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -311,7 +311,7 @@ const BrokerResources = () => {
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-[#5A4A2E] max-w-2xl mx-auto mb-8"
+                className="text-center text-[#1A1A1A]/70 max-w-2xl mx-auto mb-8"
               >
                 Professional brokerage performance depends on:
               </motion.p>
@@ -331,7 +331,7 @@ const BrokerResources = () => {
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-[#5A4A2E] mt-8"
+                className="text-center text-[#1A1A1A]/70 mt-8"
               >
                 These resources are built to support those standards consistently.
               </motion.p>

@@ -255,7 +255,7 @@ JBJ Contact Information:
                 {userAssistant.name}
                 <ChevronDown className="w-4 h-4" />
               </button>
-              <p className="text-[#5A4A2E] text-xs">{userAssistant.role}</p>
+              <p className="text-[#1A1A1A]/70 text-xs">{userAssistant.role}</p>
             </div>
           </div>
           <button
@@ -298,7 +298,7 @@ JBJ Contact Information:
                   </Avatar>
                   <div className="text-left">
                     <p className="text-[#1A1A1A] text-sm font-medium">{agent.name}</p>
-                    <p className="text-[#5A4A2E] text-xs">{agent.title}</p>
+                    <p className="text-[#1A1A1A]/70 text-xs">{agent.title}</p>
                   </div>
                 </button>
               ))}
@@ -345,7 +345,7 @@ JBJ Contact Information:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold"
+              className="flex-1 bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold"
               disabled={isLoading}
             />
             <Button
@@ -356,7 +356,7 @@ JBJ Contact Information:
               <Send className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-[#5A4A2E] text-xs text-center mt-2">
+          <p className="text-[#1A1A1A]/70 text-xs text-center mt-2">
             Powered by JBJ AI • Available 24/7
           </p>
         </div>

@@ -354,7 +354,7 @@ const InquiryFormModal = ({
                   setEmailVerified(false);
                   setPendingFormData(null);
                 }}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#5A4A2E] hover:text-[#1A1A1A] transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
                 aria-label="Close"
               >
                 ✕
@@ -363,7 +363,7 @@ const InquiryFormModal = ({
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">Welcome to the Community!</h3>
-              <p className="text-[#5A4A2E] mb-6">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
+              <p className="text-[#1A1A1A]/70 mb-6">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
               
               {/* Manual close button */}
               <Button
@@ -398,7 +398,7 @@ const InquiryFormModal = ({
                 >
                   {propertyName ? `Inquire About ${propertyName}` : 'Join Our Community'}
                 </DialogTitle>
-                <p className="text-[#5A4A2E] text-sm text-center mt-2">Register to receive exclusive updates and property insights</p>
+                <p className="text-[#1A1A1A]/70 text-sm text-center mt-2">Register to receive exclusive updates and property insights</p>
               </DialogHeader>
 
               <Form {...form}>
@@ -409,7 +409,7 @@ const InquiryFormModal = ({
                     name="role"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E] text-sm">I am a... *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70 text-sm">I am a... *</FormLabel>
                         <div className="grid grid-cols-3 gap-2">
                           <button
                             type="button"
@@ -422,7 +422,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'buyer' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#5A4A2E] hover:border-[#B89555]/30'
+                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
                             <Target className="w-5 h-5" />
@@ -437,7 +437,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'broker' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#5A4A2E] hover:border-[#B89555]/30'
+                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
                             <Briefcase className="w-5 h-5" />
@@ -452,7 +452,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'visitor' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#5A4A2E] hover:border-[#B89555]/30'
+                                : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                             }`}
                           >
                             <Users className="w-5 h-5" />
@@ -471,7 +471,7 @@ const InquiryFormModal = ({
                       name="buyerType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E] text-sm">Looking to... *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">Looking to... *</FormLabel>
                           <div className="grid grid-cols-2 gap-2">
                             <button
                               type="button"
@@ -479,7 +479,7 @@ const InquiryFormModal = ({
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'homeowner' 
                                   ? 'border-gold bg-gold/10 text-gold' 
-                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#5A4A2E] hover:border-[#B89555]/30'
+                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                               }`}
                             >
                               <Home className="w-4 h-4" />
@@ -491,7 +491,7 @@ const InquiryFormModal = ({
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'investor' 
                                   ? 'border-gold bg-gold/10 text-gold' 
-                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#5A4A2E] hover:border-[#B89555]/30'
+                                  : 'border-[#B89555]/30 bg-[#F7F2EA] text-[#1A1A1A]/70 hover:border-[#B89555]/30'
                               }`}
                             >
                               <TrendingUp className="w-4 h-4" />
@@ -509,11 +509,11 @@ const InquiryFormModal = ({
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E] text-sm">{t('inquiry.fullName')} *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70 text-sm">{t('inquiry.fullName')} *</FormLabel>
                         <FormControl>
                           <Input 
                             {...field} 
-                            className="h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-lg"
+                            className="h-12 bg-[#FDFBF7] border-2 border-gold/50 hover:border-gold text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg"
                             placeholder="John Doe"
                           />
                         </FormControl>
@@ -528,7 +528,7 @@ const InquiryFormModal = ({
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E] text-sm flex items-center gap-2">
+                        <FormLabel className="text-[#1A1A1A]/70 text-sm flex items-center gap-2">
                           {t('inquiry.email')} *
                           {emailStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
                           {emailStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
@@ -544,7 +544,7 @@ const InquiryFormModal = ({
                               // Reset verification if email changes
                               if (emailVerified) setEmailVerified(false);
                             }}
-                            className={`h-12 bg-[#FDFBF7] text-[#1A1A1A] placeholder:text-[#5A4A2E] rounded-lg w-full border-2 ${
+                            className={`h-12 bg-[#FDFBF7] text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 rounded-lg w-full border-2 ${
                               emailStatus === 'valid' ? 'border-green-500/60 focus:border-green-500' :
                               emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
                               'border-gold/50 hover:border-gold focus:border-gold'
@@ -563,7 +563,7 @@ const InquiryFormModal = ({
                     name="phone"
                     render={({ field, fieldState }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E] text-sm">{t('inquiry.phone')} *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70 text-sm">{t('inquiry.phone')} *</FormLabel>
                         <FormControl>
                           <PhoneInput 
                             value={field.value}
@@ -593,7 +593,7 @@ const InquiryFormModal = ({
                       name="nationality"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E] text-sm">{t('inquiry.nationality')} *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">{t('inquiry.nationality')} *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -615,7 +615,7 @@ const InquiryFormModal = ({
                       name="language"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E] text-sm">{t('inquiry.language')} *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">{t('inquiry.language')} *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -639,7 +639,7 @@ const InquiryFormModal = ({
                       name="preferredContact"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E] text-sm">Preferred Contact Method *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70 text-sm">Preferred Contact Method *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -661,7 +661,7 @@ const InquiryFormModal = ({
                         name="buyingService"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#5A4A2E] text-sm">Service Needed *</FormLabel>
+                            <FormLabel className="text-[#1A1A1A]/70 text-sm">Service Needed *</FormLabel>
                             <FormControl>
                               <SearchableSelect
                                 value={field.value || ''}
@@ -684,11 +684,11 @@ const InquiryFormModal = ({
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E] text-sm">{t('inquiry.message')}</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70 text-sm">{t('inquiry.message')}</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[80px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-lg resize-none"
+                            className="min-h-[80px] bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-lg resize-none"
                             placeholder="Tell us about your requirements..."
                           />
                         </FormControl>
@@ -718,13 +718,13 @@ const InquiryFormModal = ({
                   {/* Security & Privacy Notice */}
                   <div className="flex items-start gap-2 p-3 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 mt-3">
                     <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                    <p className="text-[#5A4A2E] text-xs leading-relaxed">
+                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
                       Your information is securely stored in the JBJ Global Real Estate system for service and quality purposes. We never share your data with third parties.
                     </p>
                   </div>
 
                   {/* Registration note */}
-                  <p className="text-[#5A4A2E] text-xs text-center pt-2">
+                  <p className="text-[#1A1A1A]/70 text-xs text-center pt-2">
                     By registering, you'll join our exclusive community and receive updates via WhatsApp.
                   </p>
                 </form>

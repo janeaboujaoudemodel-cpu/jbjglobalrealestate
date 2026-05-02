@@ -160,7 +160,7 @@ export function AIBrokerEditDialog({
           <TabsContent value="profile" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-[#5A4A2E]">Name</Label>
+                <Label className="text-[#1A1A1A]/70">Name</Label>
                 <Input
                   value={formData.name || ""}
                   onChange={(e) =>
@@ -170,7 +170,7 @@ export function AIBrokerEditDialog({
                 />
               </div>
               <div>
-                <Label className="text-[#5A4A2E]">Email</Label>
+                <Label className="text-[#1A1A1A]/70">Email</Label>
                 <Input
                   value={formData.email || ""}
                   onChange={(e) =>
@@ -183,7 +183,7 @@ export function AIBrokerEditDialog({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-[#5A4A2E]">Phone</Label>
+                <Label className="text-[#1A1A1A]/70">Phone</Label>
                 <Input
                   value={formData.phone || ""}
                   onChange={(e) =>
@@ -193,7 +193,7 @@ export function AIBrokerEditDialog({
                 />
               </div>
               <div>
-                <Label className="text-[#5A4A2E]">Avatar URL</Label>
+                <Label className="text-[#1A1A1A]/70">Avatar URL</Label>
                 <Input
                   value={formData.avatar_url || ""}
                   onChange={(e) =>
@@ -205,7 +205,7 @@ export function AIBrokerEditDialog({
             </div>
 
             <div>
-              <Label className="text-[#5A4A2E]">Bio</Label>
+              <Label className="text-[#1A1A1A]/70">Bio</Label>
               <Textarea
                 value={formData.bio || ""}
                 onChange={(e) =>
@@ -217,7 +217,7 @@ export function AIBrokerEditDialog({
             </div>
 
             <div>
-              <Label className="text-[#5A4A2E] mb-2 block">Languages</Label>
+              <Label className="text-[#1A1A1A]/70 mb-2 block">Languages</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {formData.languages?.map((lang) => (
                   <Badge
@@ -241,7 +241,7 @@ export function AIBrokerEditDialog({
                     variant="outline"
                     size="sm"
                     onClick={() => addLanguage(lang)}
-                    className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+                    className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
                   >
                     <Plus className="h-3 w-3 mr-1" />
                     {lang}
@@ -251,7 +251,7 @@ export function AIBrokerEditDialog({
             </div>
 
             <div>
-              <Label className="text-[#5A4A2E] mb-2 block">Specializations</Label>
+              <Label className="text-[#1A1A1A]/70 mb-2 block">Specializations</Label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {formData.specialization?.map((spec) => (
                   <Badge
@@ -275,7 +275,7 @@ export function AIBrokerEditDialog({
                     variant="outline"
                     size="sm"
                     onClick={() => addSpecialization(spec)}
-                    className="border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+                    className="border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
                   >
                     <Plus className="h-3 w-3 mr-1" />
                     {spec}
@@ -287,7 +287,7 @@ export function AIBrokerEditDialog({
 
           <TabsContent value="behavior" className="space-y-4 mt-4">
             <div>
-              <Label className="text-[#5A4A2E]">Daily Interaction Limit</Label>
+              <Label className="text-[#1A1A1A]/70">Daily Interaction Limit</Label>
               <Input
                 type="number"
                 value={formData.daily_interaction_limit || 150}
@@ -299,14 +299,14 @@ export function AIBrokerEditDialog({
                 }
                 className="bg-zinc-800 border-[#1A1A1A] text-white mt-1"
               />
-              <p className="text-[#5A4A2E] text-sm mt-1">
+              <p className="text-[#1A1A1A]/70 text-sm mt-1">
                 Maximum leads this broker can handle per day
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-[#5A4A2E]">Min Response Delay (seconds)</Label>
+                <Label className="text-[#1A1A1A]/70">Min Response Delay (seconds)</Label>
                 <Input
                   type="number"
                   value={formData.response_delay_min_seconds || 3}
@@ -320,7 +320,7 @@ export function AIBrokerEditDialog({
                 />
               </div>
               <div>
-                <Label className="text-[#5A4A2E]">Max Response Delay (seconds)</Label>
+                <Label className="text-[#1A1A1A]/70">Max Response Delay (seconds)</Label>
                 <Input
                   type="number"
                   value={formData.response_delay_max_seconds || 10}
@@ -334,7 +334,7 @@ export function AIBrokerEditDialog({
                 />
               </div>
             </div>
-            <p className="text-[#5A4A2E] text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               Randomized delay to simulate human-like response times
             </p>
           </TabsContent>
@@ -342,7 +342,7 @@ export function AIBrokerEditDialog({
           <TabsContent value="schedule" className="space-y-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-[#5A4A2E]">Working Hours Start</Label>
+                <Label className="text-[#1A1A1A]/70">Working Hours Start</Label>
                 <Input
                   type="time"
                   value={formData.working_hours_start || "09:00"}
@@ -356,7 +356,7 @@ export function AIBrokerEditDialog({
                 />
               </div>
               <div>
-                <Label className="text-[#5A4A2E]">Working Hours End</Label>
+                <Label className="text-[#1A1A1A]/70">Working Hours End</Label>
                 <Input
                   type="time"
                   value={formData.working_hours_end || "18:00"}
@@ -372,7 +372,7 @@ export function AIBrokerEditDialog({
             </div>
 
             <div>
-              <Label className="text-[#5A4A2E] mb-3 block">Working Days</Label>
+              <Label className="text-[#1A1A1A]/70 mb-3 block">Working Days</Label>
               <div className="flex gap-2">
                 {DAYS_OF_WEEK.map((day) => (
                   <Button
@@ -387,7 +387,7 @@ export function AIBrokerEditDialog({
                     className={
                       formData.working_days?.includes(day.value)
                         ? "bg-gold text-[#1A1A1A] hover:bg-gold/90"
-                        : "border-[#1A1A1A] text-[#5A4A2E] hover:bg-[#1A1A1A]"
+                        : "border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
                     }
                   >
                     {day.label}
@@ -399,7 +399,7 @@ export function AIBrokerEditDialog({
 
           <TabsContent value="personality" className="space-y-4 mt-4">
             <div>
-              <Label className="text-[#5A4A2E]">Personality Prompt</Label>
+              <Label className="text-[#1A1A1A]/70">Personality Prompt</Label>
               <Textarea
                 value={formData.personality_prompt || ""}
                 onChange={(e) =>
@@ -411,7 +411,7 @@ export function AIBrokerEditDialog({
                 className="bg-zinc-800 border-[#1A1A1A] text-white mt-1 min-h-[200px] font-mono text-sm"
                 placeholder="System prompt that defines the AI broker's personality, tone, and behavior..."
               />
-              <p className="text-[#5A4A2E] text-sm mt-2">
+              <p className="text-[#1A1A1A]/70 text-sm mt-2">
                 This prompt defines how the AI broker communicates. Include tone,
                 style, and any specific behaviors or restrictions.
               </p>
@@ -423,7 +423,7 @@ export function AIBrokerEditDialog({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-[#1A1A1A] text-[#5A4A2E]"
+            className="border-[#1A1A1A] text-[#1A1A1A]/70"
           >
             Cancel
           </Button>

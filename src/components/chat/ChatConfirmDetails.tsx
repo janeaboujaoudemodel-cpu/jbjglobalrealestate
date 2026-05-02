@@ -43,7 +43,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
 
       <div className="mb-4">
         <h4 className="text-[#1a1a1a] text-lg font-bold mb-1">Welcome Back!</h4>
-        <p className="text-[#5A4A2E] text-sm">Please confirm your details to continue</p>
+        <p className="text-[#1A1A1A]/70 text-sm">Please confirm your details to continue</p>
       </div>
 
       <div className="w-full bg-[#FDFBF7]/80 rounded-xl border border-[#C8A766]/30 p-4 space-y-3">
@@ -52,14 +52,14 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             <div className="flex items-center gap-3 text-left">
               <User className="w-4 h-4 text-[#C8A766] shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs text-[#5A4A2E]">Name</p>
+                <p className="text-xs text-[#1A1A1A]/70">Name</p>
                 <p className="text-sm font-semibold text-[#1A1A1A] truncate">{name || 'Not provided'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 text-left">
               <Mail className="w-4 h-4 text-[#C8A766] shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs text-[#5A4A2E]">Email</p>
+                <p className="text-xs text-[#1A1A1A]/70">Email</p>
                 <p className="text-sm font-semibold text-[#1A1A1A] truncate">{email}</p>
               </div>
             </div>
@@ -67,7 +67,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
               <div className="flex items-center gap-3 text-left">
                 <Phone className="w-4 h-4 text-[#C8A766] shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs text-[#5A4A2E]">Phone</p>
+                  <p className="text-xs text-[#1A1A1A]/70">Phone</p>
                   <p className="text-sm font-semibold text-[#1A1A1A] truncate">{phone}</p>
                 </div>
               </div>
@@ -125,7 +125,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             <Button
               variant="ghost"
               onClick={() => setIsEditing(true)}
-              className="w-full h-10 text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-sm"
+              className="w-full h-10 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-sm"
             >
               <Edit3 className="w-3.5 h-3.5 mr-1.5" />
               Update My Details
@@ -152,7 +152,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
                 setEditPhone(phone);
                 setIsEditing(false);
               }}
-              className="w-full h-10 text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-sm"
+              className="w-full h-10 text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#1A1A1A]/5 text-sm"
             >
               Cancel
             </Button>

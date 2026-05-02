@@ -104,7 +104,7 @@ export const FAQFloatingSidebar = ({
                 </div>
                 <div>
                   <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-[#5A4A2E] text-xs leading-relaxed">
+                  <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
                     Click any category to jump directly to that section. The active category is highlighted in gold.
                   </p>
                 </div>
@@ -142,9 +142,9 @@ export const FAQFloatingSidebar = ({
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-[#5A4A2E]" />
+              <ChevronDown className="w-4 h-4 text-[#1A1A1A]/70" />
             ) : (
-              <ChevronUp className="w-4 h-4 text-[#5A4A2E]" />
+              <ChevronUp className="w-4 h-4 text-[#1A1A1A]/70" />
             )}
           </button>
         </div>
@@ -167,7 +167,7 @@ export const FAQFloatingSidebar = ({
                     "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
                       ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-gold/40"
-                      : "text-[#5A4A2E] hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <span className={cn(

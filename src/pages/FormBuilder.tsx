@@ -193,7 +193,7 @@ const FormBuilder = () => {
                 key={star}
                 type="button"
                 onClick={() => onChange(star)}
-                className={`text-2xl ${value >= star ? "text-yellow-400" : "text-[#5A4A2E]"}`}
+                className={`text-2xl ${value >= star ? "text-yellow-400" : "text-[#1A1A1A]/70"}`}
               >
                 ★
               </button>
@@ -293,7 +293,7 @@ const FormBuilder = () => {
                     <Card key={field.id} className="bg-zinc-900 border-[#1A1A1A]">
                       <CardContent className="pt-6">
                         <div className="flex items-start gap-4">
-                          <GripVertical className="w-5 h-5 text-[#5A4A2E] cursor-grab mt-2" />
+                          <GripVertical className="w-5 h-5 text-[#1A1A1A]/70 cursor-grab mt-2" />
                           <div className="flex-1 space-y-4">
                             <Input
                               value={field.label}

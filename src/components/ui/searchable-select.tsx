@@ -88,7 +88,7 @@ export function SearchableSelect({
           className={cn(
             "w-full justify-between h-12 rounded-lg",
             !triggerClassName && "bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] hover:bg-[#FDFBF7] hover:border-gold/60 hover:text-[#1A1A1A]",
-            !value && "text-[#5A4A2E]",
+            !value && "text-[#1A1A1A]/70",
             triggerClassName
           )}
         >
@@ -96,7 +96,7 @@ export function SearchableSelect({
             {selectedFlag && <span className="text-xl leading-none">{selectedFlag}</span>}
             {value || placeholder}
           </span>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#5A4A2E]" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 text-[#1A1A1A]/70" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -112,13 +112,13 @@ export function SearchableSelect({
       >
         <div className="p-2 border-b border-gold/20">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A2E]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/70" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:border-gold rounded-md"
+              className="h-10 pl-9 bg-[#FDFBF7] border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold rounded-md"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export function SearchableSelect({
           }}
         >
           {filteredOptions.length === 0 ? (
-            <div className="py-6 text-center text-sm text-[#5A4A2E]">
+            <div className="py-6 text-center text-sm text-[#1A1A1A]/70">
               No results found
             </div>
           ) : (
@@ -164,7 +164,7 @@ export function SearchableSelect({
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base">{option}</span>
                   {option === priorityItem && (
-                    <span className="ml-auto text-xs text-[#5A4A2E]">Default</span>
+                    <span className="ml-auto text-xs text-[#1A1A1A]/70">Default</span>
                   )}
                 </button>
               );

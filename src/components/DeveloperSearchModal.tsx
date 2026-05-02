@@ -60,7 +60,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search developers by name or headquarters..."
-            className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] focus:border-gold h-12"
+            className="pl-10 bg-zinc-900 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 focus:border-gold h-12"
             autoFocus
           />
         </div>
@@ -86,7 +86,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                   }`}
                 >
                   {/* Rank Number */}
-                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-[#5A4A2E]"}`}>
+                  <div className={`w-8 text-center font-bold text-lg ${isTopTier ? "text-gold" : "text-[#1A1A1A]/70"}`}>
                     #{developer.rank || index + 1}
                   </div>
                   
@@ -127,7 +127,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     </div>
                   </div>
                   
-                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-[#5A4A2E] group-hover:text-gold" : "text-[#5A4A2E] group-hover:text-white"}`} />
+                  <ChevronRight className={`w-5 h-5 transition-colors ${isTopTier ? "text-[#1A1A1A]/70 group-hover:text-gold" : "text-[#1A1A1A]/70 group-hover:text-white"}`} />
                 </button>
               );
             })

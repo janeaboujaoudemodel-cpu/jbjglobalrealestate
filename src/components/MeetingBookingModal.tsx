@@ -189,11 +189,11 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-[#1A1A1A] mb-4">Meeting Request Submitted</h3>
-            <p className="text-[#5A4A2E] mb-6">
+            <p className="text-[#1A1A1A]/70 mb-6">
               We have received your meeting request and will confirm your appointment via email within 24 hours.
             </p>
             <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 text-left max-w-sm mx-auto mb-6">
-              <p className="text-sm text-[#5A4A2E]">
+              <p className="text-sm text-[#1A1A1A]/70">
                 <strong className="text-[#1A1A1A]">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}<br />
                 <strong className="text-[#1A1A1A]">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)
               </p>
@@ -211,7 +211,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   <div key={s} className="flex items-center gap-2">
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      step >= s ? "bg-gold text-[#1A1A1A]" : "bg-[#EFE6D6] text-[#5A4A2E]"
+                      step >= s ? "bg-gold text-[#1A1A1A]" : "bg-[#EFE6D6] text-[#1A1A1A]/70"
                     )}>
                       {s}
                     </div>
@@ -225,7 +225,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-4">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-[#1A1A1A]">Your Information</h3>
-                    <p className="text-[#5A4A2E] text-sm">Please provide accurate details for verification</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">Please provide accurate details for verification</p>
                   </div>
 
                   <FormField
@@ -233,7 +233,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E]">Full Name *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70">Full Name *</FormLabel>
                         <FormControl>
                           <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="Your full legal name" />
                         </FormControl>
@@ -248,7 +248,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E]">Email Address *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70">Email Address *</FormLabel>
                           <FormControl>
                             <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="email@example.com" />
                           </FormControl>
@@ -262,7 +262,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E]">Phone Number *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70">Phone Number *</FormLabel>
                           <FormControl>
                             <PhoneInput value={field.value} onChange={field.onChange} />
                           </FormControl>
@@ -278,7 +278,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="nationality"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E]">Nationality *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70">Nationality *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -299,7 +299,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       name="currentLocation"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#5A4A2E]">Current Location *</FormLabel>
+                          <FormLabel className="text-[#1A1A1A]/70">Current Location *</FormLabel>
                           <FormControl>
                             <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] focus:border-gold" placeholder="City, Country" />
                           </FormControl>
@@ -314,7 +314,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="serviceNeeded"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E]">Service Needed *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70">Service Needed *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold">
@@ -339,7 +339,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="purpose"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E]">Meeting Purpose *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70">Meeting Purpose *</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
@@ -363,7 +363,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-[#1A1A1A]">Select Date & Time</h3>
-                    <p className="text-[#5A4A2E] text-sm">Online meetings are scheduled at least 1 day in advance</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">Online meetings are scheduled at least 1 day in advance</p>
                   </div>
 
                   <FormField
@@ -371,7 +371,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="meetingDate"
                     render={({ field }) => (
                       <FormItem className="flex flex-col">
-                        <FormLabel className="text-[#5A4A2E]">Meeting Date *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70">Meeting Date *</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -407,7 +407,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                     name="meetingTime"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#5A4A2E]">Meeting Time (Dubai Time - GMT+4) *</FormLabel>
+                        <FormLabel className="text-[#1A1A1A]/70">Meeting Time (Dubai Time - GMT+4) *</FormLabel>
                         <div className="grid grid-cols-5 gap-2">
                           {TIME_SLOTS.map((time) => (
                             <Button
@@ -418,7 +418,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                                 "h-10",
                                 field.value === time 
                                   ? "bg-gold text-[#1A1A1A] hover:bg-gold-light" 
-                                  : "bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E] hover:border-gold"
+                                  : "bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-gold"
                               )}
                               onClick={() => field.onChange(time)}
                             >
@@ -432,7 +432,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   />
 
                   <div className="flex gap-4">
-                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#5A4A2E]">
+                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#1A1A1A]/70">
                       Back
                     </Button>
                     <Button type="button" onClick={handleNext} className="flex-1 h-12 bg-gold hover:bg-gold-light text-[#1A1A1A] font-semibold">
@@ -447,18 +447,18 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-[#1A1A1A]">Confirm Your Booking</h3>
-                    <p className="text-[#5A4A2E] text-sm">Please review and accept the terms</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">Please review and accept the terms</p>
                   </div>
 
                   {/* Summary */}
                   <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl p-4 space-y-2">
                     <h4 className="font-semibold text-[#1A1A1A] mb-3">Meeting Summary</h4>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Name:</strong> {form.getValues("fullName")}</p>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Email:</strong> {form.getValues("email")}</p>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Service:</strong> {SERVICE_OPTIONS.find(s => s.value === form.getValues("serviceNeeded"))?.label}</p>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}</p>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)</p>
-                    <p className="text-sm text-[#5A4A2E]"><strong className="text-[#1A1A1A]">Type:</strong> Online Video Meeting</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Name:</strong> {form.getValues("fullName")}</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Email:</strong> {form.getValues("email")}</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Service:</strong> {SERVICE_OPTIONS.find(s => s.value === form.getValues("serviceNeeded"))?.label}</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Date:</strong> {form.getValues("meetingDate") ? format(form.getValues("meetingDate"), "PPP") : ""}</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Time:</strong> {form.getValues("meetingTime")} (Dubai Time)</p>
+                    <p className="text-sm text-[#1A1A1A]/70"><strong className="text-[#1A1A1A]">Type:</strong> Online Video Meeting</p>
                   </div>
 
                   {/* Legal Disclaimer */}
@@ -491,7 +491,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
+                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
                               I confirm all information provided is accurate and truthful. *
                             </FormLabel>
                             <FormMessage className="text-red-500 text-xs" />
@@ -513,7 +513,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel className="text-[#5A4A2E] text-sm font-normal cursor-pointer">
+                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
                               I understand and agree to the legal disclaimer above. *
                             </FormLabel>
                             <FormMessage className="text-red-500 text-xs" />
@@ -524,7 +524,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   </div>
 
                   <div className="flex gap-4">
-                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#5A4A2E]">
+                    <Button type="button" variant="outline" onClick={handleBack} className="flex-1 h-12 border-[#B89555]/30 text-[#1A1A1A]/70">
                       Back
                     </Button>
                     <Button 

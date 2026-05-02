@@ -183,7 +183,7 @@ export const ConsultationRequestForm = ({
         <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
           Request Received!
         </h3>
-        <p className="text-[#5A4A2E]">
+        <p className="text-[#1A1A1A]/70">
           Our team will reach out within 24 hours to schedule your consultation.
         </p>
       </motion.div>
@@ -211,7 +211,7 @@ export const ConsultationRequestForm = ({
             title
           )}
         </h3>
-        <p className="text-[#5A4A2E] text-sm mt-2">{subtitle}</p>
+        <p className="text-[#1A1A1A]/70 text-sm mt-2">{subtitle}</p>
       </div>
 
       <Form {...form}>

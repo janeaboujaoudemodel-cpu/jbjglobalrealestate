@@ -30,7 +30,7 @@ export const EmailLogDialog = ({
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">Email log — {developerName}</DialogTitle>
         </DialogHeader>
-        <div className="text-xs text-[#5A4A2E] mb-2">{recipientEmail}</div>
+        <div className="text-xs text-[#1A1A1A]/70 mb-2">{recipientEmail}</div>
         {isLoading ? (
           <div className="text-sm text-[#8A7556]">Loading…</div>
         ) : history.length === 0 ? (
@@ -43,7 +43,7 @@ export const EmailLogDialog = ({
                   <Badge className={`${STATUS_STYLE[row.status] || "bg-[#EFE6D6] text-[#1A1A1A]"} border font-semibold`}>
                     {row.status}
                   </Badge>
-                  <span className="text-xs text-[#5A4A2E]">{new Date(row.created_at).toLocaleString()}</span>
+                  <span className="text-xs text-[#1A1A1A]/70">{new Date(row.created_at).toLocaleString()}</span>
                 </div>
                 <div className="mt-1 text-xs text-[#1A1A1A]">
                   Variant: <strong>{row.template_name === "developer_registration" ? "New registration" : "Confirm registered"}</strong>

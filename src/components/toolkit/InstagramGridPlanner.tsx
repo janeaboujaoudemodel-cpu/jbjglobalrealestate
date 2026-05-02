@@ -1049,7 +1049,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                     <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
                       post.status === 'published' ? 'bg-green-500/20 text-green-400' :
                       post.status === 'failed' ? 'bg-red-500/20 text-red-400' :
-                      post.status === 'cancelled' ? 'bg-[#B89555]/20 text-[#5A4A2E]' :
+                      post.status === 'cancelled' ? 'bg-[#B89555]/20 text-[#1A1A1A]/70' :
                       'bg-yellow-500/20 text-yellow-400'
                     }`}>
                       {post.status.toUpperCase()}

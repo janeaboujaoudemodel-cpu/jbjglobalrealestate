@@ -58,7 +58,7 @@ export const PreFooterSeparator = ({
             >
               {title}
             </h2>
-            <p className="text-[#5A4A2E] text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-5 sm:mb-8 leading-relaxed">
+            <p className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-5 sm:mb-8 leading-relaxed">
               {subtitle}
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4">

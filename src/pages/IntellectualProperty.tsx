@@ -63,7 +63,7 @@ const IntellectualProperty = () => {
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Intellectual Property</h1>
             <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Legal Protection & Copyright Notice</p>
-            <p className="text-[#5A4A2E] leading-relaxed max-w-3xl mx-auto text-[15px]">
+            <p className="text-[#1A1A1A]/70 leading-relaxed max-w-3xl mx-auto text-[15px]">
               This page outlines the comprehensive intellectual property protections governing the JBJ Global Real Estate platform, its proprietary AI tools, designs, and all associated digital assets.
             </p>
           </div>
@@ -84,7 +84,7 @@ const IntellectualProperty = () => {
                     className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeSection === item.id
                         ? "text-[#C8A766] font-semibold border-l-2 border-[#C8A766] bg-[#C8A766]/5"
-                        : "text-[#5A4A2E] hover:text-[#5A4A2E] border-l-2 border-transparent"
+                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-l-2 border-transparent"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -105,7 +105,7 @@ const IntellectualProperty = () => {
                   <div>
                     <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Official Copyright Statement</h2>
                     <p className="text-[#1A1A1A] text-lg leading-relaxed">© {currentYear} <span className="text-[#C8A766] font-semibold">JBJ Global Real Estate</span>. All Rights Reserved.</p>
-                    <p className="text-[#5A4A2E] mt-4 leading-relaxed">
+                    <p className="text-[#1A1A1A]/70 mt-4 leading-relaxed">
                       This platform, including but not limited to all software code, AI algorithms, user interface designs, branding elements, written content, graphics, and digital assets, is the exclusive intellectual property of <span className="text-[#1A1A1A] font-medium">JBJ Global Real Estate</span>.
                     </p>
                   </div>
@@ -134,7 +134,7 @@ const IntellectualProperty = () => {
                 ].map((item, index) => (
                   <CCard key={index} className="hover:border-[#C8A766]/60 transition-colors">
                     <h3 className="text-[#1A1A1A] font-medium">{item.title}</h3>
-                    <p className="text-[#5A4A2E] text-sm">{item.desc}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">{item.desc}</p>
                   </CCard>
                 ))}
               </div>
@@ -148,8 +148,8 @@ const IntellectualProperty = () => {
                 <Scale className="w-6 h-6 text-[#C8A766]" />Legal Framework & Jurisdiction
               </h2>
               <CCard className="space-y-4">
-                <p className="text-[#5A4A2E] leading-relaxed">All intellectual property rights are protected under the laws of the <span className="text-[#1A1A1A] font-medium">United Arab Emirates</span>, including but not limited to:</p>
-                <ul className="space-y-3 text-[#5A4A2E]">
+                <p className="text-[#1A1A1A]/70 leading-relaxed">All intellectual property rights are protected under the laws of the <span className="text-[#1A1A1A] font-medium">United Arab Emirates</span>, including but not limited to:</p>
+                <ul className="space-y-3 text-[#1A1A1A]/70">
                   {[
                     { law: "UAE Federal Law No. 38 of 2021", desc: "Concerning Copyrights and Related Rights" },
                     { law: "UAE Trademark Law", desc: "Federal Law No. 37 of 1992 (as amended)" },
@@ -173,8 +173,8 @@ const IntellectualProperty = () => {
                 <AlertTriangle className="w-6 h-6 text-[#C8A766]" />Strictly Prohibited Actions
               </h2>
               <CCard className="space-y-4">
-                <p className="text-[#5A4A2E] leading-relaxed">The following activities are <span className="text-red-700 font-semibold">strictly prohibited</span> and will result in legal action:</p>
-                <ul className="space-y-3 text-[#5A4A2E]">
+                <p className="text-[#1A1A1A]/70 leading-relaxed">The following activities are <span className="text-red-700 font-semibold">strictly prohibited</span> and will result in legal action:</p>
+                <ul className="space-y-3 text-[#1A1A1A]/70">
                   {[
                     "Copying, reproducing, or cloning any part of this platform or its features",
                     "Reverse engineering AI algorithms or proprietary systems",
@@ -209,7 +209,7 @@ const IntellectualProperty = () => {
                   <CCard key={i}>
                     <item.icon className="w-8 h-8 text-[#C8A766] mb-4" />
                     <h3 className="text-[#1A1A1A] font-semibold mb-2">{item.title}</h3>
-                    <p className="text-[#5A4A2E] text-sm">{item.desc}</p>
+                    <p className="text-[#1A1A1A]/70 text-sm">{item.desc}</p>
                   </CCard>
                 ))}
               </div>
@@ -223,8 +223,8 @@ const IntellectualProperty = () => {
                 <Scale className="w-6 h-6 text-[#C8A766]" />Enforcement & Legal Remedies
               </h2>
               <CCard className="space-y-4">
-                <p className="text-[#5A4A2E] leading-relaxed">JBJ Global Real Estate reserves the right to pursue all available legal remedies against infringers, including but not limited to:</p>
-                <ul className="space-y-3 text-[#5A4A2E]">
+                <p className="text-[#1A1A1A]/70 leading-relaxed">JBJ Global Real Estate reserves the right to pursue all available legal remedies against infringers, including but not limited to:</p>
+                <ul className="space-y-3 text-[#1A1A1A]/70">
                   {[
                     "Injunctive relief to immediately cease infringing activities",
                     "Monetary damages including actual damages and disgorgement of profits",
@@ -247,8 +247,8 @@ const IntellectualProperty = () => {
             <div id="contact">
               <CCard className="!p-8">
                 <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensing & Legal Inquiries</h2>
-                <p className="text-[#5A4A2E] mb-6">For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:</p>
-                <div className="bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-5 space-y-2 text-[#5A4A2E]">
+                <p className="text-[#1A1A1A]/70 mb-6">For licensing requests, partnership inquiries, or to report intellectual property violations, please contact our legal department:</p>
+                <div className="bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-5 space-y-2 text-[#1A1A1A]/70">
                   <p><strong className="text-[#1A1A1A]">Email:</strong> PRIVACY@JBJ.AE</p>
                   <p><strong className="text-[#1A1A1A]">Legal Representative:</strong> JBJ Global Real Estate</p>
                   <p><strong className="text-[#1A1A1A]">Jurisdiction:</strong> Dubai, United Arab Emirates</p>
@@ -258,11 +258,11 @@ const IntellectualProperty = () => {
 
             {/* Footer */}
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-[#5A4A2E] text-sm">Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+              <p className="text-[#1A1A1A]/70 text-sm">Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
               <p className="text-[#C8A766] text-sm mt-2">© {currentYear} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-[#5A4A2E]">|</span>
+                <span className="text-[#1A1A1A]/70">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

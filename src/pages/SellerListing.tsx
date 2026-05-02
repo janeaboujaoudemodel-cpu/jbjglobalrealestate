@@ -485,13 +485,13 @@ Requirements:
                 <CheckCircle2 className="w-10 h-10 text-gold" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
-              <p className="text-[#5A4A2E] mb-8">
+              <p className="text-[#1A1A1A]/70 mb-8">
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
               <div className="bg-zinc-900/50 border border-[#1A1A1A] rounded-xl p-6 mb-8 text-left">
                 <h3 className="text-gold font-semibold mb-3">What Happens Next?</h3>
-                <ul className="space-y-2 text-[#5A4A2E] text-sm">
+                <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
                     <span>Our team will review your listing details and documents</span>
@@ -549,7 +549,7 @@ Requirements:
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-3">
                 List Your Property <span className="text-gold">for Sale</span>
               </h1>
-              <p className="text-[#5A4A2E] mb-6">
+              <p className="text-[#1A1A1A]/70 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
@@ -600,7 +600,7 @@ Requirements:
                       ? 'text-[#1A1A1A]' 
                       : currentStep > step.number 
                         ? 'text-gold' 
-                        : 'text-[#5A4A2E]'
+                        : 'text-[#1A1A1A]/70'
                   }`}
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
@@ -609,7 +609,7 @@ Requirements:
                       ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-[#1A1A1A] text-[#1A1A1A] shadow-lg' 
                       : currentStep > step.number 
                         ? 'bg-[#FDFBF7] border-gold text-gold'
-                        : 'bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E]'
+                        : 'bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70'
                   }`}>
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -618,7 +618,7 @@ Requirements:
                     )}
                   </div>
                   <span className={`text-xs text-center whitespace-nowrap ${
-                    currentStep === step.number ? 'text-[#1A1A1A] font-medium' : 'text-[#5A4A2E]'
+                    currentStep === step.number ? 'text-[#1A1A1A] font-medium' : 'text-[#1A1A1A]/70'
                   }`}>{step.title}</span>
                 </div>
               ))}
@@ -640,7 +640,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Seller Details</h2>
-                      <p className="text-[#5A4A2E] text-sm">Tell us about yourself so we can contact you</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -732,7 +732,7 @@ Requirements:
                               id={option.value}
                               className="border-gold/50"
                             />
-                            <Label htmlFor={option.value} className="ml-2 text-[#5A4A2E] cursor-pointer">
+                            <Label htmlFor={option.value} className="ml-2 text-[#1A1A1A]/70 cursor-pointer">
                               {option.label}
                             </Label>
                           </div>
@@ -753,7 +753,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Property Details</h2>
-                      <p className="text-[#5A4A2E] text-sm">Tell us about your property</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -792,7 +792,7 @@ Requirements:
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
                     </div>
 
@@ -823,7 +823,7 @@ Requirements:
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                         />
                       </div>
                     </div>
@@ -849,7 +849,7 @@ Requirements:
                             />
                             <Label
                               htmlFor={`status-${option.value}`}
-                              className="ml-2 text-[#5A4A2E] cursor-pointer text-sm"
+                              className="ml-2 text-[#1A1A1A]/70 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -863,7 +863,7 @@ Requirements:
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1 min-h-[100px]"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -880,7 +880,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Pricing Information</h2>
-                      <p className="text-[#5A4A2E] text-sm">Help us understand your pricing expectations</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Help us understand your pricing expectations</p>
                     </div>
 
                     <div>
@@ -889,9 +889,9 @@ Requirements:
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder="Original purchase price"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
-                      <p className="text-[#5A4A2E] text-xs mt-1">What you paid for the property</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-1">What you paid for the property</p>
                     </div>
 
                     <div>
@@ -900,7 +900,7 @@ Requirements:
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder="Your desired selling price"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
                     </div>
 
@@ -910,7 +910,7 @@ Requirements:
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder="Lowest price you'd accept"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
                       />
                     </div>
 
@@ -934,7 +934,7 @@ Requirements:
                             />
                             <Label
                               htmlFor={`urgency-${option.value}`}
-                              className="ml-2 text-[#5A4A2E] cursor-pointer text-sm"
+                              className="ml-2 text-[#1A1A1A]/70 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -949,7 +949,7 @@ Requirements:
                         <Calculator className="w-5 h-5 text-gold" />
                         <span className="text-[#1A1A1A] font-medium">Need help with pricing?</span>
                       </div>
-                      <p className="text-[#5A4A2E] text-sm mb-3">
+                      <p className="text-[#1A1A1A]/70 text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
                       <Button
@@ -970,7 +970,7 @@ Requirements:
                           <p className="text-[#1A1A1A]">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
-                          <p className="text-[#5A4A2E] text-xs mt-1">{form.watch("estimated_note")}</p>
+                          <p className="text-[#1A1A1A]/70 text-xs mt-1">{form.watch("estimated_note")}</p>
                         </div>
                       )}
                     </div>
@@ -988,7 +988,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Condition & Upgrades</h2>
-                      <p className="text-[#5A4A2E] text-sm">Tell us about the property's condition and any improvements</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Tell us about the property's condition and any improvements</p>
                     </div>
 
                     <div className="space-y-4">
@@ -1023,7 +1023,7 @@ Requirements:
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1 min-h-[100px]"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[100px]"
                         />
                       </div>
                     )}
@@ -1035,7 +1035,7 @@ Requirements:
                           value={newHighlight}
                           onChange={(e) => setNewHighlight(e.target.value)}
                           placeholder="e.g., Sea view, Private pool, Smart home"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E]"
+                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
                         />
                         <Button 
@@ -1089,9 +1089,9 @@ Requirements:
                       <Textarea
                         {...form.register("listing_description")}
                         placeholder="Describe your property or use AI to generate a professional description..."
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] mt-1 min-h-[150px]"
+                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[150px]"
                       />
-                      <p className="text-[#5A4A2E] text-xs mt-1">
+                      <p className="text-[#1A1A1A]/70 text-xs mt-1">
                         This description will be used in marketing materials (you can edit it)
                       </p>
                     </div>
@@ -1109,7 +1109,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Media Uploads</h2>
-                      <p className="text-[#5A4A2E] text-sm">Upload photos and videos of your property</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Upload photos and videos of your property</p>
                     </div>
 
                     <div className="space-y-6">
@@ -1126,9 +1126,9 @@ Requirements:
                             id="photo-upload"
                           />
                           <label htmlFor="photo-upload" className="cursor-pointer">
-                            <Camera className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Click to upload photos</p>
-                            <p className="text-[#5A4A2E] text-xs mt-1">JPG, PNG up to 10MB each</p>
+                            <Camera className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Click to upload photos</p>
+                            <p className="text-[#1A1A1A]/70 text-xs mt-1">JPG, PNG up to 10MB each</p>
                           </label>
                         </div>
                         {photoFiles.length > 0 && (
@@ -1149,9 +1149,9 @@ Requirements:
                             id="video-upload"
                           />
                           <label htmlFor="video-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Click to upload videos</p>
-                            <p className="text-[#5A4A2E] text-xs mt-1">MP4, MOV up to 100MB each</p>
+                            <Upload className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Click to upload videos</p>
+                            <p className="text-[#1A1A1A]/70 text-xs mt-1">MP4, MOV up to 100MB each</p>
                           </label>
                         </div>
                         {videoFiles.length > 0 && (
@@ -1172,9 +1172,9 @@ Requirements:
                             id="floorplan-upload"
                           />
                           <label htmlFor="floorplan-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Click to upload floor plans</p>
-                            <p className="text-[#5A4A2E] text-xs mt-1">PDF, JPG, PNG</p>
+                            <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Click to upload floor plans</p>
+                            <p className="text-[#1A1A1A]/70 text-xs mt-1">PDF, JPG, PNG</p>
                           </label>
                         </div>
                         {floorPlanFiles.length > 0 && (
@@ -1196,7 +1196,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Documents Vault</h2>
-                      <p className="text-[#5A4A2E] text-sm">Upload required documents securely. These are only visible to you and our team.</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
                     <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 flex items-start gap-3">
@@ -1228,8 +1228,8 @@ Requirements:
                             id="titledeed-upload"
                           />
                           <label htmlFor="titledeed-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Upload Title Deed</p>
+                            <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Upload Title Deed</p>
                           </label>
                         </div>
                         {titleDeedFile && (
@@ -1252,8 +1252,8 @@ Requirements:
                             id="passport-upload"
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
-                            <User className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Upload ID Document</p>
+                            <User className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Upload ID Document</p>
                           </label>
                         </div>
                         {passportFile && (
@@ -1286,8 +1286,8 @@ Requirements:
                               id="poa-upload"
                             />
                             <label htmlFor="poa-upload" className="cursor-pointer">
-                              <FileText className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                              <p className="text-[#5A4A2E]">Upload POA Document</p>
+                              <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                              <p className="text-[#1A1A1A]/70">Upload POA Document</p>
                             </label>
                           </div>
                           {poaFile && (
@@ -1312,8 +1312,8 @@ Requirements:
                             id="additional-upload"
                           />
                           <label htmlFor="additional-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-[#5A4A2E] mx-auto mb-2" />
-                            <p className="text-[#5A4A2E]">Upload any other documents</p>
+                            <Upload className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
+                            <p className="text-[#1A1A1A]/70">Upload any other documents</p>
                           </label>
                         </div>
                         {additionalDocs.length > 0 && (
@@ -1335,7 +1335,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Review & Submit</h2>
-                      <p className="text-[#5A4A2E] text-sm">Please review your information before submitting</p>
+                      <p className="text-[#1A1A1A]/70 text-sm">Please review your information before submitting</p>
                     </div>
 
                     <div className="space-y-4">
@@ -1346,13 +1346,13 @@ Requirements:
                           Seller Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#5A4A2E]">Name:</p>
+                          <p className="text-[#1A1A1A]/70">Name:</p>
                           <p className="text-[#1A1A1A]">{form.getValues("seller_full_name")}</p>
-                          <p className="text-[#5A4A2E]">Phone:</p>
+                          <p className="text-[#1A1A1A]/70">Phone:</p>
                           <p className="text-[#1A1A1A]">{form.getValues("seller_phone")}</p>
-                          <p className="text-[#5A4A2E]">Email:</p>
+                          <p className="text-[#1A1A1A]/70">Email:</p>
                           <p className="text-[#1A1A1A]">{form.getValues("seller_email")}</p>
-                          <p className="text-[#5A4A2E]">Type:</p>
+                          <p className="text-[#1A1A1A]/70">Type:</p>
                           <p className="text-[#1A1A1A] capitalize">{form.getValues("seller_type")}</p>
                         </div>
                       </div>
@@ -1364,19 +1364,19 @@ Requirements:
                           Property Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#5A4A2E]">Type:</p>
+                          <p className="text-[#1A1A1A]/70">Type:</p>
                           <p className="text-[#1A1A1A] capitalize">{form.getValues("property_type")}</p>
-                          <p className="text-[#5A4A2E]">Location:</p>
+                          <p className="text-[#1A1A1A]/70">Location:</p>
                           <p className="text-[#1A1A1A]">{form.getValues("property_location")}</p>
                           {form.getValues("bedrooms") !== undefined && (
                             <>
-                              <p className="text-[#5A4A2E]">Bedrooms:</p>
+                              <p className="text-[#1A1A1A]/70">Bedrooms:</p>
                               <p className="text-[#1A1A1A]">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
                             </>
                           )}
                           {form.getValues("property_size_sqft") && (
                             <>
-                              <p className="text-[#5A4A2E]">Size:</p>
+                              <p className="text-[#1A1A1A]/70">Size:</p>
                               <p className="text-[#1A1A1A]">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
                             </>
                           )}
@@ -1390,9 +1390,9 @@ Requirements:
                           Pricing
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#5A4A2E]">Target Price:</p>
+                          <p className="text-[#1A1A1A]/70">Target Price:</p>
                           <p className="text-[#1A1A1A]">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
-                          <p className="text-[#5A4A2E]">Urgency:</p>
+                          <p className="text-[#1A1A1A]/70">Urgency:</p>
                           <p className="text-[#1A1A1A]">{form.getValues("selling_urgency")} days</p>
                         </div>
                       </div>
@@ -1404,13 +1404,13 @@ Requirements:
                           Uploaded Files
                         </h3>
                         <div className="text-sm space-y-1">
-                          <p className="text-[#5A4A2E]">{photoFiles.length} photos uploaded</p>
-                          <p className="text-[#5A4A2E]">{videoFiles.length} videos uploaded</p>
+                          <p className="text-[#1A1A1A]/70">{photoFiles.length} photos uploaded</p>
+                          <p className="text-[#1A1A1A]/70">{videoFiles.length} videos uploaded</p>
                           <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-600' : 'text-red-500'}`}>
                             {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                             Title Deed {titleDeedFile ? '✓' : '(Required)'}
                           </p>
-                          <p className="text-[#5A4A2E]">{passportFile ? "✓" : "✗"} ID Document</p>
+                          <p className="text-[#1A1A1A]/70">{passportFile ? "✓" : "✗"} ID Document</p>
                           {form.getValues("seller_type") === 'poa' && (
                             <p className={`flex items-center gap-1 ${poaFile ? 'text-green-600' : 'text-red-500'}`}>
                               {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
@@ -1516,16 +1516,16 @@ Requirements:
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-[#5A4A2E] text-sm">
+            <p className="text-[#1A1A1A]/70 text-sm">
               Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
             </p>
             <div className="bg-zinc-800/50 rounded-lg p-4 space-y-2 text-sm">
-              <p className="text-[#5A4A2E]"><span className="text-[#5A4A2E]">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
-              <p className="text-[#5A4A2E]"><span className="text-[#5A4A2E]">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
-              <p className="text-[#5A4A2E]"><span className="text-[#5A4A2E]">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
-              <p className="text-[#5A4A2E]"><span className="text-[#5A4A2E]">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
+              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
+              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
+              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
+              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
             </div>
-            <p className="text-[#5A4A2E] text-xs">
+            <p className="text-[#1A1A1A]/70 text-xs">
               Note: This is an AI-generated informational estimate only and should not be relied upon for pricing decisions.
             </p>
             <div className="flex gap-3 justify-end">

@@ -428,7 +428,7 @@ export default function MyTasksCard() {
                   {!selectionMode && (
                     <div className="flex items-center gap-1.5 shrink-0">
                       {getTaskRoute(task) && (
-                        <ChevronRight className="w-4 h-4 text-[#5A4A2E] group-hover:text-gold transition-colors" />
+                        <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70 group-hover:text-gold transition-colors" />
                       )}
                       <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                       {isCompleted && (

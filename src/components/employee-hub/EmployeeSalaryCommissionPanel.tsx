@@ -30,7 +30,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle },
     paid: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle },
     cancelled: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle },
-  }[status] || { color: 'bg-[#EFE6D6] text-[#5A4A2E]', icon: Clock };
+  }[status] || { color: 'bg-[#EFE6D6] text-[#1A1A1A]/70', icon: Clock };
   const Icon = config.icon;
   return <Badge className={`${config.color} capitalize`}><Icon className="h-3 w-3 mr-1" />{status}</Badge>;
 };
@@ -62,7 +62,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-sm">Monthly Payroll</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Monthly Payroll</p>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{formatCurrency(totalSalaries)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
@@ -75,7 +75,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-sm">Pending Commissions</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Pending Commissions</p>
                 <p className="text-2xl font-bold text-amber-600">{formatCurrency(totalPending)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
@@ -88,7 +88,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-sm">Commissions Paid</p>
+                <p className="text-[#1A1A1A]/70 text-sm">Commissions Paid</p>
                 <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
@@ -130,23 +130,23 @@ export function EmployeeSalaryCommissionPanel() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-[#B89555]/30">
-                    <TableHead className="text-[#5A4A2E]">Employee</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Deal</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Amount</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Date</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Status</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Actions</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Employee</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Deal</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Amount</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Date</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Status</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredCommissions.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center text-[#5A4A2E] py-8">No commission records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={6} className="text-center text-[#1A1A1A]/70 py-8">No commission records</TableCell></TableRow>
                   ) : filteredCommissions.map((c) => (
                     <TableRow key={c.id} className="border-[#B89555]/30 hover:bg-[#F7F2EA]">
                       <TableCell className="font-medium text-[#1A1A1A]">{c.employee_name}</TableCell>
-                      <TableCell className="text-[#5A4A2E]">{c.deal_reference || '-'}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70">{c.deal_reference || '-'}</TableCell>
                       <TableCell className="text-right font-bold text-emerald-600">{formatCurrency(c.commission_amount || 0, c.currency || 'AED')}</TableCell>
-                      <TableCell className="text-[#5A4A2E]">{c.deal_closed_date ? format(new Date(c.deal_closed_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70">{c.deal_closed_date ? format(new Date(c.deal_closed_date), 'MMM dd, yyyy') : '-'}</TableCell>
                       <TableCell><StatusBadge status={c.status || 'pending'} /></TableCell>
                       <TableCell>
                         {c.status === 'pending' && <Button size="sm" variant="outline" onClick={() => approveCommission(c.id)} className="text-blue-600 border-blue-200">Approve</Button>}
@@ -167,21 +167,21 @@ export function EmployeeSalaryCommissionPanel() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-[#B89555]/30">
-                    <TableHead className="text-[#5A4A2E]">Employee</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Department</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Base Salary</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Effective Date</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Employee</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Department</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Base Salary</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Effective Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {salaries.length === 0 ? (
-                    <TableRow><TableCell colSpan={4} className="text-center text-[#5A4A2E] py-8">No salary records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={4} className="text-center text-[#1A1A1A]/70 py-8">No salary records</TableCell></TableRow>
                   ) : salaries.map((s) => (
                     <TableRow key={s.id} className="border-[#B89555]/30 hover:bg-[#F7F2EA]">
                       <TableCell className="font-medium text-[#1A1A1A]">{s.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#5A4A2E]">{s.department}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/70">{s.department}</Badge></TableCell>
                       <TableCell className="text-right font-bold text-[#1A1A1A]">{formatCurrency(s.base_salary || 0, s.currency || 'AED')}</TableCell>
-                      <TableCell className="text-[#5A4A2E]">{s.effective_date ? format(new Date(s.effective_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70">{s.effective_date ? format(new Date(s.effective_date), 'MMM dd, yyyy') : '-'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -197,23 +197,23 @@ export function EmployeeSalaryCommissionPanel() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-[#B89555]/30">
-                    <TableHead className="text-[#5A4A2E]">Employee</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Type</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Amount</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Date</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Method</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Employee</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Type</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Amount</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Date</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Method</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {payments.length === 0 ? (
-                    <TableRow><TableCell colSpan={5} className="text-center text-[#5A4A2E] py-8">No payment records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center text-[#1A1A1A]/70 py-8">No payment records</TableCell></TableRow>
                   ) : payments.map((p) => (
                     <TableRow key={p.id} className="border-[#B89555]/30 hover:bg-[#F7F2EA]">
                       <TableCell className="font-medium text-[#1A1A1A]">{p.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#5A4A2E] capitalize">{p.payment_type}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/70 capitalize">{p.payment_type}</Badge></TableCell>
                       <TableCell className="text-right font-bold text-[#1A1A1A]">{formatCurrency(p.amount || 0, p.currency || 'AED')}</TableCell>
-                      <TableCell className="text-[#5A4A2E]">{p.payment_date ? format(new Date(p.payment_date), 'MMM dd, yyyy') : '-'}</TableCell>
-                      <TableCell className="text-[#5A4A2E]">{p.payment_method || '-'}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70">{p.payment_date ? format(new Date(p.payment_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-[#1A1A1A]/70">{p.payment_method || '-'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -229,21 +229,21 @@ export function EmployeeSalaryCommissionPanel() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-[#B89555]/30">
-                    <TableHead className="text-[#5A4A2E]">Employee</TableHead>
-                    <TableHead className="text-[#5A4A2E]">Department</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Salary</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Commission</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Bonus</TableHead>
-                    <TableHead className="text-[#5A4A2E] text-right">Net Earnings</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Employee</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70">Department</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Salary</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Commission</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Bonus</TableHead>
+                    <TableHead className="text-[#1A1A1A]/70 text-right">Net Earnings</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {summaries.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center text-[#5A4A2E] py-8">No earnings data</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={6} className="text-center text-[#1A1A1A]/70 py-8">No earnings data</TableCell></TableRow>
                   ) : summaries.map((s) => (
                     <TableRow key={s.id} className="border-[#B89555]/30 hover:bg-[#F7F2EA]">
                       <TableCell className="font-medium text-[#1A1A1A]">{s.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#5A4A2E]">{s.department}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-[#B89555]/30 text-[#1A1A1A]/70">{s.department}</Badge></TableCell>
                       <TableCell className="text-right text-[#1A1A1A]">{formatCurrency(s.total_salary || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right text-emerald-600">{formatCurrency(s.total_commission || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right text-blue-600">{formatCurrency(s.total_bonus || 0, s.currency || 'AED')}</TableCell>

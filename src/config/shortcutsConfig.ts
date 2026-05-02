@@ -192,7 +192,7 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
   {
     label: "Account",
     colorBorder: "border-l-zinc-400",
-    colorText: "text-[#5A4A2E]",
+    colorText: "text-[#1A1A1A]/70",
     colorBg: "bg-[#F7F2EA]",
     visibility: ['authenticated'],
     items: [

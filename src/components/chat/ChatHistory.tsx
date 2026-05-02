@@ -63,7 +63,7 @@ const ChatHistory = ({
           <History className="w-7 h-7 text-gold" />
         </div>
         <h4 className="text-white text-lg font-semibold mb-1"><T>{`Welcome back, ${userFirstName}!`}</T></h4>
-        <p className="text-[#5A4A2E] text-sm"><T>Continue a conversation or start fresh</T></p>
+        <p className="text-[#1A1A1A]/70 text-sm"><T>Continue a conversation or start fresh</T></p>
       </div>
 
       {/* New Conversation Button */}
@@ -99,18 +99,18 @@ const ChatHistory = ({
       {/* Search Bar */}
       {chatHistory.length > 0 && !isLoading && (
         <div className="relative mb-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
           <Input
             type="text"
             value={historySearch}
             onChange={(e) => setHistorySearch(e.target.value)}
             placeholder="Search conversations..."
-            className="pl-9 bg-[#FDFBF7]/5 border-[#1A1A1A] text-white placeholder:text-[#5A4A2E] h-9 text-sm"
+            className="pl-9 bg-[#FDFBF7]/5 border-[#1A1A1A] text-white placeholder:text-[#1A1A1A]/70 h-9 text-sm"
           />
           {historySearch && (
             <button
               onClick={() => setHistorySearch('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4A2E] hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-white"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -125,7 +125,7 @@ const ChatHistory = ({
         </div>
       ) : chatHistory.length > 0 ? (
         <div className="space-y-2">
-          <p className="text-[#5A4A2E] text-xs font-medium mb-2 flex items-center gap-1">
+          <p className="text-[#1A1A1A]/70 text-xs font-medium mb-2 flex items-center gap-1">
             <Clock className="w-3 h-3" />
             <T>Previous Conversations</T>
             {historySearch && <T>{` (filtered)`}</T>}
@@ -152,9 +152,9 @@ const ChatHistory = ({
                       <h6 className="text-white text-sm font-medium truncate">
                         <HighlightText text={serviceName} search={historySearch} />
                       </h6>
-                      <span className="text-[#5A4A2E] text-xs flex-shrink-0 ml-2">{getTimeAgo(updatedAt)}</span>
+                      <span className="text-[#1A1A1A]/70 text-xs flex-shrink-0 ml-2">{getTimeAgo(updatedAt)}</span>
                     </div>
-                    <p className="text-[#5A4A2E] text-xs line-clamp-2">
+                    <p className="text-[#1A1A1A]/70 text-xs line-clamp-2">
                       <HighlightText text={preview} search={historySearch} />
                     </p>
                     <div className="flex items-center gap-2 mt-1.5">
@@ -163,11 +163,11 @@ const ChatHistory = ({
                           ? 'bg-green-500/20 text-green-400' 
                           : conv.status === 'submitted_to_team'
                           ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-zinc-700 text-[#5A4A2E]'
+                          : 'bg-zinc-700 text-[#1A1A1A]/70'
                       }`}>
                         {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
-                      <span className="text-[#5A4A2E] text-[10px]">
+                      <span className="text-[#1A1A1A]/70 text-[10px]">
                         {conv.messages?.length || 0} <T>messages</T>
                       </span>
                     </div>
@@ -177,16 +177,16 @@ const ChatHistory = ({
             );
           })}
           {historySearch && filteredHistory.length === 0 && (
-            <p className="text-[#5A4A2E] text-sm text-center py-4"><T>{`No conversations match "${historySearch}"`}</T></p>
+            <p className="text-[#1A1A1A]/70 text-sm text-center py-4"><T>{`No conversations match "${historySearch}"`}</T></p>
           )}
         </div>
       ) : (
         <div className="text-center py-6">
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-zinc-800 flex items-center justify-center">
-            <MessageCircle className="w-6 h-6 text-[#5A4A2E]" />
+            <MessageCircle className="w-6 h-6 text-[#1A1A1A]/70" />
           </div>
-          <p className="text-[#5A4A2E] text-sm"><T>No previous conversations</T></p>
-          <p className="text-[#5A4A2E] text-xs mt-1"><T>Start a new chat above!</T></p>
+          <p className="text-[#1A1A1A]/70 text-sm"><T>No previous conversations</T></p>
+          <p className="text-[#1A1A1A]/70 text-xs mt-1"><T>Start a new chat above!</T></p>
         </div>
       )}
     </div>

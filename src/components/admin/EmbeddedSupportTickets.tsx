@@ -158,7 +158,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Total Tickets</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Total Tickets</p>
                 <p className="text-2xl font-bold text-[#1A1A1A]">{ticketCounts.total}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -174,7 +174,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Open</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Open</p>
                 <p className="text-2xl font-bold text-yellow-600">{ticketCounts.open}</p>
               </div>
               <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
@@ -190,7 +190,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">In Progress</p>
+                <p className="text-[#1A1A1A]/70 text-xs">In Progress</p>
                 <p className="text-2xl font-bold text-blue-600">{ticketCounts.inProgress}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -206,7 +206,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Resolved</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Resolved</p>
                 <p className="text-2xl font-bold text-green-600">{ticketCounts.resolved}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -223,7 +223,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[#5A4A2E] text-xs">Reopened</p>
+                <p className="text-[#1A1A1A]/70 text-xs">Reopened</p>
                 <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
               </div>
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
@@ -239,18 +239,18 @@ export function EmbeddedSupportTickets() {
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5A4A2E]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
               <input
                 type="text"
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#5A4A2E] focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-[#FDFBF7] border-2 border-gold/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#5A4A2E]" />
+              <Filter className="w-4 h-4 text-[#1A1A1A]/70" />
               <Select
                 value={filters.status}
                 onValueChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
@@ -426,7 +426,7 @@ export function EmbeddedSupportTickets() {
                               <p className="font-medium text-[#1A1A1A] text-xs truncate max-w-[150px]">
                                 {ticket.full_name}
                               </p>
-                              <p className="text-[#5A4A2E] text-[10px] truncate max-w-[150px]">
+                              <p className="text-[#1A1A1A]/70 text-[10px] truncate max-w-[150px]">
                                 {ticket.email}
                               </p>
                             </div>
@@ -455,7 +455,7 @@ export function EmbeddedSupportTickets() {
                               {status.label}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-[#5A4A2E] text-xs whitespace-nowrap">
+                          <TableCell className="text-[#1A1A1A]/70 text-xs whitespace-nowrap">
                             {format(new Date(ticket.created_at), "MMM d, HH:mm")}
                           </TableCell>
                         </TableRow>
@@ -467,7 +467,7 @@ export function EmbeddedSupportTickets() {
             ) : (
               <CardContent className="p-12 text-center">
                 <Ticket className="w-12 h-12 text-[#8A7556] mx-auto mb-3" />
-                <p className="text-[#5A4A2E] font-medium">No tickets found</p>
+                <p className="text-[#1A1A1A]/70 font-medium">No tickets found</p>
                 <p className="text-[#8A7556] text-sm mt-1">
                   Try adjusting your filters
                 </p>

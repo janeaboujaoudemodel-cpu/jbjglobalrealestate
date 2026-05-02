@@ -124,7 +124,7 @@ export function BrokerAvailabilityToggle({
       icon: XCircle,
       label: "Offline",
       color: "bg-[#B89555]",
-      textColor: "text-[#5A4A2E]",
+      textColor: "text-[#1A1A1A]/70",
       borderColor: "border-[#B89555]/30",
       description: "Not receiving new leads"
     }
@@ -150,7 +150,7 @@ export function BrokerAvailabilityToggle({
                 "w-6 h-6 rounded-full flex items-center justify-center transition-all",
                 status === s 
                   ? cn(statusConfig[s].color, "text-white scale-110")
-                  : "bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#5A4A2E]"
+                  : "bg-[#EFE6D6] hover:bg-[#EFE6D6] text-[#1A1A1A]/70"
               )}
             >
               {s === "available" && <CheckCircle className="w-3 h-3" />}

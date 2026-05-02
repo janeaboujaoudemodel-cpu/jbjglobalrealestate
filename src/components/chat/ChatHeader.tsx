@@ -69,7 +69,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
           <h3 className="text-[#1A1A1A] font-bold text-sm flex items-center gap-1.5">
             {showAgentPhoto ? agent.name : t('chat.title', 'JBJ Support')}
           </h3>
-          <p className="text-[#5A4A2E] text-xs font-medium">{getStatusText()}</p>
+          <p className="text-[#1A1A1A]/70 text-xs font-medium">{getStatusText()}</p>
         </div>
       </div>
       <div className="flex items-center gap-2">

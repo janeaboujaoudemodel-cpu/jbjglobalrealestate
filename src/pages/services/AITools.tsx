@@ -178,7 +178,7 @@ const AITools = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -199,7 +199,7 @@ const AITools = () => {
             >
               Tools Library
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] text-center max-w-3xl mx-auto mb-12">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 text-center max-w-3xl mx-auto mb-12">
               Select a tool below. Each tool is designed to help you structure decisions, compare options, and understand trade-offs—without relying on vague assumptions.
             </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
@@ -214,7 +214,7 @@ const AITools = () => {
                         <h3 className="font-semibold text-[#1A1A1A] text-lg mb-2 group-hover:text-gold transition-colors">
                           {tool.title}
                         </h3>
-                        <p className="text-sm text-[#5A4A2E] mb-4">
+                        <p className="text-sm text-[#1A1A1A]/70 mb-4">
                           {tool.description}
                         </p>
                         <div className="flex items-center gap-1 text-gold text-sm font-medium">
@@ -295,7 +295,7 @@ const AITools = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <Shield className="w-8 h-8 text-gold shrink-0" />
-                <p className="text-[#5A4A2E] text-lg leading-relaxed">
+                <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                   Outputs are generated from available inputs and structured logic. Where official datasets are referenced in the platform, sources are shown inside the relevant report modules.
                 </p>
               </div>
@@ -335,7 +335,7 @@ const AITools = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#5A4A2E] pl-8">
+                    <AccordionContent className="text-[#1A1A1A]/70 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -363,7 +363,7 @@ const AITools = () => {
             >
               Use tools built for clarity
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 mb-8">
               Open the library, select a tool, and structure your decision in minutes.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

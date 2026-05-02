@@ -323,9 +323,9 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
       {/* Characters List */}
       {characters.length === 0 ? (
         <div className="text-center py-8 border-2 border-dashed border-[#1A1A1A] rounded-lg">
-          <Users className="w-10 h-10 text-[#5A4A2E] mx-auto mb-2" />
+          <Users className="w-10 h-10 text-[#1A1A1A]/70 mx-auto mb-2" />
           <p className="text-white/90 text-sm">No characters created yet</p>
-          <p className="text-[#5A4A2E] text-xs">Create characters for multi-voice scripts</p>
+          <p className="text-[#1A1A1A]/70 text-xs">Create characters for multi-voice scripts</p>
         </div>
       ) : (
         <ScrollArea className="h-[200px]">

@@ -83,7 +83,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
               </div>
               
               {/* Icon */}
-              <BookOpen className="w-12 h-12 text-[#5A4A2E]" />
+              <BookOpen className="w-12 h-12 text-[#1A1A1A]/70" />
               
               {/* Restricted overlay */}
               {book.is_restricted && (

@@ -97,10 +97,10 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-[#5A4A2E] hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-[#5A4A2E]" />
-          <Link to="/areas" className="text-[#5A4A2E] hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-[#5A4A2E]" />
+          <Link to="/" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
+          <Link to="/areas" className="text-[#1A1A1A]/70 hover:text-white transition-colors">Areas</Link>
+          <ChevronRight className="w-4 h-4 text-[#1A1A1A]/70" />
           <span className="text-gold">{area.name}</span>
         </motion.nav>
 
@@ -115,7 +115,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               <Building2 className="w-5 h-5 text-gold" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div className="text-[#5A4A2E] text-xs">Projects</div>
+                <div className="text-[#1A1A1A]/70 text-xs">Projects</div>
               </div>
             </button>
           )}
@@ -129,7 +129,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               <Users className="w-5 h-5 text-gold" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">{area.developer_count}</div>
-                <div className="text-[#5A4A2E] text-xs">Developers</div>
+                <div className="text-[#1A1A1A]/70 text-xs">Developers</div>
               </div>
             </button>
           )}
@@ -140,7 +140,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               <BarChart3 className="w-5 h-5 text-gold" />
               <div>
                 <div className="text-xl font-bold text-white">AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
-                <div className="text-[#5A4A2E] text-xs">Avg. Price/sqft</div>
+                <div className="text-[#1A1A1A]/70 text-xs">Avg. Price/sqft</div>
               </div>
             </div>
           )}
@@ -152,7 +152,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
                 <Activity className="w-5 h-5 text-gold" />
                 <div>
                   <div className="text-xl font-bold text-white">{dldAreaData.transactions.toLocaleString()}</div>
-                  <div className="text-[#5A4A2E] text-xs">DLD Transactions (YTD)</div>
+                  <div className="text-[#1A1A1A]/70 text-xs">DLD Transactions (YTD)</div>
                 </div>
               </div>
 
@@ -166,7 +166,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
                   <div className={`text-xl font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
                     {dldAreaData.change}
                   </div>
-                  <div className="text-[#5A4A2E] text-xs">YoY Growth</div>
+                  <div className="text-[#1A1A1A]/70 text-xs">YoY Growth</div>
                 </div>
               </div>
             </>
@@ -175,7 +175,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* DLD source note */}
         {dldAreaData && (
-          <motion.p className="mt-3 text-[#5A4A2E] text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+          <motion.p className="mt-3 text-[#1A1A1A]/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
             ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
           </motion.p>
         )}

@@ -154,7 +154,7 @@ const CompanySetup = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <span className="text-[#5A4A2E] text-xs tracking-widest uppercase">Explore</span>
+          <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
         </motion.div>
       </section>
@@ -177,7 +177,7 @@ const CompanySetup = () => {
               Why This Matters for Investors
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-[#5A4A2E] text-lg leading-relaxed">
+              <p className="text-[#1A1A1A]/70 text-lg leading-relaxed">
                 Some investors structure ownership, operations, or tenancy through corporate entities. This page provides a clean pathway to get set up correctly with licensed professionals.
               </p>
             </motion.div>
@@ -205,7 +205,7 @@ const CompanySetup = () => {
               <motion.div variants={fadeInUp} className="jj-card-inner">
                 <ul className="space-y-4">
                   {whatWeProvide.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-4 text-[#5A4A2E]">
+                    <li key={idx} className="flex items-start gap-4 text-[#1A1A1A]/70">
                       <div className="w-10 h-10 rounded-lg bg-[#1A1A1A] flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
@@ -283,7 +283,7 @@ const CompanySetup = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-[#5A4A2E]">
+                  <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
                     <FolderOpen className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -325,7 +325,7 @@ const CompanySetup = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-[#5A4A2E] pl-8">
+                    <AccordionContent className="text-[#1A1A1A]/70 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -353,7 +353,7 @@ const CompanySetup = () => {
             >
               Start company setup with a clear workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-[#5A4A2E] mb-8">
+            <motion.p variants={fadeInUp} className="text-[#1A1A1A]/70 mb-8">
               Submit your intent and timeline to receive a structured checklist and next steps.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

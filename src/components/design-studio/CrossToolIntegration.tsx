@@ -124,7 +124,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
           <Share2 className="w-5 h-5 text-gold" />
           Send Project to Another Tool
         </CardTitle>
-        <p className="text-sm text-[#5A4A2E]">
+        <p className="text-sm text-[#1A1A1A]/70">
           Continue your project workflow with our connected creative tools
         </p>
       </CardHeader>
@@ -150,13 +150,13 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
                       </h3>
                       <Sparkles className="w-4 h-4 text-gold opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <p className="text-sm text-[#5A4A2E] truncate">{tool.description}</p>
+                    <p className="text-sm text-[#1A1A1A]/70 truncate">{tool.description}</p>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {tool.capabilities.slice(0, 2).map((cap) => (
                         <Badge 
                           key={cap} 
                           variant="outline" 
-                          className="text-xs bg-[#F7F2EA] border-[#B89555]/30 text-[#5A4A2E]"
+                          className="text-xs bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]/70"
                         >
                           {cap}
                         </Badge>
@@ -164,7 +164,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
                     </div>
                   </div>
                   
-                  <ArrowRight className="w-5 h-5 text-[#5A4A2E] group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-[#1A1A1A]/70 group-hover:text-gold group-hover:translate-x-1 transition-all" />
                 </div>
               </Link>
             </motion.div>

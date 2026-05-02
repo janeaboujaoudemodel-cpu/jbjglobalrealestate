@@ -64,7 +64,7 @@ export function DisplayModeToggle({
               isActive
                 ? "bg-gold text-[#1A1A1A] font-medium shadow-sm"
                 : isDark
-                  ? "text-[#5A4A2E] hover:text-white hover:bg-[#2a2a2a]"
+                  ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
             )}
           >
@@ -114,7 +114,7 @@ export function DisplayModeIconToggle({
           value === 'investor'
             ? "bg-gold text-[#1A1A1A]"
             : isDark
-              ? "text-[#5A4A2E] hover:text-white"
+              ? "text-[#1A1A1A]/70 hover:text-white"
               : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
         )}
         title="Investor View — See investment-focused content like ROI, yields & capital growth"
@@ -128,7 +128,7 @@ export function DisplayModeIconToggle({
           value === 'broker'
             ? "bg-gold text-[#1A1A1A]"
             : isDark
-              ? "text-[#5A4A2E] hover:text-white"
+              ? "text-[#1A1A1A]/70 hover:text-white"
               : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
         )}
         title="Broker View — See broker tools, commissions & deal registration"

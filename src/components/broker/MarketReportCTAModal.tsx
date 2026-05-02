@@ -88,13 +88,13 @@ export default function MarketReportCTAModal({
           <DialogTitle className="text-2xl">
             {userName ? `Welcome, ${userName}!` : "Your Report is Ready!"}
           </DialogTitle>
-          <DialogDescription className="text-[#5A4A2E] text-base">
+          <DialogDescription className="text-[#1A1A1A]/70 text-base">
             Found the insights valuable? Take your real estate career to the next level.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-center text-sm text-[#5A4A2E] mb-4">
+          <p className="text-center text-sm text-[#1A1A1A]/70 mb-4">
             Choose the path that fits your goals:
           </p>
 
@@ -127,13 +127,13 @@ export default function MarketReportCTAModal({
                     )}
                   </div>
                   <p className="text-gold text-sm font-medium">{option.subtitle}</p>
-                  <p className="text-[#5A4A2E] text-sm mt-1">{option.description}</p>
+                  <p className="text-[#1A1A1A]/70 text-sm mt-1">{option.description}</p>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {option.benefits.map((benefit, i) => (
                       <Badge 
                         key={i}
                         variant="outline" 
-                        className="text-xs border-[#B89555]/30 text-[#5A4A2E]"
+                        className="text-xs border-[#B89555]/30 text-[#1A1A1A]/70"
                       >
                         {benefit}
                       </Badge>
@@ -149,7 +149,7 @@ export default function MarketReportCTAModal({
           <Button
             variant="ghost"
             onClick={handleSkip}
-            className="text-[#5A4A2E] hover:text-[#5A4A2E]"
+            className="text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
           >
             Maybe Later
           </Button>
@@ -165,9 +165,9 @@ export default function MarketReportCTAModal({
 
         <div className="text-center mt-4">
           <FounderContent fallback={null}>
-            <p className="text-[#5A4A2E] text-xs font-medium">Jane Bou Jaoude</p>
+            <p className="text-[#1A1A1A]/70 text-xs font-medium">Jane Bou Jaoude</p>
             <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-            <p className="text-[#5A4A2E] text-xs mt-0.5">JBJ Global Real Estate</p>
+            <p className="text-[#1A1A1A]/70 text-xs mt-0.5">JBJ Global Real Estate</p>
           </FounderContent>
         </div>
       </DialogContent>

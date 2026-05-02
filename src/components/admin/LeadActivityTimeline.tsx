@@ -230,7 +230,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
           >
             <p className="text-2xl font-bold">{stat.value}</p>
             <p className="text-xs text-white/70 mt-0.5">{stat.label}</p>
-            <p className="text-[10px] text-[#5A4A2E]">{stat.sub}</p>
+            <p className="text-[10px] text-[#1A1A1A]/70">{stat.sub}</p>
           </div>
         ))}
       </div>
@@ -255,9 +255,9 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
         </div>
       ) : events.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-white/90 gap-2">
-          <Activity className="w-8 h-8 text-[#5A4A2E]" />
+          <Activity className="w-8 h-8 text-[#1A1A1A]/70" />
           <p className="text-sm">No activity recorded yet for this lead.</p>
-          <p className="text-xs text-[#5A4A2E]">Activity is tracked after form submission.</p>
+          <p className="text-xs text-[#1A1A1A]/70">Activity is tracked after form submission.</p>
         </div>
       ) : (
         <ScrollArea className="h-[380px] pr-2">

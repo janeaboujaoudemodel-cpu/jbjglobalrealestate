@@ -81,7 +81,7 @@ export function OwnerTasksPopupAlert() {
           type="button"
           onClick={handleClose}
           aria-label="Close pending tasks alert"
-          className="absolute top-3 right-3 text-[#3A2D1D] hover:text-[#1A1A1A] transition-colors"
+          className="absolute top-3 right-3 inline-flex items-center justify-center w-8 h-8 rounded-full text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
           <X className="w-5 h-5" />
         </button>
@@ -94,7 +94,7 @@ export function OwnerTasksPopupAlert() {
             <h3 id="pending-tasks-title" className="text-[#1A1A1A] font-bold text-lg">
               Pending Tasks
             </h3>
-            <p className="text-[#3A2D1D] text-sm">Daily action items require attention</p>
+            <p className="text-[#1A1A1A]/70 text-sm font-medium">Daily action items require attention</p>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export function OwnerTasksPopupAlert() {
           <Button
             variant="secondary"
             onClick={handleClose}
-            className="rounded-xl border-[#B89555]/40 text-[#1A1A1A]"
+            className="rounded-xl"
           >
             Later
           </Button>
