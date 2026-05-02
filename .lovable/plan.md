@@ -1,67 +1,73 @@
-# Backfill real handover dates for all projects
+## Homepage cleanup, merge & podcast gating
 
-## Current state
-- 2,778 total projects, **1,330 missing `handover_date`** (1,056 of them are published).
-- Only ~36 are recoverable from existing text fields via regex.
-- 1,329 of the missing rows have a `source_url`; 1,053 have a `developer_name`.
-- 175 rows have `construction_status` indicating Ready/Completed but no handover.
+The homepage today scrolls long with overlapping value propositions. We will tighten it by removing four sections, merging the Dubai stats into the international-investor banner, slimming Areas We Cover to a curated Top 4, and making the JBJ Podcast (The JBJ Perspective) hidden from the owner's homepage too — controlled by the existing admin toggle.
 
-So a regex-only pass is not enough. We need a 3-stage backfill that always writes a real, sourced value.
+### What changes on the homepage
 
-## Goal
-Eliminate all "Coming soon" / TBA fallbacks on cards by populating `handover_date` (+ mirror to `expected_completion`) for every project, using **only verified signals** — never invented dates.
+```text
+BEFORE                                AFTER
+-----------------------------------   -----------------------------------
+Hero / Categories / Partners          Hero / Categories / Partners
+Trust Bar                             Trust Bar
+Featured Listings                     Featured Listings
+Resale Properties                     Resale Properties
+Find Your Starting Point      ✗ remove
+Overseas Investors Banner             Overseas Investors Banner
+                                      └ + 4 Dubai stats merged in
+Guides & Reports marquee              Guides & Reports marquee
+Explore Our Services                  Explore Our Services
+Toolkit Showcase                      Toolkit Showcase
+AI Home Finder (purple card)  ✗ remove
+AI Comparison Widget                  AI Comparison Widget
+Mortgage Calculator                   Mortgage Calculator
+Why Dubai Capital section     ✗ merged into Overseas Investors
+JBJ Podcast (owner-only today)✗ hidden everywhere unless toggle ON
+Why Choose Us                 ✗ remove
+Areas We Cover (8 areas)              Top Areas (Top 4, trending first)
+Testimonials                  ✗ remove
+```
 
-## Stages (run in order, idempotent, batched)
+### Section-by-section detail
 
-### Stage 1 — Local regex sweep (fast, free)
-Sweep all rows where `handover_date IS NULL`. For each row, scan `description`, `payment_plan`, `payment_breakdown`, `status_label`, `construction_status`:
-1. `Q[1-4] YYYY` → `Q# YYYY`
-2. Earliest future bare year `20YY` (≥ current year) → `YYYY`
-3. If `construction_status` matches `ready|complet|handed.?over` → `"Ready"`
+1. **Remove Find Your Starting Point** — drop the `<StartingPointSection />` block and its surrounding divider in `src/pages/Index.tsx`. Remove the unused `lazy`/`chunkImports` entries (and the preload reference) so the chunk is no longer fetched.
 
-Writes `handover_date` and `expected_completion`. Expected to fix ~36 + ~175 Ready rows.
+2. **Remove AI Home Finder purple card** — delete the inline `<section>` (lines ~409–462 in `Index.tsx`) along with one neighbouring `<SectionDivider />` to keep the rhythm. Remove the now-unused `Sparkles, ArrowUpRight` imports only if no other usage remains.
 
-### Stage 2 — Source-URL scrape via Firecrawl (real data)
-For remaining missing rows that have `source_url`:
-- New edge function `backfill-handover-dates` (batched, 20 rows / call).
-- For each project, call Firecrawl `/v2/scrape` with `formats: ['markdown', { type: 'json', prompt: '...handover/completion date...', schema: { handover_date: string|null, status: 'Ready'|'Under Construction'|'Presale'|null } }]` against `source_url`.
-- Accept only values matching `^(Q[1-4] 20\d{2}|20\d{2}|Ready)$`. Reject anything else (no invention).
-- Persist on success; on failure leave row for Stage 3.
+3. **Merge Why Dubai → Overseas Investors**
+   - In `src/components/home/OverseasInvestorsBanner.tsx`, add a 4-stat strip above the existing 6-tile highlights grid with: `0% Income Tax`, `10Y Golden Visa`, `#1 Safety Rank`, `200+ Nationalities` (same data the standalone section uses). Style: champagne `#F7F2EA` cards with `#1A1A1A` icon tile and gold accent — matches the current section.
+   - Tighten the heading copy to keep it as one cohesive section ("Invest in Dubai From Anywhere in the World" remains the H2; sub-line incorporates the global-hub framing).
+   - Delete the `<WhyDubaiCapitalSection />` mount and its divider from `Index.tsx`. Remove the lazy import and the `WhyDubaiCapitalSection.tsx` file.
 
-### Stage 3 — AI inference fallback (Lovable AI Gateway)
-For rows still missing after Stage 2 but with `name` + `developer_name`:
-- Reuse pattern from `ai-enrich-drafts` but `model: google/gemini-2.5-pro` with explicit instruction: "Return null unless you are confident this is a real, verifiable Dubai/UAE project handover quarter or year." Strict regex validation on output before persist.
+4. **Hide JBJ Podcast on the owner homepage too**
+   - Update `src/components/home/PodcastVisibilityGate.tsx`: remove the unconditional `if (isOwner) return children` early return so the gate honours `isPodcastVisible` for everyone. The owner can flip it on whenever they want via the existing admin toggle.
+   - The toggle already exists in two places — `src/pages/Admin.tsx` and `src/pages/owner/OwnerFounderSettings.tsx` — both call `<PodcastVisibilityToggle />`. We will refresh its copy to make clear it now controls the section for *all* viewers (including the owner), removing the "Testing Mode — you always see it" notice that no longer applies.
+   - Default state remains `enabled: false` in `site_settings.podcast_visibility`, so post-deploy the podcast is hidden everywhere until the owner enables it.
 
-### Orchestration
-- New edge function `backfill-handover-dates` exposes `POST` with body `{ stage: 1|2|3, batch_size, dry_run }`.
-- Owner-only (uses `requireOwnerAuth`).
-- Returns `{ updated, skipped, failed, details[] }`.
-- Run sequentially from a small admin trigger button on the existing **Provident Portal** enrichment hub (no new page). Button: "Backfill Handover Dates" with progress toast; loops calling stage 1 → 2 → 3 until `updated === 0` per stage.
+5. **Remove Why Choose Us** — drop the `<WhyChooseUs />` mount and the surrounding divider from `Index.tsx`. Remove its lazy import.
 
-## Validation rules (applied at every stage before write)
-- Allow: `^Q[1-4] 20\d{2}$`, `^20\d{2}$`, `^Ready$`.
-- Reject: empty, "TBA", "To be announced", "soon", anything outside the regex.
-- Always mirror value into `expected_completion`.
-- Never overwrite an existing non-null `handover_date`.
+6. **Top Areas (Top 4)**
+   - Rename the section in `src/components/home/AreasWeCover.tsx`: badge label and H2 become `Top Areas` (with translation keys `areas.topLabel` / `areas.topTitle`, falling back to "Top Areas").
+   - Reduce the limit from 8 to 4 and reorder so trending + high-demand surface first. The hook query orders by `property_count desc`; we'll change the call to fetch up to 12 and pick the first 4 after sorting client-side: `is_trending` first, then `is_high_demand`, then highest `property_count`. This guarantees the curated 4 are the most demanded.
+   - Grid stays `grid-cols-2 md:grid-cols-4`, so 4 cards fit one row on desktop and 2×2 on mobile.
+   - CTA button label switches to `Read Area Guides` linking to `/areas` (existing route). Keep the existing styling.
 
-## Files
+7. **Remove Testimonials** — drop the `<TestimonialsSection />` mount from `Index.tsx`. Remove its lazy import.
 
-### New
-- `supabase/functions/backfill-handover-dates/index.ts` — orchestrator (3 stages, owner-auth, batched).
+### Technical details
 
-### Edited
-- `src/pages/ProvidentPortal.tsx` (or the enrichment hub it renders) — add "Backfill Handover Dates" admin button that loops the function and shows progress.
-- `src/utils/handoverDerivation.ts` — extend `deriveHandover` to also recognize Ready/Completed `construction_status` (kept in sync with Stage 1 logic so cards render consistently between renders and DB writes).
+Files touched:
 
-### Secrets
-- Requires `FIRECRAWL_API_KEY` (Firecrawl connector) and `LOVABLE_API_KEY` (already present).
-- If Firecrawl is not connected, Stage 2 is skipped and we proceed to Stage 3.
+- `src/pages/Index.tsx` — remove four section mounts (StartingPoint, AI Home Finder inline section, WhyDubaiCapital, WhyChooseUs, Testimonials), prune lazy imports + `chunkImports` entries + preload list, clean unused `lucide-react` imports.
+- `src/components/home/OverseasInvestorsBanner.tsx` — add 4-stat strip merged from WhyDubaiCapitalSection.
+- `src/components/home/WhyDubaiCapitalSection.tsx` — delete file.
+- `src/components/home/AreasWeCover.tsx` — limit 4, sort by trending/high-demand, rename to "Top Areas", CTA label "Read Area Guides".
+- `src/components/home/PodcastVisibilityGate.tsx` — remove owner bypass.
+- `src/components/admin/PodcastVisibilityToggle.tsx` — update copy (remove testing-mode bullet that says owners always see it).
 
-## Expected outcome
-- Stage 1: ~210 rows fixed instantly.
-- Stage 2: bulk of the remaining ~1,120 rows fixed from real developer pages.
-- Stage 3: long-tail (~50-150) inferred only when AI is confident; rest stay "Coming soon" rather than fabricated.
+No DB changes. No new routes. No new components. The existing `site_settings.podcast_visibility` row + `set_podcast_visibility` RPC continue to drive visibility.
 
-## Out of scope
-- No schema changes (columns already exist).
-- No card UI changes — premium orange handover label already shipped.
+### Out of scope
+
+- No changes to translations beyond the two new "Top Areas" keys (others already exist).
+- No layout or styling changes to surviving sections.
+- The standalone `/areas` page, podcast studio, and admin podcast toggle behaviour are unchanged aside from the copy refresh.

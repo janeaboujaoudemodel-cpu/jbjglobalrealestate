@@ -100,12 +100,12 @@ export const PodcastVisibilityToggle = () => {
               )}
               <div>
                 <p className="font-medium text-[#1A1A1A]">
-                  {isPodcastVisible ? "Visible to Public" : "Hidden - Owner Only"}
+                  {isPodcastVisible ? "Visible on Homepage" : "Hidden from Homepage"}
                 </p>
                 <p className="text-sm text-[#5A4A2E]">
-                  {isPodcastVisible 
-                    ? "All visitors can see the JBJ Podcast section" 
-                    : "Only the Owner can see the podcast section"
+                  {isPodcastVisible
+                    ? "The JBJ Podcast section appears on the homepage for all viewers — including you."
+                    : "The JBJ Podcast section is hidden from every homepage feed, including yours."
                   }
                 </p>
               </div>
@@ -144,12 +144,11 @@ export const PodcastVisibilityToggle = () => {
           <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 border border-blue-200">
             <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-800">
-              <p className="font-medium mb-1">Testing Mode</p>
+              <p className="font-medium mb-1">How this toggle works</p>
               <ul className="list-disc list-inside space-y-1 text-blue-700">
-                <li>You <strong>always see</strong> the podcast section as an admin</li>
-                <li>When hidden, only <strong>admin/owner roles</strong> can view it</li>
-                <li>Use this to test the podcast before making it public</li>
-                <li>Toggle to <strong>public</strong> when ready to launch</li>
+                <li>This switch controls the homepage section for <strong>all viewers</strong>, including the owner.</li>
+                <li>The podcast studio and individual episode pages are unaffected — they remain accessible directly.</li>
+                <li>Flip it on whenever you want the podcast block to surface on the public homepage.</li>
               </ul>
             </div>
           </div>
@@ -185,15 +184,12 @@ export const PodcastVisibilityToggle = () => {
                 </>
               ) : (
                 <>
-                  This will <strong>hide the JBJ Podcast section</strong> from public visitors:
+                  This will <strong>hide the JBJ Podcast section</strong> from every homepage feed:
                   <ul className="list-disc list-inside mt-2 space-y-1">
-                    <li>Only admins and owners can see the section</li>
-                    <li>Regular users won't see the podcast on homepage</li>
-                    <li>You can still test all podcast features</li>
+                    <li>No visitors will see the podcast block on the homepage.</li>
+                    <li>You will also stop seeing it on your own homepage.</li>
+                    <li>Direct podcast pages and the studio remain available.</li>
                   </ul>
-                  <p className="mt-3 font-medium text-amber-700">
-                    Note: You will still see the section for testing purposes.
-                  </p>
                 </>
               )}
             </AlertDialogDescription>

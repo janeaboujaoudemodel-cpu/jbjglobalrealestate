@@ -1,36 +1,23 @@
 import { ReactNode } from "react";
 import { usePodcastVisibility } from "@/contexts/PodcastVisibilityContext";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface PodcastVisibilityGateProps {
   children: ReactNode;
 }
 
 /**
- * PodcastVisibilityGate - Conditionally renders podcast section based on visibility setting.
- * 
- * Logic:
- * - Owner: Always sees the podcast section (for testing)
- * - Visitors: Only see it when isPodcastVisible is true
+ * PodcastVisibilityGate - Conditionally renders the JBJ Podcast section based
+ * on the admin-controlled visibility setting in `site_settings.podcast_visibility`.
+ *
+ * The owner no longer has a bypass — the section is hidden for everyone
+ * (including the owner's own homepage feed) until the toggle is flipped on
+ * in Admin → Podcast Visibility or Owner → Founder Settings.
  */
 export const PodcastVisibilityGate = ({ children }: PodcastVisibilityGateProps) => {
-  const { isPodcastVisible, isLoading: isVisibilityLoading } = usePodcastVisibility();
-  const { isOwner, loading: isAuthLoading } = useAuth();
+  const { isPodcastVisible, isLoading } = usePodcastVisibility();
 
-  // Owner ALWAYS sees the podcast section - check first, before loading states
-  if (isOwner) {
-    return <>{children}</>;
-  }
-
-  // For non-owners, wait for both auth AND visibility to resolve
-  if (isAuthLoading || isVisibilityLoading) {
-    return null;
-  }
-
-  // Non-owner: only show if visibility is enabled
-  if (!isPodcastVisible) {
-    return null;
-  }
+  if (isLoading) return null;
+  if (!isPodcastVisible) return null;
 
   return <>{children}</>;
 };

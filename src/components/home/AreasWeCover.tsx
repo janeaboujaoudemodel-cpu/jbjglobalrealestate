@@ -10,18 +10,28 @@ import { useAreas } from "@/hooks/useAreas";
 
 const AreasWeCover = () => {
   const { t } = useLanguage();
-  const { data: areas, isLoading } = useAreas({ limit: 8 });
+  // Fetch a wider pool, then curate the Top 4 — trending first, then high-demand,
+  // then highest property_count.
+  const { data: areas, isLoading } = useAreas({ limit: 12 });
 
-  const displayAreas = areas && areas.length > 0
-    ? areas.map(a => ({
-        slug: a.slug,
-        name: a.name,
-        propertyCount: a.property_count,
-        imageUrl: a.image_url,
-        isTrending: a.is_trending,
-        isHighDemand: a.is_high_demand,
-      }))
-    : [];
+  const displayAreas = (areas ?? [])
+    .slice()
+    .sort((a, b) => {
+      const score = (x: typeof a) =>
+        (x.is_trending ? 2 : 0) + (x.is_high_demand ? 1 : 0);
+      const diff = score(b) - score(a);
+      if (diff !== 0) return diff;
+      return (b.property_count ?? 0) - (a.property_count ?? 0);
+    })
+    .slice(0, 4)
+    .map(a => ({
+      slug: a.slug,
+      name: a.name,
+      propertyCount: a.property_count,
+      imageUrl: a.image_url,
+      isTrending: a.is_trending,
+      isHighDemand: a.is_high_demand,
+    }));
 
   if (isLoading || displayAreas.length === 0) {
     return null;
@@ -34,13 +44,16 @@ const AreasWeCover = () => {
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
             <MapPin className="w-3.5 h-3.5 text-[#5A4A2E]" />
-            <span className="text-[#1A1A1A]">{t('areas.label', 'Explore Areas')}</span>
+            <span className="text-[#1A1A1A]">{t('areas.topLabel', 'Top Areas')}</span>
           </span>
           <h2
             className="text-2xl md:text-3xl font-bold text-[#1A1A1A]"
           >
-            {t('areas.title', 'Areas We Cover')}
+            {t('areas.topTitle', 'Top Areas in Dubai')}
           </h2>
+          <p className="mt-3 text-sm text-[#5A4A2E] max-w-xl mx-auto">
+            {t('areas.topSubtitle', 'The four most trending and high-demand neighbourhoods our investors are watching right now.')}
+          </p>
         </div>
 
         {/* Featured Photo Cards Grid */}
@@ -108,13 +121,13 @@ const AreasWeCover = () => {
           ))}
         </div>
 
-        {/* View All Areas CTA */}
+        {/* Read Area Guides CTA */}
         <div className="text-center mt-12 md:mt-14">
           <Link
             to="/areas"
             className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white border border-[#1A1A1A] rounded-xl font-semibold text-sm hover:bg-[#1A1A1A] hover:-translate-y-0.5 transition-all duration-300 group"
           >
-            <span>{t('areas.viewAll', 'View All Areas')}</span>
+            <span>{t('areas.readGuides', 'Read Area Guides')}</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
