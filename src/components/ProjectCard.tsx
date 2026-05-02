@@ -179,15 +179,16 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   return (
     <div
+      data-surface="champagne"
       className={
-        "group relative overflow-hidden rounded-xl border-2 border-gold transition-all duration-300 flex flex-col " +
+        "group relative overflow-hidden rounded-2xl border border-[#B89555]/60 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-gold " +
+        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-[#B89555] " +
         "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
       }
     >
       {/* Top-Right: Favorite + Shortlist Buttons (stacked) — Always visible */}
-      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5">
+      <div className="absolute top-3 right-3 z-20 flex flex-col gap-1.5" data-no-contrast-guard>
         {showFavorite && (
           <div>
             <FavoriteButton projectId={project.id} size="sm" />
@@ -201,8 +202,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       </div>
 
       <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
-        {/* Image with Carousel - LANDSCAPE aspect ratio (16:10 - Premium Hybrid) */}
-        <div className="aspect-[16/10] overflow-hidden relative">
+        {/* Image with Carousel — 16:10 landscape */}
+        <div className="aspect-[16/10] overflow-hidden relative" data-surface="ink">
           {/* Developer Logo Overlay - Top Left */}
           {getDeveloperLogoUrl(project.developer) && (
             <div className="absolute top-3 left-3 z-20">
@@ -219,199 +220,203 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             placeholderLabel="Media pending verification"
           />
-          
-          {/* Navigation Arrows - Always Visible */}
+
+          {/* Navigation Arrows */}
           {images.length > 1 && (
             <>
               <button
                 onClick={handlePrevImage}
+                aria-label="Previous image"
+                data-no-contrast-guard
                 className={
                   "absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                  "border border-gold/70 text-gold " +
+                  "bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
+                  "hover:bg-[#B89555] hover:text-[#FFFFFF]"
                 }
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNextImage}
+                aria-label="Next image"
+                data-no-contrast-guard
                 className={
                   "absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full z-10 flex items-center justify-center transition-all " +
-                  "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-                  "border border-gold/70 text-gold " +
+                  "bg-[#FDFBF7] border border-[#B89555] text-[#1A1A1A] " +
                   "shadow-[0_10px_24px_hsl(0_0%_0%/0.20),inset_0_1px_0_hsl(0_0%_100%/0.55)] " +
-                  "hover:bg-gold hover:text-[#1A1A1A] hover:border-gold"
+                  "hover:bg-[#B89555] hover:text-[#FFFFFF]"
                 }
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
-              
-              {/* Image Dots Indicator - Bottom center */}
+
+              {/* Image Dots Indicator */}
               <div className="absolute bottom-14 left-1/2 -translate-x-1/2 flex gap-1 z-10">
                 {images.slice(0, 5).map((_, idx) => (
                   <span
                     key={idx}
                     className={`w-1.5 h-1.5 rounded-full transition-colors ${
                       idx === currentImageIndex
-                        ? 'bg-gold shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
-                        : 'bg-gold/35'
+                        ? 'bg-[#B89555] shadow-[0_0_10px_hsl(var(--gold)/0.55)]'
+                        : 'bg-[#FDFBF7]/70'
                     }`}
                   />
                 ))}
               </div>
             </>
           )}
-          
-          {/* Top-Left: Property Type Label (if no developer logo) */}
+
+          {/* Top-Left: Property Type Label (if no developer logo) — solid ink badge */}
           {project.property_type_label && !getDeveloperLogoUrl(project.developer) && (
-            <div className="absolute top-3 left-3 z-10 bg-premium-bg/90 text-gold px-2 py-1 rounded text-xs font-semibold border border-gold/30">
+            <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#1A1A1A] text-[#FDFBF7] border border-[#B89555] shadow-md">
               {project.property_type_label}
             </div>
           )}
-          
-          {/* Sale Status Badge - Bottom Left, always visible */}
+
+          {/* Sale Status Badge — Bottom Left */}
           {saleStatusBadge && !project.is_sold_out && !project.status_label?.toLowerCase().includes('sold') && (
-            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+            <div className={`absolute bottom-3 left-3 z-10 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-md ${saleStatusBadge.className}`}>
               {saleStatusBadge.label}
             </div>
           )}
-          
-          {/* Bottom-Right: Price overlay (replaces handover; handover moved to footer) */}
+
+          {/* Bottom-Right: Price pill — solid orange, opaque white text */}
           {project.price_from ? (
-            <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1 rounded-full bg-price-orange px-2.5 py-1 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
-              <span className="text-[9px] uppercase tracking-[0.14em] font-semibold text-white/85">From</span>
-              <span className="text-white font-bold text-xs tabular-nums leading-none">
+            <div className="absolute bottom-3 right-3 z-10 inline-flex items-baseline gap-1.5 rounded-full bg-[hsl(var(--price-orange))] px-3 py-1.5 shadow-[0_10px_25px_hsl(0_0%_0%/0.35)]">
+              <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-[#FFFFFF]">From</span>
+              <span className="text-[#FFFFFF] font-extrabold text-sm tabular-nums leading-none">
                 {formatPriceWithCurrency(project.price_from, currency)}
               </span>
             </div>
           ) : null}
-          
-          {/* Sold Out Badge - Top Left (offset below developer logo if present) */}
+
+          {/* Sold Out Badge */}
           {(project.is_sold_out || project.status_label?.toLowerCase().includes('sold')) && (
             <div className={`absolute ${badgePosition} z-10`}>
-              <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
+              <div className="bg-[#DC2626] text-[#FFFFFF] px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-lg border border-[#FCA5A5]">
                 Sold Out
               </div>
             </div>
           )}
         </div>
-        
-        {/* Content - Premium Hybrid Style */}
-        <div className="p-4 flex-1 flex flex-col">
-          {/* Project Name - Ink black for max readability */}
-          <h4 className="text-[#1A1A1A] text-lg font-bold mb-1 break-words leading-tight line-clamp-2 group-hover:text-[#A68444] transition-colors">
-            {project.name}
-          </h4>
-          
-          {/* Location with icon */}
-          {project.location && (
-            <div className="flex items-center gap-1.5 text-[#1A1A1A]/80 text-sm mb-2 font-medium">
-              <MapPin className="w-3.5 h-3.5 text-[#A68444] flex-shrink-0" />
-              <span className="truncate">{project.location}</span>
-            </div>
-          )}
-          
-          {/* Divider */}
-          <div className="h-px bg-[#B89555]/30 my-2" />
-          
-          {/* Handover line (replaces price; price now lives on the photo) */}
-          <p className="text-sm mb-2">
-            {project.handover_date ? (
-              <>
-                <span className="text-[#1A1A1A]/70">Handover </span>
-                <span className="text-[#1A1A1A] font-semibold">
-                  {project.handover_date}
-                </span>
-              </>
-            ) : (
-              <span className="text-[#1A1A1A]/70">Handover TBA</span>
-            )}
-          </p>
-          
-          {/* Developer - ALWAYS Clickable (Gold line - separate) */}
-          {project.developer && (
-            <DeveloperLink 
-              name={project.developer.name}
-              slug={project.developer.slug}
-              className="text-sm mb-3 block"
-              showPrefix={true}
-            />
-          )}
-          
-          {/* Unit Types Row (1BR • 2BR • 3BR | 800-1500 sqft) */}
-          <div className="flex items-center gap-2 text-[#1A1A1A]/80 text-xs mb-3 flex-wrap font-medium">
-            {getUnitTypesText() && (
-              <span className="font-semibold">{getUnitTypesText()}</span>
-            )}
-            {getUnitTypesText() && getSizeText() && (
-              <span className="text-[#A68444]">|</span>
-            )}
-            {getSizeText() && (
-              <span>{getSizeText()}</span>
+
+        {/* Content — consistent 4px-grid spacing */}
+        <div className="p-4 flex-1 flex flex-col gap-3">
+          {/* Header block — title + location, ink-solid */}
+          <div className="flex flex-col gap-1.5">
+            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 group-hover:text-[#B89555] transition-colors">
+              {project.name}
+            </h4>
+            {project.location && (
+              <div className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium">
+                <MapPin className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0" aria-hidden="true" />
+                <span className="truncate">{project.location}</span>
+              </div>
             )}
           </div>
-          
-          {/* Description with ...more link - Shorter */}
-          <p className="text-[#1A1A1A]/85 text-sm leading-relaxed mb-3 flex-1 line-clamp-2 overflow-hidden">
+
+          {/* Divider */}
+          <div className="h-px bg-[#B89555]/40" />
+
+          {/* Meta block — handover + developer + unit types, all solid ink */}
+          <div className="flex flex-col gap-2">
+            <p className="text-sm">
+              {project.handover_date ? (
+                <>
+                  <span className="text-[#1A1A1A]/85">Handover </span>
+                  <span className="text-[#1A1A1A] font-semibold">{project.handover_date}</span>
+                </>
+              ) : (
+                <span className="text-[#1A1A1A]/85">Handover TBA</span>
+              )}
+            </p>
+
+            {project.developer && (
+              <DeveloperLink
+                name={project.developer.name}
+                slug={project.developer.slug}
+                className="text-sm block"
+                showPrefix={true}
+              />
+            )}
+
+            {(getUnitTypesText() || getSizeText()) && (
+              <div className="flex items-center gap-2 text-[#1A1A1A] text-xs flex-wrap font-medium">
+                {getUnitTypesText() && (
+                  <span className="font-semibold">{getUnitTypesText()}</span>
+                )}
+                {getUnitTypesText() && getSizeText() && (
+                  <span className="text-[#B89555]" aria-hidden="true">|</span>
+                )}
+                {getSizeText() && <span>{getSizeText()}</span>}
+              </div>
+            )}
+          </div>
+
+          {/* Description */}
+          <p className="text-[#1A1A1A] text-sm leading-relaxed flex-1 line-clamp-2 overflow-hidden">
             {getTruncatedDescription() || "Discover this exceptional property opportunity..."}
-            <span className="text-[#A68444] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
+            <span className="text-[#B89555] font-bold hover:text-[#1A1A1A] cursor-pointer ml-1">
               ...more
             </span>
           </p>
 
-          {/* Updated date */}
-          {(project as any).updated_at && (
-            <p className="text-[10px] text-muted-foreground mb-2">
-              Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
-            </p>
-          )}
-
-          {/* Payment Plan Badge - Bottom Right (real data only) */}
-          {(() => {
+          {/* Footer meta — updated date + payment-plan badge, single row */}
+          {(((project as any).updated_at) || (() => {
             const breakdown = (project as any).payment_breakdown;
-            if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
-            const percentages = breakdown
-              .map((b: any) => b.percentage)
-              .filter((p: any) => typeof p === 'number');
-            if (percentages.length === 0) return null;
-            return (
-              <div className="flex justify-end mb-1">
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-gold bg-gold/10 border border-gold/30 rounded-full px-2.5 py-1">
-                  <CreditCard className="w-3 h-3" />
-                  {percentages.join('/')}
-                </span>
-              </div>
-            );
-          })()}
+            return Array.isArray(breakdown) && breakdown.some((b: any) => typeof b?.percentage === 'number');
+          })()) && (
+            <div className="flex items-center justify-between gap-2 min-h-[24px]">
+              {(project as any).updated_at ? (
+                <p className="text-[10px] text-[#1A1A1A]/70 font-medium">
+                  Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
+                </p>
+              ) : <span aria-hidden="true" />}
+
+              {(() => {
+                const breakdown = (project as any).payment_breakdown;
+                if (!breakdown || !Array.isArray(breakdown) || breakdown.length === 0) return null;
+                const percentages = breakdown
+                  .map((b: any) => b.percentage)
+                  .filter((p: any) => typeof p === 'number');
+                if (percentages.length === 0) return null;
+                return (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FFFFFF] bg-[#B89555] border border-[#A68444] rounded-full px-2.5 py-1 shadow-sm">
+                    <CreditCard className="w-3 h-3" aria-hidden="true" />
+                    {percentages.join('/')}
+                  </span>
+                );
+              })()}
+            </div>
+          )}
         </div>
       </Link>
 
-      {/* CTA Buttons - Email, Call, WhatsApp - Fixed overflow */}
-      <div className="px-4 pb-4 pt-0 overflow-hidden">
-        <div className="grid grid-cols-3 gap-1.5 border-t border-gold/20 pt-3">
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
+      {/* CTA Buttons — Email, Call, WhatsApp. Solid surfaces, equal grid */}
+      <div className="px-4 pb-4">
+        <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/40 pt-3">
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
             <a
               href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
               onClick={(e) => e.stopPropagation()}
               aria-label={`Email about ${project.name}`}
-              className="flex items-center justify-center gap-1"
+              className="flex items-center justify-center gap-1.5"
             >
-              <Mail className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate text-xs">Email</span>
+              <Mail className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+              <span className="truncate text-xs font-semibold">Email</span>
             </a>
           </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
-            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`} className="flex items-center justify-center gap-1">
-              <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate text-xs">Call</span>
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
+            <a href={callHref} onClick={(e) => e.stopPropagation()} aria-label={`Call about ${project.name}`} className="flex items-center justify-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+              <span className="truncate text-xs font-semibold">Call</span>
             </a>
           </Button>
-          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2">
-            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`} className="flex items-center justify-center gap-1">
-              <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" />
-              <span className="truncate text-xs">Chat</span>
+          <Button asChild variant="secondary" size="sm" className="w-full min-w-0 overflow-hidden px-2 h-9">
+            <a href={whatsappHref} onClick={(e) => e.stopPropagation()} aria-label={`WhatsApp about ${project.name}`} className="flex items-center justify-center gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+              <span className="truncate text-xs font-semibold">Chat</span>
             </a>
           </Button>
         </div>
