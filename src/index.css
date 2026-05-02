@@ -4278,3 +4278,59 @@ a[class*="bg-red-"]:hover {
     0 0 0 2px rgba(255, 255, 255, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
 }
+
+/* ============================================================
+ * BACKEND / OWNER DASHBOARD CONTRAST HARDENING (PASS 6)
+ * Scoped to /owner shell, CRM page header, communication panel,
+ * and pending-task popups. Lifts faded gold and low-opacity text
+ * to legible ink on champagne. Does NOT touch the public site.
+ * ============================================================ */
+
+/* 1. Faded gold text on backend champagne surfaces → ink.
+ *    Covers text-gold/40..90 used widely across owner pages. */
+[data-surface="champagne"] :is(
+  [class*="text-gold/4"],
+  [class*="text-gold/5"],
+  [class*="text-gold/6"],
+  [class*="text-gold/7"],
+  [class*="text-gold/8"],
+  [class*="text-gold/9"]
+):not([data-no-contrast-guard]) {
+  color: #1A1A1A !important;
+}
+
+/* 2. Solid `text-gold` used for body copy on champagne is too washed —
+ *    keep gold for icons/badges only. Body-text nodes on champagne flip to ink. */
+[data-surface="champagne"] :is(p, span, a, li, label, button, h1, h2, h3, h4, h5, h6):where(.text-gold):not([data-no-contrast-guard]):not(svg):not(:has(> svg:only-child)) {
+  color: #1A1A1A !important;
+}
+
+/* 3. Low-opacity ink text floor on backend surfaces. /50 and below was unreadable. */
+[data-surface="champagne"] :is(
+  .text-\[\#1A1A1A\]\/40,
+  .text-\[\#1A1A1A\]\/50,
+  .text-\[\#1A1A1A\]\/60
+):not([data-no-contrast-guard]) {
+  color: rgba(26, 26, 26, 0.78) !important;
+}
+
+/* 4. CRM communication tab triggers — guarantee active tab readable */
+.tab-trigger-champagne[data-state="active"] {
+  color: #1A1A1A !important;
+  background-color: #FDFBF7 !important;
+  font-weight: 600;
+}
+
+/* 5. Pending Tasks alert — final lock (defense in depth) */
+[data-surface="page"][data-no-contrast-guard],
+[data-surface="page"][data-no-contrast-guard] * {
+  /* allow inline styles on direct children to win, but block runtime guard */
+}
+[data-surface="page"][data-no-contrast-guard] h1,
+[data-surface="page"][data-no-contrast-guard] h2,
+[data-surface="page"][data-no-contrast-guard] h3,
+[data-surface="page"][data-no-contrast-guard] p,
+[data-surface="page"][data-no-contrast-guard] span:not([style*="color"]),
+[data-surface="page"][data-no-contrast-guard] label {
+  color: #1A1A1A !important;
+}
