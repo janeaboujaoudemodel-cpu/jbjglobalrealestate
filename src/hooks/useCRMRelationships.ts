@@ -341,9 +341,7 @@ export const useEnrichUaeBrokerageDirectory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { ids?: string[]; reverify?: boolean; batchSize?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("enrich-uae-brokerage-directory", { body: input });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      const data = await invokeWithTimeout<any>("enrich-uae-brokerage-directory", input, 120_000);
       return data as { processed: number; timedOut?: boolean; results: Array<{ id: string; name: string; filled: string[] }> };
     },
     onSuccess: (data) => {
