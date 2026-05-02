@@ -491,7 +491,7 @@ export const AdminOverviewDashboard = () => {
                 <Button
                   variant="primary"
                   size="sm"
-                  onClick={() => navigate("/listing-admin")}
+                  onClick={() => navigate("/admin/listings-approval")}
                 >
                   Review Now
                   <ArrowUpRight className="w-4 h-4 ml-2" />
