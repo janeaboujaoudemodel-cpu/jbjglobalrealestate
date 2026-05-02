@@ -415,7 +415,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {searchSlot}
             </div>
           ) : (
-            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-[#B89555]/30 rounded-full bg-[#FDFBF7]">
+            <div className={cn(filterSearchPillWrapper, "w-[160px]")}>
+              <input
+                type="text"
+                value={filters.searchQuery}
+                onChange={(e) => update({ searchQuery: e.target.value })}
+                placeholder={t('filter.searchPlaceholder')}
+                className={filterSearchPillInput}
+              />
               <input
                 type="text"
                 value={filters.searchQuery}
