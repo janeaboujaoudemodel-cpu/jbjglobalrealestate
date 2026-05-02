@@ -623,7 +623,10 @@ const BrokeragesTab = () => {
                 <Field label="Company name *"><Input value={editing.company_name || ""} onChange={(e) => setEditing({ ...editing, company_name: e.target.value })} /></Field>
                 <Field label="RERA license"><Input value={editing.rera_license || ""} onChange={(e) => setEditing({ ...editing, rera_license: e.target.value })} /></Field>
                 <Field label="Office location"><Input value={editing.office_location || ""} onChange={(e) => setEditing({ ...editing, office_location: e.target.value })} /></Field>
+                <Field label="Google Maps URL"><Input placeholder="https://maps.google.com/…" value={editing.office_map_url || ""} onChange={(e) => setEditing({ ...editing, office_map_url: e.target.value })} /></Field>
                 <Field label="Website"><Input value={editing.website || ""} onChange={(e) => setEditing({ ...editing, website: e.target.value })} /></Field>
+                <Field label="Instagram URL"><Input placeholder="https://instagram.com/…" value={editing.instagram_url || ""} onChange={(e) => setEditing({ ...editing, instagram_url: e.target.value })} /></Field>
+                <Field label="Agents (count)"><Input type="number" value={editing.estimated_agent_count || 0} onChange={(e) => setEditing({ ...editing, estimated_agent_count: +e.target.value })} /></Field>
                 <Field label="Status">
                   <Select value={editing.status} onValueChange={(v) => setEditing({ ...editing, status: v })}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -631,6 +634,16 @@ const BrokeragesTab = () => {
                   </Select>
                 </Field>
                 <Field label="Deal count"><Input type="number" value={editing.deal_count || 0} onChange={(e) => setEditing({ ...editing, deal_count: +e.target.value })} /></Field>
+                <Field label="Represented developer (sender)">
+                  <Input placeholder="e.g. Emaar, DAMAC, Sobha" value={editing.represented_developer_name || ""} onChange={(e) => setEditing({ ...editing, represented_developer_name: e.target.value })} />
+                </Field>
+              </div>
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2">Top active agents (closing with us)</div>
+                <TopAgentsEditor
+                  value={Array.isArray(editing.top_active_agents) ? editing.top_active_agents : []}
+                  onChange={(v) => setEditing({ ...editing, top_active_agents: v })}
+                />
               </div>
               <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">Primary Contact</div>
                 <div className="grid grid-cols-2 gap-3">
