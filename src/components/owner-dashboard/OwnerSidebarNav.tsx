@@ -183,8 +183,10 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                     <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")} style={{ color: '#1A1A1A' }}>{item.label}</span>
                     {item.badge && (
                       <span className={cn(
-                        "text-xs px-1.5 py-0.5 rounded-full font-semibold",
-                        isActivePath(item.path) ? "bg-[#1A1A1A] text-[#B89555]" : "bg-[#B89555] text-[#1A1A1A]"
+                        "text-xs px-1.5 py-0.5 rounded-full font-semibold border",
+                        isActivePath(item.path)
+                          ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]"
+                          : "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/50"
                       )}>
                         {item.badge}
                       </span>
