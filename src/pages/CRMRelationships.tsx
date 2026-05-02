@@ -347,6 +347,27 @@ const BrokeragesTab = () => {
     <TooltipProvider>
     <div className="space-y-4">
       <DirectoryToolsPanel />
+
+      {/* Directory status summary — always reflects actual counts available */}
+      <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-[#1A1A1A]">
+          <div className="font-semibold flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#B89555]" />
+            Directory status
+          </div>
+          <div><span className="text-[#5A4A2E]">All:</span> <b>{data.length}</b></div>
+          <div><span className="text-[#5A4A2E]">UAE Directory:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#5A4A2E]">My Additions:</span> <b>{ownerCount}</b></div>
+          <div><span className="text-[#5A4A2E]">Existing Matches:</span> <b>{existingCount}</b></div>
+        </div>
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#5A4A2E]">
+          {EMIRATES.map((e) => (
+            <span key={e}>
+              {e}: <b className="text-[#1A1A1A]">{emirateCounts[e] || 0}</b>
+            </span>
+          ))}
+        </div>
+      </div>
       {/* Source sub-tabs */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
