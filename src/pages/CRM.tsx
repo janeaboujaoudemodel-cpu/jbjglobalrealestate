@@ -667,24 +667,24 @@ const CRM = () => {
           </div>
           
           {/* Second Line - Search & Quick Actions */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gold/20">
+          <div data-no-contrast-guard className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 mt-3 pt-3 border-t border-gold/20">
             {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#1A1A1A]/70 hover:border-gold/50 transition-all max-w-xs"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#1A1A1A] hover:border-gold/50 transition-all max-w-xs"
             >
-              <Search className="h-4 w-4 text-gold" />
+              <Search className="h-4 w-4 text-[#1A1A1A]" />
               <span className="text-sm">Search leads…</span>
-              <kbd className="ml-2 px-2 py-0.5 bg-gold/10 text-gold text-xs rounded font-mono">⌘K</kbd>
+              <kbd className="ml-2 px-2 py-0.5 bg-[#1A1A1A]/8 text-[#1A1A1A] text-xs rounded font-mono border border-[#1A1A1A]/15">⌘K</kbd>
             </button>
             
             {/* Quick Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowAIInsights(!showAIInsights)}
-                className={`text-gold hover:text-[#1A1A1A] hover:bg-gold/20 ${showAIInsights ? 'bg-gold/10' : ''}`}
+                className={`text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 ${showAIInsights ? 'bg-gold/15 text-[#1A1A1A]' : ''}`}
               >
                 <Brain className="h-4 w-4" />
               </Button>
@@ -697,36 +697,36 @@ const CRM = () => {
                 />
               </Suspense>
               
-              <div className="hidden md:flex items-center gap-1 ml-2">
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
-                  <CheckSquare className="h-4 w-4 mr-1" />
+              <div className="hidden md:flex flex-wrap items-center gap-2 ml-2 pl-2 border-l border-gold/20">
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/tasks")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+                  <CheckSquare className="h-4 w-4 mr-1.5" />
                   Tasks
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
-                  <Calendar className="h-4 w-4 mr-1" />
+                <Button variant="ghost" size="sm" onClick={() => navigate("/crm/calendar")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+                  <Calendar className="h-4 w-4 mr-1.5" />
                   Calendar
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs">
-                  <Users className="h-4 w-4 mr-1" />
+                <Button variant="ghost" size="sm" onClick={() => setActiveTab("employees")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs px-3">
+                  <Users className="h-4 w-4 mr-1.5" />
                   Team
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-[#1A1A1A] hover:text-gold hover:bg-gold/10 text-xs font-semibold">
-                  <Briefcase className="h-4 w-4 mr-1" />
+                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs font-semibold px-3">
+                  <Briefcase className="h-4 w-4 mr-1.5" />
                   Relationships
                 </Button>
                 <Button
                   variant="gold"
                   size="sm"
                   onClick={() => navigate("/admin/media-ingestion")}
-                  className="text-xs font-semibold shadow-md"
+                  className="text-xs font-semibold shadow-md px-3"
                   title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
                 >
-                  <Inbox className="h-4 w-4 mr-1" />
+                  <Inbox className="h-4 w-4 mr-1.5" />
                   Media Ingestion
                 </Button>
                 {isCRMOwner && (
-                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-[#1A1A1A] hover:bg-gold/20 text-xs font-semibold">
-                    <Zap className="h-4 w-4 mr-1" />
+                  <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-[#1A1A1A] hover:text-[#B89555] hover:bg-gold/10 text-xs font-semibold px-3">
+                    <Zap className="h-4 w-4 mr-1.5" />
                     Automations
                   </Button>
                 )}
