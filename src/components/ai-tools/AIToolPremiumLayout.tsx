@@ -209,7 +209,7 @@ const AIToolPremiumLayout = ({
                 }
               }}
               data-no-contrast-guard
-              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#1A1A1A]/90 text-[#FDFBF7] hover:text-[#FDFBF7] border-2 border-[#FDFBF7]/30 hover:border-[#FDFBF7]/60"
+              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#A68444] text-white border-2 border-[#1A1A1A] hover:border-[#A68444]"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
