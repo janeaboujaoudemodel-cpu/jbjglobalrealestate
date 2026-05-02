@@ -333,7 +333,7 @@ END:VCARD`;
                     <card.icon className="w-5 h-5 text-gold transition-all duration-300 group-hover:text-[#1A1A1A]" />
                   </div>
                   <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A] transition-colors">{card.title}</h3>
-                  <p className="text-sm text-gold transition-colors group-hover:text-[#1A1A1A]/80">{card.value}</p>
+                  <p className="text-sm font-medium text-[#1A1A1A]/80 transition-colors group-hover:text-[#1A1A1A]">{card.value}</p>
                 </div>
               ))}
             </div>
