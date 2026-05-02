@@ -25,7 +25,7 @@ export type IconTileTone =
 export type IconTileSize = "sm" | "md" | "lg" | "xl";
 
 const TONE: Record<IconTileTone, { tile: string; icon: string }> = {
-  gold:    { tile: "bg-[#B89555]/10 ring-1 ring-[#B89555]/30",     icon: "text-[#B89555]" },
+  gold:    { tile: "bg-[#EFE6D6] ring-1 ring-[#B89555]",            icon: "text-[#1A1A1A]" },
   emerald: { tile: "bg-emerald-500/10 ring-1 ring-emerald-500/30", icon: "text-emerald-600" },
   red:     { tile: "bg-red-500/10 ring-1 ring-red-500/30",         icon: "text-red-600" },
   blue:    { tile: "bg-blue-500/10 ring-1 ring-blue-500/30",       icon: "text-blue-600" },
