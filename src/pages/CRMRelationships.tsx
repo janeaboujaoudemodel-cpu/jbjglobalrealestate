@@ -35,7 +35,7 @@ import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
-import { ArrowLeftRight, Trophy, HelpCircle } from "lucide-react";
+import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
