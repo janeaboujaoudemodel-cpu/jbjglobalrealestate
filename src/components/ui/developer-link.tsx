@@ -30,12 +30,12 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
     onClick?.(e);
   };
 
-  // If no slug, render as styled text (but still gold)
+  // If no slug, render as styled text (still gold + underline so it reads as a brand mark)
   if (!slug) {
     return (
       <span ref={ref} className={cn("text-muted-foreground", className)}>
         {showPrefix && <span className="text-[#1A1A1A]">by </span>}
-        <span className="font-semibold text-gold">
+        <span className="font-semibold text-gold underline underline-offset-4 decoration-gold/60">
           {name}
         </span>
       </span>
@@ -48,7 +48,7 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
       <Link 
         to={`/developer/${slug}`}
         onClick={handleClick}
-        className="font-semibold transition-all hover:underline text-gold"
+        className="font-semibold text-gold underline underline-offset-4 decoration-gold/60 hover:decoration-gold hover:text-gold transition-all"
       >
         {name}
       </Link>
