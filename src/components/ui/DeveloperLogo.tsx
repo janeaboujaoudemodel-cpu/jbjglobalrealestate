@@ -23,8 +23,12 @@ interface DeveloperLogoProps {
    *  - "bare": no border, no background, no inner padding. Used as an
    *    overlay on project-card photos so the logo reads as a clean,
    *    full-fit brand mark with a soft drop-shadow for legibility.
+   *  - "card": Reelly-style hero plate. Uniform-size white rounded plate
+   *    used on the developer directory and per-developer header tiles.
+   *    Logo renders `object-contain` with generous padding so wordmark
+   *    and colored marks always read fully without cropping.
    */
-  variant?: "tile" | "bare";
+  variant?: "tile" | "bare" | "card";
 }
 
 /**
@@ -86,6 +90,42 @@ export function DeveloperLogo({
             onError?.();
           }}
           className="block h-full w-full object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+        />
+      </div>
+    );
+  }
+
+  // ── Card variant — Reelly-style hero plate (developer directory) ──
+  if (variant === "card") {
+    if (!valid) {
+      return (
+        <div
+          className={cn(
+            "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6",
+            className,
+          )}
+          aria-label={`${alt} (logo unavailable)`}
+        >
+          <Building2 className="w-12 h-12 text-[#1A1A1A]/50" />
+        </div>
+      );
+    }
+    return (
+      <div
+        className={cn(
+          "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/30 p-6 overflow-hidden",
+          className,
+        )}
+      >
+        <img
+          src={src as string}
+          alt={alt}
+          loading={loading}
+          onError={() => {
+            setError(true);
+            onError?.();
+          }}
+          className="block max-h-full max-w-full w-auto h-auto object-contain"
         />
       </div>
     );

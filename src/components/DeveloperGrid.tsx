@@ -97,18 +97,16 @@ const DeveloperGrid = () => {
                 to={`/developer/${developer.slug}`}
                 className="inline-block group mb-6"
               >
-                {/* Developer Logo Tile - Light background for readability */}
-                <div className="bg-card rounded-2xl p-6 md:p-8 inline-flex items-center justify-center min-w-[280px] md:min-w-[350px] h-24 md:h-32 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02] border border-gold/20">
+                {/* Developer Logo Tile — uniform white plate, full-fit logo */}
+                <div className="w-[260px] h-[120px] rounded-2xl bg-white border border-[#B89555]/35 shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:-translate-y-0.5 flex items-center justify-center p-5 overflow-hidden">
                   {isValidDeveloperLogoUrl(developer.logo_url) ? (
-                    <img 
-                      src={developer.logo_url as string} 
+                    <img
+                      src={developer.logo_url as string}
                       alt={`${developer.name} logo`}
-                      className="max-h-16 md:max-h-20 max-w-[240px] md:max-w-[300px] object-contain"
+                      className="block max-h-full max-w-full w-auto h-auto object-contain"
                     />
                   ) : (
-                    <h2
-                      className="text-foreground font-bold text-2xl md:text-3xl text-center"
-                    >
+                    <h2 className="text-[#1A1A1A] font-bold text-xl md:text-2xl text-center line-clamp-2">
                       {developer.name}
                     </h2>
                   )}
