@@ -396,14 +396,16 @@ const CRMCommunicationPanel = () => {
                             {msg.sender[0]}
                           </AvatarFallback>
                         </Avatar>
-                        <div className={`max-w-[70%] ${msg.isMe ? 'text-right' : ''}`}>
+                        <div className={`max-w-[70%] min-w-0 ${msg.isMe ? 'text-right' : ''}`}>
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-[10px] font-medium text-[#1A1A1A]">{msg.sender}</span>
-                            <span className="text-[9px] text-[#1A1A1A]/70">{msg.timestamp}</span>
+                            <span className="text-[10px] font-medium text-[#1A1A1A] truncate">{msg.sender}</span>
+                            <span className="text-[9px] text-[#1A1A1A]/70 flex-shrink-0">{msg.timestamp}</span>
                           </div>
-                          <p className={`text-xs p-2 rounded-lg ${
-                            msg.isMe ? 'bg-gold/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
-                          }`}>
+                          <p
+                            className={`text-xs p-2 rounded-lg break-words [overflow-wrap:anywhere] [word-break:break-word] ${
+                              msg.isMe ? 'bg-gold/20 text-[#1A1A1A]' : 'bg-[#F7F2EA] text-[#1A1A1A]'
+                            }`}
+                          >
                             {msg.message}
                           </p>
                         </div>
