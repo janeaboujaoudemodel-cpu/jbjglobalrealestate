@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { deriveHandover, HANDOVER_FALLBACK } from "@/utils/handoverDerivation";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
@@ -239,14 +240,14 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <hr className="border-[#B89555]/30 my-2" />
             <div className="flex-grow" />
 
-            {/* Handover line — replaces the price line; price now lives on the photo */}
+            {/* Handover line — orange, matches the price label identity */}
             <div className="mt-2 min-h-[22px]">
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-[10px] uppercase tracking-[0.14em] text-[#5A4A2E] font-medium">
+              <div className="flex items-baseline gap-1.5 handover-orange">
+                <span className="handover-label text-[10px] uppercase tracking-[0.14em] font-medium">
                   Handover
                 </span>
-                <span className="text-[#1A1A1A] font-semibold text-sm md:text-[15px] tabular-nums">
-                  {project.handover_date || 'TBA'}
+                <span className="font-semibold text-sm md:text-[15px] tabular-nums">
+                  {deriveHandover(project) || HANDOVER_FALLBACK}
                 </span>
               </div>
             </div>
