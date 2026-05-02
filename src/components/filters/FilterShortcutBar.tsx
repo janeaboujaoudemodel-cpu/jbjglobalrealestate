@@ -9,6 +9,24 @@ import { ChevronDown, X, Bookmark, Building2, Bed, Calendar, DollarSign, CreditC
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
+import {
+  filterPillBase,
+  filterPillActive,
+  pillInactive,
+  togglePillBase,
+  togglePillOff,
+  togglePillOn,
+  filterPopoverSurface,
+  filterInput,
+  filterLabel,
+  filterHelpText,
+  filterPrimaryButton,
+  filterSecondaryButton,
+  filterSearchPillWrapper,
+  filterSearchPillInput,
+  filterDivider,
+  resetAllPill,
+} from "./filterStyles";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -334,23 +352,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const toggleArray = (arr: string[], val: string) =>
     arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val];
 
-  // Pill styling
-  // `touch-manipulation` removes the 300ms double-tap-zoom delay on iOS/Android
-  // so chip taps fire instantly even mid-scroll, eliminating accidental
-  // "swallowed" taps when the user starts a horizontal pan and lifts on a pill.
-  const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation";
-  const pillInactive = isDark
-    ? "bg-[#FDFBF7]/10 backdrop-blur-md border border-white/20 text-white hover:bg-[#FDFBF7]/20"
-    : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] font-semibold hover:border-[#B89555] hover:bg-[#F7F2EA] hover:-translate-y-0.5 transition-all";
-  const pillActive = isDark
-    ? "bg-[#FDFBF7] text-[#1A1A1A] border border-white shadow-lg"
-    : "bg-[#1A1A1A] text-white border border-[#1A1A1A] font-bold shadow-md hover:bg-[#A68444] hover:border-[#A68444]";
-
-  const popoverClass = "bg-[#FDFBF7] border border-[#B89555]/30 z-[10200] shadow-xl";
-
-  const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer";
-  const togglePillOff = "border-[#B89555]/50 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
-  const togglePillOn = "border-[#1A1A1A] bg-[#1A1A1A] text-white font-bold";
+  // Pill styling — sourced from filterStyles so every filter surface looks identical.
+  // The `pillBase` token already handles touch-manipulation and the focus-visible ring.
+  const pillBase = filterPillBase;
+  const pillInactiveCls = pillInactive(isDark ? "dark" : "light");
+  const pillActive = filterPillActive;
+  const popoverClass = filterPopoverSurface;
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -408,20 +415,20 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {searchSlot}
             </div>
           ) : (
-            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-[#B89555]/30 rounded-full bg-[#FDFBF7]">
+            <div className={cn(filterSearchPillWrapper, "w-[160px]")}>
               <input
                 type="text"
                 value={filters.searchQuery}
                 onChange={(e) => update({ searchQuery: e.target.value })}
                 placeholder={t('filter.searchPlaceholder')}
-                className="w-full py-1.5 bg-transparent text-xs text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 outline-none"
+                className={filterSearchPillInput}
               />
             </div>
           )}
         {/* Price */}
         <Popover open={priceOpen} onOpenChange={handlePriceOpenChange}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactiveCls)}>
               {t('filter.price')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -510,7 +517,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Payments */}
         <Popover open={paymentsOpen} onOpenChange={handlePaymentsOpenChange}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactiveCls)}>
               {t('filter.payments')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -576,7 +583,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Handover */}
         <Popover open={handoverOpen} onOpenChange={setHandoverOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, pillInactive)}>
+            <button className={cn(pillBase, pillInactiveCls)}>
               {t('filter.handover')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -645,7 +652,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Property Type */}
         <Popover open={propertyTypeOpen} onOpenChange={setPropertyTypeOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
               {getPropertyTypeLabel()}
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -681,7 +688,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Bedrooms */}
         <Popover open={bedroomsOpen} onOpenChange={setBedroomsOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.bedrooms')}
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -709,7 +716,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Status */}
         <Popover open={statusOpen} onOpenChange={setStatusOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.status')}
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -742,7 +749,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Construction Status */}
         <Popover open={constructionOpen} onOpenChange={setConstructionOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.construction')}
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
@@ -770,7 +777,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Views */}
         <Popover open={viewsOpen} onOpenChange={setViewsOpen}>
           <PopoverTrigger asChild>
-            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
+            <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactiveCls)}>
               <Eye className="w-3.5 h-3.5" />
               {t('filter.views')}
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
@@ -823,7 +830,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
             className={cn(
               pillBase, "px-2.5 py-1.5",
-              filters.sortBy === opt.value ? pillActive : pillInactive
+              filters.sortBy === opt.value ? pillActive : pillInactiveCls
             )}
           >
             {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
@@ -836,7 +843,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         {/* Map toggle */}
         <button
           onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-          className={cn(pillBase, "px-2.5 py-1.5", isMapMode ? pillActive : pillInactive)}
+          className={cn(pillBase, "px-2.5 py-1.5", isMapMode ? pillActive : pillInactiveCls)}
           title={t('filter.map')}
         >
           <Map className="w-3.5 h-3.5" />
