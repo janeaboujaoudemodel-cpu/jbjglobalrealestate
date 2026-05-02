@@ -66,7 +66,7 @@ const AIComparisonWidget = () => {
           {features.map((feature, i) => (
             <div 
               key={i}
-              className="flex items-center gap-4 p-4 bg-[#FDFBF7]/80 border border-gold/20 rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-4 bg-[#F7F2EA] border border-gold/20 rounded-xl shadow-sm"
             >
               <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
                 <feature.icon className="w-5 h-5 text-gold" />
@@ -80,7 +80,7 @@ const AIComparisonWidget = () => {
         </div>
 
         {/* Sample comparison preview */}
-        <div className="bg-[#F7F2EA] border border-gold/20 rounded-xl p-4 mb-6">
+        <div className="bg-[#EFE6D6] border border-gold/20 rounded-xl p-4 mb-6">
           <div className="grid grid-cols-3 gap-2 text-xs text-[#5A4A2E] mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>

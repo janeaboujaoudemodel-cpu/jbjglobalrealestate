@@ -91,13 +91,13 @@ const StartingPointSection = () => {
           {activeCards.map((card) => (
             <Link key={card.to + card.label} to={card.to} className="group">
               <div className={cn(
-                "bg-[#FDFBF7] border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
-                "border-[#B89555]/30 hover:border-[#B89555]/30",
-                "hover:shadow-lg hover:-translate-y-1.5",
-                "shadow-sm",
-              )}>
-                <div className="relative flex flex-col items-center gap-2 md:gap-3 w-full">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-[#F7F2EA] border border-[#B89555]/30">
+                "bg-[#F7F2EA] border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
+                tier.borderColor,
+                "hover:shadow-xl hover:-translate-y-1"
+              )}
+            >
+              <div className="flex flex-col items-center gap-3">
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-[#EFE6D6] border border-[#B89555]/30">
                     <card.icon className="w-7 h-7 text-[#1A1A1A]" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
