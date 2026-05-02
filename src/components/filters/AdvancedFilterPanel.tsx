@@ -224,11 +224,11 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
             <div>
               <DialogTitle className="text-xl font-bold text-[#1A1A1A] tracking-tight">New Off Plan Projects</DialogTitle>
               {projectCount !== null ? (
-                <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#B8964A] to-[#D4AF37]">
+                <span className="text-sm font-bold text-[#1A1A1A]">
                   {projectCount.toLocaleString()} live projects
                 </span>
               ) : (
-                <span className="text-sm text-[#1A1A1A]/30">Loading...</span>
+                <span className="text-sm text-[#1A1A1A]/70">Loading...</span>
               )}
             </div>
           </div>
@@ -254,7 +254,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                 onClick={() => setEmiratesOpen(!emiratesOpen)}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/40"}>
+                <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
                   {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
                 </span>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
@@ -279,9 +279,9 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
-                            {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
                           <span className="text-sm text-[#1A1A1A]">{em.label}</span>
                         </button>
@@ -299,7 +299,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                 onClick={() => setAreasOpen(!areasOpen)}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/40"}>
+                <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
                   {!localFilters.areas || localFilters.areas.length === 0
                     ? "All Areas"
                     : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
@@ -316,15 +316,15 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
                   {allAreas.length === 0 ? (
-                    <div className="py-4 text-center text-xs text-[#1A1A1A]/40">Loading areas...</div>
+                    <div className="py-4 text-center text-xs text-[#1A1A1A]/70">Loading areas...</div>
                   ) : (
                     <div className="space-y-3 max-h-72 overflow-y-auto">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
-                            <span className="text-[10px] font-bold text-[#1A1A1A]/50 uppercase tracking-wider">{emirate}</span>
+                            <span className="text-[10px] font-bold text-[#1A1A1A]/70 uppercase tracking-wider">{emirate}</span>
                             <div className="flex-1 h-px bg-gold/20" />
-                            <span className="text-[10px] text-[#1A1A1A]/30">{areaNames.length}</span>
+                            <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
                           </div>
                           <div className="space-y-0.5">
                             {areaNames.map(areaName => {
@@ -337,9 +337,9 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                                    isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                                   )}>
-                                    {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
+                                    {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
                                   <span className="text-sm text-[#1A1A1A] text-left">{areaName}</span>
                                 </button>
@@ -361,7 +361,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                 onClick={() => setDevsOpen(!devsOpen)}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/40"}>
+                <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
                   {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
                 </span>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
@@ -386,9 +386,9 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? "border-gold bg-gold/20" : "border-gold/40"
+                            isSelected ? "border-[#1A1A1A] bg-[#1A1A1A]" : "border-[#B89555]/60 bg-[#FDFBF7]"
                           )}>
-                            {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
+                            {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
                           <div className="w-8 h-8 rounded-lg bg-[#FDFBF7] border border-gold/20 p-0.5 flex items-center justify-center flex-shrink-0 overflow-hidden shadow-sm">
                             {dev.logo_url ? (
@@ -426,7 +426,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               <h4 className={sectionTitle}>Projects Payment Plan</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A]/60">Maximum pre-handover</span>
+                  <span className="text-xs text-[#1A1A1A]/70">Maximum pre-handover</span>
                   <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-gold/30">
                     {localFilters.paymentPlanMax}%
                   </span>
@@ -460,7 +460,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               </Tabs>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">Min Price</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Min Price</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -469,11 +469,11 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                       placeholder="0"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/40 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">Max Price</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Max Price</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -482,7 +482,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                       placeholder="Any"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/40 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
                   </div>
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               <h4 className={sectionTitle}>Property Size</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">Min sqft</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Min sqft</label>
                   <input
                     type="text"
                     value={localFilters.sizeMin}
@@ -503,7 +503,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-1 block">Max sqft</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Max sqft</label>
                   <input
                     type="text"
                     value={localFilters.sizeMax}
@@ -589,7 +589,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
               <h4 className={sectionTitle}>Project Handover By</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-2 block">From</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">From</label>
                   <div className="flex gap-1 mb-2">
                     {QUARTERS.map(q => (
                       <button
@@ -598,8 +598,8 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-[#1A1A1A] shadow-sm"
-                            : "bg-[#FDFBF7]/80 border border-gold/25 text-[#1A1A1A]/60 hover:bg-gold/10 hover:border-gold/50"
+                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
                         {q}
@@ -616,7 +616,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/50 uppercase mb-2 block">To</label>
+                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">To</label>
                   <div className="flex gap-1 mb-2">
                     {QUARTERS.map(q => (
                       <button
@@ -625,8 +625,8 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-[#1A1A1A] shadow-sm"
-                            : "bg-[#FDFBF7]/80 border border-gold/25 text-[#1A1A1A]/60 hover:bg-gold/10 hover:border-gold/50"
+                            ? "bg-[#1A1A1A] border border-[#1A1A1A] text-white font-bold ring-1 ring-[#B89555] shadow-sm"
+                            : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
                         )}
                       >
                         {q}
@@ -667,7 +667,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
         <div className="px-6 py-4 border-t border-gold/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
-            className="px-5 py-2.5 rounded-full border border-gold/40 text-xs font-bold text-[#1A1A1A]/70 hover:bg-gold/10 hover:border-gold/60 transition-all"
+            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
           >
             Clear all
           </button>
@@ -676,7 +676,7 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
           </button>
           <button
             onClick={handleApply}
-            className="flex-1 py-3 rounded-full bg-gradient-to-r from-[#C8A766] via-[#D4AF37] to-[#C8A766] text-white font-bold text-sm shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:shadow-[0_6px_28px_rgba(200,167,102,0.55)] hover:brightness-105 transition-all"
+            className="flex-1 py-3 rounded-full bg-[#1A1A1A] text-white font-bold text-sm ring-1 ring-[#B89555] hover:bg-[#0d0d0d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7] transition-all"
           >
             Show {projectCount !== null ? projectCount.toLocaleString() : '...'} projects
           </button>
