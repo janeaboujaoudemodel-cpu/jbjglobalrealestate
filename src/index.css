@@ -3497,10 +3497,8 @@ button:disabled:has(.lucide),
   transform: none;
 }
 
-/* DARK MODE — flip hover/active surface to keep contrast premium */
-.dark a:hover:has(.lucide),
-.dark button:hover:has(.lucide),
-.dark [role="button"]:hover:has(.lucide),
+/* DARK MODE — flip hover/active surface to keep contrast premium.
+   Scoped to `.icon-tile` only (see note above). */
 .dark .icon-tile:hover {
   background-color: hsl(var(--accent) / 0.4);
   box-shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.4);
