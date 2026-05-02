@@ -33,6 +33,20 @@ function effectiveBgColor(el: Element): string {
     if (bg && !bg.includes("rgba(0, 0, 0, 0)") && bg !== "transparent") {
       return bg;
     }
+    // Element has a gradient or image background (no flat color but rendered surface).
+    // Trust the explicit data-surface contract instead of falling through to page.
+    const surface = cur.getAttribute("data-surface");
+    if (surface) {
+      if (surface === "dark" || surface === "ink") return "rgb(26, 26, 26)";
+      if (surface === "gold") return "rgb(184, 149, 85)";
+      // page / champagne / light
+      return "rgb(253, 251, 247)";
+    }
+    const bgImage = style.backgroundImage;
+    if (bgImage && bgImage !== "none") {
+      // Unknown gradient/image surface — bail out of guarding rather than guessing.
+      return "__unknown__";
+    }
     cur = cur.parentElement;
   }
   return "rgb(253, 251, 247)"; // page #FDFBF7 fallback
