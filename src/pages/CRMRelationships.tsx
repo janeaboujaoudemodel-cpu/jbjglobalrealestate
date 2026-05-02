@@ -277,6 +277,35 @@ const aiRecommend = async (kind: "brokerage" | "client" | "developer_registry", 
 };
 
 /* ===========================================================
+   Brokerage clickable contact row
+=========================================================== */
+const BrokerageContactLinks = ({ r }: { r: any }) => {
+  const email = r.email || r.primary_contact?.email || "";
+  const phone = r.phone || r.primary_contact?.phone || "";
+  const wa = r.whatsapp_e164 || r.primary_contact?.whatsapp || "";
+  const website = r.website || "";
+  const ig = r.instagram_url || "";
+  const address = r.office_address || r.office_location || "";
+  const mapUrl = r.office_map_url
+    || (address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + (r.emirate ? ", " + r.emirate : ""))}` : "");
+
+  const link = "inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] border-b border-[#B89555]/50 hover:border-[#B89555] py-0.5";
+
+  if (!email && !phone && !wa && !website && !ig && !mapUrl) return null;
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5">
+      {email && <a href={`mailto:${email}`} className={link}><Mail className="w-3 h-3" />{email}</a>}
+      {phone && <a href={`tel:${phone.replace(/\s+/g, "")}`} className={link}><Phone className="w-3 h-3" />{phone}</a>}
+      {wa && <a href={`https://wa.me/${wa.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener" className={link}><MessageCircle className="w-3 h-3" />WhatsApp</a>}
+      {mapUrl && <a href={mapUrl} target="_blank" rel="noopener" className={link}><MapPin className="w-3 h-3" />{address || "Map"}</a>}
+      {website && <a href={website.startsWith("http") ? website : `https://${website}`} target="_blank" rel="noopener" className={link}><Globe2 className="w-3 h-3" />Website</a>}
+      {ig && <a href={ig.startsWith("http") ? ig : `https://instagram.com/${ig.replace(/^@/, "")}`} target="_blank" rel="noopener" className={link}><Instagram className="w-3 h-3" />Instagram</a>}
+    </div>
+  );
+};
+
+/* ===========================================================
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
