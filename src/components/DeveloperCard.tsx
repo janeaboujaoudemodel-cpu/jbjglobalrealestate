@@ -59,26 +59,24 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             "0 8px 24px rgba(200,167,102,0.18), 0 2px 6px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
         }}
       >
-        {/* Logo plate — uniform white rounded surface, full-fit logo */}
-        <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25">
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            {developer.logo_url ? (
-              <DeveloperLogo
-                src={developer.logo_url}
-                alt={`${developer.name} logo`}
-                variant="card"
-                loading={isEager ? "eager" : "lazy"}
-                className="!border-0 !p-0 !rounded-none !bg-transparent"
-              />
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />
-                <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide text-center line-clamp-2 max-w-[200px]">
-                  {developer.name}
-                </span>
-              </div>
-            )}
-          </div>
+        {/* Logo plate — uniform white surface, full-fit logo, no crops */}
+        <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25 flex items-center justify-center p-8">
+          {developer.logo_url ? (
+            <img
+              src={developer.logo_url}
+              alt={`${developer.name} logo`}
+              loading={isEager ? "eager" : "lazy"}
+              referrerPolicy="no-referrer"
+              className="block max-h-full max-w-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2">
+              <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />
+              <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide text-center line-clamp-2 max-w-[220px]">
+                {developer.name}
+              </span>
+            </div>
+          )}
 
           {/* Tier Badge — top-right pill on the plate */}
           {tier && (
