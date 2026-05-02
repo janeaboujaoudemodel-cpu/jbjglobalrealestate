@@ -211,7 +211,7 @@ const Testimonials = () => {
     <motion.div key={index} variants={fadeInUp}>
       <Card className="jj-card-inner h-full">
         <CardContent className="p-6">
-          <Quote className="w-8 h-8 text-[#8A7556] mb-4" />
+          <Quote className="w-8 h-8 text-[#1A1A1A]/70 mb-4" />
           <p className="text-[#1A1A1A]/70 mb-6 italic">
             "{testimonial.content}"
           </p>

@@ -152,7 +152,7 @@ const CEOLeadershipShowcase = () => {
               className="text-center max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-6 md:p-8 border border-gold/30"
             >
               <div className="relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-[#8A7556]">"</div>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-[#1A1A1A]/70">"</div>
                 <p className="text-xl md:text-2xl text-[#1A1A1A]/70 italic leading-relaxed pt-8">
                   Innovation and excellence are not just goals—they are the foundation
                   of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.

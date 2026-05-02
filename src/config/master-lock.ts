@@ -405,7 +405,7 @@ export const UI_CONTRAST_LOCK = Object.freeze({
   LIGHT_SURFACE: Object.freeze({
     PRIMARY_TEXT: 'text-[#1A1A1A]',
     SECONDARY_TEXT: 'text-[#1A1A1A]/70',
-    MUTED_TEXT: 'text-[#8A7556]',
+    MUTED_TEXT: 'text-[#1A1A1A]/70',
     CTA_BG: 'bg-[#1A1A1A]',
     CTA_TEXT: 'text-white',
   }),
@@ -422,7 +422,7 @@ export const UI_CONTRAST_LOCK = Object.freeze({
   RULES: Object.freeze([
     'All button text MUST be white on dark/black backgrounds, black on light backgrounds',
     'No gold, champagne, or low-contrast text inside buttons or CTAs',
-    'text-[#8A7556] is the absolute minimum contrast on light surfaces (4.6:1)',
+    'text-[#1A1A1A]/70 is the absolute minimum contrast on light surfaces (4.6:1)',
     'text-[#1A1A1A]/70 is auto-bumped to text-[#1A1A1A]/70 on light surfaces via global CSS',
     'All image overlay text must use text-white with text-shadow for readability',
     'Per-component color overrides on buttons are FORBIDDEN without founder unlock',

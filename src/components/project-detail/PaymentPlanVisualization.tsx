@@ -199,7 +199,7 @@ export default function PaymentPlanVisualization({
             </div>
             <p className="text-2xl font-bold text-[#1A1A1A] mb-2">100%</p>
             <p className="text-sm text-[#1A1A1A]/70">Pay full amount upfront</p>
-            <p className="text-xs text-[#8A7556] mt-2">Contact us for special discounts on full payment</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Contact us for special discounts on full payment</p>
           </div>
         </TabsContent>
 
@@ -332,7 +332,7 @@ export default function PaymentPlanVisualization({
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-[#1A1A1A] truncate">{step.milestone}</p>
                         {step.timing && (
-                          <p className="text-xs text-[#8A7556]">{step.timing}</p>
+                          <p className="text-xs text-[#1A1A1A]/70">{step.timing}</p>
                         )}
                       </div>
                       <div className={cn(
@@ -378,7 +378,7 @@ export default function PaymentPlanVisualization({
           )}
 
           {handoverDate && (
-            <p className="mt-6 text-sm text-[#8A7556] italic text-center">
+            <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
               Benefit from extended payment terms until {handoverDate} handover
             </p>
           )}

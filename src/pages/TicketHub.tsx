@@ -611,9 +611,9 @@ const TicketHub = () => {
                                 ) : (
                                   <div className="w-full h-20 flex items-center justify-center bg-gold/5">
                                     {att.file.type.startsWith('video/') ? (
-                                      <Video className="w-8 h-8 text-[#8A7556]" />
+                                      <Video className="w-8 h-8 text-[#1A1A1A]/70" />
                                     ) : (
-                                      <FileImage className="w-8 h-8 text-[#8A7556]" />
+                                      <FileImage className="w-8 h-8 text-[#1A1A1A]/70" />
                                     )}
                                   </div>
                                 )}

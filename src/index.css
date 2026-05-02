@@ -3805,10 +3805,12 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
    This rule is correct ONLY when the white element sits directly on the
    light surface — not when it sits on a nested dark surface (icon tile,
    black CTA, dark badge) inside the light card. The re-assertion block
-   below restores white text in those nested-dark contexts. */
-.bg-\[\#FDFBF7\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]),
-.bg-\[\#F7F2EA\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]),
-.bg-\[\#EFE6D6\] :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#EFE6D6\]):not(.allow-white):not([data-no-contrast-guard]) {
+   below restores white text in those nested-dark contexts.
+   IMPORTANT: also opt out the entire subtree under [data-no-contrast-guard]
+   (used by modals/popups that own their own contrast). */
+.bg-\[\#FDFBF7\]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]):not([data-no-contrast-guard] *),
+.bg-\[\#F7F2EA\]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#F7F2EA\]):not(.allow-white):not([data-no-contrast-guard]):not([data-no-contrast-guard] *),
+.bg-\[\#EFE6D6\]:not([data-no-contrast-guard]):not([data-no-contrast-guard] *) :is(.text-white, .text-\[\#FDFBF7\], .text-\[\#EFE6D6\]):not(.allow-white):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
   color: #1A1A1A !important;
 }
 
@@ -3860,19 +3862,21 @@ a[class*="hover:bg-white"]:hover :is(span, svg) {
  * Runs LAST so it beats earlier low-contrast utility classes.
  * ============================================================ */
 
-/* 1. Lift faded ink (text-[#1A1A1A]/25..85) to solid ink on light surfaces */
+/* 1. Lift faded ink (text-[#1A1A1A]/25..85) to solid ink on light surfaces.
+   Opt out the entire subtree under [data-no-contrast-guard] so popups/dialogs
+   that own their own contrast aren't broken. */
 :root:not(.dark) :is(
   .bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], .bg-\[\#EFE6D6\],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#EFE6D6]"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-):not([data-surface="dark"]) :is(
+):not([data-surface="dark"]):not([data-no-contrast-guard]) :is(
   .text-\[\#1A1A1A\]\/25, .text-\[\#1A1A1A\]\/40, .text-\[\#1A1A1A\]\/50,
   .text-\[\#1A1A1A\]\/60, .text-\[\#1A1A1A\]\/65, .text-\[\#1A1A1A\]\/70,
   .text-\[\#1A1A1A\]\/80, .text-\[\#1A1A1A\]\/85, .text-\[\#1A1A1A\]\/90,
   [class*="text-[#1A1A1A]/2"], [class*="text-[#1A1A1A]/3"],
   [class*="text-[#1A1A1A]/4"], [class*="text-[#1A1A1A]/5"],
   [class*="text-[#1A1A1A]/6"], [class*="text-[#1A1A1A]/7"]
-) {
+):not([data-no-contrast-guard]):not([data-no-contrast-guard] *):not([class*="bg-[#1A1A1A]"] *):not([class*="bg-foreground"] *):not(.bg-black *) {
   color: #1A1A1A !important;
   --tw-text-opacity: 1 !important;
 }

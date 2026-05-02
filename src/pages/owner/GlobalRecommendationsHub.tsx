@@ -322,7 +322,7 @@ export default function GlobalRecommendationsHub() {
           <Card className="bg-[#FDFBF7] border-gold/20">
             <CardContent className="flex flex-col items-center justify-center py-16">
               <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gold/10 border border-gold/25">
-                <CheckCircle className="w-8 h-8 text-[#8A7556]" />
+                <CheckCircle className="w-8 h-8 text-[#1A1A1A]/70" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No recommendations</h3>
               <p className="text-[#1A1A1A]/70 text-sm">

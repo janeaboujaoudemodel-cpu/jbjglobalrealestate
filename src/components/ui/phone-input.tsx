@@ -519,8 +519,8 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] hover:border-gold focus:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-[#1A1A1A] hover:text-white hover:border-gold focus:border-gold";
     const inputStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#8A7556] focus:border-gold hover:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-[#8A7556] focus:border-gold hover:border-gold";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-gold hover:border-gold"
+      : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-[#1A1A1A]/70 focus:border-gold hover:border-gold";
     const popoverStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50"
       : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";

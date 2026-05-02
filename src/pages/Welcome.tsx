@@ -176,7 +176,7 @@ export default function Welcome() {
                 <div className="space-y-1">
                   {cat.features.map((f) => (
                     <div key={f} className="flex items-center gap-2 text-xs text-[#1A1A1A]/70">
-                      <Sparkles className="w-3 h-3 text-[#8A7556] flex-shrink-0" />
+                      <Sparkles className="w-3 h-3 text-[#1A1A1A]/70 flex-shrink-0" />
                       <span>{f}</span>
                     </div>
                   ))}

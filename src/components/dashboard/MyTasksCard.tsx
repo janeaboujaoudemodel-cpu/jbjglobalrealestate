@@ -340,7 +340,7 @@ export default function MyTasksCard() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-8">
-            <ListChecks className="w-8 h-8 text-[#8A7556] mx-auto mb-2" />
+            <ListChecks className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
             <p className="text-xs text-muted-foreground">
               {filter === "all" ? "No tasks yet. Click + to add one." : filter === "completed" ? "No completed tasks yet." : "No pending tasks."}
             </p>
@@ -418,9 +418,9 @@ export default function MyTasksCard() {
                         </span>
                       )}
                       {/* Indicator icons for contact/url/attachments */}
-                      {task.client_contact && <Phone className="w-3 h-3 text-[#8A7556]" />}
-                      {task.reference_url && <Link2 className="w-3 h-3 text-[#8A7556]" />}
-                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-[#8A7556]" />}
+                      {task.client_contact && <Phone className="w-3 h-3 text-[#1A1A1A]/70" />}
+                      {task.reference_url && <Link2 className="w-3 h-3 text-[#1A1A1A]/70" />}
+                      {task.attachments && Array.isArray(task.attachments) && task.attachments.length > 0 && <Paperclip className="w-3 h-3 text-[#1A1A1A]/70" />}
                     </div>
                   </div>
 

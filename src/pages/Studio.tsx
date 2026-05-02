@@ -375,7 +375,7 @@ export default function Studio() {
           ) : filteredProjects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl bg-[#FDFBF7]/40 border border-gold/20">
               <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center bg-gold/10 border border-gold/25">
-                <FolderOpen className="w-8 h-8 text-[#8A7556]" />
+                <FolderOpen className="w-8 h-8 text-[#1A1A1A]/70" />
               </div>
               <h3 className="text-lg font-bold text-[#1A1A1A] mb-1">No projects yet</h3>
               <p className="mb-5 text-sm max-w-xs text-[#1A1A1A]/70">

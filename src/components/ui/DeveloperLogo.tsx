@@ -49,7 +49,7 @@ export function DeveloperLogo({
         )}
         aria-label={`${alt} (logo unavailable)`}
       >
-        <Building2 className="w-6 h-6 text-[#8A7556]" />
+        <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
       </div>
     );
   }

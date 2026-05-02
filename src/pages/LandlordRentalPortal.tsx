@@ -367,7 +367,7 @@ export default function LandlordRentalPortal() {
                 ) : listings.length === 0 ? (
                   <Card className="bg-[#FDFBF7]/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                     <CardContent className="py-12 text-center">
-                      <Home className="h-16 w-16 text-[#8A7556] mx-auto mb-4" />
+                      <Home className="h-16 w-16 text-[#1A1A1A]/70 mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                         No Listings Yet
                       </h3>

@@ -1,112 +1,90 @@
-## Why things look invisible
+# Finish Contrast Fix + Visual Audit
 
-The buttons "View Tasks" / "Later" and the close (✕) icon next to **Pending Tasks** are not rendered with `text-gold/XX` (which the existing CI guard catches). They use the **muddy gold‑tone hex `#5A4A2E` and `#3A2D1D`** for "secondary" text. On the `#FDFBF7` champagne page these tones contrast at ~3.0–3.7:1 — below WCAG AA for body text — so on most monitors they read as "blank champagne on champagne".
+## Why this is needed
 
-A repo‑wide scan finds **525 source files** using `text-[#5A4A2E]` or `text-[#3A2D1D]`, including:
+The previous sweep replaced `text-[#5A4A2E]` and `text-[#3A2D1D]`, but missed the **third banned hex `#8A7556`** which is still used as a text/icon color in **124 places across 71 files**. The CI guard `check-faded-gold.mjs` confirms these violations.
 
-- `UserTasksPopupAlert.tsx` and `OwnerTasksPopupAlert.tsx` (the exact dialogs the user screenshotted)
-- The global `Button` "tertiary" variant (idle text is `#5A4A2E`)
-- 100+ pages: `OwnerDashboardOverview`, `ListingAdmin`, `News`, `Terms`, `LandlordGuide`, `SellWithUs`, etc.
-- High‑traffic widgets: `SupportTicketBox`, `CRMCommunicationPanel`, `BrokerSubscriptionsDashboard`, `FoundersEscalationsPanel`, `ReellyImportPanel`, etc.
+Visual evidence (Owner Inbox screenshot just captured) shows the impact:
+- **Pending Tasks popup**: ✕ icon, "View Tasks" label, "Later" label all invisible
+- **Inbox header**: "Connect Channel" text invisible, "Refresh" icon faint
+- **5 KPI tiles**: Numbers and icons barely legible (same-tone)
+- **Tabs row**: WhatsApp / Website / Voice icons invisible
+- **Sidebar**: Section headers (CORE, PROPERTIES, COMMUNICATION) and nav labels invisible
+- **Empty states**: Chat bubble + checkmark icons faint
 
-The fix is mechanical and safe: those tones are always used as *secondary* text on champagne; the canonical replacement under our existing memory rules is `text-[#1A1A1A]/70` (ink at 70 % alpha — the "secondary copy floor" already mandated by the **Faded Gold Prohibition** and **Global Contrast Enforcement** memories).
+These are not isolated to one screen — the same pattern repeats across CRM, Studio, Welcome, Compare, Ticket Hub, E-Signature, Listing Portal, etc.
 
-## Scope
+## What I'll do
 
-### 1. Targeted dialog fixes (the exact screenshot)
+### 1. Final muddy-gold sweep (124 occurrences, 71 files)
 
-`src/components/notifications/UserTasksPopupAlert.tsx` and `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`:
+Run a targeted codemod replacing `text-[#8A7556]` with the proper accessible token, scoped by usage:
 
-- Close ✕ → ink at /60 hover /100 (currently faded gold)
-- Subtitle "Daily action items require attention" → ink/70
-- Ticket‑update message body → ink/70
-- Ensure both buttons render through canonical `Button` variants and inherit the new tokens.
+| Usage context | Replacement |
+|---|---|
+| Body text / labels / numbers / placeholders | `text-[#1A1A1A]/70` |
+| Decorative icons on champagne | `text-[#1A1A1A]/60` |
+| Brand wordmarks / large display "JBJ GLOBAL" / quote marks | `text-gold` (real `#B89555`) |
+| Conditional hover states (`dragActive ? text-gold : text-[#8A7556]`) | inactive → `text-[#1A1A1A]/50` |
 
-### 2. Sitewide muddy‑tone sweep
+Files affected (top 15): `pages/CRMRelationships.tsx`, `pages/Compare.tsx`, `pages/Studio.tsx`, `pages/TicketHub.tsx`, `pages/Welcome.tsx`, `pages/OwnerInbox.tsx`, `pages/AcademyGraduates.tsx`, `pages/LandlordRentalPortal.tsx`, `pages/ListingPortalSubmit.tsx`, `pages/owner/GlobalRecommendationsHub.tsx`, `pages/e-signature/ESignatureDashboard.tsx`, `pages/toolkit/ImageResize.tsx`, `pages/toolkit/VideoResizePack.tsx`, `components/CEOLeadershipShowcase.tsx`, `components/BrandIntroSplash.tsx`, `components/video-meet/*` — plus 56 others.
 
-Two automated string replacements across **all of `src/`** (hex codes only, never substrings of class names that could mean something else — the codebase only uses these inside `text-[#…]`):
+Master-lock config (`src/config/master-lock.ts` line 408 + 425) and market-intelligence engine (line 401) currently treat `#8A7556` as their "muted text" floor. I'll bump those constants to `text-[#1A1A1A]/70` so the floor itself is accessible.
 
-```text
-text-[#5A4A2E]   →   text-[#1A1A1A]/70
-text-[#3A2D1D]   →   text-[#1A1A1A]/70
+### 2. Owner Inbox specific fixes
 
-placeholder:text-[#5A4A2E]   →   placeholder:text-[#1A1A1A]/70
-hover:text-[#5A4A2E]         →   hover:text-[#1A1A1A]
-```
+The screenshot shows additional issues beyond muddy-gold:
+- **Pending Tasks popup buttons**: confirm `BRAND_TERTIARY` / "Later" variant renders visible label (likely a separate variant regression)
+- **Sidebar section headers and nav labels**: probable `text-foreground/40` or similar opacity issue — bump to `/70` minimum
+- **KPI tile numbers**: bold text needs solid `text-[#1A1A1A]` not faded
+- **Tab icons** in `<Tabs>`: ensure `text-[#1A1A1A]/70` default
 
-Border / background occurrences of these hex codes (rare, ~10 hits) are left alone — they're decorative gold‑tone surfaces, not text contrast bugs.
+I'll inspect `OwnerSidebarNav.tsx`, `OwnerDashboard*` KPI cards, and `UserTasksPopupAlert.tsx` button rendering, and patch concrete violations.
 
-### 3. Global `Button` tertiary variant
+### 3. CI guard verification
 
-`src/components/ui/button.tsx`:
+Re-run all three guards to prove zero regressions:
+- `scripts/contrast/check-faded-gold.mjs` → must report 0
+- `scripts/contrast/check-white-on-light.mjs` → must report 0
+- `scripts/contrast/check-low-opacity-text.mjs` → must report 0
 
-```text
-BRAND_TERTIARY: text-[#5A4A2E]   →   text-[#1A1A1A]/75
-```
+### 4. Visual audit with before/after screenshots
 
-Hover state already escalates to `text-[#1A1A1A]` so no change needed there.
+Capture screenshots of these representative surfaces **after** the fix:
 
-### 4. Harden the CI contrast guard
+| # | Route | What I'm verifying |
+|---|---|---|
+| 1 | `/` (home) | Header, sidebar, filter bar, hero CTAs |
+| 2 | `/owner/inbox` | Pending Tasks popup, KPI tiles, sidebar, tabs (the failing screen) |
+| 3 | `/crm` | Tables, status badges, action icons |
+| 4 | `/crm/relationships` | Search inputs, contact cards, "Company:" / "Office:" labels (heavy `#8A7556` user) |
+| 5 | `/owner/dashboard` | Founder dashboard cards, "Pending Tasks" icon |
+| 6 | `/studio` | Folder icons, empty states |
+| 7 | `/welcome` | Sparkles, sub-text |
+| 8 | `/compare` | Comparison sub-labels |
+| 9 | `/listing-portal/submit` | Upload widgets |
+| 10 | `/owner/global-recommendations` | CheckCircle icons |
 
-Extend `scripts/contrast/check-faded-gold.mjs` to also flag the muddy hex tones we just removed, so the bug can never silently come back:
+Each screenshot will be paired with the **before** version (already captured for Owner Inbox; will capture before-state for the rest by running the build first, screenshotting, then applying the fix).
 
-```js
-// Banned faded gold-tone hex codes used as text colour
-const BANNED_HEX = /\btext-\[#(5A4A2E|3A2D1D|6B5A3E|7A6747)\]/gi;
-```
+### 5. Deliverable: audit report
 
-…with an empty allowlist (`scripts/contrast/faded-gold-allowlist.json` continues to handle existing exceptions). Wired into the same `node scripts/contrast/check-faded-gold.mjs` invocation that runs in CI today.
+A single markdown file `mnt/documents/contrast-audit-final-2026-05-02.md` containing:
+- Sweep summary (files touched, occurrences replaced, hex → token map)
+- All 10 before/after screenshot pairs embedded
+- CI guard pass evidence (script outputs)
+- Remaining known limitations (e.g., decorative borders/backgrounds with `#8A7556` are kept — only text usage is forbidden)
+- Updated `mem://constraints/faded-gold-prohibition` confirming `#8A7556` is now fully purged from text usage
 
-### 5. Memory update
+## Acceptance criteria
 
-Append a new line to `mem://constraints/faded-gold-prohibition` documenting that the muddy hex equivalents (`#5A4A2E`, `#3A2D1D`) are now banned as text colours and that the CI guard enforces them. Update `mem://index.md` description accordingly.
+- `rg "text-\[#(5A4A2E|3A2D1D|6B5A3E|7A6747|8A7556)\]" src/` returns **0**
+- All 3 contrast CI guards exit 0
+- The Owner Inbox screenshot at `/owner/inbox` shows visible: ✕ button, "View Tasks" / "Later" labels, "Connect Channel" / "Refresh", all 5 KPI tiles, all 6 tabs, all sidebar labels
+- Audit markdown delivered at `/mnt/documents/contrast-audit-final-2026-05-02.md` with 10 before/after screenshot pairs
 
-### 6. Audit deliverables (what the user explicitly asked for)
+## Out of scope
 
-1. **Browser screenshots — before**: Sign in to the preview, trigger the Pending Tasks dialog, capture (saved to `/mnt/documents/audit/before-pending-tasks.png`).
-2. **Apply the fixes** in steps 1–4.
-3. **Browser screenshots — after**: Same dialog, plus 2 sample pages most affected by the sweep (`/owner` overview and `/news` or `/terms`).
-4. **Markdown audit report** at `/mnt/documents/audit/contrast-audit-2026-05-02.md` containing:
-   - Root‑cause explanation
-   - Full checklist of every file touched (deduplicated, grouped by area)
-   - Token mapping table (before → after, with measured contrast ratios)
-   - List of the 4 dialog‑specific fixes
-   - CI guard diff and how to reproduce
-   - "Not changed" list (decorative borders/backgrounds using the same hex)
-
-Both screenshots and the report are surfaced via `<lov-artifact>` tags at the end of the response.
-
-## Files changed
-
-```text
-Edited (mechanical sweep, ~525 files):
-  src/**/*.{ts,tsx}                  — hex-tone → ink/70 replacements
-
-Edited (targeted):
-  src/components/notifications/UserTasksPopupAlert.tsx
-  src/components/owner-dashboard/OwnerTasksPopupAlert.tsx
-  src/components/ui/button.tsx       — tertiary variant tightened
-
-Edited (CI guard):
-  scripts/contrast/check-faded-gold.mjs
-
-Edited (memory):
-  mem://constraints/faded-gold-prohibition
-  mem://index.md
-
-Created (deliverables):
-  /mnt/documents/audit/contrast-audit-2026-05-02.md
-  /mnt/documents/audit/before-pending-tasks.png
-  /mnt/documents/audit/after-pending-tasks.png
-  /mnt/documents/audit/after-owner-overview.png
-  /mnt/documents/audit/after-news-page.png
-```
-
-## Risk & verification
-
-- **No structural / behavioural changes** — only colour tokens swapped.
-- After the sweep we re‑run `node scripts/contrast/check-faded-gold.mjs`, `check-white-on-light.mjs`, and `check-low-opacity-text.mjs`. Expectation: all green.
-- The 525‑file sweep is pure string replace on a unique pattern (`text-[#5A4A2E]` and `text-[#3A2D1D]` never appear inside other identifiers), so collateral damage is zero.
-- Existing `Button` callers using `variant="tertiary"` keep working — only the resting text colour changes from muddy gold to ink/75.
-
-Approve to execute.
+- Decorative `#8A7556` used as `border-` or `bg-` (allowed by guard for non-text)
+- Dark surfaces (rules differ; covered by white-on-light guard which already passes)
+- New design tokens — using the existing approved palette only
