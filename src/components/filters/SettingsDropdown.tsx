@@ -73,7 +73,7 @@ export function SettingsDropdown({
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/50"
+            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
           )}>
             Measure Unit
           </h4>
@@ -104,7 +104,7 @@ export function SettingsDropdown({
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/50"
+            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
           )}>
             Currency
           </h4>
@@ -136,7 +136,7 @@ export function SettingsDropdown({
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/50"
+            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
           )}>
             Display Mode
           </h4>
@@ -175,7 +175,7 @@ export function SettingsDropdown({
                   </div>
                   <div className={cn(
                     "text-xs",
-                    isDark ? "text-[#5A4A2E]" : "text-[#1A1A1A]/60"
+                    isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/60"
                   )}>
                     {mode.description}
                   </div>
