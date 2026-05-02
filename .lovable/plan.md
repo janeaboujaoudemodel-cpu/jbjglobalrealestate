@@ -1,65 +1,59 @@
 ## Goal
 
-Update the three category cards ("I'm an Investor / Broker / Developer") on the home page so the icon tile matches the champagne sidebar tone, with a clean black/gold invert on hover.
+Add premium vertical dividers between the three hero pillar cards on the home page: **Premium Marketplace**, **AI-Powered Tools**, and **Brokerage Services**.
 
 ## Scope
 
-Single file: `src/components/home/CategorySelectorSection.tsx` (lines ~99–110, the icon tile `div` and its `<Icon />`).
+Single file: `src/pages/Index.tsx` (lines 250–277, the `pillars.map()` grid inside the merged hero).
 
-Nothing else changes — card body, text, bullets, "Continue" row, and the locked homepage marquee all stay exactly as they are.
+No other section is touched — homepage marquee, CTAs, video background, and other cards stay exactly as they are.
 
-## Visual spec
+## Current state
 
-**Default state**
-- Icon tile background: champagne (`#F7F2EA`) — same tone as the vertical sidebar surface
-- Tile border: subtle gold hairline (`#B89555` at ~40% opacity), no heavy gradient/shadow
-- Icon color: solid black (`#1A1A1A`), strokeWidth 2.25, no white drop-shadow
+The three pillar cards sit in a `grid grid-cols-3 gap-px` with a gold border around the whole strip. The `gap-px` creates a 1px black seam between cards but reads as touching/edge-to-edge — there is no visible divider.
 
-**Hover state** (whole card already lifts via `whileHover={{ y: -4 }}` — keep that, plus invert the tile)
-- Tile background: ink black (`#1A1A1A`)
-- Tile border: gold (`#B89555`)
-- Icon color: gold (`#B89555`)
-- Smooth color transition (~200ms)
+## Change
 
-This gives the "floating + invert" effect the user described, picking option B (black fill, gold icon on hover) layered on top of the existing card lift.
+Replace the seam with a true **premium divider** between each pair of cards:
 
-## Technical change
+- **Hairline:** vertical 1px line using a gold gradient (transparent → gold 85% → transparent) so the line fades out at the top and bottom edges instead of butting into the card border.
+- **Center diamond:** a small 6×6 gold square rotated 45° at the vertical midpoint with a soft gold glow — a recognisable "premium / editorial" divider mark consistent with the champagne-gold standard.
+- **Placement:** rendered as an absolutely-positioned element on the **left edge** of cards 2 and 3 only (`idx > 0`), inset 12px top and bottom so it never touches the outer gold frame.
+- Remove the `gap-px` so the cards sit flush and the divider is the only visual separator. Keep the outer `border border-gold/40`, rounded corners, and shadow unchanged.
 
-Replace the current tile markup:
+Colors used: `#B89555` (gold token) at varying alphas, on the existing `#0A0A0A` card surface — fully on-palette, no new tokens.
+
+## Technical detail
 
 ```text
-<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] ... shadow-[...]">
-  <Icon style={{ color: "#FFFFFF", filter: "drop-shadow(...)" }} />
-</div>
+{pillars.map((pillar, idx) => (
+  <div className="relative bg-[#0A0A0A] p-4 sm:p-5 text-center">
+    {idx > 0 && (
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-3 bottom-3 w-px"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(184,149,85,0.85) 50%, transparent)" }}
+      >
+        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 block w-1.5 h-1.5 rotate-45 bg-gold shadow-[0_0_6px_rgba(184,149,85,0.8)]" />
+      </div>
+    )}
+    {/* existing icon, title, desc unchanged */}
+  </div>
+))}
 ```
 
-With a champagne-filled tile that inverts on group-hover:
-
-```text
-<div class="w-12 h-12 rounded-xl bg-[#F7F2EA] border border-[#B89555]/40
-            flex items-center justify-center flex-shrink-0
-            transition-colors duration-200
-            group-hover:bg-[#1A1A1A] group-hover:border-[#B89555]">
-  <Icon class="w-6 h-6 text-[#1A1A1A] group-hover:text-[#B89555] transition-colors duration-200"
-        strokeWidth={2.25} />
-</div>
-```
-
-Notes:
-- The parent `<motion.button>` already has `className="group ..."`, so `group-hover:` works without further changes.
-- Drop the inline `style={{ color, filter }}` on the icon so Tailwind `text-*` classes drive the color cleanly.
-- Keep `flex-shrink-0`, sizing, and rounded corners identical so layout doesn't shift.
+Grid container className change: `grid grid-cols-3 gap-px ...` → `grid grid-cols-3 ...` (drop `gap-px`, add `bg-[#0A0A0A]` on the wrapper so no seam shows through).
 
 ## Out of scope / locked
 
-- Homepage hero marquee and `DeveloperPartnersMarquee` — untouched.
-- Project listing cards, developer logos, payment-plan badges — untouched.
-- Tagline text, bullets, "Continue" arrow row — untouched.
-- No global token changes; this is a local restyle of one component.
+- Pillar icons, titles, descriptions, and order — unchanged.
+- Outer gold border, rounded corners, drop shadow — unchanged.
+- Mobile responsiveness — unchanged (still `grid-cols-3` on all breakpoints, matching current behavior).
+- Homepage marquee, CTA pills, video hero — untouched.
 
 ## Verification
 
-After implementing, visually confirm on `/`:
-1. Default: tile reads as champagne with a black icon, matching the sidebar tone.
-2. Hover: card lifts, tile flips to black, icon flips to gold, transition is smooth.
-3. Focus ring (`focus-visible:ring-[#B89555]`) still visible for keyboard users.
+After implementing, on `/` confirm:
+1. Three pillar cards now show a faint gold hairline + small gold diamond between each pair.
+2. Dividers do not appear before card 1 or after card 3.
+3. Card text and icons render exactly as before; layout/height unchanged.
