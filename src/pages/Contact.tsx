@@ -445,7 +445,7 @@ END:VCARD`;
                             
                             return (
                               <FormItem>
-                                <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Phone Number *</FormLabel>
+                                <FormLabel className="text-[#1A1A1A] text-sm font-semibold">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
                                     <PhoneInput
