@@ -198,6 +198,40 @@ Deno.serve(async (req) => {
       if (detail.roi_estimate != null) { updateData.roi_estimate = detail.roi_estimate; dataPopulated = true; }
       if (detail.rental_yield_estimate != null) { updateData.roi_estimate = detail.rental_yield_estimate; dataPopulated = true; }
 
+      // Real handover/completion from Reelly — normalize to "Q# YYYY" / "YYYY" / "Ready"
+      {
+        const rawHandover =
+          (detail as any).completion_datetime ||
+          (detail as any).completion_date ||
+          (detail as any).construction_end_date ||
+          null;
+        if (rawHandover) {
+          let s = String(rawHandover).trim();
+          // ISO date "2027-06-30T..." → quarter
+          const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+          let normalized: string | null = null;
+          if (iso) {
+            const y = parseInt(iso[1], 10);
+            const m = parseInt(iso[2], 10);
+            const q = Math.ceil(m / 3);
+            normalized = `Q${q} ${y}`;
+          } else {
+            const q = s.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+            if (q) normalized = `Q${q[1]} ${q[2]}`;
+            else if (/^(ready|completed|handed.?over)$/i.test(s)) normalized = "Ready";
+            else {
+              const yr = s.match(/(20\d{2})/);
+              if (yr) normalized = yr[1];
+            }
+          }
+          if (normalized && /^(Q[1-4] 20\d{2}|20\d{2}|Ready)$/.test(normalized)) {
+            updateData.handover_date = normalized;
+            updateData.expected_completion = normalized;
+            dataPopulated = true;
+          }
+        }
+      }
+
       // Only set detail_fetched_at if we ACTUALLY got data
       if (dataPopulated) {
         updateData.detail_fetched_at = new Date().toISOString();
