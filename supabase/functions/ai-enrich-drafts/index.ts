@@ -109,6 +109,37 @@ IMPORTANT: Only return the JSON array, nothing else. Be accurate - these are rea
       if (!project.handover_date && enrichment.handover_date) {
         updates.handover_date = enrichment.handover_date;
         updates.expected_completion = enrichment.handover_date;
+      } else if (!project.handover_date) {
+        // Regex fallback: scrape Q# YYYY or earliest future year from text
+        // already on the row (no external fetch) so cards stop showing "TBA".
+        const haystack: string[] = [
+          (project as any).description,
+          (project as any).payment_breakdown,
+          (project as any).payment_plan,
+          (project as any).status_label,
+          project.construction_status,
+        ]
+          .filter(Boolean)
+          .map((v: any) => (typeof v === "string" ? v : JSON.stringify(v)));
+        let scraped: string | null = null;
+        for (const h of haystack) {
+          const q = h.match(/Q\s?([1-4])\s*[\/\-\s]?\s*(20\d{2})/i);
+          if (q) { scraped = `Q${q[1]} ${q[2]}`; break; }
+        }
+        if (!scraped) {
+          const thisYear = new Date().getFullYear();
+          for (const h of haystack) {
+            const yrs = h.match(/(20\d{2})/g);
+            if (yrs) {
+              const future = yrs.map(Number).filter((n: number) => n >= thisYear).sort((a: number, b: number) => a - b)[0];
+              if (future) { scraped = String(future); break; }
+            }
+          }
+        }
+        if (scraped) {
+          updates.handover_date = scraped;
+          updates.expected_completion = scraped;
+        }
       }
       if (project.bedrooms_min === null && enrichment.bedrooms_min !== null && enrichment.bedrooms_min !== undefined) {
         updates.bedrooms_min = enrichment.bedrooms_min;
