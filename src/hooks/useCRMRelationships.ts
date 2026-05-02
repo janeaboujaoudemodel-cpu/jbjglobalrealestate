@@ -273,13 +273,26 @@ export const useUpsertDeveloperRegistry = () => {
  * via master catalog → Perplexity → Firecrawl → AI inference, and records the source
  * for each filled field in `field_sources`.
  */
+// Wrap an edge-function invoke with a hard client-side timeout so spinners
+// never run forever when the function hangs / network stalls.
+async function invokeWithTimeout<T = any>(name: string, body: any, ms = 90_000): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`${name} timed out after ${Math.round(ms / 1000)}s — try a smaller batch or retry.`)), ms),
+  );
+  const call = supabase.functions.invoke(name, { body }).then(({ data, error }) => {
+    if (error) throw error;
+    if ((data as any)?.error) throw new Error((data as any).error);
+    return data as T;
+  });
+  return await Promise.race([call, timeout]);
+}
+
 export const useEnrichDeveloperRegistry = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { ids?: string[]; useWeb?: boolean; batchSize?: number } = {}) => {
-      const { data, error } = await supabase.functions.invoke("enrich-developer-registry", {
-        body: input,
-      });
+      const data = await invokeWithTimeout<any>("enrich-developer-registry", input);
+      const error = null as any;
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       return data as { processed: number; results: Array<{ id: string; name: string; filled?: string[]; error?: string }>; message?: string };
