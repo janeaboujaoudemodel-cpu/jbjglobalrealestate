@@ -484,7 +484,7 @@ export const AdminOverviewDashboard = () => {
                       {stats.pendingApprovals} Pending Approval{stats.pendingApprovals > 1 ? "s" : ""}
                     </p>
                     <p className="text-sm text-amber-600">
-                      New project imports require your review
+                      New project imports and listings awaiting media verification require your review
                     </p>
                   </div>
                 </div>
