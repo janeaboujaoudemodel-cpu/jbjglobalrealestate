@@ -527,12 +527,13 @@ const BrokeragesTab = () => {
                     </div>
 
                     {/* KPI strip — readable champagne palette, never white-on-white */}
-                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-6 gap-2">
                       {[
+                        { label: "Rating", value: r.star_rating ? `★ ${Number(r.star_rating).toFixed(1)}` : "—" },
+                        { label: "Agents", value: r.estimated_agent_count ? `~${r.estimated_agent_count}` : "—" },
                         { label: "Brokers", value: r.active_broker_count || 0 },
                         { label: "Inquiries", value: r.inquiry_count || 0 },
                         { label: "Deals", value: r.deal_count_cached || r.deal_count || 0 },
-                        { label: "Total (AED)", value: Number(r.total_deal_value_cached || 0).toLocaleString() },
                         { label: "Last Deal", value: r.last_deal_at ? new Date(r.last_deal_at).toLocaleDateString() : "—" },
                       ].map((k) => (
                         <div key={k.label} className="rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 px-2 py-1.5">
@@ -541,6 +542,24 @@ const BrokeragesTab = () => {
                         </div>
                       ))}
                     </div>
+
+                    {r.ai_next_action && (
+                      <div className="mt-2 p-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded text-xs">
+                        <Sparkles className="w-3 h-3 inline mr-1 text-[#B89555]" />
+                        <span className="font-medium text-[#1A1A1A]">{r.ai_next_action}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 items-start">
+                    <LeadAIStar entityType="brokerage" entityId={r.id} entityName={r.company_name} />
+                    <Button
+                      size="sm"
+                      variant="gold"
+                      onClick={() => { setBulkSel(new Set([r.id])); setBulkOpen(true); }}
+                      title="Preview & send outreach to this brokerage (test send to me first)"
+                    >
+                      <Send className="w-3 h-3 mr-1" />Message
+                    </Button>
 
                     {r.ai_next_action && (
                       <div className="mt-2 p-2 bg-[#F7F2EA] border border-[#B89555]/40 rounded text-xs">
