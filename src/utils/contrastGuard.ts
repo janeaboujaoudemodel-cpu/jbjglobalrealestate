@@ -59,7 +59,9 @@ function fixIfLowContrast(el: HTMLElement, minRatio: number) {
   const cs = window.getComputedStyle(el);
   if (cs.visibility === "hidden" || cs.display === "none" || cs.opacity === "0") return;
   const fg = parseRgb(cs.color);
-  const bg = parseRgb(effectiveBgColor(el));
+  const bgStr = effectiveBgColor(el);
+  if (bgStr === "__unknown__") return; // unknown gradient/image surface — leave authored color alone
+  const bg = parseRgb(bgStr);
   if (!fg || !bg) return;
   const lf = relLuminance(fg);
   const lb = relLuminance(bg);
