@@ -169,14 +169,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                 onClick={() => handleNavClick(item.path)}
                 data-no-contrast-guard
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border",
-                  item.premium
-                    ? isActivePath(item.path)
-                      ? "bg-gradient-to-r from-[#B89555] to-[#A68444] !text-[#1A1A1A] border-[#B89555] shadow-[0_2px_14px_rgba(184,149,85,0.5)] font-semibold"
-                      : "bg-[#F7F2EA] !text-[#1A1A1A] border-[#B89555]/40 hover:!bg-gradient-to-r hover:from-[#B89555]/30 hover:to-[#B89555]/15 hover:border-[#B89555] hover:!text-[#1A1A1A]"
-                    : isActivePath(item.path)
-                      ? "bg-gradient-to-r from-[#B89555] to-[#A68444] !text-[#1A1A1A] border-[#B89555] shadow-[0_2px_10px_rgba(184,149,85,0.4)] font-semibold"
-                      : "!text-[#1A1A1A] border-transparent hover:!bg-gradient-to-r hover:from-[#B89555]/22 hover:to-[#B89555]/10 hover:border-[#B89555]/45 hover:!text-[#1A1A1A]"
+                  "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 border-l-2 border-y border-r relative",
+                  isActivePath(item.path)
+                    ? "bg-[#EFE6D6] !text-[#1A1A1A] border-l-[#B89555] border-y-[#B89555]/30 border-r-[#B89555]/30 font-semibold"
+                    : "bg-transparent !text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60 hover:border-l-[#B89555]/60 hover:!text-[#1A1A1A]",
+                  item.premium && !isActivePath(item.path) && "bg-[#F7F2EA]/70 border-l-[#B89555]/40"
                 )}
                 title={collapsed ? item.label : undefined}
               >
