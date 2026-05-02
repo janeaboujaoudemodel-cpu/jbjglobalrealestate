@@ -526,18 +526,18 @@ const Footer = () => {
               </div>
             </Link>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#FDFBF7]/[0.03] border border-[hsl(var(--gold))]/30">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3 md:gap-3 px-3 py-2 rounded-xl bg-[#F7F2EA] border border-[hsl(var(--gold))]/40 shadow-[0_4px_18px_rgba(0,0,0,0.25)]">
               <div className="flex items-center gap-2.5">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-white/90">Connect</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-semibold">Connect</span>
                 <SocialLinks variant="premium" className="gap-2" />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#FDFBF7]/10" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
               <GoogleMyBusinessLink />
-              <span className="hidden md:inline-block w-px h-5 bg-[#FDFBF7]/10" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
               {/* Mode switcher opens upward inside the footer so it never
                   overlays the page header above. */}
               <ModeSwitcher variant="header" showForUnselected={true} side="top" />
-              <span className="hidden md:inline-block w-px h-5 bg-[#FDFBF7]/10" aria-hidden="true" />
+              <span className="hidden md:inline-block w-px h-5 bg-[#B89555]/40" aria-hidden="true" />
               <FooterCurrencyUnit />
             </div>
           </div>
