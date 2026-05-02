@@ -1241,7 +1241,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
       <div className="mt-auto flex-shrink-0">
-        <div className="h-[1px] my-2 bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10" />
+        <div className="h-[2px] my-3 bg-gradient-to-r from-transparent via-[#B89555] to-transparent shadow-[0_1px_0_rgba(184,149,85,0.35)]" />
         <div className="px-2 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
           <div className="flex gap-1.5 mb-1.5">
             <Link
