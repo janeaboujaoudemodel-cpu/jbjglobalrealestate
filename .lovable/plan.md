@@ -1,23 +1,3 @@
-# Rewrite the recreation prompt in `.lovable/plan.md`
-
-Replace the current contents of `.lovable/plan.md` (the old "Fix Pending Tasks popup" notes) with a single, self-contained **Master Recreation Prompt** the user can paste into a fresh Lovable project to recreate the Relationships + Revenue + Bulk Email system.
-
-The prompt will cover, end-to-end:
-
-1. **Two-sided Relationships Hub** — Developers section + Brokerages section, each with full CRUD, logos, filters, and Emirate segmentation.
-2. **Developer Registration Outbound Flow** — bulk email to every developer with my brokerage's company profile + KYC docs (Google Drive link pre-filled), so I become eligible to sell their projects and earn commission.
-3. **Brokerage Registration Inbound Flow (Citi Developers side)** — bulk email to every UAE brokerage inviting them to register and sell Citi Developers projects, including private events / breakfasts / launches.
-4. **Pre-seeded UAE Database** — every major developer and every major brokerage in UAE pre-populated with website, office address, Emirate, agent count, Instagram, key contacts.
-5. **Revenue & Commission Ledger** — per-developer and per-brokerage: closed deals, gross commission, paid amount, pending balance, aging.
-6. **Email Automation Engine** — segment by Emirate / type / activity, pre-filled merge fields, "Jane from Sales — on behalf of Citi Developers" sender persona, scheduling, deliverability log.
-
-## File to edit
-
-- `.lovable/plan.md` — overwrite entirely with the new prompt below. No other files change.
-
-## Content to write into `.lovable/plan.md`
-
-```markdown
 # Master Recreation Prompt — Brokerage ⇄ Developer Relationships, Revenue & Bulk Email Automation
 
 Paste the prompt below into a new Lovable project. It rebuilds the full
@@ -264,6 +244,3 @@ the relevant counterparty is in scope.
 - No table is empty on first load; no mock/placeholder rows
 
 ## PROMPT END
-```
-
-After the file is written, that's the entire change — no code edits elsewhere.
