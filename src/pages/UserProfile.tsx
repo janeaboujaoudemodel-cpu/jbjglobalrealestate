@@ -727,7 +727,7 @@ const UserProfile = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-destructive">Delete Account</p>
+                        <p className="font-semibold tracking-tight text-[#9B1C1C]">Delete Account</p>
                         <p className="text-sm text-destructive/80">Permanently remove your account after 30 days</p>
                       </div>
                       <Button
