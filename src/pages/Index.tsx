@@ -234,14 +234,40 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/85 text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#EFE6D6] hover:border-[#B89555] hover:text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-all duration-300 min-h-[76px]"
-                  style={{ textShadow: '0 1px 4px rgba(0,0,0,0.85)' }}
+                  data-no-contrast-guard
+                  className="jj-hero-glass-card group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/30 hover:border-[#B89555] text-[11px] sm:text-xs font-semibold tracking-tight transition-all duration-300 min-h-[76px]"
+                  style={{
+                    background: 'rgba(20,20,20,0.45)',
+                    backdropFilter: 'blur(14px) saturate(140%)',
+                    WebkitBackdropFilter: 'blur(14px) saturate(140%)',
+                    color: '#FDFBF7',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.85)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 24px rgba(0,0,0,0.35)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(30,30,30,0.65)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(20,20,20,0.45)';
+                  }}
                 >
                   <action.icon
-                    className="w-4 h-4 text-gold group-hover:!text-[#1A1A1A] flex-shrink-0 transition-colors duration-300"
-                    style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.7))" }}
+                    aria-hidden="true"
+                    className="w-5 h-5 flex-shrink-0 transition-colors duration-300"
+                    strokeWidth={2.25}
+                    style={{
+                      color: '#E9C97A',
+                      stroke: '#E9C97A',
+                      opacity: 1,
+                      filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.7))',
+                    }}
                   />
-                  <span className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2 group-hover:[text-shadow:none]">{action.label}</span>
+                  <span
+                    className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2"
+                    style={{ color: '#FDFBF7' }}
+                  >
+                    {action.label}
+                  </span>
                 </Link>
               ))}
             </motion.div>

@@ -4474,3 +4474,53 @@ nav a[data-active="true"] {
 [class*="text-gold"] {
   /* no-op: these stay gold by design (hairline accent) */
 }
+
+/* ============================================================
+   HOMEPAGE: Role-selector icon tile + Hero glass cards
+   Hardened against global contrast guards.
+   ============================================================ */
+.jj-role-icon-tile,
+.jj-role-icon-tile * {
+  /* Block guard inversion */
+}
+.group:hover > .jj-role-icon-tile,
+button:hover .jj-role-icon-tile,
+.group:hover .jj-role-icon-tile {
+  background-color: #1A1A1A !important;
+  border-color: #B89555 !important;
+}
+.group:hover .jj-role-icon,
+button:hover .jj-role-icon {
+  color: #FDFBF7 !important;
+  stroke: #FDFBF7 !important;
+  opacity: 1 !important;
+}
+
+/* Hero glass cards — keep glass on hover, never become solid white */
+.jj-hero-glass-card,
+.jj-hero-glass-card * {
+  color: #FDFBF7 !important;
+}
+.jj-hero-glass-card svg.lucide {
+  color: #E9C97A !important;
+  stroke: #E9C97A !important;
+  opacity: 1 !important;
+}
+.jj-hero-glass-card:hover {
+  border-color: #B89555 !important;
+}
+
+/* Role-card Continue must stay gold at rest and on hover */
+.group .jj-role-icon-tile ~ *,
+button:hover [data-no-contrast-guard] [style*="#B89555"],
+.group:hover [data-no-contrast-guard] svg,
+.group:hover [data-no-contrast-guard] span {
+  /* placeholder to anchor specificity */
+}
+button [data-no-contrast-guard] span[style*="#B89555"],
+button:hover [data-no-contrast-guard] span[style*="#B89555"],
+button [data-no-contrast-guard] svg[style*="#B89555"],
+button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
