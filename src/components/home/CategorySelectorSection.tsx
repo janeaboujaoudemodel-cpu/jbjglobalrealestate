@@ -106,7 +106,7 @@ export default function CategorySelectorSection() {
                     aria-hidden="true"
                   >
                     <Icon
-                      className="w-7 h-7 shrink-0 transition-none"
+                      className="w-7 h-7 shrink-0 !opacity-100 !text-[#1A1A1A] !stroke-[#1A1A1A] group-hover:!text-[#FDFBF7] group-hover:!stroke-[#FDFBF7] [--jj-icon-stroke:3] transition-none"
                       style={{
                         color: "var(--category-icon-color)",
                         stroke: "var(--category-icon-color)",
