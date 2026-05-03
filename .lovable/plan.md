@@ -1,48 +1,25 @@
-# Fix: Media Ingestion Hub PDF upload silently failing
+I verified the live homepage section and the issue is real: the icon tiles are rendering as nearly blank white boxes, the tagline text is pushed too far right and wraps awkwardly, and the bottom dividers/Continue rows are not aligned because the cards are not using a consistent internal flex layout.
 
-## Root cause (confirmed)
+Plan:
 
-The table `public.material_ingestion_jobs` has:
-- `source_url TEXT NOT NULL`
-- `source_type TEXT NOT NULL DEFAULT 'web'`
+1. Fix the actual homepage component
+- Update `src/components/home/CategorySelectorSection.tsx`, which renders the three cards: “I'm an Investor”, “I'm a Broker”, “I'm a Developer”.
+- Import and use the project-standard `<IconTile />` instead of the current hand-coded icon box, so normal-state contrast is guaranteed: cream tile, gold ring, ink icon.
+- Add a proper hover state on the tile: ink background + champagne/white icon, with a visible gold ring.
 
-But the upload flow in `useMediaIngestion.uploadFiles` inserts a row **without** `source_url` (uploads only have a file, not a URL). Every PDF "Choose Files" insert is rejected by the NOT NULL constraint, so no row ever reaches the queue. The DB confirms `material_ingestion_jobs` is currently empty even after upload attempts.
+2. Rebuild the card layout so everything aligns
+- Make every card `h-full flex flex-col`.
+- Make the card grid use `items-stretch` so all three cards have equal height in the row.
+- Change the top row from `justify-between` to a compact left-aligned header: icon tile + tagline immediately beside it.
+- Give the tagline a constrained, readable treatment (`leading-tight`, smaller tracking, `max-w`, no excessive gap) so “Buy, hold, and grow”, “Sell smarter, faster”, and “Launch with confidence” sit visually next to the icon instead of floating far away.
 
-Storage bucket `ingestion-staging`, MIME allowlist (includes `application/pdf`), 500 MB limit, and RLS policies for owner/admin/listing_admin are all fine — not the cause.
+3. Align dividers and Continue rows
+- Put the description + bullet list into a flex-growing middle content block.
+- Move the bottom divider/Continue row into `mt-auto`, so all dividers and Continue links line up at the same baseline across all cards.
+- Keep the bottom arrow visible and high contrast, without relying on low-contrast gold text.
 
-## Fix
-
-### 1. Migration — relax NOT NULL on source-side columns
-
-```sql
-ALTER TABLE public.material_ingestion_jobs
-  ALTER COLUMN source_url DROP NOT NULL;
-
--- Either source_url (link mode) or file_path (upload mode) must be present
-ALTER TABLE public.material_ingestion_jobs
-  ADD CONSTRAINT mij_source_or_file_required
-  CHECK (source_url IS NOT NULL OR file_path IS NOT NULL OR status = 'pending');
-```
-
-(Keep `source_type NOT NULL` — the hook already sets it to `"video"`, `"pdf"`, `"file"`, or `"link"`.)
-
-### 2. Hook hardening — `src/hooks/useMediaIngestion.ts`
-
-- Surface insert errors to the user with the actual Postgres message (currently the toast says "insert failed" with no detail for PDF specifically).
-- After upload, also re-trigger classify on rows whose `file_path` was just patched (no logic change, just confirm sequence).
-- Add a small guard: if `file.size > 500 * 1024 * 1024`, reject client-side with a clear toast before inserting.
-
-### 3. Verify end-to-end
-
-After migration + redeploy:
-1. Upload a PDF via "Choose files".
-2. Confirm a row appears in `material_ingestion_jobs` with `source_kind='upload'`, `source_type='pdf'`, `file_path` populated.
-3. Confirm `media-ingestion-classify` runs (check edge function logs).
-4. Confirm card renders in the Staging Queue tab.
-
-## Files touched
-
-- `supabase/migrations/<new>.sql` — drop NOT NULL on `source_url`, add presence check.
-- `src/hooks/useMediaIngestion.ts` — better error surfacing + size guard.
-
-No UI/layout changes; the centering and tab styling are already correct from the previous pass.
+4. Prove it with screenshots
+- After the implementation is approved and applied, I will load the homepage at the same desktop viewport.
+- I will scroll to “Tell us who you are”.
+- I will take a normal-state screenshot showing the fixed icon contrast, tagline spacing, and aligned Continue rows.
+- I will also hover one of the cards and take a hover-state screenshot to prove the hover contrast is fixed too.
