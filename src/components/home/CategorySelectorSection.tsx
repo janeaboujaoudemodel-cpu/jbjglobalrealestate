@@ -97,13 +97,23 @@ export default function CategorySelectorSection() {
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
                 className="group relative h-full flex flex-col text-left bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
+                style={{ color: "#1A1A1A" }}
               >
                 {/* Header: icon + tagline tightly aligned */}
                 <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#1A1A1A] group-hover:ring-[#1A1A1A]">
+                  <div
+                    className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#1A1A1A] group-hover:ring-[#B89555] [--category-icon-color:#1A1A1A] group-hover:[--category-icon-color:#FDFBF7]"
+                    aria-hidden="true"
+                  >
                     <Icon
-                      className="w-6 h-6 text-[#1A1A1A] group-hover:text-[#FDFBF7] transition-colors duration-200"
-                      strokeWidth={2.25}
+                      className="w-7 h-7 shrink-0 transition-none"
+                      style={{
+                        color: "var(--category-icon-color)",
+                        stroke: "var(--category-icon-color)",
+                        opacity: 1,
+                      }}
+                      strokeWidth={3}
+                      absoluteStrokeWidth
                     />
                   </div>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.14em] leading-tight text-[#1A1A1A]/80 group-hover:text-[#1A1A1A] transition-colors">
