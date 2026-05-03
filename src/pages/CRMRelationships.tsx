@@ -299,7 +299,16 @@ const BrokerageContactLinks = ({ r }: { r: any }) => {
       {phone && <a href={`tel:${phone.replace(/\s+/g, "")}`} className={link}><Phone className="w-3 h-3" />{phone}</a>}
       {wa && <a href={`https://wa.me/${wa.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener" className={link}><MessageCircle className="w-3 h-3" />WhatsApp</a>}
       {mapUrl && <a href={mapUrl} target="_blank" rel="noopener" className={link}><MapPin className="w-3 h-3" />{address || "Map"}</a>}
-      {website && <a href={website.startsWith("http") ? website : `https://${website}`} target="_blank" rel="noopener" className={link}><Globe2 className="w-3 h-3" />Website</a>}
+      {website && (() => {
+        const href = website.startsWith("http") ? website : `https://${website}`;
+        const display = website.replace(/^https?:\/\//i, "").replace(/\/$/, "");
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer" className={`${link} max-w-[240px]`}>
+            <Globe2 className="w-3 h-3 shrink-0" />
+            <span className="truncate">{display}</span>
+          </a>
+        );
+      })()}
       {ig && <a href={ig.startsWith("http") ? ig : `https://instagram.com/${ig.replace(/^@/, "")}`} target="_blank" rel="noopener" className={link}><Instagram className="w-3 h-3" />Instagram</a>}
     </div>
   );
