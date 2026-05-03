@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { X, AlertTriangle, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -82,10 +81,16 @@ export function OwnerTasksPopupAlert() {
           type="button"
           onClick={handleClose}
           aria-label="Close pending tasks alert"
-          style={{ color: "#1A1A1A" }}
-          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full bg-[#F7F2EA] border border-[#B89555]/40 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+          data-no-contrast-guard
+          style={{ backgroundColor: "#F7F2EA", color: "#1A1A1A" }}
+          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/40 hover:!bg-[#EFE6D6] hover:!border-[#B89555] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
-          <X className="w-5 h-5" style={{ color: "#1A1A1A" }} />
+          <X
+            className="w-5 h-5"
+            data-no-contrast-guard
+            strokeWidth={2.5}
+            style={{ color: "#1A1A1A", stroke: "#1A1A1A", opacity: 1 }}
+          />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
@@ -111,20 +116,30 @@ export function OwnerTasksPopupAlert() {
         </div>
 
         <div className="flex gap-3">
-          <Button
+          <button
+            type="button"
             onClick={handleViewTasks}
-            variant="primary"
-            className="flex-1 rounded-xl"
+            data-no-contrast-guard
+            style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF", borderColor: "#1A1A1A" }}
+            className="flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold hover:!bg-[#2A2A2A] hover:!border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
-            View Tasks <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-          <Button
-            variant="secondary"
+            <span data-no-contrast-guard style={{ color: "#FFFFFF" }}>View Tasks</span>
+            <ArrowRight
+              className="w-4 h-4"
+              data-no-contrast-guard
+              strokeWidth={2.5}
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
+            />
+          </button>
+          <button
+            type="button"
             onClick={handleClose}
-            className="rounded-xl"
+            data-no-contrast-guard
+            style={{ backgroundColor: "#F7F2EA", color: "#1A1A1A", borderColor: "rgba(184,149,85,0.4)" }}
+            className="inline-flex items-center justify-center h-10 px-6 rounded-xl border-2 text-sm font-semibold hover:!bg-[#EFE6D6] hover:!border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
-            Later
-          </Button>
+            <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>Later</span>
+          </button>
         </div>
       </div>
     </div>
