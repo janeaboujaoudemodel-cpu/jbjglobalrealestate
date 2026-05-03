@@ -120,6 +120,12 @@ export function useMediaIngestion() {
 
       for (const slice of chunk(files, MAX_BATCH)) {
         for (const file of slice) {
+          // Client-side size guard (500 MB bucket limit)
+          if (file.size > 500 * 1024 * 1024) {
+            toast.error(`${file.name}: file exceeds 500 MB limit`);
+            continue;
+          }
+
           // 1) Optimistic insert so the row appears in the queue immediately
           const sourceType = file.type?.startsWith("video/")
             ? "video"
@@ -140,7 +146,9 @@ export function useMediaIngestion() {
             .select("id")
             .single();
           if (insErr || !created?.id) {
-            toast.error(`Could not queue ${file.name}: ${insErr?.message ?? "insert failed"}`);
+            const detail = insErr?.message || insErr?.details || "insert failed";
+            console.error("[media-ingestion] insert failed", { file: file.name, error: insErr });
+            toast.error(`Could not queue ${file.name}: ${detail}`);
             continue;
           }
           const jobId = created.id;

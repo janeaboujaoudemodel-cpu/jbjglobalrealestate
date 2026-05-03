@@ -17500,7 +17500,7 @@ export type Database = {
           page_count: number | null
           source_kind: string | null
           source_type: string
-          source_url: string
+          source_url: string | null
           status: string
           user_id: string
         }
@@ -17535,7 +17535,7 @@ export type Database = {
           page_count?: number | null
           source_kind?: string | null
           source_type?: string
-          source_url: string
+          source_url?: string | null
           status?: string
           user_id: string
         }
@@ -17570,7 +17570,7 @@ export type Database = {
           page_count?: number | null
           source_kind?: string | null
           source_type?: string
-          source_url?: string
+          source_url?: string | null
           status?: string
           user_id?: string
         }
