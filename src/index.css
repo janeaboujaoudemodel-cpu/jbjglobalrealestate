@@ -4509,3 +4509,18 @@ button:hover .jj-role-icon {
 .jj-hero-glass-card:hover {
   border-color: #B89555 !important;
 }
+
+/* Role-card Continue must stay gold at rest and on hover */
+.group .jj-role-icon-tile ~ *,
+button:hover [data-no-contrast-guard] [style*="#B89555"],
+.group:hover [data-no-contrast-guard] svg,
+.group:hover [data-no-contrast-guard] span {
+  /* placeholder to anchor specificity */
+}
+button [data-no-contrast-guard] span[style*="#B89555"],
+button:hover [data-no-contrast-guard] span[style*="#B89555"],
+button [data-no-contrast-guard] svg[style*="#B89555"],
+button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
+  color: #B89555 !important;
+  stroke: #B89555 !important;
+}
