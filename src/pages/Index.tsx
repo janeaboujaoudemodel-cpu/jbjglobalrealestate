@@ -234,14 +234,14 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/85 text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#1A1A1A] hover:border-gold/70 transition-all duration-300 min-h-[76px]"
+                  className="group flex flex-col items-center justify-center gap-1.5 px-3 py-3 rounded-2xl border border-white/40 bg-[#1A1A1A]/85 text-white text-[11px] sm:text-xs font-semibold tracking-tight hover:bg-[#EFE6D6] hover:border-[#B89555] hover:text-[#1A1A1A] hover:shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-all duration-300 min-h-[76px]"
                   style={{ textShadow: '0 1px 4px rgba(0,0,0,0.85)' }}
                 >
                   <action.icon
-                    className="w-4 h-4 text-gold flex-shrink-0"
+                    className="w-4 h-4 text-gold group-hover:!text-[#1A1A1A] flex-shrink-0 transition-colors duration-300"
                     style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.7))" }}
                   />
-                  <span className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2">{action.label}</span>
+                  <span className="whitespace-normal break-words leading-[1.15] text-center line-clamp-2 group-hover:[text-shadow:none]">{action.label}</span>
                 </Link>
               ))}
             </motion.div>
