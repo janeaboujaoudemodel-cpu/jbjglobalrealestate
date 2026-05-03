@@ -744,7 +744,7 @@ const UserProfile = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-destructive">Sign Out</p>
+                        <p className="font-semibold tracking-tight text-[#9B1C1C]">Sign Out</p>
                         <p className="text-sm text-destructive/80">Sign out of your account on this device</p>
                       </div>
                       <Button 
