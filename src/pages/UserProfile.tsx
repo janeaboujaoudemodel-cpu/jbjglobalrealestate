@@ -712,7 +712,7 @@ const UserProfile = () => {
                   <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/30 space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-destructive">Deactivate Account</p>
+                        <p className="font-semibold tracking-tight text-[#9B1C1C]">Deactivate Account</p>
                         <p className="text-sm text-destructive/80">Hide your profile &amp; pause access. Recover anytime.</p>
                       </div>
                       <Button
@@ -727,7 +727,7 @@ const UserProfile = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-destructive">Delete Account</p>
+                        <p className="font-semibold tracking-tight text-[#9B1C1C]">Delete Account</p>
                         <p className="text-sm text-destructive/80">Permanently remove your account after 30 days</p>
                       </div>
                       <Button
@@ -744,7 +744,7 @@ const UserProfile = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-destructive">Sign Out</p>
+                        <p className="font-semibold tracking-tight text-[#9B1C1C]">Sign Out</p>
                         <p className="text-sm text-destructive/80">Sign out of your account on this device</p>
                       </div>
                       <Button 
