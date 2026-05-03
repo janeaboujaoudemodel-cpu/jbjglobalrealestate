@@ -673,12 +673,14 @@ const UserProfile = () => {
                   <CardDescription>Manage your account preferences</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-lg border border-gold/30 bg-gold/5">
+                  <div className="flex items-center justify-between p-4 rounded-lg border border-gold/40 bg-[#EFE6D6] shadow-[0_1px_0_0_rgba(184,149,85,0.25)_inset]">
                     <div className="flex items-center gap-3">
-                      <Bell className="h-5 w-5 text-gold" />
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-[#F7F2EA] border border-gold/40">
+                        <Bell className="h-5 w-5 text-[#1A1A1A]" />
+                      </span>
                       <div>
-                        <p className="font-medium text-foreground">Marketing & Campaign Emails</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-medium text-[#1A1A1A] tracking-tight">Marketing & Campaign Emails</p>
+                        <p className="text-sm text-[#1A1A1A]/70">
                           {emailNotifications ? "You are receiving marketing emails" : "Marketing emails are disabled"}
                         </p>
                       </div>
