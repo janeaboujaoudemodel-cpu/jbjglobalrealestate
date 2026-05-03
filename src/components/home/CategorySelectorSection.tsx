@@ -101,22 +101,26 @@ export default function CategorySelectorSection() {
               >
                 {/* Header: icon + tagline tightly aligned */}
                 <div className="flex items-center gap-3 mb-5">
-                  <div
-                    className="w-12 h-12 rounded-xl bg-[#EFE6D6] ring-1 ring-[#B89555] flex items-center justify-center flex-shrink-0 transition-colors duration-200 group-hover:bg-[#1A1A1A] group-hover:ring-[#B89555] [--category-icon-color:#1A1A1A] group-hover:[--category-icon-color:#FDFBF7]"
+                  <span
+                    data-no-contrast-guard
                     aria-hidden="true"
+                    className="jj-role-icon-tile w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-200"
+                    style={{
+                      backgroundColor: "#EFE6D6",
+                      border: "1px solid #B89555",
+                    }}
                   >
                     <Icon
-                      className="w-7 h-7 shrink-0 !opacity-100 !text-[#1A1A1A] !stroke-[#1A1A1A] group-hover:!text-[#FDFBF7] group-hover:!stroke-[#FDFBF7] [--jj-icon-stroke:3] transition-none"
+                      className="jj-role-icon w-6 h-6 shrink-0"
+                      strokeWidth={2.25}
                       style={{
-                        color: "var(--category-icon-color)",
-                        stroke: "var(--category-icon-color)",
+                        color: "#1A1A1A",
+                        stroke: "#1A1A1A",
                         opacity: 1,
                       }}
-                      strokeWidth={3}
-                      absoluteStrokeWidth
                     />
-                  </div>
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] leading-tight text-[#1A1A1A]/80 group-hover:text-[#1A1A1A] transition-colors">
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.14em] leading-tight text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">
                     {cat.tagline}
                   </span>
                 </div>
@@ -129,17 +133,27 @@ export default function CategorySelectorSection() {
                 <ul className="space-y-2 mb-6">
                   {cat.bullets.map((b) => (
                     <li key={b} className="flex items-center gap-2 text-sm text-[#1A1A1A]">
-                      <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-[#B89555] flex-shrink-0" style={{ color: "#B89555", stroke: "#B89555", opacity: 1 }} />
                       <span>{b}</span>
                     </li>
                   ))}
                 </ul>
 
                 {/* Continue row pinned to bottom so all dividers align */}
-                <div className="mt-auto flex items-center justify-between w-full pt-4 border-t border-[#B89555]/30">
-                  <span className="text-sm font-semibold text-[#1A1A1A]">Continue</span>
+                <div
+                  data-no-contrast-guard
+                  className="mt-auto flex items-center justify-between w-full pt-4 border-t border-[#B89555]/30"
+                >
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ color: "#B89555" }}
+                  >
+                    Continue
+                  </span>
                   <ArrowRight
-                    className="w-4 h-4 text-[#1A1A1A] group-hover:translate-x-1 transition-transform flex-shrink-0"
+                    className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0"
+                    strokeWidth={2.5}
+                    style={{ color: "#B89555", stroke: "#B89555", opacity: 1 }}
                   />
                 </div>
               </motion.button>
