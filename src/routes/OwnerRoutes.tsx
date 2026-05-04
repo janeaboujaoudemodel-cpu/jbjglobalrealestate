@@ -69,6 +69,9 @@ const IconSizePreview = lazy(() => import("@/pages/owner/IconSizePreview"));
 const VatCertificate = lazy(() => import("@/pages/owner/templates/VatCertificate"));
 const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatureStudio"));
 const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault"));
+const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
+const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
+const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -152,5 +155,8 @@ export const OwnerRoutes = () => (
     <Route path="sign" element={<AdoptSignatureStudio />} />
     <Route path="sign/:envelopeId" element={<AdoptSignatureStudio />} />
     <Route path="contracts" element={<ContractVault />} />
+    <Route path="relationships" element={<OwnerRelationships />} />
+    <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
+    <Route path="media-ingest" element={<OwnerMediaIngest />} />
   </Route>
 );

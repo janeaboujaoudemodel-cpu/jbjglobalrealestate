@@ -21899,6 +21899,642 @@ export type Database = {
         }
         Relationships: []
       }
+      rel_brokerage_contacts: {
+        Row: {
+          brokerage_id: string
+          created_at: string | null
+          email: string | null
+          full_name: string
+          id: string
+          is_primary: boolean | null
+          last_contacted_at: string | null
+          phone: string | null
+          role: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          is_primary?: boolean | null
+          last_contacted_at?: string | null
+          phone?: string | null
+          role?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_primary?: boolean | null
+          last_contacted_at?: string | null
+          phone?: string | null
+          role?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_brokerage_contacts_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "rel_brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_brokerages: {
+        Row: {
+          active_agents_count: number | null
+          agent_count: number | null
+          created_at: string | null
+          google_maps_url: string | null
+          hq_address: string | null
+          hq_emirate: Database["public"]["Enums"]["rel_emirate"] | null
+          id: string
+          instagram: string | null
+          invited_at: string | null
+          legal_name: string | null
+          linkedin: string | null
+          logo_url: string | null
+          name: string
+          notes: string | null
+          onboarding_status: Database["public"]["Enums"]["rel_onboarding_status"]
+          our_active_agents: string[] | null
+          phone: string | null
+          primary_email: string | null
+          registered_at: string | null
+          rera_number: string | null
+          slug: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          active_agents_count?: number | null
+          agent_count?: number | null
+          created_at?: string | null
+          google_maps_url?: string | null
+          hq_address?: string | null
+          hq_emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          instagram?: string | null
+          invited_at?: string | null
+          legal_name?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name: string
+          notes?: string | null
+          onboarding_status?: Database["public"]["Enums"]["rel_onboarding_status"]
+          our_active_agents?: string[] | null
+          phone?: string | null
+          primary_email?: string | null
+          registered_at?: string | null
+          rera_number?: string | null
+          slug: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          active_agents_count?: number | null
+          agent_count?: number | null
+          created_at?: string | null
+          google_maps_url?: string | null
+          hq_address?: string | null
+          hq_emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          instagram?: string | null
+          invited_at?: string | null
+          legal_name?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name?: string
+          notes?: string | null
+          onboarding_status?: Database["public"]["Enums"]["rel_onboarding_status"]
+          our_active_agents?: string[] | null
+          phone?: string | null
+          primary_email?: string | null
+          registered_at?: string | null
+          rera_number?: string | null
+          slug?: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      rel_deal_payments: {
+        Row: {
+          amount_aed: number
+          created_at: string | null
+          deal_id: string
+          id: string
+          method: string | null
+          notes: string | null
+          paid_at: string
+          reference: string | null
+        }
+        Insert: {
+          amount_aed: number
+          created_at?: string | null
+          deal_id: string
+          id?: string
+          method?: string | null
+          notes?: string | null
+          paid_at: string
+          reference?: string | null
+        }
+        Update: {
+          amount_aed?: number
+          created_at?: string | null
+          deal_id?: string
+          id?: string
+          method?: string | null
+          notes?: string | null
+          paid_at?: string
+          reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_deal_payments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "rel_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_deals: {
+        Row: {
+          client_name: string | null
+          closed_at: string
+          commission_amount_aed: number | null
+          commission_pct: number
+          counterparty_id: string
+          counterparty_type: Database["public"]["Enums"]["rel_counterparty_type"]
+          created_at: string | null
+          gross_value_aed: number
+          id: string
+          notes: string | null
+          project_name: string
+          status: Database["public"]["Enums"]["rel_deal_status"]
+          unit_reference: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          client_name?: string | null
+          closed_at: string
+          commission_amount_aed?: number | null
+          commission_pct: number
+          counterparty_id: string
+          counterparty_type: Database["public"]["Enums"]["rel_counterparty_type"]
+          created_at?: string | null
+          gross_value_aed: number
+          id?: string
+          notes?: string | null
+          project_name: string
+          status?: Database["public"]["Enums"]["rel_deal_status"]
+          unit_reference?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          client_name?: string | null
+          closed_at?: string
+          commission_amount_aed?: number | null
+          commission_pct?: number
+          counterparty_id?: string
+          counterparty_type?: Database["public"]["Enums"]["rel_counterparty_type"]
+          created_at?: string | null
+          gross_value_aed?: number
+          id?: string
+          notes?: string | null
+          project_name?: string
+          status?: Database["public"]["Enums"]["rel_deal_status"]
+          unit_reference?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      rel_developer_contacts: {
+        Row: {
+          created_at: string | null
+          developer_id: string
+          email: string | null
+          full_name: string
+          id: string
+          is_primary: boolean | null
+          last_contacted_at: string | null
+          phone: string | null
+          role: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          developer_id: string
+          email?: string | null
+          full_name: string
+          id?: string
+          is_primary?: boolean | null
+          last_contacted_at?: string | null
+          phone?: string | null
+          role?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          developer_id?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_primary?: boolean | null
+          last_contacted_at?: string | null
+          phone?: string | null
+          role?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_developer_contacts_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "rel_developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_developers: {
+        Row: {
+          commission_terms_pct: number | null
+          created_at: string | null
+          google_maps_url: string | null
+          hq_address: string | null
+          hq_emirate: Database["public"]["Enums"]["rel_emirate"] | null
+          id: string
+          instagram: string | null
+          legal_name: string | null
+          linkedin: string | null
+          logo_url: string | null
+          name: string
+          notes: string | null
+          payment_terms_days: number | null
+          phone: string | null
+          primary_email: string | null
+          registration_approved_at: string | null
+          registration_status: Database["public"]["Enums"]["rel_registration_status"]
+          registration_submitted_at: string | null
+          slug: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          commission_terms_pct?: number | null
+          created_at?: string | null
+          google_maps_url?: string | null
+          hq_address?: string | null
+          hq_emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          instagram?: string | null
+          legal_name?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name: string
+          notes?: string | null
+          payment_terms_days?: number | null
+          phone?: string | null
+          primary_email?: string | null
+          registration_approved_at?: string | null
+          registration_status?: Database["public"]["Enums"]["rel_registration_status"]
+          registration_submitted_at?: string | null
+          slug: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          commission_terms_pct?: number | null
+          created_at?: string | null
+          google_maps_url?: string | null
+          hq_address?: string | null
+          hq_emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          instagram?: string | null
+          legal_name?: string | null
+          linkedin?: string | null
+          logo_url?: string | null
+          name?: string
+          notes?: string | null
+          payment_terms_days?: number | null
+          phone?: string | null
+          primary_email?: string | null
+          registration_approved_at?: string | null
+          registration_status?: Database["public"]["Enums"]["rel_registration_status"]
+          registration_submitted_at?: string | null
+          slug?: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      rel_email_campaigns: {
+        Row: {
+          attachments_json: Json | null
+          audience: Database["public"]["Enums"]["rel_campaign_audience"]
+          body_html: string
+          body_text: string | null
+          created_at: string | null
+          created_by: string | null
+          followup_days: number | null
+          id: string
+          name: string
+          reply_to: string | null
+          scheduled_at: string | null
+          segment_filter: Json | null
+          sender_email: string
+          sender_name: string
+          sent_at: string | null
+          status: Database["public"]["Enums"]["rel_campaign_status"]
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          attachments_json?: Json | null
+          audience: Database["public"]["Enums"]["rel_campaign_audience"]
+          body_html: string
+          body_text?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          followup_days?: number | null
+          id?: string
+          name: string
+          reply_to?: string | null
+          scheduled_at?: string | null
+          segment_filter?: Json | null
+          sender_email: string
+          sender_name?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["rel_campaign_status"]
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          attachments_json?: Json | null
+          audience?: Database["public"]["Enums"]["rel_campaign_audience"]
+          body_html?: string
+          body_text?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          followup_days?: number | null
+          id?: string
+          name?: string
+          reply_to?: string | null
+          scheduled_at?: string | null
+          segment_filter?: Json | null
+          sender_email?: string
+          sender_name?: string
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["rel_campaign_status"]
+          subject?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      rel_email_sends: {
+        Row: {
+          campaign_id: string
+          counterparty_id: string | null
+          counterparty_type:
+            | Database["public"]["Enums"]["rel_counterparty_type"]
+            | null
+          created_at: string | null
+          delivered_at: string | null
+          error: string | null
+          id: string
+          merge_data: Json | null
+          message_id: string | null
+          opened_at: string | null
+          recipient_company: string | null
+          recipient_email: string
+          recipient_name: string | null
+          replied_at: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["rel_email_send_status"]
+        }
+        Insert: {
+          campaign_id: string
+          counterparty_id?: string | null
+          counterparty_type?:
+            | Database["public"]["Enums"]["rel_counterparty_type"]
+            | null
+          created_at?: string | null
+          delivered_at?: string | null
+          error?: string | null
+          id?: string
+          merge_data?: Json | null
+          message_id?: string | null
+          opened_at?: string | null
+          recipient_company?: string | null
+          recipient_email: string
+          recipient_name?: string | null
+          replied_at?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["rel_email_send_status"]
+        }
+        Update: {
+          campaign_id?: string
+          counterparty_id?: string | null
+          counterparty_type?:
+            | Database["public"]["Enums"]["rel_counterparty_type"]
+            | null
+          created_at?: string | null
+          delivered_at?: string | null
+          error?: string | null
+          id?: string
+          merge_data?: Json | null
+          message_id?: string | null
+          opened_at?: string | null
+          recipient_company?: string | null
+          recipient_email?: string
+          recipient_name?: string | null
+          replied_at?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["rel_email_send_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_email_sends_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "rel_email_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_listing_media: {
+        Row: {
+          listing_id: string
+          media_asset_id: string
+        }
+        Insert: {
+          listing_id: string
+          media_asset_id: string
+        }
+        Update: {
+          listing_id?: string
+          media_asset_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_listing_media_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rel_listing_with_media"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rel_listing_media_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rel_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rel_listing_media_media_asset_id_fkey"
+            columns: ["media_asset_id"]
+            isOneToOne: false
+            referencedRelation: "rel_media_assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_listings: {
+        Row: {
+          bedrooms: number | null
+          created_at: string | null
+          id: string
+          price_aed: number | null
+          project_id: string
+          size_sqft: number | null
+          status: string | null
+          unit_reference: string | null
+        }
+        Insert: {
+          bedrooms?: number | null
+          created_at?: string | null
+          id?: string
+          price_aed?: number | null
+          project_id: string
+          size_sqft?: number | null
+          status?: string | null
+          unit_reference?: string | null
+        }
+        Update: {
+          bedrooms?: number | null
+          created_at?: string | null
+          id?: string
+          price_aed?: number | null
+          project_id?: string
+          size_sqft?: number | null
+          status?: string | null
+          unit_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_listings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "rel_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_media_assets: {
+        Row: {
+          created_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["rel_media_kind"]
+          mime_type: string | null
+          project_id: string | null
+          size_bytes: number | null
+          source_filename: string | null
+          storage_path: string
+          title: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["rel_media_kind"]
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          source_filename?: string | null
+          storage_path: string
+          title?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["rel_media_kind"]
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          source_filename?: string | null
+          storage_path?: string
+          title?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_media_assets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "rel_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rel_projects: {
+        Row: {
+          community: string | null
+          created_at: string | null
+          developer_id: string | null
+          emirate: Database["public"]["Enums"]["rel_emirate"] | null
+          id: string
+          name: string
+          slug: string
+          status: string | null
+        }
+        Insert: {
+          community?: string | null
+          created_at?: string | null
+          developer_id?: string | null
+          emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          name: string
+          slug: string
+          status?: string | null
+        }
+        Update: {
+          community?: string | null
+          created_at?: string | null
+          developer_id?: string | null
+          emirate?: Database["public"]["Enums"]["rel_emirate"] | null
+          id?: string
+          name?: string
+          slug?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_projects_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "rel_developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rental_listing_approvals: {
         Row: {
           approved_at: string | null
@@ -29269,6 +29905,28 @@ export type Database = {
         }
         Relationships: []
       }
+      rel_listing_with_media: {
+        Row: {
+          bedrooms: number | null
+          created_at: string | null
+          id: string | null
+          media: Json | null
+          price_aed: number | null
+          project_id: string | null
+          size_sqft: number | null
+          status: string | null
+          unit_reference: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rel_listings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "rel_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rental_listings_public: {
         Row: {
           address: string | null
@@ -30401,6 +31059,14 @@ export type Database = {
         Args: { p_transcript: string }
         Returns: string
       }
+      rel_followup_due_sends: {
+        Args: never
+        Returns: {
+          campaign_id: string
+          send_id: string
+        }[]
+      }
+      rel_is_owner: { Args: never; Returns: boolean }
       release_function_lock: {
         Args: { p_duration_ms?: number; p_function_name: string }
         Returns: undefined
@@ -30781,6 +31447,50 @@ export type Database = {
         | "draft"
         | "submitted"
         | "under_review"
+        | "approved"
+        | "rejected"
+      rel_campaign_audience: "developers" | "brokerages" | "custom"
+      rel_campaign_status: "draft" | "scheduled" | "sending" | "sent" | "failed"
+      rel_counterparty_type: "developer" | "brokerage"
+      rel_deal_status:
+        | "closed"
+        | "invoiced"
+        | "partially_paid"
+        | "paid"
+        | "disputed"
+      rel_email_send_status:
+        | "queued"
+        | "sent"
+        | "delivered"
+        | "bounced"
+        | "opened"
+        | "clicked"
+        | "replied"
+        | "failed"
+      rel_emirate:
+        | "Dubai"
+        | "Abu Dhabi"
+        | "Sharjah"
+        | "Ajman"
+        | "Ras Al Khaimah"
+        | "Fujairah"
+        | "Umm Al Quwain"
+      rel_media_kind:
+        | "brochure"
+        | "floorplan"
+        | "image"
+        | "video"
+        | "price_list"
+        | "other"
+      rel_onboarding_status:
+        | "not_invited"
+        | "invited"
+        | "registered"
+        | "active"
+        | "paused"
+      rel_registration_status:
+        | "not_started"
+        | "submitted"
         | "approved"
         | "rejected"
       reward_type: "points" | "gift" | "badge" | "certificate"
@@ -31364,6 +32074,56 @@ export const Constants = {
         "draft",
         "submitted",
         "under_review",
+        "approved",
+        "rejected",
+      ],
+      rel_campaign_audience: ["developers", "brokerages", "custom"],
+      rel_campaign_status: ["draft", "scheduled", "sending", "sent", "failed"],
+      rel_counterparty_type: ["developer", "brokerage"],
+      rel_deal_status: [
+        "closed",
+        "invoiced",
+        "partially_paid",
+        "paid",
+        "disputed",
+      ],
+      rel_email_send_status: [
+        "queued",
+        "sent",
+        "delivered",
+        "bounced",
+        "opened",
+        "clicked",
+        "replied",
+        "failed",
+      ],
+      rel_emirate: [
+        "Dubai",
+        "Abu Dhabi",
+        "Sharjah",
+        "Ajman",
+        "Ras Al Khaimah",
+        "Fujairah",
+        "Umm Al Quwain",
+      ],
+      rel_media_kind: [
+        "brochure",
+        "floorplan",
+        "image",
+        "video",
+        "price_list",
+        "other",
+      ],
+      rel_onboarding_status: [
+        "not_invited",
+        "invited",
+        "registered",
+        "active",
+        "paused",
+      ],
+      rel_registration_status: [
+        "not_started",
+        "submitted",
         "approved",
         "rejected",
       ],
