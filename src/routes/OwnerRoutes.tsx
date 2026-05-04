@@ -155,5 +155,8 @@ export const OwnerRoutes = () => (
     <Route path="sign" element={<AdoptSignatureStudio />} />
     <Route path="sign/:envelopeId" element={<AdoptSignatureStudio />} />
     <Route path="contracts" element={<ContractVault />} />
+    <Route path="relationships" element={<OwnerRelationships />} />
+    <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
+    <Route path="media-ingest" element={<OwnerMediaIngest />} />
   </Route>
 );
