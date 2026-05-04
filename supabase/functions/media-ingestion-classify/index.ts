@@ -345,24 +345,41 @@ Deno.serve(async (req) => {
     }
     const { job_ids } = parsed.data;
 
-    // Run with concurrency 5
-    const results: any[] = [];
-    const queue = [...job_ids];
-    const workers = Array.from({ length: Math.min(5, queue.length) }, async () => {
-      while (queue.length) {
-        const id = queue.shift()!;
+    // Mark all jobs as queued immediately, process in background to avoid
+    // WORKER_RESOURCE_LIMIT (CPU/wall-time) on the request handler.
+    await supabase
+      .from("material_ingestion_jobs")
+      .update({ status: "processing" })
+      .in("id", job_ids);
+
+    const runInBackground = async () => {
+      for (const id of job_ids) {
         try {
-          results.push(await classifyJob(supabase, id));
+          await classifyJob(supabase, id);
         } catch (err) {
-          results.push({ jobId: id, error: err instanceof Error ? err.message : "failed" });
+          console.error("classifyJob failed", id, err);
+          try {
+            await supabase
+              .from("material_ingestion_jobs")
+              .update({ status: "unmatched", ai_summary: err instanceof Error ? err.message : "failed" })
+              .eq("id", id);
+          } catch (_) { /* ignore */ }
         }
       }
-    });
-    await Promise.all(workers);
+    };
 
-    return new Response(JSON.stringify({ results }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // @ts-ignore EdgeRuntime is provided by Supabase edge runtime
+    if (typeof EdgeRuntime !== "undefined" && EdgeRuntime?.waitUntil) {
+      // @ts-ignore
+      EdgeRuntime.waitUntil(runInBackground());
+    } else {
+      runInBackground();
+    }
+
+    return new Response(
+      JSON.stringify({ queued: job_ids.length, job_ids, status: "processing" }),
+      { status: 202, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
   } catch (e) {
     console.error(e);
     return new Response(
