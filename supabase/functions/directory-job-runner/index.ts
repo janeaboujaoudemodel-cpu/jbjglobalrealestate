@@ -222,11 +222,12 @@ async function runEnrichChunk(job: any) {
   const isDev = job.kind === "developer_enrich";
   const table = isDev ? "crm_developer_registry" : "crm_brokerages";
   const nameCol = isDev ? "developer_name" : "company_name";
+  const emailCol = isDev ? "developer_email" : "email";
 
   const { data: rows } = await admin
     .from(table)
-    .select(`id, ${nameCol}, emirate, phone, email, website, instagram_url, office_address, office_map_url, field_sources`)
-    .or("phone.is.null,email.is.null,website.is.null,instagram_url.is.null,office_address.is.null,office_map_url.is.null")
+    .select(`id, ${nameCol}, emirate, phone, ${emailCol}, website, instagram_url, office_address, office_map_url`)
+    .or(`phone.is.null,${emailCol}.is.null,website.is.null,instagram_url.is.null,office_address.is.null,office_map_url.is.null`)
     .order("updated_at", { ascending: true, nullsFirst: true })
     .limit(CHUNK_SIZE);
 
@@ -237,7 +238,7 @@ async function runEnrichChunk(job: any) {
     if (!facts) continue;
     const patch: any = {};
     if (!r.phone && facts.phone) patch.phone = normPhone(facts.phone);
-    if (!r.email && facts.email) patch.email = String(facts.email).toLowerCase();
+    if (!(r as any)[emailCol] && facts.email) patch[emailCol] = String(facts.email).toLowerCase();
     if (!r.website && facts.website) patch.website = normSite(facts.website);
     if (!r.instagram_url && facts.instagram_url) patch.instagram_url = normIg(facts.instagram_url);
     if (!r.office_address && facts.office_address) patch.office_address = facts.office_address;
