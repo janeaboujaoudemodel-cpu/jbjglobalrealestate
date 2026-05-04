@@ -5687,6 +5687,7 @@ export type Database = {
           first_contact_at: string | null
           health_score: number | null
           id: string
+          instagram_url: string | null
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
           last_inbound_at: string | null
@@ -5751,6 +5752,7 @@ export type Database = {
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          instagram_url?: string | null
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
@@ -5815,6 +5817,7 @@ export type Database = {
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          instagram_url?: string | null
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
@@ -5870,6 +5873,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_directory_jobs: {
+        Row: {
+          created_at: string
+          emirate: string | null
+          error: string | null
+          finished_at: string | null
+          id: string
+          inserted_count: number
+          kind: string
+          message: string | null
+          next_continue_at: string | null
+          progress: number
+          started_at: string
+          status: string
+          total: number
+          triggered_by: string | null
+          updated_count: number
+        }
+        Insert: {
+          created_at?: string
+          emirate?: string | null
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          inserted_count?: number
+          kind: string
+          message?: string | null
+          next_continue_at?: string | null
+          progress?: number
+          started_at?: string
+          status?: string
+          total?: number
+          triggered_by?: string | null
+          updated_count?: number
+        }
+        Update: {
+          created_at?: string
+          emirate?: string | null
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          inserted_count?: number
+          kind?: string
+          message?: string | null
+          next_continue_at?: string | null
+          progress?: number
+          started_at?: string
+          status?: string
+          total?: number
+          triggered_by?: string | null
+          updated_count?: number
+        }
+        Relationships: []
       }
       crm_email_campaigns: {
         Row: {
