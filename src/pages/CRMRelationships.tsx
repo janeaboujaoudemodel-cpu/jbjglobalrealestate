@@ -1450,6 +1450,12 @@ const DeveloperRegistryTab = () => {
                             <FieldSource meta={r.field_sources?.website} />
                           </div>
                         )}
+                        {r.instagram_url && (
+                          <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
+                            <span className="text-[#1A1A1A]/70 shrink-0">Instagram:</span>
+                            <a href={r.instagram_url} target="_blank" rel="noopener noreferrer" className="font-medium text-[#1A1A1A] underline truncate" onClick={(e) => e.stopPropagation()}>{r.instagram_url.replace(/^https?:\/\/(www\.)?instagram\.com\//,'@').replace(/\/$/,'')}</a>
+                          </div>
+                        )}
                         {r.agency_code && (
                           <div className="flex items-center gap-1.5 min-w-0 sm:col-span-2">
                             <span className="text-[#1A1A1A]/70 shrink-0">Agency code:</span>
