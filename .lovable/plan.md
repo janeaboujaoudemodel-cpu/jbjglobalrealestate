@@ -1,110 +1,86 @@
-I’ll fix this as one upgrade to the brokerage section in the Relationships CRM.
+## Why the shortcut shows 404
 
-What I found
-- The main brokerage CRM is `src/pages/CRMRelationships.tsx` at `/owner/crm/relationships`.
-- It already loads from `crm_brokerages`, but search filters on every keystroke and can feel slow with a bigger directory.
-- The list currently sorts by backend `updated_at`, so top agencies are not guaranteed to stay at the top.
-- Export is CSV only and still includes a RERA license column. I’ll remove RERA from the visible/exported brokerage flow because you said all agencies must already be licensed.
-- There is an existing reminders table (`crm_relationship_reminders`) and an existing `admin_tasks` table. I’ll wire the brokerage Remind button into both, and add calendar/note records through a new CRM action table so it is tracked cleanly.
+The "Remind" button on a brokerage does not open a page — it silently writes 4 records (CRM reminder, Owner task, calendar event, agency note) into `crm_brokerage_actions` and other tables. There is no `/owner/crm/brokerage-actions` route, which is why the shortcut you pinned returns 404.
 
-Implementation plan
+I will fix this by **building the page that displays those activity records** and routing your shortcut to it.
 
-1. Make brokerage search fast and reliable
-- Add a debounced search value so typing does not lag.
-- Search across agency name, emirate, office/location, website, phone, email, Instagram, status, outreach stage, and represented developer.
-- Normalize text before searching so names with symbols or accents (for example `fäm Properties`) are easier to find.
-- Keep the search input responsive even as the directory grows.
+---
 
-2. Rank famous/top agencies first
-- Sort brokerages by a deterministic priority score:
-  1. `directory_rank` if present
-  2. estimated agent count
-  3. rating
-  4. deal count / activity
-  5. agency name
-- Add a hardcoded priority boost for UAE-famous agencies already in the directory, such as fäm Properties, Betterhomes, Allsopp & Allsopp, Metropolitan, D&B Properties, AX Capital, Driven, Provident, haus & haus, White & Co, Engel & Völkers, Espace, Knight Frank, CBRE, JLL, Asteco, Coldwell Banker, Savills, Chestertons, Bayut/Dubizzle-owned agency entries only if they are real estate brokerages.
-- Keep non-real-estate filtering rules: no banks, mortgage brokers, insurance, law firms, logistics brokers, etc.
+## 1. New page — Agency Activity Log
 
-3. Make the brokerage list CRM-style
-- Replace the current general brokerage statuses with business statuses matching your wording:
-  - Not registered
-  - Message sent
-  - Follow-up scheduled
-  - Registered
-  - Active partner
-  - Dormant
-  - Do not contact
-- Display a clear status pill/dropdown on every agency, including directory agencies.
-- Show outreach metrics on each card: last message, attempts, next follow-up, deals, inquiry count, agent count.
-- Rename “Licensed” UI labels to “Verified UAE real estate agencies” and remove visible RERA license labels from cards and exports.
+- Route: `/owner/crm/relationships/activity` (alias `/owner/crm/brokerage-actions` so any existing shortcut works).
+- Linked from:
+  - Quick Actions Grid on Owner Command Center (tile "Agency Activity").
+  - A new "Activity" button on each brokerage card.
+  - The toast that fires after Remind ("View activity →").
+- Content:
+  - Filters: agency, action type (note / calendar_event / reminder / outreach_sent), date range, created_by.
+  - Timeline list pulled from `crm_brokerage_actions` joined with `crm_brokerages.company_name`.
+  - Inline edit / delete / mark-done.
+  - Export (CSV / Excel / PDF) of the filtered log.
 
-4. Add PDF, CSV, and Excel export
-- Add three export buttons: `Export PDF`, `Export CSV`, `Export Excel`.
-- Export the currently filtered/sorted agency list in CRM-report format.
-- Columns will include:
-  - Rank
-  - Agency name
-  - Emirate
-  - Office location
-  - Website
-  - Instagram
-  - Phone
-  - WhatsApp
-  - Email
-  - CRM status
-  - Outreach stage
-  - Last message sent
-  - Next follow-up
-  - Message attempts
-  - Deals
-  - Estimated agents
-  - Rating
-  - Notes
-- Excel will be a real `.xlsx` sheet using the existing `xlsx` package, with styled headers and column widths.
-- PDF will use `jsPDF` + `jspdf-autotable`, branded `JBJ GLOBAL REAL ESTATE`, landscape layout, and summary totals for the owner/company report.
-- CSV remains simple and clean for import into other tools.
+## 2. Unified Export dropdown (replaces 3 buttons)
 
-5. Make Remind create reminder, task, calendar item, and note
-- Update `Remind` so one click creates:
-  - CRM relationship reminder for the agency
-  - Owner/admin task in `admin_tasks`
-  - Brokerage CRM action record of type `calendar_event`
-  - Brokerage CRM note/action record saying a follow-up reminder was created
-- Update the agency row with `next_followup_at`, `next_action_at`, `next_action_note`, and outreach stage `follow_up_scheduled` when appropriate.
-- Show a toast confirming: reminder added, task created, calendar note saved.
+Replace `Export PDF | Export Excel | Export CSV` with a single **Export** button (`Download` icon) that opens a `DropdownMenu`:
 
-6. Add the required database support
-- Add a small `crm_brokerage_actions` table for notes/calendar/activity against each agency:
-  - owner_id
-  - brokerage_id
-  - action_type (`note`, `calendar_event`, `reminder`, `status_change`)
-  - title
-  - body
-  - due_at
-  - metadata
-  - created_by
-- Protect it with owner/admin RLS following the existing CRM access pattern.
-- Add indexes for brokerage and due date.
-- Add an outreach-stage value for `follow_up_scheduled` if not already present.
-- Do not modify generated backend client/type files.
+```
+Export ▾
+├─ Export as PDF
+├─ Export as Excel (.xlsx)
+└─ Export as CSV
+```
 
-7. Improve directory completeness controls
-- Keep the existing background directory sync card.
-- Adjust the wording to make clear this is the UAE real estate agency directory only.
-- Keep the backend exclusion rules for banks/mortgage/insurance/legal/logistics.
-- Increase the visible/exportable list handling so all loaded agencies appear and can be searched/exported. If the backend has more than 1,000 agencies later, the hook will page through all rows instead of relying on a single capped query.
+Same dropdown reused on the Clients tab, Developer Outreach tab, and the new Activity Log page so the pattern is consistent.
 
-Files I expect to edit
-- `src/pages/CRMRelationships.tsx`
-- `src/hooks/useCRMRelationships.ts`
-- `src/components/crm/DirectoryToolsPanel.tsx`
-- a new migration under `supabase/migrations/...`
-- possibly `supabase/functions/seed-uae-brokerage-directory/index.ts` and/or `supabase/functions/enrich-uae-brokerage-directory/index.ts` for stricter real-estate-only wording and ranking/contact fields
+## 3. Add / Edit Brokerage — richer form
 
-Result after approval
-- Brokerage search will feel immediate and find agencies correctly.
-- The most famous/top UAE agencies will appear first.
-- You’ll have PDF, CSV, and Excel exports suitable to send to the owner/company leadership.
-- No RERA license column/label will be shown in this brokerage CRM flow.
-- Every agency will have clear CRM status tracking.
-- Clicking `Remind` will create the reminder, task, calendar-style action, and note in one step.
+Extend the existing Add Brokerage dialog (`crm_brokerages` row) with three new sections:
+
+**a. Admin / Owner contact** (stored in a new `admin_contact` jsonb column)
+- Name, role (default "Admin / Managing Director"), phone, WhatsApp, email (optional).
+
+**b. Brokers under this agency** (stored in `crm_brokerage_agents` — new table)
+- Repeatable rows: name, phone/WhatsApp, email (optional), specialty, photo, status (active / inactive / unknown).
+- "Add broker" button + bulk paste (one per line).
+
+**c. Bulk import from WhatsApp / contact screenshots (AI)**
+- Upload zone accepts up to **300 images** (JPG/PNG/HEIC/PDF) per batch.
+- Files go to a new private storage bucket `brokerage-contact-photos` (owner-only RLS).
+- New edge function `extract-brokerage-contacts` (Lovable AI, `google/gemini-2.5-pro`, vision) reads each image and returns `{ name|null, phone, whatsapp|null, role|null, source_image }`. Missing names → "Unknown".
+- Results appear in a review table (checkbox per row, edit inline) before being saved into `crm_brokerage_agents` for the selected brokerage.
+- After save, an "AI outreach draft" is generated automatically:
+  - A vertical Excel-ready list of the extracted contacts (Name, Phone, WhatsApp, Role) downloadable as `.xlsx`.
+  - A ready-to-send WhatsApp/email message template signed *"Jane Bouchra Jajeh — Founder & CEO, JBJ Global Real Estate"* asking each broker to confirm their name and whether they still work with the agency. Copy-button included.
+
+## 4. Fix "Send Outreach" UX
+
+Today the bulk outreach button is confusing because:
+- Directory (licensed) brokerages are not selectable (no checkbox), so clicking Send Outreach with no selection just shows an error.
+- The button label doesn't explain what it does.
+
+Fixes:
+- Add a checkbox on **every** brokerage card. For directory rows that have no email yet, the checkbox is enabled but selecting one opens the editor first to capture the admin email, then queues it.
+- Rename the button to **Email Selected Agencies** with a tooltip: *"Sends your branded onboarding / follow-up email to each ticked agency. A test copy is sent to you first."*
+- Show a sticky bottom bar "N selected · Email selected · Clear" while the selection is non-empty so it's obvious what will happen.
+- Add a "Select all visible" master checkbox in the toolbar (already exists, but will move next to the new Export dropdown for clarity).
+
+## 5. Shortcut cleanup
+
+- Re-point the broken `/owner/crm/brokerage-actions` shortcut to the new Activity Log page.
+- Add a new shortcut suggestion "Agency Activity Log" in the shortcuts catalog so future pins use the canonical path.
+
+---
+
+## Technical notes
+
+- **DB migration**:
+  - `alter table crm_brokerages add column admin_contact jsonb default '{}'::jsonb;`
+  - `create table crm_brokerage_agents ( id uuid pk, brokerage_id uuid references crm_brokerages on delete cascade, owner_id uuid not null, name text, phone text, whatsapp text, email text, role text, status text default 'active', photo_path text, source text default 'manual', metadata jsonb default '{}', created_at timestamptz default now(), updated_at timestamptz default now() );` — owner-only RLS.
+  - Storage bucket `brokerage-contact-photos` (private) + RLS for owner.
+- **Edge function** `extract-brokerage-contacts`: validates JWT (`requireOwnerAuth`), accepts an array of storage paths, calls Lovable AI vision in parallel batches of 5, returns structured rows. Handles 429 / 402 surfaced to UI.
+- **Files touched**:
+  - New: `src/pages/owner/crm/AgencyActivityLog.tsx`, `src/components/crm/BrokerageAgentsEditor.tsx`, `src/components/crm/BrokerageContactPhotoImporter.tsx`, `src/components/crm/ExportMenu.tsx`, `supabase/functions/extract-brokerage-contacts/index.ts`, migration.
+  - Edited: `src/routes/OwnerRoutes.tsx`, `src/pages/CRMRelationships.tsx`, `src/hooks/useCRMRelationships.ts`, `src/components/owner-dashboard/QuickActionsGrid.tsx`, `src/config/shortcutsConfig.ts`, `src/components/crm/BulkSendDialog.tsx`.
+- Champagne/gold styling, IconTile primitive, no white-on-light, Inter only — per project standards.
+
+Approve this and I will build it.
