@@ -44,6 +44,7 @@ interface Personalization {
   groupStatusLabelOverride?: string;
   preferredSlotId?: string;
   preferredEventTimeOverride?: string;
+  featuredProjectKey?: string;
 }
 
 interface Body {
@@ -56,6 +57,37 @@ interface Body {
   ccEmailOverride?: string;
   personalization?: Personalization;
 }
+
+// City Developer e-catalogue projects (mirrors src/config/citi-projects.ts).
+type CitiProjectKey = "amra" | "allura" | "aveline" | "agua" | "arya";
+interface CitiProject {
+  key: CitiProjectKey;
+  name: string;
+  url: string;
+  tagline: string;
+  offerHtml?: string;
+}
+const CITI_PROJECTS: Record<CitiProjectKey, CitiProject> = {
+  amra: {
+    key: "amra",
+    name: "AMRA",
+    url: "https://citideveloper.com/e-catalogue/amra",
+    tagline: "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.",
+    offerHtml: `<p style="margin:0 0 8px"><strong>AMRA</strong> is the project we are actively focused on. Brochures, floor plans, payment plans and amenity videos are all in the e-catalogue.</p><p style="margin:0">Marketing freedom: no QR required for AMRA marketing assets — videos are pre-branded and ready to use.</p>`,
+  },
+  allura: {
+    key: "allura",
+    name: "Allura Residences",
+    url: "https://citideveloper.com/e-catalogue/allura",
+    tagline: "Allura Residences — current resale opportunity for serious end-users and investors.",
+    offerHtml: `<p style="margin:0 0 8px"><strong>Two 1-bedroom units</strong> available in Allura Residences.</p><p style="margin:0"><strong>15% discount</strong> · <strong>100% upfront payment only</strong>. First-come, first-served.</p>`,
+  },
+  aveline: { key: "aveline", name: "Aveline", url: "https://citideveloper.com/e-catalogue/aveline", tagline: "Aveline — full project materials available in the e-catalogue." },
+  agua: { key: "agua", name: "Agua", url: "https://citideveloper.com/e-catalogue/agua", tagline: "Agua — full project materials available in the e-catalogue." },
+  arya: { key: "arya", name: "Arya", url: "https://citideveloper.com/e-catalogue/arya", tagline: "Arya — full project materials available in the e-catalogue." },
+};
+const resolveProject = (key?: string): CitiProject =>
+  CITI_PROJECTS[(key as CitiProjectKey)] || CITI_PROJECTS.amra;
 
 const GROUP_STATUS_LABELS: Record<GroupStatusKey, string> = {
   prospective: "Prospective Partner",
@@ -325,6 +357,9 @@ serve(async (req: Request) => {
       console.warn("Booking token mint failed (continuing):", tokErr);
     }
 
+    // Resolve featured Citi project (defaults to AMRA).
+    const project = resolveProject(personalization.featuredProjectKey);
+
     const varsMap: Record<string, string> = {
       brokerage_name: brk.company_name || "your brokerage",
       brokerage_location: brokerageLocation,
@@ -341,23 +376,37 @@ serve(async (req: Request) => {
       from_name: fromName,
       represented_developer_name: representedDeveloperName,
       booking_url: bookingUrl,
+      project_name: project.name,
+      project_url: project.url,
+      project_tagline: project.tagline,
+      project_offer_html: project.offerHtml || "",
     };
 
-    // If the stored template doesn't reference {{represented_developer_name}},
-    // build a fallback subject/body so test sends still showcase the new sender.
-    const refsDeveloper = /\{\{\s*represented_developer_name\s*\}\}/.test(template.html + " " + template.subject);
+    // If the stored template doesn't reference {{project_name}}, build a fallback
+    // body so test sends and legacy templates still showcase the project picker.
+    const refsProject = /\{\{\s*project_name\s*\}\}/.test(template.html + " " + template.subject);
     let html = renderTemplate(template.html, varsMap);
     let subjectRendered = renderTemplate(template.subject, varsMap);
-    if (!refsDeveloper) {
-      subjectRendered = `Private Briefing — ${representedDeveloperName} × ${varsMap.brokerage_name}`;
+    if (!refsProject) {
+      subjectRendered = `${project.name} — Private Briefing for ${varsMap.brokerage_name}`;
+      const offerBlock = project.offerHtml
+        ? `<div style="margin:18px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px">${project.offerHtml}</div>`
+        : "";
       html = `<!DOCTYPE html><html><body style="background:#ffffff;color:#1A1A1A;font-family:Inter,Arial,sans-serif;padding:32px;max-width:640px;margin:0 auto;line-height:1.55">
         <p>Dear ${varsMap.contact_first_name},</p>
-        <p>This is <strong>${ownerFirstName}</strong> from the <strong>Sales &amp; Channel Partner Activation</strong> team at <strong>${representedDeveloperName}</strong>, in partnership with <strong>JBJ Global Real Estate</strong>.</p>
+        <p>This is <strong>${ownerFirstName}</strong> from <strong>JBJ Global Real Estate</strong>, channel partner for <strong>${representedDeveloperName}</strong>.</p>
         <p>${resolvedGroupLine}</p>
-        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> for select brokerages — agenda covers our latest launches, commissions, training and channel activation tools.</p>
-        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf so you can start receiving inventory and incentives immediately.</p>
-        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a slot</a></p>` : ""}
-        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>Sales &amp; Channel Partner Activation · ${representedDeveloperName}<br/>in partnership with JBJ Global Real Estate<br/>${replyTo}</p>
+        <div style="margin:20px 0;padding:18px 20px;background:#FDFBF7;border:1px solid #1A1A1A14;border-radius:10px">
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#1A1A1A99;margin-bottom:6px">Featured Project</div>
+          <div style="font-size:18px;font-weight:600;color:#1A1A1A;margin-bottom:6px">${project.name}</div>
+          <div style="font-size:14px;color:#1A1A1A;margin-bottom:12px">${project.tagline}</div>
+          <a href="${project.url}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">Open ${project.name} e-catalogue</a>
+        </div>
+        ${offerBlock}
+        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> reserved for select brokerages — agenda covers ${project.name}, commissions, training and channel activation.</p>
+        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf.</p>
+        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#B89555;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a breakfast slot</a></p>` : ""}
+        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>JBJ Global Real Estate<br/>${replyTo}</p>
       </body></html>`;
     }
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;

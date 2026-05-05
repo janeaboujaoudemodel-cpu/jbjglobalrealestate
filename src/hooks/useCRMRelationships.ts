@@ -435,6 +435,8 @@ export interface BrokerageOutreachPersonalization {
   groupStatusLabelOverride?: string;
   preferredSlotId?: string;
   preferredEventTimeOverride?: string;
+  /** Citi Developer e-catalogue project key (amra | allura | aveline | agua | arya). Defaults to amra. */
+  featuredProjectKey?: string;
 }
 
 export const useSendBrokerageOutreach = () => {

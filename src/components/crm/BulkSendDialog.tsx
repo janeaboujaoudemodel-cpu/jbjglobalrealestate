@@ -20,6 +20,7 @@ import {
   type BrokerageGroupStatus,
   type BrokerageOutreachPersonalization,
 } from "@/hooks/useCRMRelationships";
+import { CITI_PROJECT_LIST, DEFAULT_FEATURED_PROJECT, getCitiProject, type CitiProjectKey } from "@/config/citi-projects";
 
 type EntityType = "developer" | "brokerage";
 
@@ -165,6 +166,7 @@ export const BulkSendDialog = ({
   const { data: upcomingSlots = [] } = useUpcomingBreakfastSlots();
   const [bulkPreferredSlotId, setBulkPreferredSlotId] = useState<string>("");
   const [bulkGroupStatus, setBulkGroupStatus] = useState<BrokerageGroupStatus | "">("");
+  const [bulkFeaturedProjectKey, setBulkFeaturedProjectKey] = useState<CitiProjectKey>(DEFAULT_FEATURED_PROJECT);
   const [perRowPersonalization, setPerRowPersonalization] = useState<
     Record<string, BrokerageOutreachPersonalization>
   >({});
@@ -178,12 +180,14 @@ export const BulkSendDialog = ({
       row.groupStatus ?? (bulkGroupStatus || undefined) ?? detected;
     const slotId = row.preferredSlotId ?? (bulkPreferredSlotId || undefined);
     const contactName = row.contactName ?? (r.primary_contact?.name || "");
+    const featuredProjectKey = (row.featuredProjectKey as CitiProjectKey) || bulkFeaturedProjectKey;
     const out: BrokerageOutreachPersonalization = {
       contactName: contactName || undefined,
       groupStatus,
       preferredSlotId: slotId || undefined,
       groupStatusLabelOverride: row.groupStatusLabelOverride,
       preferredEventTimeOverride: row.preferredEventTimeOverride,
+      featuredProjectKey,
     };
     return out;
   };
@@ -320,6 +324,7 @@ export const BulkSendDialog = ({
       : (personal?.preferredEventTimeOverride || "");
     const brokerageLocation =
       (previewDev as any)?.office_location || (previewDev as any)?.emirate || "Dubai";
+    const project = getCitiProject(personal?.featuredProjectKey);
     return {
       brokerage_name: name,
       brokerage_location: brokerageLocation,
@@ -334,10 +339,15 @@ export const BulkSendDialog = ({
       reply_to: "contact@jbj.ae",
       cc_email: "infoo.jane@gmail.com",
       from_name: "JBJ Global Real Estate",
+      represented_developer_name: "City Developer",
       booking_url: "#preview",
+      project_name: project.name,
+      project_url: project.url,
+      project_tagline: project.tagline,
+      project_offer_html: project.offerHtml || "",
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, upcomingSlots]);
+  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, bulkFeaturedProjectKey, upcomingSlots]);
 
   const renderPreview = (s: string) => {
     const conditional = s.replace(
@@ -556,6 +566,20 @@ export const BulkSendDialog = ({
                 <UserCog className="w-4 h-4" /><strong>Personalization defaults</strong>
               </div>
               <div className="text-[11px] text-[#1A1A1A]/70">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
+              <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Featured project (e-catalogue link)</Label>
+                <Select value={bulkFeaturedProjectKey} onValueChange={(v) => setBulkFeaturedProjectKey(v as CitiProjectKey)}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {CITI_PROJECT_LIST.map((p) => (
+                      <SelectItem key={p.key} value={p.key} className="text-xs">
+                        {p.name}{p.isFocus ? " · Focus" : ""}{p.offerHtml && p.key !== "amra" ? " · Promo" : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="text-[10px] text-[#1A1A1A]/60 mt-1">{getCitiProject(bulkFeaturedProjectKey).tagline}</div>
+              </div>
               <div>
                 <Label className="text-[11px] text-[#1A1A1A]">Group / partnership status</Label>
                 <Select value={bulkGroupStatus || "__auto"} onValueChange={(v) => setBulkGroupStatus(v === "__auto" ? "" : (v as BrokerageGroupStatus))}>
@@ -793,6 +817,23 @@ export const BulkSendDialog = ({
                                     <SelectItem value="__inherit" className="text-xs">Use default</SelectItem>
                                     {upcomingSlots.map((s) => (
                                       <SelectItem key={s.id} value={s.id} className="text-xs">{formatSlotLabelLocal(s.slot_at)}</SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="md:col-span-3">
+                                <Label className="text-[10px] text-[#1A1A1A]">Featured project</Label>
+                                <Select
+                                  value={(perRowPersonalization[t.id]?.featuredProjectKey as string) || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], featuredProjectKey: v === "__inherit" ? undefined : v } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default ({getCitiProject(bulkFeaturedProjectKey).name})</SelectItem>
+                                    {CITI_PROJECT_LIST.map((p) => (
+                                      <SelectItem key={p.key} value={p.key} className="text-xs">
+                                        {p.name}{p.isFocus ? " · Focus" : ""}{p.offerHtml && p.key !== "amra" ? " · Promo" : ""}
+                                      </SelectItem>
                                     ))}
                                   </SelectContent>
                                 </Select>

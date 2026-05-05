@@ -1,79 +1,69 @@
-# Brokerage Deal Ledger + Revenue Breakdown
+# Brokerage Outreach: Drop Drive URL, Add Citi Project Picker
 
 ## Goal
-From the Brokerages tab, click any brokerage → see a full deal history (with agent name, project, value, commission, date), register new deals, and slice total revenue by month / quarter / year. Search must work on brokerage name **and** location/emirate.
+For brokerage emails, replace the Google Drive link with a **City Developer e-catalogue project picker**, default to **AMRA** (current focus), and surface the **Allura tactical promo** (2 × 1BR, 15% discount, 100% upfront) when Allura is selected. Developer registration emails keep the Drive link unchanged.
 
-## What's already there
-- `crm_brokerage_deals` table exists (id, brokerage_id, developer_id, developer_name_snapshot, unit_label, client_name, deal_value_aed, commission_aed, closed_on, notes, currency).
-- `BrokerageDealModal` already lets you register one deal per brokerage from a "Register Deal" button on each card.
-- Search input on `BrokeragesTab` filters by name + contact.
-
-## Gaps to close
-1. No `agent_name` column on `crm_brokerage_deals` → cannot record which agent closed.
-2. Search ignores `office_location` / `emirate`.
-3. There is no per-brokerage drill-down: you can register deals but never see them, and there's no revenue rollup by month/quarter/year.
+## Current state (verified)
+- `crm-send-brokerage-outreach` builds `varsMap` with no project fields — only `brokerage_name`, `contact_*`, `group_status_*`, `booking_url`, etc.
+- `crm-send-developer-registration` already injects `drive_url` from `crm_owner_settings.drive_doc_pack_url`. Stays as-is.
+- `TemplateEditorDialog` brokerage placeholder hint shows only `brokerage_name` + `contact_first_name`. Drive URL appears only in developer mode (line 99/142).
+- `crm_email_templates` rows exist for both brokerage variants but are **not locked** → safe to re-seed.
+- `BrokerageOutreachPersonalization` carries `groupStatus` + `preferredSlotId`. Needs a new `featuredProjectKey`.
+- `BulkSendDialog` already has bulk + per-row personalization UI for group status / preferred slot.
 
 ## Plan
 
-### 1. Schema (migration)
-Add to `crm_brokerage_deals`:
-- `agent_name text`
-- `agent_email text` (optional, for future invitations)
-- index on `(brokerage_id, closed_on desc)` for fast ledger queries.
+### 1. New config — `src/config/citi-projects.ts`
+Single source of truth: 5 projects (AMRA, Allura, Aveline, Agua, Arya) with `name`, `url` (e-catalogue), `tagline`, optional `offerHtml`. AMRA flagged `isFocus: true`. Allura `offerHtml` describes the 2×1BR / 15% / 100% upfront promo. Default = `amra`.
 
-No RLS change needed — existing `owner_id` policies cover it.
+### 2. Type extension — `src/hooks/useCRMRelationships.ts`
+Add `featuredProjectKey?: CitiProjectKey` to `BrokerageOutreachPersonalization`.
 
-### 2. UI: clickable brokerage row
-- Make the brokerage **company name** in `BrokeragesTab` a button that opens a new dialog `BrokerageLedgerDialog` (full-screen on mobile, max-w-5xl on desktop).
-- Add a small "View deals" action button next to "Register Deal" so the entry point is obvious.
+### 3. Edge function — `supabase/functions/crm-send-brokerage-outreach/index.ts`
+- Inline the project catalogue (Deno can't import from `src/`).
+- Resolve `featuredProjectKey` from `personalization` (default `amra`).
+- Add to `varsMap`: `project_name`, `project_url`, `project_tagline`, `project_offer_html`.
+- Update fallback HTML (when stored template lacks `{{represented_developer_name}}`) to include the project section instead of any Drive link.
 
-### 3. New component: `BrokerageLedgerDialog`
-Sections inside the dialog:
+### 4. Re-seed brokerage templates
+SQL update on `crm_email_templates` for `brokerage_partnership_intro` and `brokerage_breakfast_invite`. Both templates use:
+- `{{contact_first_name}}`, `{{brokerage_name}}`, `{{group_status_line}}`
+- A clear **Featured Project** card with `{{project_name}}`, `{{project_tagline}}`, a CTA button to `{{project_url}}`
+- `{{#if project_offer_html}} … {{/if}}` block to inject the Allura promo (or any future project's tactical offer)
+- Private breakfast & briefing CTA (`{{booking_url}}`)
+- A short paragraph asking them to confirm whether they're already registered with us
 
-**Header** — brokerage name, emirate, RERA, clickable phone/email/website/IG (reuse `BrokerageContactLinks`).
+No `{{drive_url}}` anywhere in brokerage variants.
 
-**Revenue summary cards** — driven by a date-range filter (reuse `DateRangeFilter` from `src/components/analytics/DateRangeFilter.tsx`):
-- Total deals
-- Gross deal value (AED)
-- Total commission (AED)
-- Avg deal size
+### 5. UI — `src/components/crm/TemplateEditorDialog.tsx`
+- For brokerage mode only: change placeholder hint to list `{{brokerage_name}}`, `{{contact_first_name}}`, `{{project_name}}`, `{{project_url}}`, `{{project_offer_html}}`.
+- Update preview replacement: drop the `drive_url` substitution from the brokerage branch (it was already only in the developer branch — verify), add substitutions for the new project vars using the AMRA defaults so previews render correctly.
+- Developer mode unchanged.
 
-**Group-by selector**: Month / Quarter / Year. Renders a compact table:
-```
-Period         Deals   Gross AED       Commission AED
-2026 Q1        4       12,400,000      372,000
-2026 Q2        2        5,800,000      174,000
-```
-Computed client-side from the fetched deals.
+### 6. UI — `src/components/crm/BulkSendDialog.tsx`
+- Add a **Featured project** select (bulk-level + per-row override) shown only for `entityType === "brokerage"`. Options pulled from `CITI_PROJECT_LIST`. Default = AMRA.
+- Pipe `featuredProjectKey` through `resolvePersonalization()`.
+- Extend `previewVars` with `project_name`, `project_url`, `project_tagline`, `project_offer_html` so the in-dialog preview reflects the choice.
 
-**Deals table** — columns: Date · Agent · Project/Unit · Client · Developer · Value · Commission · Notes. Inline edit (pencil) and delete. Sorted by `closed_on desc`.
-
-**"Register new deal" button** at top — opens the existing `BrokerageDealModal` (extended with `agent_name` field, optional `agent_email`).
-
-### 4. Extend `BrokerageDealModal`
-- Add **Agent name** input (required) and **Agent email** (optional) to the form grid.
-- Persist them in the insert payload.
-
-### 5. Search improvements (`BrokeragesTab`)
-Update the local filter to also match `office_location`, `emirate`, and `represented_developer_name`. Update placeholder text to "Search by name, location, emirate, or developer".
-
-### 6. Revenue rollup helper
-Small pure helper in `src/lib/crm/brokerageRevenue.ts`:
-```ts
-groupDealsByPeriod(deals, "month" | "quarter" | "year") => Array<{period, deals, gross, commission}>
-```
-Used by the ledger dialog and unit-tested.
+### 7. Acceptance
+- Brokerage email preview shows AMRA card + e-catalogue button by default; switching to Allura adds the 2×1BR / 15% / 100% upfront block.
+- No Drive URL appears in any brokerage send.
+- Developer registration emails are unchanged.
+- Test send works for both brokerage variants with project selected.
 
 ## Files to create
-- `supabase/migrations/<ts>_brokerage_deal_agent.sql` — add columns + index
-- `src/components/crm/BrokerageLedgerDialog.tsx`
-- `src/lib/crm/brokerageRevenue.ts` (+ test)
+- `src/config/citi-projects.ts`
 
 ## Files to edit
-- `src/components/crm/BrokerageDealModal.tsx` — add agent fields
-- `src/pages/CRMRelationships.tsx` — open ledger on row click, broader search
-- `src/integrations/supabase/types.ts` — auto-regenerated by migration
+- `src/hooks/useCRMRelationships.ts` — add `featuredProjectKey` to personalization type
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — resolve project vars, update fallback HTML
+- `src/components/crm/TemplateEditorDialog.tsx` — placeholder hint + preview vars (brokerage only)
+- `src/components/crm/BulkSendDialog.tsx` — project picker (bulk + per-row), preview vars
+
+## Database change (data, not schema)
+- Update two rows in `crm_email_templates` (variants `brokerage_partnership_intro`, `brokerage_breakfast_invite`) with the new HTML/subject. Both rows are unlocked.
 
 ## Out of scope
-- No changes to developer-side ledger (the existing `OwnerRelationshipsRevenue` page already covers cross-side rollups).
-- No changes to `rel_deals` / payments system.
+- No change to developer registration templates or `drive_url` flow.
+- No change to breakfast slot booking, registration check, or NDA logic.
+- No new tables; project catalogue is a static config (curated, low churn).
