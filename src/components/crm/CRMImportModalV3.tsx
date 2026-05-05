@@ -829,7 +829,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         created_by_user_id: userId,
         // Broker attribution (optional)
         broker_id: registerUnderBroker && selectedBrokerId ? selectedBrokerId : null,
-        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.display_name : null,
+        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.full_name : null,
       })
       .select()
       .single();
