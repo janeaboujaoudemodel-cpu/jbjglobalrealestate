@@ -431,9 +431,13 @@ const BrokeragesTab = () => {
     const t = setTimeout(() => setDebouncedQ(q), 220);
     return () => clearTimeout(t);
   }, [q]);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [emirateFilter, setEmirateFilter] = useState("all");
-  const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [statusFilter, setStatusFilterRaw] = useState("all");
+  const [emirateFilter, setEmirateFilterRaw] = useState("all");
+  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [, startTransition] = useTransition();
+  const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
+  const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
+  const setSourceTab = (v: "all" | "directory" | "owner" | "existing") => startTransition(() => setSourceTabRaw(v));
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
