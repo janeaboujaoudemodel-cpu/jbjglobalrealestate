@@ -28,8 +28,11 @@ const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
 const INTERNAL_TOKEN = SERVICE_KEY; // reused as continuation auth between chunks
 
 const EMIRATES = ["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain"] as const;
-const CHUNK_SIZE = 12; // seed rows per chunk
-const ENRICH_CHUNK_SIZE = 24; // enrich rows per chunk (run in parallel within a chunk)
+const CHUNK_SIZE = 25; // seed rows per Perplexity page
+const ENRICH_CHUNK_SIZE = 30; // enrich rows per chunk (run in parallel within a chunk)
+// Each cron sweep starts a fresh seed job per emirate at each of these
+// starting offsets so we walk past Perplexity's first page and discover the long tail.
+const SEED_OFFSETS = [0, 100, 250, 500];
 
 const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
@@ -62,7 +65,7 @@ function mapsUrl(addr?: string | null): string | null {
 }
 
 /* ------------------------- perplexity helpers ------------------------- */
-async function pplxList(emirate: string, offset: number, pageSize: number) {
+async function pplxList(emirate: string, offset: number, pageSize: number, exclude: string[] = []) {
   if (!PPLX) return [];
   const schema = {
     type: "object",
@@ -86,6 +89,9 @@ async function pplxList(emirate: string, offset: number, pageSize: number) {
     },
     required: ["brokerages"],
   };
+  const excludeBlock = exclude.length
+    ? `\n\nDO NOT include any of these firms (already in our database): ${exclude.slice(0, 80).join("; ")}.`
+    : "";
   const resp = await fetch("https://api.perplexity.ai/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${PPLX}`, "Content-Type": "application/json" },
@@ -93,7 +99,7 @@ async function pplxList(emirate: string, offset: number, pageSize: number) {
       model: "sonar-pro",
       messages: [
         { role: "system", content: "You compile UAE real estate brokerage directories from official licensing authorities (DLD/RERA, Abu Dhabi DMT, emirate municipalities). Only real, currently-licensed firms. Never fabricate. Use null for unknowns." },
-        { role: "user", content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate}. Skip the first ${offset} firms (already returned). For each return: company_name, rera_license, office_address (full street + area + emirate), phone (+971 international), email (sales/info), website, instagram_url (e.g. https://instagram.com/handle).` },
+        { role: "user", content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate}. Skip the first ${offset} firms already returned in earlier pages — return only firms ranked from position ${offset + 1} onward (smaller, less well-known firms welcome).${excludeBlock} For each return: company_name, rera_license, office_address (full street + area + emirate), phone (+971 international), email (sales/info), website, instagram_url (e.g. https://instagram.com/handle).` },
       ],
       response_format: { type: "json_schema", json_schema: { name: "brokerage_directory", schema } },
       temperature: 0.0,
@@ -146,7 +152,16 @@ async function pplxFacts(name: string, emirate: string | null, isDev: boolean) {
 async function runBrokerageSeedChunk(job: any) {
   const emirate = job.emirate || EMIRATES[0];
   const offset = job.progress || 0;
-  const list = await pplxList(emirate, offset, CHUNK_SIZE);
+  // Pull the most recent firms we already have for this emirate so Perplexity
+  // doesn't keep returning the same names.
+  const { data: existingNames } = await admin
+    .from("crm_brokerages")
+    .select("company_name")
+    .eq("emirate", emirate)
+    .order("updated_at", { ascending: false })
+    .limit(80);
+  const exclude = (existingNames ?? []).map((r: any) => r.company_name).filter(Boolean);
+  const list = await pplxList(emirate, offset, CHUNK_SIZE, exclude);
   let inserted = 0, updated = 0;
 
   for (const r of list) {
@@ -201,22 +216,23 @@ async function runBrokerageSeedChunk(job: any) {
   }
 
   const totalSoFar = offset + list.length;
-  const isEmirateDone = list.length < CHUNK_SIZE;
-  const emirateIdx = EMIRATES.indexOf(emirate as any);
-  const nextEmirate = isEmirateDone ? EMIRATES[emirateIdx + 1] : emirate;
-  const allDone = isEmirateDone && !nextEmirate;
+  // Each seed job stays within its assigned emirate (cron fans out one job per
+  // emirate × offset). Walk forward until Perplexity returns a short page or
+  // we hit the per-job cap.
+  const HARD_CAP = (job.progress ?? 0) + CHUNK_SIZE * 8; // ~200 firms per job max
+  const isEmirateDone = list.length < CHUNK_SIZE || totalSoFar >= HARD_CAP;
 
   await admin.from("crm_directory_jobs").update({
-    progress: isEmirateDone ? 0 : totalSoFar,
-    emirate: allDone ? emirate : (isEmirateDone ? nextEmirate : emirate),
+    progress: totalSoFar,
+    emirate,
     inserted_count: (job.inserted_count ?? 0) + inserted,
     updated_count: (job.updated_count ?? 0) + updated,
-    message: `${emirate}: +${inserted} new, ${updated} filled`,
-    status: allDone ? "completed" : "running",
-    finished_at: allDone ? new Date().toISOString() : null,
+    message: `${emirate} @${offset}: +${inserted} new, ${updated} filled`,
+    status: isEmirateDone ? "completed" : "running",
+    finished_at: isEmirateDone ? new Date().toISOString() : null,
   }).eq("id", job.id);
 
-  return !allDone;
+  return !isEmirateDone;
 }
 
 async function runEnrichChunk(job: any) {
@@ -351,13 +367,21 @@ serve(async (req) => {
       const ownerId = ownerRow?.user_id ?? null;
 
       const jobs = [
-        ...EMIRATES.map((em) => ({ kind: "brokerage_seed", emirate: em as string, triggered_by: ownerId })),
-        { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId },
-        { kind: "developer_enrich", emirate: null, triggered_by: ownerId },
+        ...EMIRATES.flatMap((em) =>
+          SEED_OFFSETS.map((off) => ({
+            kind: "brokerage_seed",
+            emirate: em as string,
+            triggered_by: ownerId,
+            progress: off,
+          })),
+        ),
+        { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId, progress: 0 },
+        { kind: "developer_enrich", emirate: null, triggered_by: ownerId, progress: 0 },
       ];
-      const { data: created } = await admin.from("crm_directory_jobs").insert(jobs).select("id");
+      const { data: created, error: insErr } = await admin.from("crm_directory_jobs").insert(jobs).select("id");
+      if (insErr) console.error("cron insert err", insErr);
       for (const j of created ?? []) await scheduleNext(j.id);
-      return new Response(JSON.stringify({ scheduled: created?.length ?? 0 }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ scheduled: created?.length ?? 0, error: insErr?.message }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     // start / status — owner only
