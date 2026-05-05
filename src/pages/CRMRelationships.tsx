@@ -594,7 +594,18 @@ const BrokeragesTab = () => {
   return (
     <TooltipProvider>
     <div className="space-y-4">
-      <DocumentPackPanel />
+      <section aria-labelledby="brokerage-outreach-settings" className="rounded-2xl border-2 border-[#B89555]/40 bg-[#F7F2EA] p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <Mail className="w-5 h-5 text-[#1A1A1A]" />
+          <h2 id="brokerage-outreach-settings" className="text-base font-bold text-[#1A1A1A] tracking-tight">
+            Brokerage Outreach — Document Pack & Senders
+          </h2>
+        </div>
+        <p className="text-xs text-[#1A1A1A]/70 mb-3">
+          Same pack used for developer registrations. Edit once here or in the Developer Registry tab — they share one source of truth.
+        </p>
+        <DocumentPackPanel context="brokerage" />
+      </section>
       <DirectoryToolsPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
