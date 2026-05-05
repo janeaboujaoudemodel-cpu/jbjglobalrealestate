@@ -881,6 +881,23 @@ const BrokeragesTab = () => {
                   <Input placeholder="WhatsApp" value={editing.primary_contact?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, primary_contact: { ...editing.primary_contact, whatsapp: e.target.value } })} />
                 </div>
               </div>
+              <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">Admin / Owner contact (always present)</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="Admin name" value={editing.admin_contact?.name || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, name: e.target.value } })} />
+                  <Input placeholder="Role (default: Managing Director)" value={editing.admin_contact?.role || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, role: e.target.value } })} />
+                  <Input placeholder="Phone" value={editing.admin_contact?.phone || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, phone: e.target.value } })} />
+                  <Input placeholder="WhatsApp" value={editing.admin_contact?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, whatsapp: e.target.value } })} />
+                  <Input placeholder="Email (optional)" value={editing.admin_contact?.email || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, email: e.target.value } })} />
+                </div>
+              </div>
+              <div className="border-t pt-3">
+                <BrokerageAgentsEditor value={agents} onChange={setAgents} />
+                <BrokerageContactPhotoImporter
+                  brokerageId={editing.id}
+                  brokerageName={editing.company_name}
+                  onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
+                />
+              </div>
               <Field label="Notes"><Textarea rows={3} value={editing.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} /></Field>
             </div>
           )}
