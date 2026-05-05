@@ -46,6 +46,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm", color: "text-violet-600" },
   { label: "Contract Vault", description: "Developer agreements & AI contract upload", icon: FileSignature, path: "/owner/contracts", color: "text-[#B89555]" },
   { label: "Agency Activity", description: "Reminders, calls & notes logged on UAE agencies", icon: Bell, path: "/owner/crm/relationships/activity", color: "text-amber-600" },
+  { label: "Brokers Registry", description: "Every broker & company they work for", icon: Users, path: "/owner/crm/brokers", color: "text-[#B89555]" },
 ];
 
 export default function QuickActionsGrid() {
