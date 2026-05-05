@@ -669,3 +669,89 @@ export const useUpsertReminder = () => {
     onError: (e: any) => toast.error(e.message),
   });
 };
+
+/* ---------- Brokerage unified Remind: reminder + task + calendar + note ---------- */
+export const useBrokerageRemind = () => {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (vars: {
+      brokerageId: string;
+      brokerageName: string;
+      daysFromNow?: number;
+      title?: string;
+      body?: string;
+    }) => {
+      if (!user) throw new Error("Not signed in");
+      const days = vars.daysFromNow ?? 7;
+      const due = new Date();
+      due.setDate(due.getDate() + days);
+      const dueIso = due.toISOString();
+      const title = vars.title || `Follow up with ${vars.brokerageName}`;
+      const body =
+        vars.body ||
+        `Check status with ${vars.brokerageName}. If no reply, send a second message and log outcome.`;
+
+      // 1. Relationship reminder (drives the CRM reminders list)
+      await supabase.from("crm_relationship_reminders").insert({
+        owner_id: user.id,
+        kind: "follow_up",
+        title,
+        body,
+        due_at: dueIso,
+        brokerage_id: vars.brokerageId,
+      });
+
+      // 2. Owner task (drives Tasks dashboard)
+      await supabase.from("admin_tasks").insert({
+        user_id: user.id,
+        title,
+        description: body,
+        category: "Brokerage Follow-up",
+        priority: "medium",
+        status: "pending",
+        due_date: dueIso,
+      });
+
+      // 3 + 4. Brokerage calendar event + note (drives the agency activity log)
+      await (supabase as any).from("crm_brokerage_actions").insert([
+        {
+          owner_id: user.id,
+          brokerage_id: vars.brokerageId,
+          action_type: "calendar_event",
+          title,
+          body,
+          due_at: dueIso,
+          created_by: user.id,
+          metadata: { source: "remind_button" },
+        },
+        {
+          owner_id: user.id,
+          brokerage_id: vars.brokerageId,
+          action_type: "note",
+          title: "Reminder created",
+          body: `Follow-up scheduled for ${due.toLocaleDateString()} (${days}d).`,
+          created_by: user.id,
+          metadata: { source: "remind_button", due_at: dueIso },
+        },
+      ]);
+
+      // 5. Update brokerage row so the next-action chip surfaces in the list
+      await (supabase.from("crm_brokerages") as any)
+        .update({
+          next_followup_at: dueIso,
+          next_action_at: dueIso,
+          next_action_note: title,
+        })
+        .eq("id", vars.brokerageId);
+
+      return { ok: true, dueIso };
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      qc.invalidateQueries({ queryKey: ["crm-reminders"] });
+      toast.success("Reminder, task, calendar event & note created");
+    },
+    onError: (e: any) => toast.error(e.message || "Could not create reminder"),
+  });
+};
