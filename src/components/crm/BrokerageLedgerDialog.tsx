@@ -61,7 +61,15 @@ export const BrokerageLedgerDialog = ({
       return data ?? [];
     },
     enabled: open && !!brokerageId,
+    staleTime: 30_000,
   });
+
+  const handleOpenChange = (v: boolean) => {
+    if (!v) {
+      setAddOpen(false);
+    }
+    onOpenChange(v);
+  };
 
   const filteredDeals = useMemo(() => {
     let d = deals as any[];
@@ -99,7 +107,7 @@ export const BrokerageLedgerDialog = ({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
@@ -140,25 +148,31 @@ export const BrokerageLedgerDialog = ({
           </div>
 
           {/* Summary cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3 items-stretch">
             {[
               { label: "Deals", value: totals.count, isCount: true },
               { label: "Gross value", value: totals.gross },
               { label: "Commission", value: totals.commission },
               { label: "Avg deal size", value: Math.round(totals.avg) },
-            ].map((k) => (
-              <div
-                key={k.label}
-                className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3"
-              >
-                <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold">
-                  {k.label}
+            ].map((k) => {
+              const display = k.isCount ? String(k.value) : fmtAED(Number(k.value));
+              return (
+                <div
+                  key={k.label}
+                  className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 min-h-[96px] flex flex-col items-center justify-center text-center"
+                >
+                  <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold whitespace-nowrap">
+                    {k.label}
+                  </div>
+                  <div
+                    className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1 tabular-nums leading-tight whitespace-nowrap truncate max-w-full"
+                    title={display}
+                  >
+                    {display}
+                  </div>
                 </div>
-                <div className="text-lg font-bold text-[#1A1A1A] mt-1">
-                  {k.isCount ? k.value : fmtAED(Number(k.value))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Period rollup */}
@@ -174,10 +188,10 @@ export const BrokerageLedgerDialog = ({
             <table className="w-full text-sm">
               <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
                 <tr>
-                  <th className="p-2 text-left">Period</th>
-                  <th className="p-2 text-right">Deals</th>
-                  <th className="p-2 text-right">Gross</th>
-                  <th className="p-2 text-right">Commission</th>
+                  <th className="p-2 text-left whitespace-nowrap">Period</th>
+                  <th className="p-2 text-right whitespace-nowrap">Deals</th>
+                  <th className="p-2 text-right whitespace-nowrap">Gross</th>
+                  <th className="p-2 text-right whitespace-nowrap">Commission</th>
                 </tr>
               </thead>
               <tbody>
@@ -193,10 +207,10 @@ export const BrokerageLedgerDialog = ({
                 )}
                 {rollups.map((r) => (
                   <tr key={r.sortKey} className="border-t border-[#B89555]/15">
-                    <td className="p-2 font-medium">{r.period}</td>
-                    <td className="p-2 text-right">{r.deals}</td>
-                    <td className="p-2 text-right">{fmtAED(r.gross)}</td>
-                    <td className="p-2 text-right font-semibold">
+                    <td className="p-2 font-medium whitespace-nowrap">{r.period}</td>
+                    <td className="p-2 text-right tabular-nums whitespace-nowrap">{r.deals}</td>
+                    <td className="p-2 text-right tabular-nums whitespace-nowrap">{fmtAED(r.gross)}</td>
+                    <td className="p-2 text-right font-semibold tabular-nums whitespace-nowrap">
                       {fmtAED(r.commission)}
                     </td>
                   </tr>
@@ -219,14 +233,14 @@ export const BrokerageLedgerDialog = ({
                 <table className="w-full text-sm">
                   <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
                     <tr>
-                      <th className="p-2 text-left">Date</th>
-                      <th className="p-2 text-left">Agent</th>
-                      <th className="p-2 text-left">Project / Unit</th>
-                      <th className="p-2 text-left">Client</th>
-                      <th className="p-2 text-left">Developer</th>
-                      <th className="p-2 text-right">Value</th>
-                      <th className="p-2 text-right">Commission</th>
-                      <th className="p-2"></th>
+                      <th className="p-2 text-left whitespace-nowrap">Date</th>
+                      <th className="p-2 text-left whitespace-nowrap">Agent</th>
+                      <th className="p-2 text-left whitespace-nowrap">Project / Unit</th>
+                      <th className="p-2 text-left whitespace-nowrap">Client</th>
+                      <th className="p-2 text-left whitespace-nowrap">Developer</th>
+                      <th className="p-2 text-right whitespace-nowrap">Value</th>
+                      <th className="p-2 text-right whitespace-nowrap">Commission</th>
+                      <th className="p-2 whitespace-nowrap"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -247,14 +261,14 @@ export const BrokerageLedgerDialog = ({
                             ? new Date(d.closed_on).toLocaleDateString()
                             : "—"}
                         </td>
-                        <td className="p-2">{d.agent_name || "—"}</td>
-                        <td className="p-2">{d.unit_label || "—"}</td>
-                        <td className="p-2">{d.client_name || "—"}</td>
-                        <td className="p-2">{d.developer_name_snapshot || "—"}</td>
-                        <td className="p-2 text-right">
+                        <td className="p-2 whitespace-nowrap">{d.agent_name || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.unit_label || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.client_name || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.developer_name_snapshot || "—"}</td>
+                        <td className="p-2 text-right tabular-nums whitespace-nowrap">
                           {fmtAED(Number(d.deal_value_aed))}
                         </td>
-                        <td className="p-2 text-right font-semibold">
+                        <td className="p-2 text-right font-semibold tabular-nums whitespace-nowrap">
                           {fmtAED(Number(d.commission_aed))}
                         </td>
                         <td className="p-2 text-right">
@@ -277,16 +291,18 @@ export const BrokerageLedgerDialog = ({
         </DialogContent>
       </Dialog>
 
-      <BrokerageDealModal
-        open={addOpen}
-        onOpenChange={setAddOpen}
-        brokerageId={brokerageId}
-        brokerageName={brokerageName}
-        onSaved={() => {
-          refetch();
-          qc.invalidateQueries({ queryKey: ["brokerages"] });
-        }}
-      />
+      {addOpen && (
+        <BrokerageDealModal
+          open={addOpen}
+          onOpenChange={setAddOpen}
+          brokerageId={brokerageId}
+          brokerageName={brokerageName}
+          onSaved={() => {
+            refetch();
+            qc.invalidateQueries({ queryKey: ["brokerages"] });
+          }}
+        />
+      )}
     </>
   );
 };
