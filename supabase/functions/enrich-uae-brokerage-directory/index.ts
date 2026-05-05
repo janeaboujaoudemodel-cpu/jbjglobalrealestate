@@ -70,11 +70,11 @@ async function perplexityResearch(
         {
           role: "system",
           content:
-            "You research UAE real-estate brokerage offices. Return verifiable facts only — from the firm's own website, the DLD/RERA broker registry, the Abu Dhabi DMT, or the relevant emirate municipality. Use null for unknowns. Never fabricate.",
+            "You research UAE REAL ESTATE SALES brokerage offices. Return verifiable facts only — from the firm's own website, the DLD/RERA broker registry, the Abu Dhabi DMT, or the relevant emirate municipality. Skip any firm that is a bank, mortgage broker, insurance broker, financial advisor, law firm, consultancy, freight/logistics broker, or pure property-management company. Use null for unknowns. Never fabricate.",
         },
         {
           role: "user",
-          content: `Research the UAE real estate brokerage "${name}"${emirate ? ` in ${emirate}` : ""}${rera ? ` (RERA license ${rera})` : ""}. Return JSON: phone (international format with +971), email (sales/info), website, office_address (full street + area + emirate), hq_emirate (one of ${EMIRATES.join(", ")}), rera_license (DLD or DMT broker registration number).`,
+          content: `Research the UAE REAL ESTATE SALES brokerage "${name}"${emirate ? ` in ${emirate}` : ""}${rera ? ` (RERA license ${rera})` : ""}. Return JSON: phone (international format with +971), email (sales/info), website, office_address (full street + area + emirate), hq_emirate (one of ${EMIRATES.join(", ")}), rera_license (DLD or DMT real-estate broker registration number — null if firm is not a real-estate broker).`,
         },
       ],
       response_format: { type: "json_schema", json_schema: { name: "brokerage_facts", schema } },
