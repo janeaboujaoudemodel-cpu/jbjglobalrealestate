@@ -5,10 +5,11 @@
  * email. The token in the URL identifies the brokerage and the placeholder
  * meeting_requests row that this booking confirms.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
-import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight, MapPin, Phone, Download, Copy, CalendarPlus } from "lucide-react";
+import html2canvas from "html2canvas";
 import { supabase } from "@/integrations/supabase/client";
 import { edgeFnUrl, anonHeaders } from "@/config/backend";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+
+const HOST_NAME = "Jane Bou Jaoude";
+const HOST_PHONE = "+971 54 716 7107";
+const HOST_PHONE_TEL = "+971547167107";
+const OFFICE_LOCATION = "Citi Developers Sales and Experience Center, Dubai";
 
 interface Slot {
   id: string;
