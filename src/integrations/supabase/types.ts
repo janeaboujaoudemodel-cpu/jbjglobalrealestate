@@ -7074,6 +7074,7 @@ export type Database = {
       }
       crm_owner_settings: {
         Row: {
+          active_cc_emails: Json
           cc_email: string
           cc_jane_enabled: boolean
           created_at: string
@@ -7083,10 +7084,13 @@ export type Database = {
           from_name: string
           owner_id: string
           reply_to_email: string
+          saved_cc_emails: Json
+          saved_sender_emails: Json
           signature_html: string | null
           updated_at: string
         }
         Insert: {
+          active_cc_emails?: Json
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
@@ -7096,10 +7100,13 @@ export type Database = {
           from_name?: string
           owner_id: string
           reply_to_email?: string
+          saved_cc_emails?: Json
+          saved_sender_emails?: Json
           signature_html?: string | null
           updated_at?: string
         }
         Update: {
+          active_cc_emails?: Json
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
@@ -7109,6 +7116,8 @@ export type Database = {
           from_name?: string
           owner_id?: string
           reply_to_email?: string
+          saved_cc_emails?: Json
+          saved_sender_emails?: Json
           signature_html?: string | null
           updated_at?: string
         }
