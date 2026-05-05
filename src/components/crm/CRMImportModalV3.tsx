@@ -153,7 +153,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       setSelectedBrokerId(data.id);
       setNewBrokerName("");
       setIsAddingBroker(false);
-      toast.success(`Broker "${data.display_name}" created`);
+      toast.success(`Broker "${data.full_name}" created`);
     } catch (err) {
       console.error("Failed to create broker:", err);
       toast.error("Failed to create broker");
