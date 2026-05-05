@@ -26139,37 +26139,48 @@ export type Database = {
           brand_name: string
           brokerage_priority: Database["public"]["Enums"]["uae_company_priority"]
           brokerage_ref: string
+          company_size_estimated: string | null
           created_at: string
           created_by: string | null
+          data_source: string | null
           emirate_section: Database["public"]["Enums"]["uae_emirate"]
           first_email_sent_at: string | null
           id: string
+          instagram_url: string | null
           last_email_sent_at: string | null
           last_reply_received_at: string | null
           last_response_summary: string | null
           last_verified_date: string | null
           legal_company_name: string
           license_number: string | null
+          linkedin_url: string | null
           main_email_addresses: Json
           main_phone_numbers: Json
+          name_norm: string | null
           next_follow_up_date: string | null
           notes: string | null
+          number_of_brokers: number | null
           number_of_follow_ups_sent: number
+          office_google_maps_url: string | null
           office_locations: Json
           outreach_contact_person: string | null
           outreach_email: string | null
           outreach_phone: string | null
           outreach_status: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits: string | null
+          primary_market: string | null
           public_key_contacts: Json
           registration_completed_date: string | null
           regulator_or_authority: string | null
           required_next_action: string | null
           rera_orn_or_broker_number: string | null
           service_categories: string[]
+          specialization: string[]
           test_email_completed: boolean
           updated_at: string
           verification_status: Database["public"]["Enums"]["uae_verification_status"]
           website: string | null
+          website_domain: string | null
         }
         Insert: {
           active_developer_relationships?: Json
@@ -26177,37 +26188,48 @@ export type Database = {
           brand_name: string
           brokerage_priority?: Database["public"]["Enums"]["uae_company_priority"]
           brokerage_ref: string
+          company_size_estimated?: string | null
           created_at?: string
           created_by?: string | null
+          data_source?: string | null
           emirate_section: Database["public"]["Enums"]["uae_emirate"]
           first_email_sent_at?: string | null
           id?: string
+          instagram_url?: string | null
           last_email_sent_at?: string | null
           last_reply_received_at?: string | null
           last_response_summary?: string | null
           last_verified_date?: string | null
           legal_company_name: string
           license_number?: string | null
+          linkedin_url?: string | null
           main_email_addresses?: Json
           main_phone_numbers?: Json
+          name_norm?: string | null
           next_follow_up_date?: string | null
           notes?: string | null
+          number_of_brokers?: number | null
           number_of_follow_ups_sent?: number
+          office_google_maps_url?: string | null
           office_locations?: Json
           outreach_contact_person?: string | null
           outreach_email?: string | null
           outreach_phone?: string | null
           outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits?: string | null
+          primary_market?: string | null
           public_key_contacts?: Json
           registration_completed_date?: string | null
           regulator_or_authority?: string | null
           required_next_action?: string | null
           rera_orn_or_broker_number?: string | null
           service_categories?: string[]
+          specialization?: string[]
           test_email_completed?: boolean
           updated_at?: string
           verification_status?: Database["public"]["Enums"]["uae_verification_status"]
           website?: string | null
+          website_domain?: string | null
         }
         Update: {
           active_developer_relationships?: Json
@@ -26215,37 +26237,48 @@ export type Database = {
           brand_name?: string
           brokerage_priority?: Database["public"]["Enums"]["uae_company_priority"]
           brokerage_ref?: string
+          company_size_estimated?: string | null
           created_at?: string
           created_by?: string | null
+          data_source?: string | null
           emirate_section?: Database["public"]["Enums"]["uae_emirate"]
           first_email_sent_at?: string | null
           id?: string
+          instagram_url?: string | null
           last_email_sent_at?: string | null
           last_reply_received_at?: string | null
           last_response_summary?: string | null
           last_verified_date?: string | null
           legal_company_name?: string
           license_number?: string | null
+          linkedin_url?: string | null
           main_email_addresses?: Json
           main_phone_numbers?: Json
+          name_norm?: string | null
           next_follow_up_date?: string | null
           notes?: string | null
+          number_of_brokers?: number | null
           number_of_follow_ups_sent?: number
+          office_google_maps_url?: string | null
           office_locations?: Json
           outreach_contact_person?: string | null
           outreach_email?: string | null
           outreach_phone?: string | null
           outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits?: string | null
+          primary_market?: string | null
           public_key_contacts?: Json
           registration_completed_date?: string | null
           regulator_or_authority?: string | null
           required_next_action?: string | null
           rera_orn_or_broker_number?: string | null
           service_categories?: string[]
+          specialization?: string[]
           test_email_completed?: boolean
           updated_at?: string
           verification_status?: Database["public"]["Enums"]["uae_verification_status"]
           website?: string | null
+          website_domain?: string | null
         }
         Relationships: []
       }
@@ -26257,6 +26290,7 @@ export type Database = {
           company_type: Database["public"]["Enums"]["uae_developer_company_type"]
           created_at: string
           created_by: string | null
+          data_source: string | null
           developer_priority: Database["public"]["Enums"]["uae_company_priority"]
           developer_ref: string
           emirate_section: Database["public"]["Enums"]["uae_emirate"]
@@ -26264,21 +26298,26 @@ export type Database = {
           founded_year: number | null
           headquarters_address: string | null
           id: string
+          instagram_url: string | null
           international_projects: Json
           last_email_sent_at: string | null
           last_reply_received_at: string | null
           last_response_summary: string | null
           last_verified_date: string | null
           legal_company_name: string
+          linkedin_url: string | null
           main_email_addresses: Json
           main_phone_numbers: Json
           master_developer_evidence: string | null
           master_developer_status: Database["public"]["Enums"]["uae_master_developer_status"]
+          name_norm: string | null
           next_follow_up_date: string | null
           notes: string | null
           number_of_follow_ups_sent: number
+          office_google_maps_url: string | null
           office_locations: Json
           outreach_status: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits: string | null
           public_key_contacts: Json
           public_registration_identifiers: Json
           registration_completed_date: string | null
@@ -26291,6 +26330,7 @@ export type Database = {
           updated_at: string
           verification_status: Database["public"]["Enums"]["uae_verification_status"]
           website: string | null
+          website_domain: string | null
         }
         Insert: {
           assigned_team_member?: string | null
@@ -26299,6 +26339,7 @@ export type Database = {
           company_type?: Database["public"]["Enums"]["uae_developer_company_type"]
           created_at?: string
           created_by?: string | null
+          data_source?: string | null
           developer_priority?: Database["public"]["Enums"]["uae_company_priority"]
           developer_ref: string
           emirate_section: Database["public"]["Enums"]["uae_emirate"]
@@ -26306,21 +26347,26 @@ export type Database = {
           founded_year?: number | null
           headquarters_address?: string | null
           id?: string
+          instagram_url?: string | null
           international_projects?: Json
           last_email_sent_at?: string | null
           last_reply_received_at?: string | null
           last_response_summary?: string | null
           last_verified_date?: string | null
           legal_company_name: string
+          linkedin_url?: string | null
           main_email_addresses?: Json
           main_phone_numbers?: Json
           master_developer_evidence?: string | null
           master_developer_status?: Database["public"]["Enums"]["uae_master_developer_status"]
+          name_norm?: string | null
           next_follow_up_date?: string | null
           notes?: string | null
           number_of_follow_ups_sent?: number
+          office_google_maps_url?: string | null
           office_locations?: Json
           outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits?: string | null
           public_key_contacts?: Json
           public_registration_identifiers?: Json
           registration_completed_date?: string | null
@@ -26333,6 +26379,7 @@ export type Database = {
           updated_at?: string
           verification_status?: Database["public"]["Enums"]["uae_verification_status"]
           website?: string | null
+          website_domain?: string | null
         }
         Update: {
           assigned_team_member?: string | null
@@ -26341,6 +26388,7 @@ export type Database = {
           company_type?: Database["public"]["Enums"]["uae_developer_company_type"]
           created_at?: string
           created_by?: string | null
+          data_source?: string | null
           developer_priority?: Database["public"]["Enums"]["uae_company_priority"]
           developer_ref?: string
           emirate_section?: Database["public"]["Enums"]["uae_emirate"]
@@ -26348,21 +26396,26 @@ export type Database = {
           founded_year?: number | null
           headquarters_address?: string | null
           id?: string
+          instagram_url?: string | null
           international_projects?: Json
           last_email_sent_at?: string | null
           last_reply_received_at?: string | null
           last_response_summary?: string | null
           last_verified_date?: string | null
           legal_company_name?: string
+          linkedin_url?: string | null
           main_email_addresses?: Json
           main_phone_numbers?: Json
           master_developer_evidence?: string | null
           master_developer_status?: Database["public"]["Enums"]["uae_master_developer_status"]
+          name_norm?: string | null
           next_follow_up_date?: string | null
           notes?: string | null
           number_of_follow_ups_sent?: number
+          office_google_maps_url?: string | null
           office_locations?: Json
           outreach_status?: Database["public"]["Enums"]["uae_outreach_status"]
+          phone_digits?: string | null
           public_key_contacts?: Json
           public_registration_identifiers?: Json
           registration_completed_date?: string | null
@@ -26375,6 +26428,7 @@ export type Database = {
           updated_at?: string
           verification_status?: Database["public"]["Enums"]["uae_verification_status"]
           website?: string | null
+          website_domain?: string | null
         }
         Relationships: []
       }
@@ -31178,6 +31232,15 @@ export type Database = {
         Returns: string
       }
       enqueue_pending_cv_task_reminders: { Args: never; Returns: undefined }
+      find_existing_company: {
+        Args: {
+          p_kind: string
+          p_name: string
+          p_phone?: string
+          p_website?: string
+        }
+        Returns: string
+      }
       generate_card_number: { Args: never; Returns: string }
       generate_company_id: { Args: never; Returns: string }
       generate_referral_code: { Args: never; Returns: string }
@@ -31477,6 +31540,9 @@ export type Database = {
         }
         Returns: string
       }
+      uae_norm_domain: { Args: { p_url: string }; Returns: string }
+      uae_norm_name: { Args: { p_name: string }; Returns: string }
+      uae_norm_phone: { Args: { p_phone: string }; Returns: string }
       update_partner_banking: {
         Args: {
           p_bank_account?: string
