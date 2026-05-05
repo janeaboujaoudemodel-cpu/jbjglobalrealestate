@@ -417,6 +417,7 @@ const TopAgentsEditor = ({ value, onChange }: { value: TopAgent[]; onChange: (v:
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
+  const navigate = useNavigate();
   const { data = [], isLoading, refetch } = useBrokerages();
   const upsert = useUpsertBrokerage();
   const del = useDeleteBrokerage();
