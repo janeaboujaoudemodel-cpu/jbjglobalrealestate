@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
-import { Archive, Search, Download, FileSignature, Stamp } from "lucide-react";
+import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText } from "lucide-react";
+import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
 
 interface SignedRow {
   signed_document_id: string;
