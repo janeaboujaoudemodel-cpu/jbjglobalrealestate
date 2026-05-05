@@ -160,29 +160,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setOwnerError(null);
 
       let result = false;
-      // Try up to 2 times (initial + 1 retry)
-      try {
-        result = await attemptVerify();
-      } catch (firstErr) {
-        console.warn("verify-owner attempt 1 failed, retrying...", firstErr);
-        // Wait 1s then retry
-        await new Promise(r => setTimeout(r, 1000));
-        result = await attemptVerify();
+      // Try up to 3 times (initial + 2 retries with backoff) to ride out transient network blips
+      let lastErr: any = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          result = await attemptVerify();
+          lastErr = null;
+          break;
+        } catch (e) {
+          lastErr = e;
+          if (attempt < 2) {
+            await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt)));
+          }
+        }
       }
+      if (lastErr && !result) throw lastErr;
 
       // CRITICAL: Set isOwner BEFORE ownerLoading=false to prevent
       // a render frame where ownerLoading=false but isOwner is still false,
       // which causes OwnerGuard to redirect to /403.
       setIsOwner(result);
       setOwnerLoading(false);
-      // Cache successful owner verification in sessionStorage
-      if (result && currentSession?.access_token) {
-        const ck = `owner_${currentSession.access_token.substring(0, 16)}`;
-        sessionStorage.setItem(ck, 'true');
-      }
+      writeCache(result);
       return result;
     } catch (err: any) {
       console.error("verify-owner failed after retries:", err);
+      // If we have a fresh-ish cached owner=true, fall back to it instead of showing the error wall
+      const fallback = readCache();
+      if (fallback?.ok === true && (Date.now() - fallback.ts) < OWNER_TTL_MS * 2) {
+        console.warn("Using cached owner verification due to network error");
+        setIsOwner(true);
+        setOwnerLoading(false);
+        setOwnerError(null);
+        return true;
+      }
       setOwnerError(err?.message || "Verification failed");
       setIsOwner(false);
       setOwnerLoading(false);
