@@ -821,6 +821,23 @@ export const BulkSendDialog = ({
                                   </SelectContent>
                                 </Select>
                               </div>
+                              <div className="md:col-span-3">
+                                <Label className="text-[10px] text-[#1A1A1A]">Featured project</Label>
+                                <Select
+                                  value={(perRowPersonalization[t.id]?.featuredProjectKey as string) || "__inherit"}
+                                  onValueChange={(v) => setPerRowPersonalization((p) => ({ ...p, [t.id]: { ...p[t.id], featuredProjectKey: v === "__inherit" ? undefined : v } }))}
+                                >
+                                  <SelectTrigger className="h-7 text-xs mt-0.5"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="__inherit" className="text-xs">Use default ({getCitiProject(bulkFeaturedProjectKey).name})</SelectItem>
+                                    {CITI_PROJECT_LIST.map((p) => (
+                                      <SelectItem key={p.key} value={p.key} className="text-xs">
+                                        {p.name}{p.isFocus ? " · Focus" : ""}{p.offerHtml && p.key !== "amra" ? " · Promo" : ""}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
                             </div>
                           )}
                         </div>
