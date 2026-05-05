@@ -44,24 +44,65 @@ export default function AgencyActivityLog() {
   const [typeFilter, setTypeFilter] = useState("all");
 
   const { data: rows = [], isLoading } = useQuery<ActivityRow[]>({
-    queryKey: ["crm-brokerage-actions"],
+    queryKey: ["crm-unified-activity"],
     queryFn: async () => {
-      const { data: actions, error } = await (supabase as any)
-        .from("crm_brokerage_actions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(1000);
-      if (error) throw error;
-      const ids = Array.from(new Set((actions || []).map((a: any) => a.brokerage_id)));
+      const sb = supabase as any;
+      const [actionsRes, remindersRes, touchpointsRes] = await Promise.all([
+        sb.from("crm_brokerage_actions").select("*").order("created_at", { ascending: false }).limit(500),
+        sb.from("crm_relationship_reminders").select("*").order("created_at", { ascending: false }).limit(500),
+        sb.from("crm_outreach_touchpoints").select("*").eq("entity_type", "brokerage").order("occurred_at", { ascending: false }).limit(500),
+      ]);
+
+      const merged: ActivityRow[] = [];
+
+      (actionsRes.data || []).forEach((a: any) => merged.push({
+        id: `a:${a.id}`,
+        brokerage_id: a.brokerage_id,
+        action_type: a.action_type,
+        title: a.title,
+        body: a.body,
+        due_at: a.due_at,
+        created_at: a.created_at,
+        metadata: a.metadata,
+      }));
+
+      (remindersRes.data || []).forEach((r: any) => {
+        if (!r.brokerage_id) return;
+        merged.push({
+          id: `r:${r.id}`,
+          brokerage_id: r.brokerage_id,
+          action_type: "reminder",
+          title: r.title,
+          body: r.body,
+          due_at: r.due_at,
+          created_at: r.created_at,
+          metadata: { kind: r.kind, is_done: r.is_done },
+        });
+      });
+
+      (touchpointsRes.data || []).forEach((t: any) => merged.push({
+        id: `t:${t.id}`,
+        brokerage_id: t.entity_id,
+        action_type: t.direction === "inbound" ? "message_sent" : "outreach_sent",
+        title: t.subject,
+        body: t.body_excerpt,
+        due_at: null,
+        created_at: t.occurred_at || t.created_at,
+        metadata: { channel: t.channel, direction: t.direction },
+      }));
+
+      merged.sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
+
+      const ids = Array.from(new Set(merged.map((m) => m.brokerage_id).filter(Boolean)));
       let lookup = new Map<string, string>();
       if (ids.length) {
-        const { data: brokerages } = await (supabase as any)
+        const { data: brokerages } = await sb
           .from("crm_brokerages")
           .select("id,company_name")
           .in("id", ids);
         lookup = new Map((brokerages || []).map((b: any) => [b.id, b.company_name as string]));
       }
-      return (actions || []).map((a: any) => ({ ...a, brokerage_name: lookup.get(a.brokerage_id) || "Unknown agency" }));
+      return merged.map((a) => ({ ...a, brokerage_name: lookup.get(a.brokerage_id) || "Unknown agency" }));
     },
   });
 
