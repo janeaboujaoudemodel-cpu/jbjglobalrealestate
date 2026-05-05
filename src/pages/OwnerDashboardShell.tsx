@@ -54,7 +54,7 @@ const OwnerDashboardShell = () => {
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             data-no-contrast-guard
             style={{ color: "#1A1A1A" }}
-            className="hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
+            className="border-2 border-[#B89555] bg-[#EFE6D6] hover:bg-[#B89555]/15 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {collapsed ? (
