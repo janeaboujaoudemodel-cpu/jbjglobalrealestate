@@ -76,19 +76,27 @@ export const DirectoryToolsPanel = () => {
     const j = jobs.find((x) => x.kind === kind);
     return { kind, job: j };
   });
-  const allDone = latestByKind.every(({ job }) => job && job.status === "completed");
+  const allFinished = latestByKind.every(({ job }) => job && job.status === "completed");
   const anyFailed = latestByKind.some(({ job }) => job && job.status === "failed");
+  const anyChanges = latestByKind.some(({ job }) => job && ((job.inserted_count || 0) + (job.updated_count || 0)) > 0);
+  const allDoneWithChanges = allFinished && anyChanges && !anyFailed;
+  const allDoneNoChanges = allFinished && !anyChanges && !anyFailed;
 
   return (
     <Card className="border-[#B89555]/30 bg-[#FDFBF7]">
       <CardContent className="p-5 space-y-4">
         <div className="flex items-center gap-2 flex-wrap">
           <Globe2 className="w-4 h-4 text-[#B89555]" />
-          <h3 className="text-sm font-semibold text-[#1A1A1A]">UAE Directory · Background sync</h3>
+          <h3 className="text-sm font-semibold text-[#1A1A1A]">UAE Brokerage &amp; Developer Directory · Background sync</h3>
           <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">Auto-runs daily</Badge>
-          {allDone && (
+          {allDoneWithChanges && (
             <Badge className="bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3" /> All daily tasks completed
+              <CheckCircle2 className="w-3 h-3" /> Daily run complete · new data added
+            </Badge>
+          )}
+          {allDoneNoChanges && (
+            <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 inline-flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Daily run complete · no new records
             </Badge>
           )}
           {anyFailed && (
@@ -111,28 +119,32 @@ export const DirectoryToolsPanel = () => {
         </div>
 
         <p className="text-xs text-[#1A1A1A]/70">
-          The system automatically discovers UAE-licensed brokerages by emirate and fills missing
-          phone, email, website, Instagram, office address & map link for both brokerages and
-          developers. You don't need to click anything — this card just shows progress.
+          Each day the system automatically scans publicly-listed UAE (United Arab Emirates) brokerages and developers by emirate and fills in any missing
+          phone, email, website, Instagram, office address &amp; map link. You don't need to click anything — this card just shows progress.
+          A run that finishes with <strong>0 new</strong> means the public sources had no new contact info to add this cycle, not an error.
         </p>
 
         {/* Per-kind ticked summary — always shows the three daily tasks with a clear status */}
         <div className="grid sm:grid-cols-3 gap-2">
           {latestByKind.map(({ kind, job }) => {
-            const isDone = job?.status === "completed";
+            const changes = ((job?.inserted_count || 0) + (job?.updated_count || 0)) > 0;
+            const isDoneWithChanges = job?.status === "completed" && changes;
+            const isDoneNoChanges = job?.status === "completed" && !changes;
             const isFailed = job?.status === "failed";
             const isRunning = job && (job.status === "running" || job.status === "queued");
             return (
               <div
                 key={kind}
                 className={`rounded-lg border px-3 py-2 text-xs flex items-start gap-2 ${
-                  isDone ? "border-emerald-300 bg-emerald-50" :
+                  isDoneWithChanges ? "border-emerald-300 bg-emerald-50" :
+                  isDoneNoChanges ? "border-[#B89555]/40 bg-[#EFE6D6]" :
                   isFailed ? "border-red-300 bg-red-50" :
                   "border-[#B89555]/30 bg-white"
                 }`}
               >
                 <div className="mt-0.5">
-                  {isDone ? <CheckCircle2 className="w-4 h-4 text-emerald-700" /> :
+                  {isDoneWithChanges ? <CheckCircle2 className="w-4 h-4 text-emerald-700" /> :
+                    isDoneNoChanges ? <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" /> :
                     isFailed ? <AlertCircle className="w-4 h-4 text-red-700" /> :
                     isRunning ? <Loader2 className="w-4 h-4 animate-spin text-[#B89555]" /> :
                     <Loader2 className="w-4 h-4 text-[#1A1A1A]/40" />}
@@ -140,7 +152,10 @@ export const DirectoryToolsPanel = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-[#1A1A1A]">{KIND_LABEL[kind]}</div>
                   <div className="text-[#1A1A1A]/70 truncate">
-                    {isDone ? "Completed" : isFailed ? (job?.error || "Failed") : isRunning ? "In progress…" : "Awaiting next run"}
+                    {isDoneWithChanges ? "Completed — new data added" :
+                      isDoneNoChanges ? "Up to date — no new records this run" :
+                      isFailed ? (job?.error || "Failed") :
+                      isRunning ? "In progress…" : "Awaiting next run"}
                   </div>
                   {job && (job.inserted_count || job.updated_count) ? (
                     <div className="text-[#1A1A1A]/60 mt-0.5">+{job.inserted_count} new · {job.updated_count} updated</div>

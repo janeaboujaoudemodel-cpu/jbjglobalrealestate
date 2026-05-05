@@ -39,7 +39,7 @@ const OwnerDashboardShell = () => {
     <>
       {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
       <div
-        className="border-b border-[#B89555]/40 flex items-center justify-between px-4 flex-shrink-0 bg-[#FDFBF7]"
+        className="border-b border-[#B89555]/40 flex items-center justify-between px-4 flex-shrink-0 bg-[#F7F2EA]"
         style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
       >
         {!collapsed && (
@@ -70,7 +70,7 @@ const OwnerDashboardShell = () => {
       <OwnerSidebarNav collapsed={collapsed} onNavigate={() => setMobileOpen(false)} />
 
       {/* Bottom Actions */}
-      <div data-no-contrast-guard className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#FDFBF7]">
+      <div data-no-contrast-guard className="p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
           style={{ color: "#1A1A1A" }}
@@ -94,7 +94,7 @@ const OwnerDashboardShell = () => {
   );
 
   return (
-    <div data-surface="champagne" className="min-h-screen bg-[#FDFBF7] flex">
+    <div data-surface="champagne" className="min-h-screen bg-[#F7F2EA] flex">
       {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
       <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
         <OwnerTasksPopupAlert />
@@ -102,7 +102,7 @@ const OwnerDashboardShell = () => {
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" data-surface="champagne" className="w-64 p-0 bg-[#FDFBF7] border-r border-[#B89555]/40">
+          <SheetContent side="left" data-surface="champagne" className="w-64 p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -115,7 +115,7 @@ const OwnerDashboardShell = () => {
         <aside 
           data-surface="champagne"
           className={cn(
-            "fixed left-0 top-0 h-full bg-[#FDFBF7] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
+            "fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
             sidebarCollapsed ? "w-16" : "w-64"
           )}
           role="navigation"
@@ -137,7 +137,7 @@ const OwnerDashboardShell = () => {
             pixel-for-pixel with the sidebar logo divider. No top padding/margin. */}
         <header
           data-no-contrast-guard
-          className="bg-[#FDFBF7] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0"
+          className="bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0"
           style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
         >
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
