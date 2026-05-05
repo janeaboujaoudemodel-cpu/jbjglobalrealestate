@@ -20,6 +20,7 @@ import {
   type BrokerageGroupStatus,
   type BrokerageOutreachPersonalization,
 } from "@/hooks/useCRMRelationships";
+import { CITI_PROJECT_LIST, DEFAULT_FEATURED_PROJECT, getCitiProject, type CitiProjectKey } from "@/config/citi-projects";
 
 type EntityType = "developer" | "brokerage";
 
