@@ -631,12 +631,15 @@ const BrokeragesTab = () => {
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => exportCSV(filtered, `brokerages-${Date.now()}.csv`, [
-          { key: "company_name", label: "Company" }, { key: "rera_license", label: "License" },
-          { key: "office_location", label: "Location" }, { key: "emirate", label: "Emirate" }, { key: "status", label: "Status" },
-          { key: "deal_count", label: "Deals" }, { key: "primary_contact", label: "Primary Contact" },
-          { key: "entry_source", label: "Source" }, { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        <Button variant="outline" onClick={() => handleExport("pdf")} title="Export the filtered agency list as a branded PDF">
+          <FileTextIcon className="w-4 h-4 mr-2" />Export PDF
+        </Button>
+        <Button variant="outline" onClick={() => handleExport("xlsx")} title="Export the filtered agency list as an Excel sheet">
+          <FileSpreadsheet className="w-4 h-4 mr-2" />Export Excel
+        </Button>
+        <Button variant="outline" onClick={() => handleExport("csv")} title="Export the filtered agency list as CSV">
+          <Download className="w-4 h-4 mr-2" />Export CSV
+        </Button>
         <Button
           variant="outline"
           onClick={() => {
