@@ -143,6 +143,19 @@ function normalizeWebsite(w: string | null): string | null {
   return "https://" + trimmed.replace(/^\/+/, "");
 }
 
+// Reject names that are clearly NOT real-estate sales brokerages.
+const NON_REALESTATE_RX =
+  /\b(bank|banking|mortgage|mortgages|insurance|insurer|takaful|reinsurance|financial advisor|wealth management|capital partners|asset management|law\s|legal|advocates?|attorneys?|notary|consult(ing|ancy|ants?)|freight|logistics|cargo|shipping|customs broker|recruitment|manpower|staffing|hospitality only|property management only|facilities management)\b/i;
+function isNonRealEstateBrokerage(name: string, license: string | null): boolean {
+  if (license && license.trim().length >= 3) return false; // licensed firms always allowed
+  return NON_REALESTATE_RX.test(name);
+}
+  const trimmed = w.trim();
+  if (!trimmed) return null;
+  if (trimmed.startsWith("http")) return trimmed;
+  return "https://" + trimmed.replace(/^\/+/, "");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
