@@ -1,126 +1,96 @@
 
-# UAE Real Estate Database Engine — System Upgrade
+# UAE Registry — Gap Closure (modify existing only)
 
-This is a **modify and extend** plan. No new modules, pages, or duplicate tables. Everything below changes existing files only.
+The schema, dedup engine, settings (`CONTACT@JBJ.AE` locked, forbidden Gmail), follow-up cron, sources table, comm-history log, attachments table, send + test-send gating, CSV import, smart actions, dedup triggers — **already exist**. This plan only builds the **missing** pieces from the spec.
 
-## Existing system that will be reused
+## What's missing vs. what's already built
 
-| Concern | Existing artifact (kept & extended) |
-|---|---|
-| Brokerage master directory | `public.uae_brk_registry` (currently empty, 0 rows) |
-| Developer master directory | `public.uae_dev_registry` (currently empty, 0 rows) |
-| Owner CRM brokerage records | `public.crm_brokerages` (377 rows) |
-| Owner CRM developer records | `public.crm_developer_registry` (774 rows) |
-| Source attribution | `public.uae_registry_sources` |
-| Activity log | `public.uae_registry_log` |
-| Brokerage UI (list + detail) | `src/pages/owner/uae-registry/UAERegistryListPage.tsx`, `UAERegistryDetailPage.tsx`, `UAERegistryOverview.tsx` |
-| CRM Relationships UI | `src/pages/CRMRelationships.tsx` + `src/hooks/useCRMRelationships.ts` |
-| Hook layer | `src/hooks/useUAERegistry.ts` |
-| Enrichment edge functions | `enrich-uae-brokerage-directory`, `enrich-developer-registry`, `extract-brokerage-contacts` |
-| Outreach edge function | `crm-send-brokerage-outreach`, `uae-registry-send` |
+| Spec item | Status | Action |
+|---|---|---|
+| Tables `uae_dev_registry` / `uae_brk_registry` with all fields incl. JSONB office_locations, public_key_contacts, uae_projects, international_projects, public_registration_identifiers, active_developer_relationships, service_categories | EXISTS | none |
+| All enums (emirate, status, verification, priority, master, company_type) | EXISTS | none |
+| `uae_registry_sources`, `uae_registry_log`, `uae_registry_attachments`, `uae_registry_settings` | EXISTS | none |
+| Sender locked to `CONTACT@JBJ.AE`, forbidden `janeaboujaoudemodel@gmail.com` | EXISTS in `uae_registry_settings` | none |
+| Test-send required before bulk; "Not Verified" blocks sending; missing recipient/sources blocks | EXISTS in `uae-registry-send` | none |
+| Follow-up scheduling D+2 / D+5 / D+10 / mark No Response D+14 | Cron EXISTS but only **marks** records due; does not actually send the follow-up email | **Add auto-send** |
+| Dedup by name / website / phone / license | EXISTS | none |
+| CSV import + smart actions (call / email / WhatsApp) | EXISTS in list page | none |
+| Detail page shows full editable record (founded_year, registration_email, registration_page_url, broker_registration_process, required_documents, key contacts, projects, identifiers, locations, license) | **MISSING** — current detail page only shows outreach + sources + log | **Build full editor** |
+| Attachments UI (upload + view rows from `uae_registry_attachments`) | **MISSING** | **Build** |
+| Master developer Evidence required when status = Yes | Not enforced in DB | **Add trigger** |
+| Inbound reply ingestion: match by email_thread_id / sender_domain / company_name / outreach_email, set status `Replied`, save to log, AI summarize + extract requested documents / contact person / registration instructions / deadline + draft response | **MISSING** | **Build edge function + Resend inbound webhook hook** |
+| Last response summary, required next action auto-fill on reply | **MISSING** | covered by inbound function |
 
-**No tables are added.** The UAE registry tables already cover every requested field — they just need a few extra columns and proper dedup constraints.
+## Part 1 — Schema additions (single migration, additive only)
 
-## Part 1 — Schema additions (single migration)
+1. Trigger `validate_master_developer_evidence` on `uae_dev_registry` BEFORE INSERT/UPDATE: if `master_developer_status = 'Yes'` and `master_developer_evidence` is NULL/blank → raise `'master_developer_evidence required when status = Yes'`.
+2. Indexes for follow-up sender + reply matching:
+   - `uae_dev_registry (next_follow_up_date) where outreach_status in ('Test Sent','Contacted','Follow-up Needed')`
+   - same on `uae_brk_registry`
+   - `uae_registry_log (email_thread_id)` and `(email_message_id)`
 
-`uae_brk_registry` — add only what's missing:
-- `instagram_url text`
-- `office_google_maps_url text` (already have address; add explicit maps link)
-- `company_size_estimated text`
-- `number_of_brokers integer`
-- `specialization text[]`
-- `primary_market text`
-- `data_source text` (alias view of `uae_registry_sources` first row)
-- Normalized dedup columns (generated): `name_norm text generated always as (regexp_replace(lower(unaccent(brand_name)),'\s+|llc|l\.l\.c|real estate|realty|brokers?|properties|group|co\.?|company','','g')) stored`
-- Unique constraint: `unique(name_norm)` plus existing license unique
-- Btree index on `lower(website)`, `phone digits-only` for fuzzy lookup
+## Part 2 — Detail page full editor (`UAERegistryDetailPage.tsx`)
 
-Same additions, equivalent fields, on `uae_dev_registry` (it already has most fields — only add `instagram_url`, `name_norm`, indexes).
+Add tabbed sections inside the existing page (no new route, no new page). Tabs: **Profile · Contacts · Projects · Sources · Communication · Attachments · Outreach** (Outreach + Sources + Communication tabs already render; the rest are new).
 
-Add Postgres function `public.find_existing_company(p_kind text, p_name text, p_website text, p_phone text) returns uuid` that returns the existing UAE registry id when:
-- exact match on `name_norm`, OR
-- same domain on `website`, OR
-- same digits-only phone in `main_phone_numbers`.
+Profile tab fields written directly to `uae_dev_registry` / `uae_brk_registry`:
+- Common: `legal_company_name`, `brand_name`, `emirate_section`, `website`, `headquarters_address`, `office_google_maps_url`, `instagram_url`, `linkedin_url`, `data_source`, `notes`, `last_verified_date`, `verification_status`, `priority`, `outreach_*`.
+- Developer-only: `company_type`, `master_developer_status`, `master_developer_evidence` (required when status=Yes — UI mirrors trigger), `founded_year`, `registration_email`, `registration_page_url`, `broker_registration_process`, `required_documents_for_registration` (chip input).
+- Brokerage-only: `license_number`, `regulator_or_authority`, `rera_orn_or_broker_number`, `service_categories` (multi-select), `outreach_contact_person`, `outreach_email`, `outreach_phone`, `company_size_estimated`, `number_of_brokers`, `specialization`, `primary_market`.
 
-Triggers `before insert on uae_brk_registry / uae_dev_registry` reject the insert and raise `'DUPLICATE:<existing_id>'` so client/edge code can switch to UPDATE.
+Contacts tab — JSONB editors with add/remove rows for:
+- `office_locations`, `main_phone_numbers`, `main_email_addresses`, `public_key_contacts`. Each row enforces a `source_url` field (matches spec validation).
 
-## Part 2 — Hook + UI changes (no new pages)
+Projects / Identifiers tab (developer-only): `uae_projects`, `international_projects`, `public_registration_identifiers`. Brokerages get `active_developer_relationships` here instead.
 
-**`src/hooks/useUAERegistry.ts`** — extend `useCreateRecord` to:
-1. Call `rpc('find_existing_company', …)` first.
-2. If id returned → call `useUpdateRecord` instead, toast "Merged into existing record".
-3. Else insert.
+All edits go through existing `useUpdateRecord` mutation in `useUAERegistry.ts` — no new hooks beyond a tiny `useUpsertRow` helper for JSONB array editing.
 
-Add `useImportRegistryCsv(type)` hook that:
-- Accepts `File`.
-- Parses with `papaparse` (already in deps; verify with `code--view package.json` at build time, fall back to lightweight parser).
-- Maps columns by header (case-insensitive) to schema fields.
-- Validates each row with zod (`email`, `httpUrl`, `e164` from `outreachSchema`).
-- Per row: dedup check → upsert.
-- Returns `{ inserted, updated, rejected: [{row, reason}] }`.
+## Part 3 — Attachments UI
 
-**`src/pages/owner/uae-registry/UAERegistryListPage.tsx`** — additions only:
-- New "Import CSV/Excel" button → opens existing dialog component pattern (`CRMImportModalV3` is reused as base, wrapped for registry).
-- New columns visible: phone (click-to-call `tel:`), email (click-to-email `mailto:`), website (target=_blank), instagram, linkedin, google maps, verification status badge, last_verified_date.
-- Smart actions row: 📞 / ✉️ / 💬 (WhatsApp `https://wa.me/<digits>`).
-- Server-side pagination (25/50/100) and debounced search across `brand_name`, `legal_company_name`, `phone`, `email` to handle 2000+ rows without lag.
+In the new Attachments tab:
+- Upload to existing Supabase storage bucket (reuse `crm-attachments` bucket; if absent, the migration in Part 1 also creates `uae-registry-attachments` private bucket with owner-only RLS).
+- Insert row into `uae_registry_attachments` with `developer_id` or `brokerage_id`, `file_name`, `storage_path`, `sent_to`, `sent_date`.
+- List existing rows with download (signed URL) + delete.
+- New hook `useRegistryAttachments(type, recordId)` in `useUAERegistry.ts`.
 
-**`src/pages/owner/uae-registry/UAERegistryDetailPage.tsx`** — additions only:
-- Show full field set (instagram, maps link, size, broker count, specialization, primary_market, source URL list from `uae_registry_sources`).
-- "Re-enrich from website" button → invokes existing `enrich-uae-brokerage-directory` / `enrich-developer-registry` edge function for the single record.
+## Part 4 — Auto follow-up sender
 
-**`src/pages/CRMRelationships.tsx`** — additions only:
-- Status enum already supports outreach stages; surface the 5 required statuses (`Not Contacted`, `Contacted`, `Follow-up`, `Registered`, `Rejected`) as quick filters mapped onto existing `outreach_stage` values (`not_contacted`, `engaged`, `attempted`, `active_partner`, `declined`).
-- Add "Open in UAE Registry" link on each brokerage/developer card, jumping to the existing registry detail page.
+New edge function `uae-registry-followup-send` (extends pattern from `uae-registry-send`):
+- Triggered by existing pg_cron at 09:00 Dubai (alter existing job to call this AFTER `uae-registry-followup-cron`).
+- Selects records where `next_follow_up_date <= today`, `outreach_status in ('Test Sent','Contacted','Follow-up Needed')`, `verification_status != 'Not Verified'`, recipient email present, `do_not_send` rules pass.
+- Renders template variant `developer_followup_<n>` / `brokerage_followup_<n>` from existing `crm_email_templates` table (variants will be inserted in the same migration; reuse champagne/black branding from previous turn — no new template engine).
+- Sends via Resend from `CONTACT@JBJ.AE`, threads on previous `email_message_id`.
+- Logs to `uae_registry_log` with channel=`Email`, direction=`Outbound`, `summary='Follow-up #N'`, captures `email_message_id`.
+- Updates `last_email_sent_at`, increments `number_of_follow_ups_sent`, recomputes `next_follow_up_date` per `uae_registry_settings`.
 
-## Part 3 — Edge function changes (extend existing only)
+Cron change: alter existing schedule to invoke `uae-registry-followup-cron` then `uae-registry-followup-send` sequentially.
 
-**`enrich-uae-brokerage-directory`** + **`enrich-developer-registry`**:
-- Strict rule enforcement: only fetch the official `website` of the record. No third-party scraping, no guessing.
-- Use existing `firecrawl` connector pattern (scrape → extract `phone`, `email`, `address`, `linkedin`, `instagram` from page DOM/markdown).
-- For each extracted value, write a row to `uae_registry_sources` with `source_url = website`, `fields_verified = […]`.
-- Never overwrite a non-null field that has a different verified source unless `force=true`.
-- If a field is not on the website → leave NULL.
+## Part 5 — Inbound reply ingestion + AI extraction
 
-**`crm-send-brokerage-outreach`** — already brand-correct from prior turn; no change here, only ensure it reads from the upgraded `uae_brk_registry` so a single outreach updates `last_outreach_at`, `outreach_count`, and `outreach_status` on the master record (no duplicate write to `crm_brokerages`).
+New edge function `uae-registry-inbound-reply`:
+- Invoked by existing `resend-inbound-email-webhook` (add a hand-off block: if recipient is `contact@jbj.ae` AND a matching `uae_registry_log.email_thread_id` or `email_message_id` exists, forward the parsed payload to this function).
+- Match priority: `email_thread_id` → `email_message_id` → `outreach_email` exact → `sender_domain` (lower(split_part(from, '@', 2))) against `website_domain` → fuzzy `legal_company_name`.
+- On match:
+  1. Insert `uae_registry_log` row (channel=`Email`, direction=`Inbound`, full body, `email_thread_id`, `email_message_id`).
+  2. Call Lovable AI Gateway (`google/gemini-2.5-flash`) with prompt to return JSON `{ summary, requested_documents[], contact_person, registration_instructions, deadline, recommended_next_action, draft_response_html }`. Store in `uae_registry_log.ai_extracted` (column already exists).
+  3. Update record: `outreach_status='Replied'`, `last_reply_received_at=now()`, `last_response_summary=summary`, `required_next_action=recommended_next_action`, `next_follow_up_date=null`.
+- Show AI extraction + draft reply in the detail page Communication tab (read from `ai_extracted` JSONB) with one-click "Send draft" reusing `uae-registry-send`.
 
-## Part 4 — Duplication control (zero tolerance)
+No new tables. No new pages. All authentication via owner JWT or service role for webhooks.
 
-Three layers:
-1. **DB**: unique index on `name_norm`, unique on `license_number`, unique partial on lower(website domain). Trigger raises `DUPLICATE:<id>` so callers always know to update.
-2. **Edge functions**: every insert path (`uae-registry-send`, enrichment functions, CSV importer edge handler) calls `find_existing_company` before insert.
-3. **Client**: `useCreateRecord` and the CSV importer hook short-circuit to update on duplicate.
+## Part 6 — Files to edit (no new files apart from 2 edge functions and 1 migration)
 
-`crm_brokerages` (377) and `crm_developer_registry` (774) stay as **owner-scoped CRM overlays** linked by FK to the registry master via existing columns (`match_directory_id`, `uae_developer_id`). A backfill SQL pass (one-time, in the same migration) will:
-- Insert missing master rows from CRM tables into `uae_brk_registry` / `uae_dev_registry` using the same dedup function.
-- Populate `match_directory_id` / `uae_developer_id` on the CRM rows.
+- `supabase/migrations/<new>.sql` — master-developer evidence trigger, indexes, follow-up cron alter, follow-up template variants insert, optional storage bucket.
+- `src/pages/owner/uae-registry/UAERegistryDetailPage.tsx` — replace with tabbed editor (Profile / Contacts / Projects / Sources / Communication / Attachments / Outreach).
+- `src/hooks/useUAERegistry.ts` — add `useRegistryAttachments`, JSONB array helpers.
+- `supabase/functions/resend-inbound-email-webhook/index.ts` — branch to UAE registry handler.
+- `supabase/functions/uae-registry-followup-send/index.ts` — new.
+- `supabase/functions/uae-registry-inbound-reply/index.ts` — new.
 
-Result: one master record per real-world company, CRM rows reference it, no duplicates anywhere.
+## Out of scope
 
-## Part 5 — Performance
+- Any new dashboard / module / "v2" page.
+- Changing the brokerage outreach templates (locked from previous turn).
+- Touching `crm_brokerages` / `crm_developer_registry` overlays — they remain CRM-only and link via existing FKs.
 
-- All filter/search columns indexed (`emirate_section`, `outreach_status`, `name_norm`, lower(website)).
-- List pages move from "fetch all" to range-paginated queries (`.range(from, to)` with `count: 'exact'`).
-- React Query keyed by `(type, emirate, search, page)`.
-
-## Files that will be edited
-
-- `supabase/migrations/<new>.sql` (single migration: columns + indexes + trigger + function + backfill)
-- `src/hooks/useUAERegistry.ts`
-- `src/pages/owner/uae-registry/UAERegistryListPage.tsx`
-- `src/pages/owner/uae-registry/UAERegistryDetailPage.tsx`
-- `src/pages/CRMRelationships.tsx`
-- `src/hooks/useCRMRelationships.ts` (add registry link helpers only)
-- `supabase/functions/enrich-uae-brokerage-directory/index.ts`
-- `supabase/functions/enrich-developer-registry/index.ts`
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` (master-record write only)
-
-No new files, no new tables, no new pages.
-
-## Out of scope (intentionally)
-
-- Any new dashboard, admin page, or "v2" module.
-- Any web scraping beyond the official company website.
-- Any change to brokerage email templates (already finalized in previous turn).
-
-Approve to switch to build mode and execute the migration + edits above.
+Approve to switch to build mode and execute.
