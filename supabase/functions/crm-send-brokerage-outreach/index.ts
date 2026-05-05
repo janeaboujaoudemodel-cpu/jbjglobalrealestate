@@ -292,22 +292,22 @@ serve(async (req: Request) => {
       throw new Error("Gmail connector not configured");
     }
 
-    // Sender brand = represented developer (per-row → owner default → fallback)
+    // Sender brand = represented developer (per-row → owner default → CITI Developer)
     const representedDeveloperName: string =
       (brk?.represented_developer_name && String(brk.represented_developer_name).trim()) ||
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
-      "Channel Partner Activation";
+      "CITI Developer";
 
-    // Brokerage outreach uses its OWN settings (independent of developer pack).
-    // Falls back to shared/legacy fields only when brokerage-specific is empty.
+    // Brokerage outreach uses its OWN settings ONLY — never falls back to developer
+    // (JBJ) settings, so brokerage emails are never accidentally sent as JBJ.
     const brkFromName: string =
-      (settings?.brokerage_from_name && String(settings.brokerage_from_name).trim()) || "";
-    const fromName = brkFromName || `${representedDeveloperName} · Channel Partner Activation`;
+      (settings?.brokerage_from_name && String(settings.brokerage_from_name).trim()) ||
+      representedDeveloperName;
+    const fromName = brkFromName;
     const replyTo = (
       body.fromEmailOverride ||
       settings?.brokerage_reply_to_email ||
-      settings?.reply_to_email ||
-      "contact@jbj.ae"
+      "jane@citideveloper.com"
     ).toString().trim();
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
