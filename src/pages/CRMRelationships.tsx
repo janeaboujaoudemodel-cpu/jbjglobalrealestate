@@ -568,7 +568,14 @@ const BrokeragesTab = () => {
                   )}
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="font-bold text-base text-[#1A1A1A]">{r.company_name}</h3>
+                      <button
+                        type="button"
+                        onClick={() => setLedgerOpen({ id: r.id, name: r.company_name })}
+                        className="font-bold text-base text-[#1A1A1A] hover:underline decoration-[#B89555] underline-offset-4 text-left"
+                        title="View deal ledger and revenue"
+                      >
+                        {r.company_name}
+                      </button>
                       {isDirectory && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">RERA-Licensed</span>
                       )}
