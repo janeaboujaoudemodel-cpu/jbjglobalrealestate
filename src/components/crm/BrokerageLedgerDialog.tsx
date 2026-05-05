@@ -61,7 +61,15 @@ export const BrokerageLedgerDialog = ({
       return data ?? [];
     },
     enabled: open && !!brokerageId,
+    staleTime: 30_000,
   });
+
+  const handleOpenChange = (v: boolean) => {
+    if (!v) {
+      setAddOpen(false);
+    }
+    onOpenChange(v);
+  };
 
   const filteredDeals = useMemo(() => {
     let d = deals as any[];
