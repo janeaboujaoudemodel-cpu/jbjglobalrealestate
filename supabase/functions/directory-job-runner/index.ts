@@ -204,22 +204,23 @@ async function runBrokerageSeedChunk(job: any) {
   }
 
   const totalSoFar = offset + list.length;
-  const isEmirateDone = list.length < CHUNK_SIZE;
-  const emirateIdx = EMIRATES.indexOf(emirate as any);
-  const nextEmirate = isEmirateDone ? EMIRATES[emirateIdx + 1] : emirate;
-  const allDone = isEmirateDone && !nextEmirate;
+  // Each seed job stays within its assigned emirate (cron fans out one job per
+  // emirate × offset). Walk forward until Perplexity returns a short page or
+  // we hit the per-job cap.
+  const HARD_CAP = (job.progress ?? 0) + CHUNK_SIZE * 8; // ~200 firms per job max
+  const isEmirateDone = list.length < CHUNK_SIZE || totalSoFar >= HARD_CAP;
 
   await admin.from("crm_directory_jobs").update({
-    progress: isEmirateDone ? 0 : totalSoFar,
-    emirate: allDone ? emirate : (isEmirateDone ? nextEmirate : emirate),
+    progress: totalSoFar,
+    emirate,
     inserted_count: (job.inserted_count ?? 0) + inserted,
     updated_count: (job.updated_count ?? 0) + updated,
-    message: `${emirate}: +${inserted} new, ${updated} filled`,
-    status: allDone ? "completed" : "running",
-    finished_at: allDone ? new Date().toISOString() : null,
+    message: `${emirate} @${offset}: +${inserted} new, ${updated} filled`,
+    status: isEmirateDone ? "completed" : "running",
+    finished_at: isEmirateDone ? new Date().toISOString() : null,
   }).eq("id", job.id);
 
-  return !allDone;
+  return !isEmirateDone;
 }
 
 async function runEnrichChunk(job: any) {
