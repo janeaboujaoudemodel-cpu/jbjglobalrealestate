@@ -184,16 +184,18 @@ export default function ContractVault() {
               className="pl-9 bg-[#FDFBF7] border-gold/25 text-[#1A1A1A]"
             />
           </div>
-          <select
-            value={emirate}
-            onChange={(e) => setEmirate(e.target.value)}
-            className="h-10 px-3 rounded-md border border-gold/25 bg-[#FDFBF7] text-[#1A1A1A] text-sm"
-          >
-            <option value="all">All emirates</option>
-            {emirates.map((e) => (
-              <option key={e} value={e}>{e}</option>
-            ))}
-          </select>
+          <div className="min-w-[260px]">
+            <DeveloperSelectDropdown
+              value={developerName}
+              onChange={setDeveloperName}
+              placeholder="All developers"
+            />
+          </div>
+          {developerName && (
+            <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
+              Clear
+            </Button>
+          )}
           <Badge variant="outline" className="border-gold/40 text-[#1A1A1A]">
             {filtered.length} contract{filtered.length === 1 ? "" : "s"}
           </Badge>
