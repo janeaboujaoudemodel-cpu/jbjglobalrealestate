@@ -1238,12 +1238,15 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             <PrimarySenderEditor
               saved={savedSenders}
               active={replyTo}
-              onChange={({ saved, active }) =>
-                update({ [F.savedSenders]: saved, [F.replyTo]: active })
-              }
+              onChange={({ saved, active }) => {
+                const patch = { [F.savedSenders]: saved, [F.replyTo]: active };
+                // Reflect immediately + persist without requiring Save click.
+                setDraft({ ...(draft || settings || {}), ...patch });
+                autoSave(patch);
+              }}
             />
             <p className="text-xs text-[#1A1A1A]/70 mt-1">
-              Add as many sender emails as you like — they're saved here forever. Click any chip to use it as the active sender.
+              Add as many sender emails as you like — they're saved automatically. Click any chip to use it as the active sender.
             </p>
           </div>
           <div className="md:col-span-2">
@@ -1257,9 +1260,13 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
                   patch.cc_email = active[0] || s.cc_email || "";
                   patch.cc_jane_enabled = active.length > 0;
                 }
-                update(patch);
+                setDraft({ ...(draft || settings || {}), ...patch });
+                autoSave(patch);
               }}
             />
+            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+              CC addresses are saved automatically and will appear here on every send. Click a chip to toggle, or the trash icon to remove permanently.
+            </p>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#1A1A1A]/10">
