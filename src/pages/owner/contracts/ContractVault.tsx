@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
-import { Archive, Search, Download, FileSignature, Stamp } from "lucide-react";
+import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText } from "lucide-react";
+import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
 
 interface SignedRow {
   signed_document_id: string;
@@ -27,6 +28,20 @@ interface SignedRow {
 export default function ContractVault() {
   const [q, setQ] = useState("");
   const [emirate, setEmirate] = useState<string>("all");
+  const [uploadOpen, setUploadOpen] = useState(false);
+
+  const { data: agreements = [] } = useQuery({
+    queryKey: ["external_agreements"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("external_agreements" as any)
+        .select("id, developer_id, developer_name_raw, contract_type, file_url, file_name, effective_date, expiry_date, commission_pct, ai_confidence, status, uploaded_at")
+        .order("uploaded_at", { ascending: false })
+        .limit(500);
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["signed_contracts"],
@@ -72,13 +87,86 @@ export default function ContractVault() {
             <p className="text-sm text-[#1A1A1A]/70">Every signed contract — searchable by developer, emirate, area.</p>
           </div>
         </div>
-        <Button asChild variant="gold">
-          <Link to="/owner/sign">
-            <Stamp className="h-4 w-4 mr-2" />
-            Manage signature & stamp
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button onClick={() => setUploadOpen(true)} variant="gold">
+            <Upload className="h-4 w-4 mr-2" />
+            Upload Agreement
+          </Button>
+          <Button asChild variant="outline" className="border-gold/40 text-[#1A1A1A]">
+            <Link to="/owner/sign">
+              <Stamp className="h-4 w-4 mr-2" />
+              Manage signature & stamp
+            </Link>
+          </Button>
+        </div>
       </div>
+
+      {/* External agreements (uploaded developer contracts) */}
+      <Card className="bg-[#F7F2EA] border-gold/20">
+        <CardHeader className="pb-3 flex flex-row items-center justify-between">
+          <CardTitle className="text-[#1A1A1A] text-base flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+            Developer Agreements
+            <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
+              {agreements.length}
+            </Badge>
+          </CardTitle>
+          <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by developer</p>
+        </CardHeader>
+        <CardContent className="p-0">
+          {agreements.length === 0 ? (
+            <div className="p-8 text-center text-sm text-[#1A1A1A]/60">
+              <FileText className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/30" />
+              No agreements uploaded yet. Drop a Sobha / Emaar / Damac contract — AI will file it for you.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
+                  <tr>
+                    <th className="text-left px-4 py-3 font-semibold">Developer</th>
+                    <th className="text-left px-4 py-3 font-semibold">Type</th>
+                    <th className="text-left px-4 py-3 font-semibold">Effective</th>
+                    <th className="text-left px-4 py-3 font-semibold">Expires</th>
+                    <th className="text-left px-4 py-3 font-semibold">Status</th>
+                    <th className="text-right px-4 py-3 font-semibold">File</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {agreements.map((a) => (
+                    <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
+                      <td className="px-4 py-3 text-[#1A1A1A] font-medium">
+                        {a.developer_name_raw ?? "—"}
+                        {a.ai_confidence != null && (
+                          <span className="ml-2 text-[10px] text-[#1A1A1A]/50">
+                            {Math.round(a.ai_confidence * 100)}%
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.contract_type ?? "—"}</td>
+                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.effective_date ?? "—"}</td>
+                      <td className="px-4 py-3 text-[#1A1A1A]/80">{a.expiry_date ?? "—"}</td>
+                      <td className="px-4 py-3">
+                        <Badge variant="outline" className={a.status === "filed" ? "border-emerald-600/40 text-emerald-700" : "border-amber-500/50 text-amber-700"}>
+                          {a.status.replace("_", " ")}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Button asChild size="sm" variant="outline" className="border-gold/40 text-[#1A1A1A]">
+                          <a href={a.file_url} target="_blank" rel="noreferrer">
+                            <Download className="h-3 w-3 mr-1" />
+                            Open
+                          </a>
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card className="bg-[#F7F2EA] border-gold/20">
         <CardHeader className="pb-3">
@@ -171,6 +259,8 @@ export default function ContractVault() {
           )}
         </CardContent>
       </Card>
+
+      <AgreementUploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} />
     </div>
   );
 }

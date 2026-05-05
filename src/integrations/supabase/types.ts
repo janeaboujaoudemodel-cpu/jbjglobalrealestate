@@ -12120,6 +12120,83 @@ export type Database = {
         }
         Relationships: []
       }
+      external_agreements: {
+        Row: {
+          ai_confidence: number | null
+          ai_extracted: Json | null
+          commission_pct: number | null
+          contract_type: string | null
+          counterparties: Json | null
+          created_at: string
+          developer_id: string | null
+          developer_name_raw: string | null
+          effective_date: string | null
+          expiry_date: string | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_url: string
+          id: string
+          notes: string | null
+          owner_user_id: string
+          status: string
+          updated_at: string
+          uploaded_at: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_extracted?: Json | null
+          commission_pct?: number | null
+          contract_type?: string | null
+          counterparties?: Json | null
+          created_at?: string
+          developer_id?: string | null
+          developer_name_raw?: string | null
+          effective_date?: string | null
+          expiry_date?: string | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          notes?: string | null
+          owner_user_id: string
+          status?: string
+          updated_at?: string
+          uploaded_at?: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_extracted?: Json | null
+          commission_pct?: number | null
+          contract_type?: string | null
+          counterparties?: Json | null
+          created_at?: string
+          developer_id?: string | null
+          developer_name_raw?: string | null
+          effective_date?: string | null
+          expiry_date?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          notes?: string | null
+          owner_user_id?: string
+          status?: string
+          updated_at?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "external_agreements_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       external_data_sources: {
         Row: {
           auth_config: Json | null
