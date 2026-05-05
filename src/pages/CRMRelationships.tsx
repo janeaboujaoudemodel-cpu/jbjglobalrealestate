@@ -491,7 +491,7 @@ const BrokeragesTab = () => {
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, location, emirate, or developer" className="pl-10" />
         </div>
         <Select value={emirateFilter} onValueChange={setEmirateFilter}>
           <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
