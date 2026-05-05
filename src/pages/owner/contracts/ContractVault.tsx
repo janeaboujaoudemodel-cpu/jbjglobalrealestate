@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
 import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText } from "lucide-react";
 import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
+import DeveloperSelectDropdown from "@/components/developer-portal/DeveloperSelectDropdown";
 
 interface SignedRow {
   signed_document_id: string;
