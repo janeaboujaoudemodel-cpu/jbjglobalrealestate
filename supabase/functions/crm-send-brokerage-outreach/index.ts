@@ -210,16 +210,31 @@ serve(async (req: Request) => {
       });
     }
 
+    // Helper: prettify a name segment derived from an email local-part
+    const prettifyFromEmail = (email: string): { firstName: string; fullName: string; brokerage: string } => {
+      const [local, domain] = email.split("@");
+      const cleanedLocal = (local || "").replace(/[._+\-0-9]+/g, " ").trim();
+      const parts = cleanedLocal.split(/\s+/).filter(Boolean);
+      const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      const firstName = parts[0] ? cap(parts[0]) : "there";
+      const fullName = parts.map(cap).join(" ") || firstName;
+      const dom = (domain || "").split(".")[0] || "";
+      const brokerage = dom ? cap(dom) : "";
+      return { firstName, fullName, brokerage };
+    };
+
     let brk: any = null;
     let recipient = "";
     let contactName = "";
     if (isTest && !body.brokerageId) {
       recipient = body.testRecipient!;
+      const guess = prettifyFromEmail(recipient);
+      const brokerageName = (body.testBrokerageName && body.testBrokerageName.trim()) || guess.brokerage || "Your Brokerage";
       brk = {
-        company_name: body.testBrokerageName || "Sample Brokerage Group",
-        primary_contact: { name: "Sample Manager" },
+        company_name: brokerageName,
+        primary_contact: { name: guess.fullName },
       };
-      contactName = "Sample Manager";
+      contactName = guess.fullName;
     } else {
       if (!body.brokerageId) throw new Error("brokerageId required");
       const { data: b, error: bErr } = await service
