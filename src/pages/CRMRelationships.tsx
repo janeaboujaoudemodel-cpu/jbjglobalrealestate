@@ -1239,6 +1239,10 @@ const DeveloperRegistryTab = () => {
     return matchesQ && matchesS && matchesE;
   }), [queuePool, q, statusFilter, emailFilter]);
 
+  const [devVisibleCount, setDevVisibleCount] = useState(60);
+  useEffect(() => { setDevVisibleCount(60); }, [q, statusFilter, emailFilter]);
+  const devVisible = useMemo(() => filtered.slice(0, devVisibleCount), [filtered, devVisibleCount]);
+
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
     data.forEach((r: any) => { c[r.status] = (c[r.status] || 0) + 1; });
