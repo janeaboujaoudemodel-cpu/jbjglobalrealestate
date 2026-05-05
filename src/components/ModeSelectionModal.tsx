@@ -47,7 +47,7 @@ const MODE_OPTIONS: ModeOption[] = [
 
 export const ModeSelectionModal = () => {
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
-  const { isVisible, dismiss, requestToShow } = usePopupVisibility('mode-selection-modal');
+  const { isVisible, dismiss } = usePopupVisibility('mode-selection-modal');
   const { user } = useAuth();
   const navigate = useNavigate();
   const [selectedMode, setSelectedMode] = useState<SelectableMode | null>(null);
