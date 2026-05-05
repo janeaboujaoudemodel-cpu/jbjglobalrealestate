@@ -95,11 +95,11 @@ async function perplexityListBrokerages(
         {
           role: "system",
           content:
-            "You compile UAE real estate brokerage directories from the official licensing authority. Only include real, currently-licensed firms. Use null for fields you cannot verify. Never fabricate a license number or contact detail.",
+            "You compile UAE REAL ESTATE SALES BROKERAGE directories from the official licensing authority (DLD/RERA Trakheesi, Abu Dhabi DMT, Sharjah/Ajman/RAK/Fujairah/UAQ municipality). ONLY include firms that hold a current real-estate sales broker permit. NEVER include banks, mortgage brokers, mortgage advisors, insurance brokers, takaful, financial advisors, law firms, legal consultancies, freight/logistics brokers, customs brokers, recruitment agencies, or pure property-management companies. Use null for fields you cannot verify. Never fabricate a license number or contact detail.",
         },
         {
           role: "user",
-          content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate} from the ${authority}. ${hint}. Skip the first ${offset} firms (they were already returned in earlier batches). For each firm return: company_name, rera_license (the actual license / registration number if published), office_address (full street address with area/landmark), phone (international format with +971), email (sales/info), website. Use null when a field is not available from the authority.`,
+          content: `List up to ${pageSize} licensed REAL-ESTATE SALES brokerage offices in ${emirate} from the ${authority}. ${hint}. Skip the first ${offset} firms (they were already returned in earlier batches). Exclude banks, mortgage brokers, insurance brokers, law firms, consultancies, freight/logistics brokers and pure property-management companies. For each firm return: company_name, rera_license (the actual real-estate broker registration number if published), office_address (full street address with area/landmark), phone (international format with +971), email (sales/info), website. Use null when a field is not available from the authority.`,
         },
       ],
       response_format: {
