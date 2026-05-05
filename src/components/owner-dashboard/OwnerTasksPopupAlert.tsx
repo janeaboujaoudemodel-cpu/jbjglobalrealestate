@@ -95,8 +95,8 @@ export function OwnerTasksPopupAlert() {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
-            <AlertTriangle className="w-6 h-6" style={{ color: "#B89555" }} />
+          <div data-no-contrast-guard className="w-12 h-12 rounded-xl bg-[#1A1A1A] border border-[#B89555]/60 flex items-center justify-center shadow-sm">
+            <AlertTriangle className="w-6 h-6" data-no-contrast-guard strokeWidth={2.5} style={{ color: "#B89555", stroke: "#B89555", opacity: 1 }} />
           </div>
           <div>
             <h3 id="pending-tasks-title" style={{ color: "#1A1A1A" }} className="font-bold text-lg leading-tight">
