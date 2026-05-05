@@ -76,7 +76,7 @@ export const TemplateEditorDialog = ({
         { key: "project_url", label: "Project URL" },
         { key: "project_tagline", label: "Project tagline" },
         { key: "booking_url", label: "Booking URL" },
-        { key: "preferred_event_time_label", label: "Event time" },
+        
       ]
     : [
         { key: "developer_name", label: "Developer name" },
