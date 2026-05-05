@@ -708,7 +708,23 @@ export const useLockEmailTemplate = () => {
   });
 };
 
-/* ---------- Email Delivery Status (from email_send_log) ---------- */
+export const useUnlockEmailTemplate = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (variant: AnyEmailVariant) => {
+      const { error } = await supabase
+        .from("crm_email_templates")
+        .update({ locked_at: null, locked_by: null })
+        .eq("variant", variant);
+      if (error) throw error;
+    },
+    onSuccess: (_d, variant) => {
+      qc.invalidateQueries({ queryKey: ["crm-email-template", variant] });
+      toast.success("Template unlocked — you can now edit it.");
+    },
+    onError: (e: any) => toast.error(e.message || "Unlock failed"),
+  });
+};
 export const useEmailDeliveryStatus = (recipientEmails: string[]) =>
   useQuery({
     queryKey: ["crm-email-delivery", recipientEmails.sort().join(",")],
