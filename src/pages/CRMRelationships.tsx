@@ -1376,7 +1376,7 @@ const DeveloperRegistryTab = () => {
   const toggleSel = (id: string) => setSelected((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
   const selectAllFiltered = () => setSelected(new Set(filtered.map((r: any) => r.id)));
   const clearSelection = () => setSelected(new Set());
-  const selectedDevs = data.filter((d: any) => selected.has(d.id));
+  const selectedDevs = useMemo(() => data.filter((d: any) => selected.has(d.id)), [data, selected]);
 
   const openNew = () => { setEditing({ status: "not_started", developer_contact: {}, documents: [] }); setOpen(true); };
   const openEdit = (r: any) => { setEditing(r); setOpen(true); };
