@@ -655,6 +655,8 @@ export const useEmailTemplate = (variant: AnyEmailVariant) =>
   useQuery({
     queryKey: ["crm-email-template", variant],
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    placeholderData: (prev) => prev,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_email_templates").select("*").eq("variant", variant).maybeSingle();
