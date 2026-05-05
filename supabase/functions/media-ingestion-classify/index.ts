@@ -1,7 +1,7 @@
 // Media Ingestion Classify
-// Reads a job (file in ingestion-staging or a URL), runs AI matching against
-// developers + projects, and updates the job with detected developer/project,
-// confidence, and document type.
+// Processes ONE job per invocation to stay well under Edge worker CPU/wall-time
+// limits. Always returns HTTP 200 with { ok: false, error } on failure so the
+// frontend never gets a 5xx that crashes the page.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { z } from "https://esm.sh/zod@3.23.8";
@@ -16,8 +16,9 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
+// One job per call. Frontend pools concurrency.
 const RequestSchema = z.object({
-  job_ids: z.array(z.string().uuid()).min(1).max(100),
+  job_ids: z.array(z.string().uuid()).min(1).max(1),
 });
 
 async function hasOwnerOrAdmin(supabase: ReturnType<typeof createClient>, userId: string) {
@@ -101,20 +102,18 @@ async function aiMatch({
   developers: { id: string; name: string }[];
   projects: { id: string; name: string; developer_id?: string | null }[];
 }) {
-  if (!LOVABLE_API_KEY) {
-    return null;
-  }
+  if (!LOVABLE_API_KEY) return null;
 
   const devList = developers
-    .slice(0, 200)
+    .slice(0, 150)
     .map((d) => `${d.id}::${d.name}`)
     .join("\n");
   const projList = projects
-    .slice(0, 500)
+    .slice(0, 300)
     .map((p) => `${p.id}::${p.name}::${p.developer_id ?? ""}`)
     .join("\n");
 
-  const systemPrompt = `You are matching real estate marketing materials (videos, PDFs, brochures, links) to a developer and a project from the lists below. Use only the IDs from the lists. Return null when uncertain. Confidence is between 0 and 1.
+  const systemPrompt = `You match real estate marketing materials to a developer + project from the lists. Use only IDs from the lists. Return null when uncertain. Confidence 0-1.
 
 DEVELOPERS (id::name):
 ${devList}
@@ -125,12 +124,12 @@ ${projList}`;
   const userPrompt = `File: ${fileName}
 
 Content sample (truncated):
-${textSample.slice(0, 6000)}
+${textSample.slice(0, 3000)}
 
-Match this material to a developer and a project. Also detect the document type from: ${DOC_TYPES.join(", ")}.`;
+Match to a developer + project. Detect document type from: ${DOC_TYPES.join(", ")}.`;
 
   const body = {
-    model: "google/gemini-3-flash-preview",
+    model: "google/gemini-2.5-flash-lite",
     messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt },
@@ -140,7 +139,7 @@ Match this material to a developer and a project. Also detect the document type 
         type: "function",
         function: {
           name: "report_match",
-          description: "Return the matched developer/project + document type",
+          description: "Return matched developer/project + document type",
           parameters: {
             type: "object",
             properties: {
@@ -175,7 +174,6 @@ Match this material to a developer and a project. Also detect the document type 
     console.error("AI gateway error", resp.status, await resp.text());
     return null;
   }
-
   const data = await resp.json();
   const call = data?.choices?.[0]?.message?.tool_calls?.[0];
   if (!call) return null;
@@ -187,7 +185,6 @@ Match this material to a developer and a project. Also detect the document type 
 }
 
 async function extractTextFromPdf(buffer: ArrayBuffer): Promise<string> {
-  // Lightweight: pull readable strings out of the PDF; works for first-pass matching.
   const bytes = new Uint8Array(buffer);
   const decoder = new TextDecoder("latin1");
   const raw = decoder.decode(bytes);
@@ -197,7 +194,7 @@ async function extractTextFromPdf(buffer: ArrayBuffer): Promise<string> {
     .filter((s) => /[A-Za-z]{3,}/.test(s))
     .join(" ")
     .replace(/\s+/g, " ");
-  return text.slice(0, 8000);
+  return text.slice(0, 6000);
 }
 
 async function classifyJob(supabase: ReturnType<typeof createClient>, jobId: string) {
@@ -213,24 +210,30 @@ async function classifyJob(supabase: ReturnType<typeof createClient>, jobId: str
     .update({ status: "processing" })
     .eq("id", jobId);
 
-  // Pull the developer + project lists once
   const { data: developers } = await supabase
     .from("developers")
     .select("id, name, slug")
-    .order("name");
+    .order("name")
+    .limit(300);
   const { data: projects } = await supabase
     .from("projects")
     .select("id, name, slug, developer_id, developer_name")
     .eq("is_published", true)
     .order("name")
-    .limit(2000);
+    .limit(600);
 
   const fileName: string = job.file_name || job.source_url || "unknown";
   let textSample = "";
   let detectedDocType = guessDocTypeFromName(fileName);
 
-  // For PDFs in storage, pull text. For videos/links we pass filename + url.
-  if (job.file_path && job.mime_type?.includes("pdf")) {
+  // Skip PDF text pull for big files (>25MB) — heuristics + filename are enough.
+  const fileSize = Number(job.file_size ?? 0);
+  if (
+    job.file_path &&
+    job.mime_type?.includes("pdf") &&
+    fileSize > 0 &&
+    fileSize <= 25 * 1024 * 1024
+  ) {
     try {
       const { data: dl } = await supabase.storage
         .from("ingestion-staging")
@@ -246,7 +249,6 @@ async function classifyJob(supabase: ReturnType<typeof createClient>, jobId: str
     textSample = `Link: ${job.source_url}`;
   }
 
-  // Heuristic pre-pass
   const heur = filenameHeuristicMatch(fileName, developers ?? [], projects ?? []);
 
   let detectedDeveloperId = heur.dev?.id ?? null;
@@ -259,31 +261,34 @@ async function classifyJob(supabase: ReturnType<typeof createClient>, jobId: str
     ? `Filename match: ${fileName} → ${heur.proj.name}`
     : "";
 
-  // AI fallback when filename match wasn't conclusive
   if (matchConfidence < 0.85) {
-    const ai = await aiMatch({
-      fileName,
-      textSample,
-      developers: (developers ?? []).map((d) => ({ id: d.id, name: d.name })),
-      projects: (projects ?? []).map((p) => ({
-        id: p.id,
-        name: p.name,
-        developer_id: p.developer_id,
-      })),
-    });
-    if (ai) {
-      if (ai.developer_id) {
-        detectedDeveloperId = ai.developer_id;
-        detectedDeveloperName = ai.developer_name ?? detectedDeveloperName;
-        developerConfidence = ai.developer_confidence ?? developerConfidence;
+    try {
+      const ai = await aiMatch({
+        fileName,
+        textSample,
+        developers: (developers ?? []).map((d) => ({ id: d.id, name: d.name })),
+        projects: (projects ?? []).map((p) => ({
+          id: p.id,
+          name: p.name,
+          developer_id: p.developer_id,
+        })),
+      });
+      if (ai) {
+        if (ai.developer_id) {
+          detectedDeveloperId = ai.developer_id;
+          detectedDeveloperName = ai.developer_name ?? detectedDeveloperName;
+          developerConfidence = ai.developer_confidence ?? developerConfidence;
+        }
+        if (ai.project_id) {
+          matchedProjectId = ai.project_id;
+          matchedProjectName = ai.project_name ?? matchedProjectName;
+          matchConfidence = ai.project_confidence ?? matchConfidence;
+        }
+        detectedDocType = ai.doc_type ?? detectedDocType;
+        aiSummary = ai.summary ?? aiSummary;
       }
-      if (ai.project_id) {
-        matchedProjectId = ai.project_id;
-        matchedProjectName = ai.project_name ?? matchedProjectName;
-        matchConfidence = ai.project_confidence ?? matchConfidence;
-      }
-      detectedDocType = ai.doc_type ?? detectedDocType;
-      aiSummary = ai.summary ?? aiSummary;
+    } catch (e) {
+      console.error("aiMatch failed", e);
     }
   }
 
@@ -313,6 +318,12 @@ async function classifyJob(supabase: ReturnType<typeof createClient>, jobId: str
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const ok = (body: unknown, status = 200) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+
   try {
     const authHeader = req.headers.get("Authorization") ?? "";
     const supabase = createClient(SUPABASE_URL, SERVICE_ROLE, {
@@ -323,68 +334,33 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
     const { data: userResp } = await userClient.auth.getUser();
-    if (!userResp?.user) {
-      return new Response(JSON.stringify({ error: "unauthenticated" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    if (!userResp?.user) return ok({ ok: false, error: "unauthenticated" }, 200);
     if (!(await hasOwnerOrAdmin(supabase, userResp.user.id))) {
-      return new Response(JSON.stringify({ error: "forbidden" }), {
-        status: 403,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return ok({ ok: false, error: "forbidden" }, 200);
     }
 
     const parsed = RequestSchema.safeParse(await req.json());
     if (!parsed.success) {
-      return new Response(JSON.stringify({ error: parsed.error.flatten() }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return ok({ ok: false, error: "invalid_request", detail: parsed.error.flatten() }, 200);
     }
-    const { job_ids } = parsed.data;
+    const jobId = parsed.data.job_ids[0];
 
-    // Mark all jobs as queued immediately, process in background to avoid
-    // WORKER_RESOURCE_LIMIT (CPU/wall-time) on the request handler.
-    await supabase
-      .from("material_ingestion_jobs")
-      .update({ status: "processing" })
-      .in("id", job_ids);
-
-    const runInBackground = async () => {
-      for (const id of job_ids) {
-        try {
-          await classifyJob(supabase, id);
-        } catch (err) {
-          console.error("classifyJob failed", id, err);
-          try {
-            await supabase
-              .from("material_ingestion_jobs")
-              .update({ status: "unmatched", ai_summary: err instanceof Error ? err.message : "failed" })
-              .eq("id", id);
-          } catch (_) { /* ignore */ }
-        }
-      }
-    };
-
-    // @ts-ignore EdgeRuntime is provided by Supabase edge runtime
-    if (typeof EdgeRuntime !== "undefined" && EdgeRuntime?.waitUntil) {
-      // @ts-ignore
-      EdgeRuntime.waitUntil(runInBackground());
-    } else {
-      runInBackground();
+    try {
+      const result = await classifyJob(supabase, jobId);
+      return ok({ ok: true, ...result });
+    } catch (e) {
+      console.error("classifyJob threw", jobId, e);
+      const msg = e instanceof Error ? e.message : "classify_failed";
+      try {
+        await supabase
+          .from("material_ingestion_jobs")
+          .update({ status: "unmatched", ai_summary: msg })
+          .eq("id", jobId);
+      } catch (_) { /* ignore */ }
+      return ok({ ok: false, error: msg, jobId });
     }
-
-    return new Response(
-      JSON.stringify({ queued: job_ids.length, job_ids, status: "processing" }),
-      { status: 202, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
   } catch (e) {
-    console.error(e);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "unknown" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-    );
+    console.error("handler error", e);
+    return ok({ ok: false, error: e instanceof Error ? e.message : "unknown" });
   }
 });
