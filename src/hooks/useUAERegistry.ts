@@ -315,3 +315,70 @@ export async function sendRegistrationEmail(payload: {
   if (error) throw error;
   return data;
 }
+
+// ----- Attachments -----------------------------------------------------
+
+const BUCKET = "uae-registry-attachments";
+
+export function useRegistryAttachments(type: RegistryRecordType, id?: string) {
+  return useQuery({
+    queryKey: ["uae-registry-attachments", type, id],
+    enabled: !!id,
+    queryFn: async () => {
+      const col = type === "developer" ? "developer_id" : "brokerage_id";
+      const { data, error } = await (supabase as any)
+        .from("uae_registry_attachments").select("*").eq(col, id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+export function useUploadAttachment(type: RegistryRecordType) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: { recordId: string; file: File; sentTo?: string; sentDate?: string }) => {
+      const path = `${type}/${payload.recordId}/${Date.now()}-${payload.file.name}`;
+      const { error: upErr } = await (supabase as any).storage.from(BUCKET).upload(path, payload.file, { upsert: false });
+      if (upErr) throw upErr;
+      const col = type === "developer" ? "developer_id" : "brokerage_id";
+      const { error } = await (supabase as any).from("uae_registry_attachments").insert({
+        [col]: payload.recordId,
+        file_name: payload.file.name,
+        storage_path: path,
+        file_size_bytes: payload.file.size,
+        mime_type: payload.file.type,
+        sent_to: payload.sentTo ?? null,
+        sent_date: payload.sentDate ?? null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: ["uae-registry-attachments", type, vars.recordId] });
+      toast.success("Attachment uploaded");
+    },
+    onError: (e: any) => toast.error(e.message ?? "Upload failed"),
+  });
+}
+
+export function useDeleteAttachment(type: RegistryRecordType) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (row: { id: string; storage_path: string; recordId: string }) => {
+      await (supabase as any).storage.from(BUCKET).remove([row.storage_path]);
+      const { error } = await (supabase as any).from("uae_registry_attachments").delete().eq("id", row.id);
+      if (error) throw error;
+    },
+    onSuccess: (_d, vars) => {
+      qc.invalidateQueries({ queryKey: ["uae-registry-attachments", type, vars.recordId] });
+      toast.success("Attachment removed");
+    },
+    onError: (e: any) => toast.error(e.message ?? "Delete failed"),
+  });
+}
+
+export async function getAttachmentUrl(storagePath: string): Promise<string | null> {
+  const { data } = await (supabase as any).storage.from(BUCKET).createSignedUrl(storagePath, 60 * 10);
+  return data?.signedUrl ?? null;
+}
