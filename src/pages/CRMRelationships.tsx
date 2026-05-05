@@ -700,19 +700,18 @@ const BrokeragesTab = () => {
                         {r.company_name}
                       </button>
                       {isDirectory && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">RERA-Licensed</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">UAE Real Estate Agency</span>
                       )}
                       {isExistingMatch && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Already Licensed</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Verified Match</span>
                       )}
                       {!isDirectory && !isExistingMatch && r.entry_source === "owner" && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
                       )}
-                      {!isDirectory && <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />}
+                      <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
                     </div>
                     <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
-                      {r.rera_license && <div>RERA: {r.rera_license}</div>}
                       {r.primary_contact?.name && (
                         <div className="font-medium text-[#1A1A1A]">
                           Primary: {r.primary_contact.name}{r.primary_contact.role ? ` · ${r.primary_contact.role}` : ""}
