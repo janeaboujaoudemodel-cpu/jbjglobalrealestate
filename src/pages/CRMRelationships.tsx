@@ -961,6 +961,44 @@ const BrokeragesTab = () => {
                   onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
                 />
               </div>
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#B89555]" /> Breakfast briefing attendance
+                </div>
+                <div className="grid grid-cols-2 gap-3 items-end">
+                  <Field label="Attended briefing">
+                    <div className="flex items-center gap-2 h-10">
+                      <Switch
+                        checked={!!editing.attended_briefing}
+                        onCheckedChange={(v) => setEditing({
+                          ...editing,
+                          attended_briefing: v,
+                          attended_briefing_date: v ? (editing.attended_briefing_date || new Date().toISOString().slice(0, 10)) : null,
+                        })}
+                      />
+                      <span className="text-xs text-[#1A1A1A]/70">
+                        {editing.attended_briefing ? "Marked as attended" : "Not yet attended"}
+                      </span>
+                    </div>
+                  </Field>
+                  <Field label="Date attended">
+                    <Input
+                      type="date"
+                      value={editing.attended_briefing_date || ""}
+                      disabled={!editing.attended_briefing}
+                      onChange={(e) => setEditing({ ...editing, attended_briefing_date: e.target.value || null })}
+                    />
+                  </Field>
+                </div>
+                <Field label="Briefing notes">
+                  <Textarea
+                    rows={2}
+                    placeholder="What was discussed, attendees, next step…"
+                    value={editing.briefing_notes || ""}
+                    onChange={(e) => setEditing({ ...editing, briefing_notes: e.target.value })}
+                  />
+                </Field>
+              </div>
               <Field label="Notes"><Textarea rows={3} value={editing.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} /></Field>
             </div>
           )}
