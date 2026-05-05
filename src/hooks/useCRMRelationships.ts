@@ -7,8 +7,26 @@ import { toast } from "sonner";
 export const useBrokerages = () => useQuery({
   queryKey: ["crm-brokerages"],
   staleTime: 60_000,
+  placeholderData: (prev) => prev,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+});
+
+/* ---------- Brokerage Agents (lazy, cached per brokerage) ---------- */
+export const useBrokerageAgents = (brokerageId?: string | null) => useQuery({
+  queryKey: ["crm-brokerage-agents", brokerageId],
+  enabled: !!brokerageId,
+  staleTime: 60_000,
+  placeholderData: (prev) => prev,
+  queryFn: async () => {
+    const { data, error } = await (supabase as any)
+      .from("crm_brokerage_agents")
+      .select("*")
+      .eq("brokerage_id", brokerageId)
+      .order("created_at", { ascending: true });
     if (error) throw error;
     return data || [];
   },
