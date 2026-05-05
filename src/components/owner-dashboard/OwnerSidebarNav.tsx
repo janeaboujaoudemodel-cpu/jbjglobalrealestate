@@ -157,7 +157,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           {!collapsed && (
-            <p className="text-[10px] uppercase tracking-widest text-[#1A1A1A]/75 font-bold px-3 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-[#1A1A1A] font-bold px-3 mb-1.5">
               {section.label}
             </p>
           )}

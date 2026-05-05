@@ -160,9 +160,9 @@ const OwnerDashboardShell = () => {
           
           <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Owner Badge */}
-            <div className="flex items-center gap-1.5 md:gap-2 bg-[#B89555]/12 border border-[#B89555]/50 rounded-xl px-2 md:px-4 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
-              <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-              <span className="text-[#1A1A1A] text-xs md:text-sm font-semibold hidden sm:inline tracking-wide">Owner</span>
+            <div className="flex items-center gap-1.5 md:gap-2 bg-[#EFE6D6] border border-[#B89555] rounded-xl px-2 md:px-4 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
+              <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" strokeWidth={2.5} />
+              <span className="text-[#1A1A1A] text-xs md:text-sm font-bold hidden sm:inline tracking-wide">Owner</span>
             </div>
             
             {/* User Email */}
