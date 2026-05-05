@@ -1,38 +1,75 @@
-## Relationships Hub — speed + UAE-wide directory fix
+I found the problem areas: the brokerage preview/editor, the live send function, the bulk-send preview, and the stored brokerage templates are not using the same rendering rules or the same brand defaults. The brokerage template currently still contains JBJ wording in several paths, and the sender falls back to a Gmail/owner identity when the brokerage sender is not explicitly configured.
 
-I dug into the data and the page. The real problems are different from "the panel needs to be more minimized" — that's already done. Three concrete bugs:
+Plan:
 
-### What I found
+1. Make brokerage outreach strictly CITI Developer branded
+- Replace all brokerage-facing copy that says “introduce JBJ Global Real Estate” with CITI Developer wording.
+- Use “CITI Developer” consistently for the brokerage workflow.
+- Keep JBJ Global Real Estate only in the developer-registration workflow.
+- Brokerage signature/footer will become:
+  - Jane
+  - CITI Developer
+  - Sales & Training
+  - Channel Partner Activation
+  - jane@citideveloper.com
+- Remove contact@jbj.ae and JBJ footer text from brokerage emails.
 
-1. **Directory only ever seeds Umm Al Quwain.** The last 12 cron runs each contain exactly **1** `brokerage_seed` job, and it's always the last emirate (UAQ). The fan-out-to-all-7-emirates code exists in `directory-job-runner` but the deployed function isn't running it — it needs a fresh deploy.
-2. **"0 new" forever.** Perplexity returns the same first ~100 firms every call, so re-running with `offset=0` is a no-op. We need to walk multiple offset pages so each cron actually discovers the tail.
-3. **Relationships page feels slow on tab open.** Developer Registry tab is mounted only after click, then paginates `crm_developer_registry` (774 rows) in 1000-row pages. We can prefetch it during browser idle so the click is instant.
+2. Rebuild the brokerage email template into a premium card
+- Update the brokerage partnership/breakfast template to a polished email-safe layout:
+  - champagne outer background
+  - white/champagne premium card
+  - thin gold hairline borders only
+  - black premium CTA buttons, not blue links
+  - premium “Open AMRA e-catalogue” button
+  - premium “Reserve / pick your slot” button
+  - dedicated card sections for featured project, offer, breakfast invitation, registration check, WhatsApp group / breakfast invitation
+- Correct the “Umbra” wording to “AMRA” based on the existing CITI project configuration.
+- Ensure conditional blocks like “We’d love to introduce…” and project offer sections display correctly in the editor preview and test email.
 
-Current totals confirm the gap:
-- `crm_brokerages`: 341 rows (Dubai only 40, Abu Dhabi 30 — way too low for UAE)
-- `crm_developer_registry`: 774, `developers` master: 633 — 327 dev rows missing contact info, 210 brokerage rows missing contact info.
+3. Make the editor preview match the live email exactly
+- Add one shared brokerage preview renderer in the frontend so the template editor and bulk-send preview use the same sample variables.
+- Update sample brokerage preview variables to CITI defaults:
+  - represented developer: CITI Developer
+  - reply-to: jane@citideveloper.com
+  - footer: CITI Developer / Sales & Training
+  - group line: “We’d love to introduce CITI Developer...”
+- Fix the left-side visual editor mismatch by ensuring the editor reloads content when the selected template changes and preserves full HTML rather than stripping important sections unexpectedly.
+- Add an “HTML source” fallback remains available for precise editing.
 
-### Fix plan
+4. Fix locked template handling
+- Add an owner-only “Unlock template” action in the template editor so you can edit a locked template when needed.
+- Keep the lock feature available, but it will no longer trap you permanently in read-only mode.
+- For the immediate correction, update the database template via a migration and leave it editable/unlocked unless you lock it again.
 
-**A. `supabase/functions/directory-job-runner/index.ts`**
-- Bump `CHUNK_SIZE` 12 → 25 and `ENRICH_CHUNK_SIZE` 24 → 30 so each chunk does meaningful work.
-- Add a `SEED_OFFSETS = [0, 100, 250, 500]` rotation: in the `cron` action, create one seed job per `(emirate × offset)` so a single sweep covers all 7 emirates at 4 depths = 28 seed jobs in parallel, instead of 1.
-- Initialize each seed job's `progress` field to its starting offset so `pplxList(emirate, offset, …)` actually skips the firms we already have.
-- Tighten `pplxList` prompt to require firms _after_ the offset and to skip any firm whose name appears in a "do not repeat" list (we'll pass the 50 newest names already in `crm_brokerages` for that emirate).
-- Redeploy.
+5. Fix sender identity rules
+- Brokerage emails will default to:
+  - From name: CITI Developer
+  - Reply-to / displayed sender: jane@citideveloper.com
+  - Saved brokerage sender list includes jane@citideveloper.com
+- Developer registration emails will remain:
+  - From name: JBJ Global Real Estate
+  - Reply-to: contact@jbj.ae
+- Remove fallback from brokerage to developer settings so brokerage emails do not accidentally use contact@jbj.ae or JBJ branding.
+- Update the test-send dialog to show the sender identity clearly before sending.
 
-**B. `src/pages/CRMRelationships.tsx` — instant tab switching**
-- Eagerly add `"developers"` to the `mounted` set inside a `requestIdleCallback` after the page renders, so the registry data is fetched and ready before the user clicks the tab. (The query is already cached for 60s, so the second click is free.)
-- Same trick for the brokerages tab when the user lands on developers first.
+6. Update backend send function behavior
+- Update the brokerage send function so live emails, test emails, and fallback template generation all use the CITI Developer brand.
+- Prefix test email subjects with [TEST] for brokerage as well, so test emails are clearly marked.
+- Deploy the updated brokerage send function after changes.
 
-**C. `src/components/crm/DirectoryToolsPanel.tsx`** is already collapsed-by-default with the lockout — no change needed.
+7. Database migration
+- Update existing `crm_email_templates` rows for:
+  - `brokerage_partnership_intro`
+  - `brokerage_breakfast_invite`
+- Update existing `crm_owner_settings` brokerage defaults to CITI Developer / jane@citideveloper.com, without changing developer email settings.
 
-**D. Backfill the missing UAE data right now (one-time):**
-- Trigger the cron action with the new fan-out so all 28 seed jobs and the two enrich jobs run in parallel.
-- After it completes you'll see Dubai/Abu Dhabi numbers jump from 40/30 into the hundreds, and the "0 new" badge will turn into "+N new".
+Technical files expected to change:
+- `src/components/crm/TemplateEditorDialog.tsx`
+- `src/components/crm/VisualEditor.tsx`
+- `src/components/crm/BulkSendDialog.tsx`
+- `src/components/crm/TestSendDialog.tsx`
+- `src/hooks/useCRMRelationships.ts`
+- `supabase/functions/crm-send-brokerage-outreach/index.ts`
+- a new Supabase migration for template/default-setting updates
 
-### Files to change
-- `supabase/functions/directory-job-runner/index.ts` (logic + deploy)
-- `src/pages/CRMRelationships.tsx` (idle-prefetch developers tab)
-
-Nothing is removed; the panel stays minimized; manual "Refresh now" remains the only one-click control and it auto-locks while running.
+After approval, I’ll implement this immediately and deploy the updated brokerage email backend function.
