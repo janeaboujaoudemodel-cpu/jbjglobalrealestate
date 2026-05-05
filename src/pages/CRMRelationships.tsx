@@ -1788,6 +1788,13 @@ const DeveloperRegistryTab = () => {
               </CardContent>
             </Card>
           );})}
+          {devVisible.length < filtered.length && (
+            <div className="flex items-center justify-center py-4">
+              <Button variant="outline" onClick={() => setDevVisibleCount((n) => n + 60)}>
+                Show more · {filtered.length - devVisible.length} remaining
+              </Button>
+            </div>
+          )}
         </div>
       )}
         </div>
