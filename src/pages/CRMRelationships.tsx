@@ -1769,7 +1769,7 @@ const DeveloperRegistryTab = () => {
       )}
         </div>
       </div>
-      )}
+      </div>
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
       <BulkSendDialog
