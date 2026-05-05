@@ -720,14 +720,22 @@ const BrokeragesTab = () => {
             }`}>
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  {!isDirectory && (r.primary_contact?.email || r.email) && (
-                    <Checkbox
-                      checked={bulkSel.has(r.id)}
-                      onCheckedChange={() => toggleBulk(r.id)}
-                      className="mt-1"
-                      aria-label={`Select ${r.company_name} for bulk outreach`}
-                    />
-                  )}
+                  <Checkbox
+                    checked={bulkSel.has(r.id)}
+                    onCheckedChange={() => {
+                      const hasEmail = !!(r.primary_contact?.email || r.email || r.admin_contact?.email);
+                      if (!hasEmail && !bulkSel.has(r.id)) {
+                        toast.message("Add an email to this agency first", {
+                          description: "Open Edit and add an admin email so we know where to send the outreach.",
+                        });
+                        openEdit(r);
+                        return;
+                      }
+                      toggleBulk(r.id);
+                    }}
+                    className="mt-1"
+                    aria-label={`Select ${r.company_name} for bulk outreach`}
+                  />
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <button
