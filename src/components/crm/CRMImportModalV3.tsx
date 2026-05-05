@@ -1286,7 +1286,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-sm text-muted-foreground">
                   {parsedData.length} contacts from {file?.name}
                   {registerUnderBroker && selectedBrokerId && (
-                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.display_name}</span>
+                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.full_name}</span>
                   )}
                 </p>
               </div>
