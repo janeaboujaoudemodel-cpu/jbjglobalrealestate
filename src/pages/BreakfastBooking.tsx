@@ -264,7 +264,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
           {data?.preview && <span className="ml-2 text-xs text-foreground/50">(preview)</span>}
         </p>
 
-        {isAlreadyBooked && (
+        {data?.chosen && (
           <div className="mt-4 bg-card border border-border rounded-xl p-4 text-sm text-foreground/80">
             You already confirmed <strong>{data?.chosen?.date}</strong> at <strong>{data?.chosen?.time}</strong>.
             Submitting the form below will update your details.
