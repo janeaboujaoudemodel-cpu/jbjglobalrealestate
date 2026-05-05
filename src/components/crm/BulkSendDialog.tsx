@@ -166,6 +166,7 @@ export const BulkSendDialog = ({
   const { data: upcomingSlots = [] } = useUpcomingBreakfastSlots();
   const [bulkPreferredSlotId, setBulkPreferredSlotId] = useState<string>("");
   const [bulkGroupStatus, setBulkGroupStatus] = useState<BrokerageGroupStatus | "">("");
+  const [bulkFeaturedProjectKey, setBulkFeaturedProjectKey] = useState<CitiProjectKey>(DEFAULT_FEATURED_PROJECT);
   const [perRowPersonalization, setPerRowPersonalization] = useState<
     Record<string, BrokerageOutreachPersonalization>
   >({});
@@ -179,12 +180,14 @@ export const BulkSendDialog = ({
       row.groupStatus ?? (bulkGroupStatus || undefined) ?? detected;
     const slotId = row.preferredSlotId ?? (bulkPreferredSlotId || undefined);
     const contactName = row.contactName ?? (r.primary_contact?.name || "");
+    const featuredProjectKey = (row.featuredProjectKey as CitiProjectKey) || bulkFeaturedProjectKey;
     const out: BrokerageOutreachPersonalization = {
       contactName: contactName || undefined,
       groupStatus,
       preferredSlotId: slotId || undefined,
       groupStatusLabelOverride: row.groupStatusLabelOverride,
       preferredEventTimeOverride: row.preferredEventTimeOverride,
+      featuredProjectKey,
     };
     return out;
   };
