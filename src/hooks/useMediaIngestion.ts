@@ -94,13 +94,36 @@ export function useMediaIngestion() {
 
   const classify = useCallback(async (jobIds: string[]) => {
     if (!jobIds.length) return;
-    // Run classify in batches of 10 in parallel for big drops
-    const batches = chunk(jobIds, 10);
-    await Promise.allSettled(
-      batches.map((b) =>
-        supabase.functions.invoke("media-ingestion-classify", { body: { job_ids: b } }),
-      ),
-    );
+    // One job per invocation (server enforces max 1) with bounded concurrency
+    // to avoid overloading the edge worker (WORKER_RESOURCE_LIMIT).
+    const CONCURRENCY = 3;
+    const queue = [...jobIds];
+    const runOne = async (id: string) => {
+      try {
+        await supabase.functions.invoke("media-ingestion-classify", {
+          body: { job_ids: [id] },
+        });
+      } catch (err) {
+        console.warn("[media-ingestion] classify failed for", id, err);
+        try {
+          await supabase
+            .from("material_ingestion_jobs")
+            .update({
+              status: "error",
+              last_error: err instanceof Error ? err.message : "classify failed",
+            })
+            .eq("id", id);
+        } catch (_) { /* ignore */ }
+      }
+    };
+    const workers = Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+      while (queue.length) {
+        const next = queue.shift();
+        if (!next) break;
+        await runOne(next);
+      }
+    });
+    await Promise.allSettled(workers);
   }, []);
 
   const uploadFiles = useCallback(
