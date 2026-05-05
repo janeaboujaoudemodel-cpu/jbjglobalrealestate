@@ -28,8 +28,11 @@ const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
 const INTERNAL_TOKEN = SERVICE_KEY; // reused as continuation auth between chunks
 
 const EMIRATES = ["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain"] as const;
-const CHUNK_SIZE = 12; // seed rows per chunk
-const ENRICH_CHUNK_SIZE = 24; // enrich rows per chunk (run in parallel within a chunk)
+const CHUNK_SIZE = 25; // seed rows per Perplexity page
+const ENRICH_CHUNK_SIZE = 30; // enrich rows per chunk (run in parallel within a chunk)
+// Each cron sweep starts a fresh seed job per emirate at each of these
+// starting offsets so we walk past Perplexity's first page and discover the long tail.
+const SEED_OFFSETS = [0, 100, 250, 500];
 
 const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
