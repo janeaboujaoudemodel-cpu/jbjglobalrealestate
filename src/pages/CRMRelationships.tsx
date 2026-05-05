@@ -703,6 +703,9 @@ const BrokeragesTab = () => {
         <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
           <Mail className="w-4 h-4 mr-2" />Edit Templates
         </Button>
+        <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
+          <FlaskConical className="w-4 h-4 mr-2" />Send Test
+        </Button>
         <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
           <Bell className="w-4 h-4 mr-2" />Activity Log
         </Button>
