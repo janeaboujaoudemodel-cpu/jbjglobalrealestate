@@ -478,38 +478,51 @@ const BrokeragesTab = () => {
   // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
   const sorted = useMemo(() => sortBrokeragesForDirectory(data as any[]), [data]);
 
+  // Precompute a normalized haystack per row — done once per sort change, not per keystroke.
+  const indexed = useMemo(
+    () =>
+      sorted.map((r: any) => ({
+        row: r,
+        haystack: normalizeForSearch(
+          [
+            r.company_name,
+            r.emirate,
+            r.office_location,
+            r.office_address,
+            r.website,
+            r.phone,
+            r.email,
+            r.instagram_url,
+            r.status,
+            r.outreach_stage,
+            r.represented_developer_name,
+            r.primary_contact?.name,
+            r.primary_contact?.email,
+          ]
+            .filter(Boolean)
+            .join(" "),
+        ),
+        emirateLower: (r.emirate || "").toLowerCase(),
+      })),
+    [sorted],
+  );
+
   const filtered = useMemo(() => {
     const ql = normalizeForSearch(debouncedQ);
-    return sorted.filter((r: any) => {
-      const haystack = normalizeForSearch(
-        [
-          r.company_name,
-          r.emirate,
-          r.office_location,
-          r.office_address,
-          r.website,
-          r.phone,
-          r.email,
-          r.instagram_url,
-          r.status,
-          r.outreach_stage,
-          r.represented_developer_name,
-          r.primary_contact?.name,
-          r.primary_contact?.email,
-        ]
-          .filter(Boolean)
-          .join(" "),
-      );
-      const matchesQ = !ql || haystack.includes(ql);
-      const matchesS = statusFilter === "all" || r.status === statusFilter;
-      const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
-      let matchesSource = true;
-      if (sourceTab === "directory") matchesSource = r.entry_source === "directory";
-      else if (sourceTab === "owner") matchesSource = r.entry_source === "owner";
-      else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
-      return matchesQ && matchesS && matchesE && matchesSource;
-    });
-  }, [sorted, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+    const emirateLower = emirateFilter.toLowerCase();
+    const out: any[] = [];
+    for (const item of indexed) {
+      const r = item.row;
+      if (ql && !item.haystack.includes(ql)) continue;
+      if (statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
+      if (sourceTab === "directory" && r.entry_source !== "directory") continue;
+      else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
+      else if (sourceTab === "existing" && !(r.entry_source === "owner" && r.is_existing_match)) continue;
+      out.push(r);
+    }
+    return out;
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
