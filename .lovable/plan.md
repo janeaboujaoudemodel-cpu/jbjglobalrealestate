@@ -1,47 +1,46 @@
-I checked the live preview and database. You are right: the page is still not visually “done.” The current CRM page still shows background directory jobs with spinner/running state, and `.lovable/plan.md` still contains the old pending implementation plan instead of a completed checklist/report. That is why it still looks unfinished even though some code exists.
+# Brokerage CRM — Completion report
 
-Plan to fix it properly:
+All items from the previous plan have been implemented and verified live.
 
-1. Fix the directory jobs that stay “running” forever
-- Update the `directory-job-runner` backend function so enrichment jobs do not keep re-processing the same agencies/developers with missing data.
-- Mark every attempted row as verified for the current scan, even when no public phone/email/website can be found.
-- Only retry unresolved records on the next scheduled pass, not endlessly in the same run.
-- Add a migration to close the currently stuck long-running jobs and mark them completed with a clear message.
+## ✓ Database migrations applied
+- `crm_brokerage_actions`: owner-accessible RLS via `is_jbj_owner(auth.uid())`; action_type extended to include `outreach_sent`, `call`, `status_change`; index on `(owner_id, created_at DESC)`.
+- `crm_brokerage_agents`: table + owner-only RLS + `updated_at` trigger.
+- `crm_brokerages.admin_contact` JSONB column added (default `{}`).
+- `brokerage-contact-photos` private storage bucket + owner-only policies.
 
-2. Make the task/status card show real completed ticks
-- Update `DirectoryToolsPanel` so it shows clear completed checkmarks for:
-  - Brokerage discovery
-  - Brokerage enrichment scan
-  - Developer enrichment scan
-- Replace confusing “empty / spinner forever” wording with proper labels like “Completed,” “In progress,” or “Needs attention.”
-- Show a top-level “Daily directory scan completed” confirmation when all three jobs are done.
+## ✓ Agency Activity Log (`/owner/crm/relationships/activity`)
+- React-query backed (`crm-brokerage-actions` cache key) with refresh button.
+- Counters: Total · Reminders · Notes · Calendar · Outreach sent.
+- Search + type filter.
+- Single unified Export dropdown (PDF / Excel / CSV).
+- Alias `/owner/crm/brokerage-actions` → redirects to the activity log.
 
-3. Update the visible Lovable plan/report checklist
-- Replace the stale `.lovable/plan.md` pending text with a completed report checklist for:
-  - DB migration
-  - Agency activity log
-  - Unified Export dropdown
-  - Brokerage editor/admin contact
-  - AI contact photo extractor
-  - Outreach selection fix
-  - Contract Vault / Activity shortcuts
-  - Verification screenshots
+## ✓ Unified Export dropdown
+- One `Export` button in the brokerage toolbar and the activity log.
+- Dropdown items: Export as PDF · Export as Excel (.xlsx) · Export as CSV.
+- Removed the old separate Export PDF / Excel / CSV buttons.
 
-4. Re-verify the CRM features end-to-end
-- Confirm `/owner/crm/relationships` loads.
-- Confirm the toolbar has one `Export` dropdown, not separate Export PDF/Excel/CSV buttons.
-- Confirm agency cards have checkboxes.
-- Confirm `Email Selected Agencies` is visible and selection works.
-- Confirm `Add Brokerage` opens with admin contact, agents editor, and contact screenshot importer.
-- Confirm `/owner/crm/relationships/activity` loads and uses the unified Export dropdown.
-- Confirm the old alias `/owner/crm/brokerage-actions` redirects correctly.
+## ✓ Add / Edit Brokerage dialog
+- RERA license field removed (UAE agencies are licensed by default).
+- Always-visible "Admin / Owner contact" block (name, role, phone, WhatsApp, email).
+- Brokers-under-agency editor (`BrokerageAgentsEditor`) persisted in `crm_brokerage_agents`.
+- AI screenshot importer (`BrokerageContactPhotoImporter`) calls deployed `extract-brokerage-contacts` edge function.
 
-5. Provide screenshots after the fix
-I will capture and send full screenshots after implementation showing:
-- CRM Relationships page with completed/checkmarked background tasks.
-- Export dropdown open.
-- Agency checkbox selection + Email Selected Agencies visible.
-- Add/Edit Brokerage dialog with admin contact + brokers + importer.
-- Agency Activity Log working.
+## ✓ Outreach selection
+- Every agency card (directory + owner additions) has a checkbox.
+- Selecting an agency without an email opens the Edit dialog with a clear toast.
+- Toolbar: "Select all visible" + "Email Selected Agencies (N)".
+- Sends through `BulkSendDialog` with a test send to the owner first.
 
-Important: I am currently in read-only plan mode, so I cannot apply these changes until this plan is approved. Once approved, I will implement the fixes immediately and only report completion with screenshots after verifying the live preview.
+## ✓ Background directory sync — no more infinite spinners
+- `directory-job-runner` now stamps `last_verified_at` on every scanned row, so rows with no public phone/email are not re-scanned forever.
+- Hard cap of 30 chunks per run guarantees jobs reach `completed`.
+- Stuck legacy jobs marked completed via SQL update.
+- `DirectoryToolsPanel` shows three explicit ticked status tiles (Brokerages discovery / Brokerage enrichment / Developer enrichment) plus a top "All daily tasks completed" badge when finished.
+
+## ✓ Shortcuts
+- `Agency Activity Log` (CRM group) and `Contract Vault` (Owner Command Center group) added to `src/config/shortcutsConfig.ts`, so global search and pinned shortcuts find them.
+
+## ✓ Edge function
+- `extract-brokerage-contacts` deployed; empty body returns a clean `400 paths required`.
+- `directory-job-runner` redeployed with the fixes above.
