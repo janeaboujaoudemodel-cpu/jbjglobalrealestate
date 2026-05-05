@@ -1358,13 +1358,15 @@ const DeveloperRegistryTab = () => {
         </button>
       </div>
 
-      {subTab === "history" ? (
+      {/* Both sub-views stay mounted — toggling visibility avoids slow refetch/re-render */}
+      <div className={subTab === "history" ? "block" : "hidden"}>
         <SentHistoryView
           developers={historyPool}
           onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
-      ) : (
+      </div>
+      <div className={subTab === "queue" ? "block space-y-5" : "hidden"}>
       <div className="space-y-5">
         <div
           className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA]"
