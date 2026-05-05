@@ -188,10 +188,10 @@ export const BrokerageLedgerDialog = ({
             <table className="w-full text-sm">
               <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
                 <tr>
-                  <th className="p-2 text-left">Period</th>
-                  <th className="p-2 text-right">Deals</th>
-                  <th className="p-2 text-right">Gross</th>
-                  <th className="p-2 text-right">Commission</th>
+                  <th className="p-2 text-left whitespace-nowrap">Period</th>
+                  <th className="p-2 text-right whitespace-nowrap">Deals</th>
+                  <th className="p-2 text-right whitespace-nowrap">Gross</th>
+                  <th className="p-2 text-right whitespace-nowrap">Commission</th>
                 </tr>
               </thead>
               <tbody>
