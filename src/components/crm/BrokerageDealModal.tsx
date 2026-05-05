@@ -93,6 +93,10 @@ export const BrokerageDealModal = ({
       toast.error("Enter a deal value greater than zero");
       return;
     }
+    if (!form.agent_name?.trim()) {
+      toast.error("Enter the agent's name");
+      return;
+    }
     const { data: u } = await supabase.auth.getUser();
     if (!u?.user) {
       toast.error("Not authenticated");
@@ -105,6 +109,8 @@ export const BrokerageDealModal = ({
       developer_id: form.developer_id || null,
       developer_name_snapshot:
         developer?.name || form.developer_name_snapshot || null,
+      agent_name: form.agent_name?.trim() || null,
+      agent_email: form.agent_email?.trim() || null,
       unit_label: form.unit_label || null,
       client_name: form.client_name || null,
       deal_value_aed: Number(form.deal_value_aed),
@@ -113,7 +119,7 @@ export const BrokerageDealModal = ({
       closed_on: form.closed_on,
       notes: form.notes || null,
       created_by: u.user.id,
-    };
+    } as any;
 
     const { error } = await supabase
       .from("crm_brokerage_deals")
