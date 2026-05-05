@@ -12,6 +12,7 @@ import {
   Building2,
   FileText,
   MessageSquare,
+  FileSignature,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -42,6 +43,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   { label: "Employee Hub", description: "Team & HR management", icon: Building2, path: "/employee-hub", color: "text-teal-600" },
   { label: "Leads Inbox", description: "All CRM leads inbox", icon: FileText, path: "/owner/crm/leads", color: "text-orange-600" },
   { label: "CRM Chat", description: "Client communications", icon: MessageSquare, path: "/owner/crm", color: "text-violet-600" },
+  { label: "Contract Vault", description: "Developer agreements & AI contract upload", icon: FileSignature, path: "/owner/contracts", color: "text-[#B89555]" },
 ];
 
 export default function QuickActionsGrid() {
