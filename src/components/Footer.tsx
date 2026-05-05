@@ -557,9 +557,8 @@ const Footer = () => {
               <div className="relative">
                 <GoogleMyBusinessLink />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
-              <div className="relative">
-                <ModeSwitcher variant="header" showForUnselected={true} side="top" />
+              <div className="relative empty:hidden [&:empty+span]:hidden">
+                <ModeSwitcher variant="header" side="top" />
               </div>
               <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
               <div className="relative">
