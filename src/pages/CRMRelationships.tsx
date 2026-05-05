@@ -417,9 +417,14 @@ const BrokeragesTab = () => {
   const { data = [], isLoading, refetch } = useBrokerages();
   const upsert = useUpsertBrokerage();
   const del = useDeleteBrokerage();
-  const upsertReminder = useUpsertReminder();
+  const remind = useBrokerageRemind();
   const { data: ownerSettings } = useOwnerSettings();
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q), 220);
+    return () => clearTimeout(t);
+  }, [q]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [emirateFilter, setEmirateFilter] = useState("all");
   const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
@@ -446,22 +451,39 @@ const BrokeragesTab = () => {
     return counts;
   }, [data]);
 
-  const filtered = useMemo(() => data.filter((r: any) => {
-    const ql = q.toLowerCase();
-    const matchesQ = !q
-      || r.company_name?.toLowerCase().includes(ql)
-      || r.primary_contact?.name?.toLowerCase?.().includes(ql)
-      || r.office_location?.toLowerCase?.().includes(ql)
-      || r.emirate?.toLowerCase?.().includes(ql)
-      || r.represented_developer_name?.toLowerCase?.().includes(ql);
-    const matchesS = statusFilter === "all" || r.status === statusFilter;
-    const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
-    let matchesSource = true;
-    if (sourceTab === "directory") matchesSource = r.entry_source === "directory";
-    else if (sourceTab === "owner") matchesSource = r.entry_source === "owner";
-    else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
-    return matchesQ && matchesS && matchesE && matchesSource;
-  }), [data, q, statusFilter, emirateFilter, sourceTab]);
+  const filtered = useMemo(() => {
+    const ql = normalizeForSearch(debouncedQ);
+    const matches = (data as any[]).filter((r: any) => {
+      const haystack = normalizeForSearch(
+        [
+          r.company_name,
+          r.emirate,
+          r.office_location,
+          r.office_address,
+          r.website,
+          r.phone,
+          r.email,
+          r.instagram_url,
+          r.status,
+          r.outreach_stage,
+          r.represented_developer_name,
+          r.primary_contact?.name,
+          r.primary_contact?.email,
+        ]
+          .filter(Boolean)
+          .join(" "),
+      );
+      const matchesQ = !ql || haystack.includes(ql);
+      const matchesS = statusFilter === "all" || r.status === statusFilter;
+      const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
+      let matchesSource = true;
+      if (sourceTab === "directory") matchesSource = r.entry_source === "directory";
+      else if (sourceTab === "owner") matchesSource = r.entry_source === "owner";
+      else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
+      return matchesQ && matchesS && matchesE && matchesSource;
+    });
+    return sortBrokeragesForDirectory(matches);
+  }, [data, debouncedQ, statusFilter, emirateFilter, sourceTab]);
 
   const openNew = () => { setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {} }); setOpen(true); };
   const openEdit = (r: any) => { setEditing(r); setOpen(true); };
@@ -472,14 +494,43 @@ const BrokeragesTab = () => {
   };
 
   const quickReminder = (b: any) => {
-    const due = new Date(); due.setDate(due.getDate() + 7);
-    upsertReminder.mutate({
-      kind: "follow_up",
-      title: `Follow up with ${b.company_name}`,
-      body: `Check on partnership status and pending opportunities.`,
-      due_at: due.toISOString(),
-      brokerage_id: b.id,
+    remind.mutate({ brokerageId: b.id, brokerageName: b.company_name, daysFromNow: 7 });
+  };
+
+  const handleExport = (format: "csv" | "xlsx" | "pdf") => {
+    if (!filtered.length) {
+      toast.error("Nothing to export");
+      return;
+    }
+    const rows: BrokerageExportRow[] = filtered.map((r: any, i: number) => {
+      const statusLabel = STATUS_BROKERAGE.find((s) => s.v === r.status)?.label || r.status || "—";
+      return {
+        rank: i + 1,
+        company_name: r.company_name || "",
+        emirate: r.emirate || "",
+        office_location: r.office_location || r.office_address || "",
+        website: r.website || "",
+        instagram: r.instagram_url || "",
+        phone: r.phone || r.primary_contact?.phone || "",
+        whatsapp: r.whatsapp_e164 || r.primary_contact?.whatsapp || "",
+        email: r.email || r.primary_contact?.email || "",
+        crm_status: statusLabel,
+        outreach_stage: r.outreach_stage || "—",
+        last_message_at: r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—",
+        next_followup_at: r.next_followup_at
+          ? new Date(r.next_followup_at).toLocaleDateString()
+          : r.next_action_at
+            ? new Date(r.next_action_at).toLocaleDateString()
+            : "—",
+        attempt_count: r.attempt_count ?? 0,
+        deal_count: r.deal_count_cached || r.deal_count || 0,
+        estimated_agents: r.estimated_agent_count ?? "—",
+        rating: r.star_rating ? Number(r.star_rating).toFixed(1) : "—",
+        notes: (r.notes || "").slice(0, 240),
+      };
     });
+    exportBrokerages(rows, format);
+    toast.success(`Exported ${rows.length} agencies as ${format.toUpperCase()}`);
   };
 
   const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
