@@ -144,7 +144,6 @@ export const TemplateEditorDialog = ({
         .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
         .replace(/\{\{project_offer_html\}\}/g, offerHtml)
         .replace(/\{\{booking_url\}\}/g, "#preview")
-        .replace(/\{\{preferred_event_time_label\}\}/g, "Tue 13 May, 9:00 AM (GST)")
         .replace(/\{\{reply_to\}\}/g, "jane@citideveloper.com")
         .replace(/\{\{cc_email\}\}/g, "");
     }
