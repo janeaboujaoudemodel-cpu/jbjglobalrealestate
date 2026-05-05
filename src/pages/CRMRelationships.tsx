@@ -1337,12 +1337,14 @@ const DeveloperRegistryTab = () => {
       <DocumentPackPanel />
 
       {/* Sub-tabs: Outreach Queue vs Sent History */}
-      <div className="flex gap-1 p-1 bg-[#1A1A1A]/5 rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
           type="button"
           onClick={() => setSubTab("queue")}
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "queue" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
+            subTab === "queue"
+              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
           }`}
         >
           Outreach Queue ({queuePool.length})
@@ -1350,8 +1352,10 @@ const DeveloperRegistryTab = () => {
         <button
           type="button"
           onClick={() => setSubTab("history")}
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "history" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
+            subTab === "history"
+              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
           }`}
         >
           Sent History ({historyPool.length})
