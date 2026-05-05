@@ -1219,12 +1219,41 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             />
           </div>
         </div>
-        {dirty && (
-          <div className="flex justify-end gap-2 mt-4">
-            <Button variant="outline" onClick={() => setDraft(null)}>Cancel</Button>
-            <Button onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+        <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#1A1A1A]/10">
+          <div className="text-[11px] text-[#1A1A1A]/70">
+            {isBrk
+              ? "Edit the briefing + breakfast email template, or send yourself a test before launching."
+              : "Saved settings apply on the next outreach."}
           </div>
-        )}
+          <div className="flex flex-wrap gap-2">
+            {isBrk && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-template"))}
+                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  Open template editor
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-test"))}
+                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  Send test email
+                </Button>
+              </>
+            )}
+            {dirty && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setDraft(null)}>Cancel</Button>
+                <Button size="sm" onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+              </>
+            )}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
