@@ -1200,7 +1200,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                             value={broker.id}
                             style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                           >
-                            {broker.display_name}
+                            {broker.full_name}
                           </option>
                         ))}
                       </select>
