@@ -446,13 +446,26 @@ export const useQuickStatusUpdate = () => {
       });
       return { ok: true };
     },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
-      qc.invalidateQueries({ queryKey: ["crm-clients"] });
-      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
-      toast.success("Status updated");
+    // Optimistic: patch only the affected row in its own cache. No cross-entity invalidation.
+    onMutate: async (vars) => {
+      const keyMap = {
+        brokerage: ["crm-brokerages"],
+        client: ["crm-clients"],
+        developer_registry: ["crm-dev-registry"],
+      } as const;
+      const key = keyMap[vars.entityType];
+      await qc.cancelQueries({ queryKey: key });
+      const prev = qc.getQueryData<any[]>(key);
+      if (Array.isArray(prev)) {
+        qc.setQueryData<any[]>(key, prev.map((r) => r.id === vars.id ? { ...r, status: vars.status, last_interaction_at: new Date().toISOString() } : r));
+      }
+      return { prev, key };
     },
-    onError: (e: any) => toast.error(e.message || "Failed to update status"),
+    onError: (e: any, _vars, ctx) => {
+      if (ctx?.prev && ctx.key) qc.setQueryData(ctx.key, ctx.prev);
+      toast.error(e?.message || "Failed to update status");
+    },
+    onSuccess: () => { toast.success("Status updated"); },
   });
 };
 
