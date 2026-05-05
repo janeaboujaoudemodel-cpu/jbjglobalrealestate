@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Lock, Eye, Send, Loader2 } from "lucide-react";
+import { Lock, Eye, Send, Loader2, Code2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { VisualEditor } from "@/components/crm/VisualEditor";
 import {
   useEmailTemplate,
   useUpsertEmailTemplate,
@@ -57,10 +58,38 @@ export const TemplateEditorDialog = ({
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
   const [showPreview, setShowPreview] = useState(true);
+  const [sourceMode, setSourceMode] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testSampleName, setTestSampleName] = useState(
     isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.",
   );
+
+  const VARIABLE_CHIPS: { key: string; label: string }[] = isBrokerage
+    ? [
+        { key: "brokerage_name", label: "Brokerage name" },
+        { key: "contact_first_name", label: "Contact first name" },
+        { key: "contact_full_name", label: "Contact full name" },
+        { key: "owner_first_name", label: "Owner first name" },
+        { key: "project_name", label: "Project name" },
+        { key: "project_url", label: "Project URL" },
+        { key: "project_tagline", label: "Project tagline" },
+        { key: "booking_url", label: "Booking URL" },
+        { key: "preferred_event_time_label", label: "Event time" },
+      ]
+    : [
+        { key: "developer_name", label: "Developer name" },
+        { key: "drive_url", label: "Drive URL" },
+      ];
+
+  const insertVariable = (key: string) => {
+    const token = `{{${key}}}`;
+    if (sourceMode) {
+      setHtml((h) => h + token);
+    } else {
+      // Append a paragraph carrying the token; the visual editor renders it as plain text.
+      setHtml((h) => h + `<p>${token}</p>`);
+    }
+  };
 
   // Reset to a valid variant whenever the editor mode (or `open`) changes
   useEffect(() => {
@@ -237,14 +266,59 @@ export const TemplateEditorDialog = ({
               />
             </div>
             <div>
-              <Label className="text-xs text-[#1A1A1A]">{placeholderHint}</Label>
-              <Textarea
-                value={html}
-                onChange={(e) => setHtml(e.target.value)}
-                disabled={isLocked}
-                rows={18}
-                className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <Label className="text-xs text-[#1A1A1A]">Email body</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSourceMode((s) => !s)}
+                  className="h-7 text-[11px] text-[#1A1A1A]"
+                  title="Toggle between visual editing and raw HTML"
+                >
+                  <Code2 className="w-3 h-3 mr-1" />
+                  {sourceMode ? "Visual editor" : "HTML source"}
+                </Button>
+              </div>
+
+              {/* Variable chip bar */}
+              <div className="flex flex-wrap gap-1.5 mb-2 p-2 rounded-lg bg-[#F7F2EA] border border-[#1A1A1A]/10">
+                <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 mr-1">
+                  <Sparkles className="w-3 h-3" /> Insert variable
+                </span>
+                {VARIABLE_CHIPS.map((c) => (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => insertVariable(c.key)}
+                    disabled={isLocked}
+                    className="text-[11px] px-2 py-0.5 rounded-full bg-[#FDFBF7] border border-[#1A1A1A]/15 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
+                    title={`Insert {{${c.key}}}`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+
+              {sourceMode ? (
+                <Textarea
+                  value={html}
+                  onChange={(e) => setHtml(e.target.value)}
+                  disabled={isLocked}
+                  rows={18}
+                  className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
+                />
+              ) : (
+                <VisualEditor
+                  content={html}
+                  onChange={setHtml}
+                  disabled={isLocked}
+                />
+              )}
+
+              <p className="text-[11px] text-[#1A1A1A]/70 mt-1.5">
+                Tip: Click any chip above to insert the placeholder. {placeholderHint}
+              </p>
             </div>
 
             {/* Send test panel */}
