@@ -150,11 +150,7 @@ function isNonRealEstateBrokerage(name: string, license: string | null): boolean
   if (license && license.trim().length >= 3) return false; // licensed firms always allowed
   return NON_REALESTATE_RX.test(name);
 }
-  const trimmed = w.trim();
-  if (!trimmed) return null;
-  if (trimmed.startsWith("http")) return trimmed;
-  return "https://" + trimmed.replace(/^\/+/, "");
-}
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
