@@ -684,4 +684,6 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       </DialogContent>
     </Dialog>
   );
-}
+});
+
+export default AdvancedFilterPanel;
