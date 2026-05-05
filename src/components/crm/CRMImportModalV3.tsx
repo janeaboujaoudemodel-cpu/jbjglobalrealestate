@@ -63,7 +63,7 @@ interface ParsedLead {
 
 interface CRMBroker {
   id: string;
-  display_name: string;
+  full_name: string;
 }
 
 // Source group options - Website is NOT allowed for imports
