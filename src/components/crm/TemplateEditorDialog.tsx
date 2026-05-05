@@ -76,7 +76,7 @@ export const TemplateEditorDialog = ({
         { key: "project_url", label: "Project URL" },
         { key: "project_tagline", label: "Project tagline" },
         { key: "booking_url", label: "Booking URL" },
-        { key: "preferred_event_time_label", label: "Event time" },
+        
       ]
     : [
         { key: "developer_name", label: "Developer name" },
@@ -127,7 +127,6 @@ export const TemplateEditorDialog = ({
           const map: Record<string, string> = {
             project_offer_html: offerHtml,
             booking_url: "#preview",
-            preferred_event_time_label: "Tue 13 May, 9:00 AM (GST)",
           };
           return map[k] && map[k].trim().length > 0 ? inner : "";
         },
@@ -145,7 +144,6 @@ export const TemplateEditorDialog = ({
         .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
         .replace(/\{\{project_offer_html\}\}/g, offerHtml)
         .replace(/\{\{booking_url\}\}/g, "#preview")
-        .replace(/\{\{preferred_event_time_label\}\}/g, "Tue 13 May, 9:00 AM (GST)")
         .replace(/\{\{reply_to\}\}/g, "jane@citideveloper.com")
         .replace(/\{\{cc_email\}\}/g, "");
     }

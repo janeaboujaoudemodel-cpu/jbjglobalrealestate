@@ -425,12 +425,6 @@ serve(async (req: Request) => {
       const offerBlock = project.offerHtml
         ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px">${project.offerHtml}</div>`
         : "";
-      const slotLine = preferredSlotLabel
-        ? `<p style="margin:0 0 14px;font-size:13px"><strong>Suggested time:</strong> ${preferredSlotLabel}</p>`
-        : "";
-      const bookingBtn = bookingUrl
-        ? `<a href="${bookingUrl}" style="display:inline-block;padding:12px 24px;background:#B89555;color:#FFFFFF;text-decoration:none;border-radius:6px;font-size:14px;font-weight:600">RSVP &amp; pick your slot →</a>`
-        : "";
       html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
 <div style="background:#F7F2EA;padding:40px 16px">
   <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:36px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
@@ -449,12 +443,20 @@ serve(async (req: Request) => {
     <div style="margin:28px 0;padding:26px;background:#FDFBF7;border:1px solid #B89555;border-radius:14px">
       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Private Invitation</div>
       <div style="font-size:18px;font-weight:600;margin-bottom:10px">Partnership Briefing &amp; Breakfast</div>
-      <p style="margin:0 0 14px;font-size:14px">I'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private breakfast at our Dubai office — agenda covers ${project.name}, commissions, sales training and channel partner activation.</p>
-      ${slotLine}
-      <p style="margin:0 0 18px;font-size:13px;color:#1A1A1A99">Pick any time slot from <strong>11:00 to 17:00</strong> Dubai time on Tuesdays or Thursdays.</p>
-      ${bookingUrl ? `<a href="${bookingUrl}" style="display:inline-block;padding:13px 28px;background:#1A1A1A;color:#FDFBF7;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;border:1px solid #1A1A1A">Reserve &amp; pick your slot &rarr;</a>` : ""}
+      <p style="margin:0 0 14px;font-size:14px">I'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private breakfast at our Dubai office — exclusive for your company. Agenda covers ${project.name}, commissions, sales training and channel partner activation.</p>
+      <div style="margin:14px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Please Confirm</div>
+        <ul style="margin:0;padding-left:18px">
+          <li style="margin-bottom:6px">The <strong>names of attendees</strong> from ${varsMap.brokerage_name}.</li>
+          <li style="margin-bottom:6px">The <strong>number of brokers</strong> attending and the <strong>total members</strong> joining the breakfast.</li>
+          <li style="margin-bottom:6px">Reply by email with the <strong>date and time that suits you</strong> — any slot from <strong>Monday to Friday</strong>, between <strong>11:00 and 17:00</strong> Dubai time.</li>
+          <li>Please also book directly from the calendar and reply back with the slot you have selected.</li>
+        </ul>
+      </div>
+      ${bookingUrl ? `<div style="text-align:center;margin-top:18px"><a href="${bookingUrl}" style="display:inline-block;padding:13px 28px;background:#1A1A1A;color:#FDFBF7;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;border:1px solid #1A1A1A">Book your slot on the calendar &rarr;</a></div>` : ""}
     </div>
-    <p style="margin:20px 0 24px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track your registration and add the right contact to our WhatsApp group for breakfast logistics.</p>
+    <p style="margin:20px 0 14px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track your registration and add the right contact to our WhatsApp group for breakfast logistics.</p>
+    <p style="margin:14px 0 24px;font-size:13px;color:#1A1A1A99"><em>Please disregard this message if ${varsMap.brokerage_name} is already registered with ${representedDeveloperName}, already part of our active WhatsApp group, or actively selling with us.</em></p>
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
       Warm regards,<br/><strong>${ownerFirstName}</strong><br/>
       <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
