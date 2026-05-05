@@ -40,6 +40,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
+import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
