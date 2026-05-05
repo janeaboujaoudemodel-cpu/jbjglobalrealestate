@@ -1,46 +1,23 @@
-# Brokerage CRM — Completion report
+# Fix: OwnerTasksPopupAlert contrast-guard regression
 
-All items from the previous plan have been implemented and verified live.
+## Problem
+`src/components/owner-dashboard/OwnerTasksPopupAlert.tsx` still has three elements that occasionally render with poor/invisible contrast:
+1. The `AlertTriangle` icon inside the dark champagne tile (gold on near-black tile gets rewritten by the runtime guard).
+2. The `X` close icon.
+3. The "View Tasks" / "Later" button labels.
 
-## ✓ Database migrations applied
-- `crm_brokerage_actions`: owner-accessible RLS via `is_jbj_owner(auth.uid())`; action_type extended to include `outreach_sent`, `call`, `status_change`; index on `(owner_id, created_at DESC)`.
-- `crm_brokerage_agents`: table + owner-only RLS + `updated_at` trigger.
-- `crm_brokerages.admin_contact` JSONB column added (default `{}`).
-- `brokerage-contact-photos` private storage bucket + owner-only policies.
+The component source already sets the right colors. The issue is the runtime `contrastGuard` (`src/utils/contrastGuard.ts`) walks the DOM after route changes / mutations and rewrites `color` on any descendant of the outer `role="dialog"` wrapper that doesn't carry `data-no-contrast-guard`. The inner card has the opt-out, but the outer wrapper does not, so the guard still traverses into it.
 
-## ✓ Agency Activity Log (`/owner/crm/relationships/activity`)
-- React-query backed (`crm-brokerage-actions` cache key) with refresh button.
-- Counters: Total · Reminders · Notes · Calendar · Outreach sent.
-- Search + type filter.
-- Single unified Export dropdown (PDF / Excel / CSV).
-- Alias `/owner/crm/brokerage-actions` → redirects to the activity log.
+## Fix (single file: `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`)
 
-## ✓ Unified Export dropdown
-- One `Export` button in the brokerage toolbar and the activity log.
-- Dropdown items: Export as PDF · Export as Excel (.xlsx) · Export as CSV.
-- Removed the old separate Export PDF / Excel / CSV buttons.
+1. Add `data-no-contrast-guard` to the outer `role="dialog"` wrapper (currently only the inner card has it).
+2. Add `data-no-contrast-guard` + explicit `style={{ color: "#B89555" }}` on the `AlertTriangle` icon so its gold color survives on the near-black tile.
+3. Re-confirm explicit `style={{ color: "#FFFFFF" }}` on the `View Tasks` label span and its `ArrowRight` svg (already present — verify after edit).
+4. Re-confirm explicit `style={{ color: "#1A1A1A" }}` on the `X` svg (already present — verify after edit).
 
-## ✓ Add / Edit Brokerage dialog
-- RERA license field removed (UAE agencies are licensed by default).
-- Always-visible "Admin / Owner contact" block (name, role, phone, WhatsApp, email).
-- Brokers-under-agency editor (`BrokerageAgentsEditor`) persisted in `crm_brokerage_agents`.
-- AI screenshot importer (`BrokerageContactPhotoImporter`) calls deployed `extract-brokerage-contacts` edge function.
+No other files touched. No CSS or guard-engine changes — this keeps the sitewide guard intact and only exempts this one modal where authored colors are already correct.
 
-## ✓ Outreach selection
-- Every agency card (directory + owner additions) has a checkbox.
-- Selecting an agency without an email opens the Edit dialog with a clear toast.
-- Toolbar: "Select all visible" + "Email Selected Agencies (N)".
-- Sends through `BulkSendDialog` with a test send to the owner first.
-
-## ✓ Background directory sync — no more infinite spinners
-- `directory-job-runner` now stamps `last_verified_at` on every scanned row, so rows with no public phone/email are not re-scanned forever.
-- Hard cap of 30 chunks per run guarantees jobs reach `completed`.
-- Stuck legacy jobs marked completed via SQL update.
-- `DirectoryToolsPanel` shows three explicit ticked status tiles (Brokerages discovery / Brokerage enrichment / Developer enrichment) plus a top "All daily tasks completed" badge when finished.
-
-## ✓ Shortcuts
-- `Agency Activity Log` (CRM group) and `Contract Vault` (Owner Command Center group) added to `src/config/shortcutsConfig.ts`, so global search and pinned shortcuts find them.
-
-## ✓ Edge function
-- `extract-brokerage-contacts` deployed; empty body returns a clean `400 paths required`.
-- `directory-job-runner` redeployed with the fixes above.
+## Verification
+- Open `/owner` with at least 1 pending task (or `/owner/crm/relationships` which mounts the same shell).
+- Confirm: AlertTriangle visible (gold) on dark tile, X visible (ink) on champagne pill, "View Tasks" label visible (white) on ink button, "Later" label visible (ink) on champagne button.
+- Screenshot before/after via `browser--screenshot`.
