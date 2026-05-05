@@ -131,11 +131,14 @@ export const BrokerageDealModal = ({
     toast.success("Deal registered");
     qc.invalidateQueries({ queryKey: ["brokerages"] });
     qc.invalidateQueries({ queryKey: ["crm-brokerage-deals"] });
+    qc.invalidateQueries({ queryKey: ["brokerage-deals", brokerageId] });
     onSaved?.();
     onOpenChange(false);
     setForm({
       developer_id: defaultDeveloper?.id || "",
       developer_name_snapshot: defaultDeveloper?.name || "",
+      agent_name: "",
+      agent_email: "",
       unit_label: "",
       client_name: "",
       deal_value_aed: "",
