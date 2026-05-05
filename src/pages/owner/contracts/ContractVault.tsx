@@ -28,7 +28,7 @@ interface SignedRow {
 
 export default function ContractVault() {
   const [q, setQ] = useState("");
-  const [emirate, setEmirate] = useState<string>("all");
+  const [developerName, setDeveloperName] = useState<string>("");
   const [uploadOpen, setUploadOpen] = useState(false);
 
   const { data: agreements = [] } = useQuery({
@@ -57,16 +57,17 @@ export default function ContractVault() {
     },
   });
 
-  const emirates = useMemo(() => {
-    const set = new Set<string>();
-    data.forEach((r) => r.emirate && set.add(r.emirate));
-    return Array.from(set);
-  }, [data]);
+  const devLower = developerName.trim().toLowerCase();
+
+  const filteredAgreements = useMemo(() => {
+    if (!devLower) return agreements;
+    return agreements.filter((a) => (a.developer_name_raw || "").toLowerCase() === devLower);
+  }, [agreements, devLower]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return data.filter((r) => {
-      if (emirate !== "all" && r.emirate !== emirate) return false;
+      if (devLower && (r.developer_name || "").toLowerCase() !== devLower) return false;
       if (!term) return true;
       return (
         r.envelope_name?.toLowerCase().includes(term) ||
@@ -76,7 +77,7 @@ export default function ContractVault() {
         r.area?.toLowerCase().includes(term)
       );
     });
-  }, [data, q, emirate]);
+  }, [data, q, devLower]);
 
   return (
     <div className="p-6 space-y-6 bg-[#FDFBF7] min-h-screen">
