@@ -116,7 +116,7 @@ export default function ContractVault() {
           <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by developer</p>
         </CardHeader>
         <CardContent className="p-0">
-          {agreements.length === 0 ? (
+          {filteredAgreements.length === 0 ? (
             <div className="p-8 text-center text-sm text-[#1A1A1A]/60">
               <FileText className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/30" />
               No agreements uploaded yet. Drop a Sobha / Emaar / Damac contract — AI will file it for you.
