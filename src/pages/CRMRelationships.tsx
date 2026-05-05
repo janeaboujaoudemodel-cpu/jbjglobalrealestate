@@ -378,7 +378,13 @@ const BrokeragesTab = () => {
   }, [data]);
 
   const filtered = useMemo(() => data.filter((r: any) => {
-    const matchesQ = !q || r.company_name?.toLowerCase().includes(q.toLowerCase()) || r.primary_contact?.name?.toLowerCase?.().includes(q.toLowerCase());
+    const ql = q.toLowerCase();
+    const matchesQ = !q
+      || r.company_name?.toLowerCase().includes(ql)
+      || r.primary_contact?.name?.toLowerCase?.().includes(ql)
+      || r.office_location?.toLowerCase?.().includes(ql)
+      || r.emirate?.toLowerCase?.().includes(ql)
+      || r.represented_developer_name?.toLowerCase?.().includes(ql);
     const matchesS = statusFilter === "all" || r.status === statusFilter;
     const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
     let matchesSource = true;
