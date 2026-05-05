@@ -254,8 +254,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             } else if (modeSelected) {
               navigate("/");
             } else {
-              // No preselection and no prior selection → land on home; the
-              // ModeSelectionModal will force-open until they pick a category.
+              // No preselection and no prior selection → land on home, where
+              // the "Tell us who you are" CategorySelectorSection lets the
+              // user pick their role on their own terms (no forced modal).
               navigate("/");
             }
           }
