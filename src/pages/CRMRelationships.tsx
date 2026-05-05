@@ -812,6 +812,17 @@ const BrokeragesTab = () => {
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
                       )}
                       <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
+                      {r.attended_briefing && (
+                        <span
+                          className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                          title={r.briefing_notes || "Attended breakfast briefing"}
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          Attended {r.attended_briefing_date
+                            ? new Date(r.attended_briefing_date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+                            : ""}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
