@@ -207,10 +207,10 @@ export const BrokerageLedgerDialog = ({
                 )}
                 {rollups.map((r) => (
                   <tr key={r.sortKey} className="border-t border-[#B89555]/15">
-                    <td className="p-2 font-medium">{r.period}</td>
-                    <td className="p-2 text-right">{r.deals}</td>
-                    <td className="p-2 text-right">{fmtAED(r.gross)}</td>
-                    <td className="p-2 text-right font-semibold">
+                    <td className="p-2 font-medium whitespace-nowrap">{r.period}</td>
+                    <td className="p-2 text-right tabular-nums whitespace-nowrap">{r.deals}</td>
+                    <td className="p-2 text-right tabular-nums whitespace-nowrap">{fmtAED(r.gross)}</td>
+                    <td className="p-2 text-right font-semibold tabular-nums whitespace-nowrap">
                       {fmtAED(r.commission)}
                     </td>
                   </tr>
