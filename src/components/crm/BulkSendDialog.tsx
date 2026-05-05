@@ -324,6 +324,7 @@ export const BulkSendDialog = ({
       : (personal?.preferredEventTimeOverride || "");
     const brokerageLocation =
       (previewDev as any)?.office_location || (previewDev as any)?.emirate || "Dubai";
+    const project = getCitiProject(personal?.featuredProjectKey);
     return {
       brokerage_name: name,
       brokerage_location: brokerageLocation,
@@ -338,10 +339,15 @@ export const BulkSendDialog = ({
       reply_to: "contact@jbj.ae",
       cc_email: "infoo.jane@gmail.com",
       from_name: "JBJ Global Real Estate",
+      represented_developer_name: "City Developer",
       booking_url: "#preview",
+      project_name: project.name,
+      project_url: project.url,
+      project_tagline: project.tagline,
+      project_offer_html: project.offerHtml || "",
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, upcomingSlots]);
+  }, [previewDev, entityType, perRowPersonalization, bulkPreferredSlotId, bulkGroupStatus, bulkFeaturedProjectKey, upcomingSlots]);
 
   const renderPreview = (s: string) => {
     const conditional = s.replace(
