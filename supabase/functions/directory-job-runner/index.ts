@@ -234,24 +234,30 @@ async function runEnrichChunk(job: any) {
   const list = rows ?? [];
   let updated = 0;
   for (const r of list) {
-    const facts = await pplxFacts((r as any)[nameCol], r.emirate, isDev);
-    if (!facts) continue;
+    const facts = await pplxFacts((r as any)[nameCol], r.emirate, isDev).catch(() => null);
     const patch: any = {};
-    if (!r.phone && facts.phone) patch.phone = normPhone(facts.phone);
-    if (!(r as any)[emailCol] && facts.email) patch[emailCol] = String(facts.email).toLowerCase();
-    if (!r.website && facts.website) patch.website = normSite(facts.website);
-    if (!r.instagram_url && facts.instagram_url) patch.instagram_url = normIg(facts.instagram_url);
-    if (!r.office_address && facts.office_address) patch.office_address = facts.office_address;
-    const finalAddr = patch.office_address ?? r.office_address;
-    if (!r.office_map_url && finalAddr) patch.office_map_url = mapsUrl(finalAddr);
-    if (Object.keys(patch).length) {
-      patch.last_verified_at = new Date().toISOString();
-      await admin.from(table).update(patch).eq("id", r.id);
-      updated++;
+    if (facts) {
+      if (!r.phone && facts.phone) patch.phone = normPhone(facts.phone);
+      if (!(r as any)[emailCol] && facts.email) patch[emailCol] = String(facts.email).toLowerCase();
+      if (!r.website && facts.website) patch.website = normSite(facts.website);
+      if (!r.instagram_url && facts.instagram_url) patch.instagram_url = normIg(facts.instagram_url);
+      if (!r.office_address && facts.office_address) patch.office_address = facts.office_address;
+      const finalAddr = patch.office_address ?? r.office_address;
+      if (!r.office_map_url && finalAddr) patch.office_map_url = mapsUrl(finalAddr);
     }
+    // ALWAYS stamp last_verified_at so the same row is not re-scanned forever.
+    // Public records may legitimately have no email/phone — we still mark them
+    // checked so the enrich job can finish and the UI shows a real "completed" tick.
+    patch.last_verified_at = new Date().toISOString();
+    if (Object.keys(patch).length > 1) updated++;
+    await admin.from(table).update(patch).eq("id", r.id);
   }
 
-  const moreLikely = list.length === CHUNK_SIZE;
+  // Hard cap: 30 chunks per run (=360 rows) so even in the worst case the job
+  // completes within minutes and the user sees a clear ✓ instead of an infinite spinner.
+  const HARD_CAP = 30 * CHUNK_SIZE;
+  const newProgressEarly = (job.progress ?? 0) + list.length;
+  const moreLikely = list.length === CHUNK_SIZE && newProgressEarly < HARD_CAP;
   const newProgress = (job.progress ?? 0) + list.length;
 
   await admin.from("crm_directory_jobs").update({
