@@ -4524,3 +4524,13 @@ button:hover [data-no-contrast-guard] svg[style*="#B89555"] {
   color: #B89555 !important;
   stroke: #B89555 !important;
 }
+
+/* Owner dashboard shell must stay champagne, never be normalized to white. */
+.owner-dashboard-shell,
+.owner-dashboard-shell :is(aside, header, [class*="bg-[#F7F2EA]"]) {
+  background-color: #F7F2EA !important;
+}
+
+.owner-dashboard-shell :is([class*="bg-[#EFE6D6]"]) {
+  background-color: #EFE6D6 !important;
+}
