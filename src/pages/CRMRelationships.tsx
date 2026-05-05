@@ -766,7 +766,27 @@ const BrokeragesTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
+        data.length > 0 ? (
+          <Card className="border-amber-300 bg-amber-50">
+            <CardContent className="p-6 text-center">
+              <div className="text-sm text-amber-900 font-semibold mb-2">
+                {data.length} agencies in your directory — but none match your current filters.
+              </div>
+              <div className="text-xs text-amber-800 mb-3">
+                Active filters: {sourceTab !== "all" ? `Source: ${sourceTab} · ` : ""}{emirateFilter !== "all" ? `Emirate: ${emirateFilter} · ` : ""}{statusFilter !== "all" ? `Status: ${statusFilter} · ` : ""}{debouncedQ ? `Search: "${debouncedQ}"` : ""}
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setStatusFilter("all"); }}
+              >
+                Reset all filters
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
+        )
       ) : (
         <div className="grid gap-3">
           {visible.map((r: any) => {
