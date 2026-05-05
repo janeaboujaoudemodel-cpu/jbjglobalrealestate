@@ -594,6 +594,7 @@ const BrokeragesTab = () => {
   return (
     <TooltipProvider>
     <div className="space-y-4">
+      <DocumentPackPanel />
       <DirectoryToolsPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
