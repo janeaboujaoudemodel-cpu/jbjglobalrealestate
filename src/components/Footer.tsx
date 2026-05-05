@@ -174,9 +174,6 @@ const Footer = () => {
   const location = useLocation();
   const footerRef = useRef<HTMLElement>(null);
   const hairline = useAdaptiveHairline(footerRef);
-  const { hasMadeInitialSelection } = useUserModeContext();
-  const { hasSelectedRole } = useUserRole();
-  const showModeSwitcher = hasMadeInitialSelection || hasSelectedRole;
 
   const isBackOfficeContext =
     location.pathname.startsWith("/listing-admin") || location.pathname.startsWith("/admin");
