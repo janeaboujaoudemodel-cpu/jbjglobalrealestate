@@ -766,7 +766,27 @@ const BrokeragesTab = () => {
       </div>
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
-        <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
+        data.length > 0 ? (
+          <Card className="border-amber-300 bg-amber-50">
+            <CardContent className="p-6 text-center">
+              <div className="text-sm text-amber-900 font-semibold mb-2">
+                {data.length} agencies in your directory — but none match your current filters.
+              </div>
+              <div className="text-xs text-amber-800 mb-3">
+                Active filters: {sourceTab !== "all" ? `Source: ${sourceTab} · ` : ""}{emirateFilter !== "all" ? `Emirate: ${emirateFilter} · ` : ""}{statusFilter !== "all" ? `Status: ${statusFilter} · ` : ""}{debouncedQ ? `Search: "${debouncedQ}"` : ""}
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setStatusFilter("all"); }}
+              >
+                Reset all filters
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
+        )
       ) : (
         <div className="grid gap-3">
           {visible.map((r: any) => {
@@ -812,6 +832,17 @@ const BrokeragesTab = () => {
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1A1A1A] text-white">My Addition</span>
                       )}
                       <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
+                      {r.attended_briefing && (
+                        <span
+                          className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1"
+                          title={r.briefing_notes || "Attended breakfast briefing"}
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          Attended {r.attended_briefing_date
+                            ? new Date(r.attended_briefing_date).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+                            : ""}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-[#1A1A1A]/70 space-y-0.5">
                       {r.emirate && <div className="font-medium text-[#1A1A1A]">{r.emirate}</div>}
@@ -960,6 +991,44 @@ const BrokeragesTab = () => {
                   brokerageName={editing.company_name}
                   onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
                 />
+              </div>
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#B89555]" /> Breakfast briefing attendance
+                </div>
+                <div className="grid grid-cols-2 gap-3 items-end">
+                  <Field label="Attended briefing">
+                    <div className="flex items-center gap-2 h-10">
+                      <Switch
+                        checked={!!editing.attended_briefing}
+                        onCheckedChange={(v) => setEditing({
+                          ...editing,
+                          attended_briefing: v,
+                          attended_briefing_date: v ? (editing.attended_briefing_date || new Date().toISOString().slice(0, 10)) : null,
+                        })}
+                      />
+                      <span className="text-xs text-[#1A1A1A]/70">
+                        {editing.attended_briefing ? "Marked as attended" : "Not yet attended"}
+                      </span>
+                    </div>
+                  </Field>
+                  <Field label="Date attended">
+                    <Input
+                      type="date"
+                      value={editing.attended_briefing_date || ""}
+                      disabled={!editing.attended_briefing}
+                      onChange={(e) => setEditing({ ...editing, attended_briefing_date: e.target.value || null })}
+                    />
+                  </Field>
+                </div>
+                <Field label="Briefing notes">
+                  <Textarea
+                    rows={2}
+                    placeholder="What was discussed, attendees, next step…"
+                    value={editing.briefing_notes || ""}
+                    onChange={(e) => setEditing({ ...editing, briefing_notes: e.target.value })}
+                  />
+                </Field>
               </div>
               <Field label="Notes"><Textarea rows={3} value={editing.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} /></Field>
             </div>
@@ -1146,6 +1215,16 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   const update = (patch: any) => setDraft({ ...(draft || settings || {}), ...patch });
   const save = async () => { await upsert.mutateAsync(draft); setDraft(null); };
 
+  // Auto-save sender/CC chip changes (no Save click needed). Other fields
+  // (drive URL, from name) keep the explicit Save button.
+  const autoSave = React.useCallback(async (patch: any) => {
+    try {
+      await upsert.mutateAsync(patch);
+    } catch (e) {
+      console.error("[DocumentPackPanel] auto-save failed", e);
+    }
+  }, [upsert]);
+
   if (isLoading) return <Skeleton className="h-32" />;
 
   // Field aliases — brokerage and developer packs are independent.
@@ -1222,12 +1301,15 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             <PrimarySenderEditor
               saved={savedSenders}
               active={replyTo}
-              onChange={({ saved, active }) =>
-                update({ [F.savedSenders]: saved, [F.replyTo]: active })
-              }
+              onChange={({ saved, active }) => {
+                const patch = { [F.savedSenders]: saved, [F.replyTo]: active };
+                // Reflect immediately + persist without requiring Save click.
+                setDraft({ ...(draft || settings || {}), ...patch });
+                autoSave(patch);
+              }}
             />
             <p className="text-xs text-[#1A1A1A]/70 mt-1">
-              Add as many sender emails as you like — they're saved here forever. Click any chip to use it as the active sender.
+              Add as many sender emails as you like — they're saved automatically. Click any chip to use it as the active sender.
             </p>
           </div>
           <div className="md:col-span-2">
@@ -1241,9 +1323,13 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
                   patch.cc_email = active[0] || s.cc_email || "";
                   patch.cc_jane_enabled = active.length > 0;
                 }
-                update(patch);
+                setDraft({ ...(draft || settings || {}), ...patch });
+                autoSave(patch);
               }}
             />
+            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+              CC addresses are saved automatically and will appear here on every send. Click a chip to toggle, or the trash icon to remove permanently.
+            </p>
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#1A1A1A]/10">

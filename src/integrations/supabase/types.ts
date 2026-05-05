@@ -5290,6 +5290,9 @@ export type Database = {
           ai_summary: string | null
           assigned_to: string | null
           attempt_count: number
+          attended_briefing: boolean
+          attended_briefing_date: string | null
+          briefing_notes: string | null
           company_name: string
           confidence: string | null
           created_at: string
@@ -5360,6 +5363,9 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          attended_briefing?: boolean
+          attended_briefing_date?: string | null
+          briefing_notes?: string | null
           company_name: string
           confidence?: string | null
           created_at?: string
@@ -5430,6 +5436,9 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          attended_briefing?: boolean
+          attended_briefing_date?: string | null
+          briefing_notes?: string | null
           company_name?: string
           confidence?: string | null
           created_at?: string
