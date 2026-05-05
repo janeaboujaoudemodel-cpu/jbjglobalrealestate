@@ -1,66 +1,38 @@
-## Agency Activity Log — Full Workflow Upgrade
+## Relationships Hub — speed + UAE-wide directory fix
 
-Add complete bulk + per-row management on top of the existing list, with proper handling of the three underlying data sources (reminders, brokerage actions, outreach history).
+I dug into the data and the page. The real problems are different from "the panel needs to be more minimized" — that's already done. Three concrete bugs:
 
-### What you'll be able to do
+### What I found
 
-**Per row (hover toolbar on each card):**
-- Toggle done / not done (reminders)
-- Edit title, body, due date inline
-- Delete (with 6-second undo toast)
-- Restore from trash
+1. **Directory only ever seeds Umm Al Quwain.** The last 12 cron runs each contain exactly **1** `brokerage_seed` job, and it's always the last emirate (UAQ). The fan-out-to-all-7-emirates code exists in `directory-job-runner` but the deployed function isn't running it — it needs a fresh deploy.
+2. **"0 new" forever.** Perplexity returns the same first ~100 firms every call, so re-running with `offset=0` is a no-op. We need to walk multiple offset pages so each cron actually discovers the tail.
+3. **Relationships page feels slow on tab open.** Developer Registry tab is mounted only after click, then paginates `crm_developer_registry` (774 rows) in 1000-row pages. We can prefetch it during browser idle so the click is instant.
 
-**Bulk (sticky toolbar appears when 1+ selected):**
-- Tick checkbox on each row
-- Select all (visible / filtered)
-- Unselect all
-- Mark selected as done
-- Mark selected as not done (restore active)
-- Delete selected (with undo)
-- Restore selected (from trash view)
-- Permanently delete (trash view only)
-- Export selected only
+Current totals confirm the gap:
+- `crm_brokerages`: 341 rows (Dubai only 40, Abu Dhabi 30 — way too low for UAE)
+- `crm_developer_registry`: 774, `developers` master: 633 — 327 dev rows missing contact info, 210 brokerage rows missing contact info.
 
-**View tabs added** above the list: `Active` · `Done` · `All` · `Trash`.
-Counters (Total / Reminders / Notes / Calendar / Outreach) become clickable filters and reflect the active view.
+### Fix plan
 
-### Data-model rules (per source)
+**A. `supabase/functions/directory-job-runner/index.ts`**
+- Bump `CHUNK_SIZE` 12 → 25 and `ENRICH_CHUNK_SIZE` 24 → 30 so each chunk does meaningful work.
+- Add a `SEED_OFFSETS = [0, 100, 250, 500]` rotation: in the `cron` action, create one seed job per `(emirate × offset)` so a single sweep covers all 7 emirates at 4 depths = 28 seed jobs in parallel, instead of 1.
+- Initialize each seed job's `progress` field to its starting offset so `pplxList(emirate, offset, …)` actually skips the firms we already have.
+- Tighten `pplxList` prompt to require firms _after_ the offset and to skip any firm whose name appears in a "do not repeat" list (we'll pass the 50 newest names already in `crm_brokerages` for that emirate).
+- Redeploy.
 
-| Source table | Done toggle | Delete | Restore |
-|---|---|---|---|
-| `crm_relationship_reminders` | flips `is_done` | sets `metadata.deleted_at` (add jsonb col) | clears it |
-| `crm_brokerage_actions` | flips `metadata.is_done` | sets `metadata.deleted_at` | clears it |
-| `crm_outreach_touchpoints` | n/a (history is read-only) | hidden from delete; bulk skips them with a toast note | n/a |
+**B. `src/pages/CRMRelationships.tsx` — instant tab switching**
+- Eagerly add `"developers"` to the `mounted` set inside a `requestIdleCallback` after the page renders, so the registry data is fetched and ready before the user clicks the tab. (The query is already cached for 60s, so the second click is free.)
+- Same trick for the brokerages tab when the user lands on developers first.
 
-Outreach entries stay visible but show a small "history — read only" hint instead of action buttons, so the audit trail can never be tampered with.
+**C. `src/components/crm/DirectoryToolsPanel.tsx`** is already collapsed-by-default with the lockout — no change needed.
 
-### Schema change (one tiny migration)
-
-`crm_relationship_reminders` has no `metadata` column today — add one:
-
-```sql
-alter table public.crm_relationship_reminders
-  add column if not exists metadata jsonb not null default '{}'::jsonb;
-```
-
-No other schema changes; soft-delete + done flags live inside `metadata.deleted_at` and `metadata.is_done` JSON keys, so we don't reshape any existing tables.
+**D. Backfill the missing UAE data right now (one-time):**
+- Trigger the cron action with the new fan-out so all 28 seed jobs and the two enrich jobs run in parallel.
+- After it completes you'll see Dubai/Abu Dhabi numbers jump from 40/30 into the hundreds, and the "0 new" badge will turn into "+N new".
 
 ### Files to change
+- `supabase/functions/directory-job-runner/index.ts` (logic + deploy)
+- `src/pages/CRMRelationships.tsx` (idle-prefetch developers tab)
 
-- `src/pages/owner/crm/AgencyActivityLog.tsx` — main rewrite:
-  - Add `selected: Set<string>` state, `view: 'active'|'done'|'all'|'trash'` state.
-  - Add row checkbox column, sticky bulk-action bar, per-row hover actions.
-  - Update query to include rows where `metadata.deleted_at` is set so trash view works; default Active view filters them out.
-  - Add mutations: `toggleDone(ids[])`, `softDelete(ids[])`, `restore(ids[])`, `purge(ids[])` — each fans out per source table and revalidates `["crm-unified-activity"]`.
-  - Optimistic cache update so ticking feels instant; toast w/ "Undo" button for destructive actions.
-- `src/components/crm/ActivityBulkBar.tsx` *(new)* — sticky toolbar component (count, Mark done, Restore, Delete, Clear selection).
-
-### UX notes
-
-- Bulk bar slides in at the bottom on champagne surface with gold hairline (matches design tokens).
-- Checkboxes use existing `@/components/ui/checkbox`.
-- "Select all" only selects rows currently visible after filters/view, so the user is never surprised.
-- Touchpoint rows render the checkbox disabled with a tooltip: "History entries can't be modified."
-- Keyboard: `x` toggles selection on focused row, `Esc` clears selection, `Shift+click` range-selects.
-
-Once you approve, I'll run the one-line migration, then ship the rewrite + new bulk bar in a single pass.
+Nothing is removed; the panel stays minimized; manual "Refresh now" remains the only one-click control and it auto-locks while running.
