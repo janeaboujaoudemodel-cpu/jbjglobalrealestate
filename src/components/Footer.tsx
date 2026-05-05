@@ -17,6 +17,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
@@ -172,6 +174,9 @@ const Footer = () => {
   const location = useLocation();
   const footerRef = useRef<HTMLElement>(null);
   const hairline = useAdaptiveHairline(footerRef);
+  const { hasMadeInitialSelection } = useUserModeContext();
+  const { hasSelectedRole } = useUserRole();
+  const showModeSwitcher = hasMadeInitialSelection || hasSelectedRole;
 
   const isBackOfficeContext =
     location.pathname.startsWith("/listing-admin") || location.pathname.startsWith("/admin");
@@ -557,10 +562,14 @@ const Footer = () => {
               <div className="relative">
                 <GoogleMyBusinessLink />
               </div>
-              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
-              <div className="relative">
-                <ModeSwitcher variant="header" showForUnselected={true} side="top" />
-              </div>
+              {showModeSwitcher && (
+                <>
+                  <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+                  <div className="relative">
+                    <ModeSwitcher variant="header" side="top" />
+                  </div>
+                </>
+              )}
               <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
               <div className="relative">
                 <FooterCurrencyUnit />

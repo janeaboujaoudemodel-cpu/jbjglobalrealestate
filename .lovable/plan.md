@@ -1,46 +1,39 @@
-## Problem
+## Goal
 
-`media-ingestion-classify` crashes with `WORKER_RESOURCE_LIMIT` (HTTP 546) and the hub goes blank. Root causes:
+Stop showing any "mode" UI to a brand-new visitor before they have explicitly picked a category. The mode badge / selector should only appear *after* the user picks their role from the home "Tell us who you are" section (or from the in-app switcher once they have one). No forced modal, no placeholder "Investor" badge in the footer on first visit.
 
-1. **Edge worker overloaded per call.** Each invocation downloads *all developers* + *up to 2,000 projects*, then calls the AI gateway. Frontend (`useMediaIngestion.classify`) fans out **10 batches × 10 jobs in parallel** → Deno worker runs many concurrent AI calls and dies on CPU/wall-time before `EdgeRuntime.waitUntil` finishes.
-2. **Unstable model id.** `google/gemini-3-flash-preview` is a preview model and frequently returns errors that get retried, amplifying compute use.
-3. **Blank screen.** Frontend doesn't catch the 546 from `supabase.functions.invoke`; the unhandled rejection in `MediaIngestionHub` mount path nukes the page.
-4. **PDF text extractor** runs for every PDF unconditionally and downloads the whole staging file into memory (up to 500 MB), worsening worker pressure.
+## Current behaviour (why it's wrong)
 
-## Fix
+1. `src/components/Footer.tsx` (line 562) renders:
+   ```tsx
+   <ModeSwitcher variant="header" showForUnselected={true} side="top" />
+   ```
+   The `showForUnselected={true}` flag bypasses the guard inside `ModeSwitcher.tsx` (line 103) that normally hides the badge until the user has chosen. Result: every visitor immediately sees a coloured "Mode: Investor" chip in the footer even though they never picked anything.
 
-### 1. `supabase/functions/media-ingestion-classify/index.ts`
-- Switch model to **`google/gemini-2.5-flash-lite`** (stable, cheap, fast — supported per Lovable AI rules).
-- **Process one job per invocation** (cap server-side `job_ids` to 1; if more, return 400). Removes the in-function loop and `EdgeRuntime.waitUntil` background fan-out → no resource limit.
-- Cap project list passed to AI prompt to **300 rows** (was 2000 fetched + 500 prompt).
-- Skip PDF download when `file_size > 25 MB` (use filename heuristic only).
-- Always return **HTTP 200** with `{ok:false, error}` payload on failure (keeps frontend from crashing on 5xx).
-- Keep auth + role check.
+2. `src/components/ModeSelectionModal.tsx` (lines 61-65) auto-opens a non-dismissable modal for any logged-in user who hasn't chosen a category yet. The user wants role selection to happen from the home `CategorySelectorSection` ("Tell us who you are"), not from a forced popup.
 
-### 2. `src/hooks/useMediaIngestion.ts`
-- Rewrite `classify()` to:
-  - send **one job per invoke**,
-  - run with **concurrency 3** via a small worker pool (not unbounded `Promise.all`),
-  - swallow errors per job (mark row `status=error, last_error=...` via UPDATE) so the UI never sees a thrown rejection.
-- Wrap the post-upload `classify(allCreated)` call in try/catch (already `.catch(()=>{})`, keep it).
+3. `MegaMenuAccount` already calls `<ModeSwitcher variant="header" />` without `showForUnselected`, so it correctly stays hidden until a mode exists — that one is fine.
 
-### 3. `src/pages/admin/MediaIngestionHub.tsx`
-- Wrap render in a small inline error boundary (`<ErrorBoundary fallback=…>`) so any future hook crash shows a retry card instead of a blank screen.
+## Changes
 
-## Files
+### 1. `src/components/Footer.tsx`
+- Remove the `showForUnselected={true}` prop from the footer `ModeSwitcher` (line 562) so the badge — and its surrounding "|" divider — is hidden until the user has actually picked a category. Also conditionally render the adjacent `<span ... w-px ...>` divider so we don't leave an orphan separator when the switcher is hidden.
 
-- edit `supabase/functions/media-ingestion-classify/index.ts`
-- edit `src/hooks/useMediaIngestion.ts`
-- edit `src/pages/admin/MediaIngestionHub.tsx` (add lightweight error boundary wrapper)
+### 2. `src/components/ModeSelectionModal.tsx`
+- Remove the auto-open `useEffect` (lines 61-65) and the `isForcedOpen` lockdown (lines 72-73, 111-119, 126-129). The modal stays available for components that explicitly call `requestToShow()` but no longer pops up by itself on login. Logged-in users without a selection are funnelled through the home page `CategorySelectorSection` instead.
 
-## Out of scope
+### 3. `src/pages/Auth.tsx`
+- The comment on line 258 ("ModeSelectionModal will force-open until they pick a category") becomes stale. Update the comment and, if Auth was relying on the forced modal to bounce a freshly-signed-in user into role selection, add an explicit `navigate('/?preselect=...')` (or `/welcome`) so newly-registered users land on the home category selector instead.
 
-- No DB schema changes.
-- No changes to `media-ingestion-merge`, `-rollback`, `MergeHistory`, `IngestionCard`, or storage RLS.
-- No model swap in other functions.
+## What stays the same
+
+- `CategorySelectorSection` on the home page is the canonical entry point for picking Investor / Broker / Developer.
+- `ModeSwitcher` in the header (`MegaMenuAccount`) and the footer keeps working — it just won't render until `hasMadeInitialSelection === true`.
+- `UserModeContext`, DB persistence, and `register-mode-lead` invocation are untouched.
+- No DB / RLS / edge-function changes.
 
 ## Acceptance
 
-- Dropping 10–50 files no longer returns 546 from `media-ingestion-classify`; rows transition `pending → processing → auto_matched/needs_review/unmatched`.
-- If the AI gateway/PDF parse fails for a row, the hub stays interactive and that row shows `status=error` with `last_error`.
-- Hub never goes blank on classify failure.
+- Anonymous visitor on `/` sees no mode badge in the footer or header. They can only set a mode by clicking a card in "Tell us who you are".
+- Newly-registered logged-in user is NOT trapped behind a forced modal; they land on the home page (or `/welcome`) and pick from the category section.
+- Once a mode is chosen, the footer mode chip + header switcher reappear and behave exactly as today.
