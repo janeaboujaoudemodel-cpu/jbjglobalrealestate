@@ -1992,6 +1992,19 @@ const CRMRelationships = () => {
   useEffect(() => {
     setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
   }, [tab]);
+  // Idle-prefetch the other tab so switching is instant.
+  useEffect(() => {
+    const w: any = window;
+    const idle = w.requestIdleCallback || ((cb: any) => setTimeout(cb, 1200));
+    const cancel = w.cancelIdleCallback || clearTimeout;
+    const handle = idle(() => {
+      setMounted((prev) => {
+        if (prev.has("brokerages") && prev.has("developers")) return prev;
+        return new Set([...prev, "brokerages", "developers"]);
+      });
+    });
+    return () => cancel(handle);
+  }, []);
 
   return (
     <>
