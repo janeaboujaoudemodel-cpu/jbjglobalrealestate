@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
 import { Archive, Search, Download, FileSignature, Stamp, Upload, Sparkles, FileText } from "lucide-react";
 import { AgreementUploadDrawer } from "@/components/owner/contracts/AgreementUploadDrawer";
+import DeveloperSelectDropdown from "@/components/developer-portal/DeveloperSelectDropdown";
 
 interface SignedRow {
   signed_document_id: string;
@@ -27,7 +28,7 @@ interface SignedRow {
 
 export default function ContractVault() {
   const [q, setQ] = useState("");
-  const [emirate, setEmirate] = useState<string>("all");
+  const [developerName, setDeveloperName] = useState<string>("");
   const [uploadOpen, setUploadOpen] = useState(false);
 
   const { data: agreements = [] } = useQuery({
@@ -56,16 +57,17 @@ export default function ContractVault() {
     },
   });
 
-  const emirates = useMemo(() => {
-    const set = new Set<string>();
-    data.forEach((r) => r.emirate && set.add(r.emirate));
-    return Array.from(set);
-  }, [data]);
+  const devLower = developerName.trim().toLowerCase();
+
+  const filteredAgreements = useMemo(() => {
+    if (!devLower) return agreements;
+    return agreements.filter((a) => (a.developer_name_raw || "").toLowerCase() === devLower);
+  }, [agreements, devLower]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     return data.filter((r) => {
-      if (emirate !== "all" && r.emirate !== emirate) return false;
+      if (devLower && (r.developer_name || "").toLowerCase() !== devLower) return false;
       if (!term) return true;
       return (
         r.envelope_name?.toLowerCase().includes(term) ||
@@ -75,7 +77,7 @@ export default function ContractVault() {
         r.area?.toLowerCase().includes(term)
       );
     });
-  }, [data, q, emirate]);
+  }, [data, q, devLower]);
 
   return (
     <div className="p-6 space-y-6 bg-[#FDFBF7] min-h-screen">
@@ -108,13 +110,13 @@ export default function ContractVault() {
             <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
             Developer Agreements
             <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
-              {agreements.length}
+              {filteredAgreements.length}
             </Badge>
           </CardTitle>
           <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by developer</p>
         </CardHeader>
         <CardContent className="p-0">
-          {agreements.length === 0 ? (
+          {filteredAgreements.length === 0 ? (
             <div className="p-8 text-center text-sm text-[#1A1A1A]/60">
               <FileText className="h-8 w-8 mx-auto mb-2 text-[#1A1A1A]/30" />
               No agreements uploaded yet. Drop a Sobha / Emaar / Damac contract — AI will file it for you.
@@ -133,7 +135,7 @@ export default function ContractVault() {
                   </tr>
                 </thead>
                 <tbody>
-                  {agreements.map((a) => (
+                  {filteredAgreements.map((a) => (
                     <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
                       <td className="px-4 py-3 text-[#1A1A1A] font-medium">
                         {a.developer_name_raw ?? "—"}
@@ -182,16 +184,18 @@ export default function ContractVault() {
               className="pl-9 bg-[#FDFBF7] border-gold/25 text-[#1A1A1A]"
             />
           </div>
-          <select
-            value={emirate}
-            onChange={(e) => setEmirate(e.target.value)}
-            className="h-10 px-3 rounded-md border border-gold/25 bg-[#FDFBF7] text-[#1A1A1A] text-sm"
-          >
-            <option value="all">All emirates</option>
-            {emirates.map((e) => (
-              <option key={e} value={e}>{e}</option>
-            ))}
-          </select>
+          <div className="min-w-[260px]">
+            <DeveloperSelectDropdown
+              value={developerName}
+              onChange={setDeveloperName}
+              placeholder="All developers"
+            />
+          </div>
+          {developerName && (
+            <Button variant="outline" size="sm" className="border-gold/40 text-[#1A1A1A]" onClick={() => setDeveloperName("")}>
+              Clear
+            </Button>
+          )}
           <Badge variant="outline" className="border-gold/40 text-[#1A1A1A]">
             {filtered.length} contract{filtered.length === 1 ? "" : "s"}
           </Badge>

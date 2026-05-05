@@ -160,5 +160,6 @@ export const OwnerRoutes = () => (
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
+    <Route path="crm/brokers" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokersRegistry")))}</Suspense>} />
   </Route>
 );
