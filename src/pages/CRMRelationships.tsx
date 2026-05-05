@@ -1330,22 +1330,41 @@ const DeveloperRegistryTab = () => {
   // See `src/lib/crm/developerPools.ts` for the canonical rules and unit
   // tests that guarantee `pending_application` developers without an email
   // always stay in the Outreach Queue.
-  const historyPool = useMemo(() => data.filter(isInHistoryPool), [data]);
-  const queuePool = useMemo(() => data.filter(isInQueuePool), [data]);
+  // Single pass: split data into history vs queue pools so we don't iterate twice.
+  const { historyPool, queuePool } = useMemo(() => {
+    const history: any[] = [], queue: any[] = [];
+    for (const r of data as any[]) {
+      if (isInHistoryPool(r)) history.push(r);
+      if (isInQueuePool(r)) queue.push(r);
+    }
+    return { historyPool: history, queuePool: queue };
+  }, [data]);
 
-  const filtered = useMemo(() => queuePool.filter((r: any) => {
-    const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
-    const matchesS = statusFilter === "all" || r.status === statusFilter;
-    const matchesE =
-      emailFilter === "all" ||
-      (emailFilter === "not_sent" && !r.last_outreach_at && r.status !== "registered") ||
-      (emailFilter === "sent" && !!r.last_outreach_at && r.status !== "registered") ||
-      (emailFilter === "registered" && r.status === "registered");
-    return matchesQ && matchesS && matchesE;
-  }), [queuePool, q, statusFilter, emailFilter]);
+  // Pre-lowercase the searchable name once per pool change.
+  const queueIndexed = useMemo(
+    () => queuePool.map((r: any) => ({ row: r, nameLower: (r.developer_name || "").toLowerCase() })),
+    [queuePool],
+  );
+
+  const filtered = useMemo(() => {
+    const ql = debouncedQ.trim().toLowerCase();
+    const out: any[] = [];
+    for (const item of queueIndexed) {
+      const r = item.row;
+      if (ql && !item.nameLower.includes(ql)) continue;
+      if (statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (emailFilter !== "all") {
+        if (emailFilter === "not_sent" && !(!r.last_outreach_at && r.status !== "registered")) continue;
+        else if (emailFilter === "sent" && !(!!r.last_outreach_at && r.status !== "registered")) continue;
+        else if (emailFilter === "registered" && r.status !== "registered") continue;
+      }
+      out.push(r);
+    }
+    return out;
+  }, [queueIndexed, debouncedQ, statusFilter, emailFilter]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
-  useEffect(() => { setDevVisibleCount(60); }, [q, statusFilter, emailFilter]);
+  useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
   const devVisible = useMemo(() => filtered.slice(0, devVisibleCount), [filtered, devVisibleCount]);
 
   const counts = useMemo(() => {
