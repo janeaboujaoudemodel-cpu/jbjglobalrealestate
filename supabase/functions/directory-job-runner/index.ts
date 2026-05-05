@@ -65,7 +65,7 @@ function mapsUrl(addr?: string | null): string | null {
 }
 
 /* ------------------------- perplexity helpers ------------------------- */
-async function pplxList(emirate: string, offset: number, pageSize: number) {
+async function pplxList(emirate: string, offset: number, pageSize: number, exclude: string[] = []) {
   if (!PPLX) return [];
   const schema = {
     type: "object",
@@ -89,6 +89,9 @@ async function pplxList(emirate: string, offset: number, pageSize: number) {
     },
     required: ["brokerages"],
   };
+  const excludeBlock = exclude.length
+    ? `\n\nDO NOT include any of these firms (already in our database): ${exclude.slice(0, 80).join("; ")}.`
+    : "";
   const resp = await fetch("https://api.perplexity.ai/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${PPLX}`, "Content-Type": "application/json" },
@@ -96,7 +99,7 @@ async function pplxList(emirate: string, offset: number, pageSize: number) {
       model: "sonar-pro",
       messages: [
         { role: "system", content: "You compile UAE real estate brokerage directories from official licensing authorities (DLD/RERA, Abu Dhabi DMT, emirate municipalities). Only real, currently-licensed firms. Never fabricate. Use null for unknowns." },
-        { role: "user", content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate}. Skip the first ${offset} firms (already returned). For each return: company_name, rera_license, office_address (full street + area + emirate), phone (+971 international), email (sales/info), website, instagram_url (e.g. https://instagram.com/handle).` },
+        { role: "user", content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate}. Skip the first ${offset} firms already returned in earlier pages — return only firms ranked from position ${offset + 1} onward (smaller, less well-known firms welcome).${excludeBlock} For each return: company_name, rera_license, office_address (full street + area + emirate), phone (+971 international), email (sales/info), website, instagram_url (e.g. https://instagram.com/handle).` },
       ],
       response_format: { type: "json_schema", json_schema: { name: "brokerage_directory", schema } },
       temperature: 0.0,
