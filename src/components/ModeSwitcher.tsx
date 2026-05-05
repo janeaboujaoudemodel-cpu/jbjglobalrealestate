@@ -112,19 +112,29 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   };
 
   const currentConfig = MODE_CONFIG[mode];
-  const CurrentIcon = currentConfig.icon;
+  const CurrentIcon = isUnselected ? User : currentConfig.icon;
+  const triggerLabel = isUnselected ? 'Select your mode' : currentConfig.label;
+  const triggerShortLabel = isUnselected ? '?' : currentConfig.shortLabel;
 
   // ─────────────────────────────────────────────────────────────────
   // Closed-trigger styling: a saturated mode-color chip with **ink black**
   // label/icon (never white). Hover does NOT change colour — only floats
-  // upward + adds a soft glow ring.
+  // upward + adds a soft glow ring. Unselected state uses a neutral
+  // champagne chip with a gold hairline so it reads as a CTA.
   // ─────────────────────────────────────────────────────────────────
-  const triggerStyle: CSSProperties = {
-    backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
-    borderColor: currentConfig.baseDark,
-    color: '#1A1A1A',
-    boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
-  };
+  const triggerStyle: CSSProperties = isUnselected
+    ? {
+        backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+        borderColor: '#B89555',
+        color: '#1A1A1A',
+        boxShadow: '0 2px 8px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(0,0,0,0.06)',
+      }
+    : {
+        backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
+        borderColor: currentConfig.baseDark,
+        color: '#1A1A1A',
+        boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
+      };
 
   if (variant === 'compact') {
     return (
