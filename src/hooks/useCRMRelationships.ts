@@ -403,7 +403,7 @@ export const useOwnerSettings = () => {
     queryFn: async () => {
       const { data, error } = await supabase.from("crm_owner_settings").select("*").eq("owner_id", user!.id).maybeSingle();
       if (error) throw error;
-      const base = data || {
+      const base: any = data || {
         owner_id: user!.id,
         drive_doc_pack_url: "",
         signature_html: "",
@@ -414,13 +414,27 @@ export const useOwnerSettings = () => {
         saved_sender_emails: ["contact@jbj.ae"],
         saved_cc_emails: [],
         active_cc_emails: [],
+        brokerage_drive_doc_pack_url: "",
+        brokerage_reply_to_email: "",
+        brokerage_from_name: "Amra · JBJ Global Real Estate",
+        brokerage_saved_sender_emails: [],
+        brokerage_saved_cc_emails: [],
+        brokerage_active_cc_emails: [],
+        saved_test_to_emails: [],
+        saved_test_cc_emails: [],
       };
-      // Defensive defaults for older rows missing the new arrays
+      const arr = (v: any) => (Array.isArray(v) ? v : []);
       return {
         ...base,
-        saved_sender_emails: Array.isArray((base as any).saved_sender_emails) ? (base as any).saved_sender_emails : [],
-        saved_cc_emails: Array.isArray((base as any).saved_cc_emails) ? (base as any).saved_cc_emails : [],
-        active_cc_emails: Array.isArray((base as any).active_cc_emails) ? (base as any).active_cc_emails : [],
+        saved_sender_emails: arr(base.saved_sender_emails),
+        saved_cc_emails: arr(base.saved_cc_emails),
+        active_cc_emails: arr(base.active_cc_emails),
+        brokerage_saved_sender_emails: arr(base.brokerage_saved_sender_emails),
+        brokerage_saved_cc_emails: arr(base.brokerage_saved_cc_emails),
+        brokerage_active_cc_emails: arr(base.brokerage_active_cc_emails),
+        saved_test_to_emails: arr(base.saved_test_to_emails),
+        saved_test_cc_emails: arr(base.saved_test_cc_emails),
+        brokerage_from_name: base.brokerage_from_name || "Amra · JBJ Global Real Estate",
       };
     },
   });
