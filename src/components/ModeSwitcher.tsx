@@ -192,7 +192,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block"
               style={{ color: '#1A1A1A' }}
             >
-              {currentConfig.label}
+              {triggerLabel}
             </span>
             <ChevronDown
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
