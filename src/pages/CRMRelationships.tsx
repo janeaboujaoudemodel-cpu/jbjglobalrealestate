@@ -548,7 +548,7 @@ const BrokeragesTab = () => {
             Directory status
           </div>
           <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
-          <div><span className="text-[#1A1A1A]/70">Licensed:</span> <b>{directoryCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">UAE Agencies:</span> <b>{directoryCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
         </div>
