@@ -110,7 +110,7 @@ export default function ContractVault() {
             <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
             Developer Agreements
             <Badge variant="outline" className="border-gold/40 text-[#1A1A1A] ml-2">
-              {agreements.length}
+              {filteredAgreements.length}
             </Badge>
           </CardTitle>
           <p className="text-xs text-[#1A1A1A]/60">AI-matched, filed by developer</p>
