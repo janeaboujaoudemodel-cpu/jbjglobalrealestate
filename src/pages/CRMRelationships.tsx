@@ -645,6 +645,14 @@ const BrokeragesTab = () => {
                     <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => setLedgerOpen({ id: r.id, name: r.company_name })}
+                      title="View deal history & revenue"
+                    >
+                      <Trophy className="w-3 h-3 mr-1" />Deals
+                    </Button>
                     {!isDirectory && (
                       <>
                         <Button size="sm" variant="gold" onClick={() => setDealOpen({ id: r.id, name: r.company_name })}>
