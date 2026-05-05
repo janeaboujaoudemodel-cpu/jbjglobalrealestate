@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Send, Loader2, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useOwnerSettings, useUpsertOwnerSettings } from "@/hooks/useCRMRelationships";
+import { useOwnerSettings } from "@/hooks/useCRMRelationships";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 
 interface TestSendDialogProps {
@@ -18,6 +18,8 @@ interface TestSendDialogProps {
   initialHtml?: string;
 }
 
+const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
 export const TestSendDialog = ({
   open,
   onOpenChange,
@@ -25,9 +27,11 @@ export const TestSendDialog = ({
   variant,
 }: TestSendDialogProps) => {
   const { data: settings } = useOwnerSettings();
-  const upsert = useUpsertOwnerSettings();
 
-  // Local working copies of the persistent chip lists
+  // Free-text recipient (works even if user never clicks "Add")
+  const [quickTo, setQuickTo] = useState("");
+
+  // Persistent chip lists
   const [savedTo, setSavedTo] = useState<string[]>([]);
   const [activeTo, setActiveTo] = useState<string>("");
   const [savedCc, setSavedCc] = useState<string[]>([]);
@@ -38,10 +42,16 @@ export const TestSendDialog = ({
     mode === "brokerage" ? "Sample Brokerage Group" : "Sample Developer Co.",
   );
   const [sending, setSending] = useState(false);
+  const hydratedRef = useRef(false);
 
-  // Hydrate from owner settings on open
+  // Hydrate ONCE per open — never re-hydrate after persist refetches
   useEffect(() => {
-    if (!open || !settings) return;
+    if (!open) {
+      hydratedRef.current = false;
+      return;
+    }
+    if (hydratedRef.current || !settings) return;
+    hydratedRef.current = true;
     const to = Array.isArray((settings as any).saved_test_to_emails)
       ? (settings as any).saved_test_to_emails
       : [];
@@ -52,42 +62,61 @@ export const TestSendDialog = ({
     setActiveTo(to[0] || "");
     setSavedCc(cc);
     setActiveCc(cc);
-    // Seed with current user's email if list is empty
     if (to.length === 0) {
       supabase.auth.getUser().then(({ data }) => {
         const email = data.user?.email;
         if (email) {
-          setSavedTo([email]);
-          setActiveTo(email);
+          setQuickTo(email);
         }
       });
     }
   }, [open, settings]);
 
+  // Silent persist (no toast, no refetch loop)
   const persist = async (next: { savedTo?: string[]; savedCc?: string[] }) => {
     try {
-      await upsert.mutateAsync({
-        ...(settings || {}),
-        saved_test_to_emails: next.savedTo ?? savedTo,
-        saved_test_cc_emails: next.savedCc ?? savedCc,
-      });
-    } catch {
-      /* surfaced by upsert toast */
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return;
+      await supabase.from("crm_owner_settings").upsert(
+        {
+          owner_id: u.user.id,
+          saved_test_to_emails: next.savedTo ?? savedTo,
+          saved_test_cc_emails: next.savedCc ?? savedCc,
+        } as any,
+        { onConflict: "owner_id" },
+      );
+    } catch (e) {
+      console.warn("persist test recipients failed", e);
     }
   };
 
   const recipientsForSend = useMemo(() => {
-    if (allTo) return savedTo;
-    return activeTo ? [activeTo] : [];
-  }, [allTo, savedTo, activeTo]);
+    const list: string[] = [];
+    const q = quickTo.trim();
+    if (isEmail(q)) list.push(q);
+    if (allTo) {
+      for (const e of savedTo) if (!list.includes(e)) list.push(e);
+    } else if (activeTo && !list.includes(activeTo)) {
+      list.push(activeTo);
+    }
+    return list;
+  }, [quickTo, allTo, savedTo, activeTo]);
 
   const handleSend = async () => {
     if (recipientsForSend.length === 0) {
-      toast.error("Pick at least one test recipient");
+      toast.error("Enter or pick at least one test recipient");
       return;
     }
     setSending(true);
     try {
+      // Auto-save the quick-typed email so it persists for next time
+      const q = quickTo.trim();
+      if (isEmail(q) && !savedTo.includes(q)) {
+        const next = [...savedTo, q];
+        setSavedTo(next);
+        setActiveTo(q);
+        void persist({ savedTo: next });
+      }
       const fnName = mode === "brokerage" ? "crm-send-brokerage-outreach" : "crm-send-developer-registration";
       const results = await Promise.allSettled(
         recipientsForSend.map((to) =>
@@ -102,12 +131,22 @@ export const TestSendDialog = ({
           }),
         ),
       );
-      const failed = results.filter((r) => r.status === "rejected" || (r.status === "fulfilled" && (r.value as any)?.error));
-      if (failed.length === 0) {
+      const failures: string[] = [];
+      results.forEach((r, i) => {
+        if (r.status === "rejected") {
+          failures.push(`${recipientsForSend[i]}: ${(r.reason as any)?.message || "failed"}`);
+        } else {
+          const v = r.value as any;
+          if (v?.error) failures.push(`${recipientsForSend[i]}: ${v.error.message || "failed"}`);
+          else if (v?.data?.error) failures.push(`${recipientsForSend[i]}: ${v.data.error}`);
+        }
+      });
+      if (failures.length === 0) {
         toast.success(`Test email sent to ${recipientsForSend.length} recipient${recipientsForSend.length === 1 ? "" : "s"}`);
         onOpenChange(false);
       } else {
-        toast.error(`${failed.length} of ${recipientsForSend.length} test sends failed`);
+        console.error("Test send failures:", failures);
+        toast.error(failures[0], { duration: 6000 });
       }
     } catch (err: any) {
       console.error("Test send failed:", err);
@@ -129,7 +168,21 @@ export const TestSendDialog = ({
 
         <div className="space-y-4 py-2">
           <div className="space-y-1.5">
-            <Label className="text-xs font-semibold uppercase tracking-wider text-[#1A1A1A]">Test recipients (To)</Label>
+            <Label className="text-xs font-semibold uppercase tracking-wider text-[#1A1A1A]">Send test to</Label>
+            <Input
+              value={quickTo}
+              onChange={(e) => setQuickTo(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleSend(); } }}
+              placeholder="email@example.com"
+              className="bg-white border-[#1A1A1A]/15 focus-visible:ring-[#B89555]"
+            />
+            <p className="text-[11px] text-[#1A1A1A]/70">
+              Type an email and hit Send — it will be saved below for next time.
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-xs font-semibold uppercase tracking-wider text-[#1A1A1A]">Saved test recipients</Label>
             <PrimarySenderEditor
               saved={savedTo}
               active={activeTo}
@@ -148,9 +201,6 @@ export const TestSendDialog = ({
               />
               Send to all saved test recipients ({savedTo.length})
             </label>
-            <p className="text-[11px] text-[#1A1A1A]/70">
-              Saved here forever. Click any chip to set as the active recipient, or tick "send to all" to blast every saved address.
-            </p>
           </div>
 
           <div className="space-y-1.5">
@@ -179,7 +229,10 @@ export const TestSendDialog = ({
 
           <div className="bg-[#F7F2EA] p-3 rounded-lg border border-[#B89555]/30">
             <p className="text-[11px] leading-relaxed text-[#1A1A1A]/80 italic">
-              Test emails are prefixed with [TEST] and never logged as real outreach. Saved To/CC lists persist until you remove them with the trash icon.
+              Test emails are prefixed with [TEST] and never logged as real outreach.
+              {recipientsForSend.length > 0 && (
+                <> Will send to: <strong>{recipientsForSend.join(", ")}</strong></>
+              )}
             </p>
           </div>
         </div>
