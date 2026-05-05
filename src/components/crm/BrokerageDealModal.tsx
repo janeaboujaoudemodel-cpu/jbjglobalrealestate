@@ -68,6 +68,8 @@ export const BrokerageDealModal = ({
   const [form, setForm] = useState<any>({
     developer_id: "",
     developer_name_snapshot: "",
+    agent_name: "",
+    agent_email: "",
     unit_label: "",
     client_name: "",
     deal_value_aed: "",
