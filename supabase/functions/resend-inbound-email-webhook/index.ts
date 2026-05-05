@@ -239,6 +239,22 @@ serve(async (req: Request): Promise<Response> => {
 
     console.log(`Inbound email processed: ${senderEmail} → ${service} (thread: ${threadId}, msg: ${insertedMessageId})`);
 
+    // --- Forward to UAE registry inbound matcher (best-effort, non-blocking) ---
+    try {
+      const svcKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+      const fnUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/uae-registry-inbound-reply`;
+      await fetch(fnUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${svcKey}` },
+        body: JSON.stringify({
+          from, subject, text: textBody, html: htmlBody,
+          message_id: messageId, in_reply_to: inReplyTo, thread_id: threadId,
+        }),
+      });
+    } catch (e) {
+      console.warn("uae-registry-inbound-reply forward failed:", (e as Error).message);
+    }
+
     return new Response(
       JSON.stringify({ success: true, threadId, messageId: insertedMessageId }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
