@@ -567,6 +567,20 @@ export const BulkSendDialog = ({
               </div>
               <div className="text-[11px] text-[#1A1A1A]/70">Applied to every recipient unless overridden per row. Contact name auto-fills from each brokerage record.</div>
               <div>
+                <Label className="text-[11px] text-[#1A1A1A]">Featured project (e-catalogue link)</Label>
+                <Select value={bulkFeaturedProjectKey} onValueChange={(v) => setBulkFeaturedProjectKey(v as CitiProjectKey)}>
+                  <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {CITI_PROJECT_LIST.map((p) => (
+                      <SelectItem key={p.key} value={p.key} className="text-xs">
+                        {p.name}{p.isFocus ? " · Focus" : ""}{p.offerHtml && p.key !== "amra" ? " · Promo" : ""}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="text-[10px] text-[#1A1A1A]/60 mt-1">{getCitiProject(bulkFeaturedProjectKey).tagline}</div>
+              </div>
+              <div>
                 <Label className="text-[11px] text-[#1A1A1A]">Group / partnership status</Label>
                 <Select value={bulkGroupStatus || "__auto"} onValueChange={(v) => setBulkGroupStatus(v === "__auto" ? "" : (v as BrokerageGroupStatus))}>
                   <SelectTrigger className="h-8 text-xs mt-1"><SelectValue /></SelectTrigger>
