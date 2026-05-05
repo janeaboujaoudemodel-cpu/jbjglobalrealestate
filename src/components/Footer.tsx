@@ -562,14 +562,10 @@ const Footer = () => {
               <div className="relative">
                 <GoogleMyBusinessLink />
               </div>
-              {showModeSwitcher && (
-                <>
-                  <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
-                  <div className="relative">
-                    <ModeSwitcher variant="header" side="top" />
-                  </div>
-                </>
-              )}
+              <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
+              <div className="relative">
+                <ModeSwitcher variant="header" side="top" showForUnselected />
+              </div>
               <span className="hidden md:inline-block w-px h-5 bg-[#1A1A1A]/30 relative" aria-hidden="true" />
               <div className="relative">
                 <FooterCurrencyUnit />
