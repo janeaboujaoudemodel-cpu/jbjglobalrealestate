@@ -1,7 +1,7 @@
 /**
  * AdvancedFilterPanel - Centered dialog with all filter sections, developer logos, UAE-only locations
  */
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, forwardRef } from "react";
 import { X, Search, Heart, Check, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -71,7 +71,7 @@ interface AreaEntry {
   emirate: string;
 }
 
-export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }: AdvancedFilterPanelProps) {
+const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>(function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }, _ref) {
   const [localFilters, setLocalFilters] = useState<ShortcutFilterState>(filters);
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
@@ -684,4 +684,6 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
       </DialogContent>
     </Dialog>
   );
-}
+});
+
+export default AdvancedFilterPanel;

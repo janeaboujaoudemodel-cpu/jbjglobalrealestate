@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -431,9 +431,13 @@ const BrokeragesTab = () => {
     const t = setTimeout(() => setDebouncedQ(q), 220);
     return () => clearTimeout(t);
   }, [q]);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [emirateFilter, setEmirateFilter] = useState("all");
-  const [sourceTab, setSourceTab] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [statusFilter, setStatusFilterRaw] = useState("all");
+  const [emirateFilter, setEmirateFilterRaw] = useState("all");
+  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [, startTransition] = useTransition();
+  const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
+  const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
+  const setSourceTab = (v: "all" | "directory" | "owner" | "existing") => startTransition(() => setSourceTabRaw(v));
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
@@ -594,7 +598,18 @@ const BrokeragesTab = () => {
   return (
     <TooltipProvider>
     <div className="space-y-4">
-      <DocumentPackPanel />
+      <section aria-labelledby="brokerage-outreach-settings" className="rounded-2xl border-2 border-[#B89555]/40 bg-[#F7F2EA] p-4 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <Mail className="w-5 h-5 text-[#1A1A1A]" />
+          <h2 id="brokerage-outreach-settings" className="text-base font-bold text-[#1A1A1A] tracking-tight">
+            Brokerage Outreach — Document Pack & Senders
+          </h2>
+        </div>
+        <p className="text-xs text-[#1A1A1A]/70 mb-3">
+          Same pack used for developer registrations. Edit once here or in the Developer Registry tab — they share one source of truth.
+        </p>
+        <DocumentPackPanel context="brokerage" />
+      </section>
       <DirectoryToolsPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
@@ -1094,7 +1109,7 @@ const ClientsTab = () => {
 /* ===========================================================
    Developer Registry
 =========================================================== */
-const DocumentPackPanel = () => {
+const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | "developer" } = {}) => {
   const { data: settings, isLoading } = useOwnerSettings();
   const upsert = useUpsertOwnerSettings();
   const [draft, setDraft] = useState<any>(null);
@@ -1106,6 +1121,10 @@ const DocumentPackPanel = () => {
 
   if (isLoading) return <Skeleton className="h-32" />;
 
+  const lead = context === "brokerage"
+    ? "Set this once — used for every brokerage partnership outreach · developer registration. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use."
+    : "Set this once — used for every developer registration · brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.";
+
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
@@ -1113,9 +1132,7 @@ const DocumentPackPanel = () => {
           <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
           <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
-        <p className="text-xs text-[#1A1A1A]/70 mb-4">
-          Set this once — used for every developer registration <span className="text-[#1A1A1A]/50">·</span> brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.
-        </p>
+        <p className="text-xs text-[#1A1A1A]/70 mb-4">{lead}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">Google Drive document pack URL *</Label>
@@ -1864,6 +1881,10 @@ const CRMRelationships = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("brokerages");
   const [testSendOpen, setTestSendOpen] = useState(false);
+  const [mounted, setMounted] = useState<Set<string>>(new Set(["brokerages"]));
+  useEffect(() => {
+    setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
+  }, [tab]);
 
   return (
     <>
@@ -1882,25 +1903,25 @@ const CRMRelationships = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">Relationships Hub</h1>
               <p className="text-sm text-[#1A1A1A]/70 mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-[#1A1A1A]">Leads &amp; Clients</span>.</p>
             </div>
-            <Button
-              variant="gold"
-              onClick={() => navigate("/admin/media-ingestion")}
-              className="shadow-md shrink-0"
-              title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
-            >
-              <Inbox className="w-4 h-4 mr-2" />Media Ingestion
-            </Button>
           </div>
 
-          {/* Clients tab intentionally removed — all client + lead records now live in the unified
-              "Leads & Clients" workspace at /crm/leads (powered by crm_leads). Do NOT re-add a Clients tab here. */}
           <div className="mb-6 rounded-xl border border-[#1A1A1A]/10 bg-[#FDFBF7] p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div className="text-sm text-[#1A1A1A]/70">
               <span className="font-semibold text-[#1A1A1A]">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
             </div>
-            <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
-              <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
+                <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate("/admin/media-ingestion")}
+                className="rounded-full font-semibold"
+                title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
+              >
+                <Inbox className="w-4 h-4 mr-2" />Media Ingestion
+              </Button>
+            </div>
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
@@ -1911,8 +1932,12 @@ const CRMRelationships = () => {
                 <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
-            <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
+            {mounted.has("brokerages") && (
+              <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
+            )}
+            {mounted.has("developers") && (
+              <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
+            )}
           </Tabs>
         </div>
       </div>

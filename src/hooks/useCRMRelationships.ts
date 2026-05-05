@@ -7,6 +7,7 @@ import { toast } from "sonner";
 export const useBrokerages = () => useQuery({
   queryKey: ["crm-brokerages"],
   staleTime: 60_000,
+  refetchOnWindowFocus: false,
   placeholderData: (prev) => prev,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
@@ -112,6 +113,7 @@ export const useDeleteClient = () => {
 export const useDeveloperRegistry = () => useQuery({
   queryKey: ["crm-dev-registry"],
   staleTime: 60_000,
+  refetchOnWindowFocus: false,
   placeholderData: (prev) => prev,
   queryFn: async () => {
     // Paginate past server-side row caps so the full registry (hundreds/thousands) is returned.
