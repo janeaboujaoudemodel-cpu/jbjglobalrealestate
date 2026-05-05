@@ -7219,6 +7219,7 @@ export type Database = {
           id: string
           is_done: boolean
           kind: Database["public"]["Enums"]["crm_reminder_kind"]
+          metadata: Json
           owner_id: string
           title: string
           updated_at: string
@@ -7234,6 +7235,7 @@ export type Database = {
           id?: string
           is_done?: boolean
           kind?: Database["public"]["Enums"]["crm_reminder_kind"]
+          metadata?: Json
           owner_id: string
           title: string
           updated_at?: string
@@ -7249,6 +7251,7 @@ export type Database = {
           id?: string
           is_done?: boolean
           kind?: Database["public"]["Enums"]["crm_reminder_kind"]
+          metadata?: Json
           owner_id?: string
           title?: string
           updated_at?: string

@@ -1,0 +1,1 @@
+alter table public.crm_relationship_reminders add column if not exists metadata jsonb not null default '{}'::jsonb;
