@@ -5,10 +5,11 @@
  * email. The token in the URL identifies the brokerage and the placeholder
  * meeting_requests row that this booking confirms.
  */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
-import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight } from "lucide-react";
+import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight, MapPin, Phone, Download, Copy, CalendarPlus } from "lucide-react";
+import html2canvas from "html2canvas";
 import { supabase } from "@/integrations/supabase/client";
 import { edgeFnUrl, anonHeaders } from "@/config/backend";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+
+const HOST_NAME = "Jane Bou Jaoude";
+const HOST_PHONE = "+971 54 716 7107";
+const HOST_PHONE_TEL = "+971547167107";
+const OFFICE_LOCATION = "Citi Developers Sales and Experience Center, Dubai";
 
 interface Slot {
   id: string;
@@ -118,32 +124,62 @@ export default function BreakfastBooking() {
     }
   };
 
-  const downloadIcs = () => {
-    if (!confirmed) return;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const buildIcs = () => {
+    if (!confirmed) return "";
     const dt = new Date(confirmed.slotAt);
     const dtEnd = new Date(dt.getTime() + 60 * 60 * 1000);
-    const fmt = (d: Date) =>
-      d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    const ics = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//JBJ Global Real Estate//Breakfast//EN",
-      "BEGIN:VEVENT",
-      `UID:${token}@jbj.ae`,
-      `DTSTAMP:${fmt(new Date())}`,
-      `DTSTART:${fmt(dt)}`,
-      `DTEND:${fmt(dtEnd)}`,
+    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const desc = `Private partnership briefing & breakfast.\\nHost on arrival: ${HOST_NAME} — ${HOST_PHONE}\\nLocation: ${OFFICE_LOCATION}`;
+    return [
+      "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JBJ Global Real Estate//Breakfast//EN",
+      "BEGIN:VEVENT", `UID:${token}@jbj.ae`, `DTSTAMP:${fmt(new Date())}`,
+      `DTSTART:${fmt(dt)}`, `DTEND:${fmt(dtEnd)}`,
       "SUMMARY:Private Partnership Breakfast — JBJ Global Real Estate",
-      "DESCRIPTION:Briefing and partnership discussion at the JBJ Dubai office.",
-      "LOCATION:JBJ Global Real Estate, Dubai",
-      "END:VEVENT",
-      "END:VCALENDAR",
+      `DESCRIPTION:${desc}`, `LOCATION:${OFFICE_LOCATION}`,
+      `ORGANIZER;CN=${HOST_NAME}:mailto:contact@jbj.ae`,
+      "END:VEVENT","END:VCALENDAR",
     ].join("\r\n");
+  };
+
+  const downloadIcs = () => {
+    const ics = buildIcs(); if (!ics) return;
     const blob = new Blob([ics], { type: "text/calendar" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "jbj-breakfast.ics";
-    a.click();
+    a.download = "jbj-breakfast.ics"; a.click();
+  };
+
+  const openGoogleCalendar = () => {
+    if (!confirmed) return;
+    const dt = new Date(confirmed.slotAt);
+    const dtEnd = new Date(dt.getTime() + 60 * 60 * 1000);
+    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Private Breakfast — JBJ Global Real Estate")}&dates=${fmt(dt)}/${fmt(dtEnd)}&details=${encodeURIComponent(`Host on arrival: ${HOST_NAME} — ${HOST_PHONE}\nLocation: ${OFFICE_LOCATION}`)}&location=${encodeURIComponent(OFFICE_LOCATION)}`;
+    window.open(url, "_blank");
+  };
+
+  const downloadPng = async () => {
+    if (!cardRef.current) return;
+    try {
+      const canvas = await html2canvas(cardRef.current, { backgroundColor: "#FDFBF7", scale: 2 });
+      const a = document.createElement("a");
+      a.download = "jbj-breakfast-invitation.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    } catch { toast.error("Could not export image"); }
+  };
+
+  const copyText = () => {
+    if (!confirmed) return;
+    const dt = new Date(confirmed.slotAt);
+    const text = `Private Partnership Breakfast — JBJ Global Real Estate
+${format(dt, "EEEE, d MMMM yyyy")} at ${format(dt, "HH:mm")}
+Location: ${OFFICE_LOCATION}
+Host on arrival: ${HOST_NAME} — ${HOST_PHONE}
+When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the number above and she'll meet you.`;
+    navigator.clipboard.writeText(text).then(() => toast.success("Invitation copied"));
   };
 
   // ─── render ───
@@ -167,33 +203,52 @@ export default function BreakfastBooking() {
     );
   }
   if (confirmed) {
+    const dt = new Date(confirmed.slotAt);
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-        <div className="max-w-lg w-full bg-card border border-border rounded-2xl p-10 text-center">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/15 mb-4">
-            <Check className="h-6 w-6 text-primary" />
+      <div className="min-h-screen bg-[#F7F2EA] px-4 py-12" style={{ background: "linear-gradient(180deg,#FDFBF7 0%,#F7F2EA 100%)" }}>
+        <div className="max-w-lg w-full mx-auto">
+          <div ref={cardRef} className="bg-white border border-[#B89555] rounded-2xl p-10 text-center shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+            <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-[#EFE6D6] mb-4">
+              <Check className="h-6 w-6 text-[#1A1A1A]" />
+            </div>
+            <div className="text-[11px] tracking-[3px] uppercase text-[#B89555] font-bold mb-2">JBJ Global Real Estate</div>
+            <h1 className="text-2xl font-bold text-[#1A1A1A] mb-3">Thank you — your seat is reserved</h1>
+            <p className="text-[#1A1A1A] font-medium">{format(dt, "EEEE, d MMMM yyyy")}</p>
+            <p className="text-[#1A1A1A]/70 mb-6">{format(dt, "HH:mm")} (GST)</p>
+
+            <div className="text-left bg-[#FDFBF7] border border-[#1A1A1A]/10 border-l-4 border-l-[#B89555] rounded-lg p-4 mb-4">
+              <div className="flex items-start gap-2 text-sm text-[#1A1A1A] mb-2">
+                <MapPin className="h-4 w-4 text-[#B89555] mt-0.5 shrink-0" />
+                <div><div className="text-[10px] uppercase tracking-wider text-[#B89555] font-bold">Location</div>{OFFICE_LOCATION}</div>
+              </div>
+              <div className="flex items-start gap-2 text-sm text-[#1A1A1A]">
+                <Phone className="h-4 w-4 text-[#B89555] mt-0.5 shrink-0" />
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-[#B89555] font-bold">Your host on arrival</div>
+                  <div>{HOST_NAME}</div>
+                  <a href={`tel:${HOST_PHONE_TEL}`} className="text-[#1A1A1A] underline">{HOST_PHONE}</a>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#1A1A1A]/70 italic mb-2">
+              When you reach the building, call or WhatsApp Jane on the number above and she'll meet you.
+            </p>
           </div>
-          <div className="text-[11px] tracking-[3px] uppercase text-primary font-bold mb-2">JBJ Global Real Estate</div>
-          <h1 className="text-2xl font-bold text-foreground mb-3">Your seat is reserved</h1>
-          <p className="text-foreground/80 mb-1">
-            {format(new Date(confirmed.slotAt), "EEEE, d MMMM yyyy")}
-          </p>
-          <p className="text-foreground/60 mb-6">
-            {format(new Date(confirmed.slotAt), "HH:mm")} · JBJ Dubai office
-          </p>
-          <p className="text-sm text-foreground/70 mb-8">
-            We'll follow up by email with the full address, parking, and the briefing agenda.
-          </p>
-          <div className="flex gap-3 justify-center">
-            <Button onClick={downloadIcs} variant="gold">Add to calendar</Button>
-            <Button asChild variant="outline"><Link to="/">Back to JBJ</Link></Button>
+
+          <div className="grid grid-cols-2 gap-2 mt-4">
+            <Button onClick={openGoogleCalendar} variant="gold" className="w-full"><CalendarPlus className="h-4 w-4 mr-1" />Google Calendar</Button>
+            <Button onClick={downloadIcs} variant="outline" className="w-full"><Calendar className="h-4 w-4 mr-1" />Apple/Outlook (.ics)</Button>
+            <Button onClick={downloadPng} variant="outline" className="w-full"><Download className="h-4 w-4 mr-1" />Download as PNG</Button>
+            <Button onClick={copyText} variant="outline" className="w-full"><Copy className="h-4 w-4 mr-1" />Copy invitation</Button>
+          </div>
+          <div className="text-center mt-4">
+            <Button asChild variant="ghost"><Link to="/">Back to JBJ</Link></Button>
           </div>
         </div>
       </div>
     );
   }
-
-  const isAlreadyBooked = data?.chosen && data?.status === "pending";
 
   return (
     <div className="min-h-screen bg-background py-12 px-4">

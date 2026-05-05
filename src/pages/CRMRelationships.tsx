@@ -38,6 +38,7 @@ import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/cr
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
+import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
@@ -446,6 +447,16 @@ const BrokeragesTab = () => {
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const [testSendOpen, setTestSendOpen] = useState(false);
+  useEffect(() => {
+    const openTpl = () => setTplOpen(true);
+    const openTest = () => setTestSendOpen(true);
+    window.addEventListener("crm:open-brokerage-template", openTpl);
+    window.addEventListener("crm:open-brokerage-test", openTest);
+    return () => {
+      window.removeEventListener("crm:open-brokerage-template", openTpl);
+      window.removeEventListener("crm:open-brokerage-test", openTest);
+    };
+  }, []);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
@@ -610,6 +621,7 @@ const BrokeragesTab = () => {
         </p>
         <DocumentPackPanel context="brokerage" />
       </section>
+      <BreakfastBookingsSection />
       <DirectoryToolsPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
@@ -1219,12 +1231,41 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             />
           </div>
         </div>
-        {dirty && (
-          <div className="flex justify-end gap-2 mt-4">
-            <Button variant="outline" onClick={() => setDraft(null)}>Cancel</Button>
-            <Button onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+        <div className="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-[#1A1A1A]/10">
+          <div className="text-[11px] text-[#1A1A1A]/70">
+            {isBrk
+              ? "Edit the briefing + breakfast email template, or send yourself a test before launching."
+              : "Saved settings apply on the next outreach."}
           </div>
-        )}
+          <div className="flex flex-wrap gap-2">
+            {isBrk && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-template"))}
+                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  Open template editor
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-test"))}
+                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                >
+                  Send test email
+                </Button>
+              </>
+            )}
+            {dirty && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setDraft(null)}>Cancel</Button>
+                <Button size="sm" onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+              </>
+            )}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

@@ -161,6 +161,84 @@ serve(async (req: Request) => {
       }
     }
 
+    // In-app notification for the owner (Jane)
+    if (invite.user_id) {
+      try {
+        await service.from("notifications").insert({
+          user_id: invite.user_id,
+          notification_type: "breakfast_booked",
+          title: `Breakfast booked — ${invite.brokerage_name}`,
+          body: `${body.fullName} (${body.email}) · ${dateStr} ${timeStr} · ${body.attendeeCount} attendee(s)`,
+          action_url: "/owner/crm/relationships?tab=brokerages&section=breakfast",
+          metadata: {
+            brokerage_id: invite.brokerage_id,
+            brokerage_name: invite.brokerage_name,
+            slot_at: slot.slot_at,
+            attendee_count: body.attendeeCount,
+            briefing_topics: body.briefingTopics || null,
+            partnership_focus: body.partnershipFocus || null,
+            phone: body.phone || null,
+          },
+        });
+      } catch (notifyErr) {
+        console.warn("notifications insert failed:", notifyErr);
+      }
+    }
+
+    // Email Jane with the booking summary (best-effort, non-blocking)
+    try {
+      const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+      const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
+      if (LOVABLE_API_KEY && GMAIL_API_KEY) {
+        const slotPretty = new Intl.DateTimeFormat("en-GB", {
+          weekday: "long", day: "numeric", month: "long", year: "numeric",
+          hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Asia/Dubai",
+        }).format(new Date(slot.slot_at)) + " (GST)";
+
+        const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
+<div style="background:linear-gradient(180deg,#FDFBF7 0%,#F7F2EA 100%);padding:40px 16px">
+  <div style="max-width:600px;margin:0 auto;background:#FFFFFF;border:1px solid #B89555;border-radius:14px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:18px">JBJ Global · Breakfast Booked</div>
+    <h2 style="margin:0 0 8px;font-size:22px">${invite.brokerage_name}</h2>
+    <p style="margin:0 0 20px;color:#1A1A1A99;font-size:14px">${slotPretty}</p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <tr><td style="padding:6px 0;color:#1A1A1A99;width:140px">Contact</td><td><strong>${body.fullName}</strong></td></tr>
+      <tr><td style="padding:6px 0;color:#1A1A1A99">Email</td><td><a href="mailto:${body.email}" style="color:#1A1A1A">${body.email}</a></td></tr>
+      ${body.phone ? `<tr><td style="padding:6px 0;color:#1A1A1A99">Phone</td><td><a href="tel:${body.phone}" style="color:#1A1A1A">${body.phone}</a></td></tr>` : ""}
+      <tr><td style="padding:6px 0;color:#1A1A1A99">Attendees</td><td>${body.attendeeCount}</td></tr>
+    </table>
+    ${body.briefingTopics ? `<div style="margin-top:16px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Briefing</div>${body.briefingTopics.replace(/</g,"&lt;")}</div>` : ""}
+    ${body.partnershipFocus ? `<div style="margin-top:12px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Partnership focus</div>${body.partnershipFocus.replace(/</g,"&lt;")}</div>` : ""}
+    ${body.notes ? `<div style="margin-top:12px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Notes</div>${body.notes.replace(/</g,"&lt;")}</div>` : ""}
+  </div>
+</div></body></html>`;
+
+        const subj = `Breakfast booked — ${invite.brokerage_name} · ${dateStr} ${timeStr}`;
+        const headers = [
+          `From: JBJ Breakfast <contact@jbj.ae>`,
+          `To: janeaboujaoudenails@gmail.com`,
+          `Reply-To: ${body.email}`,
+          `Subject: ${subj}`,
+          "MIME-Version: 1.0",
+          'Content-Type: text/html; charset="UTF-8"',
+        ].join("\r\n");
+        const bytes = new TextEncoder().encode(headers + "\r\n\r\n" + html);
+        let bin = ""; bytes.forEach((b) => bin += String.fromCharCode(b));
+        const raw = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+        await fetch("https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": GMAIL_API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ raw }),
+        });
+      }
+    } catch (mailErr) {
+      console.warn("Owner notify email failed:", mailErr);
+    }
+
     return new Response(JSON.stringify({
       ok: true,
       slotAt: slot.slot_at,
