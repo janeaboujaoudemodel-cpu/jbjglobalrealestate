@@ -1,73 +1,45 @@
 ## Goal
 
-Fix the four issues in the Brokerage Ledger dialog (`Deal Ledger — {brokerage}`):
+Three improvements to the **UAE Brokerage & Developer Directory · Background sync** card on the CRM brokerages tab:
 
-1. **Custom Range** picker is unusable — replace with explicit From / To inputs plus a clean two‑month calendar with Day / Month / Year navigation.
-2. **Individual Deals** column headers (Date, Agent, Project / Unit, Client, Developer, Value, Commission) wrap onto two lines. Force single‑line headers and consistent row sizing.
-3. The four summary KPI cards (Deals, Gross value, Commission, Avg deal size) are uneven — values sit at different vertical positions. Align to a single baseline grid with equal heights and centered numbers.
-4. Closing the dialog (X button) feels laggy / glitchy.
+1. Collapse the whole card by default — only the title row and **Refresh now** button stay visible. A chevron toggle reveals the description, three-status grid and recent jobs list.
+2. Make **Refresh now** truly idempotent: it must be the *only* action available, and it cannot trigger a second sync while one is already running. Currently the user can click it repeatedly and stack up cron-style runs.
+3. Speed up "all the brokerage agencies across the UAE". The runner currently processes one chunk of 12 rows sequentially per HTTP continuation, against 7 emirates, which is why a full sweep takes a long time. We will parallelise the seed runs across emirates and raise the per-chunk concurrency for enrichment.
 
 ## Files to change
 
-- `src/components/analytics/DateRangeFilter.tsx` — full rewrite of the custom-range UX.
-- `src/components/crm/BrokerageLedgerDialog.tsx` — header `whitespace-nowrap`, KPI card layout, dialog close behaviour.
+- `src/components/crm/DirectoryToolsPanel.tsx` — collapse-by-default UI + active-job lockout for the Refresh button.
+- `supabase/functions/directory-job-runner/index.ts` — fan out across all 7 emirates on a single `cron` call, and process enrich rows in parallel.
 
 ## Detailed changes
 
-### 1. `DateRangeFilter.tsx` — proper custom range
+### 1. `DirectoryToolsPanel.tsx` — collapsed shell
 
-Replace the single popover with a richer custom-range editor that appears inline next to the preset select when `Custom Range` is chosen:
+- Add `const [expanded, setExpanded] = useState(false)`.
+- Header row keeps: `Globe2` icon, the short title `UAE Brokerage & Developer Directory`, an `Auto-runs daily` badge, a single live status badge (`Syncing…` while jobs are running, `Up to date` / `Up to date · new data` / `Needs attention` when idle), the **Refresh now** button, and a chevron toggle (`ChevronDown` / `ChevronUp`).
+- Remove the long "Each day the system…" paragraph, the three-status grid, and the recent jobs list from the always-visible area. Render them only when `expanded`.
+- Lower the polling rate from 5 s to 15 s when collapsed (4 s when expanded) — keeps the page light when nobody is looking.
+- **Refresh-now lockout**: compute `anyActive = jobs.some(j => j.status === "running" || j.status === "queued")`. The button is disabled while `refreshing || anyActive` and its label switches to `Running…` so the user can see why. Clicking while active shows a toast `"A background sync is already running."` and is a no-op.
+- Tighten card padding from `p-5 space-y-4` to `p-4 space-y-3` so the collapsed state is a slim single-line card.
 
-- **From** and **To** as two separate `Popover + Calendar` controls, each labelled and showing `dd MMM yyyy`.
-- Inside each `Calendar`, add `captionLayout="dropdown-buttons"` with `fromYear={2015}` and `toYear={currentYear + 1}` so users get **Day / Month / Year dropdowns** at the top of the calendar (months back/forward + jump to any year).
-- `numberOfMonths={1}` per popover (cleaner than the cramped two-month range picker), `mode="single"`, `pointer-events-auto` wrapper class so it works inside the dialog.
-- A small **Apply** button next to the inputs that calls `onRangeChange({ start: startOfDay(from), end: endOfDay(to) })`. Disable Apply until both dates are set and `from <= to`.
-- Validation: if `to < from`, show inline error text and don't fire `onRangeChange`.
-- Persist the selected `from` / `to` in component state so re-opening the dialog keeps the previous custom range.
-- Keep all existing presets and labels untouched (no removal).
+### 2. `directory-job-runner/index.ts` — faster sync
 
-### 2. `BrokerageLedgerDialog.tsx` — headers and cards
+- **Cron action (`action === "cron"`)** today only enqueues 1 seed job for the day's emirate plus 2 enrich jobs. Replace with: enqueue **one `brokerage_seed` job per emirate (all 7)** + 1 `brokerage_enrich` + 1 `developer_enrich`. This way a single Refresh now sweeps the whole UAE in parallel instead of one emirate per day.
+- After insert, call `scheduleNext(j.id)` for every created job (already done in a loop) — they now run concurrently because each chunk lives in its own `EdgeRuntime.waitUntil` task.
+- **`runEnrichChunk`** currently awaits `pplxFacts` then `update` for each row sequentially (12 sequential network round-trips). Replace the `for (const r of list)` loop with `Promise.all(list.map(async (r) => { … }))` so all 12 rows are enriched in parallel within one chunk. Keep the existing per-row patch logic and the final `crm_directory_jobs` update.
+- Raise `CHUNK_SIZE` from `12` to `24` for enrich jobs (kept at 12 for seed which is bounded by Perplexity list size). The hard cap stays at `30 * CHUNK_SIZE` rows per run.
+- Keep all existing safeguards: dedup by `company_name + emirate`, "fill-only never overwrite curated values", `last_verified_at` always stamped, `requireOwnerAuth` for non-cron actions, internal token for `continue`.
 
-**Individual Deals table headers** (lines 220–230) and the **Period rollup** headers (lines 175–181):
-- Add `whitespace-nowrap` to every `<th>` so "Date", "Project / Unit", "Commission", etc. never break across lines.
-- Add `whitespace-nowrap` to the date cell (already present) and the value/commission cells.
-- Use `tabular-nums` on numeric columns so digits align.
+### Out of scope / preserved
 
-**Summary KPI cards** (lines 143–162):
-- Make each card a `flex flex-col items-center justify-center text-center min-h-[96px]` block, so all four cards have identical height regardless of value length.
-- Label uses `text-[10px] uppercase tracking-wider` (kept), centered.
-- Value uses `text-xl md:text-2xl font-bold tabular-nums leading-tight whitespace-nowrap` and centered, so the digit baseline of "0", "AED 0", and "AED 1,234,567" all sit on the same line.
-- Wrap the long currency values in a single line with `truncate` + `title={formatted}` tooltip fallback so big numbers don't push card height.
-- Change the grid to `grid grid-cols-2 md:grid-cols-4 gap-3 items-stretch` (the cards already stretch, but make this explicit).
-
-**Dialog close lag**:
-- Root cause is the ledger's React Query (`brokerage-deals`) keeps refetching/staying mounted while the dialog animates out, and `BrokerageDealModal` is rendered as a sibling inside the same fragment, which keeps a second portal alive.
-- Wrap close in a stable handler:
-  ```ts
-  const handleOpenChange = (v: boolean) => {
-    if (!v) {
-      setAddOpen(false);
-      setRange(null);
-      setAgentFilter("");
-    }
-    onOpenChange(v);
-  };
-  ```
-  Pass `handleOpenChange` to `<Dialog onOpenChange={...}>`.
-- Gate the inner `useQuery` with `enabled: open && !!brokerageId` (already in place — keep) and add `staleTime: 30_000` so the panel doesn't re-fetch on every open/close cycle.
-- Render `<BrokerageDealModal />` only when `addOpen` is true (`{addOpen && <BrokerageDealModal ... />}`) so it doesn't keep an extra Radix portal mounted behind the ledger, which is what makes the X feel sluggish.
-
-## Out of scope / preserved
-
-- No DB schema changes.
-- All existing presets, columns, actions (Register Deal, Delete) and styling tone (champagne + gold hairline) preserved per the No‑Removal policy.
-- No changes to `BrokerageDealModal` itself.
+- No DB schema or RLS changes.
+- No removal of features: the description, three-status grid, and recent jobs list still exist — they're just behind the chevron now (No-Removal policy).
+- pg_cron schedule, owner attribution, and audit rows untouched.
 
 ## Verification
 
-After edits, in the preview:
-1. Open a brokerage's Deal Ledger.
-2. Pick **Custom Range** → confirm From/To popovers show with Day/Month/Year dropdowns; pick a from and to date; confirm Apply triggers a refresh.
-3. Confirm "Date", "Project / Unit", "Commission" headers are single-line at desktop and on a 1024px viewport.
-4. Confirm the four KPI cards are vertically centered and the values are baseline-aligned.
-5. Click the X — dialog should close immediately with no flash of a second overlay.
+1. Open Owner → CRM → Brokerages. The directory card now shows a single line with the title, "Auto-runs daily" badge, **Refresh now**, and a chevron.
+2. Click the chevron → description, three status cards, and recent job list expand.
+3. Click **Refresh now** → 7 seed jobs (one per emirate) + 2 enrich jobs are created and start running in parallel. The button instantly switches to "Running…" and is disabled until all jobs reach `completed`/`failed`.
+4. Try clicking **Refresh now** again while it says "Running…" — nothing happens, toast says "A background sync is already running."
+5. Watch the "Discovering brokerages" job advance much faster than before (Promise.all + parallel emirates).
