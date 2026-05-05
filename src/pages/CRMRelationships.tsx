@@ -278,39 +278,103 @@ const aiRecommend = async (kind: "brokerage" | "client" | "developer_registry", 
 };
 
 /* ===========================================================
-   Brokerage clickable contact row
+   Brokerage clickable contact row — robust link normalization
 =========================================================== */
+function normalizePhoneHref(p: string): string | null {
+  const cleaned = p.replace(/[^\d+]/g, "");
+  if (!cleaned || cleaned.replace(/\+/g, "").length < 6) return null;
+  return `tel:${cleaned}`;
+}
+function normalizeWhatsApp(p: string): string | null {
+  let d = p.replace(/[^\d]/g, "");
+  if (!d) return null;
+  if (d.startsWith("00")) d = d.slice(2);
+  if (d.startsWith("0")) d = d.slice(1);
+  // 9-digit UAE local number → prepend country code
+  if (d.length === 9 && d.startsWith("5")) d = "971" + d;
+  if (d.length < 8) return null;
+  return `https://wa.me/${d}`;
+}
+function normalizeInstagram(v: string): string | null {
+  const s = v.trim();
+  if (!s) return null;
+  if (/^https?:\/\//i.test(s)) return s;
+  let handle = s.replace(/^@/, "").replace(/^https?:\/\//i, "");
+  handle = handle.replace(/^(www\.)?instagram\.com\//i, "").replace(/^\/+/, "").replace(/\/+$/, "");
+  if (!handle) return null;
+  return `https://www.instagram.com/${handle}`;
+}
+function normalizeWebsiteHref(w: string): { href: string; display: string } | null {
+  const t = w.trim();
+  if (!t) return null;
+  const href = /^https?:\/\//i.test(t) ? t : `https://${t.replace(/^\/+/, "")}`;
+  const display = href.replace(/^https?:\/\//i, "").replace(/\/$/, "");
+  return { href, display };
+}
+function normalizeEmail(e: string): string | null {
+  const t = e.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)) return null;
+  return t;
+}
+
 const BrokerageContactLinks = ({ r }: { r: any }) => {
-  const email = r.email || r.primary_contact?.email || "";
-  const phone = r.phone || r.primary_contact?.phone || "";
-  const wa = r.whatsapp_e164 || r.primary_contact?.whatsapp || "";
-  const website = r.website || "";
-  const ig = r.instagram_url || "";
-  const address = r.office_address || r.office_location || "";
-  const mapUrl = r.office_map_url
-    || (address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + (r.emirate ? ", " + r.emirate : ""))}` : "");
+  const emailRaw = (r.email || r.primary_contact?.email || "").toString();
+  const phoneRaw = (r.phone || r.primary_contact?.phone || "").toString();
+  const waRaw = (r.whatsapp_e164 || r.primary_contact?.whatsapp || "").toString();
+  const websiteRaw = (r.website || "").toString();
+  const igRaw = (r.instagram_url || "").toString();
+  const address = (r.office_address || r.office_location || "").toString().trim();
 
-  const link = "inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] border-b border-[#B89555]/50 hover:border-[#B89555] py-0.5";
+  const email = emailRaw ? normalizeEmail(emailRaw) : null;
+  const phoneHref = phoneRaw ? normalizePhoneHref(phoneRaw) : null;
+  const waHref = waRaw ? normalizeWhatsApp(waRaw) : (phoneRaw ? normalizeWhatsApp(phoneRaw) : null);
+  const ig = igRaw ? normalizeInstagram(igRaw) : null;
+  const web = websiteRaw ? normalizeWebsiteHref(websiteRaw) : null;
+  const mapQuery = address
+    ? address + (r.emirate ? `, ${r.emirate}` : "")
+    : "";
+  const mapHref = r.office_map_url
+    || (mapQuery ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}` : null);
 
-  if (!email && !phone && !wa && !website && !ig && !mapUrl) return null;
+  if (!email && !phoneHref && !waHref && !web && !ig && !mapHref) return null;
+
+  const link =
+    "inline-flex items-center gap-1 text-[11px] font-medium text-[#1A1A1A] border-b border-[#B89555]/50 hover:border-[#B89555] py-0.5 cursor-pointer";
+  const stop = (e: React.MouseEvent) => e.stopPropagation();
 
   return (
-    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5">
-      {email && <a href={`mailto:${email}`} className={link}><Mail className="w-3 h-3" />{email}</a>}
-      {phone && <a href={`tel:${phone.replace(/\s+/g, "")}`} className={link}><Phone className="w-3 h-3" />{phone}</a>}
-      {wa && <a href={`https://wa.me/${wa.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener" className={link}><MessageCircle className="w-3 h-3" />WhatsApp</a>}
-      {mapUrl && <a href={mapUrl} target="_blank" rel="noopener" className={link}><MapPin className="w-3 h-3" />{address || "Map"}</a>}
-      {website && (() => {
-        const href = website.startsWith("http") ? website : `https://${website}`;
-        const display = website.replace(/^https?:\/\//i, "").replace(/\/$/, "");
-        return (
-          <a href={href} target="_blank" rel="noopener noreferrer" className={`${link} max-w-[240px]`}>
-            <Globe2 className="w-3 h-3 shrink-0" />
-            <span className="truncate">{display}</span>
-          </a>
-        );
-      })()}
-      {ig && <a href={ig.startsWith("http") ? ig : `https://instagram.com/${ig.replace(/^@/, "")}`} target="_blank" rel="noopener" className={link}><Instagram className="w-3 h-3" />Instagram</a>}
+    <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1.5" data-no-contrast-guard>
+      {email && (
+        <a href={`mailto:${email}`} className={link} onClick={stop}>
+          <Mail className="w-3 h-3" />{email}
+        </a>
+      )}
+      {phoneHref && (
+        <a href={phoneHref} className={link} onClick={stop}>
+          <Phone className="w-3 h-3" />{phoneRaw}
+        </a>
+      )}
+      {waHref && (
+        <a href={waHref} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={link} onClick={stop}>
+          <MessageCircle className="w-3 h-3" />WhatsApp
+        </a>
+      )}
+      {mapHref && (
+        <a href={mapHref} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={link} onClick={stop}>
+          <MapPin className="w-3 h-3" />{address || "Map"}
+        </a>
+      )}
+      {web && (
+        <a href={web.href} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={`${link} max-w-[240px]`} onClick={stop}>
+          <Globe2 className="w-3 h-3 shrink-0" />
+          <span className="truncate">{web.display}</span>
+        </a>
+      )}
+      {ig && (
+        <a href={ig} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className={link} onClick={stop}>
+          <Instagram className="w-3 h-3" />Instagram
+        </a>
+      )}
     </div>
   );
 };
