@@ -4997,6 +4997,53 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_brokerage_actions: {
+        Row: {
+          action_type: string
+          body: string | null
+          brokerage_id: string
+          created_at: string
+          created_by: string | null
+          due_at: string | null
+          id: string
+          metadata: Json
+          owner_id: string
+          title: string
+        }
+        Insert: {
+          action_type: string
+          body?: string | null
+          brokerage_id: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json
+          owner_id: string
+          title: string
+        }
+        Update: {
+          action_type?: string
+          body?: string | null
+          brokerage_id?: string
+          created_at?: string
+          created_by?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json
+          owner_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_actions_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_brokerage_deals: {
         Row: {
           agent_email: string | null

@@ -1,61 +1,110 @@
-# Upload External Developer Agreements with AI Auto-Match
+I’ll fix this as one upgrade to the brokerage section in the Relationships CRM.
 
-## Goal
+What I found
+- The main brokerage CRM is `src/pages/CRMRelationships.tsx` at `/owner/crm/relationships`.
+- It already loads from `crm_brokerages`, but search filters on every keystroke and can feel slow with a bigger directory.
+- The list currently sorts by backend `updated_at`, so top agencies are not guaranteed to stay at the top.
+- Export is CSV only and still includes a RERA license column. I’ll remove RERA from the visible/exported brokerage flow because you said all agencies must already be licensed.
+- There is an existing reminders table (`crm_relationship_reminders`) and an existing `admin_tasks` table. I’ll wire the brokerage Remind button into both, and add calendar/note records through a new CRM action table so it is tracked cleanly.
 
-When you receive a signed agreement from a developer (e.g. Sobha, Emaar, Damac), drop the PDF into the Contract Vault. AI reads it, identifies the developer + contract type + key dates, and files it under the right developer automatically — no manual searching or tagging.
+Implementation plan
 
-## Where it lives
+1. Make brokerage search fast and reliable
+- Add a debounced search value so typing does not lag.
+- Search across agency name, emirate, office/location, website, phone, email, Instagram, status, outreach stage, and represented developer.
+- Normalize text before searching so names with symbols or accents (for example `fäm Properties`) are easier to find.
+- Keep the search input responsive even as the directory grows.
 
-`/owner/contracts` (Contract Vault) — add a new **"Upload Agreement"** button at the top, next to "Manage signature & stamp". Same page you already know, no new route to remember.
+2. Rank famous/top agencies first
+- Sort brokerages by a deterministic priority score:
+  1. `directory_rank` if present
+  2. estimated agent count
+  3. rating
+  4. deal count / activity
+  5. agency name
+- Add a hardcoded priority boost for UAE-famous agencies already in the directory, such as fäm Properties, Betterhomes, Allsopp & Allsopp, Metropolitan, D&B Properties, AX Capital, Driven, Provident, haus & haus, White & Co, Engel & Völkers, Espace, Knight Frank, CBRE, JLL, Asteco, Coldwell Banker, Savills, Chestertons, Bayut/Dubizzle-owned agency entries only if they are real estate brokerages.
+- Keep non-real-estate filtering rules: no banks, mortgage brokers, insurance, law firms, logistics brokers, etc.
 
-## User flow
+3. Make the brokerage list CRM-style
+- Replace the current general brokerage statuses with business statuses matching your wording:
+  - Not registered
+  - Message sent
+  - Follow-up scheduled
+  - Registered
+  - Active partner
+  - Dormant
+  - Do not contact
+- Display a clear status pill/dropdown on every agency, including directory agencies.
+- Show outreach metrics on each card: last message, attempts, next follow-up, deals, inquiry count, agent count.
+- Rename “Licensed” UI labels to “Verified UAE real estate agencies” and remove visible RERA license labels from cards and exports.
 
-```text
-1. Click "Upload Agreement" → drawer opens
-2. Drag PDF (or multiple PDFs) into drop zone
-3. AI reads each file in background:
-     - extracts developer name (Sobha, Emaar, etc.)
-     - extracts contract type (Brokerage Agreement, NDA, MOU, Addendum...)
-     - extracts effective date, expiry, commission %, signatories
-     - matches developer to existing record in `crm_developers` (fuzzy)
-4. Preview card shows: "Matched to Sobha Realty (98% confidence) — Brokerage Agreement, expires 2027-05"
-     - [Confirm & file]  [Change developer ▼]  [Edit fields]
-5. Confirm → PDF stored, row added to vault, tagged to developer
-```
+4. Add PDF, CSV, and Excel export
+- Add three export buttons: `Export PDF`, `Export CSV`, `Export Excel`.
+- Export the currently filtered/sorted agency list in CRM-report format.
+- Columns will include:
+  - Rank
+  - Agency name
+  - Emirate
+  - Office location
+  - Website
+  - Instagram
+  - Phone
+  - WhatsApp
+  - Email
+  - CRM status
+  - Outreach stage
+  - Last message sent
+  - Next follow-up
+  - Message attempts
+  - Deals
+  - Estimated agents
+  - Rating
+  - Notes
+- Excel will be a real `.xlsx` sheet using the existing `xlsx` package, with styled headers and column widths.
+- PDF will use `jsPDF` + `jspdf-autotable`, branded `JBJ GLOBAL REAL ESTATE`, landscape layout, and summary totals for the owner/company report.
+- CSV remains simple and clean for import into other tools.
 
-If AI can't confidently match (e.g. unknown developer), the card shows "No match — pick developer" with a searchable dropdown. Nothing is filed silently under the wrong company.
+5. Make Remind create reminder, task, calendar item, and note
+- Update `Remind` so one click creates:
+  - CRM relationship reminder for the agency
+  - Owner/admin task in `admin_tasks`
+  - Brokerage CRM action record of type `calendar_event`
+  - Brokerage CRM note/action record saying a follow-up reminder was created
+- Update the agency row with `next_followup_at`, `next_action_at`, `next_action_note`, and outreach stage `follow_up_scheduled` when appropriate.
+- Show a toast confirming: reminder added, task created, calendar note saved.
 
-## What changes
+6. Add the required database support
+- Add a small `crm_brokerage_actions` table for notes/calendar/activity against each agency:
+  - owner_id
+  - brokerage_id
+  - action_type (`note`, `calendar_event`, `reminder`, `status_change`)
+  - title
+  - body
+  - due_at
+  - metadata
+  - created_by
+- Protect it with owner/admin RLS following the existing CRM access pattern.
+- Add indexes for brokerage and due date.
+- Add an outreach-stage value for `follow_up_scheduled` if not already present.
+- Do not modify generated backend client/type files.
 
-### Database (migration)
-- New table `external_agreements`:
-  - `id`, `owner_user_id`, `developer_id` (nullable, FK to `crm_developers`), `developer_name_raw`, `contract_type`, `file_url`, `file_name`, `effective_date`, `expiry_date`, `commission_pct`, `counterparties jsonb`, `ai_confidence numeric`, `ai_extracted jsonb`, `status` (`pending_review` | `filed` | `archived`), `uploaded_at`, `created_at`
-  - RLS: only owner role can read/write (reuse `requireOwnerAuth` pattern)
-- New storage bucket `developer-agreements` (private), with RLS allowing only owner.
+7. Improve directory completeness controls
+- Keep the existing background directory sync card.
+- Adjust the wording to make clear this is the UAE real estate agency directory only.
+- Keep the backend exclusion rules for banks/mortgage/insurance/legal/logistics.
+- Increase the visible/exportable list handling so all loaded agencies appear and can be searched/exported. If the backend has more than 1,000 agencies later, the hook will page through all rows instead of relying on a single capped query.
 
-### Edge function
-- `match-developer-agreement` — accepts file (or storage path), runs Lovable AI Gateway (`google/gemini-2.5-pro` for PDF vision + reasoning) with a strict JSON schema, then fuzzy-matches the extracted developer name against `crm_developers.name` (normalized). Returns `{developer_id, confidence, extracted}`.
+Files I expect to edit
+- `src/pages/CRMRelationships.tsx`
+- `src/hooks/useCRMRelationships.ts`
+- `src/components/crm/DirectoryToolsPanel.tsx`
+- a new migration under `supabase/migrations/...`
+- possibly `supabase/functions/seed-uae-brokerage-directory/index.ts` and/or `supabase/functions/enrich-uae-brokerage-directory/index.ts` for stricter real-estate-only wording and ranking/contact fields
 
-### Frontend
-- `ContractVault.tsx`:
-  - Add "Upload Agreement" button + `AgreementUploadDrawer` component.
-  - Add a second tab/section: **"External Agreements"** alongside the existing signed-contracts table. Columns: Developer · Type · Effective · Expiry · Status · Actions (Open / Re-match / Archive).
-- `AgreementUploadDrawer.tsx` (new):
-  - Drop zone (multi-file, PDF only, 25 MB cap each)
-  - Per-file row with progress, AI match preview, confirm/override controls
-  - Reuses the look of `DocumentExtractorUpload`
-
-### Surfacing the contract on the developer page
-- On the developer detail page, add a small "Agreements (2)" chip linking back to the vault filtered by that developer — so the contract is visible from both directions.
-
-## Answer to your direct question
-
-> Do I have to search Sobha and click upload, or can AI auto-file it?
-
-After this is built: **just drop the file. AI will detect "Sobha" from the document and file it under Sobha automatically.** You only intervene if confidence is low or the developer doesn't exist in your CRM yet — and even then it's a one-click confirm, not a manual search.
-
-## Out of scope (for this round)
-
-- Auto-renewal reminders before `expiry_date` (easy follow-up).
-- E-signing the uploaded PDF (different flow — use the existing `/owner/sign` envelope system for that).
-- Bulk re-processing of historical PDFs already sitting elsewhere.
+Result after approval
+- Brokerage search will feel immediate and find agencies correctly.
+- The most famous/top UAE agencies will appear first.
+- You’ll have PDF, CSV, and Excel exports suitable to send to the owner/company leadership.
+- No RERA license column/label will be shown in this brokerage CRM flow.
+- Every agency will have clear CRM status tracking.
+- Clicking `Remind` will create the reminder, task, calendar-style action, and note in one step.
