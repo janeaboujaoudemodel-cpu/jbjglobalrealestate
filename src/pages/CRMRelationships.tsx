@@ -38,6 +38,7 @@ import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/cr
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
+import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
