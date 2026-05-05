@@ -73,12 +73,11 @@ const OwnerDashboardShell = () => {
       <div data-no-contrast-guard className="owner-shell-surface p-3 border-t border-[#B89555]/40 flex-shrink-0 space-y-1 bg-[#F7F2EA]">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          style={{ color: "#1A1A1A" }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium hover:!text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40 text-primary bg-secondary"
           aria-label="Return to main site"
         >
-          <Home className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span>Return to Site</span>}
+          <Home className="w-5 h-5 flex-shrink-0 text-primary" />
+          {!collapsed && <span className="text-primary">Return to Site</span>}
         </button>
         <button
           onClick={handleSignOut}
