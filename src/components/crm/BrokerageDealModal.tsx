@@ -250,6 +250,7 @@ export const BrokerageDealModal = ({
                 }
                 placeholder="0"
               />
+            </div>
             <div>
               <Label className="text-xs text-[#1A1A1A] mb-1 block">
                 Agent name *
