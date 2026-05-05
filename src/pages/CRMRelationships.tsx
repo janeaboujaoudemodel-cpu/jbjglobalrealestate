@@ -37,6 +37,7 @@ import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
 import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
+import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
