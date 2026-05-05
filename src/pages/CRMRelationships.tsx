@@ -33,6 +33,9 @@ import {
 import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
+import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
+import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
+import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
@@ -414,6 +417,7 @@ const TopAgentsEditor = ({ value, onChange }: { value: TopAgent[]; onChange: (v:
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
+  const navigate = useNavigate();
   const { data = [], isLoading, refetch } = useBrokerages();
   const upsert = useUpsertBrokerage();
   const del = useDeleteBrokerage();
@@ -485,11 +489,51 @@ const BrokeragesTab = () => {
     return sortBrokeragesForDirectory(matches);
   }, [data, debouncedQ, statusFilter, emirateFilter, sourceTab]);
 
-  const openNew = () => { setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {} }); setOpen(true); };
-  const openEdit = (r: any) => { setEditing(r); setOpen(true); };
+  const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
+
+  const openNew = () => {
+    setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {}, admin_contact: {} });
+    setAgents([]);
+    setOpen(true);
+  };
+  const openEdit = async (r: any) => {
+    setEditing({ ...r, admin_contact: r.admin_contact || {} });
+    setAgents([]);
+    setOpen(true);
+    if (r.id) {
+      const { data: rows } = await (supabase as any)
+        .from("crm_brokerage_agents")
+        .select("*")
+        .eq("brokerage_id", r.id)
+        .order("created_at", { ascending: true });
+      setAgents((rows || []) as BrokerageAgentDraft[]);
+    }
+  };
 
   const save = async () => {
-    await upsert.mutateAsync({ ...editing, entry_source: editing.entry_source || "owner" });
+    const saved = await upsert.mutateAsync({ ...editing, entry_source: editing.entry_source || "owner" });
+    const brokerageId = (saved as any)?.id || editing?.id;
+    if (brokerageId) {
+      await (supabase as any).from("crm_brokerage_agents").delete().eq("brokerage_id", brokerageId);
+      if (agents.length) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const rows = agents.map((a) => ({
+            brokerage_id: brokerageId,
+            owner_id: user.id,
+            name: a.name || "Unknown",
+            phone: a.phone || null,
+            whatsapp: a.whatsapp || null,
+            email: a.email || null,
+            role: a.role || null,
+            status: a.status || "active",
+            source: a.source || "manual",
+            photo_path: a.photo_path || null,
+          }));
+          await (supabase as any).from("crm_brokerage_agents").insert(rows);
+        }
+      }
+    }
     setOpen(false);
   };
 
@@ -631,39 +675,34 @@ const BrokeragesTab = () => {
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => handleExport("pdf")} title="Export the filtered agency list as a branded PDF">
-          <FileTextIcon className="w-4 h-4 mr-2" />Export PDF
-        </Button>
-        <Button variant="outline" onClick={() => handleExport("xlsx")} title="Export the filtered agency list as an Excel sheet">
-          <FileSpreadsheet className="w-4 h-4 mr-2" />Export Excel
-        </Button>
-        <Button variant="outline" onClick={() => handleExport("csv")} title="Export the filtered agency list as CSV">
-          <Download className="w-4 h-4 mr-2" />Export CSV
-        </Button>
+        <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
         <Button
           variant="outline"
           onClick={() => {
-            const eligible = filtered.filter((r: any) => r.entry_source !== "directory" && (r.primary_contact?.email || r.email));
-            const ids = new Set<string>(eligible.map((r: any) => r.id));
+            const ids = new Set<string>((filtered as any[]).map((r: any) => r.id));
             setBulkSel((cur) => (cur.size === ids.size ? new Set() : ids));
           }}
-          title="Select all eligible brokerages on this view"
+          title="Select every visible agency (directory + your additions). Agencies missing an email will prompt you to add one before sending."
         >
           <CheckCircle2 className="w-4 h-4 mr-2" />
-          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all"}
+          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all visible"}
         </Button>
         <Button
           variant="gold"
           onClick={() => {
-            if (bulkSel.size === 0) { toast.error("Select at least one brokerage first"); return; }
+            if (bulkSel.size === 0) { toast.error("Tick at least one agency first"); return; }
             setBulkOpen(true);
           }}
           className="shadow-md"
+          title="Send your branded outreach email to every ticked agency. A test copy is sent to you first so you can review before the real send."
         >
-          <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
+          <Send className="w-4 h-4 mr-2" />Email Selected Agencies{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
         </Button>
         <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
           <Mail className="w-4 h-4 mr-2" />Edit Templates
+        </Button>
+        <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
+          <Bell className="w-4 h-4 mr-2" />Activity Log
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
@@ -681,14 +720,22 @@ const BrokeragesTab = () => {
             }`}>
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  {!isDirectory && (r.primary_contact?.email || r.email) && (
-                    <Checkbox
-                      checked={bulkSel.has(r.id)}
-                      onCheckedChange={() => toggleBulk(r.id)}
-                      className="mt-1"
-                      aria-label={`Select ${r.company_name} for bulk outreach`}
-                    />
-                  )}
+                  <Checkbox
+                    checked={bulkSel.has(r.id)}
+                    onCheckedChange={() => {
+                      const hasEmail = !!(r.primary_contact?.email || r.email || r.admin_contact?.email);
+                      if (!hasEmail && !bulkSel.has(r.id)) {
+                        toast.message("Add an email to this agency first", {
+                          description: "Open Edit and add an admin email so we know where to send the outreach.",
+                        });
+                        openEdit(r);
+                        return;
+                      }
+                      toggleBulk(r.id);
+                    }}
+                    className="mt-1"
+                    aria-label={`Select ${r.company_name} for bulk outreach`}
+                  />
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <button
@@ -833,6 +880,23 @@ const BrokeragesTab = () => {
                   <Input placeholder="Phone" value={editing.primary_contact?.phone || ""} onChange={(e) => setEditing({ ...editing, primary_contact: { ...editing.primary_contact, phone: e.target.value } })} />
                   <Input placeholder="WhatsApp" value={editing.primary_contact?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, primary_contact: { ...editing.primary_contact, whatsapp: e.target.value } })} />
                 </div>
+              </div>
+              <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">Admin / Owner contact (always present)</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="Admin name" value={editing.admin_contact?.name || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, name: e.target.value } })} />
+                  <Input placeholder="Role (default: Managing Director)" value={editing.admin_contact?.role || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, role: e.target.value } })} />
+                  <Input placeholder="Phone" value={editing.admin_contact?.phone || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, phone: e.target.value } })} />
+                  <Input placeholder="WhatsApp" value={editing.admin_contact?.whatsapp || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, whatsapp: e.target.value } })} />
+                  <Input placeholder="Email (optional)" value={editing.admin_contact?.email || ""} onChange={(e) => setEditing({ ...editing, admin_contact: { ...editing.admin_contact, email: e.target.value } })} />
+                </div>
+              </div>
+              <div className="border-t pt-3">
+                <BrokerageAgentsEditor value={agents} onChange={setAgents} />
+                <BrokerageContactPhotoImporter
+                  brokerageId={editing.id}
+                  brokerageName={editing.company_name}
+                  onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
+                />
               </div>
               <Field label="Notes"><Textarea rows={3} value={editing.notes || ""} onChange={(e) => setEditing({ ...editing, notes: e.target.value })} /></Field>
             </div>
