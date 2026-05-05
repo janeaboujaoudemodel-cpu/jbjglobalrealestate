@@ -60,14 +60,14 @@ export function PrimarySenderEditor({
               <span className="truncate max-w-[200px]">{email}</span>
               <button
                 type="button"
-                className="ml-1 p-1 rounded-full hover:bg-[#1A1A1A]/10"
+                className="ml-1 p-1 rounded-full bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-red-100 hover:text-red-700 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   remove(email);
                 }}
                 aria-label={`Remove ${email}`}
               >
-                <Trash2 className="w-3 h-3 text-[#1A1A1A]/70" />
+                <Trash2 className="w-3 h-3" />
               </button>
             </div>
           );
@@ -149,14 +149,14 @@ export function CcListEditor({
               <span className="truncate max-w-[200px]">{email}</span>
               <button
                 type="button"
-                className="ml-1 p-1 rounded-full hover:bg-[#1A1A1A]/10"
+                className="ml-1 p-1 rounded-full bg-[#1A1A1A]/5 text-[#1A1A1A] hover:bg-red-100 hover:text-red-700 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   remove(email);
                 }}
                 aria-label={`Remove ${email}`}
               >
-                <Trash2 className="w-3 h-3 text-[#1A1A1A]/70" />
+                <Trash2 className="w-3 h-3" />
               </button>
             </div>
           );
