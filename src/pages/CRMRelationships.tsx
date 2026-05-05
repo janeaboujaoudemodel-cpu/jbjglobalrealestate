@@ -360,6 +360,7 @@ const BrokeragesTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
+  const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
