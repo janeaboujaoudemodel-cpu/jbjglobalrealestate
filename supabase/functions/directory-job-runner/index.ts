@@ -343,15 +343,15 @@ serve(async (req) => {
     }
 
     if (action === "cron") {
-      // pg_cron / public daily kickoff. Creates the three rotating jobs.
+      // Daily kickoff (also called by the manual "Refresh now" button).
+      // Fan out: one seed job per emirate (all 7) + 1 brokerage_enrich + 1 developer_enrich.
+      // Each job lives in its own EdgeRuntime.waitUntil task so the whole UAE
+      // is swept in parallel instead of one emirate per day.
       const { data: ownerRow } = await admin.from("user_roles").select("user_id").eq("role","owner").limit(1).maybeSingle();
       const ownerId = ownerRow?.user_id ?? null;
 
-      const dayOfWeek = new Date().getUTCDay();
-      const emirate = EMIRATES[dayOfWeek % EMIRATES.length];
-
       const jobs = [
-        { kind: "brokerage_seed", emirate, triggered_by: ownerId },
+        ...EMIRATES.map((em) => ({ kind: "brokerage_seed", emirate: em as string, triggered_by: ownerId })),
         { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId },
         { kind: "developer_enrich", emirate: null, triggered_by: ownerId },
       ];
