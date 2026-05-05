@@ -94,7 +94,7 @@ const OwnerDashboardShell = () => {
   );
 
   return (
-    <div data-surface="champagne" className="min-h-screen bg-[#F7F2EA] flex">
+    <div data-surface="champagne" className="owner-dashboard-shell min-h-screen bg-[#F7F2EA] flex">
       {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
       <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
         <OwnerTasksPopupAlert />
