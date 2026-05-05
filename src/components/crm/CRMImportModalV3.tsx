@@ -141,8 +141,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       const { data, error } = await supabase
         .from("crm_brokers")
         .insert({
-          display_name: newBrokerName.trim(),
-          created_by_user_id: userId
+          full_name: newBrokerName.trim(),
+          owner_id: userId
         })
         .select()
         .single();
