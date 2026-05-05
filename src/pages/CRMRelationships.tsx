@@ -1146,6 +1146,22 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   const update = (patch: any) => setDraft({ ...(draft || settings || {}), ...patch });
   const save = async () => { await upsert.mutateAsync(draft); setDraft(null); };
 
+  // Auto-save sender/CC chip changes (no Save click needed). Other fields
+  // (drive URL, from name) keep the explicit Save button.
+  const autoSaveKeys = React.useMemo(() => new Set([
+    "saved_sender_emails", "reply_to_email", "saved_cc_emails", "active_cc_emails",
+    "brokerage_saved_sender_emails", "brokerage_reply_to_email",
+    "brokerage_saved_cc_emails", "brokerage_active_cc_emails",
+    "cc_email", "cc_jane_enabled",
+  ]), []);
+  const autoSave = React.useCallback(async (patch: any) => {
+    try {
+      await upsert.mutateAsync(patch);
+    } catch (e) {
+      console.error("[DocumentPackPanel] auto-save failed", e);
+    }
+  }, [upsert]);
+
   if (isLoading) return <Skeleton className="h-32" />;
 
   // Field aliases — brokerage and developer packs are independent.
