@@ -1,58 +1,135 @@
-## Brokerage outreach is its own pack + persistent Test Send
+## Scope
+Five connected fixes around the Brokerage Outreach Pack and the Private Breakfast booking flow, plus a new Breakfast Bookings section inside the Command Center.
 
-### What's actually wrong (verified in code/DB)
+---
 
-- **Document Pack is shared between developer and brokerage.** `DocumentPackPanel` reads/writes one set of columns (`drive_doc_pack_url`, `saved_sender_emails`, `saved_cc_emails`) regardless of `context`. The `crm-send-brokerage-outreach` edge function reads from those same shared fields. So whatever you save under "Brokerage Outreach" silently overwrites the developer pack and vice-versa — that's why the brokerage pack feels wrong (wrong drive link, wrong senders/CCs). 
-- **`Open Pack ↗` button has poor contrast on normal load.** It uses `border-[#1A1A1A]/30 text-[#1A1A1A]` on a `#FDFBF7` card with no fill — almost invisible until hovered. Same card squeezes the input + button on one row, so on a 1028px viewport the URL is clipped.
-- **Trash icon on saved-email chips is `text-[#1A1A1A]/70` inside a tiny ghost button** — barely visible against the cream chip; users miss it.
-- **TestSendDialog forgets recipients.** Each open it only prefills the user's own auth email; CC list resets every time. That's why "send test" feels disposable.
+## 1. Brokerage Outreach Pack — show Primary + CC + Template inline
 
-### Plan
+In `src/pages/CRMRelationships.tsx` (the Brokerages tab section starting at line 601), restructure `DocumentPackPanel` so for `context="brokerage"` it always renders:
 
-#### A. Make the Brokerage Document Pack genuinely separate
-1. **Migration** — add brokerage-only columns on `crm_owner_settings`:
-   - `brokerage_drive_doc_pack_url text`
-   - `brokerage_saved_sender_emails jsonb default '[]'`
-   - `brokerage_reply_to_email text`
-   - `brokerage_saved_cc_emails jsonb default '[]'`
-   - `brokerage_active_cc_emails jsonb default '[]'`
-   - `brokerage_from_name text`  (default "Amra · JBJ Global Real Estate")
-   - Plus persistent test-send fields (used by section D below):
-     - `saved_test_to_emails jsonb default '[]'`
-     - `saved_test_cc_emails jsonb default '[]'`
-2. **`DocumentPackPanel`** — when `context="brokerage"` read/write the `brokerage_*` columns. When `context="developer"` keep using the existing fields. Header copy on the brokerage pack: "Brokerage outreach pack — sent by Amra on behalf of JBJ Global. Independent of developer registration."
-3. **`useCRMRelationships.ts`** — extend defaults so brokerage fields hydrate to safe values (`[]`, `""`).
-4. **`supabase/functions/crm-send-brokerage-outreach/index.ts`** — read `brokerage_drive_doc_pack_url`, `brokerage_reply_to_email`, `brokerage_active_cc_emails`, `brokerage_from_name` first, falling back to the shared field only if brokerage-specific is empty (back-compat for existing customers). Same for `crm-bulk-brokerage-send` if it shares the resolver.
+- **Drive URL row** (already there)
+- **From name + Primary sender (Reply-to)** — `PrimarySenderEditor` always visible
+- **CC emails** — `CcListEditor` always visible
+- **Template editor block** (currently only opened via a button) — embed the brokerage template editor inline as a collapsible card pre-expanded, using the existing `TemplateEditorDialog` content extracted into a reusable `<BrokerageTemplatePanel />` (or render the dialog body inline). Shows both `brokerage_partnership_intro` and `brokerage_breakfast_invite` variants, side-by-side with subject + HTML preview and Save.
+- **Send Test** button at the bottom of the card.
 
-#### B. Fix contrast and layout (normal load)
-- `Open Pack ↗` becomes `<Button variant="outline">` with `bg-[#EFE6D6] border-[#B89555]/40 text-[#1A1A1A]` — visible on champagne without hover.
-- The Drive URL row collapses to two rows on `<lg` so the input never gets clipped:
-  - `<div className="flex flex-col sm:flex-row gap-2">` with `min-w-0 flex-1` on the input wrapper.
-- Trash icon in `EmailListEditor` chips → `text-[#1A1A1A]` (full ink) inside a `bg-[#1A1A1A]/5 hover:bg-red-100 hover:text-red-700` round button so it's always discoverable.
+Goal: everything Amra needs (sender, CCs, template, test) is in one visible place — no hidden dialogs, no scrolling required to locate the primary email.
 
-#### C. Speed
-- Already addressed in the previous pass (lazy tabs, `placeholderData`, `refetchOnWindowFocus: false`). Add one more: wrap `DocumentPackPanel` in `React.memo` so unrelated re-renders of the parent tab don't re-render it (it currently re-renders on every keystroke in the search box because it sits inside `BrokeragesTab`).
-- Promote `DocumentPackPanel` to be rendered once at the page level (inside the active tab still, but outside the heavy filter/sort block), so its inputs feel instant.
+---
 
-#### D. Persistent Test Send
-1. **Always-available "Send Test" button** stays where it is in both tabs (already mounted).
-2. **`TestSendDialog`** rework:
-   - On open, hydrate `to` + `cc` chip lists from `crm_owner_settings.saved_test_to_emails` and `saved_test_cc_emails`.
-   - Both fields are now **chip lists** (same UX as `CcListEditor`): add multiple recipients, multiple CCs, click chip to toggle "use for this test", click trash to delete.
-   - On send, if a chip was added/removed, write the updated array back to `crm_owner_settings` so it persists across sessions.
-   - All "active" To addresses get the test email (loop), CCs come along on each send.
-   - Edge function call extends `testRecipient` to also accept `testRecipients: string[]`. Backwards-compatible: fall back to the comma-joined string.
-3. Subject still prefixed `[TEST]`; nothing logged to outreach history.
+## 2. Test Send — remove "Sample / TEST / ACAEA", use real names
 
-### Files to touch
-- `supabase/migrations/<new>.sql` — add 8 brokerage-and-test columns.
-- `src/hooks/useCRMRelationships.ts` — defaults + types for the new fields.
-- `src/pages/CRMRelationships.tsx` — pass/consume `context`, button visibility/layout, memoize panel.
-- `src/components/crm/EmailListEditor.tsx` — visible trash button, responsive chip wrap.
-- `src/components/crm/TestSendDialog.tsx` — persistent chip lists, multi-recipient send, save back on close/send.
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — resolve brokerage-specific settings; accept `testRecipients[]`.
-- `supabase/functions/crm-send-developer-registration/index.ts` — accept `testRecipients[]` (parity for developer test sends).
+In `supabase/functions/crm-send-brokerage-outreach/index.ts`:
 
-### Out of scope
-- No changes to the actual outreach templates or pipeline beyond the field source.
-- No changes to send history / queue UI beyond what's needed to keep them fast.
+- **Drop the `[TEST]` subject prefix** when `isTest`. Send the real subject.
+- **Sample contact name**: when `isTest`, derive `contact_first_name` from the recipient email's local-part (e.g. `jane@…` → "Jane"), and `brokerage_name` from `body.testBrokerageName` (default to a clean value like the recipient's domain — never "Sample Brokerage Group").
+- **Group status label**: never emit the raw key (this is the "ACAEA"-looking text user is seeing — likely the uppercase status code leaking through). Force it to a clean label like "Channel Partner" for tests, never the enum string.
+- **Greeting**: render as `Dear {first_name} from {brokerage_name},` — pass through to the template fallback HTML at lines 416–431.
+
+In `TestSendDialog.tsx`:
+- Remove "Sample brokerage name" placeholder defaulting to `"Sample Brokerage Group"`. Default to empty; if empty at send time, the edge function uses the email-derived value.
+
+---
+
+## 3. Unified Briefing + Breakfast email with premium background layer
+
+Replace the two separate variants (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) usage path so the **single email Amra sends** includes:
+
+- Briefing intro (current intro copy)
+- Featured project (AMRA by default) card
+- Inline **Private Breakfast invitation** with the booking CTA (`{{booking_url}}`)
+- Calendar slot summary block (uses `{{preferred_event_time_label}}` if set)
+- Premium background: wrap the body in a champagne layered background
+  ```
+  <body style="background:linear-gradient(180deg,#FDFBF7 0%,#F7F2EA 100%); padding:40px 0">
+    <div style="max-width:640px;margin:0 auto;background:#FFFFFF;border:1px solid #B89555;border-radius:14px;padding:36px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
+      …
+    </div>
+  </body>
+  ```
+- Migration: update the stored HTML for `brokerage_partnership_intro` in `crm_email_templates` to include both briefing + breakfast sections in one premium layout. Delete/deprecate the standalone breakfast variant in the UI (still kept in DB for compatibility).
+
+---
+
+## 4. Breakfast slots from 11:00 to 17:00
+
+Migration to refresh `breakfast_slots`:
+
+- Deactivate existing 12:30 / 13:30 slots
+- Insert hourly active slots `11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00` (Asia/Dubai → stored as UTC) for the next 8 weeks on the same weekdays already used (Tue/Thu)
+
+Update `BreakfastBooking.tsx` slot label formatter — already uses `format(..., "HH:mm")`, no UI change needed.
+
+---
+
+## 5. Booking confirmation — premium card + contact details + calendar integrations
+
+In `src/pages/BreakfastBooking.tsx`, replace the current `confirmed` view with a richer success card:
+
+- Headline: "Thank you for booking your private breakfast with JBJ Global Real Estate"
+- Confirmation card showing:
+  - Date · Time · Attendees
+  - **Location**: Citi Developers Sales and Experience Center, Dubai
+  - **Your host on arrival**: Jane Bou Jaoude — `+971 54 716 7107` (tel: link)
+  - "When you reach the building, call/WhatsApp Jane on the number above and she'll meet you."
+- Action row (4 buttons):
+  - **Add to Google Calendar** — open `https://calendar.google.com/calendar/render?action=TEMPLATE&text=…&dates=…&details=…&location=…` with full details
+  - **Add to Apple / Outlook (.ics)** — uses existing `downloadIcs()` enriched with `ORGANIZER`, full address, phone in DESCRIPTION
+  - **Download invitation card (PNG)** — render the confirmation card to a canvas via `html2canvas` and download as `jbj-breakfast-invitation.png`
+  - **Copy invitation text** — copies a clean plaintext summary (date, time, location, contact, agenda) to clipboard
+- All copy + .ics now include `LOCATION:Citi Developers Sales and Experience Center, Dubai`, organizer Jane + phone in DESCRIPTION.
+
+Add `html2canvas` dependency for the PNG export.
+
+---
+
+## 6. Booking notifications — email Jane + in-app notification + Command Center section
+
+### Edge function `breakfast-booking-confirm`
+After the existing update at line 134:
+
+1. **Email Jane**: send via Gmail (reuse the same gateway pattern as `crm-send-brokerage-outreach`) to `janeaboujaoudenails@gmail.com` (and any saved owner CCs) with subject `Breakfast booked — {brokerage_name} · {date} {time}` and a premium HTML summary (brokerage, contact name/email/phone, attendee count, slot, briefing topics, partnership focus).
+2. **In-app notification**: insert into `notifications` table (or whatever table `useNotifications` reads — confirm by reading `src/hooks/useNotifications*`) with type `breakfast_booked`, linking to `/owner/crm/relationships?tab=breakfast`.
+3. Already inserts into `crm_relationship_email_log` ✅
+
+### New Command Center "Breakfast Bookings" section
+
+Add a new tab/section inside `CRMRelationships.tsx` (Brokerages tab) labelled **"Breakfast & Briefings"** — a dense table reading from `meeting_requests WHERE booking_kind='brokerage_breakfast' AND status IN ('pending','completed')` joined with `crm_brokerages`:
+
+| Date · Time | Brokerage | Contact | Phone | Email | Attendees | Briefing Topics | Status | Actions |
+
+Includes: realtime updates (subscribe to `meeting_requests` via Supabase realtime), filter by upcoming/past, export.
+
+Wire a small badge in the existing brokerage tab header showing count of upcoming bookings.
+
+---
+
+## 7. Files
+
+**Edits**
+- `src/pages/CRMRelationships.tsx` — restructure `DocumentPackPanel` (brokerage), add Breakfast Bookings section
+- `src/components/crm/EmailListEditor.tsx` — minor visibility tweaks (always-show label even with empty saved list)
+- `src/components/crm/TestSendDialog.tsx` — drop "Sample" defaults
+- `src/components/crm/TemplateEditorDialog.tsx` — extract reusable `<TemplatePanel mode="brokerage" />` for inline render
+- `src/pages/BreakfastBooking.tsx` — premium confirmation card, html2canvas PNG, Google Calendar URL, enriched .ics
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — drop `[TEST]`, derive contact name from recipient email, premium gradient wrapper, unified briefing+breakfast body
+- `supabase/functions/breakfast-booking-confirm/index.ts` — send Jane email + insert notification
+
+**New**
+- `src/components/crm/BreakfastBookingsSection.tsx`
+- `src/components/crm/BrokerageTemplatePanel.tsx` (extracted from dialog)
+
+**Migrations**
+- New migration: refresh breakfast slots to 11:00–17:00 hourly
+- New migration: update `crm_email_templates` row for `brokerage_partnership_intro` HTML/subject to unified premium layout
+- New migration: ensure `notifications` table accepts `breakfast_booked` type (if enum exists)
+
+**Dependency**
+- `html2canvas`
+
+---
+
+## Out of scope
+- No changes to UAE Brokerage Directory minimization (already handled previous turn)
+- No changes to Developer Registration pack
+- Sender/Reply-to remains Amra/JBJ as currently configured
