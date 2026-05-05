@@ -378,9 +378,10 @@ serve(async (req) => {
         { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId },
         { kind: "developer_enrich", emirate: null, triggered_by: ownerId },
       ];
-      const { data: created } = await admin.from("crm_directory_jobs").insert(jobs).select("id");
+      const { data: created, error: insErr } = await admin.from("crm_directory_jobs").insert(jobs).select("id");
+      if (insErr) console.error("cron insert err", insErr);
       for (const j of created ?? []) await scheduleNext(j.id);
-      return new Response(JSON.stringify({ scheduled: created?.length ?? 0 }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ scheduled: created?.length ?? 0, error: insErr?.message }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     // start / status — owner only
