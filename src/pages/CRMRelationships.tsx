@@ -488,11 +488,51 @@ const BrokeragesTab = () => {
     return sortBrokeragesForDirectory(matches);
   }, [data, debouncedQ, statusFilter, emirateFilter, sourceTab]);
 
-  const openNew = () => { setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {} }); setOpen(true); };
-  const openEdit = (r: any) => { setEditing(r); setOpen(true); };
+  const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
+
+  const openNew = () => {
+    setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {}, admin_contact: {} });
+    setAgents([]);
+    setOpen(true);
+  };
+  const openEdit = async (r: any) => {
+    setEditing({ ...r, admin_contact: r.admin_contact || {} });
+    setAgents([]);
+    setOpen(true);
+    if (r.id) {
+      const { data: rows } = await (supabase as any)
+        .from("crm_brokerage_agents")
+        .select("*")
+        .eq("brokerage_id", r.id)
+        .order("created_at", { ascending: true });
+      setAgents((rows || []) as BrokerageAgentDraft[]);
+    }
+  };
 
   const save = async () => {
-    await upsert.mutateAsync({ ...editing, entry_source: editing.entry_source || "owner" });
+    const saved = await upsert.mutateAsync({ ...editing, entry_source: editing.entry_source || "owner" });
+    const brokerageId = (saved as any)?.id || editing?.id;
+    if (brokerageId) {
+      await (supabase as any).from("crm_brokerage_agents").delete().eq("brokerage_id", brokerageId);
+      if (agents.length) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const rows = agents.map((a) => ({
+            brokerage_id: brokerageId,
+            owner_id: user.id,
+            name: a.name || "Unknown",
+            phone: a.phone || null,
+            whatsapp: a.whatsapp || null,
+            email: a.email || null,
+            role: a.role || null,
+            status: a.status || "active",
+            source: a.source || "manual",
+            photo_path: a.photo_path || null,
+          }));
+          await (supabase as any).from("crm_brokerage_agents").insert(rows);
+        }
+      }
+    }
     setOpen(false);
   };
 
