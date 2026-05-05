@@ -1,45 +1,66 @@
-## Goal
+## Agency Activity Log — Full Workflow Upgrade
 
-Three improvements to the **UAE Brokerage & Developer Directory · Background sync** card on the CRM brokerages tab:
+Add complete bulk + per-row management on top of the existing list, with proper handling of the three underlying data sources (reminders, brokerage actions, outreach history).
 
-1. Collapse the whole card by default — only the title row and **Refresh now** button stay visible. A chevron toggle reveals the description, three-status grid and recent jobs list.
-2. Make **Refresh now** truly idempotent: it must be the *only* action available, and it cannot trigger a second sync while one is already running. Currently the user can click it repeatedly and stack up cron-style runs.
-3. Speed up "all the brokerage agencies across the UAE". The runner currently processes one chunk of 12 rows sequentially per HTTP continuation, against 7 emirates, which is why a full sweep takes a long time. We will parallelise the seed runs across emirates and raise the per-chunk concurrency for enrichment.
+### What you'll be able to do
 
-## Files to change
+**Per row (hover toolbar on each card):**
+- Toggle done / not done (reminders)
+- Edit title, body, due date inline
+- Delete (with 6-second undo toast)
+- Restore from trash
 
-- `src/components/crm/DirectoryToolsPanel.tsx` — collapse-by-default UI + active-job lockout for the Refresh button.
-- `supabase/functions/directory-job-runner/index.ts` — fan out across all 7 emirates on a single `cron` call, and process enrich rows in parallel.
+**Bulk (sticky toolbar appears when 1+ selected):**
+- Tick checkbox on each row
+- Select all (visible / filtered)
+- Unselect all
+- Mark selected as done
+- Mark selected as not done (restore active)
+- Delete selected (with undo)
+- Restore selected (from trash view)
+- Permanently delete (trash view only)
+- Export selected only
 
-## Detailed changes
+**View tabs added** above the list: `Active` · `Done` · `All` · `Trash`.
+Counters (Total / Reminders / Notes / Calendar / Outreach) become clickable filters and reflect the active view.
 
-### 1. `DirectoryToolsPanel.tsx` — collapsed shell
+### Data-model rules (per source)
 
-- Add `const [expanded, setExpanded] = useState(false)`.
-- Header row keeps: `Globe2` icon, the short title `UAE Brokerage & Developer Directory`, an `Auto-runs daily` badge, a single live status badge (`Syncing…` while jobs are running, `Up to date` / `Up to date · new data` / `Needs attention` when idle), the **Refresh now** button, and a chevron toggle (`ChevronDown` / `ChevronUp`).
-- Remove the long "Each day the system…" paragraph, the three-status grid, and the recent jobs list from the always-visible area. Render them only when `expanded`.
-- Lower the polling rate from 5 s to 15 s when collapsed (4 s when expanded) — keeps the page light when nobody is looking.
-- **Refresh-now lockout**: compute `anyActive = jobs.some(j => j.status === "running" || j.status === "queued")`. The button is disabled while `refreshing || anyActive` and its label switches to `Running…` so the user can see why. Clicking while active shows a toast `"A background sync is already running."` and is a no-op.
-- Tighten card padding from `p-5 space-y-4` to `p-4 space-y-3` so the collapsed state is a slim single-line card.
+| Source table | Done toggle | Delete | Restore |
+|---|---|---|---|
+| `crm_relationship_reminders` | flips `is_done` | sets `metadata.deleted_at` (add jsonb col) | clears it |
+| `crm_brokerage_actions` | flips `metadata.is_done` | sets `metadata.deleted_at` | clears it |
+| `crm_outreach_touchpoints` | n/a (history is read-only) | hidden from delete; bulk skips them with a toast note | n/a |
 
-### 2. `directory-job-runner/index.ts` — faster sync
+Outreach entries stay visible but show a small "history — read only" hint instead of action buttons, so the audit trail can never be tampered with.
 
-- **Cron action (`action === "cron"`)** today only enqueues 1 seed job for the day's emirate plus 2 enrich jobs. Replace with: enqueue **one `brokerage_seed` job per emirate (all 7)** + 1 `brokerage_enrich` + 1 `developer_enrich`. This way a single Refresh now sweeps the whole UAE in parallel instead of one emirate per day.
-- After insert, call `scheduleNext(j.id)` for every created job (already done in a loop) — they now run concurrently because each chunk lives in its own `EdgeRuntime.waitUntil` task.
-- **`runEnrichChunk`** currently awaits `pplxFacts` then `update` for each row sequentially (12 sequential network round-trips). Replace the `for (const r of list)` loop with `Promise.all(list.map(async (r) => { … }))` so all 12 rows are enriched in parallel within one chunk. Keep the existing per-row patch logic and the final `crm_directory_jobs` update.
-- Raise `CHUNK_SIZE` from `12` to `24` for enrich jobs (kept at 12 for seed which is bounded by Perplexity list size). The hard cap stays at `30 * CHUNK_SIZE` rows per run.
-- Keep all existing safeguards: dedup by `company_name + emirate`, "fill-only never overwrite curated values", `last_verified_at` always stamped, `requireOwnerAuth` for non-cron actions, internal token for `continue`.
+### Schema change (one tiny migration)
 
-### Out of scope / preserved
+`crm_relationship_reminders` has no `metadata` column today — add one:
 
-- No DB schema or RLS changes.
-- No removal of features: the description, three-status grid, and recent jobs list still exist — they're just behind the chevron now (No-Removal policy).
-- pg_cron schedule, owner attribution, and audit rows untouched.
+```sql
+alter table public.crm_relationship_reminders
+  add column if not exists metadata jsonb not null default '{}'::jsonb;
+```
 
-## Verification
+No other schema changes; soft-delete + done flags live inside `metadata.deleted_at` and `metadata.is_done` JSON keys, so we don't reshape any existing tables.
 
-1. Open Owner → CRM → Brokerages. The directory card now shows a single line with the title, "Auto-runs daily" badge, **Refresh now**, and a chevron.
-2. Click the chevron → description, three status cards, and recent job list expand.
-3. Click **Refresh now** → 7 seed jobs (one per emirate) + 2 enrich jobs are created and start running in parallel. The button instantly switches to "Running…" and is disabled until all jobs reach `completed`/`failed`.
-4. Try clicking **Refresh now** again while it says "Running…" — nothing happens, toast says "A background sync is already running."
-5. Watch the "Discovering brokerages" job advance much faster than before (Promise.all + parallel emirates).
+### Files to change
+
+- `src/pages/owner/crm/AgencyActivityLog.tsx` — main rewrite:
+  - Add `selected: Set<string>` state, `view: 'active'|'done'|'all'|'trash'` state.
+  - Add row checkbox column, sticky bulk-action bar, per-row hover actions.
+  - Update query to include rows where `metadata.deleted_at` is set so trash view works; default Active view filters them out.
+  - Add mutations: `toggleDone(ids[])`, `softDelete(ids[])`, `restore(ids[])`, `purge(ids[])` — each fans out per source table and revalidates `["crm-unified-activity"]`.
+  - Optimistic cache update so ticking feels instant; toast w/ "Undo" button for destructive actions.
+- `src/components/crm/ActivityBulkBar.tsx` *(new)* — sticky toolbar component (count, Mark done, Restore, Delete, Clear selection).
+
+### UX notes
+
+- Bulk bar slides in at the bottom on champagne surface with gold hairline (matches design tokens).
+- Checkboxes use existing `@/components/ui/checkbox`.
+- "Select all" only selects rows currently visible after filters/view, so the user is never surprised.
+- Touchpoint rows render the checkbox disabled with a tooltip: "History entries can't be modified."
+- Keyboard: `x` toggles selection on focused row, `Esc` clears selection, `Shift+click` range-selects.
+
+Once you approve, I'll run the one-line migration, then ship the rewrite + new bulk bar in a single pass.
