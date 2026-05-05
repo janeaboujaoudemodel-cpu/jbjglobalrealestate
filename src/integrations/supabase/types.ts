@@ -5044,6 +5044,65 @@ export type Database = {
           },
         ]
       }
+      crm_brokerage_agents: {
+        Row: {
+          brokerage_id: string
+          created_at: string
+          email: string | null
+          id: string
+          metadata: Json
+          name: string | null
+          owner_id: string
+          phone: string | null
+          photo_path: string | null
+          role: string | null
+          source: string
+          status: string
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          metadata?: Json
+          name?: string | null
+          owner_id: string
+          phone?: string | null
+          photo_path?: string | null
+          role?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          metadata?: Json
+          name?: string | null
+          owner_id?: string
+          phone?: string | null
+          photo_path?: string | null
+          role?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_brokerage_deals: {
         Row: {
           agent_email: string | null
@@ -5193,6 +5252,7 @@ export type Database = {
       crm_brokerages: {
         Row: {
           active_broker_count: number
+          admin_contact: Json
           ai_generated_at: string | null
           ai_next_action: string | null
           ai_summary: string | null
@@ -5262,6 +5322,7 @@ export type Database = {
         }
         Insert: {
           active_broker_count?: number
+          admin_contact?: Json
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
@@ -5331,6 +5392,7 @@ export type Database = {
         }
         Update: {
           active_broker_count?: number
+          admin_contact?: Json
           ai_generated_at?: string | null
           ai_next_action?: string | null
           ai_summary?: string | null
