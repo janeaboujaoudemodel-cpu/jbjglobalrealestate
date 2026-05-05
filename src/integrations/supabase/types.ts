@@ -4999,6 +4999,8 @@ export type Database = {
       }
       crm_brokerage_deals: {
         Row: {
+          agent_email: string | null
+          agent_name: string | null
           brokerage_id: string
           client_name: string | null
           closed_on: string
@@ -5016,6 +5018,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          agent_email?: string | null
+          agent_name?: string | null
           brokerage_id: string
           client_name?: string | null
           closed_on?: string
@@ -5033,6 +5037,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          agent_email?: string | null
+          agent_name?: string | null
           brokerage_id?: string
           client_name?: string | null
           closed_on?: string
