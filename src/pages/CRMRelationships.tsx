@@ -1129,32 +1129,33 @@ const DocumentPackPanel = () => {
             <Label className="text-xs text-[#1A1A1A] mb-1 block">From name</Label>
             <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
           </div>
-          <div>
+          <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">Primary sender email (Reply-to)</Label>
-            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} placeholder="contact@jbj.ae" />
+            <PrimarySenderEditor
+              saved={s.saved_sender_emails || []}
+              active={s.reply_to_email || ""}
+              onChange={({ saved, active }) =>
+                update({ saved_sender_emails: saved, reply_to_email: active })
+              }
+            />
+            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+              Add as many sender emails as you like — they're saved here forever. Click any chip to use it as the active sender.
+            </p>
           </div>
-          <div>
-            <Label className="text-xs text-[#1A1A1A] mb-1 block">CC email</Label>
-            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} placeholder="infoo.jane@gmail.com" />
-          </div>
-          <div className="flex flex-col justify-center gap-2 pt-2">
-            <div className="flex items-center gap-3">
-              <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
-              <span className="text-sm text-[#1A1A1A]">Always CC this address</span>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="self-start border-[#1A1A1A]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
-              onClick={() => update({
-                reply_to_email: s.cc_email || "",
-                cc_email: s.reply_to_email || "",
-              })}
-            >
-              <ArrowLeftRight className="w-4 h-4 mr-2" />
-              Reverse Primary ↔ CC
-            </Button>
+          <div className="md:col-span-2">
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">CC emails</Label>
+            <CcListEditor
+              saved={s.saved_cc_emails || []}
+              active={s.active_cc_emails || []}
+              onChange={({ saved, active }) =>
+                update({
+                  saved_cc_emails: saved,
+                  active_cc_emails: active,
+                  cc_email: active[0] || s.cc_email || "",
+                  cc_jane_enabled: active.length > 0,
+                })
+              }
+            />
           </div>
         </div>
         {dirty && (
