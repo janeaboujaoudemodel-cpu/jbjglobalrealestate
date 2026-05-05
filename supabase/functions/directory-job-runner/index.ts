@@ -375,8 +375,8 @@ serve(async (req) => {
             progress: off,
           })),
         ),
-        { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId },
-        { kind: "developer_enrich", emirate: null, triggered_by: ownerId },
+        { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId, progress: 0 },
+        { kind: "developer_enrich", emirate: null, triggered_by: ownerId, progress: 0 },
       ];
       const { data: created, error: insErr } = await admin.from("crm_directory_jobs").insert(jobs).select("id");
       if (insErr) console.error("cron insert err", insErr);
