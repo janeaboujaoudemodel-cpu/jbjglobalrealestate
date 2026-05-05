@@ -7,8 +7,26 @@ import { toast } from "sonner";
 export const useBrokerages = () => useQuery({
   queryKey: ["crm-brokerages"],
   staleTime: 60_000,
+  placeholderData: (prev) => prev,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+});
+
+/* ---------- Brokerage Agents (lazy, cached per brokerage) ---------- */
+export const useBrokerageAgents = (brokerageId?: string | null) => useQuery({
+  queryKey: ["crm-brokerage-agents", brokerageId],
+  enabled: !!brokerageId,
+  staleTime: 60_000,
+  placeholderData: (prev) => prev,
+  queryFn: async () => {
+    const { data, error } = await (supabase as any)
+      .from("crm_brokerage_agents")
+      .select("*")
+      .eq("brokerage_id", brokerageId)
+      .order("created_at", { ascending: true });
     if (error) throw error;
     return data || [];
   },
@@ -26,7 +44,17 @@ export const useUpsertBrokerage = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["crm-brokerages"] }); toast.success("Saved"); },
+    onSuccess: (saved: any) => {
+      const prev = qc.getQueryData<any[]>(["crm-brokerages"]);
+      if (saved && Array.isArray(prev)) {
+        const i = prev.findIndex((r) => r.id === saved.id);
+        const next = i >= 0 ? prev.map((r) => r.id === saved.id ? { ...r, ...saved } : r) : [saved, ...prev];
+        qc.setQueryData(["crm-brokerages"], next);
+      } else {
+        qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      }
+      toast.success("Saved");
+    },
     onError: (e: any) => toast.error(e.message),
   });
 };
@@ -84,6 +112,7 @@ export const useDeleteClient = () => {
 export const useDeveloperRegistry = () => useQuery({
   queryKey: ["crm-dev-registry"],
   staleTime: 60_000,
+  placeholderData: (prev) => prev,
   queryFn: async () => {
     // Paginate past server-side row caps so the full registry (hundreds/thousands) is returned.
     const PAGE = 1000;
@@ -265,7 +294,17 @@ export const useUpsertDeveloperRegistry = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["crm-dev-registry"] }); toast.success("Saved"); },
+    onSuccess: (saved: any) => {
+      const prev = qc.getQueryData<any[]>(["crm-dev-registry"]);
+      if (saved && Array.isArray(prev)) {
+        const i = prev.findIndex((r) => r.id === saved.id);
+        const next = i >= 0 ? prev.map((r) => r.id === saved.id ? { ...r, ...saved } : r) : [saved, ...prev];
+        qc.setQueryData(["crm-dev-registry"], next);
+      } else {
+        qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+      }
+      toast.success("Saved");
+    },
     onError: (e: any) => toast.error(e.message),
   });
 };
@@ -427,13 +466,26 @@ export const useQuickStatusUpdate = () => {
       });
       return { ok: true };
     },
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
-      qc.invalidateQueries({ queryKey: ["crm-clients"] });
-      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
-      toast.success("Status updated");
+    // Optimistic: patch only the affected row in its own cache. No cross-entity invalidation.
+    onMutate: async (vars) => {
+      const keyMap = {
+        brokerage: ["crm-brokerages"],
+        client: ["crm-clients"],
+        developer_registry: ["crm-dev-registry"],
+      } as const;
+      const key = keyMap[vars.entityType];
+      await qc.cancelQueries({ queryKey: key });
+      const prev = qc.getQueryData<any[]>(key);
+      if (Array.isArray(prev)) {
+        qc.setQueryData<any[]>(key, prev.map((r) => r.id === vars.id ? { ...r, status: vars.status, last_interaction_at: new Date().toISOString() } : r));
+      }
+      return { prev, key };
     },
-    onError: (e: any) => toast.error(e.message || "Failed to update status"),
+    onError: (e: any, _vars, ctx) => {
+      if (ctx?.prev && ctx.key) qc.setQueryData(ctx.key, ctx.prev);
+      toast.error(e?.message || "Failed to update status");
+    },
+    onSuccess: () => { toast.success("Status updated"); },
   });
 };
 

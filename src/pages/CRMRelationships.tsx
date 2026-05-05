@@ -458,9 +458,12 @@ const BrokeragesTab = () => {
     return counts;
   }, [data]);
 
+  // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
+  const sorted = useMemo(() => sortBrokeragesForDirectory(data as any[]), [data]);
+
   const filtered = useMemo(() => {
     const ql = normalizeForSearch(debouncedQ);
-    const matches = (data as any[]).filter((r: any) => {
+    return sorted.filter((r: any) => {
       const haystack = normalizeForSearch(
         [
           r.company_name,
@@ -489,8 +492,13 @@ const BrokeragesTab = () => {
       else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
       return matchesQ && matchesS && matchesE && matchesSource;
     });
-    return sortBrokeragesForDirectory(matches);
-  }, [data, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  }, [sorted, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+
+  // Window the long card list — render first N rows, grow on demand. Keeps filter
+  // updates and status flips snappy even when the directory has 1000+ agencies.
+  const [visibleCount, setVisibleCount] = useState(60);
+  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
 
@@ -499,17 +507,18 @@ const BrokeragesTab = () => {
     setAgents([]);
     setOpen(true);
   };
-  const openEdit = async (r: any) => {
+  const openEdit = (r: any) => {
     setEditing({ ...r, admin_contact: r.admin_contact || {} });
     setAgents([]);
     setOpen(true);
     if (r.id) {
-      const { data: rows } = await (supabase as any)
+      // Load agents in the background — never block the dialog.
+      (supabase as any)
         .from("crm_brokerage_agents")
         .select("*")
         .eq("brokerage_id", r.id)
-        .order("created_at", { ascending: true });
-      setAgents((rows || []) as BrokerageAgentDraft[]);
+        .order("created_at", { ascending: true })
+        .then(({ data: rows }: any) => setAgents((rows || []) as BrokerageAgentDraft[]));
     }
   };
 
@@ -585,6 +594,7 @@ const BrokeragesTab = () => {
   return (
     <TooltipProvider>
     <div className="space-y-4">
+      <DocumentPackPanel />
       <DirectoryToolsPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
@@ -717,7 +727,7 @@ const BrokeragesTab = () => {
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
-          {filtered.map((r: any) => {
+          {visible.map((r: any) => {
             const isDirectory = r.entry_source === "directory";
             const isExistingMatch = r.entry_source === "owner" && r.is_existing_match;
             return (
@@ -752,9 +762,7 @@ const BrokeragesTab = () => {
                       >
                         {r.company_name}
                       </button>
-                      {isDirectory && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">UAE Real Estate Agency</span>
-                      )}
+                      {/* "UAE Real Estate Agency" pill removed — the whole tab is brokerages already. */}
                       {isExistingMatch && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Verified Match</span>
                       )}
@@ -844,6 +852,13 @@ const BrokeragesTab = () => {
               </CardContent>
             </Card>
           );})}
+          {visible.length < filtered.length && (
+            <div className="flex items-center justify-center py-4">
+              <Button variant="outline" onClick={() => setVisibleCount((n) => n + 60)}>
+                Show more · {filtered.length - visible.length} remaining
+              </Button>
+            </div>
+          )}
         </div>
       )}
 
@@ -1099,7 +1114,7 @@ const DocumentPackPanel = () => {
           <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
         <p className="text-xs text-[#1A1A1A]/70 mb-4">
-          Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
+          Set this once — used for every developer registration <span className="text-[#1A1A1A]/50">·</span> brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -1223,6 +1238,10 @@ const DeveloperRegistryTab = () => {
       (emailFilter === "registered" && r.status === "registered");
     return matchesQ && matchesS && matchesE;
   }), [queuePool, q, statusFilter, emailFilter]);
+
+  const [devVisibleCount, setDevVisibleCount] = useState(60);
+  useEffect(() => { setDevVisibleCount(60); }, [q, statusFilter, emailFilter]);
+  const devVisible = useMemo(() => filtered.slice(0, devVisibleCount), [filtered, devVisibleCount]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -1585,7 +1604,7 @@ const DeveloperRegistryTab = () => {
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
-          {filtered.map((r: any) => {
+          {devVisible.map((r: any) => {
             const sentDays = r.last_outreach_at
               ? Math.floor((Date.now() - new Date(r.last_outreach_at).getTime()) / 86400000)
               : null;
@@ -1769,6 +1788,13 @@ const DeveloperRegistryTab = () => {
               </CardContent>
             </Card>
           );})}
+          {devVisible.length < filtered.length && (
+            <div className="flex items-center justify-center py-4">
+              <Button variant="outline" onClick={() => setDevVisibleCount((n) => n + 60)}>
+                Show more · {filtered.length - devVisible.length} remaining
+              </Button>
+            </div>
+          )}
         </div>
       )}
         </div>

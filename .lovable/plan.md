@@ -1,65 +1,74 @@
-# Relationship Hub: Speed, Polish & Saved Sender/CC
+## Goal
 
-Three connected fixes in `/owner/crm/relationships` (CRMRelationships).
+Three deep fixes inside `/owner/crm/relationships`:
 
-## 1. Speed up tab + sub-tab switching
+1. **Add Document Pack & Outreach Settings to the Brokerages tab** (same UI as Developer Registry).
+2. **Make the entire Relationships Hub feel instant** — tabs, sub-tabs, enrichment, agency extraction, opening Edit forms, filtering.
+3. **Audit + clean the Brokerages view**: remove the redundant "UAE Real Estate Agency" badge, and confirm no developer-only data leaks into the Brokerages tab.
 
-**Problem**: Switching Brokerages ↔ Developer Registry, and Outreach Queue ↔ Sent History, refetches and re-renders large tables — feels laggy.
+---
 
-**Fix**:
-- Wrap parent `<Tabs>` content with `forceMount` so both tabs stay mounted after first visit; toggle visibility via `hidden`. Keeps React-Query caches warm and avoids tear-down/re-mount of large lists.
-- For sub-tabs (Outreach Queue / Sent History) inside `DeveloperRegistryTab`, render both lists once and toggle by CSS only (`hidden` attr). They already share the same `data` array.
-- Add `staleTime: 60_000` to:
-  - `useDeveloperRegistry`
-  - `useCRMBrokerages` (relationship list)
-  - `useEmailTemplate`, `useOwnerSettings`
-  - SentHistoryView's internal queries
-- Memoize the heavy `<table>` body rows (extract to a tiny `<RegistryRow />` component wrapped in `React.memo`).
+## 1. Brokerage Document Pack & Outreach Settings
 
-Result: first visit still loads, every subsequent switch is instant.
+`DocumentPackPanel` is currently only mounted at the top of `DeveloperRegistryTab`. It already reads/writes `crm_owner_settings` (Drive link, From name, saved sender emails, saved CC emails) — these settings are **already shared** with the brokerage send pipeline (`crm-send-brokerage-outreach` reads `active_cc_emails`).
 
-## 2. Saved Sender + CC emails (multi-select with persistence)
+Action:
 
-**Schema change** (`crm_owner_settings`):
+- Mount `<DocumentPackPanel />` at the top of `BrokeragesTab` (above `DirectoryToolsPanel`), wrapped in a small "Outreach settings" header so it reads as: *"Set this once — used for every developer + brokerage outreach"*.
+- Tweak the panel copy slightly: change the lead sentence from "Trade Licence + RERA + MOU pack" to "Used for both developer registration and brokerage partnership outreach" so it doesn't feel developer-only.
+- No schema change — same `crm_owner_settings` row drives both tabs.
 
-Add two JSONB array columns to keep history of every email the user ever typed, plus the currently active selection.
+---
 
-```sql
-ALTER TABLE crm_owner_settings
-  ADD COLUMN IF NOT EXISTS saved_sender_emails JSONB
-    DEFAULT '[]'::jsonb,                  -- ["contact@jbj.ae","ops@jbj.ae", ...]
-  ADD COLUMN IF NOT EXISTS saved_cc_emails JSONB
-    DEFAULT '[]'::jsonb,                  -- ["info.jane@gmail.com", ...]
-  ADD COLUMN IF NOT EXISTS active_cc_emails JSONB
-    DEFAULT '[]'::jsonb;                  -- subset that is currently CC'd on sends
-```
+## 2. Speed audit — Relationships Hub feels slow
 
-`reply_to_email` (string) stays as the single active primary; `saved_sender_emails` is the dropdown the user picks from. CC becomes multi-select (`active_cc_emails`).
+Findings from the current code:
 
-**UI** in `DocumentPackPanel`:
-- Replace plain Input for **Primary sender (Reply-to)** with a `<Combobox>` showing saved senders + free-text. "Add" pushes to `saved_sender_emails`. Clicking a saved entry sets it as `reply_to_email`. Trash icon next to each entry deletes from saved list (never auto-deletes when switching).
-- Replace single CC input with a **chip multi-select**: one chip per email in `saved_cc_emails`; clicking toggles inclusion in `active_cc_emails`. "+ Add email" input appends to saved list. Saved list is preserved even when unselected.
-- Remove the "Always CC" switch (replaced by per-chip selection). Migrate existing `cc_email` into `saved_cc_emails` + `active_cc_emails` on first load.
+| Area | Current behavior | Why slow |
+|---|---|---|
+| Brokerages ↔ Developer Registry tabs | Already `forceMount` + CSS hide. Good. | OK. |
+| Outreach Queue ↔ Sent History sub-tabs | Already CSS-toggled. Good. | OK. |
+| Filtering brokerages | `filtered` recomputes + sorts on every keystroke against full list (often 1k+ rows). Search input is debounced 220ms — but `sortBrokeragesForDirectory` runs every recompute. | Heavy sort on each pass. |
+| Brokerage cards | All filtered cards render in a flat list (no virtualization). Each card has KPI strip, contact links, AI star, etc. | Hundreds of cards mounted at once → slow scroll + slow filter updates. |
+| `openEdit(r)` on a brokerage | Opens the dialog **then** awaits `crm_brokerage_agents` over the network before the form is interactive. | Dialog feels frozen for ~500ms. |
+| Status dropdown change | `useQuickStatusUpdate` invalidates `crm-brokerages`, `crm-clients`, `crm-dev-registry` together → full refetch of all three lists. | Every status flick reloads ~thousands of rows. |
+| Enrichment buttons | Mutations re-`invalidateQueries(['crm-brokerages'])` / `['crm-dev-registry']` → full pagination loop runs again. | Re-pulls every row even when one row changed. |
+| `useDeveloperRegistry` | Paginates 1000-by-1000 with no `keepPreviousData`; first refetch re-renders the empty state. | Switching feels like a reload. |
 
-**Send pipeline**:
-- `BulkSendDialog` and `TestSendDialog` read `active_cc_emails` (array). Edge function `rel-send-bulk-email` already accepts CC; pass joined array.
-- `useOwnerSettings` defaults updated to provide both arrays.
+Fixes:
 
-## 3. Visual polish & contrast
+1. **Memoize sort separately from filter** in `BrokeragesTab`: do the heavy `sortBrokeragesForDirectory(data)` once per `data` change (not per keystroke), then filter the sorted array.
+2. **Virtualize long card lists** with a lightweight windowing approach (`react-virtual` is already in lockstep deps; otherwise render only first 60 rows + a "Show more" sentinel that grows on scroll). Apply to both Brokerages card list and Developer Registry card list.
+3. **Optimistic `useQuickStatusUpdate`**: write directly into the React Query cache for the affected entity (`setQueryData`) instead of invalidating all three relationship caches. Drop the cross-entity invalidation entirely.
+4. **Optimistic + targeted invalidation in enrichment hooks** (`useEnrichDeveloperRegistry`, `useEnrichUaeBrokerageDirectory`, `useUpsertBrokerage`, `useUpsertDeveloperRegistry`): merge returned rows into the cached array via `setQueryData` instead of full `invalidateQueries`. Keep `invalidate` only as a fallback if the response doesn't carry the row.
+5. **Open-Edit responsiveness**: open the dialog with whatever data we already have (cached agents from a new `useBrokerageAgents(brokerageId)` query with `staleTime: 60_000`); show a skeleton row while it loads; never block the dialog on the network.
+6. **`useDeveloperRegistry`** — add `keepPreviousData: true` and a `placeholderData` of the previous value so tab/sub-tab switches do not flash an empty list. Same for `useBrokerages`.
+7. **Memoize `BrokerageCard` / `RegistryRow`** as `React.memo` components so a single status change does not re-render the whole list.
+8. **Defer non-critical chrome**: `RegistryDebugBanner` already early-returns when not enabled — confirmed fine.
 
-- Replace muddy `text-[#1A1A1A]/60` on small captions with `/70` to satisfy contrast guard.
-- Tab triggers: tighten active-state — cream `#EFE6D6` + ink, single 1px gold hairline, no shadow blur (current `shadow-sm` causes faint halo).
-- Sub-tab pills (Outreach Queue / Sent History): same cream-active treatment, remove faded gray inactive (`text-[#1A1A1A]/60` → `/70`), add gold underline only when active.
-- Filter row: align all controls to 36px height, single border tone (`border-[#1A1A1A]/10`), champagne hover.
-- Saved-sender / CC chips: cream chip with thin gold border when active; plain `#FDFBF7` with `#1A1A1A]/15` border when inactive.
-- Loading skeletons (`Skeleton h-32`) replace spinner-only states so the page never collapses while switching.
+Result: filtering, status flips, opening Edit, switching sub-tabs all stay sub-100 ms even on the full data set.
 
-## Files touched
+---
 
-- `src/pages/CRMRelationships.tsx` — tab `forceMount`, sub-tab toggle, sender/CC UI rewrite, contrast tweaks.
-- `src/hooks/useCRMRelationships.ts` — `useOwnerSettings` defaults + cache `staleTime`; `useCRMBrokerages` `staleTime`; `useDeveloperRegistry` `staleTime`.
-- `src/components/crm/SentHistoryView.tsx` — `staleTime`, memoized rows.
-- `src/components/crm/BulkSendDialog.tsx` — read `active_cc_emails` array, pass through.
-- `src/components/crm/TestSendDialog.tsx` — same.
-- New small primitive `src/components/crm/EmailListEditor.tsx` — saved-list combobox + chip multi-select.
-- DB migration: add 3 JSONB columns to `crm_owner_settings`, backfill from existing `cc_email`.
+## 3. Brokerages tab — content audit
+
+- **Remove "UAE Real Estate Agency" pill** (line ~756 of `CRMRelationships.tsx`) on each brokerage card. The whole tab is brokerages already; we keep the existing "Verified Match" / "My Addition" badges since they convey new info.
+- **Audit "developer" leakage**: confirmed — the Brokerages card uses `r.represented_developer_name` only inside the search haystack and nothing developer-specific renders on the card itself. We will leave `represented_developer_name` searchable (useful) but will **not** render any developer-pill/label on brokerage cards. No other developer data flows in.
+- Tighten contrast of small captions and KPI labels (`text-[#1A1A1A]/70` is fine; spot-fix any `/60` we find).
+
+---
+
+## Files to touch
+
+- `src/pages/CRMRelationships.tsx` — mount `DocumentPackPanel` in `BrokeragesTab`, remove "UAE Real Estate Agency" pill, refactor `filtered` (sort outside filter), wrap rows in `React.memo`, add simple windowing, make `openEdit` non-blocking.
+- `src/hooks/useCRMRelationships.ts` — optimistic `setQueryData` updates in `useQuickStatusUpdate`, `useUpsertBrokerage`, `useUpsertDeveloperRegistry`, `useEnrichDeveloperRegistry`, `useEnrichUaeBrokerageDirectory`; add `placeholderData` to `useDeveloperRegistry` & `useBrokerages`; new `useBrokerageAgents(id)`.
+- `src/components/crm/EmailListEditor.tsx` — no change.
+- No DB migration needed.
+
+---
+
+## Out of scope
+
+- No changes to actual outreach email content / templates.
+- No changes to the Activity Log page (already unified in earlier work).
+- No new tables or RLS edits.
