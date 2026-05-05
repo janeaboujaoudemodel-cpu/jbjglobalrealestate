@@ -182,7 +182,7 @@ export default function AgencyActivityLog() {
             <ArrowLeft className="w-4 h-4 mr-1" /> Back to Relationships
           </Button>
           <h1 className="text-2xl font-bold">Agency Activity Log</h1>
-          <Button variant="outline" size="sm" className="ml-auto" onClick={() => qc.invalidateQueries({ queryKey: ["crm-brokerage-actions"] })}>
+          <Button variant="outline" size="sm" className="ml-auto" onClick={() => qc.invalidateQueries({ queryKey: ["crm-unified-activity"] })}>
             <RefreshCw className="w-3 h-3 mr-1" /> Refresh
           </Button>
         </div>
