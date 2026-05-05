@@ -312,14 +312,11 @@ serve(async (req: Request) => {
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
-    const devActiveCc = Array.isArray(settings?.active_cc_emails)
-      ? settings.active_cc_emails.filter(Boolean)
-      : [];
-    const activeCcArr = brkActiveCc.length > 0 ? brkActiveCc : devActiveCc;
-    const legacyCc = (settings?.cc_email || "").trim();
+    // Brokerage CC list is INDEPENDENT — never inherit developer/legacy CC,
+    // so JBJ addresses never accidentally CC on a CITI Developer email.
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
-      : (activeCcArr.length > 0 ? activeCcArr : (settings?.cc_jane_enabled && legacyCc ? [legacyCc] : []));
+      : brkActiveCc;
     const ccEmail = ccList[0] || "";
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
