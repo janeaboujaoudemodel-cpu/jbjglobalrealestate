@@ -1,7 +1,7 @@
 /**
  * AdvancedFilterPanel - Centered dialog with all filter sections, developer logos, UAE-only locations
  */
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, forwardRef } from "react";
 import { X, Search, Heart, Check, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
