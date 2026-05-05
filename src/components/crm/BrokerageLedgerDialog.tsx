@@ -233,14 +233,14 @@ export const BrokerageLedgerDialog = ({
                 <table className="w-full text-sm">
                   <thead className="bg-[#F7F2EA] text-[#1A1A1A]">
                     <tr>
-                      <th className="p-2 text-left">Date</th>
-                      <th className="p-2 text-left">Agent</th>
-                      <th className="p-2 text-left">Project / Unit</th>
-                      <th className="p-2 text-left">Client</th>
-                      <th className="p-2 text-left">Developer</th>
-                      <th className="p-2 text-right">Value</th>
-                      <th className="p-2 text-right">Commission</th>
-                      <th className="p-2"></th>
+                      <th className="p-2 text-left whitespace-nowrap">Date</th>
+                      <th className="p-2 text-left whitespace-nowrap">Agent</th>
+                      <th className="p-2 text-left whitespace-nowrap">Project / Unit</th>
+                      <th className="p-2 text-left whitespace-nowrap">Client</th>
+                      <th className="p-2 text-left whitespace-nowrap">Developer</th>
+                      <th className="p-2 text-right whitespace-nowrap">Value</th>
+                      <th className="p-2 text-right whitespace-nowrap">Commission</th>
+                      <th className="p-2 whitespace-nowrap"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -261,14 +261,14 @@ export const BrokerageLedgerDialog = ({
                             ? new Date(d.closed_on).toLocaleDateString()
                             : "—"}
                         </td>
-                        <td className="p-2">{d.agent_name || "—"}</td>
-                        <td className="p-2">{d.unit_label || "—"}</td>
-                        <td className="p-2">{d.client_name || "—"}</td>
-                        <td className="p-2">{d.developer_name_snapshot || "—"}</td>
-                        <td className="p-2 text-right">
+                        <td className="p-2 whitespace-nowrap">{d.agent_name || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.unit_label || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.client_name || "—"}</td>
+                        <td className="p-2 whitespace-nowrap">{d.developer_name_snapshot || "—"}</td>
+                        <td className="p-2 text-right tabular-nums whitespace-nowrap">
                           {fmtAED(Number(d.deal_value_aed))}
                         </td>
-                        <td className="p-2 text-right font-semibold">
+                        <td className="p-2 text-right font-semibold tabular-nums whitespace-nowrap">
                           {fmtAED(Number(d.commission_aed))}
                         </td>
                         <td className="p-2 text-right">
