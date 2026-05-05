@@ -44,6 +44,7 @@ interface Personalization {
   groupStatusLabelOverride?: string;
   preferredSlotId?: string;
   preferredEventTimeOverride?: string;
+  featuredProjectKey?: string;
 }
 
 interface Body {
@@ -56,6 +57,37 @@ interface Body {
   ccEmailOverride?: string;
   personalization?: Personalization;
 }
+
+// City Developer e-catalogue projects (mirrors src/config/citi-projects.ts).
+type CitiProjectKey = "amra" | "allura" | "aveline" | "agua" | "arya";
+interface CitiProject {
+  key: CitiProjectKey;
+  name: string;
+  url: string;
+  tagline: string;
+  offerHtml?: string;
+}
+const CITI_PROJECTS: Record<CitiProjectKey, CitiProject> = {
+  amra: {
+    key: "amra",
+    name: "AMRA",
+    url: "https://citideveloper.com/e-catalogue/amra",
+    tagline: "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.",
+    offerHtml: `<p style="margin:0 0 8px"><strong>AMRA</strong> is the project we are actively focused on. Brochures, floor plans, payment plans and amenity videos are all in the e-catalogue.</p><p style="margin:0">Marketing freedom: no QR required for AMRA marketing assets — videos are pre-branded and ready to use.</p>`,
+  },
+  allura: {
+    key: "allura",
+    name: "Allura Residences",
+    url: "https://citideveloper.com/e-catalogue/allura",
+    tagline: "Allura Residences — current resale opportunity for serious end-users and investors.",
+    offerHtml: `<p style="margin:0 0 8px"><strong>Two 1-bedroom units</strong> available in Allura Residences.</p><p style="margin:0"><strong>15% discount</strong> · <strong>100% upfront payment only</strong>. First-come, first-served.</p>`,
+  },
+  aveline: { key: "aveline", name: "Aveline", url: "https://citideveloper.com/e-catalogue/aveline", tagline: "Aveline — full project materials available in the e-catalogue." },
+  agua: { key: "agua", name: "Agua", url: "https://citideveloper.com/e-catalogue/agua", tagline: "Agua — full project materials available in the e-catalogue." },
+  arya: { key: "arya", name: "Arya", url: "https://citideveloper.com/e-catalogue/arya", tagline: "Arya — full project materials available in the e-catalogue." },
+};
+const resolveProject = (key?: string): CitiProject =>
+  CITI_PROJECTS[(key as CitiProjectKey)] || CITI_PROJECTS.amra;
 
 const GROUP_STATUS_LABELS: Record<GroupStatusKey, string> = {
   prospective: "Prospective Partner",
