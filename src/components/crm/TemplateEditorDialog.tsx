@@ -52,6 +52,7 @@ export const TemplateEditorDialog = ({
   const { data: template } = useEmailTemplate(variant);
   const upsert = useUpsertEmailTemplate();
   const lock = useLockEmailTemplate();
+  const unlock = useUnlockEmailTemplate();
   const sendDeveloperTest = useSendDeveloperRegistration();
   const sendBrokerageTest = useSendBrokerageOutreach();
   const sendTestPending = isBrokerage ? sendBrokerageTest.isPending : sendDeveloperTest.isPending;
