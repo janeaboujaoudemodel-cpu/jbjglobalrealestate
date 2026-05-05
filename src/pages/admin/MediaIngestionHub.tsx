@@ -273,3 +273,11 @@ function MediaIngestionHubInner({ embedded = false }: MediaIngestionHubProps = {
     </div>
   );
 }
+
+export default function MediaIngestionHub(props: MediaIngestionHubProps = {}) {
+  return (
+    <HubErrorBoundary>
+      <MediaIngestionHubInner {...props} />
+    </HubErrorBoundary>
+  );
+}
