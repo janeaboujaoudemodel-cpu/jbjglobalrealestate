@@ -28,7 +28,8 @@ const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
 const INTERNAL_TOKEN = SERVICE_KEY; // reused as continuation auth between chunks
 
 const EMIRATES = ["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain"] as const;
-const CHUNK_SIZE = 12; // rows per chunk — keeps each invocation under ~60s
+const CHUNK_SIZE = 12; // seed rows per chunk
+const ENRICH_CHUNK_SIZE = 24; // enrich rows per chunk (run in parallel within a chunk)
 
 const admin = createClient(SUPABASE_URL, SERVICE_KEY);
 
