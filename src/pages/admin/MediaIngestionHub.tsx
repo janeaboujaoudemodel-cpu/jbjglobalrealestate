@@ -59,7 +59,7 @@ const tabTriggerCls =
   "data-[state=active]:border-[#B89555] text-[#1A1A1A]/70 hover:text-[#1A1A1A] " +
   "rounded-md px-3 py-1.5 transition-colors";
 
-export default function MediaIngestionHub({ embedded = false }: MediaIngestionHubProps = {}) {
+function MediaIngestionHubInner({ embedded = false }: MediaIngestionHubProps = {}) {
   const {
     jobs,
     loading,
