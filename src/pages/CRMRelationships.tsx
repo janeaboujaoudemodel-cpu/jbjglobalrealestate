@@ -458,9 +458,12 @@ const BrokeragesTab = () => {
     return counts;
   }, [data]);
 
+  // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
+  const sorted = useMemo(() => sortBrokeragesForDirectory(data as any[]), [data]);
+
   const filtered = useMemo(() => {
     const ql = normalizeForSearch(debouncedQ);
-    const matches = (data as any[]).filter((r: any) => {
+    return sorted.filter((r: any) => {
       const haystack = normalizeForSearch(
         [
           r.company_name,
@@ -489,8 +492,13 @@ const BrokeragesTab = () => {
       else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
       return matchesQ && matchesS && matchesE && matchesSource;
     });
-    return sortBrokeragesForDirectory(matches);
-  }, [data, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  }, [sorted, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+
+  // Window the long card list — render first N rows, grow on demand. Keeps filter
+  // updates and status flips snappy even when the directory has 1000+ agencies.
+  const [visibleCount, setVisibleCount] = useState(60);
+  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
 
