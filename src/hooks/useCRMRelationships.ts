@@ -74,6 +74,9 @@ export const useDeleteBrokerage = () => {
 /* ---------- Clients ---------- */
 export const useClients = () => useQuery({
   queryKey: ["crm-clients"],
+  staleTime: 60_000,
+  refetchOnWindowFocus: false,
+  placeholderData: (prev) => prev,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_clients").select("*").order("updated_at", { ascending: false });
     if (error) throw error;
