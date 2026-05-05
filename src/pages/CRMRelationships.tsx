@@ -741,6 +741,14 @@ const BrokeragesTab = () => {
           onSaved={() => refetch()}
         />
       )}
+      {ledgerOpen && (
+        <BrokerageLedgerDialog
+          open={!!ledgerOpen}
+          onOpenChange={(v) => !v && setLedgerOpen(null)}
+          brokerageId={ledgerOpen.id}
+          brokerageName={ledgerOpen.name}
+        />
+      )}
     </div>
     </TooltipProvider>
   );
