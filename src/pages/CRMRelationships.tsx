@@ -1297,6 +1297,8 @@ const DeveloperRegistryTab = () => {
   const upsertReminder = useUpsertReminder();
   const sendRegistration = useSendDeveloperRegistration();
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  useEffect(() => { const t = setTimeout(() => setDebouncedQ(q), 220); return () => clearTimeout(t); }, [q]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
