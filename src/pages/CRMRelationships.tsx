@@ -674,39 +674,34 @@ const BrokeragesTab = () => {
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => handleExport("pdf")} title="Export the filtered agency list as a branded PDF">
-          <FileTextIcon className="w-4 h-4 mr-2" />Export PDF
-        </Button>
-        <Button variant="outline" onClick={() => handleExport("xlsx")} title="Export the filtered agency list as an Excel sheet">
-          <FileSpreadsheet className="w-4 h-4 mr-2" />Export Excel
-        </Button>
-        <Button variant="outline" onClick={() => handleExport("csv")} title="Export the filtered agency list as CSV">
-          <Download className="w-4 h-4 mr-2" />Export CSV
-        </Button>
+        <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
         <Button
           variant="outline"
           onClick={() => {
-            const eligible = filtered.filter((r: any) => r.entry_source !== "directory" && (r.primary_contact?.email || r.email));
-            const ids = new Set<string>(eligible.map((r: any) => r.id));
+            const ids = new Set<string>((filtered as any[]).map((r: any) => r.id));
             setBulkSel((cur) => (cur.size === ids.size ? new Set() : ids));
           }}
-          title="Select all eligible brokerages on this view"
+          title="Select every visible agency (directory + your additions). Agencies missing an email will prompt you to add one before sending."
         >
           <CheckCircle2 className="w-4 h-4 mr-2" />
-          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all"}
+          {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all visible"}
         </Button>
         <Button
           variant="gold"
           onClick={() => {
-            if (bulkSel.size === 0) { toast.error("Select at least one brokerage first"); return; }
+            if (bulkSel.size === 0) { toast.error("Tick at least one agency first"); return; }
             setBulkOpen(true);
           }}
           className="shadow-md"
+          title="Send your branded outreach email to every ticked agency. A test copy is sent to you first so you can review before the real send."
         >
-          <Send className="w-4 h-4 mr-2" />Send Outreach{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
+          <Send className="w-4 h-4 mr-2" />Email Selected Agencies{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
         </Button>
         <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
           <Mail className="w-4 h-4 mr-2" />Edit Templates
+        </Button>
+        <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
+          <Bell className="w-4 h-4 mr-2" />Activity Log
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
