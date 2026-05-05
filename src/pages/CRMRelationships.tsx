@@ -1885,8 +1885,8 @@ const CRMRelationships = () => {
                 <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
-            <TabsContent value="developers"><DeveloperRegistryTab /></TabsContent>
+            <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
+            <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
           </Tabs>
         </div>
       </div>
