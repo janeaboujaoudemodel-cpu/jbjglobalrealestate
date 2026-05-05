@@ -392,7 +392,16 @@ export const TemplateEditorDialog = ({
           <Button variant="outline" onClick={() => onOpenChange(false)} className="text-[#1A1A1A]">
             Close
           </Button>
-          {!isLocked && (
+          {isLocked ? (
+            <Button
+              variant="outline"
+              onClick={() => unlock.mutate(variant)}
+              disabled={unlock.isPending}
+              className="border-amber-400 text-amber-800 hover:bg-amber-50"
+            >
+              <Lock className="w-3 h-3 mr-1" /> {unlock.isPending ? "Unlocking…" : "Unlock template"}
+            </Button>
+          ) : (
             <>
               <Button
                 variant="outline"
