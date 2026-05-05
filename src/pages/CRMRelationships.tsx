@@ -1604,7 +1604,7 @@ const DeveloperRegistryTab = () => {
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
-          {filtered.map((r: any) => {
+          {devVisible.map((r: any) => {
             const sentDays = r.last_outreach_at
               ? Math.floor((Date.now() - new Date(r.last_outreach_at).getTime()) / 86400000)
               : null;
