@@ -44,7 +44,17 @@ export const useUpsertBrokerage = () => {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["crm-brokerages"] }); toast.success("Saved"); },
+    onSuccess: (saved: any) => {
+      const prev = qc.getQueryData<any[]>(["crm-brokerages"]);
+      if (saved && Array.isArray(prev)) {
+        const i = prev.findIndex((r) => r.id === saved.id);
+        const next = i >= 0 ? prev.map((r) => r.id === saved.id ? { ...r, ...saved } : r) : [saved, ...prev];
+        qc.setQueryData(["crm-brokerages"], next);
+      } else {
+        qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      }
+      toast.success("Saved");
+    },
     onError: (e: any) => toast.error(e.message),
   });
 };
