@@ -350,7 +350,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   <p className="text-[10px] text-[#1A1A1A] font-semibold uppercase tracking-wider">
                     {t('account.selectYourMode', 'Select your mode')}
                   </p>
-                  <ModeSwitcher variant="header" />
+                  <ModeSwitcher variant="header" showForUnselected />
                 </div>
                 {/* Edit Profile with more spacing below mode switcher */}
                 <Link 

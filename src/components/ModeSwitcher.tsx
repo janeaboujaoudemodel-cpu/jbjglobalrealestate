@@ -97,10 +97,10 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredMode, setHoveredMode] = useState<UserMode | null>(null);
 
-  // Hide the badge entirely until the user has explicitly chosen a category.
-  // (Anonymous visitors and freshly-signed-in users without a selection both
-  // fall into this branch — they only see role-neutral UI.)
-  if (!hasMadeInitialSelection && !hasSelectedRole && !showForUnselected) return null;
+  // Hide the badge only when no selection has been made AND the placement
+  // hasn't opted in to the unselected/"Select your mode" CTA.
+  const isUnselected = !hasMadeInitialSelection && !hasSelectedRole;
+  if (isUnselected && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
     await setMode(newMode);
@@ -112,19 +112,29 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   };
 
   const currentConfig = MODE_CONFIG[mode];
-  const CurrentIcon = currentConfig.icon;
+  const CurrentIcon = isUnselected ? User : currentConfig.icon;
+  const triggerLabel = isUnselected ? 'Select your mode' : currentConfig.label;
+  const triggerShortLabel = isUnselected ? '?' : currentConfig.shortLabel;
 
   // ─────────────────────────────────────────────────────────────────
   // Closed-trigger styling: a saturated mode-color chip with **ink black**
   // label/icon (never white). Hover does NOT change colour — only floats
-  // upward + adds a soft glow ring.
+  // upward + adds a soft glow ring. Unselected state uses a neutral
+  // champagne chip with a gold hairline so it reads as a CTA.
   // ─────────────────────────────────────────────────────────────────
-  const triggerStyle: CSSProperties = {
-    backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
-    borderColor: currentConfig.baseDark,
-    color: '#1A1A1A',
-    boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
-  };
+  const triggerStyle: CSSProperties = isUnselected
+    ? {
+        backgroundImage: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
+        borderColor: '#B89555',
+        color: '#1A1A1A',
+        boxShadow: '0 2px 8px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6), 0 0 0 1px rgba(0,0,0,0.06)',
+      }
+    : {
+        backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.base}D9 100%)`,
+        borderColor: currentConfig.baseDark,
+        color: '#1A1A1A',
+        boxShadow: `0 2px 8px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(0,0,0,0.12)`,
+      };
 
   if (variant === 'compact') {
     return (
@@ -145,7 +155,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#1A1A1A' }} />
         )}
         <span className="text-xs font-bold" style={{ color: '#1A1A1A' }}>
-          {currentConfig.shortLabel}
+          {triggerShortLabel}
         </span>
       </button>
     );
@@ -182,7 +192,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block"
               style={{ color: '#1A1A1A' }}
             >
-              {currentConfig.label}
+              {triggerLabel}
             </span>
             <ChevronDown
               className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
