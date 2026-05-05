@@ -250,6 +250,30 @@ export const BrokerageDealModal = ({
                 }
                 placeholder="0"
               />
+            <div>
+              <Label className="text-xs text-[#1A1A1A] mb-1 block">
+                Agent name *
+              </Label>
+              <Input
+                value={form.agent_name}
+                onChange={(e) =>
+                  setForm({ ...form, agent_name: e.target.value })
+                }
+                placeholder="Agent who closed the deal"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-[#1A1A1A] mb-1 block">
+                Agent email
+              </Label>
+              <Input
+                type="email"
+                value={form.agent_email}
+                onChange={(e) =>
+                  setForm({ ...form, agent_email: e.target.value })
+                }
+                placeholder="agent@brokerage.com"
+              />
             </div>
           </div>
           <div>
