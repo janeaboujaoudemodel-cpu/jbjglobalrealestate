@@ -113,6 +113,7 @@ export const useDeleteClient = () => {
 export const useDeveloperRegistry = () => useQuery({
   queryKey: ["crm-dev-registry"],
   staleTime: 60_000,
+  refetchOnWindowFocus: false,
   placeholderData: (prev) => prev,
   queryFn: async () => {
     // Paginate past server-side row caps so the full registry (hundreds/thousands) is returned.
