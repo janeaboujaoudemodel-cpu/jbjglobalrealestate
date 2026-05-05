@@ -762,9 +762,7 @@ const BrokeragesTab = () => {
                       >
                         {r.company_name}
                       </button>
-                      {isDirectory && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">UAE Real Estate Agency</span>
-                      )}
+                      {/* "UAE Real Estate Agency" pill removed — the whole tab is brokerages already. */}
                       {isExistingMatch && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]">Verified Match</span>
                       )}
