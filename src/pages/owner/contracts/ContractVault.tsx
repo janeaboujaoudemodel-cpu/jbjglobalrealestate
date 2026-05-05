@@ -259,6 +259,8 @@ export default function ContractVault() {
           )}
         </CardContent>
       </Card>
+
+      <AgreementUploadDrawer open={uploadOpen} onOpenChange={setUploadOpen} />
     </div>
   );
 }
