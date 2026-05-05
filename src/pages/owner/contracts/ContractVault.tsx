@@ -135,7 +135,7 @@ export default function ContractVault() {
                   </tr>
                 </thead>
                 <tbody>
-                  {agreements.map((a) => (
+                  {filteredAgreements.map((a) => (
                     <tr key={a.id} className="border-t border-gold/15 hover:bg-[#FDFBF7]">
                       <td className="px-4 py-3 text-[#1A1A1A] font-medium">
                         {a.developer_name_raw ?? "—"}
