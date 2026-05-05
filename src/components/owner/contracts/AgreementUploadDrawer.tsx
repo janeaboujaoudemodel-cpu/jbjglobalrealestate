@@ -126,9 +126,35 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
         .from("developer-agreements")
         .createSignedUrl(path, 60 * 60 * 24 * 365);
 
+      // Auto-create developer if needed
+      let finalDeveloperId = developerId;
+      const devName = (extracted.developer_name || "").trim();
+      if (!finalDeveloperId && devName) {
+        const { data: existing } = await supabase
+          .from("developers")
+          .select("id, name")
+          .ilike("name", devName)
+          .limit(1)
+          .maybeSingle();
+        if (existing?.id) {
+          finalDeveloperId = existing.id;
+        } else {
+          const slug = devName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80) || `dev-${Date.now()}`;
+          const { data: created, error: createErr } = await supabase
+            .from("developers")
+            .insert({ name: devName, slug })
+            .select("id")
+            .single();
+          if (!createErr && created?.id) {
+            finalDeveloperId = created.id;
+            toast.success(`New developer "${devName}" added to your directory`);
+          }
+        }
+      }
+
       const { error: insErr } = await supabase.from("external_agreements").insert({
         owner_user_id: user.id,
-        developer_id: developerId,
+        developer_id: finalDeveloperId,
         developer_name_raw: extracted.developer_name ?? null,
         contract_type: extracted.contract_type ?? null,
         file_url: signed?.signedUrl ?? "",
@@ -140,12 +166,15 @@ export function AgreementUploadDrawer({ open, onOpenChange }: Props) {
         commission_pct: extracted.commission_pct ?? null,
         ai_confidence: match?.confidence ?? null,
         ai_extracted: extracted as any,
-        status: developerId ? "filed" : "pending_review",
+        status: finalDeveloperId ? "filed" : "pending_review",
       });
       if (insErr) throw insErr;
 
       toast.success("Agreement filed");
       qc.invalidateQueries({ queryKey: ["external_agreements"] });
+      qc.invalidateQueries({ queryKey: ["developers"] });
+      qc.invalidateQueries({ queryKey: ["all-developers"] });
+      qc.invalidateQueries({ queryKey: ["projects-developers"] });
       reset();
       onOpenChange(false);
     } catch (e) {
