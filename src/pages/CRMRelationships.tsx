@@ -1109,11 +1109,11 @@ const ClientsTab = () => {
 /* ===========================================================
    Developer Registry
 =========================================================== */
-const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | "developer" } = {}) => {
+const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "brokerage" | "developer" } = {}) => {
   const { data: settings, isLoading } = useOwnerSettings();
   const upsert = useUpsertOwnerSettings();
   const [draft, setDraft] = useState<any>(null);
-  const s = draft || settings || {};
+  const s: any = draft || settings || {};
   const dirty = !!draft;
 
   const update = (patch: any) => setDraft({ ...(draft || settings || {}), ...patch });
@@ -1121,53 +1121,82 @@ const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | 
 
   if (isLoading) return <Skeleton className="h-32" />;
 
-  const lead = context === "brokerage"
-    ? "Set this once — used for every brokerage partnership outreach · developer registration. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use."
-    : "Set this once — used for every developer registration · brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.";
+  // Field aliases — brokerage and developer packs are independent.
+  const isBrk = context === "brokerage";
+  const F = {
+    drive: isBrk ? "brokerage_drive_doc_pack_url" : "drive_doc_pack_url",
+    fromName: isBrk ? "brokerage_from_name" : "from_name",
+    savedSenders: isBrk ? "brokerage_saved_sender_emails" : "saved_sender_emails",
+    replyTo: isBrk ? "brokerage_reply_to_email" : "reply_to_email",
+    savedCc: isBrk ? "brokerage_saved_cc_emails" : "saved_cc_emails",
+    activeCc: isBrk ? "brokerage_active_cc_emails" : "active_cc_emails",
+  };
+
+  const driveUrl: string = s[F.drive] || "";
+  const savedSenders: string[] = Array.isArray(s[F.savedSenders]) ? s[F.savedSenders] : [];
+  const replyTo: string = s[F.replyTo] || "";
+  const savedCc: string[] = Array.isArray(s[F.savedCc]) ? s[F.savedCc] : [];
+  const activeCc: string[] = Array.isArray(s[F.activeCc]) ? s[F.activeCc] : [];
+
+  const headerTitle = isBrk
+    ? "Brokerage Outreach Pack — Amra · JBJ Global"
+    : "Developer Registration Pack & Outreach Settings";
+  const lead = isBrk
+    ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra on behalf of JBJ Global Real Estate)."
+    : "Used ONLY for developer registrations. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs.";
 
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
-          <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
+          <h3 className="font-semibold text-[#1A1A1A]">{headerTitle}</h3>
         </div>
         <p className="text-xs text-[#1A1A1A]/70 mb-4">{lead}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
-            <Label className="text-xs text-[#1A1A1A] mb-1 block">Google Drive document pack URL *</Label>
-            <div className="flex gap-2">
-              <Input
-                placeholder="https://drive.google.com/drive/folders/..."
-                value={s.drive_doc_pack_url || ""}
-                onChange={(e) => update({ drive_doc_pack_url: e.target.value })}
-              />
-              {s.drive_doc_pack_url && /^https?:\/\//i.test(s.drive_doc_pack_url) ? (
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">
+              Google Drive document pack URL *
+            </Label>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <div className="min-w-0 flex-1">
+                <Input
+                  placeholder="https://drive.google.com/drive/folders/..."
+                  value={driveUrl}
+                  onChange={(e) => update({ [F.drive]: e.target.value })}
+                  className="w-full"
+                />
+              </div>
+              {driveUrl && /^https?:\/\//i.test(driveUrl) ? (
                 <a
-                  href={s.drive_doc_pack_url}
+                  href={driveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-3 rounded-md border border-[#1A1A1A]/30 text-[#1A1A1A] text-sm hover:bg-[#1A1A1A] hover:text-white whitespace-nowrap"
+                  className="inline-flex items-center justify-center px-4 h-10 rounded-md bg-[#EFE6D6] border border-[#B89555]/60 text-[#1A1A1A] text-sm font-semibold hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A] whitespace-nowrap shrink-0"
                 >
                   Open Pack ↗
                 </a>
               ) : null}
             </div>
-            {s.drive_doc_pack_url && !/^https?:\/\//i.test(s.drive_doc_pack_url) && (
+            {driveUrl && !/^https?:\/\//i.test(driveUrl) && (
               <p className="text-xs text-red-600 mt-1">Paste a full https://drive.google.com/… link.</p>
             )}
           </div>
           <div>
             <Label className="text-xs text-[#1A1A1A] mb-1 block">From name</Label>
-            <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
+            <Input
+              value={s[F.fromName] || ""}
+              onChange={(e) => update({ [F.fromName]: e.target.value })}
+              placeholder={isBrk ? "Amra · JBJ Global Real Estate" : "JBJ Global Real Estate"}
+            />
           </div>
           <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">Primary sender email (Reply-to)</Label>
             <PrimarySenderEditor
-              saved={s.saved_sender_emails || []}
-              active={s.reply_to_email || ""}
+              saved={savedSenders}
+              active={replyTo}
               onChange={({ saved, active }) =>
-                update({ saved_sender_emails: saved, reply_to_email: active })
+                update({ [F.savedSenders]: saved, [F.replyTo]: active })
               }
             />
             <p className="text-xs text-[#1A1A1A]/70 mt-1">
@@ -1177,16 +1206,16 @@ const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | 
           <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">CC emails</Label>
             <CcListEditor
-              saved={s.saved_cc_emails || []}
-              active={s.active_cc_emails || []}
-              onChange={({ saved, active }) =>
-                update({
-                  saved_cc_emails: saved,
-                  active_cc_emails: active,
-                  cc_email: active[0] || s.cc_email || "",
-                  cc_jane_enabled: active.length > 0,
-                })
-              }
+              saved={savedCc}
+              active={activeCc}
+              onChange={({ saved, active }) => {
+                const patch: any = { [F.savedCc]: saved, [F.activeCc]: active };
+                if (!isBrk) {
+                  patch.cc_email = active[0] || s.cc_email || "";
+                  patch.cc_jane_enabled = active.length > 0;
+                }
+                update(patch);
+              }}
             />
           </div>
         </div>
@@ -1199,7 +1228,8 @@ const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | 
       </CardContent>
     </Card>
   );
-};
+});
+DocumentPackPanel.displayName = "DocumentPackPanel";
 
 const DeveloperRegistryTab = () => {
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
