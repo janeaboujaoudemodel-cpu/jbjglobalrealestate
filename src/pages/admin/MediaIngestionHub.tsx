@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Component, type ErrorInfo, type ReactNode, useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Inbox, ListChecks, History as HistoryIcon, Search } from "lucide-react";
@@ -7,6 +7,35 @@ import { DropZone } from "@/components/listing-admin/media-ingestion/DropZone";
 import { IngestionCard } from "@/components/listing-admin/media-ingestion/IngestionCard";
 import { BulkToolbar } from "@/components/listing-admin/media-ingestion/BulkToolbar";
 import { MergeHistory } from "@/components/listing-admin/media-ingestion/MergeHistory";
+
+class HubErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("[MediaIngestionHub] crashed", error, info);
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="mx-auto w-full max-w-2xl p-6">
+          <div className="rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center">
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">Media Ingestion Hub hit an error</h2>
+            <p className="mt-2 text-sm text-[#1A1A1A]/70">
+              {this.state.error.message || "Something went wrong rendering this page."}
+            </p>
+            <button
+              onClick={() => this.setState({ error: null })}
+              className="mt-4 rounded border border-[#B89555]/40 bg-[#EFE6D6] px-4 py-2 text-sm text-[#1A1A1A] hover:bg-[#E7DCC8]"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const STATUS_OPTIONS = [
   "all",
