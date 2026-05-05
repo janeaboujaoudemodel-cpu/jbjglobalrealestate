@@ -848,7 +848,7 @@ const BrokeragesTab = () => {
             <div className="grid gap-3 py-2">
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Company name *"><Input value={editing.company_name || ""} onChange={(e) => setEditing({ ...editing, company_name: e.target.value })} /></Field>
-                <Field label="RERA license"><Input value={editing.rera_license || ""} onChange={(e) => setEditing({ ...editing, rera_license: e.target.value })} /></Field>
+                
                 <Field label="Office location"><Input value={editing.office_location || ""} onChange={(e) => setEditing({ ...editing, office_location: e.target.value })} /></Field>
                 <Field label="Google Maps URL"><Input placeholder="https://maps.google.com/…" value={editing.office_map_url || ""} onChange={(e) => setEditing({ ...editing, office_map_url: e.target.value })} /></Field>
                 <Field label="Website"><Input value={editing.website || ""} onChange={(e) => setEditing({ ...editing, website: e.target.value })} /></Field>

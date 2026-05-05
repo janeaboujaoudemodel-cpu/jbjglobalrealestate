@@ -750,7 +750,14 @@ export const useBrokerageRemind = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
       qc.invalidateQueries({ queryKey: ["crm-reminders"] });
-      toast.success("Reminder, task, calendar event & note created");
+      qc.invalidateQueries({ queryKey: ["crm-brokerage-actions"] });
+      toast.success("Reminder logged", {
+        description: "Reminder, task, calendar event & note created.",
+        action: {
+          label: "View activity",
+          onClick: () => { window.location.href = "/owner/crm/relationships/activity"; },
+        },
+      });
     },
     onError: (e: any) => toast.error(e.message || "Could not create reminder"),
   });
