@@ -357,6 +357,9 @@ serve(async (req: Request) => {
       console.warn("Booking token mint failed (continuing):", tokErr);
     }
 
+    // Resolve featured Citi project (defaults to AMRA).
+    const project = resolveProject(personalization.featuredProjectKey);
+
     const varsMap: Record<string, string> = {
       brokerage_name: brk.company_name || "your brokerage",
       brokerage_location: brokerageLocation,
@@ -373,23 +376,37 @@ serve(async (req: Request) => {
       from_name: fromName,
       represented_developer_name: representedDeveloperName,
       booking_url: bookingUrl,
+      project_name: project.name,
+      project_url: project.url,
+      project_tagline: project.tagline,
+      project_offer_html: project.offerHtml || "",
     };
 
-    // If the stored template doesn't reference {{represented_developer_name}},
-    // build a fallback subject/body so test sends still showcase the new sender.
-    const refsDeveloper = /\{\{\s*represented_developer_name\s*\}\}/.test(template.html + " " + template.subject);
+    // If the stored template doesn't reference {{project_name}}, build a fallback
+    // body so test sends and legacy templates still showcase the project picker.
+    const refsProject = /\{\{\s*project_name\s*\}\}/.test(template.html + " " + template.subject);
     let html = renderTemplate(template.html, varsMap);
     let subjectRendered = renderTemplate(template.subject, varsMap);
-    if (!refsDeveloper) {
-      subjectRendered = `Private Briefing — ${representedDeveloperName} × ${varsMap.brokerage_name}`;
+    if (!refsProject) {
+      subjectRendered = `${project.name} — Private Briefing for ${varsMap.brokerage_name}`;
+      const offerBlock = project.offerHtml
+        ? `<div style="margin:18px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px">${project.offerHtml}</div>`
+        : "";
       html = `<!DOCTYPE html><html><body style="background:#ffffff;color:#1A1A1A;font-family:Inter,Arial,sans-serif;padding:32px;max-width:640px;margin:0 auto;line-height:1.55">
         <p>Dear ${varsMap.contact_first_name},</p>
-        <p>This is <strong>${ownerFirstName}</strong> from the <strong>Sales &amp; Channel Partner Activation</strong> team at <strong>${representedDeveloperName}</strong>, in partnership with <strong>JBJ Global Real Estate</strong>.</p>
+        <p>This is <strong>${ownerFirstName}</strong> from <strong>JBJ Global Real Estate</strong>, channel partner for <strong>${representedDeveloperName}</strong>.</p>
         <p>${resolvedGroupLine}</p>
-        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> for select brokerages — agenda covers our latest launches, commissions, training and channel activation tools.</p>
-        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf so you can start receiving inventory and incentives immediately.</p>
-        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a slot</a></p>` : ""}
-        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>Sales &amp; Channel Partner Activation · ${representedDeveloperName}<br/>in partnership with JBJ Global Real Estate<br/>${replyTo}</p>
+        <div style="margin:20px 0;padding:18px 20px;background:#FDFBF7;border:1px solid #1A1A1A14;border-radius:10px">
+          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#1A1A1A99;margin-bottom:6px">Featured Project</div>
+          <div style="font-size:18px;font-weight:600;color:#1A1A1A;margin-bottom:6px">${project.name}</div>
+          <div style="font-size:14px;color:#1A1A1A;margin-bottom:12px">${project.tagline}</div>
+          <a href="${project.url}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">Open ${project.name} e-catalogue</a>
+        </div>
+        ${offerBlock}
+        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> reserved for select brokerages — agenda covers ${project.name}, commissions, training and channel activation.</p>
+        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf.</p>
+        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#B89555;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a breakfast slot</a></p>` : ""}
+        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>JBJ Global Real Estate<br/>${replyTo}</p>
       </body></html>`;
     }
     const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
