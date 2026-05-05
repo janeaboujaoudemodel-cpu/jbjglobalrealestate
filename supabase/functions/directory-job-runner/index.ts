@@ -152,7 +152,16 @@ async function pplxFacts(name: string, emirate: string | null, isDev: boolean) {
 async function runBrokerageSeedChunk(job: any) {
   const emirate = job.emirate || EMIRATES[0];
   const offset = job.progress || 0;
-  const list = await pplxList(emirate, offset, CHUNK_SIZE);
+  // Pull the most recent firms we already have for this emirate so Perplexity
+  // doesn't keep returning the same names.
+  const { data: existingNames } = await admin
+    .from("crm_brokerages")
+    .select("company_name")
+    .eq("emirate", emirate)
+    .order("updated_at", { ascending: false })
+    .limit(80);
+  const exclude = (existingNames ?? []).map((r: any) => r.company_name).filter(Boolean);
+  const list = await pplxList(emirate, offset, CHUNK_SIZE, exclude);
   let inserted = 0, updated = 0;
 
   for (const r of list) {
