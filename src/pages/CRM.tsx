@@ -674,8 +674,7 @@ const CRM = () => {
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-[#1A1A1A] hover:border-gold/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-[#1A1A1A]" />
-              <span className="text-sm">Search leads…</span>
-              <kbd className="ml-2 px-2 py-0.5 bg-[#1A1A1A]/8 text-[#1A1A1A] text-xs rounded font-mono border border-[#1A1A1A]/15">⌘K</kbd>
+              <span className="text-sm font-medium">Search leads…</span>
             </button>
             
             {/* Quick Actions */}
