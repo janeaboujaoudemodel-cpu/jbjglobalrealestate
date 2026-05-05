@@ -127,7 +127,6 @@ export const TemplateEditorDialog = ({
           const map: Record<string, string> = {
             project_offer_html: offerHtml,
             booking_url: "#preview",
-            preferred_event_time_label: "Tue 13 May, 9:00 AM (GST)",
           };
           return map[k] && map[k].trim().length > 0 ? inner : "";
         },
