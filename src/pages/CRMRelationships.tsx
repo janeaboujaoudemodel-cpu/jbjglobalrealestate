@@ -1877,6 +1877,10 @@ const CRMRelationships = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("brokerages");
   const [testSendOpen, setTestSendOpen] = useState(false);
+  const [mounted, setMounted] = useState<Set<string>>(new Set(["brokerages"]));
+  useEffect(() => {
+    setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
+  }, [tab]);
 
   return (
     <>
@@ -1895,25 +1899,25 @@ const CRMRelationships = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">Relationships Hub</h1>
               <p className="text-sm text-[#1A1A1A]/70 mt-1">Brokerages &middot; Developer Registrations &mdash; client &amp; lead records live in <span className="font-semibold text-[#1A1A1A]">Leads &amp; Clients</span>.</p>
             </div>
-            <Button
-              variant="gold"
-              onClick={() => navigate("/admin/media-ingestion")}
-              className="shadow-md shrink-0"
-              title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
-            >
-              <Inbox className="w-4 h-4 mr-2" />Media Ingestion
-            </Button>
           </div>
 
-          {/* Clients tab intentionally removed — all client + lead records now live in the unified
-              "Leads & Clients" workspace at /crm/leads (powered by crm_leads). Do NOT re-add a Clients tab here. */}
           <div className="mb-6 rounded-xl border border-[#1A1A1A]/10 bg-[#FDFBF7] p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div className="text-sm text-[#1A1A1A]/70">
               <span className="font-semibold text-[#1A1A1A]">Looking for Clients?</span> Clients and Leads are now unified in one workspace.
             </div>
-            <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
-              <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
-            </Button>
+            <div className="flex gap-2 flex-wrap">
+              <Button variant="outline" onClick={() => navigate("/crm/leads")} className="rounded-full font-semibold">
+                <Users className="w-4 h-4 mr-2" />Open Leads &amp; Clients
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate("/admin/media-ingestion")}
+                className="rounded-full font-semibold"
+                title="Bulk-upload videos, PDFs and links — AI matches each to the right developer & project"
+              >
+                <Inbox className="w-4 h-4 mr-2" />Media Ingestion
+              </Button>
+            </div>
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
@@ -1924,8 +1928,12 @@ const CRMRelationships = () => {
                 <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
-            <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
+            {mounted.has("brokerages") && (
+              <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
+            )}
+            {mounted.has("developers") && (
+              <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
+            )}
           </Tabs>
         </div>
       </div>
