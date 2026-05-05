@@ -354,7 +354,14 @@ serve(async (req) => {
       const ownerId = ownerRow?.user_id ?? null;
 
       const jobs = [
-        ...EMIRATES.map((em) => ({ kind: "brokerage_seed", emirate: em as string, triggered_by: ownerId })),
+        ...EMIRATES.flatMap((em) =>
+          SEED_OFFSETS.map((off) => ({
+            kind: "brokerage_seed",
+            emirate: em as string,
+            triggered_by: ownerId,
+            progress: off,
+          })),
+        ),
         { kind: "brokerage_enrich", emirate: null, triggered_by: ownerId },
         { kind: "developer_enrich", emirate: null, triggered_by: ownerId },
       ];
