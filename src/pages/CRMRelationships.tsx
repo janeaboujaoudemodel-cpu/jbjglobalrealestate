@@ -1094,7 +1094,7 @@ const ClientsTab = () => {
 /* ===========================================================
    Developer Registry
 =========================================================== */
-const DocumentPackPanel = () => {
+const DocumentPackPanel = ({ context = "developer" }: { context?: "brokerage" | "developer" } = {}) => {
   const { data: settings, isLoading } = useOwnerSettings();
   const upsert = useUpsertOwnerSettings();
   const [draft, setDraft] = useState<any>(null);
@@ -1106,6 +1106,10 @@ const DocumentPackPanel = () => {
 
   if (isLoading) return <Skeleton className="h-32" />;
 
+  const lead = context === "brokerage"
+    ? "Set this once — used for every brokerage partnership outreach · developer registration. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use."
+    : "Set this once — used for every developer registration · brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.";
+
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
@@ -1113,9 +1117,7 @@ const DocumentPackPanel = () => {
           <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
           <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
-        <p className="text-xs text-[#1A1A1A]/70 mb-4">
-          Set this once — used for every developer registration <span className="text-[#1A1A1A]/50">·</span> brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.
-        </p>
+        <p className="text-xs text-[#1A1A1A]/70 mb-4">{lead}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">Google Drive document pack URL *</Label>
