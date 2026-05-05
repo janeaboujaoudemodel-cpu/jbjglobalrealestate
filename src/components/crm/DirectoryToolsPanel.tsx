@@ -127,24 +127,27 @@ export const DirectoryToolsPanel = () => {
         {/* Per-kind ticked summary — always shows the three daily tasks with a clear status */}
         <div className="grid sm:grid-cols-3 gap-2">
           {latestByKind.map(({ kind, job }) => {
-            const changes = ((job?.inserted_count || 0) + (job?.updated_count || 0)) > 0;
-            const isDoneWithChanges = job?.status === "completed" && changes;
-            const isDoneNoChanges = job?.status === "completed" && !changes;
+            // "Zero new" logic fix: only green if inserted_count > 0.
+            // If inserted_count === 0, show champagne even if status is completed.
+            const hasNewRecords = (job?.inserted_count || 0) > 0;
+            const isDoneWithNew = job?.status === "completed" && hasNewRecords;
+            const isDoneNoNew = job?.status === "completed" && !hasNewRecords;
             const isFailed = job?.status === "failed";
             const isRunning = job && (job.status === "running" || job.status === "queued");
+
             return (
               <div
                 key={kind}
                 className={`rounded-lg border px-3 py-2 text-xs flex items-start gap-2 ${
-                  isDoneWithChanges ? "border-emerald-300 bg-emerald-50" :
-                  isDoneNoChanges ? "border-[#B89555]/40 bg-[#EFE6D6]" :
+                  isDoneWithNew ? "border-emerald-300 bg-emerald-50" :
+                  isDoneNoNew ? "border-[#B89555]/40 bg-[#EFE6D6]" :
                   isFailed ? "border-red-300 bg-red-50" :
                   "border-[#B89555]/30 bg-white"
                 }`}
               >
                 <div className="mt-0.5">
-                  {isDoneWithChanges ? <CheckCircle2 className="w-4 h-4 text-emerald-700" /> :
-                    isDoneNoChanges ? <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]" /> :
+                  {isDoneWithNew ? <CheckCircle2 className="w-4 h-4 text-emerald-700" /> :
+                    isDoneNoNew ? <CheckCircle2 className="w-4 h-4 text-[#1A1A1A]/60" /> :
                     isFailed ? <AlertCircle className="w-4 h-4 text-red-700" /> :
                     isRunning ? <Loader2 className="w-4 h-4 animate-spin text-[#B89555]" /> :
                     <Loader2 className="w-4 h-4 text-[#1A1A1A]/40" />}
@@ -152,13 +155,15 @@ export const DirectoryToolsPanel = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-[#1A1A1A]">{KIND_LABEL[kind]}</div>
                   <div className="text-[#1A1A1A]/70 truncate">
-                    {isDoneWithChanges ? "Completed — new data added" :
-                      isDoneNoChanges ? "Up to date — no new records this run" :
+                    {isDoneWithNew ? "Completed — new records added" :
+                      isDoneNoNew ? "Completed — up to date" :
                       isFailed ? (job?.error || "Failed") :
                       isRunning ? "In progress…" : "Awaiting next run"}
                   </div>
                   {job && (job.inserted_count || job.updated_count) ? (
-                    <div className="text-[#1A1A1A]/60 mt-0.5">+{job.inserted_count} new · {job.updated_count} updated</div>
+                    <div className="text-[#1A1A1A]/60 mt-0.5">
+                      {job.inserted_count > 0 ? `+${job.inserted_count} new` : "0 new"} · {job.updated_count} updated
+                    </div>
                   ) : null}
                 </div>
               </div>

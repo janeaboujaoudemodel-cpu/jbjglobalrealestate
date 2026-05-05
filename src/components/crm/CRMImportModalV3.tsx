@@ -63,7 +63,7 @@ interface ParsedLead {
 
 interface CRMBroker {
   id: string;
-  display_name: string;
+  full_name: string;
 }
 
 // Source group options - Website is NOT allowed for imports
@@ -119,8 +119,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     try {
       const { data, error } = await supabase
         .from("crm_brokers")
-        .select("id, display_name")
-        .order("display_name");
+        .select("id, full_name")
+        .order("full_name");
       
       if (error) throw error;
       setBrokers(data || []);
@@ -141,8 +141,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       const { data, error } = await supabase
         .from("crm_brokers")
         .insert({
-          display_name: newBrokerName.trim(),
-          created_by_user_id: userId
+          full_name: newBrokerName.trim(),
+          owner_id: userId
         })
         .select()
         .single();
@@ -153,7 +153,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
       setSelectedBrokerId(data.id);
       setNewBrokerName("");
       setIsAddingBroker(false);
-      toast.success(`Broker "${data.display_name}" created`);
+      toast.success(`Broker "${data.full_name}" created`);
     } catch (err) {
       console.error("Failed to create broker:", err);
       toast.error("Failed to create broker");
@@ -829,7 +829,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
         created_by_user_id: userId,
         // Broker attribution (optional)
         broker_id: registerUnderBroker && selectedBrokerId ? selectedBrokerId : null,
-        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.display_name : null,
+        broker_name_snapshot: registerUnderBroker && selectedBroker ? selectedBroker.full_name : null,
       })
       .select()
       .single();
@@ -1200,7 +1200,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                             value={broker.id}
                             style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                           >
-                            {broker.display_name}
+                            {broker.full_name}
                           </option>
                         ))}
                       </select>
@@ -1286,7 +1286,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-sm text-muted-foreground">
                   {parsedData.length} contacts from {file?.name}
                   {registerUnderBroker && selectedBrokerId && (
-                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.display_name}</span>
+                    <span className="text-gold"> · Broker: {brokers.find(b => b.id === selectedBrokerId)?.full_name}</span>
                   )}
                 </p>
               </div>

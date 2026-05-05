@@ -2492,6 +2492,38 @@ export type Database = {
           },
         ]
       }
+      broker_company_history: {
+        Row: {
+          broker_id: string
+          company_name: string
+          ended_at: string | null
+          id: string
+          started_at: string | null
+        }
+        Insert: {
+          broker_id: string
+          company_name: string
+          ended_at?: string | null
+          id?: string
+          started_at?: string | null
+        }
+        Update: {
+          broker_id?: string
+          company_name?: string
+          ended_at?: string | null
+          id?: string
+          started_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_company_history_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_contracts: {
         Row: {
           contract_content: string | null
@@ -5465,21 +5497,42 @@ export type Database = {
       crm_brokers: {
         Row: {
           created_at: string
-          created_by_user_id: string | null
-          display_name: string
+          current_company: string | null
+          email_lower: string | null
+          full_name: string | null
           id: string
+          last_active_at: string | null
+          notes: string | null
+          owner_id: string | null
+          phone_e164: string | null
+          rera_license: string | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string
-          created_by_user_id?: string | null
-          display_name: string
+          current_company?: string | null
+          email_lower?: string | null
+          full_name?: string | null
           id?: string
+          last_active_at?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          phone_e164?: string | null
+          rera_license?: string | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string
-          created_by_user_id?: string | null
-          display_name?: string
+          current_company?: string | null
+          email_lower?: string | null
+          full_name?: string | null
           id?: string
+          last_active_at?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          phone_e164?: string | null
+          rera_license?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -5992,6 +6045,7 @@ export type Database = {
       crm_directory_jobs: {
         Row: {
           created_at: string
+          current_batch_offset: number | null
           emirate: string | null
           error: string | null
           finished_at: string | null
@@ -6004,11 +6058,13 @@ export type Database = {
           started_at: string
           status: string
           total: number
+          total_expected: number | null
           triggered_by: string | null
           updated_count: number
         }
         Insert: {
           created_at?: string
+          current_batch_offset?: number | null
           emirate?: string | null
           error?: string | null
           finished_at?: string | null
@@ -6021,11 +6077,13 @@ export type Database = {
           started_at?: string
           status?: string
           total?: number
+          total_expected?: number | null
           triggered_by?: string | null
           updated_count?: number
         }
         Update: {
           created_at?: string
+          current_batch_offset?: number | null
           emirate?: string | null
           error?: string | null
           finished_at?: string | null
@@ -6038,6 +6096,7 @@ export type Database = {
           started_at?: string
           status?: string
           total?: number
+          total_expected?: number | null
           triggered_by?: string | null
           updated_count?: number
         }
@@ -7569,7 +7628,9 @@ export type Database = {
       }
       deals: {
         Row: {
+          broker_company_at_close: string | null
           broker_user_id: string
+          client_dob: string | null
           client_email: string | null
           client_name: string
           client_phone: string | null
@@ -7578,10 +7639,12 @@ export type Database = {
           deal_value_aed: number
           developer_id: string | null
           developer_name: string | null
+          extracted_json: Json | null
           id: string
           notes: string | null
           points_awarded: number | null
           rejected_reason: string | null
+          spa_url: string | null
           submitted_at: string
           unit_number: string
           updated_at: string
@@ -7589,7 +7652,9 @@ export type Database = {
           verified_by: string | null
         }
         Insert: {
+          broker_company_at_close?: string | null
           broker_user_id: string
+          client_dob?: string | null
           client_email?: string | null
           client_name: string
           client_phone?: string | null
@@ -7598,10 +7663,12 @@ export type Database = {
           deal_value_aed: number
           developer_id?: string | null
           developer_name?: string | null
+          extracted_json?: Json | null
           id?: string
           notes?: string | null
           points_awarded?: number | null
           rejected_reason?: string | null
+          spa_url?: string | null
           submitted_at?: string
           unit_number: string
           updated_at?: string
@@ -7609,7 +7676,9 @@ export type Database = {
           verified_by?: string | null
         }
         Update: {
+          broker_company_at_close?: string | null
           broker_user_id?: string
+          client_dob?: string | null
           client_email?: string | null
           client_name?: string
           client_phone?: string | null
@@ -7618,10 +7687,12 @@ export type Database = {
           deal_value_aed?: number
           developer_id?: string | null
           developer_name?: string | null
+          extracted_json?: Json | null
           id?: string
           notes?: string | null
           points_awarded?: number | null
           rejected_reason?: string | null
+          spa_url?: string | null
           submitted_at?: string
           unit_number?: string
           updated_at?: string
@@ -18675,6 +18746,42 @@ export type Database = {
           settings?: Json | null
           slug?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      owner_calendar_events: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_at: string
+          id: string
+          location: string | null
+          metadata: Json | null
+          owner_id: string
+          start_at: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_at: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          owner_id: string
+          start_at: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          owner_id?: string
+          start_at?: string
+          title?: string
         }
         Relationships: []
       }

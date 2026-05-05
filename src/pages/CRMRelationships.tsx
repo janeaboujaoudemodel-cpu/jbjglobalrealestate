@@ -37,6 +37,7 @@ import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
 import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
+import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
@@ -439,6 +440,7 @@ const BrokeragesTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
+  const [testSendOpen, setTestSendOpen] = useState(false);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
@@ -700,6 +702,9 @@ const BrokeragesTab = () => {
         </Button>
         <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
           <Mail className="w-4 h-4 mr-2" />Edit Templates
+        </Button>
+        <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
+          <FlaskConical className="w-4 h-4 mr-2" />Send Test
         </Button>
         <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
           <Bell className="w-4 h-4 mr-2" />Activity Log
@@ -1824,6 +1829,7 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 const CRMRelationships = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("brokerages");
+  const [testSendOpen, setTestSendOpen] = useState(false);
 
   return (
     <>
@@ -1876,6 +1882,12 @@ const CRMRelationships = () => {
           </Tabs>
         </div>
       </div>
+      <TestSendDialog
+        open={testSendOpen}
+        onOpenChange={setTestSendOpen}
+        mode="brokerage"
+        variant="brokerage_partnership_intro"
+      />
     </>
   );
 };
