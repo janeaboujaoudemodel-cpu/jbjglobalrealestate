@@ -155,7 +155,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#1A1A1A' }} />
         )}
         <span className="text-xs font-bold" style={{ color: '#1A1A1A' }}>
-          {currentConfig.shortLabel}
+          {triggerShortLabel}
         </span>
       </button>
     );
