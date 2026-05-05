@@ -565,7 +565,7 @@ const BrokeragesTab = () => {
         <div className="flex flex-wrap gap-1.5 p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
           {[
             { v: "all", label: `All · ${data.length}` },
-            { v: "directory", label: `Licensed · ${directoryCount}` },
+            { v: "directory", label: `UAE Agencies · ${directoryCount}` },
             { v: "owner", label: `My Additions · ${ownerCount}` },
             { v: "existing", label: `Existing Matches · ${existingCount}` },
           ].map((t) => (
