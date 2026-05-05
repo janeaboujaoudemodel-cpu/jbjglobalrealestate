@@ -507,17 +507,18 @@ const BrokeragesTab = () => {
     setAgents([]);
     setOpen(true);
   };
-  const openEdit = async (r: any) => {
+  const openEdit = (r: any) => {
     setEditing({ ...r, admin_contact: r.admin_contact || {} });
     setAgents([]);
     setOpen(true);
     if (r.id) {
-      const { data: rows } = await (supabase as any)
+      // Load agents in the background — never block the dialog.
+      (supabase as any)
         .from("crm_brokerage_agents")
         .select("*")
         .eq("brokerage_id", r.id)
-        .order("created_at", { ascending: true });
-      setAgents((rows || []) as BrokerageAgentDraft[]);
+        .order("created_at", { ascending: true })
+        .then(({ data: rows }: any) => setAgents((rows || []) as BrokerageAgentDraft[]));
     }
   };
 
