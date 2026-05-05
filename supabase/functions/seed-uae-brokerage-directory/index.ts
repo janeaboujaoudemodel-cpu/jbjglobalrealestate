@@ -231,6 +231,17 @@ serve(async (req) => {
           const email = b.email?.trim().toLowerCase() || null;
           const license = b.rera_license?.trim() || null;
 
+          // Reject non-real-estate firms (banks, mortgage/insurance brokers, law, etc.)
+          if (isNonRealEstateBrokerage(name, license)) {
+            stat.skipped++;
+            continue;
+          }
+          // Drop entries with no signal at all (no license, no contact)
+          if (!license && !phone && !email && !website) {
+            stat.skipped++;
+            continue;
+          }
+
           // Dedupe — try license first, then case-insensitive name within emirate
           let existing: { id: string } | null = null;
           if (license) {
