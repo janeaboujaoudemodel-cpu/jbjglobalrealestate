@@ -68,6 +68,7 @@ export function OwnerTasksPopupAlert() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="pending-tasks-title"
+      data-no-contrast-guard
       className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center bg-[#1A1A1A]/50 p-4 pt-24 md:pt-[104px]"
       data-no-backdrop-blur
     >
