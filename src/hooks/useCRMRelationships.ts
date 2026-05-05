@@ -74,6 +74,9 @@ export const useDeleteBrokerage = () => {
 /* ---------- Clients ---------- */
 export const useClients = () => useQuery({
   queryKey: ["crm-clients"],
+  staleTime: 60_000,
+  refetchOnWindowFocus: false,
+  placeholderData: (prev) => prev,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_clients").select("*").order("updated_at", { ascending: false });
     if (error) throw error;
@@ -400,6 +403,8 @@ export const useOwnerSettings = () => {
     queryKey: ["crm-owner-settings", user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    placeholderData: (prev) => prev,
     queryFn: async () => {
       const { data, error } = await supabase.from("crm_owner_settings").select("*").eq("owner_id", user!.id).maybeSingle();
       if (error) throw error;
@@ -652,6 +657,8 @@ export const useEmailTemplate = (variant: AnyEmailVariant) =>
   useQuery({
     queryKey: ["crm-email-template", variant],
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    placeholderData: (prev) => prev,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_email_templates").select("*").eq("variant", variant).maybeSingle();

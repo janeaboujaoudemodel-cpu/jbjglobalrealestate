@@ -459,55 +459,70 @@ const BrokeragesTab = () => {
   }, []);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
-  const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
-  const ownerCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner").length, [data]);
-  const existingCount = useMemo(() => data.filter((r: any) => r.entry_source === "owner" && r.is_existing_match).length, [data]);
-
-  // Live counts per emirate so the filter shows agencies-per-emirate at a glance
-  const emirateCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
+  // Single pass over data — combine source counts and per-emirate counts to avoid 4× iteration on every render.
+  const { directoryCount, ownerCount, existingCount, emirateCounts } = useMemo(() => {
+    let directory = 0, owner = 0, existing = 0;
+    const emirates: Record<string, number> = {};
     for (const r of data as any[]) {
+      if (r.entry_source === "directory") directory++;
+      else if (r.entry_source === "owner") {
+        owner++;
+        if (r.is_existing_match) existing++;
+      }
       const e = r.emirate || "Unknown";
-      counts[e] = (counts[e] || 0) + 1;
+      emirates[e] = (emirates[e] || 0) + 1;
     }
-    return counts;
+    return { directoryCount: directory, ownerCount: owner, existingCount: existing, emirateCounts: emirates };
   }, [data]);
 
   // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
   const sorted = useMemo(() => sortBrokeragesForDirectory(data as any[]), [data]);
 
+  // Precompute a normalized haystack per row — done once per sort change, not per keystroke.
+  const indexed = useMemo(
+    () =>
+      sorted.map((r: any) => ({
+        row: r,
+        haystack: normalizeForSearch(
+          [
+            r.company_name,
+            r.emirate,
+            r.office_location,
+            r.office_address,
+            r.website,
+            r.phone,
+            r.email,
+            r.instagram_url,
+            r.status,
+            r.outreach_stage,
+            r.represented_developer_name,
+            r.primary_contact?.name,
+            r.primary_contact?.email,
+          ]
+            .filter(Boolean)
+            .join(" "),
+        ),
+        emirateLower: (r.emirate || "").toLowerCase(),
+      })),
+    [sorted],
+  );
+
   const filtered = useMemo(() => {
     const ql = normalizeForSearch(debouncedQ);
-    return sorted.filter((r: any) => {
-      const haystack = normalizeForSearch(
-        [
-          r.company_name,
-          r.emirate,
-          r.office_location,
-          r.office_address,
-          r.website,
-          r.phone,
-          r.email,
-          r.instagram_url,
-          r.status,
-          r.outreach_stage,
-          r.represented_developer_name,
-          r.primary_contact?.name,
-          r.primary_contact?.email,
-        ]
-          .filter(Boolean)
-          .join(" "),
-      );
-      const matchesQ = !ql || haystack.includes(ql);
-      const matchesS = statusFilter === "all" || r.status === statusFilter;
-      const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
-      let matchesSource = true;
-      if (sourceTab === "directory") matchesSource = r.entry_source === "directory";
-      else if (sourceTab === "owner") matchesSource = r.entry_source === "owner";
-      else if (sourceTab === "existing") matchesSource = r.entry_source === "owner" && !!r.is_existing_match;
-      return matchesQ && matchesS && matchesE && matchesSource;
-    });
-  }, [sorted, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+    const emirateLower = emirateFilter.toLowerCase();
+    const out: any[] = [];
+    for (const item of indexed) {
+      const r = item.row;
+      if (ql && !item.haystack.includes(ql)) continue;
+      if (statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
+      if (sourceTab === "directory" && r.entry_source !== "directory") continue;
+      else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
+      else if (sourceTab === "existing" && !(r.entry_source === "owner" && r.is_existing_match)) continue;
+      out.push(r);
+    }
+    return out;
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
@@ -1282,6 +1297,8 @@ const DeveloperRegistryTab = () => {
   const upsertReminder = useUpsertReminder();
   const sendRegistration = useSendDeveloperRegistration();
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  useEffect(() => { const t = setTimeout(() => setDebouncedQ(q), 220); return () => clearTimeout(t); }, [q]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
@@ -1313,22 +1330,41 @@ const DeveloperRegistryTab = () => {
   // See `src/lib/crm/developerPools.ts` for the canonical rules and unit
   // tests that guarantee `pending_application` developers without an email
   // always stay in the Outreach Queue.
-  const historyPool = useMemo(() => data.filter(isInHistoryPool), [data]);
-  const queuePool = useMemo(() => data.filter(isInQueuePool), [data]);
+  // Single pass: split data into history vs queue pools so we don't iterate twice.
+  const { historyPool, queuePool } = useMemo(() => {
+    const history: any[] = [], queue: any[] = [];
+    for (const r of data as any[]) {
+      if (isInHistoryPool(r)) history.push(r);
+      if (isInQueuePool(r)) queue.push(r);
+    }
+    return { historyPool: history, queuePool: queue };
+  }, [data]);
 
-  const filtered = useMemo(() => queuePool.filter((r: any) => {
-    const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
-    const matchesS = statusFilter === "all" || r.status === statusFilter;
-    const matchesE =
-      emailFilter === "all" ||
-      (emailFilter === "not_sent" && !r.last_outreach_at && r.status !== "registered") ||
-      (emailFilter === "sent" && !!r.last_outreach_at && r.status !== "registered") ||
-      (emailFilter === "registered" && r.status === "registered");
-    return matchesQ && matchesS && matchesE;
-  }), [queuePool, q, statusFilter, emailFilter]);
+  // Pre-lowercase the searchable name once per pool change.
+  const queueIndexed = useMemo(
+    () => queuePool.map((r: any) => ({ row: r, nameLower: (r.developer_name || "").toLowerCase() })),
+    [queuePool],
+  );
+
+  const filtered = useMemo(() => {
+    const ql = debouncedQ.trim().toLowerCase();
+    const out: any[] = [];
+    for (const item of queueIndexed) {
+      const r = item.row;
+      if (ql && !item.nameLower.includes(ql)) continue;
+      if (statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (emailFilter !== "all") {
+        if (emailFilter === "not_sent" && !(!r.last_outreach_at && r.status !== "registered")) continue;
+        else if (emailFilter === "sent" && !(!!r.last_outreach_at && r.status !== "registered")) continue;
+        else if (emailFilter === "registered" && r.status !== "registered") continue;
+      }
+      out.push(r);
+    }
+    return out;
+  }, [queueIndexed, debouncedQ, statusFilter, emailFilter]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
-  useEffect(() => { setDevVisibleCount(60); }, [q, statusFilter, emailFilter]);
+  useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
   const devVisible = useMemo(() => filtered.slice(0, devVisibleCount), [filtered, devVisibleCount]);
 
   const counts = useMemo(() => {
@@ -1340,7 +1376,7 @@ const DeveloperRegistryTab = () => {
   const toggleSel = (id: string) => setSelected((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
   const selectAllFiltered = () => setSelected(new Set(filtered.map((r: any) => r.id)));
   const clearSelection = () => setSelected(new Set());
-  const selectedDevs = data.filter((d: any) => selected.has(d.id));
+  const selectedDevs = useMemo(() => data.filter((d: any) => selected.has(d.id)), [data, selected]);
 
   const openNew = () => { setEditing({ status: "not_started", developer_contact: {}, documents: [] }); setOpen(true); };
   const openEdit = (r: any) => { setEditing(r); setOpen(true); };
