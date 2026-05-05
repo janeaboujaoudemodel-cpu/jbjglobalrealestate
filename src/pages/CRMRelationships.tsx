@@ -1829,6 +1829,7 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 const CRMRelationships = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("brokerages");
+  const [testSendOpen, setTestSendOpen] = useState(false);
 
   return (
     <>
