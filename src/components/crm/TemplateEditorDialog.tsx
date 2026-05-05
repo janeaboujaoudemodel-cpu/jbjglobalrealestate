@@ -266,14 +266,59 @@ export const TemplateEditorDialog = ({
               />
             </div>
             <div>
-              <Label className="text-xs text-[#1A1A1A]">{placeholderHint}</Label>
-              <Textarea
-                value={html}
-                onChange={(e) => setHtml(e.target.value)}
-                disabled={isLocked}
-                rows={18}
-                className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <Label className="text-xs text-[#1A1A1A]">Email body</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSourceMode((s) => !s)}
+                  className="h-7 text-[11px] text-[#1A1A1A]"
+                  title="Toggle between visual editing and raw HTML"
+                >
+                  <Code2 className="w-3 h-3 mr-1" />
+                  {sourceMode ? "Visual editor" : "HTML source"}
+                </Button>
+              </div>
+
+              {/* Variable chip bar */}
+              <div className="flex flex-wrap gap-1.5 mb-2 p-2 rounded-lg bg-[#F7F2EA] border border-[#1A1A1A]/10">
+                <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 mr-1">
+                  <Sparkles className="w-3 h-3" /> Insert variable
+                </span>
+                {VARIABLE_CHIPS.map((c) => (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => insertVariable(c.key)}
+                    disabled={isLocked}
+                    className="text-[11px] px-2 py-0.5 rounded-full bg-[#FDFBF7] border border-[#1A1A1A]/15 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-50"
+                    title={`Insert {{${c.key}}}`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+
+              {sourceMode ? (
+                <Textarea
+                  value={html}
+                  onChange={(e) => setHtml(e.target.value)}
+                  disabled={isLocked}
+                  rows={18}
+                  className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
+                />
+              ) : (
+                <VisualEditor
+                  content={html}
+                  onChange={setHtml}
+                  disabled={isLocked}
+                />
+              )}
+
+              <p className="text-[11px] text-[#1A1A1A]/70 mt-1.5">
+                Tip: Click any chip above to insert the placeholder. {placeholderHint}
+              </p>
             </div>
 
             {/* Send test panel */}
