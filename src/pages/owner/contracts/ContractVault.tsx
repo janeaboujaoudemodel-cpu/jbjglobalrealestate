@@ -28,6 +28,20 @@ interface SignedRow {
 export default function ContractVault() {
   const [q, setQ] = useState("");
   const [emirate, setEmirate] = useState<string>("all");
+  const [uploadOpen, setUploadOpen] = useState(false);
+
+  const { data: agreements = [] } = useQuery({
+    queryKey: ["external_agreements"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("external_agreements" as any)
+        .select("id, developer_id, developer_name_raw, contract_type, file_url, file_name, effective_date, expiry_date, commission_pct, ai_confidence, status, uploaded_at")
+        .order("uploaded_at", { ascending: false })
+        .limit(500);
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["signed_contracts"],
