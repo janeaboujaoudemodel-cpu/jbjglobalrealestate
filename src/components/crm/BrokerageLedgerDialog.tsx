@@ -291,16 +291,18 @@ export const BrokerageLedgerDialog = ({
         </DialogContent>
       </Dialog>
 
-      <BrokerageDealModal
-        open={addOpen}
-        onOpenChange={setAddOpen}
-        brokerageId={brokerageId}
-        brokerageName={brokerageName}
-        onSaved={() => {
-          refetch();
-          qc.invalidateQueries({ queryKey: ["brokerages"] });
-        }}
-      />
+      {addOpen && (
+        <BrokerageDealModal
+          open={addOpen}
+          onOpenChange={setAddOpen}
+          brokerageId={brokerageId}
+          brokerageName={brokerageName}
+          onSaved={() => {
+            refetch();
+            qc.invalidateQueries({ queryKey: ["brokerages"] });
+          }}
+        />
+      )}
     </>
   );
 };
