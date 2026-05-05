@@ -6,6 +6,7 @@ import { toast } from "sonner";
 /* ---------- Brokerages ---------- */
 export const useBrokerages = () => useQuery({
   queryKey: ["crm-brokerages"],
+  staleTime: 60_000,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
     if (error) throw error;
@@ -82,6 +83,7 @@ export const useDeleteClient = () => {
 /* ---------- Developer Registry ---------- */
 export const useDeveloperRegistry = () => useQuery({
   queryKey: ["crm-dev-registry"],
+  staleTime: 60_000,
   queryFn: async () => {
     // Paginate past server-side row caps so the full registry (hundreds/thousands) is returned.
     const PAGE = 1000;
@@ -356,10 +358,29 @@ export const useOwnerSettings = () => {
   return useQuery({
     queryKey: ["crm-owner-settings", user?.id],
     enabled: !!user,
+    staleTime: 60_000,
     queryFn: async () => {
       const { data, error } = await supabase.from("crm_owner_settings").select("*").eq("owner_id", user!.id).maybeSingle();
       if (error) throw error;
-      return data || { owner_id: user!.id, drive_doc_pack_url: "", signature_html: "", cc_jane_enabled: true, cc_email: "info.jane@thegmail.com", reply_to_email: "contact@jbj.ae", from_name: "JBJ Global Real Estate" };
+      const base = data || {
+        owner_id: user!.id,
+        drive_doc_pack_url: "",
+        signature_html: "",
+        cc_jane_enabled: true,
+        cc_email: "",
+        reply_to_email: "contact@jbj.ae",
+        from_name: "JBJ Global Real Estate",
+        saved_sender_emails: ["contact@jbj.ae"],
+        saved_cc_emails: [],
+        active_cc_emails: [],
+      };
+      // Defensive defaults for older rows missing the new arrays
+      return {
+        ...base,
+        saved_sender_emails: Array.isArray((base as any).saved_sender_emails) ? (base as any).saved_sender_emails : [],
+        saved_cc_emails: Array.isArray((base as any).saved_cc_emails) ? (base as any).saved_cc_emails : [],
+        active_cc_emails: Array.isArray((base as any).active_cc_emails) ? (base as any).active_cc_emails : [],
+      };
     },
   });
 };
@@ -562,6 +583,7 @@ export const useSendDeveloperRegistration = () => {
 export const useEmailTemplate = (variant: AnyEmailVariant) =>
   useQuery({
     queryKey: ["crm-email-template", variant],
+    staleTime: 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("crm_email_templates").select("*").eq("variant", variant).maybeSingle();

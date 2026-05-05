@@ -40,6 +40,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
+import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
@@ -1128,32 +1129,33 @@ const DocumentPackPanel = () => {
             <Label className="text-xs text-[#1A1A1A] mb-1 block">From name</Label>
             <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
           </div>
-          <div>
+          <div className="md:col-span-2">
             <Label className="text-xs text-[#1A1A1A] mb-1 block">Primary sender email (Reply-to)</Label>
-            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} placeholder="contact@jbj.ae" />
+            <PrimarySenderEditor
+              saved={s.saved_sender_emails || []}
+              active={s.reply_to_email || ""}
+              onChange={({ saved, active }) =>
+                update({ saved_sender_emails: saved, reply_to_email: active })
+              }
+            />
+            <p className="text-xs text-[#1A1A1A]/70 mt-1">
+              Add as many sender emails as you like — they're saved here forever. Click any chip to use it as the active sender.
+            </p>
           </div>
-          <div>
-            <Label className="text-xs text-[#1A1A1A] mb-1 block">CC email</Label>
-            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} placeholder="infoo.jane@gmail.com" />
-          </div>
-          <div className="flex flex-col justify-center gap-2 pt-2">
-            <div className="flex items-center gap-3">
-              <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
-              <span className="text-sm text-[#1A1A1A]">Always CC this address</span>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="self-start border-[#1A1A1A]/30 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
-              onClick={() => update({
-                reply_to_email: s.cc_email || "",
-                cc_email: s.reply_to_email || "",
-              })}
-            >
-              <ArrowLeftRight className="w-4 h-4 mr-2" />
-              Reverse Primary ↔ CC
-            </Button>
+          <div className="md:col-span-2">
+            <Label className="text-xs text-[#1A1A1A] mb-1 block">CC emails</Label>
+            <CcListEditor
+              saved={s.saved_cc_emails || []}
+              active={s.active_cc_emails || []}
+              onChange={({ saved, active }) =>
+                update({
+                  saved_cc_emails: saved,
+                  active_cc_emails: active,
+                  cc_email: active[0] || s.cc_email || "",
+                  cc_jane_enabled: active.length > 0,
+                })
+              }
+            />
           </div>
         </div>
         {dirty && (
@@ -1335,12 +1337,14 @@ const DeveloperRegistryTab = () => {
       <DocumentPackPanel />
 
       {/* Sub-tabs: Outreach Queue vs Sent History */}
-      <div className="flex gap-1 p-1 bg-[#1A1A1A]/5 rounded-xl w-fit">
+      <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
           type="button"
           onClick={() => setSubTab("queue")}
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "queue" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
+            subTab === "queue"
+              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
           }`}
         >
           Outreach Queue ({queuePool.length})
@@ -1348,21 +1352,25 @@ const DeveloperRegistryTab = () => {
         <button
           type="button"
           onClick={() => setSubTab("history")}
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
-            subTab === "history" ? "bg-[#FDFBF7] text-[#1A1A1A] shadow-sm" : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
+            subTab === "history"
+              ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
+              : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]"
           }`}
         >
           Sent History ({historyPool.length})
         </button>
       </div>
 
-      {subTab === "history" ? (
+      {/* Both sub-views stay mounted — toggling visibility avoids slow refetch/re-render */}
+      <div className={subTab === "history" ? "block" : "hidden"}>
         <SentHistoryView
           developers={historyPool}
           onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
-      ) : (
+      </div>
+      <div className={subTab === "queue" ? "block space-y-5" : "hidden"}>
       <div className="space-y-5">
         <div
           className="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[#1A1A1A]/10 bg-[#FAF5EA]"
@@ -1765,7 +1773,7 @@ const DeveloperRegistryTab = () => {
       )}
         </div>
       </div>
-      )}
+      </div>
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
       <BulkSendDialog
@@ -1877,8 +1885,8 @@ const CRMRelationships = () => {
                 <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
-            <TabsContent value="developers"><DeveloperRegistryTab /></TabsContent>
+            <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
+            <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
           </Tabs>
         </div>
       </div>

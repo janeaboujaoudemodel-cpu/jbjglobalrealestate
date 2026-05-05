@@ -285,8 +285,13 @@ serve(async (req: Request) => {
 
     const fromName = `${representedDeveloperName} · Channel Partner Activation`;
     const replyTo = (body.fromEmailOverride || settings?.reply_to_email || "contact@jbj.ae").trim();
-    const ccEmail = (body.ccEmailOverride || settings?.cc_email || "infoo.jane@gmail.com").trim();
-    const cc = !isTest && settings?.cc_jane_enabled ? [ccEmail] : [];
+    const activeCcArr = Array.isArray(settings?.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
+    const legacyCc = (settings?.cc_email || "").trim();
+    const ccList = body.ccEmailOverride
+      ? [String(body.ccEmailOverride).trim()].filter(Boolean)
+      : (activeCcArr.length > 0 ? activeCcArr : (settings?.cc_jane_enabled && legacyCc ? [legacyCc] : []));
+    const ccEmail = ccList[0] || "";
+    const cc = !isTest ? ccList : [];
 
     // owner first name — defaults to "Jane" because the template is authored as Jane
     const ownerFirstName =
