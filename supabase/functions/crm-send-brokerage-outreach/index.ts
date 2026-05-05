@@ -424,26 +424,48 @@ serve(async (req: Request) => {
     let html = renderTemplate(template.html, varsMap);
     let subjectRendered = renderTemplate(template.subject, varsMap);
     if (!refsProject) {
-      subjectRendered = `${project.name} — Private Briefing for ${varsMap.brokerage_name}`;
+      subjectRendered = `${project.name} — Private Briefing & Breakfast for ${varsMap.brokerage_name}`;
       const offerBlock = project.offerHtml
-        ? `<div style="margin:18px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px">${project.offerHtml}</div>`
+        ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px">${project.offerHtml}</div>`
         : "";
-      html = `<!DOCTYPE html><html><body style="background:#ffffff;color:#1A1A1A;font-family:Inter,Arial,sans-serif;padding:32px;max-width:640px;margin:0 auto;line-height:1.55">
-        <p>Dear ${varsMap.contact_first_name},</p>
-        <p>This is <strong>${ownerFirstName}</strong> from <strong>JBJ Global Real Estate</strong>, channel partner for <strong>${representedDeveloperName}</strong>.</p>
-        <p>${resolvedGroupLine}</p>
-        <div style="margin:20px 0;padding:18px 20px;background:#FDFBF7;border:1px solid #1A1A1A14;border-radius:10px">
-          <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#1A1A1A99;margin-bottom:6px">Featured Project</div>
-          <div style="font-size:18px;font-weight:600;color:#1A1A1A;margin-bottom:6px">${project.name}</div>
-          <div style="font-size:14px;color:#1A1A1A;margin-bottom:12px">${project.tagline}</div>
-          <a href="${project.url}" style="display:inline-block;padding:10px 18px;background:#1A1A1A;color:#ffffff;text-decoration:none;border-radius:6px">Open ${project.name} e-catalogue</a>
-        </div>
-        ${offerBlock}
-        <p>I'd like to invite ${varsMap.brokerage_name} to a <strong>private breakfast &amp; briefing</strong> reserved for select brokerages — agenda covers ${project.name}, commissions, training and channel activation.</p>
-        <p>Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf.</p>
-        ${bookingUrl ? `<p><a href="${bookingUrl}" style="display:inline-block;padding:10px 18px;background:#B89555;color:#ffffff;text-decoration:none;border-radius:6px">RSVP &amp; pick a breakfast slot</a></p>` : ""}
-        <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>JBJ Global Real Estate<br/>${replyTo}</p>
-      </body></html>`;
+      const slotLine = preferredSlotLabel
+        ? `<p style="margin:0 0 14px;font-size:13px"><strong>Suggested time:</strong> ${preferredSlotLabel}</p>`
+        : "";
+      const bookingBtn = bookingUrl
+        ? `<a href="${bookingUrl}" style="display:inline-block;padding:12px 24px;background:#B89555;color:#FFFFFF;text-decoration:none;border-radius:6px;font-size:14px;font-weight:600">RSVP &amp; pick your slot →</a>`
+        : "";
+      html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
+<div style="background:linear-gradient(180deg,#FDFBF7 0%,#F7F2EA 100%);padding:40px 16px">
+  <div style="max-width:640px;margin:0 auto;background:#FFFFFF;border:1px solid #B89555;border-radius:14px;padding:36px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">JBJ Global Real Estate</div>
+    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1A1A1A99;margin-bottom:24px">Channel Partner — ${representedDeveloperName}</div>
+    <p style="margin:0 0 16px;font-size:15px">Dear <strong>${varsMap.contact_first_name}</strong> from <strong>${varsMap.brokerage_name}</strong>,</p>
+    <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>JBJ Global Real Estate</strong>, channel partner for <strong>${representedDeveloperName}</strong>.</p>
+    <p style="margin:0 0 24px;font-size:14px">${resolvedGroupLine}</p>
+    <div style="margin:24px 0;padding:20px 22px;background:#FDFBF7;border:1px solid #1A1A1A14;border-left:3px solid #B89555;border-radius:10px">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:8px">Featured Project</div>
+      <div style="font-size:20px;font-weight:600;color:#1A1A1A;margin-bottom:8px">${project.name}</div>
+      <div style="font-size:14px;color:#1A1A1A;margin-bottom:14px">${project.tagline}</div>
+      <a href="${project.url}" style="display:inline-block;padding:10px 20px;background:#1A1A1A;color:#FFFFFF;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600">Open ${project.name} e-catalogue →</a>
+    </div>
+    ${offerBlock}
+    <div style="margin:28px 0;padding:24px;background:linear-gradient(135deg,#FDFBF7 0%,#EFE6D6 100%);border:1px solid #B89555;border-radius:12px">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:8px">Private Invitation</div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:10px">Partnership Briefing &amp; Breakfast</div>
+      <p style="margin:0 0 14px;font-size:14px">I'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private breakfast at our Dubai office — agenda covers ${project.name}, commissions, training and channel activation.</p>
+      ${slotLine}
+      <p style="margin:0 0 16px;font-size:13px;color:#1A1A1A99">Pick any time slot from <strong>11:00 to 17:00</strong> Dubai time on Tuesdays or Thursdays.</p>
+      ${bookingBtn}
+    </div>
+    <p style="margin:20px 0 24px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track the registration on your behalf.</p>
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #1A1A1A14;font-size:13px">
+      Warm regards,<br/><strong>${ownerFirstName}</strong><br/>
+      <span style="color:#1A1A1A99">JBJ Global Real Estate · ${replyTo}</span>
+    </div>
+  </div>
+  <div style="max-width:640px;margin:16px auto 0;text-align:center;font-size:11px;color:#1A1A1A66">JBJ Global Real Estate · Channel Partner Activation</div>
+</div>
+</body></html>`;
     }
     const subject = subjectRendered;
 
