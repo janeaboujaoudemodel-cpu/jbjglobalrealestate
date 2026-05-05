@@ -11,6 +11,7 @@ import {
   useEmailTemplate,
   useUpsertEmailTemplate,
   useLockEmailTemplate,
+  useUnlockEmailTemplate,
   useSendDeveloperRegistration,
   useSendBrokerageOutreach,
   type RegistrationVariant,
