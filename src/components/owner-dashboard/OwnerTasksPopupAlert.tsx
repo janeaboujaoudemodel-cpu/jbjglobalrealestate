@@ -83,8 +83,8 @@ export function OwnerTasksPopupAlert() {
           onClick={handleClose}
           aria-label="Close pending tasks alert"
           data-no-contrast-guard
-          style={{ backgroundColor: "#F7F2EA", color: "#1A1A1A" }}
-          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/40 hover:!bg-[#EFE6D6] hover:!border-[#B89555] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+          style={{ backgroundColor: "#EFE6D6", color: "#1A1A1A" }}
+          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-[#B89555] hover:!bg-[#E0D3BC] hover:!border-[#A68444] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
           <X
             className="w-5 h-5"
