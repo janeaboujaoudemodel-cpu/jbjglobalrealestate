@@ -1,145 +1,79 @@
+# Brokerage Deal Ledger + Revenue Breakdown
 
 ## Goal
+From the Brokerages tab, click any brokerage → see a full deal history (with agent name, project, value, commission, date), register new deals, and slice total revenue by month / quarter / year. Search must work on brokerage name **and** location/emirate.
 
-You should never click anything to "sync" or "enrich batch of 5". When you open
-**Relationships → Brokerages** (and **Developers**), the table is already
-fully populated for every emirate with: company name, office address +
-Google-Maps link, phone (clickable `tel:`), email (clickable `mailto:`),
-website (clickable), Instagram (clickable), logo, and any other available
-public info. The system keeps itself fresh in the background.
+## What's already there
+- `crm_brokerage_deals` table exists (id, brokerage_id, developer_id, developer_name_snapshot, unit_label, client_name, deal_value_aed, commission_aed, closed_on, notes, currency).
+- `BrokerageDealModal` already lets you register one deal per brokerage from a "Register Deal" button on each card.
+- Search input on `BrokeragesTab` filters by name + contact.
 
-## Why it fails today
+## Gaps to close
+1. No `agent_name` column on `crm_brokerage_deals` → cannot record which agent closed.
+2. Search ignores `office_location` / `emirate`.
+3. There is no per-brokerage drill-down: you can register deals but never see them, and there's no revenue rollup by month/quarter/year.
 
-1. `seed-uae-brokerage-directory` runs Perplexity calls **inside the HTTP
-   request** for every emirate. Last run took **110 seconds** server-side →
-   the client/proxy aborts → toast says "returned edge function" even though
-   the function actually finished with HTTP 200.
-2. `Sync` / `Enrich batch of 5` buttons are manual, slow, and limited to 5
-   rows per click — that's why the table shows partial data (182 brokerages
-   total, only ~60 with website/email).
-3. Disabled-state styling on those buttons isn't defined, so they fade and
-   look broken while loading.
+## Plan
 
-## What I'll change
+### 1. Schema (migration)
+Add to `crm_brokerage_deals`:
+- `agent_name text`
+- `agent_email text` (optional, for future invitations)
+- index on `(brokerage_id, closed_on desc)` for fast ledger queries.
 
-### 1. Convert seed + enrich into a real background job (fire-and-forget)
+No RLS change needed — existing `owner_id` policies cover it.
 
-New table `crm_directory_jobs` (job_id, kind, emirate, status, progress,
-counts, started_at, finished_at, error). New edge functions:
+### 2. UI: clickable brokerage row
+- Make the brokerage **company name** in `BrokeragesTab` a button that opens a new dialog `BrokerageLedgerDialog` (full-screen on mobile, max-w-5xl on desktop).
+- Add a small "View deals" action button next to "Register Deal" so the entry point is obvious.
 
-- `directory-job-start` — owner-only, JWT-validated. Inserts a `queued` job
-  row, kicks off processing via `EdgeRuntime.waitUntil(...)` so the HTTP
-  response returns in <1s. Returns `{ jobId }`.
-- `directory-job-status` — returns the current row for a `jobId` (used for
-  the progress bar in the UI).
-- `directory-job-worker` — does the actual Perplexity + enrichment work in
-  small chunks (1 emirate × 25 firms per loop), updates `progress`,
-  resumable. Pre-existing curated rows are never overwritten — only blanks
-  are filled. Each loop iteration: fetch, dedupe, upsert, bump `progress`,
-  and either continue or schedule the next iteration via
-  `directory-job-worker?continue=<jobId>` so we never hit the wall-clock
-  limit.
+### 3. New component: `BrokerageLedgerDialog`
+Sections inside the dialog:
 
-Same pattern reused for the developer registry (one job per kind:
-`brokerage_seed`, `brokerage_enrich`, `developer_enrich`).
+**Header** — brokerage name, emirate, RERA, clickable phone/email/website/IG (reuse `BrokerageContactLinks`).
 
-### 2. Auto-run via pg_cron (no buttons needed)
+**Revenue summary cards** — driven by a date-range filter (reuse `DateRangeFilter` from `src/components/analytics/DateRangeFilter.tsx`):
+- Total deals
+- Gross deal value (AED)
+- Total commission (AED)
+- Avg deal size
 
-Schedule (Asia/Dubai):
+**Group-by selector**: Month / Quarter / Year. Renders a compact table:
+```
+Period         Deals   Gross AED       Commission AED
+2026 Q1        4       12,400,000      372,000
+2026 Q2        2        5,800,000      174,000
+```
+Computed client-side from the fetched deals.
 
-- Every day 02:00 → `directory-job-start` with `kind=brokerage_seed`,
-  rotating through all 7 emirates over 7 days (1 emirate per night ≈ a
-  few hundred firms).
-- Every day 03:00 → `directory-job-start` with `kind=brokerage_enrich`
-  (fills missing phone / email / website / IG / logo / office_address /
-  google maps URL on rows where any of those is null).
-- Every day 03:30 → `directory-job-start` with `kind=developer_enrich`
-  (same idea on `crm_developer_registry`).
+**Deals table** — columns: Date · Agent · Project/Unit · Client · Developer · Value · Commission · Notes. Inline edit (pencil) and delete. Sorted by `closed_on desc`.
 
-Also: trigger one `brokerage_seed` and one `*_enrich` job **immediately on
-deploy** so you don't have to wait until tomorrow.
+**"Register new deal" button** at top — opens the existing `BrokerageDealModal` (extended with `agent_name` field, optional `agent_email`).
 
-### 3. Backfill what's missing right now
+### 4. Extend `BrokerageDealModal`
+- Add **Agent name** input (required) and **Agent email** (optional) to the form grid.
+- Persist them in the insert payload.
 
-Worker fields it now writes when blank:
-- `phone` (E.164, normalized)
-- `email`
-- `website` (https-normalized)
-- `instagram_url` (NEW: queried explicitly from official handle)
-- `office_address` (full street)
-- `office_map_url` (Google Maps link auto-built from address if missing —
-  `https://www.google.com/maps/search/?api=1&query=<urlencoded address>`)
-- `logo_url` (best-effort from website favicon/og:image; bucket
-  `crm-brokerage-logos`, public)
-- `last_directory_sync_at`, `confidence`, `field_sources`
+### 5. Search improvements (`BrokeragesTab`)
+Update the local filter to also match `office_location`, `emirate`, and `represented_developer_name`. Update placeholder text to "Search by name, location, emirate, or developer".
 
-Curated rows (`entry_source = 'manual'` or non-null `last_verified_at`) are
-**never overwritten** — only nulls are filled.
+### 6. Revenue rollup helper
+Small pure helper in `src/lib/crm/brokerageRevenue.ts`:
+```ts
+groupDealsByPeriod(deals, "month" | "quarter" | "year") => Array<{period, deals, gross, commission}>
+```
+Used by the ledger dialog and unit-tested.
 
-### 4. UI changes — `OwnerCRMRelationships` Brokerages tab
+## Files to create
+- `supabase/migrations/<ts>_brokerage_deal_agent.sql` — add columns + index
+- `src/components/crm/BrokerageLedgerDialog.tsx`
+- `src/lib/crm/brokerageRevenue.ts` (+ test)
 
-- Remove the "Sync UAE brokerage directory", "Enrich brokerages (batch of
-  5)" and "Enrich developers (batch of 5)" buttons.
-- Replace the entire `DirectoryToolsPanel` with a slim **Directory health
-  card**:
-  - Last sync timestamp (Asia/Dubai), per-emirate counts, % with
-    phone/email/website/IG/logo.
-  - A small "Refresh now" link (owner-only) that just calls
-    `directory-job-start` and then polls `directory-job-status` every 5s,
-    showing `Syncing… 47/180 (Dubai)` inline. Never blocks the UI.
-- Brokerage row rendering already uses the existing detail drawer; I'll
-  ensure every contact field renders as a real anchor:
-  - `phone` → `<a href="tel:+9714...">`
-  - `email` → `<a href="mailto:...">`
-  - `website` → `<a target="_blank" rel="noopener">` (display clean
-    domain)
-  - `instagram_url` → `<a target="_blank">@handle</a>`
-  - `office_address` → text + adjacent map-pin icon link to
-    `office_map_url`
-- Same treatment in the Developers tab.
-- Fix the loading-button styling globally: add
-  `disabled:opacity-100 disabled:bg-[#1A1A1A] disabled:text-white
-  disabled:cursor-wait` on the affected buttons so they don't go faded
-  during work. (This stays for any remaining owner-only "Refresh now"
-  link.)
+## Files to edit
+- `src/components/crm/BrokerageDealModal.tsx` — add agent fields
+- `src/pages/CRMRelationships.tsx` — open ledger on row click, broader search
+- `src/integrations/supabase/types.ts` — auto-regenerated by migration
 
-### 5. Acceptance check (I'll run after build)
-
-- Hit `directory-job-start` from the preview session → response < 1s,
-  returns `jobId`.
-- Poll `directory-job-status` → see progress climbing.
-- After the first immediate run completes, query
-  `select count(*) filter (where phone is not null)` etc. on
-  `crm_brokerages` and confirm the populated counts are materially higher
-  than the current 60/180.
-- Open `/owner/crm/relationships` → Brokerages tab loads with no manual
-  buttons, all rows have clickable phone/email/website/IG, address shows a
-  Maps icon that opens Google Maps to the office.
-
-## What I will NOT touch
-
-- Existing `crm_brokerages` / `crm_developer_registry` schemas — only
-  additive columns (`instagram_url` already exists; `office_map_url`
-  already exists).
-- Existing `rel_*` system from the earlier Master Recreation prompt — that
-  stays as-is.
-- Curated/manual rows are never overwritten.
-
-## Secrets needed
-
-- `PERPLEXITY_API_KEY` — already configured (the current function uses it).
-  I'll verify via `fetch_secrets` before deploying.
-
-## Technical notes
-
-- Background continuation uses Deno's
-  `EdgeRuntime.waitUntil(processChunk(jobId))` to avoid HTTP timeout.
-  Each chunk re-invokes the worker function via `fetch` to get a fresh
-  150s window — chained jobs, never a single 110s synchronous call.
-- `pg_cron` + `pg_net` schedule the daily kickoff (already enabled in
-  this project).
-- All new edge functions: JWT-verified, owner-only via the existing
-  `requireOwnerAuth` helper pattern.
-- `directory-job-status` is read-only and safe to call from the client
-  every 5s.
-
+## Out of scope
+- No changes to developer-side ledger (the existing `OwnerRelationshipsRevenue` page already covers cross-side rollups).
+- No changes to `rel_deals` / payments system.
