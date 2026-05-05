@@ -71,21 +71,194 @@ export function useRegistryLog(type: RegistryRecordType, id?: string) {
   });
 }
 
+/** Find an existing master record by name/website/phone before insert. */
+export async function findExistingCompany(
+  type: RegistryRecordType,
+  name?: string | null,
+  website?: string | null,
+  phone?: string | null,
+): Promise<string | null> {
+  if (!name && !website && !phone) return null;
+  const { data, error } = await (supabase as any).rpc("find_existing_company", {
+    p_kind: type,
+    p_name: name ?? null,
+    p_website: website ?? null,
+    p_phone: phone ?? null,
+  });
+  if (error) return null;
+  return (data as string | null) ?? null;
+}
+
 export function useCreateRecord(type: RegistryRecordType) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: Record<string, unknown>) => {
       const refKey = type === "developer" ? "developer_ref" : "brokerage_ref";
       const ref = (payload[refKey] as string) || `${type === "developer" ? "DEV" : "BRK"}-${Date.now()}`;
+
+      // Dedup gate: check name/website/phone first
+      const phoneCandidate =
+        (payload.outreach_phone as string | undefined) ||
+        (Array.isArray(payload.main_phone_numbers) ? (payload.main_phone_numbers as string[])[0] : undefined);
+      const existingId = await findExistingCompany(
+        type,
+        (payload.brand_name as string) ?? (payload.legal_company_name as string),
+        payload.website as string | undefined,
+        phoneCandidate ?? null,
+      );
+
+      if (existingId) {
+        const { data, error } = await (supabase as any)
+          .from(TBL(type))
+          .update(payload)
+          .eq("id", existingId)
+          .select()
+          .single();
+        if (error) throw error;
+        return { ...data, __merged: true };
+      }
+
       const { data, error } = await (supabase as any).from(TBL(type)).insert({ ...payload, [refKey]: ref }).select().single();
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       qc.invalidateQueries({ queryKey: ["uae-registry", type] });
-      toast.success("Record created");
+      toast.success(data?.__merged ? "Merged into existing record" : "Record created");
     },
     onError: (e: any) => toast.error(e.message ?? "Failed to create"),
+  });
+}
+
+// ----- CSV / Excel ingestion -------------------------------------------
+
+const HEADER_MAP: Record<string, string> = {
+  "company name": "brand_name",
+  "brand": "brand_name",
+  "brand name": "brand_name",
+  "legal name": "legal_company_name",
+  "legal company name": "legal_company_name",
+  "emirate": "emirate_section",
+  "license": "license_number",
+  "license number": "license_number",
+  "license authority": "regulator_or_authority",
+  "regulator": "regulator_or_authority",
+  "website": "website",
+  "instagram": "instagram_url",
+  "linkedin": "linkedin_url",
+  "google maps": "office_google_maps_url",
+  "office address": "headquarters_address",
+  "address": "headquarters_address",
+  "phone": "__phone",
+  "phone number": "__phone",
+  "email": "__email",
+  "company size": "company_size_estimated",
+  "number of brokers": "number_of_brokers",
+  "specialization": "__specialization",
+  "primary market": "primary_market",
+  "notes": "notes",
+};
+
+function parseCsv(text: string): Record<string, string>[] {
+  const lines = text.replace(/\r\n/g, "\n").split("\n").filter((l) => l.trim().length > 0);
+  if (lines.length === 0) return [];
+  const splitLine = (line: string): string[] => {
+    const out: string[] = [];
+    let cur = "", inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQ && line[i + 1] === '"') { cur += '"'; i++; } else { inQ = !inQ; }
+      } else if (ch === "," && !inQ) { out.push(cur); cur = ""; }
+      else cur += ch;
+    }
+    out.push(cur);
+    return out.map((s) => s.trim());
+  };
+  const headers = splitLine(lines[0]).map((h) => h.toLowerCase().trim());
+  return lines.slice(1).map((line) => {
+    const cols = splitLine(line);
+    const row: Record<string, string> = {};
+    headers.forEach((h, i) => { row[h] = cols[i] ?? ""; });
+    return row;
+  });
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const URL_RE = /^https?:\/\/[^\s]+$/i;
+
+export function useImportRegistryCsv(type: RegistryRecordType) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (file: File) => {
+      const text = await file.text();
+      const rows = parseCsv(text);
+      const result = { inserted: 0, updated: 0, rejected: [] as Array<{ row: number; reason: string }> };
+
+      for (let i = 0; i < rows.length; i++) {
+        const raw = rows[i];
+        const mapped: Record<string, any> = {};
+        let phone: string | null = null;
+        let email: string | null = null;
+        let specialization: string[] | null = null;
+
+        for (const [k, v] of Object.entries(raw)) {
+          const target = HEADER_MAP[k];
+          if (!target || !v) continue;
+          if (target === "__phone") phone = v;
+          else if (target === "__email") email = v;
+          else if (target === "__specialization") specialization = v.split(/[;|,]/).map((s) => s.trim()).filter(Boolean);
+          else if (target === "number_of_brokers") mapped[target] = parseInt(v, 10) || null;
+          else mapped[target] = v;
+        }
+
+        if (!mapped.brand_name && !mapped.legal_company_name) {
+          result.rejected.push({ row: i + 2, reason: "Missing company/brand name" }); continue;
+        }
+        if (!mapped.brand_name) mapped.brand_name = mapped.legal_company_name;
+        if (!mapped.legal_company_name) mapped.legal_company_name = mapped.brand_name;
+        if (!mapped.emirate_section) mapped.emirate_section = "Dubai";
+        if (mapped.website && !URL_RE.test(mapped.website)) {
+          result.rejected.push({ row: i + 2, reason: `Invalid website: ${mapped.website}` }); continue;
+        }
+        if (email && !EMAIL_RE.test(email)) {
+          result.rejected.push({ row: i + 2, reason: `Invalid email: ${email}` }); continue;
+        }
+        if (specialization) mapped.specialization = specialization;
+        if (email) {
+          mapped.main_email_addresses = [email];
+          if (type === "brokerage") mapped.outreach_email = email; else mapped.registration_email = email;
+        }
+        if (phone) {
+          mapped.main_phone_numbers = [phone];
+          if (type === "brokerage") mapped.outreach_phone = phone;
+        }
+
+        const existingId = await findExistingCompany(type, mapped.brand_name, mapped.website, phone);
+        try {
+          if (existingId) {
+            const { error } = await (supabase as any).from(TBL(type)).update(mapped).eq("id", existingId);
+            if (error) throw error;
+            result.updated++;
+          } else {
+            const refKey = type === "developer" ? "developer_ref" : "brokerage_ref";
+            const ref = `${type === "developer" ? "DEV" : "BRK"}-${Date.now()}-${i}`;
+            const { error } = await (supabase as any).from(TBL(type)).insert({ ...mapped, [refKey]: ref });
+            if (error) throw error;
+            result.inserted++;
+          }
+        } catch (e: any) {
+          result.rejected.push({ row: i + 2, reason: e.message ?? "Insert failed" });
+        }
+      }
+
+      return result;
+    },
+    onSuccess: (r) => {
+      qc.invalidateQueries({ queryKey: ["uae-registry", type] });
+      toast.success(`Imported: ${r.inserted} new, ${r.updated} updated, ${r.rejected.length} rejected`);
+    },
+    onError: (e: any) => toast.error(e.message ?? "Import failed"),
   });
 }
 
