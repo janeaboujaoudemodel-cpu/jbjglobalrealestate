@@ -119,8 +119,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
     try {
       const { data, error } = await supabase
         .from("crm_brokers")
-        .select("id, display_name")
-        .order("display_name");
+        .select("id, full_name")
+        .order("full_name");
       
       if (error) throw error;
       setBrokers(data || []);
