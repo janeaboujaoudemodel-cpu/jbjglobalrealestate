@@ -7075,6 +7075,12 @@ export type Database = {
       crm_owner_settings: {
         Row: {
           active_cc_emails: Json
+          brokerage_active_cc_emails: Json
+          brokerage_drive_doc_pack_url: string | null
+          brokerage_from_name: string | null
+          brokerage_reply_to_email: string | null
+          brokerage_saved_cc_emails: Json
+          brokerage_saved_sender_emails: Json
           cc_email: string
           cc_jane_enabled: boolean
           created_at: string
@@ -7086,11 +7092,19 @@ export type Database = {
           reply_to_email: string
           saved_cc_emails: Json
           saved_sender_emails: Json
+          saved_test_cc_emails: Json
+          saved_test_to_emails: Json
           signature_html: string | null
           updated_at: string
         }
         Insert: {
           active_cc_emails?: Json
+          brokerage_active_cc_emails?: Json
+          brokerage_drive_doc_pack_url?: string | null
+          brokerage_from_name?: string | null
+          brokerage_reply_to_email?: string | null
+          brokerage_saved_cc_emails?: Json
+          brokerage_saved_sender_emails?: Json
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
@@ -7102,11 +7116,19 @@ export type Database = {
           reply_to_email?: string
           saved_cc_emails?: Json
           saved_sender_emails?: Json
+          saved_test_cc_emails?: Json
+          saved_test_to_emails?: Json
           signature_html?: string | null
           updated_at?: string
         }
         Update: {
           active_cc_emails?: Json
+          brokerage_active_cc_emails?: Json
+          brokerage_drive_doc_pack_url?: string | null
+          brokerage_from_name?: string | null
+          brokerage_reply_to_email?: string | null
+          brokerage_saved_cc_emails?: Json
+          brokerage_saved_sender_emails?: Json
           cc_email?: string
           cc_jane_enabled?: boolean
           created_at?: string
@@ -7118,6 +7140,8 @@ export type Database = {
           reply_to_email?: string
           saved_cc_emails?: Json
           saved_sender_emails?: Json
+          saved_test_cc_emails?: Json
+          saved_test_to_emails?: Json
           signature_html?: string | null
           updated_at?: string
         }

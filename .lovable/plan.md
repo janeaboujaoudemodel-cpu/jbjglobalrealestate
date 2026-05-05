@@ -1,45 +1,58 @@
-# Relationships Hub — Brokerage parity + perf + redirect fixes
+## Brokerage outreach is its own pack + persistent Test Send
 
-## What's actually wrong (verified in code)
+### What's actually wrong (verified in code/DB)
 
-1. **Document Pack invisible in Brokerages tab** — `<DocumentPackPanel />` IS mounted at `CRMRelationships.tsx:597` (top of `BrokeragesTab`), but its caption only mentions "developer registration" prominently and its container looks identical to the directory tools card right under it, so it visually disappears. There is no separate "Brokerage Outreach Settings" header.
+- **Document Pack is shared between developer and brokerage.** `DocumentPackPanel` reads/writes one set of columns (`drive_doc_pack_url`, `saved_sender_emails`, `saved_cc_emails`) regardless of `context`. The `crm-send-brokerage-outreach` edge function reads from those same shared fields. So whatever you save under "Brokerage Outreach" silently overwrites the developer pack and vice-versa — that's why the brokerage pack feels wrong (wrong drive link, wrong senders/CCs). 
+- **`Open Pack ↗` button has poor contrast on normal load.** It uses `border-[#1A1A1A]/30 text-[#1A1A1A]` on a `#FDFBF7` card with no fill — almost invisible until hovered. Same card squeezes the input + button on one row, so on a 1028px viewport the URL is clipped.
+- **Trash icon on saved-email chips is `text-[#1A1A1A]/70` inside a tiny ghost button** — barely visible against the cream chip; users miss it.
+- **TestSendDialog forgets recipients.** Each open it only prefills the user's own auth email; CC list resets every time. That's why "send test" feels disposable.
 
-2. **Slow tab switching** — both tabs use `forceMount` + `className="hidden"` (lines 1914-1915). That mounts `BrokeragesTab` AND `DeveloperRegistryTab` at the same time, each fetching its own 1000-row dataset, sorting, rendering 60 cards, plus mounting `DocumentPackPanel` twice. Tab switch is fast but **first paint** of the page is heavy and every cache invalidation re-renders both trees.
+### Plan
 
-3. **"Kicked out → Media Ingestion" redirect** — there is a prominent gold `Media Ingestion` button at `CRMRelationships.tsx:1885-1892` placed right next to the page title. No auto-navigation in code; the button is being mis-clicked because it sits on the main header strip with the same gold styling as primary CTAs.
+#### A. Make the Brokerage Document Pack genuinely separate
+1. **Migration** — add brokerage-only columns on `crm_owner_settings`:
+   - `brokerage_drive_doc_pack_url text`
+   - `brokerage_saved_sender_emails jsonb default '[]'`
+   - `brokerage_reply_to_email text`
+   - `brokerage_saved_cc_emails jsonb default '[]'`
+   - `brokerage_active_cc_emails jsonb default '[]'`
+   - `brokerage_from_name text`  (default "Amra · JBJ Global Real Estate")
+   - Plus persistent test-send fields (used by section D below):
+     - `saved_test_to_emails jsonb default '[]'`
+     - `saved_test_cc_emails jsonb default '[]'`
+2. **`DocumentPackPanel`** — when `context="brokerage"` read/write the `brokerage_*` columns. When `context="developer"` keep using the existing fields. Header copy on the brokerage pack: "Brokerage outreach pack — sent by Amra on behalf of JBJ Global. Independent of developer registration."
+3. **`useCRMRelationships.ts`** — extend defaults so brokerage fields hydrate to safe values (`[]`, `""`).
+4. **`supabase/functions/crm-send-brokerage-outreach/index.ts`** — read `brokerage_drive_doc_pack_url`, `brokerage_reply_to_email`, `brokerage_active_cc_emails`, `brokerage_from_name` first, falling back to the shared field only if brokerage-specific is empty (back-compat for existing customers). Same for `crm-bulk-brokerage-send` if it shares the resolver.
 
-4. **`AdvancedFilterPanel` ref warning** — unrelated to CRM but spamming the console: `HorizontalUtilityBar` wraps `AdvancedFilterPanel` (a function component) inside a Radix `Tooltip`/`asChild` parent that forwards refs. Need `forwardRef` on the panel or wrap in a `<span>`.
+#### B. Fix contrast and layout (normal load)
+- `Open Pack ↗` becomes `<Button variant="outline">` with `bg-[#EFE6D6] border-[#B89555]/40 text-[#1A1A1A]` — visible on champagne without hover.
+- The Drive URL row collapses to two rows on `<lg` so the input never gets clipped:
+  - `<div className="flex flex-col sm:flex-row gap-2">` with `min-w-0 flex-1` on the input wrapper.
+- Trash icon in `EmailListEditor` chips → `text-[#1A1A1A]` (full ink) inside a `bg-[#1A1A1A]/5 hover:bg-red-100 hover:text-red-700` round button so it's always discoverable.
 
-## Plan
+#### C. Speed
+- Already addressed in the previous pass (lazy tabs, `placeholderData`, `refetchOnWindowFocus: false`). Add one more: wrap `DocumentPackPanel` in `React.memo` so unrelated re-renders of the parent tab don't re-render it (it currently re-renders on every keystroke in the search box because it sits inside `BrokeragesTab`).
+- Promote `DocumentPackPanel` to be rendered once at the page level (inside the active tab still, but outside the heavy filter/sort block), so its inputs feel instant.
 
-### A. Brokerage Document Pack — make it impossible to miss
-In `CRMRelationships.tsx` `BrokeragesTab`:
-- Wrap `<DocumentPackPanel />` in a labeled section: header `"Brokerage Outreach — Document Pack & Senders"`, sub-caption `"Same pack used for developer registrations. Edit once here or in the Developer Registry tab — they share one source of truth."`
-- Pass an optional `context="brokerage" | "developer"` prop to `DocumentPackPanel` so the inside copy reads "brokerage outreach" first when mounted on the Brokerages tab.
-- Add a collapsible (`open by default`) so once configured the user can collapse it to focus on the directory.
+#### D. Persistent Test Send
+1. **Always-available "Send Test" button** stays where it is in both tabs (already mounted).
+2. **`TestSendDialog`** rework:
+   - On open, hydrate `to` + `cc` chip lists from `crm_owner_settings.saved_test_to_emails` and `saved_test_cc_emails`.
+   - Both fields are now **chip lists** (same UX as `CcListEditor`): add multiple recipients, multiple CCs, click chip to toggle "use for this test", click trash to delete.
+   - On send, if a chip was added/removed, write the updated array back to `crm_owner_settings` so it persists across sessions.
+   - All "active" To addresses get the test email (loop), CCs come along on each send.
+   - Edge function call extends `testRecipient` to also accept `testRecipients: string[]`. Backwards-compatible: fall back to the comma-joined string.
+3. Subject still prefixed `[TEST]`; nothing logged to outreach history.
 
-### B. Performance — stop double-mounting
-- Replace `forceMount` + `hidden` with **lazy-then-keep-alive**: track `mountedTabs: Set<string>` in `CRMRelationships`. A tab mounts on first activation and stays mounted afterwards (so subsequent switches stay instant, but initial page load only mounts Brokerages).
-- Extract `<BrokerageCard />` out of `BrokeragesTab.map(...)` and wrap in `React.memo` keyed by `r.id + r.updated_at` so quick status flips don't re-render the whole list.
-- Same for `<RegistryRow />` in `DeveloperRegistryTab`.
-- Memoize `BrokerageContactLinks` and the KPI strip (currently rebuilt every render).
-- Add `useTransition` around `setQ` / `setStatusFilter` / `setEmirateFilter` / `setSourceTab` so typing/filter changes don't block the main thread.
-- In `useCRMRelationships.ts`: confirm `useDeveloperRegistry` and `useBrokerages` use `placeholderData: (prev) => prev` (already done) and add `refetchOnWindowFocus: false` to both — currently they refetch on focus and trigger full re-sort.
+### Files to touch
+- `supabase/migrations/<new>.sql` — add 8 brokerage-and-test columns.
+- `src/hooks/useCRMRelationships.ts` — defaults + types for the new fields.
+- `src/pages/CRMRelationships.tsx` — pass/consume `context`, button visibility/layout, memoize panel.
+- `src/components/crm/EmailListEditor.tsx` — visible trash button, responsive chip wrap.
+- `src/components/crm/TestSendDialog.tsx` — persistent chip lists, multi-recipient send, save back on close/send.
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — resolve brokerage-specific settings; accept `testRecipients[]`.
+- `supabase/functions/crm-send-developer-registration/index.ts` — accept `testRecipients[]` (parity for developer test sends).
 
-### C. Ghost redirect to `/admin/media-ingestion`
-- Move the `Media Ingestion` button **out** of the page header into the Brokerages tab toolbar, demoted to `variant="outline"` with a smaller footprint. It will no longer be the first thing under the H1.
-- Add `onClick` confirm only when there are unsaved Document Pack edits (so the user is never silently navigated away mid-edit).
-- Also audit `MainLayoutWrapper` / `AdminBypass` / `ActionGateContext` for any effect that could call `navigate("/admin/media-ingestion")` — none found in the current grep, so the fix is purely UX placement.
-
-### D. Console noise — `AdvancedFilterPanel` ref warning
-- Convert `AdvancedFilterPanel` to `forwardRef` (accept and ignore the ref, or attach to the outer Dialog wrapper). This silences the React warning seen on every render of `HorizontalUtilityBar`, which currently bloats every navigation.
-
-## Files to touch
-- `src/pages/CRMRelationships.tsx` — sectioned Document Pack on Brokerages, lazy-keep-alive tabs, memoized cards, `useTransition`, relocated Media Ingestion button.
-- `src/hooks/useCRMRelationships.ts` — `refetchOnWindowFocus: false` on both list hooks.
-- `src/components/filters/AdvancedFilterPanel.tsx` — `forwardRef` wrap.
-- (No DB migration, no edge function changes.)
-
-## Out of scope
-- No changes to send pipelines (already share `crm_owner_settings`).
-- No changes to brokerage data model.
+### Out of scope
+- No changes to the actual outreach templates or pipeline beyond the field source.
+- No changes to send history / queue UI beyond what's needed to keep them fast.
