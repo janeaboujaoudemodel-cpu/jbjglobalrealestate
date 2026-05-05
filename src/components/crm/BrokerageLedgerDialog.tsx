@@ -107,7 +107,7 @@ export const BrokerageLedgerDialog = ({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="max-w-5xl max-h-[92vh] overflow-y-auto bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[#1A1A1A]">
@@ -148,25 +148,31 @@ export const BrokerageLedgerDialog = ({
           </div>
 
           {/* Summary cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3 items-stretch">
             {[
               { label: "Deals", value: totals.count, isCount: true },
               { label: "Gross value", value: totals.gross },
               { label: "Commission", value: totals.commission },
               { label: "Avg deal size", value: Math.round(totals.avg) },
-            ].map((k) => (
-              <div
-                key={k.label}
-                className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3"
-              >
-                <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold">
-                  {k.label}
+            ].map((k) => {
+              const display = k.isCount ? String(k.value) : fmtAED(Number(k.value));
+              return (
+                <div
+                  key={k.label}
+                  className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 min-h-[96px] flex flex-col items-center justify-center text-center"
+                >
+                  <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70 font-semibold whitespace-nowrap">
+                    {k.label}
+                  </div>
+                  <div
+                    className="text-xl md:text-2xl font-bold text-[#1A1A1A] mt-1 tabular-nums leading-tight whitespace-nowrap truncate max-w-full"
+                    title={display}
+                  >
+                    {display}
+                  </div>
                 </div>
-                <div className="text-lg font-bold text-[#1A1A1A] mt-1">
-                  {k.isCount ? k.value : fmtAED(Number(k.value))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Period rollup */}
