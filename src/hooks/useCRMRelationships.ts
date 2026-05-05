@@ -6,6 +6,7 @@ import { toast } from "sonner";
 /* ---------- Brokerages ---------- */
 export const useBrokerages = () => useQuery({
   queryKey: ["crm-brokerages"],
+  staleTime: 60_000,
   queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
     if (error) throw error;
