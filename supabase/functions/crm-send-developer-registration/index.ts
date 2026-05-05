@@ -129,8 +129,13 @@ serve(async (req: Request) => {
 
     const fromName = settings.from_name || "JBJ Global Real Estate";
     const replyTo = (body.fromEmailOverride || settings.reply_to_email || "contact@jbj.ae").trim();
-    const ccEmail = (body.ccEmailOverride || settings.cc_email || "infoo.jane@gmail.com").trim();
-    const cc = !isTest && settings.cc_jane_enabled ? [ccEmail] : [];
+    const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
+    const legacyCc = (settings.cc_email || "").trim();
+    const ccList = body.ccEmailOverride
+      ? [String(body.ccEmailOverride).trim()].filter(Boolean)
+      : (activeCcArr.length > 0 ? activeCcArr : (settings.cc_jane_enabled && legacyCc ? [legacyCc] : []));
+    const ccEmail = ccList[0] || "";
+    const cc = !isTest ? ccList : [];
 
     const html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
