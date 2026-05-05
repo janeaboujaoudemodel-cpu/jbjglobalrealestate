@@ -445,7 +445,7 @@ serve(async (req: Request) => {
         <p>Warm regards,<br/><strong>${ownerFirstName}</strong><br/>JBJ Global Real Estate<br/>${replyTo}</p>
       </body></html>`;
     }
-    const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
+    const subject = subjectRendered;
 
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
