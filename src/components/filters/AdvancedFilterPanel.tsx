@@ -71,7 +71,7 @@ interface AreaEntry {
   emirate: string;
 }
 
-export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }: AdvancedFilterPanelProps) {
+const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>(function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }, _ref) {
   const [localFilters, setLocalFilters] = useState<ShortcutFilterState>(filters);
   const [projectCount, setProjectCount] = useState<number | null>(null);
   const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
