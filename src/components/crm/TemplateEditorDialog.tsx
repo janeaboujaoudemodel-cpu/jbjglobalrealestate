@@ -58,10 +58,38 @@ export const TemplateEditorDialog = ({
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
   const [showPreview, setShowPreview] = useState(true);
+  const [sourceMode, setSourceMode] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testSampleName, setTestSampleName] = useState(
     isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.",
   );
+
+  const VARIABLE_CHIPS: { key: string; label: string }[] = isBrokerage
+    ? [
+        { key: "brokerage_name", label: "Brokerage name" },
+        { key: "contact_first_name", label: "Contact first name" },
+        { key: "contact_full_name", label: "Contact full name" },
+        { key: "owner_first_name", label: "Owner first name" },
+        { key: "project_name", label: "Project name" },
+        { key: "project_url", label: "Project URL" },
+        { key: "project_tagline", label: "Project tagline" },
+        { key: "booking_url", label: "Booking URL" },
+        { key: "preferred_event_time_label", label: "Event time" },
+      ]
+    : [
+        { key: "developer_name", label: "Developer name" },
+        { key: "drive_url", label: "Drive URL" },
+      ];
+
+  const insertVariable = (key: string) => {
+    const token = `{{${key}}}`;
+    if (sourceMode) {
+      setHtml((h) => h + token);
+    } else {
+      // Append a paragraph carrying the token; the visual editor renders it as plain text.
+      setHtml((h) => h + `<p>${token}</p>`);
+    }
+  };
 
   // Reset to a valid variant whenever the editor mode (or `open`) changes
   useEffect(() => {
