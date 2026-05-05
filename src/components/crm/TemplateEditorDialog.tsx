@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Lock, Eye, Send, Loader2 } from "lucide-react";
+import { Lock, Eye, Send, Loader2, Code2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { VisualEditor } from "@/components/crm/VisualEditor";
 import {
   useEmailTemplate,
   useUpsertEmailTemplate,
