@@ -17,6 +17,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
 import { FounderContent } from "@/components/FounderContent";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useUserRole } from "@/hooks/useUserRole";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
