@@ -403,6 +403,8 @@ export const useOwnerSettings = () => {
     queryKey: ["crm-owner-settings", user?.id],
     enabled: !!user,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
+    placeholderData: (prev) => prev,
     queryFn: async () => {
       const { data, error } = await supabase.from("crm_owner_settings").select("*").eq("owner_id", user!.id).maybeSingle();
       if (error) throw error;
