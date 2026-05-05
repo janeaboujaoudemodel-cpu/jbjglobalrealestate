@@ -1114,7 +1114,7 @@ const DocumentPackPanel = () => {
           <h3 className="font-semibold text-[#1A1A1A]">Document Pack & Outreach Settings</h3>
         </div>
         <p className="text-xs text-[#1A1A1A]/70 mb-4">
-          Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
+          Set this once — used for every developer registration <span className="text-[#1A1A1A]/50">·</span> brokerage partnership outreach. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs to use.
         </p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
