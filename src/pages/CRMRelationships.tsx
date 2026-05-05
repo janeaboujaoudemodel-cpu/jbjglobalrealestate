@@ -727,7 +727,7 @@ const BrokeragesTab = () => {
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70">No brokerages match these filters. Try clearing filters or click <b className="text-[#1A1A1A]">Add Brokerage</b>.</CardContent></Card>
       ) : (
         <div className="grid gap-3">
-          {filtered.map((r: any) => {
+          {visible.map((r: any) => {
             const isDirectory = r.entry_source === "directory";
             const isExistingMatch = r.entry_source === "owner" && r.is_existing_match;
             return (
