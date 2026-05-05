@@ -68,6 +68,8 @@ export const BrokerageDealModal = ({
   const [form, setForm] = useState<any>({
     developer_id: "",
     developer_name_snapshot: "",
+    agent_name: "",
+    agent_email: "",
     unit_label: "",
     client_name: "",
     deal_value_aed: "",
@@ -91,6 +93,10 @@ export const BrokerageDealModal = ({
       toast.error("Enter a deal value greater than zero");
       return;
     }
+    if (!form.agent_name?.trim()) {
+      toast.error("Enter the agent's name");
+      return;
+    }
     const { data: u } = await supabase.auth.getUser();
     if (!u?.user) {
       toast.error("Not authenticated");
@@ -103,6 +109,8 @@ export const BrokerageDealModal = ({
       developer_id: form.developer_id || null,
       developer_name_snapshot:
         developer?.name || form.developer_name_snapshot || null,
+      agent_name: form.agent_name?.trim() || null,
+      agent_email: form.agent_email?.trim() || null,
       unit_label: form.unit_label || null,
       client_name: form.client_name || null,
       deal_value_aed: Number(form.deal_value_aed),
@@ -111,7 +119,7 @@ export const BrokerageDealModal = ({
       closed_on: form.closed_on,
       notes: form.notes || null,
       created_by: u.user.id,
-    };
+    } as any;
 
     const { error } = await supabase
       .from("crm_brokerage_deals")
@@ -123,11 +131,14 @@ export const BrokerageDealModal = ({
     toast.success("Deal registered");
     qc.invalidateQueries({ queryKey: ["brokerages"] });
     qc.invalidateQueries({ queryKey: ["crm-brokerage-deals"] });
+    qc.invalidateQueries({ queryKey: ["brokerage-deals", brokerageId] });
     onSaved?.();
     onOpenChange(false);
     setForm({
       developer_id: defaultDeveloper?.id || "",
       developer_name_snapshot: defaultDeveloper?.name || "",
+      agent_name: "",
+      agent_email: "",
       unit_label: "",
       client_name: "",
       deal_value_aed: "",
@@ -238,6 +249,31 @@ export const BrokerageDealModal = ({
                   setForm({ ...form, commission_aed: e.target.value })
                 }
                 placeholder="0"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-[#1A1A1A] mb-1 block">
+                Agent name *
+              </Label>
+              <Input
+                value={form.agent_name}
+                onChange={(e) =>
+                  setForm({ ...form, agent_name: e.target.value })
+                }
+                placeholder="Agent who closed the deal"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-[#1A1A1A] mb-1 block">
+                Agent email
+              </Label>
+              <Input
+                type="email"
+                value={form.agent_email}
+                onChange={(e) =>
+                  setForm({ ...form, agent_email: e.target.value })
+                }
+                placeholder="agent@brokerage.com"
               />
             </div>
           </div>

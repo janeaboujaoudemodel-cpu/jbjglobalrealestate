@@ -33,6 +33,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
+import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
@@ -360,6 +361,7 @@ const BrokeragesTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
+  const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const directoryCount = useMemo(() => data.filter((r: any) => r.entry_source === "directory").length, [data]);
@@ -377,7 +379,13 @@ const BrokeragesTab = () => {
   }, [data]);
 
   const filtered = useMemo(() => data.filter((r: any) => {
-    const matchesQ = !q || r.company_name?.toLowerCase().includes(q.toLowerCase()) || r.primary_contact?.name?.toLowerCase?.().includes(q.toLowerCase());
+    const ql = q.toLowerCase();
+    const matchesQ = !q
+      || r.company_name?.toLowerCase().includes(ql)
+      || r.primary_contact?.name?.toLowerCase?.().includes(ql)
+      || r.office_location?.toLowerCase?.().includes(ql)
+      || r.emirate?.toLowerCase?.().includes(ql)
+      || r.represented_developer_name?.toLowerCase?.().includes(ql);
     const matchesS = statusFilter === "all" || r.status === statusFilter;
     const matchesE = emirateFilter === "all" || (r.emirate || "").toLowerCase() === emirateFilter.toLowerCase();
     let matchesSource = true;
@@ -484,7 +492,7 @@ const BrokeragesTab = () => {
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search brokerage or contact" className="pl-10" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, location, emirate, or developer" className="pl-10" />
         </div>
         <Select value={emirateFilter} onValueChange={setEmirateFilter}>
           <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
@@ -561,7 +569,14 @@ const BrokeragesTab = () => {
                   )}
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="font-bold text-base text-[#1A1A1A]">{r.company_name}</h3>
+                      <button
+                        type="button"
+                        onClick={() => setLedgerOpen({ id: r.id, name: r.company_name })}
+                        className="font-bold text-base text-[#1A1A1A] hover:underline decoration-[#B89555] underline-offset-4 text-left"
+                        title="View deal ledger and revenue"
+                      >
+                        {r.company_name}
+                      </button>
                       {isDirectory && (
                         <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60">RERA-Licensed</span>
                       )}
@@ -630,6 +645,14 @@ const BrokeragesTab = () => {
                     </Button>
                     <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => setLedgerOpen({ id: r.id, name: r.company_name })}
+                      title="View deal history & revenue"
+                    >
+                      <Trophy className="w-3 h-3 mr-1" />Deals
                     </Button>
                     {!isDirectory && (
                       <>
@@ -717,6 +740,14 @@ const BrokeragesTab = () => {
           brokerageId={dealOpen.id}
           brokerageName={dealOpen.name}
           onSaved={() => refetch()}
+        />
+      )}
+      {ledgerOpen && (
+        <BrokerageLedgerDialog
+          open={!!ledgerOpen}
+          onOpenChange={(v) => !v && setLedgerOpen(null)}
+          brokerageId={ledgerOpen.id}
+          brokerageName={ledgerOpen.name}
         />
       )}
     </div>
