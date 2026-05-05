@@ -55,27 +55,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false;
     }
 
-    // Check session-based cache for instant owner verification on reload
-    const cacheKey = `owner_${currentSession.access_token.substring(0, 16)}`;
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached === 'true') {
+    // Persistent per-user owner cache with TTL (survives token refreshes & brief network blips)
+    const OWNER_TTL_MS = 30 * 60 * 1000; // 30 minutes
+    const userId = currentSession.user?.id;
+    const cacheKey = userId ? `owner_v2_${userId}` : null;
+    const readCache = (): { ok: boolean; ts: number } | null => {
+      if (!cacheKey) return null;
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed.ts === 'number') return parsed;
+      } catch { /* ignore */ }
+      return null;
+    };
+    const writeCache = (ok: boolean) => {
+      if (!cacheKey) return;
+      try { localStorage.setItem(cacheKey, JSON.stringify({ ok, ts: Date.now() })); } catch { /* ignore */ }
+    };
+    const clearCache = () => { if (cacheKey) { try { localStorage.removeItem(cacheKey); } catch { /* ignore */ } } };
+
+    const cached = readCache();
+    const cacheFresh = cached?.ok === true && (Date.now() - cached.ts) < OWNER_TTL_MS;
+    if (cacheFresh) {
       setIsOwner(true);
       setOwnerLoading(false);
       setOwnerError(null);
-      // Still verify in background (fail-closed)
+      // Background re-verify; only downgrade on a definitive email_mismatch (not network errors)
       (async () => {
         try {
-          const result = await supabase.functions.invoke("verify-owner", {
-            headers: { Authorization: `Bearer ${currentSession.access_token}` },
+          const resp = await fetch(`${SUPABASE_URL}/functions/v1/verify-owner`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${currentSession.access_token}`,
+              'apikey': SUPABASE_ANON_KEY,
+              'Content-Type': 'application/json',
+            },
           });
-          if (result.data?.isOwner !== true) {
-            sessionStorage.removeItem(cacheKey);
+          if (!resp.ok) return; // transient — keep cache
+          const data = await resp.json();
+          if (data?.isOwner === true) {
+            writeCache(true);
+          } else if (data?.reason === 'email_mismatch') {
+            clearCache();
             setIsOwner(false);
           }
-        } catch {
-          sessionStorage.removeItem(cacheKey);
-          setIsOwner(false);
-        }
+        } catch { /* network blip — keep cache */ }
       })();
       return true;
     }
@@ -135,29 +160,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setOwnerError(null);
 
       let result = false;
-      // Try up to 2 times (initial + 1 retry)
-      try {
-        result = await attemptVerify();
-      } catch (firstErr) {
-        console.warn("verify-owner attempt 1 failed, retrying...", firstErr);
-        // Wait 1s then retry
-        await new Promise(r => setTimeout(r, 1000));
-        result = await attemptVerify();
+      // Try up to 3 times (initial + 2 retries with backoff) to ride out transient network blips
+      let lastErr: any = null;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          result = await attemptVerify();
+          lastErr = null;
+          break;
+        } catch (e) {
+          lastErr = e;
+          if (attempt < 2) {
+            await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt)));
+          }
+        }
       }
+      if (lastErr && !result) throw lastErr;
 
       // CRITICAL: Set isOwner BEFORE ownerLoading=false to prevent
       // a render frame where ownerLoading=false but isOwner is still false,
       // which causes OwnerGuard to redirect to /403.
       setIsOwner(result);
       setOwnerLoading(false);
-      // Cache successful owner verification in sessionStorage
-      if (result && currentSession?.access_token) {
-        const ck = `owner_${currentSession.access_token.substring(0, 16)}`;
-        sessionStorage.setItem(ck, 'true');
-      }
+      writeCache(result);
       return result;
     } catch (err: any) {
       console.error("verify-owner failed after retries:", err);
+      // If we have a fresh-ish cached owner=true, fall back to it instead of showing the error wall
+      const fallback = readCache();
+      if (fallback?.ok === true && (Date.now() - fallback.ts) < OWNER_TTL_MS * 2) {
+        console.warn("Using cached owner verification due to network error");
+        setIsOwner(true);
+        setOwnerLoading(false);
+        setOwnerError(null);
+        return true;
+      }
       setOwnerError(err?.message || "Verification failed");
       setIsOwner(false);
       setOwnerLoading(false);
