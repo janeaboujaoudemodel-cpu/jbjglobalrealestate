@@ -95,11 +95,11 @@ async function perplexityListBrokerages(
         {
           role: "system",
           content:
-            "You compile UAE real estate brokerage directories from the official licensing authority. Only include real, currently-licensed firms. Use null for fields you cannot verify. Never fabricate a license number or contact detail.",
+            "You compile UAE REAL ESTATE SALES BROKERAGE directories from the official licensing authority (DLD/RERA Trakheesi, Abu Dhabi DMT, Sharjah/Ajman/RAK/Fujairah/UAQ municipality). ONLY include firms that hold a current real-estate sales broker permit. NEVER include banks, mortgage brokers, mortgage advisors, insurance brokers, takaful, financial advisors, law firms, legal consultancies, freight/logistics brokers, customs brokers, recruitment agencies, or pure property-management companies. Use null for fields you cannot verify. Never fabricate a license number or contact detail.",
         },
         {
           role: "user",
-          content: `List up to ${pageSize} licensed real estate brokerage offices in ${emirate} from the ${authority}. ${hint}. Skip the first ${offset} firms (they were already returned in earlier batches). For each firm return: company_name, rera_license (the actual license / registration number if published), office_address (full street address with area/landmark), phone (international format with +971), email (sales/info), website. Use null when a field is not available from the authority.`,
+          content: `List up to ${pageSize} licensed REAL-ESTATE SALES brokerage offices in ${emirate} from the ${authority}. ${hint}. Skip the first ${offset} firms (they were already returned in earlier batches). Exclude banks, mortgage brokers, insurance brokers, law firms, consultancies, freight/logistics brokers and pure property-management companies. For each firm return: company_name, rera_license (the actual real-estate broker registration number if published), office_address (full street address with area/landmark), phone (international format with +971), email (sales/info), website. Use null when a field is not available from the authority.`,
         },
       ],
       response_format: {
@@ -142,6 +142,15 @@ function normalizeWebsite(w: string | null): string | null {
   if (trimmed.startsWith("http")) return trimmed;
   return "https://" + trimmed.replace(/^\/+/, "");
 }
+
+// Reject names that are clearly NOT real-estate sales brokerages.
+const NON_REALESTATE_RX =
+  /\b(bank|banking|mortgage|mortgages|insurance|insurer|takaful|reinsurance|financial advisor|wealth management|capital partners|asset management|law\s|legal|advocates?|attorneys?|notary|consult(ing|ancy|ants?)|freight|logistics|cargo|shipping|customs broker|recruitment|manpower|staffing|hospitality only|property management only|facilities management)\b/i;
+function isNonRealEstateBrokerage(name: string, license: string | null): boolean {
+  if (license && license.trim().length >= 3) return false; // licensed firms always allowed
+  return NON_REALESTATE_RX.test(name);
+}
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -221,6 +230,17 @@ serve(async (req) => {
           const website = normalizeWebsite(b.website);
           const email = b.email?.trim().toLowerCase() || null;
           const license = b.rera_license?.trim() || null;
+
+          // Reject non-real-estate firms (banks, mortgage/insurance brokers, law, etc.)
+          if (isNonRealEstateBrokerage(name, license)) {
+            stat.skipped++;
+            continue;
+          }
+          // Drop entries with no signal at all (no license, no contact)
+          if (!license && !phone && !email && !website) {
+            stat.skipped++;
+            continue;
+          }
 
           // Dedupe — try license first, then case-insensitive name within emirate
           let existing: { id: string } | null = null;
