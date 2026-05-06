@@ -478,6 +478,34 @@ serve(async (req: Request) => {
 </div>
 </body></html>`;
     }
+    const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
+
+    const raw = buildRawMime({
+      from: `${fromName} <${replyTo}>`,
+      to: recipient,
+      cc,
+      subject,
+      html,
+      replyTo,
+    });
+
+    const gmailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/send`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": GMAIL_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ raw }),
+    });
+
+    const gmailJson = await gmailRes.json();
+    if (!gmailRes.ok) {
+      console.error("Gmail send failed:", gmailRes.status, gmailJson);
+      return new Response(JSON.stringify({ error: gmailJson?.error?.message || "Gmail send failed", details: gmailJson }), {
+        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const messageId: string | null = gmailJson?.id || null;
     const threadId: string | null = gmailJson?.threadId || null;
