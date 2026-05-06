@@ -511,6 +511,15 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
+                          className="h-9 w-9 bg-[#B89555] hover:bg-[#A08047] text-white border-0"
+                          onClick={() => setAgreementLead(lead)}
+                          title="Send Agreement"
+                        >
+                          <FileSignature className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="icon"
                           variant="destructive"
                           className="h-9 w-9"
                           onClick={() => openDeleteDialog(lead)}
