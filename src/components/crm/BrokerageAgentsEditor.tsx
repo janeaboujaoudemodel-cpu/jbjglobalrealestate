@@ -130,6 +130,16 @@ export function BrokerageAgentsEditor({ value, onChange, brokerageId }: Props) {
                 </SelectContent>
               </Select>
             </div>
+            {a.id && brokerageId && (
+              <div className="col-span-12 sm:col-span-12 sm:order-last">
+                <QuickActivityActions
+                  entityType="broker_agent"
+                  entityId={a.id}
+                  entityName={a.name || "Broker"}
+                  brokerageId={brokerageId}
+                />
+              </div>
+            )}
             <Button
               type="button"
               size="icon"
