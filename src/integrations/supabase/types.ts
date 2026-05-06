@@ -11498,6 +11498,8 @@ export type Database = {
       }
       esign_envelopes: {
         Row: {
+          category: string | null
+          client_lead_id: string | null
           completed_at: string | null
           created_at: string
           description: string | null
@@ -11519,9 +11521,14 @@ export type Database = {
           sender_name: string | null
           signed_document_url: string | null
           status: Database["public"]["Enums"]["esign_envelope_status"]
+          template_field_values: Json | null
+          template_html: string | null
+          template_key: string | null
           updated_at: string
         }
         Insert: {
+          category?: string | null
+          client_lead_id?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
@@ -11543,9 +11550,14 @@ export type Database = {
           sender_name?: string | null
           signed_document_url?: string | null
           status?: Database["public"]["Enums"]["esign_envelope_status"]
+          template_field_values?: Json | null
+          template_html?: string | null
+          template_key?: string | null
           updated_at?: string
         }
         Update: {
+          category?: string | null
+          client_lead_id?: string | null
           completed_at?: string | null
           created_at?: string
           description?: string | null
@@ -11567,6 +11579,9 @@ export type Database = {
           sender_name?: string | null
           signed_document_url?: string | null
           status?: Database["public"]["Enums"]["esign_envelope_status"]
+          template_field_values?: Json | null
+          template_html?: string | null
+          template_key?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -11784,6 +11799,48 @@ export type Database = {
             referencedColumns: ["envelope_id"]
           },
         ]
+      }
+      esign_templates: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          field_schema: Json
+          html_body: string
+          id: string
+          is_system: boolean
+          key: string
+          name: string
+          owner_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          field_schema?: Json
+          html_body: string
+          id?: string
+          is_system?: boolean
+          key: string
+          name: string
+          owner_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          field_schema?: Json
+          html_body?: string
+          id?: string
+          is_system?: boolean
+          key?: string
+          name?: string
+          owner_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       ethics_violations: {
         Row: {
