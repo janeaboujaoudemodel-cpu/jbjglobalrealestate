@@ -140,7 +140,10 @@ export default function AgencyActivityLog() {
     return viewed.filter((r) => {
       const matchesQ = !ql || [r.brokerage_name, r.title, r.body, r.action_type]
         .filter(Boolean).some((s) => (s as string).toLowerCase().includes(ql));
-      const matchesType = typeFilter === "all" || r.action_type === typeFilter;
+      const matchesType =
+        typeFilter === "all" ||
+        r.action_type === typeFilter ||
+        (typeFilter === "outreach_sent" && r.action_type === "message_sent");
       return matchesQ && matchesType;
     });
   }, [viewed, q, typeFilter]);
