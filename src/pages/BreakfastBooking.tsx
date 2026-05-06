@@ -39,6 +39,8 @@ interface LookupResult {
   slots: Slot[];
 }
 
+interface AttendeeRow { name: string; phone: string; email: string }
+
 export default function BreakfastBooking() {
   const [params] = useSearchParams();
   const token = params.get("token") || "";
@@ -50,13 +52,16 @@ export default function BreakfastBooking() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [attendeeMode, setAttendeeMode] = useState<"count" | "list">("count");
   const [attendeeCount, setAttendeeCount] = useState("2");
+  const [attendees, setAttendees] = useState<AttendeeRow[]>([{ name: "", phone: "", email: "" }]);
   const [briefingTopics, setBriefingTopics] = useState("");
   const [partnershipFocus, setPartnershipFocus] = useState("");
   const [notes, setNotes] = useState("");
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState<{ slotAt: string } | null>(null);
+  const slotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!token) {
@@ -90,12 +95,48 @@ export default function BreakfastBooking() {
     return groups;
   }, [data]);
 
+  // Auto-pick the first available slot and scroll to the calendar so users
+  // landing from the invite email never see "please enable JavaScript" or a
+  // blank screen — the calendar is immediately visible.
+  useEffect(() => {
+    if (!data?.slots?.length || slotId) return;
+    setSlotId(data.slots[0].id);
+    requestAnimationFrame(() => {
+      slotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [data, slotId]);
+
+  const brokerageLabel = data?.brokerageName || "your brokerage";
+  const slotIsoSelected = data?.slots.find((s) => s.id === slotId)?.slot_at || "";
+  const consentText = `I confirm that ${brokerageLabel} will attend the private partnership breakfast on the selected date. I understand this is a private catered event for ${brokerageLabel} only and that I am responsible for cancelling at least 2 days before the booked date by contacting ${HOST_NAME} on ${HOST_PHONE}.`;
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slotId) { toast.error("Please pick a breakfast time"); return; }
     if (!consent) { toast.error("Please confirm the consent checkbox"); return; }
     setSubmitting(true);
     try {
+      const cleanAttendees =
+        attendeeMode === "list"
+          ? attendees
+              .map((a) => ({ name: a.name.trim(), phone: a.phone.trim(), email: a.email.trim() }))
+              .filter((a) => a.name || a.phone || a.email)
+          : [];
+      const headcount =
+        attendeeMode === "list" && cleanAttendees.length > 0
+          ? cleanAttendees.length
+          : Number(attendeeCount) || 1;
+      const consentSnapshot = {
+        text: consentText,
+        checked: true,
+        signedAt: new Date().toISOString(),
+        signerName: fullName,
+        signerEmail: email,
+        signerPhone: phone || null,
+        brokerageName: brokerageLabel,
+        slotAt: slotIsoSelected,
+        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+      };
       const { data: res, error: confErr } = await supabase.functions.invoke(
         "breakfast-booking-confirm",
         {
@@ -105,24 +146,31 @@ export default function BreakfastBooking() {
             fullName,
             email,
             phone,
-            attendeeCount: Number(attendeeCount) || 1,
+            attendeeCount: headcount,
+            attendees: cleanAttendees,
             briefingTopics,
             partnershipFocus,
             notes,
             consent,
+            consentSnapshot,
           },
         },
       );
       if (confErr) throw confErr;
       if ((res as any)?.error) throw new Error((res as any).error);
-      const slot = data?.slots.find((s) => s.id === slotId);
-      setConfirmed({ slotAt: slot?.slot_at || new Date().toISOString() });
+      setConfirmed({ slotAt: slotIsoSelected || new Date().toISOString() });
     } catch (e: any) {
       toast.error(e?.message || "Could not confirm booking");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const updateAttendee = (i: number, patch: Partial<AttendeeRow>) => {
+    setAttendees((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
+  };
+  const addAttendee = () => setAttendees((r) => [...r, { name: "", phone: "", email: "" }]);
+  const removeAttendee = (i: number) => setAttendees((r) => (r.length > 1 ? r.filter((_, idx) => idx !== i) : r));
 
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -274,7 +322,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
 
         <form onSubmit={onSubmit} className="mt-8 space-y-8 bg-card border border-border rounded-2xl p-6 sm:p-10">
           {/* Slot picker */}
-          <section>
+          <section ref={slotRef}>
             <div className="flex items-center gap-2 mb-3">
               <Calendar className="h-4 w-4 text-primary" />
               <h2 className="font-semibold text-foreground">Pick a breakfast time</h2>
@@ -301,8 +349,8 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
                             className={[
                               "inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition",
                               active
-                                ? "bg-primary text-primary-foreground border-primary"
-                                : "bg-background text-foreground border-border hover:border-primary",
+                                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                                : "bg-background text-foreground border-border hover:border-[#B89555]",
                             ].join(" ")}
                           >
                             <Clock className="h-3.5 w-3.5" />
@@ -319,7 +367,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
 
           <div className="h-px bg-border" />
 
-          {/* Attendee details */}
+          {/* Booking lead — your details */}
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="fullName">Your name</Label>
@@ -329,24 +377,69 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
-            <div>
+            <div className="sm:col-span-2">
               <Label htmlFor="phone">Phone (optional)</Label>
               <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </div>
-            <div>
-              <Label htmlFor="attendeeCount">
-                <span className="inline-flex items-center gap-1"><Users className="h-3.5 w-3.5" />Attendees</span>
-              </Label>
-              <Input
-                id="attendeeCount"
-                type="number"
-                min={1}
-                max={6}
-                value={attendeeCount}
-                onChange={(e) => setAttendeeCount(e.target.value)}
-                required
-              />
+          </section>
+
+          {/* Attendees: head-count or per-broker rows */}
+          <section className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-primary" />
+              <h2 className="font-semibold text-foreground">Attendees from {brokerageLabel}</h2>
             </div>
+            <div className="flex gap-2 text-sm">
+              <button
+                type="button"
+                onClick={() => setAttendeeMode("count")}
+                className={`px-3 py-1.5 rounded-md border ${attendeeMode === "count" ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-background border-border text-foreground/70"}`}
+              >Just give a head‑count</button>
+              <button
+                type="button"
+                onClick={() => setAttendeeMode("list")}
+                className={`px-3 py-1.5 rounded-md border ${attendeeMode === "list" ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-background border-border text-foreground/70"}`}
+              >Add each broker</button>
+            </div>
+
+            {attendeeMode === "count" ? (
+              <div className="max-w-[200px]">
+                <Label htmlFor="attendeeCount">Number of attendees</Label>
+                <Input
+                  id="attendeeCount"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={attendeeCount}
+                  onChange={(e) => setAttendeeCount(e.target.value)}
+                  required
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {attendees.map((a, i) => (
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+                    <div className="sm:col-span-4">
+                      {i === 0 && <Label className="text-xs">Name</Label>}
+                      <Input value={a.name} onChange={(e) => updateAttendee(i, { name: e.target.value })} placeholder="Broker name" />
+                    </div>
+                    <div className="sm:col-span-3">
+                      {i === 0 && <Label className="text-xs">Phone</Label>}
+                      <Input value={a.phone} onChange={(e) => updateAttendee(i, { phone: e.target.value })} placeholder="+971…" />
+                    </div>
+                    <div className="sm:col-span-4">
+                      {i === 0 && <Label className="text-xs">Email</Label>}
+                      <Input type="email" value={a.email} onChange={(e) => updateAttendee(i, { email: e.target.value })} placeholder="email" />
+                    </div>
+                    <div className="sm:col-span-1">
+                      <Button type="button" variant="outline" onClick={() => removeAttendee(i)} disabled={attendees.length === 1} className="w-full">−</Button>
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addAttendee} className="mt-1">+ Add another broker</Button>
+                <p className="text-xs text-foreground/60">All fields are optional — leave blank if you'd rather just provide a head‑count.</p>
+              </div>
+            )}
           </section>
 
           {/* Briefing context */}
@@ -382,12 +475,16 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
             </div>
           </section>
 
-          <div className="flex items-start gap-3">
-            <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(!!v)} />
-            <Label htmlFor="consent" className="text-sm text-foreground/80 leading-relaxed cursor-pointer">
-              I confirm the details above are accurate and consent to JBJ Global Real Estate contacting
-              me about this private breakfast and ongoing partnership matters.
-            </Label>
+          {/* Consent — binding 2-day cancellation policy */}
+          <div className="rounded-xl border border-[#B89555] bg-[#FDFBF7] p-4 space-y-3">
+            <div className="text-[10px] tracking-[2px] uppercase text-[#1A1A1A] font-bold">Confirmation & Cancellation Policy</div>
+            <p className="text-sm text-[#1A1A1A] leading-relaxed">{consentText}</p>
+            <div className="flex items-start gap-3">
+              <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(!!v)} />
+              <Label htmlFor="consent" className="text-sm text-[#1A1A1A] leading-relaxed cursor-pointer">
+                I agree and confirm that <strong>{brokerageLabel}</strong> will attend, and I accept the 2‑day cancellation policy.
+              </Label>
+            </div>
           </div>
 
           <div className="pt-2">
