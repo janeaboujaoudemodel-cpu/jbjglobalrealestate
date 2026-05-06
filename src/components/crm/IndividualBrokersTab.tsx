@@ -51,7 +51,9 @@ export default function IndividualBrokersTab() {
   const [q, setQ] = useState("");
   const [agencyFilter, setAgencyFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [expertiseFilter, setExpertiseFilter] = useState<string>("all");
   const [open, setOpen] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
   const { data: rows = [], isLoading } = useQuery<Row[]>({
