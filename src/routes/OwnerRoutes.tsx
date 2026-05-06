@@ -72,6 +72,7 @@ const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault")
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
+const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
