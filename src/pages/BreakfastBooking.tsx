@@ -95,12 +95,48 @@ export default function BreakfastBooking() {
     return groups;
   }, [data]);
 
+  // Auto-pick the first available slot and scroll to the calendar so users
+  // landing from the invite email never see "please enable JavaScript" or a
+  // blank screen — the calendar is immediately visible.
+  useEffect(() => {
+    if (!data?.slots?.length || slotId) return;
+    setSlotId(data.slots[0].id);
+    requestAnimationFrame(() => {
+      slotRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [data, slotId]);
+
+  const brokerageLabel = data?.brokerageName || "your brokerage";
+  const slotIsoSelected = data?.slots.find((s) => s.id === slotId)?.slot_at || "";
+  const consentText = `I confirm that ${brokerageLabel} will attend the private partnership breakfast on the selected date. I understand this is a private catered event for ${brokerageLabel} only and that I am responsible for cancelling at least 2 days before the booked date by contacting ${HOST_NAME} on ${HOST_PHONE}.`;
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!slotId) { toast.error("Please pick a breakfast time"); return; }
     if (!consent) { toast.error("Please confirm the consent checkbox"); return; }
     setSubmitting(true);
     try {
+      const cleanAttendees =
+        attendeeMode === "list"
+          ? attendees
+              .map((a) => ({ name: a.name.trim(), phone: a.phone.trim(), email: a.email.trim() }))
+              .filter((a) => a.name || a.phone || a.email)
+          : [];
+      const headcount =
+        attendeeMode === "list" && cleanAttendees.length > 0
+          ? cleanAttendees.length
+          : Number(attendeeCount) || 1;
+      const consentSnapshot = {
+        text: consentText,
+        checked: true,
+        signedAt: new Date().toISOString(),
+        signerName: fullName,
+        signerEmail: email,
+        signerPhone: phone || null,
+        brokerageName: brokerageLabel,
+        slotAt: slotIsoSelected,
+        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+      };
       const { data: res, error: confErr } = await supabase.functions.invoke(
         "breakfast-booking-confirm",
         {
@@ -110,24 +146,31 @@ export default function BreakfastBooking() {
             fullName,
             email,
             phone,
-            attendeeCount: Number(attendeeCount) || 1,
+            attendeeCount: headcount,
+            attendees: cleanAttendees,
             briefingTopics,
             partnershipFocus,
             notes,
             consent,
+            consentSnapshot,
           },
         },
       );
       if (confErr) throw confErr;
       if ((res as any)?.error) throw new Error((res as any).error);
-      const slot = data?.slots.find((s) => s.id === slotId);
-      setConfirmed({ slotAt: slot?.slot_at || new Date().toISOString() });
+      setConfirmed({ slotAt: slotIsoSelected || new Date().toISOString() });
     } catch (e: any) {
       toast.error(e?.message || "Could not confirm booking");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const updateAttendee = (i: number, patch: Partial<AttendeeRow>) => {
+    setAttendees((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
+  };
+  const addAttendee = () => setAttendees((r) => [...r, { name: "", phone: "", email: "" }]);
+  const removeAttendee = (i: number) => setAttendees((r) => (r.length > 1 ? r.filter((_, idx) => idx !== i) : r));
 
   const cardRef = useRef<HTMLDivElement>(null);
 
