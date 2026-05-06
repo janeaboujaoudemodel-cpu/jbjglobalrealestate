@@ -2079,7 +2079,7 @@ const DeveloperRegistryTab = () => {
         </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
-      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} />
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} defaultListId={devListView.kind === "list" ? devListView.listId : null} />
 
       <div className="flex flex-wrap gap-2 items-center bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-xl p-3">
         <div className="text-sm text-[#1A1A1A]"><strong>{selected.size}</strong> of {filtered.length} selected</div>
