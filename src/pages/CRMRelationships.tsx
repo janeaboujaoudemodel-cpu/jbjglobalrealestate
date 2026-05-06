@@ -439,11 +439,29 @@ const BrokeragesTab = () => {
   }, [q]);
   const [statusFilter, setStatusFilterRaw] = useState("all");
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
-  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
+  const [regionFilter, setRegionFilterRaw] = useState<string>("all");
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
-  const setSourceTab = (v: "all" | "directory" | "owner" | "existing") => startTransition(() => setSourceTabRaw(v));
+  const setRegionFilter = (v: string) => startTransition(() => setRegionFilterRaw(v));
+  const setSourceTab = (v: "all" | "directory" | "owner" | "sent" | "inbox") => startTransition(() => setSourceTabRaw(v));
+  const [syncing, setSyncing] = useState(false);
+  const handleSyncNow = async () => {
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("crm-email-sync", { body: { manual: true } });
+      if (error) throw error;
+      const processed = (data as any)?.processed ?? 0;
+      const matched = (data as any)?.matched ?? 0;
+      toast.success(`Inbox synced — ${processed} messages scanned, ${matched} matched to CRM`);
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Sync failed — check Gmail connection");
+    } finally {
+      setSyncing(false);
+    }
+  };
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
