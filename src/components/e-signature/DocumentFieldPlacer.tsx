@@ -216,13 +216,15 @@ export default function DocumentFieldPlacer({
             ? ""
             : selectedFieldType === "signature" && savedSignatureUrl
             ? savedSignatureUrl
+            : selectedFieldType === "stamp" && savedStampSvg
+            ? savedStampSvg
             : undefined,
       };
 
       onFieldsChange([...fields, newField]);
       toast.success(`${fieldConfig.label} field added — drag to reposition`);
     },
-    [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients, savedSignatureUrl]
+    [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients, savedSignatureUrl, savedStampSvg]
   );
 
   const removeField = (fieldId: string) => {
