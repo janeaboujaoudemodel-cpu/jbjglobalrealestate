@@ -423,7 +423,7 @@ serve(async (req: Request) => {
       developer_phone_display: "+971 58 589 3499",
       developer_phone_tel: "tel:+971585893499",
       whatsapp_url: "https://wa.me/971585893499",
-      developer_logo_url: "https://jbjglobalrealestate.lovable.app/brand/citi-developers-gold.png",
+      developer_logo_url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png",
       cc_email: ccEmail,
       from_name: fromName,
       represented_developer_name: representedDeveloperName,
