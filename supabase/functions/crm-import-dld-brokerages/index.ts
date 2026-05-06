@@ -115,14 +115,16 @@ Deno.serve(async (req) => {
       }
 
       const officeMatch = office ? byOffice.get(office) : null;
+      const nameMatch = nameKey ? byName.get(nameKey) : null;
+      const emailMatch = email ? byEmail.get(email) : null;
+      const phoneMatch = phone ? byPhone.get(phone) : null;
       const canClaim = (candidate: any) =>
         candidate && !candidate.dld_office_number && !claimedExistingIds.has(candidate.id);
       const match =
         officeMatch ||
-        canClaim(byName.get(nameKey)) ? byName.get(nameKey) :
-        canClaim(byEmail.get(email)) ? byEmail.get(email) :
-        canClaim(byPhone.get(phone)) ? byPhone.get(phone) :
-        null;
+        (canClaim(nameMatch) ? nameMatch : null) ||
+        (canClaim(emailMatch) ? emailMatch : null) ||
+        (canClaim(phoneMatch) ? phoneMatch : null);
 
       if (match) {
         // Backfill only — never overwrite curated fields
