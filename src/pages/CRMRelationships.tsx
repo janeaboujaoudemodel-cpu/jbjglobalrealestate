@@ -1814,7 +1814,7 @@ const DeveloperRegistryTab = () => {
         </button>
         <button
           type="button"
-          onClick={() => setSubTab("history")}
+          onClick={() => setSubTab(subTab === "history" ? null : "history")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
             subTab === "history"
               ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
