@@ -33,6 +33,32 @@ const cleanEmail = (e: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : "";
 };
 
+async function loadDldRows(req: Request) {
+  const candidates = [
+    req.headers.get("origin") ? `${req.headers.get("origin")}/dld-broker-offices.json` : "",
+    Deno.env.get("DLD_BROKER_OFFICES_URL") || "",
+    "https://www.jbj.ae/dld-broker-offices.json",
+    "https://jbjglobalrealestate.lovable.app/dld-broker-offices.json",
+  ].filter(Boolean);
+
+  let lastError = "DLD register unavailable";
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url, { headers: { "Accept": "application/json" } });
+      if (!res.ok) {
+        lastError = `${url} returned ${res.status}`;
+        continue;
+      }
+      const rows = await res.json();
+      if (Array.isArray(rows)) return rows;
+      lastError = `${url} did not return an array`;
+    } catch (e) {
+      lastError = String((e as Error)?.message || e);
+    }
+  }
+  throw new Error(lastError);
+}
+
 async function loadExistingBrokerages(supabase: any, ownerId: string) {
   const all: any[] = [];
   const page = 1000;
@@ -63,7 +89,13 @@ Deno.serve(async (req) => {
     );
     const ownerId = auth.userId;
 
-    const { rows } = await req.json();
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch {
+      body = {};
+    }
+    const rows = Array.isArray(body.rows) ? body.rows : await loadDldRows(req);
     if (!Array.isArray(rows)) {
       return new Response(JSON.stringify({ error: "rows must be an array" }), {
         status: 400,
