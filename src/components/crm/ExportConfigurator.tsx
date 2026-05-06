@@ -38,10 +38,12 @@ interface Props {
   columns: ColumnDef[];
   presets?: ExportPreset[];
   storageKey: string; // e.g. "export.brokerages"
+  statusFilters?: { key: string; label: string }[];
   onExport: (opts: {
     format: ExportFormat;
     scope: "visible" | "selected" | "all";
     columns: string[];
+    statuses?: string[];
   }) => Promise<void> | void;
 }
 
