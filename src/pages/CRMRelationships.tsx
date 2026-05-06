@@ -1846,9 +1846,13 @@ const DeveloperRegistryTab = () => {
               {queuePool.length}
             </span>
           </div>
-          <span className="text-[11px] text-[#1A1A1A]/70">
-            Always expanded — Document Pack &amp; Outreach Settings stay collapsible
-          </span>
+          <button
+            type="button"
+            onClick={() => setSubTab(null)}
+            className="text-[11px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline"
+          >
+            Collapse
+          </button>
         </div>
         <div className="space-y-5">
       <div className="flex flex-wrap gap-2 items-center">
