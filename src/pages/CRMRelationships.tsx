@@ -1913,17 +1913,24 @@ const DeveloperRegistryTab = () => {
           rows={filtered as any[]}
           columns={[
             { key: "developer_name", label: "Developer", width: 220 },
-            { key: "status", label: "Status", width: 180, status: true },
+            {
+              key: "status", label: "Registration status", width: 180, status: true,
+              statusOptions: DEV_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, status: next }),
+            },
+            {
+              key: "outreach_stage", label: "Agency status", width: 170, status: true,
+              statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
+            },
             { key: "developer_email", label: "Email", width: 200 },
             { key: "phone", label: "Phone", width: 140 },
             { key: "emirate", label: "Emirate", width: 110 },
             { key: "agency_code", label: "Agency code", width: 130 },
-            { key: "attended_briefing", label: "Attended briefing", width: 140, status: true },
             { key: "briefing_date", label: "Briefing date", width: 130, render: (r: any) => r.briefing_date ? new Date(r.briefing_date).toLocaleDateString() : "—" },
-            { key: "notes", label: "Notes", width: 280, editable: true },
+            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—" },
+            { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          getStatus={(r: any) => r.status}
-          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
           onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
           emptyLabel="No developers match filters."
         />
