@@ -468,15 +468,15 @@ serve(async (req: Request) => {
       const offerBlock = project.offerHtml
         ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px;text-align:left">${project.offerHtml}</div>`
         : "";
-      // NOTE: Salutation is resolved per-recipient from brk.company_name and primary_contact.name.
-      // It NEVER falls back to the words "Sample" or "from <Brokerage>" — bulk sends synchronize
-      // each recipient's own name automatically (e.g. "Dear Provident team," / "Dear Farm team,").
+      // Salutation: NEVER fall back to "your brokerage" — always use the resolved
+      // brokerage name (Provident, Farm, etc.) so bulk sends stay personalized.
       const hasContactName = !!(pcRaw.name && String(pcRaw.name).trim());
       const salutation = hasContactName
         ? `Dear <strong>${varsMap.contact_first_name}</strong>,`
         : `Dear <strong>${varsMap.brokerage_name}</strong> team,`;
+      // Champagne‑gold CTA (cream tile + ink text + 1px gold hairline — no yellow fill)
       const goldCta = (href: string, label: string) =>
-        `<a href="${href}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;background:#F7F2EA;color:#1A1A1A;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.3px;border:1px solid #B89555">${label}</a>`;
+        `<a href="${href}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;background:#EFE6D6;color:#1A1A1A;text-decoration:none;border-radius:12px;font-size:13px;font-weight:600;letter-spacing:0.3px;border:1px solid #B89555">${label}</a>`;
       html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
 <div style="background:#F7F2EA;padding:48px 16px">
   <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:44px 44px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
@@ -485,14 +485,22 @@ serve(async (req: Request) => {
       <div style="margin-top:6px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</div>
     </div>
     <p style="margin:0 0 16px;font-size:15px">${salutation}</p>
-    <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>${representedDeveloperName}</strong>, Sales &amp; Training department.</p>
+    <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>${representedDeveloperName}</strong>, Sales &amp; Training department. We'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private briefing with ${representedDeveloperName}.</p>
     <p style="margin:0 0 16px;font-size:14px">${resolvedGroupLine}</p>
-    <p style="margin:0 0 24px;font-size:14px">Please let us know whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}. If not, kindly share your email address so our <strong>Channel Partner Department</strong> can send the registration documents and onboard <strong>${varsMap.brokerage_name}</strong> directly.</p>
+
+    <p style="margin:0 0 16px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is <strong>already registered with ${representedDeveloperName}</strong>? If not, simply <strong>reply to this email</strong> and our <strong>Channel Partner Department</strong> will follow up with the registration documents to onboard <strong>${varsMap.brokerage_name}</strong> directly.</p>
+
+    <p style="margin:0 0 24px;font-size:14px">If <strong>${varsMap.brokerage_name}</strong> already runs an internal <strong>WhatsApp group</strong> for project updates, please add me so I can keep your team posted on launches, inventory and commissions. If not, I'll create a dedicated WhatsApp group with your team.</p>
+
+    <div style="margin:24px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px;text-align:center;color:#1A1A1A">
+      Please <strong>reply to this email</strong> at <strong>${replyTo}</strong> and CC <strong>info.jane@gmail.com</strong> so both inboxes stay in sync.
+    </div>
+
     <div style="margin:28px 0;padding:28px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px;text-align:center">
       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:10px">Featured Project</div>
       <div style="font-size:26px;font-weight:600;color:#1A1A1A;margin-bottom:10px;letter-spacing:1px">${project.name}</div>
       <div style="font-size:14px;color:#1A1A1A;margin:0 auto 22px;max-width:460px">${project.tagline}</div>
-      ${goldCta(project.url, `Open ${project.name} e-catalogue &rarr;`)}
+      ${goldCta(project.url, `Open ${project.name} e‑catalogue &rarr;`)}
     </div>
     ${offerBlock}
     <div style="margin:28px 0;padding:28px;background:#FDFBF7;border:1px solid #B89555;border-radius:14px">
@@ -502,19 +510,20 @@ serve(async (req: Request) => {
       <div style="margin:14px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px">
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Please Confirm</div>
         <ul style="margin:0;padding-left:18px">
-          <li style="margin-bottom:6px">The <strong>names of attendees</strong> from ${varsMap.brokerage_name}.</li>
+          <li style="margin-bottom:6px">The <strong>names of attendees</strong> from ${varsMap.brokerage_name} (optional — you may also just give a head‑count).</li>
           <li style="margin-bottom:6px">The <strong>number of brokers</strong> attending and the <strong>total members</strong> joining the breakfast.</li>
-          <li style="margin-bottom:6px">Reply by email with the <strong>date and time that suits you</strong> — any slot from <strong>Monday to Friday</strong>, between <strong>11:00 and 17:00</strong> Dubai time.</li>
-          <li>Please also book directly from the calendar and reply back with the slot you have selected.</li>
+          <li style="margin-bottom:6px">A <strong>date and time that suits ${varsMap.brokerage_name}</strong> — any slot from <strong>Monday to Friday</strong>, between <strong>11:00 and 17:00</strong> Dubai time.</li>
+          <li>Use the button below to <strong>book your slot directly on our calendar</strong> — you'll see live availability and receive an instant confirmation.</li>
         </ul>
       </div>
-      ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, "Book your slot on the calendar &rarr;")}</div>` : ""}
+      ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, `Reserve a seat for ${varsMap.brokerage_name} &rarr;`)}</div>` : ""}
     </div>
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
-      Warm regards,<br/><strong>${ownerFirstName} Bou Jaoude</strong><br/>
-      <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
-      <span style="color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</span><br/>
-      <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo.toUpperCase()}</a>
+      Warm regards,<br/><strong>${ownerFirstName} Bou Jaoude</strong> — Sales &amp; Training, Channel Partner Activation<br/>
+      <span style="color:#1A1A1A">${representedDeveloperName} · Sales &amp; Experience Center, Dubai</span><br/>
+      <a href="tel:+971547167107" style="color:#1A1A1A;text-decoration:none">+971 54 716 7107</a> ·
+      <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo}</a><br/>
+      <a href="https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18" target="_blank" rel="noopener" style="color:#1A1A1A99;text-decoration:none;font-size:12px">View office location on map &rarr;</a>
     </div>
   </div>
   <div style="max-width:640px;margin:16px auto 0;text-align:center;font-size:11px;color:#1A1A1A66">${representedDeveloperName} · Sales &amp; Training · Channel Partner Activation</div>
