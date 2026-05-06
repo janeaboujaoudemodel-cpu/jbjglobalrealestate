@@ -41,6 +41,11 @@ export const StandaloneRoutes = () => (
         <SignDocument />
       </Suspense>
     } />
+    <Route path="/documents/sign/:token" element={
+      <Suspense fallback={<PageLoader />}>
+        <PublicSignDocument />
+      </Suspense>
+    } />
     <Route path="/dev/footer-preview" element={
       <RouteErrorBoundary routeName="FooterPreview">
         <Suspense fallback={<PageLoader />}>
