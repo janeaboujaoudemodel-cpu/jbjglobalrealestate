@@ -1,94 +1,54 @@
-## Goals
+I’ll fix this as a reliability + workflow update to the Relationship Hub.
 
-Add three new capabilities to **Relationships → Brokerages** and **Relationships → Developers**:
+1. Fix the Exclude button crash first
+- Replace the invalid empty Radix Select option in `ExcludeFilterPopover` with a safe sentinel value.
+- This is the root cause of the black “Verifying access…” reset: opening Exclude throws a runtime error, React remounts the protected owner route, and the guard shows verification again.
+- Keep saved filters working, but “None” will use an internal value like `__none` instead of `""`.
 
-1. **Exclusion Filters** — searchable multi-select to exclude specific agencies/developers, with named saved filter sets.
-2. **Premium Excel-style Export** — colored XLSX (and matching PDF) with status-driven cell colors, frozen header, banded rows, and brand styling.
-3. **Excel View** — in-app spreadsheet-like grid with inline status labeling and color coding that matches the export.
+2. Add proper Include / Exclude review inside brokerage email sending
+- In `BulkSendDialog` for brokerages, add a recipient adjustment step before final send:
+  - Show selected count.
+  - Show excluded count.
+  - Show final send count.
+  - Provide `Exclude` and `Include` controls with searchable agency names.
+  - Owner can tick agencies to exclude from the selected list, or include additional agencies before sending.
+  - `Save/Done` applies the adjusted list inside the dialog.
+  - Final confirmation will say exactly how many brokerages are selected, excluded, added, and will be sent.
+- Wire this so “Select all visible → Email Selected Agencies” does not immediately lock the owner into that exact selection.
+- Do not send to excluded rows.
 
----
+3. Split Developer Excel statuses into two clear status columns
+- Keep developer registration tracking as `Registration Status`:
+  - Not Started, Pending Application, Documents Required, Under Review, Registered, Rejected, Expired.
+- Add a separate `Agency Status` / relationship activity column for how active the agency/developer is with us:
+  - Not Contacted, Attempted, Engaged, Meeting Booked, NDA Pending, NDA Signed, Active Partner, Dormant, Declined, Blacklisted.
+- Use the existing `outreach_stage` field for the second status where possible, so this does not duplicate data unnecessarily.
+- Update Developer Excel View to show both status dropdowns with color.
+- Update Developer export XLSX/PDF/CSV to include both colored columns.
 
-## 1. Exclusion Filters (saved)
+4. Improve Brokerage Excel statuses and broker/inquiry visibility
+- Brokerage Excel View/export will show:
+  - `Agency Status` from `status`.
+  - `Outreach Status` from `outreach_stage`.
+  - Active broker/contact fields from the brokerage record and available brokerage agents.
+  - Inquiry/contact indicators where available from existing CRM/inquiry fields.
+- Add colors to every status column, not only one status.
 
-**Schema** — new table `crm_saved_filters`:
-- `id`, `user_id` (auth.uid), `scope` (`'brokerage' | 'developer'`), `name`, `excluded_ids uuid[]`, `excluded_names text[]`, `created_at`, `updated_at`
-- RLS: owner-only (using `requireOwnerAuth` pattern + `auth.uid()` policies).
+5. Make Excel View balanced and organized
+- Prevent long agency names like “East Coast Real Estate...” from expanding the row height.
+- Add fixed row height, truncation with tooltip/title, consistent cell widths, and better wrapping only for Notes.
+- Keep the first column sticky, but not oversized.
+- Ensure both Brokerage and Developer Excel Views look like a clean spreadsheet, not uneven cards.
 
-**UI** — new component `src/components/crm/ExcludeFilterPopover.tsx`:
-- Trigger button "Exclude" next to Export.
-- Searchable list of all current rows with checkboxes.
-- Footer: `Reset`, `Save as…`, `Done`.
-- Dropdown to load any saved filter for the current scope.
-- Selected-state badge (e.g. "12 excluded · Tier-1 list") on the trigger button.
+6. Update exports to match the view
+- XLSX exports will keep the champagne/gold styling and status colors.
+- Status colors will match the on-screen Excel View.
+- PDF exports will color both status columns.
+- CSV remains plain text, but includes both status fields.
 
-Wire into both Brokerages and Developers tabs in `src/pages/CRMRelationships.tsx`. The active exclusion is applied to `filtered` BEFORE rendering, before Export, and before the new Excel View.
-
----
-
-## 2. Premium Colored Export
-
-Rewrite `src/utils/exportBrokerages.ts` (and add `src/utils/exportDevelopers.ts`) using **`exceljs`** (richer styling than `xlsx`).
-
-XLSX styling:
-- **Header row**: champagne fill `#EFE6D6`, ink `#1A1A1A`, bold, gold bottom border `#B89555`, frozen.
-- **Banded rows**: alternating `#FFFFFF` / `#FAF6EE`.
-- **Status column**: solid fill by status —
-  - `not_answering` / `rejected` → red `#FCA5A5` fg, dark red `#7F1D1D` text
-  - `interested` / `meeting_booked` → emerald `#A7F3D0` / `#065F46`
-  - `documents_required` → amber `#FDE68A` / `#92400E`
-  - `registered` / `contract_signed` → blue `#BFDBFE` / `#1E3A8A`
-  - `not_started` → champagne `#EFE6D6` / `#1A1A1A`
-- **Number columns**: right-aligned, `#,##0` format.
-- **Title block** (rows 1–3): merged "JBJ GLOBAL REAL ESTATE — UAE Brokerage Tracker" with date and total count.
-- Auto-filter on data range, column widths from existing `COLUMNS`.
-
-PDF: keep `jspdf-autotable` but add the same status fills and the brand letterhead.
-
-CSV stays plain.
-
----
-
-## 3. Excel View tab
-
-New component `src/components/crm/ExcelGridView.tsx` — virtualized grid (built on `@tanstack/react-table` + plain CSS grid; no new heavy dep needed).
-
-- Toggle pill in section header: `Cards | Excel View`.
-- Sticky header, sticky first column (Agency / Developer name).
-- Status cell is an inline dropdown (`not_answering`, `rejected`, `interested`, `documents_required`, `registered`, `contract_signed`, `meeting_booked`, `not_started`). Selecting a status:
-  - calls existing update mutation (`brokerages.crm_status` / equivalent on developers),
-  - immediately repaints the cell with the same color used in the export.
-- Notes cell becomes editable inline (debounced save).
-- "Export" from inside Excel View uses the same colored XLSX → 1-to-1 visual parity.
-
-Excluded rows from filter #1 are hidden here too.
-
----
-
-## Technical Details
-
-- Add dep: `exceljs`. Remove direct use of `xlsx` for styled output (keep it only if other modules use it).
-- Status palette centralised in `src/utils/crmStatusPalette.ts` and consumed by `ExcelGridView`, `exportBrokerages`, `exportDevelopers`, and the existing card badges so colors stay consistent everywhere.
-- Saved filters are scoped per user; `OwnerGuard` already protects `/owner/crm/relationships`.
-- Migration for `crm_saved_filters` + RLS policies (`select/insert/update/delete` where `user_id = auth.uid()`).
-
----
-
-## Files
-
-**New**
-- `supabase/migrations/<ts>_crm_saved_filters.sql`
-- `src/components/crm/ExcludeFilterPopover.tsx`
-- `src/components/crm/ExcelGridView.tsx`
-- `src/utils/crmStatusPalette.ts`
-- `src/utils/exportDevelopers.ts`
-
-**Edited**
-- `src/pages/CRMRelationships.tsx` — wire Exclude button, Cards/Excel toggle, pass excluded set into Export and grid.
-- `src/utils/exportBrokerages.ts` — switch to `exceljs`, add colored title + status fills + banding + frozen header + autofilter.
-- `package.json` — add `exceljs`.
-
----
-
-## Out of Scope (for this round)
-
-- No changes to email templates, breakfast booking page, or developer/brokerage classification (those are tracked separately).
+7. Verify after implementation
+- Reproduce the Exclude click after the fix and confirm no runtime error, no black verifying page, and the popover opens.
+- Test “Select all visible → Email Selected Agencies → Exclude/Include → final confirmation” in preview.
+- Test Excel View row balance with long agency names.
+- Test changing both status columns in Developer Excel View and confirm the row updates without breaking.
+- Check console for zero Select.Item runtime errors.

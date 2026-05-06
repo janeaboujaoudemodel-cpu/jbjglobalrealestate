@@ -111,12 +111,15 @@ export function ExcludeFilterPopover({ scope, options, excludedIds, onChange }: 
           <div className="text-sm font-semibold text-[#1A1A1A] mb-2">
             Exclude {scope === "brokerage" ? "agencies" : "developers"}
           </div>
-          <Select value={activeFilterId} onValueChange={loadFilter}>
+          <Select
+            value={activeFilterId || "__none"}
+            onValueChange={(v) => loadFilter(v === "__none" ? "" : v)}
+          >
             <SelectTrigger className="w-full h-8 text-xs">
               <SelectValue placeholder="Load saved filter…" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">— None —</SelectItem>
+              <SelectItem value="__none">— None —</SelectItem>
               {saved.map((f) => (
                 <SelectItem key={f.id} value={f.id}>
                   {f.name} ({f.excluded_ids?.length || 0})
