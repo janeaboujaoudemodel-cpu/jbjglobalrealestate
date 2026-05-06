@@ -2610,12 +2610,6 @@ const CRMRelationships = () => {
           </Tabs>
         </div>
       </div>
-      <TestSendDialog
-        open={testSendOpen}
-        onOpenChange={setTestSendOpen}
-        mode="brokerage"
-        variant="brokerage_partnership_intro"
-      />
     </>
   );
 };
