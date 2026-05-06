@@ -56,12 +56,14 @@ export function ExportConfigurator({
   columns,
   presets = [],
   storageKey,
+  statusFilters,
   onExport,
 }: Props) {
   const defaultCols = columns.filter((c) => c.defaultOn !== false).map((c) => c.key);
   const [format, setFormat] = useState<ExportFormat>("xlsx");
   const [scope, setScope] = useState<"visible" | "selected" | "all">("visible");
   const [selected, setSelected] = useState<string[]>(defaultCols);
+  const [statuses, setStatuses] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   // Load saved selection
@@ -79,6 +81,9 @@ export function ExportConfigurator({
   const toggle = (k: string) =>
     setSelected((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
 
+  const toggleStatus = (k: string) =>
+    setStatuses((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
+
   const applyPreset = (p: ExportPreset) => setSelected(p.columns);
 
   const groups = Array.from(
@@ -90,7 +95,7 @@ export function ExportConfigurator({
     setBusy(true);
     try {
       localStorage.setItem(storageKey, JSON.stringify(selected));
-      await onExport({ format, scope, columns: selected });
+      await onExport({ format, scope, columns: selected, statuses: statuses.length ? statuses : undefined });
       onClose();
     } finally {
       setBusy(false);
