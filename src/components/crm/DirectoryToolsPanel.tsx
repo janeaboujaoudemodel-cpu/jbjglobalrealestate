@@ -123,7 +123,7 @@ export const DirectoryToolsPanel = ({
         <div className="flex items-center gap-2 flex-wrap">
           <Globe2 className="w-4 h-4 text-[#B89555]" />
           <h3 className="text-sm font-semibold text-[#1A1A1A]">
-            UAE Brokerage &amp; Developer Directory
+            {title}
           </h3>
           <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
             Auto-runs daily
