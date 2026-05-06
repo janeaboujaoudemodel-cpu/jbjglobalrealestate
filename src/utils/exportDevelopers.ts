@@ -11,7 +11,8 @@ export type DeveloperExportFormat = "csv" | "xlsx" | "pdf";
 export interface DeveloperExportRow {
   rank: number;
   developer_name: string;
-  status: string;
+  status: string;             // registration status
+  agency_status: string;      // outreach / activity status
   developer_email: string;
   phone: string;
   emirate: string;
@@ -32,18 +33,19 @@ interface ColDef {
 }
 
 const COLUMNS: ColDef[] = [
-  { key: "rank",              label: "Rank",              width: 6, numeric: true },
-  { key: "developer_name",    label: "Developer",         width: 34 },
-  { key: "status",            label: "Status",            width: 22, status: true },
-  { key: "developer_email",   label: "Email",             width: 28 },
-  { key: "phone",             label: "Phone",             width: 18 },
-  { key: "emirate",           label: "Emirate",           width: 14 },
-  { key: "agency_code",       label: "Agency code",       width: 16 },
-  { key: "registration_date", label: "Registered",        width: 14 },
-  { key: "expiry_date",       label: "Expiry",            width: 14 },
-  { key: "attended_briefing", label: "Attended briefing", width: 16, status: true },
-  { key: "briefing_date",     label: "Briefing date",     width: 14 },
-  { key: "notes",             label: "Notes",             width: 40 },
+  { key: "rank",              label: "Rank",                width: 6, numeric: true },
+  { key: "developer_name",    label: "Developer",           width: 34 },
+  { key: "status",            label: "Registration status", width: 22, status: true },
+  { key: "agency_status",     label: "Agency status",       width: 20, status: true },
+  { key: "developer_email",   label: "Email",               width: 28 },
+  { key: "phone",             label: "Phone",               width: 18 },
+  { key: "emirate",           label: "Emirate",             width: 14 },
+  { key: "agency_code",       label: "Agency code",         width: 16 },
+  { key: "registration_date", label: "Registered",          width: 14 },
+  { key: "expiry_date",       label: "Expiry",              width: 14 },
+  { key: "attended_briefing", label: "Attended briefing",   width: 16, status: true },
+  { key: "briefing_date",     label: "Briefing date",       width: 14 },
+  { key: "notes",             label: "Notes",               width: 40 },
 ];
 
 const triggerDownload = (blob: Blob, filename: string) => {
