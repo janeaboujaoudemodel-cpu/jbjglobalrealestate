@@ -740,11 +740,15 @@ const BrokeragesTab = () => {
       };
     });
 
-  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[] }) => {
-    const source =
+  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[]; statuses?: string[] }) => {
+    let source =
       opts.scope === "all" ? (data as any[]) :
       opts.scope === "selected" ? (data as any[]).filter((r: any) => bulkSel.has(r.id)) :
       (filtered as any[]);
+    if (opts.statuses && opts.statuses.length) {
+      const set = new Set(opts.statuses);
+      source = source.filter((r: any) => set.has(String(r.outreach_stage || r.registration_status || r.status || "").toLowerCase()));
+    }
     if (!source.length) {
       toast.error("Nothing to export");
       return;
