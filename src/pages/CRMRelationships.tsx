@@ -1588,6 +1588,10 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
 DocumentPackPanel.displayName = "DocumentPackPanel";
 
 const DeveloperRegistryTab = () => {
+  const navigate = useNavigate();
+  const [testSendOpen, setTestSendOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [statusView, setStatusView] = useState<"all" | "contracts">("all");
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
   const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
