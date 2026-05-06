@@ -105,6 +105,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
       inbox: 0,
       contacted: 0,
       pending_actions: 0,
+      registered: 0,
       under_review: 0,
       rejected: 0,
       expired: 0,
@@ -114,6 +115,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
       if (d._inboxCount > 0) c.inbox++;
       if (d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= thirtyDaysAgo && d._inboxCount === 0) c.contacted++;
       if (d._pendingCount > 0) c.pending_actions++;
+      if (d.status === "registered") c.registered++;
       if (d.status === "under_review") c.under_review++;
       if (d.status === "rejected") c.rejected++;
       if (d.status === "expired") c.expired++;
@@ -131,6 +133,8 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
           return d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= thirtyDaysAgo && d._inboxCount === 0;
         case "pending_actions":
           return d._pendingCount > 0;
+        case "registered":
+          return d.status === "registered" && !d.deleted_at;
         case "under_review":
           return d.status === "under_review";
         case "rejected":
