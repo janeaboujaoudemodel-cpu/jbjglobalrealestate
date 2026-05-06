@@ -36,6 +36,7 @@ type TabKey =
   | "inbox"
   | "contacted"
   | "pending_actions"
+  | "registered"
   | "under_review"
   | "rejected"
   | "expired"
