@@ -285,6 +285,7 @@ serve(async (req: Request) => {
         email: c.email || null,
         website: c.website || null,
         owner_id: user.id,
+        list_id: listId,
       });
       if (sampleInserted.length < 10) sampleInserted.push(c.name);
       inserted++;
