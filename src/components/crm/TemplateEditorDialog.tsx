@@ -62,9 +62,7 @@ export const TemplateEditorDialog = ({
   const [showPreview, setShowPreview] = useState(true);
   const [sourceMode, setSourceMode] = useState(false);
   const [testEmail, setTestEmail] = useState("");
-  const [testSampleName, setTestSampleName] = useState(
-    isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.",
-  );
+  const [testSampleName, setTestSampleName] = useState("");
 
   const VARIABLE_CHIPS: { key: string; label: string }[] = isBrokerage
     ? [
