@@ -34,6 +34,9 @@ type Row = {
   status: string;
   source: string;
   created_at: string;
+  expertise_type?: string | null;
+  expertise_areas?: string[] | null;
+  import_label?: string | null;
   brokerage?: { company_name: string | null } | null;
 };
 
