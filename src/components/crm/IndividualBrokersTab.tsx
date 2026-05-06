@@ -19,7 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
-import { Plus, Search, User, Phone, Mail, MessageCircle, Trash2 } from "lucide-react";
+import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
+import { exportRowsToXlsx } from "@/utils/exportXlsx";
+import { Plus, Search, User, Phone, Mail, MessageCircle, Trash2, UploadCloud, FileDown } from "lucide-react";
 
 type Row = {
   id: string;
