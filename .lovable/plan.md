@@ -1,99 +1,90 @@
+# Brokerage Briefing — Email, Booking & Schedule Upgrade
 
-# Relationship Hub — Bulk Upload, Views, Access Fix & Performance
+## 1. Email template rewrite (`crm-send-brokerage-outreach`)
 
-## 1. Bulk database upload for Individual Brokers & Brokerages
+Replace every "your brokerage" / "your team" with the resolved `brokerage_name` (Provident, Farm, etc.) — already wired via `varsMap.brokerage_name`, but the fallback `brk.company_name || "your team"` becomes `brk.company_name || "[Brokerage]"` and we hard-block sends with no resolved name on bulk.
 
-### Schema additions (one migration)
-Add to `crm_brokerage_agents` and `crm_brokerages`:
-- `expertise_type` text — `'leasing' | 'selling' | 'both'` (default `'both'`)
-- `expertise_areas` text[] — multi-select areas (Dubai Marina, Downtown, JVC, Business Bay, Palm, etc.)
-- `import_batch_id` uuid — group rows from same upload
-- `import_label` text — friendly batch name shown in filters
+New body copy (channel‑partner + breakfast variant):
 
-New table `crm_import_batches`:
-- `id`, `owner_id`, `target` (`brokers` | `brokerages`), `label`, `strategy` (`merge` | `separate` | `replace`), `default_expertise_type`, `default_expertise_areas[]`, `row_count`, `inserted`, `updated`, `skipped`, `status`, `created_at`.
+- Salutation: `Dear <Brokerage Name> team,`
+- Intro: `This is Jane from Citi Developers, Sales & Training.`
+- WhatsApp line (replaces current "add to channel" text):
+  > "If <Brokerage Name> already has an internal WhatsApp group for project updates, please add me so I can keep you posted on launches, inventory and commissions. If not, I'll create a dedicated WhatsApp group with your team."
+- Registration line:
+  > "Could you confirm whether <Brokerage Name> is **already registered with Citi Developers**? If not, simply **reply to this email** and our Channel Partner Department will follow up with the registration documents."
+- Reply‑to instruction (visible block):
+  > "Please reply to **jane@citidevelopers.com** and CC **info.jane@gmail.com** so both inboxes stay in sync."
+- Project CTA button label: `Open <Project> e‑catalogue →`
+- Briefing CTA button label: `Reserve a seat for <Brokerage Name> →` (synchronizes per recipient)
+- Both buttons restyled to **champagne gold**:
+  `background:#EFE6D6; color:#1A1A1A; border:1px solid #B89555` (replaces the current cream `#F7F2EA` look that reads yellow on some clients). Hover/visited safe inline styles, 12px radius, 14/28 padding.
 
-RLS: owner-only (matches existing pattern).
+Signature block adds Jane's full coordinates pulled from one constant `HOST_CARD`:
+```
+Jane Bou Jaoude — Sales & Training, Channel Partner Activation
+Citi Developers · Sales & Experience Center, Dubai
++971 54 716 7107 · jane@citidevelopers.com
+Map: https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18
+```
 
-### New `<UniversalImportDialog />` (replaces ad-hoc dialogs)
-Step wizard:
-1. **Drop files** — accepts multiple `.csv` / `.xlsx` / `.xls`, no row cap. Parsed in a Web Worker via `xlsx` (already in deps) so 33k rows don't freeze the UI.
-2. **Strategy** — radio:
-   - *Merge all into one batch* (default)
-   - *One batch per file* (each file becomes its own labelled batch / category)
-   - *Append to existing batch* (pick from dropdown)
-3. **Tagging (mandatory)** — for each batch:
-   - Expertise type: Leasing / Selling / Both
-   - Area(s) of expertise: tag input with autocomplete from existing values
-   - Optional batch label (e.g. "JVC Leasing Specialists – Oct 2026")
-4. **Column mapping** — auto-detected (name, phone, email, brokerage, role, whatsapp) with manual override, preview first 10 rows.
-5. **Server import** — new edge function `crm-bulk-import-brokers` (and reuse hardened `crm-import-dld-brokerages` for brokerage rows):
-   - Server-side dedupe (paginated lookup, same pattern shipped last loop).
-   - Inserts in 500-row batches with progress streamed back via SSE / polling.
-   - Returns `{ inserted, updated, skipped, batchId }`.
+CC list automatically appends `info.jane@gmail.com` when not already present.
 
-Wired into:
-- `IndividualBrokersTab.tsx` → "Upload database" button (next to existing Add Broker).
-- `BrokeragesAgenciesView` in `CRMRelationships.tsx` → "Upload database" button.
-- Single-broker "Add Broker" form also gains the **Expertise type** + **Areas** fields (mandatory).
+## 2. Booking link must open the calendar (fix "please enable JavaScript")
 
-## 2. Card view + Excel export — unified across Developers, Brokerages, Individual Brokers
-
-New shared primitive `src/components/crm/EntityViewSwitcher.tsx`:
-- Three modes: **Table** (current), **Cards** (champagne tile grid using `<IconTile />` standard), **Compact list**.
-- View choice persisted per-section in `localStorage`.
-- "Export to Excel" button in the header — uses `xlsx` to export the **currently filtered** rows with all visible columns + expertise fields. Filename: `{section}-{YYYY-MM-DD}.xlsx`.
-
-Applied to:
-- `IndividualBrokersTab.tsx`
-- `BrokeragesAgenciesView` (in `CRMRelationships.tsx`)
-- Developers tab (same page) — same switcher + export.
-
-Cards show: avatar/logo, name, brokerage, expertise badges (Leasing/Selling), area chips, last contact, quick-actions.
-
-## 3. Fix "Verifying access, please wait…" → kicked out bug
-
-Root cause: `ExecutiveAccessGate` runs `has_role` RPCs while `AuthContext` is still hydrating the session after a token refresh. When the refresh races (see auth log: `bad_jwt` → `token_revoked` → re-login at 20:30:01), the RPC returns false and the gate flips to "Access denied" before `isOwner` resolves.
+Root cause: the `{{booking_url}}` currently renders a static SSR shell on social previewers/WebView; the React route is fine but some recipients open it in an in‑app browser that pre‑fetches and shows the noscript banner.
 
 Fix:
-- Add `useAuthReady()` hook that resolves only after `supabase.auth.getSession()` has returned **and** `onAuthStateChange` has fired at least once.
-- `ExecutiveAccessGate` waits on `isReady` (no longer just `authLoading`), and treats `isOwner === undefined` as still-loading instead of denying.
-- On RPC error (network / 403), retry once with backoff before showing the denied screen.
-- Owner email match is checked **first** synchronously from the JWT claim, so the verified Owner never sees the gate at all.
+- `BreakfastBooking.tsx`: render a server‑safe `<noscript>` block that says "Loading your calendar… open in your browser if this doesn't auto‑load" with a direct anchor to the same URL — instead of the global noscript message.
+- Add `<meta http-equiv="refresh">` fallback only inside the noscript.
+- Auto‑scroll to the slot picker on mount and pre‑select the first open slot so the calendar is visible immediately (no extra click).
+- Add `?calendar=1` deep‑link handled in `useEffect` to open the slot grid expanded.
 
-Also fixes the related `Error creating session: 42P10` console error by adding the missing unique constraint `(user_id, session_key)` on the session-tracking table referenced by the upsert (`ON CONFLICT` target).
+## 3. Booking form — attendees + consent
 
-## 4. Performance — remove lazy loading on hot routes
+In `BreakfastBooking.tsx` add:
 
-- Replace `React.lazy` + `Suspense` for `/crm/*`, `/relationships`, `/admin/*` and the home shell with eager imports (kept lazy for low-traffic standalone tools).
-- Add `<link rel="preload" as="fetch">` for the brokerages JSON in `index.html`.
-- Move heavy CSV/XLSX parsing to a Web Worker (`src/workers/importParser.ts`) so the main thread stays at 60fps during 33k-row imports.
-- Memoise table rows (`React.memo` + stable keys) in `IndividualBrokersTab` and brokerages grid; switch list rendering to `@tanstack/react-virtual` (already a sibling of installed deps) for >500 rows.
-- Reuse existing paginated fetch (shipped last loop) so initial paint shows first 1k rows immediately, then streams the rest.
+- **Attendee mode toggle** (radio):
+  - "Just give a head‑count" → numeric `attendeeCount` (existing).
+  - "Add each broker" → repeater rows `{ name, phone, email }` (all optional per row, min 1 row).
+- Attendees list stored as JSON in new column `meeting_requests.attendees jsonb`.
+- **Consent block** (required checkbox before submit):
+  > "I confirm <Brokerage Name> will attend the private breakfast on the selected date. I understand this is a private catered event and I am responsible for cancelling **at least 2 days in advance** by contacting Jane Bou Jaoude (+971 54 716 7107 · jane@citidevelopers.com)."
+- On submit we snapshot `{ text, checked: true, signedAt, ip, userAgent, brokerageName, slotAt }` into `meeting_requests.consent_snapshot jsonb` so it can be previewed later as a signed record.
 
-## 5. Verification before I confirm done
+## 4. Owner notifications when a slot is booked
 
-- Manually import a 33k-row sample CSV — confirm full count lands, batches tagged, no UI freeze.
-- Toggle Card / Table / Excel export on all three sections.
-- Sign out → sign in → reload `/crm/relationships` 5× — confirm no "Access denied" flash.
-- Lighthouse on `/crm/relationships` — target TBT < 300ms, LCP < 2.5s.
+`breakfast-booking-confirm` edge fn additions:
+- Insert a row in `owner_alerts` (or existing notifications table — will detect at implementation) with type `breakfast_booked`, payload `{ brokerageName, slotAt, contact, attendees }`.
+- Send a host email via the existing transactional pipeline to `jane@citidevelopers.com` (cc `info.jane@gmail.com`) with brokerage name, slot, attendee list, contact phone/email, and a deep link to the new Schedule section.
+- Realtime publish `meeting_requests` so the dashboard pops a toast.
 
-## Files touched (preview)
+## 5. New "Schedule" section in CRM Relationships
 
-- `supabase/migrations/<new>.sql` — schema + RLS for expertise + import batches
-- `supabase/functions/crm-bulk-import-brokers/index.ts` — new
-- `supabase/functions/crm-import-dld-brokerages/index.ts` — extend for expertise tagging
-- `src/components/crm/UniversalImportDialog.tsx` — new
-- `src/components/crm/EntityViewSwitcher.tsx` — new
-- `src/components/crm/IndividualBrokersTab.tsx` — wire upload, view switcher, export, expertise fields
-- `src/pages/CRMRelationships.tsx` — wire for Brokerages + Developers tabs
-- `src/components/executive/ExecutiveAccessGate.tsx` — auth-ready fix
-- `src/hooks/useAuthReady.ts` — new
-- `src/workers/importParser.ts` — new
-- `src/App.tsx` — eager import hot CRM routes
+New tab `Schedule` (lazy) inside `CRMRelationships`:
+- Calendar grid + list of upcoming booked breakfasts (reuses `BreakfastBookingsSection` + `EventsCalendar`).
+- Click row → drawer with: brokerage, contact, attendee list, signed consent preview (rendered from `consent_snapshot`), buttons to email/call host, and "Mark cancelled" (enforces 2‑day rule warning).
+- In‑app toast + bell badge for any new booking via realtime channel on `meeting_requests`.
 
-## Out of scope (won't touch)
+## 6. Database migration
 
-- Filter UI (already shipped).
-- DLD auto-sync (already live).
-- Brokerage outreach document layout.
+```text
+alter table meeting_requests
+  add column if not exists attendees jsonb,
+  add column if not exists consent_snapshot jsonb;
+```
+
+(No RLS change — existing policies cover it; Schedule section reads via owner role.)
+
+## Files touched
+
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — copy + button styles + per‑brokerage CTA + cc list
+- `supabase/functions/breakfast-booking-confirm/index.ts` — alert + host email + consent persistence
+- `src/pages/BreakfastBooking.tsx` — attendee repeater, consent, noscript fix, auto‑open calendar
+- `src/components/crm/BreakfastBookingsSection.tsx` — drawer + consent preview
+- `src/pages/CRMRelationships.tsx` — add Schedule tab
+- New migration for `attendees` + `consent_snapshot`
+
+## Out of scope
+
+- Changing Gmail sender identity, OAuth, or Google Calendar sync (booking already lands in `meeting_requests`; we surface it in‑app).
+- Marketing/bulk newsletter flows.
