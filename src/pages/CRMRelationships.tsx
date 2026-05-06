@@ -2454,6 +2454,7 @@ const DeveloperRegistryTab = () => {
                       Research
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
+                    <QuickActivityActions entityType="developer" entityId={r.id} entityName={r.developer_name || "Developer"} />
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                   </div>
                 </div>
