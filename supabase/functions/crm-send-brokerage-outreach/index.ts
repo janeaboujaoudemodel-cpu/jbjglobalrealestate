@@ -473,7 +473,7 @@ serve(async (req: Request) => {
       Warm regards,<br/><strong>${ownerFirstName} Aboujaoude</strong><br/>
       <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
       <span style="color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</span><br/>
-      <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo}</a>
+      <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo.toUpperCase()}</a>
     </div>
   </div>
   <div style="max-width:640px;margin:16px auto 0;text-align:center;font-size:11px;color:#1A1A1A66">${representedDeveloperName} · Sales &amp; Training · Channel Partner Activation</div>
