@@ -29,7 +29,7 @@ const STATUS_OPTIONS = [
   { v: "unknown", label: "Unknown" },
 ];
 
-export function BrokerageAgentsEditor({ value, onChange }: Props) {
+export function BrokerageAgentsEditor({ value, onChange, brokerageId }: Props) {
   const [bulkPaste, setBulkPaste] = useState("");
 
   const update = (idx: number, patch: Partial<BrokerageAgentDraft>) => {
