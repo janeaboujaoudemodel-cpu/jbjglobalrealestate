@@ -485,19 +485,18 @@ const BrokeragesTab = () => {
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Single pass over data — combine source counts and per-emirate counts to avoid 4× iteration on every render.
-  const { directoryCount, ownerCount, existingCount, emirateCounts } = useMemo(() => {
-    let directory = 0, owner = 0, existing = 0;
+  const { directoryCount, ownerCount, sentCount, inboxCount, emirateCounts } = useMemo(() => {
+    let directory = 0, owner = 0, sent = 0, inbox = 0;
     const emirates: Record<string, number> = {};
     for (const r of data as any[]) {
       if (r.entry_source === "directory") directory++;
-      else if (r.entry_source === "owner") {
-        owner++;
-        if (r.is_existing_match) existing++;
-      }
+      else if (r.entry_source === "owner") owner++;
+      if ((r as any).last_outreach_at) sent++;
+      if ((r as any).last_inbound_at) inbox++;
       const e = r.emirate || "Unknown";
       emirates[e] = (emirates[e] || 0) + 1;
     }
-    return { directoryCount: directory, ownerCount: owner, existingCount: existing, emirateCounts: emirates };
+    return { directoryCount: directory, ownerCount: owner, sentCount: sent, inboxCount: inbox, emirateCounts: emirates };
   }, [data]);
 
   // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
