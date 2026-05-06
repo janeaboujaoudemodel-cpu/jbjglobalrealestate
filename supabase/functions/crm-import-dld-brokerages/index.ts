@@ -66,15 +66,17 @@ Deno.serve(async (req) => {
     // Load existing index keys (small payload)
     const { data: existing } = await supabase
       .from("crm_brokerages")
-      .select("id, dld_office_number, company_name, email");
+      .select("id, dld_office_number, company_name, email, phone");
 
     const byOffice = new Map<string, any>();
     const byName = new Map<string, any>();
     const byEmail = new Map<string, any>();
+    const byPhone = new Map<string, any>();
     for (const r of existing || []) {
       if (r.dld_office_number) byOffice.set(String(r.dld_office_number), r);
       if (r.company_name) byName.set(norm(r.company_name), r);
       if (r.email) byEmail.set(String(r.email).toLowerCase(), r);
+      if (r.phone) byPhone.set(cleanPhone(r.phone), r);
     }
 
     const inserts: any[] = [];
