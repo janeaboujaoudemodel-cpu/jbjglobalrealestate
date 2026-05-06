@@ -240,10 +240,12 @@ export default function useCRMLeadsInbox() {
     // State
     search, statusFilter, sourceFilter, dateStart, dateEnd, page,
     activeView, deleteDialogOpen, leadToDelete,
+    listView, selectedIds,
     leads, totalLeads, totalPages, isLoading, isFetching, hasActiveFilters,
     // Setters
     setSearch, setStatusFilter, setSourceFilter, setDateStart, setDateEnd,
     setPage, setActiveView, setDeleteDialogOpen, setLeadToDelete,
+    setListView, setSelectedIds,
     // Actions
     clearFilters, handleRefresh, handleExport,
     openWhatsApp, openCall, openEmail,
