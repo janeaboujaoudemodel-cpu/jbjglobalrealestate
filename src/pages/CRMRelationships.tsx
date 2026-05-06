@@ -1357,6 +1357,7 @@ const BrokeragesTab = () => {
         onExport={handleExportConfigured}
       />
     </div>
+    </div>
     </TooltipProvider>
   );
 };
