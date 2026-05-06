@@ -47,6 +47,8 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { BulkUploadDialog } from "@/components/crm/BulkUploadDialog";
+import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
@@ -474,6 +476,7 @@ const BrokeragesTab = () => {
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [exportOpen, setExportOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [importingDLD, setImportingDLD] = useState(false);
 
   const handleImportDLD = async () => {
@@ -900,31 +903,30 @@ const BrokeragesTab = () => {
           {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all visible"}
         </Button>
         <Button
-          variant="gold"
-          onClick={() => {
+          variant="outline"
+          onClick={() => setUploadOpen(true)}
+          title="Upload Excel/CSV/HTML list — auto-classifies real-estate brokerages vs developers vs mortgage brokers, dedups by name + DLD number, and reroutes mis-categorised rows."
+        >
+          <Plus className="w-4 h-4 mr-2" />Upload list
+        </Button>
+        <OutreachActionsMenu
+          selectedCount={bulkSel.size}
+          sendLabel="Email Selected Agencies"
+          onSendSelected={() => {
             if (bulkSel.size === 0) { toast.error("Tick at least one agency first"); return; }
             setBulkOpen(true);
           }}
-          className="shadow-md"
-          title="Send your branded outreach email to every ticked agency. A test copy is sent to you first so you can review before the real send."
-        >
-          <Send className="w-4 h-4 mr-2" />Email Selected Agencies{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
-        </Button>
-        <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
-          <Mail className="w-4 h-4 mr-2" />Edit Templates
-        </Button>
-        <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
-          <FlaskConical className="w-4 h-4 mr-2" />Send Test
-        </Button>
+          onEditTemplate={() => setTplOpen(true)}
+          onSendTest={() => setTestSendOpen(true)}
+          onActivityLog={() => navigate("/owner/crm/relationships/activity")}
+        />
         <Button variant="outline" onClick={handleSyncNow} disabled={syncing} title="Pull latest agency replies from your inbox now">
           {syncing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-2" />}
           {syncing ? "Syncing…" : "Sync Inbox"}
         </Button>
-        <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
-          <Bell className="w-4 h-4 mr-2" />Activity Log
-        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} />
 
       {viewMode === "excel" ? (
         <ExcelGridView
