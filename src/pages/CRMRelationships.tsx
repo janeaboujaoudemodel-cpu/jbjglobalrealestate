@@ -608,8 +608,9 @@ const BrokeragesTab = () => {
         phone: r.phone || r.primary_contact?.phone || "",
         whatsapp: r.whatsapp_e164 || r.primary_contact?.whatsapp || "",
         email: r.email || r.primary_contact?.email || "",
-        crm_status: statusLabel,
-        outreach_stage: r.outreach_stage || "—",
+        primary_contact_name: r.primary_contact?.name || "",
+        agency_status: statusLabel,
+        outreach_status: r.outreach_stage || "not_contacted",
         last_message_at: r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—",
         next_followup_at: r.next_followup_at
           ? new Date(r.next_followup_at).toLocaleDateString()
@@ -619,6 +620,8 @@ const BrokeragesTab = () => {
         attempt_count: r.attempt_count ?? 0,
         deal_count: r.deal_count_cached || r.deal_count || 0,
         estimated_agents: r.estimated_agent_count ?? "—",
+        active_brokers: r.active_broker_count ?? r.active_agents ?? "—",
+        inquiries: r.inquiry_count ?? 0,
         rating: r.star_rating ? Number(r.star_rating).toFixed(1) : "—",
         notes: (r.notes || "").slice(0, 240),
       };

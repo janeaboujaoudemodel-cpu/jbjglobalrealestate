@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks, ShieldCheck, ShieldAlert, ShieldX, Loader2, UserCog, ChevronDown, ChevronUp } from "lucide-react";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye, ListChecks, ShieldCheck, ShieldAlert, ShieldX, Loader2, UserCog, ChevronDown, ChevronUp, Search, UserMinus, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import {
   useSendDeveloperRegistration,
@@ -153,6 +153,10 @@ export const BulkSendDialog = ({
   const [showPreview, setShowPreview] = useState(true);
   const [reviewing, setReviewing] = useState(false);
 
+  // Manual exclusion list (owner ticks rows out of the broadcast)
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [refineSearch, setRefineSearch] = useState("");
+
   // Pre-flight registration check (brokerage only).
   // Map of brokerageId → result. `null` value = "OK to send" but record exists.
   const [checks, setChecks] = useState<Record<string, BrokerageCheckResult>>({});
@@ -234,6 +238,8 @@ export const BulkSendDialog = ({
     setChecks({});
     setCheckRanFor("");
     setWarnOverrides({});
+    setExcludedIds(new Set());
+    setRefineSearch("");
   }, [variant, skipRecent, selected.length]);
 
   // Compute per-id check breakdown.
@@ -259,15 +265,33 @@ export const BulkSendDialog = ({
       targets.every((t) => !!checks[t.id]));
 
   const effectiveTargets = useMemo(() => {
-    if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+    const base = (() => {
+      if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+      return targets.filter((t) => {
+        const r = checks[t.id];
+        if (!r) return true;
+        if (r.status === "ok") return true;
+        if (r.status === "warn") return !!warnOverrides[t.id];
+        return false; // block
+      });
+    })();
+    return base.filter((t) => !excludedIds.has(t.id));
+  }, [targets, checks, warnOverrides, isBrokerageFlow, excludedIds]);
+
+  const refinedTargets = useMemo(
+    () => targets.filter((t) => !excludedIds.has(t.id)),
+    [targets, excludedIds],
+  );
+
+  const filteredRefineList = useMemo(() => {
+    const q = refineSearch.trim().toLowerCase();
+    if (!q) return targets;
     return targets.filter((t) => {
-      const r = checks[t.id];
-      if (!r) return true;
-      if (r.status === "ok") return true;
-      if (r.status === "warn") return !!warnOverrides[t.id];
-      return false; // block
+      const name = getName(t, entityType).toLowerCase();
+      const email = getEmail(t, entityType).toLowerCase();
+      return name.includes(q) || email.includes(q);
     });
-  }, [targets, checks, warnOverrides, isBrokerageFlow]);
+  }, [targets, refineSearch, entityType]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
@@ -682,6 +706,105 @@ export const BulkSendDialog = ({
             )}
           </div>
 
+          {/* Refine recipients — Include / Exclude */}
+          {!running && targets.length > 0 && (
+            <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-[#1A1A1A]/10 bg-[#FAF5EA]">
+                <div className="flex items-center gap-2 text-xs text-[#1A1A1A]">
+                  <ListChecks className="w-4 h-4" />
+                  <strong>Refine recipients</strong>
+                  <span className="text-[10px] text-[#1A1A1A]/70">— include / exclude before sending</span>
+                </div>
+                <div className="flex items-center gap-2 text-[11px]">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                    {refinedTargets.length} included
+                  </span>
+                  {excludedIds.size > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300 font-bold">
+                      {excludedIds.size} excluded
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="px-3 py-2 flex items-center gap-2 border-b border-[#1A1A1A]/10">
+                <div className="relative flex-1">
+                  <Search className="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-[#1A1A1A]/50" />
+                  <Input
+                    value={refineSearch}
+                    onChange={(e) => setRefineSearch(e.target.value)}
+                    placeholder={`Search ${entityType === "brokerage" ? "agencies" : "developers"} by name or email…`}
+                    className="h-8 text-xs pl-7"
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-8 text-xs"
+                  onClick={() => setExcludedIds(new Set())}
+                  disabled={excludedIds.size === 0}
+                >
+                  Reset
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="h-8 text-xs"
+                  onClick={() => setExcludedIds(new Set(targets.map((t) => t.id)))}
+                >
+                  Exclude all
+                </Button>
+              </div>
+              <div className="max-h-[260px] overflow-y-auto divide-y divide-black/5">
+                {filteredRefineList.length === 0 ? (
+                  <div className="px-3 py-3 text-xs text-[#1A1A1A]/70">No matches.</div>
+                ) : (
+                  filteredRefineList.map((t) => {
+                    const excluded = excludedIds.has(t.id);
+                    return (
+                      <div key={t.id} className="flex items-center justify-between px-3 py-1.5 text-xs">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <input
+                            type="checkbox"
+                            checked={!excluded}
+                            onChange={(e) => {
+                              setExcludedIds((p) => {
+                                const next = new Set(p);
+                                if (e.target.checked) next.delete(t.id);
+                                else next.add(t.id);
+                                return next;
+                              });
+                            }}
+                            className="accent-emerald-600"
+                          />
+                          <span className="font-semibold text-[#1A1A1A] truncate">{getName(t, entityType)}</span>
+                          <span className="text-[#1A1A1A]/70 truncate">{getEmail(t, entityType)}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExcludedIds((p) => {
+                              const next = new Set(p);
+                              if (excluded) next.delete(t.id);
+                              else next.add(t.id);
+                              return next;
+                            })
+                          }
+                          className={`text-[10px] uppercase tracking-wider font-bold flex items-center gap-1 px-2 py-0.5 rounded-full border ${
+                            excluded
+                              ? "bg-red-50 text-red-700 border-red-200"
+                              : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          }`}
+                        >
+                          {excluded ? <><UserPlus className="w-3 h-3" />Include</> : <><UserMinus className="w-3 h-3" />Exclude</>}
+                        </button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Pre-flight registration check (brokerage only) */}
           {isBrokerageFlow && (reviewing || Object.keys(checks).length > 0 || checkBrk.isPending) && !running && (
             <div className="border border-[#1A1A1A]/10 rounded-xl bg-[#FDFBF7] overflow-hidden">
@@ -894,7 +1017,10 @@ export const BulkSendDialog = ({
               <div className="flex-1">
                 <div className="font-bold mb-1">Confirm bulk send</div>
                 <div className="text-xs leading-relaxed">
-                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{targets.length === 1 ? "" : "s"}.
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{effectiveTargets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{effectiveTargets.length === 1 ? "" : "s"}
+                  {excludedIds.size > 0 && (
+                    <span> · <strong className="text-red-700">{excludedIds.size} excluded</strong> by you</span>
+                  )}.
                   {statusBreakdown.length > 0 && (
                     <span> Includes:{" "}
                       {statusBreakdown.map(([s, n], i) => (
@@ -920,13 +1046,13 @@ export const BulkSendDialog = ({
               Back
             </Button>
           )}
-          <Button onClick={sendAll} disabled={running || !targets.length || (reviewing && isBrokerageFlow && effectiveTargets.length === 0)} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
+          <Button onClick={sendAll} disabled={running || !refinedTargets.length || (reviewing && effectiveTargets.length === 0)} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
             <Send className="w-3 h-3 mr-1" />
             {running
               ? "Sending…"
               : reviewing
-                ? `Confirm & send to ${isBrokerageFlow ? effectiveTargets.length : targets.length}`
-                : `Review & send (${targets.length})`}
+                ? `Confirm & send to ${effectiveTargets.length}`
+                : `Review & send (${refinedTargets.length}${excludedIds.size > 0 ? ` · ${excludedIds.size} excluded` : ""})`}
           </Button>
         </DialogFooter>
       </DialogContent>

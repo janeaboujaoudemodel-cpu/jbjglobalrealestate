@@ -19,13 +19,16 @@ export interface BrokerageExportRow {
   phone: string;
   whatsapp: string;
   email: string;
-  crm_status: string;
-  outreach_stage: string;
+  primary_contact_name: string;
+  agency_status: string;
+  outreach_status: string;
   last_message_at: string;
   next_followup_at: string;
   attempt_count: number | string;
   deal_count: number | string;
   estimated_agents: number | string;
+  active_brokers: number | string;
+  inquiries: number | string;
   rating: number | string;
   notes: string;
 }
@@ -39,24 +42,27 @@ interface ColDef {
 }
 
 const COLUMNS: ColDef[] = [
-  { key: "rank",             label: "Rank",            width: 6,  numeric: true },
-  { key: "company_name",     label: "Agency",          width: 34 },
-  { key: "emirate",          label: "Emirate",         width: 14 },
-  { key: "office_location",  label: "Office",          width: 28 },
-  { key: "phone",            label: "Phone",           width: 18 },
-  { key: "whatsapp",         label: "WhatsApp",        width: 16 },
-  { key: "email",            label: "Email",           width: 28 },
-  { key: "website",          label: "Website",         width: 26 },
-  { key: "instagram",        label: "Instagram",       width: 22 },
-  { key: "crm_status",       label: "Status",          width: 20, status: true },
-  { key: "outreach_stage",   label: "Outreach stage",  width: 18 },
-  { key: "last_message_at",  label: "Last message",    width: 14 },
-  { key: "next_followup_at", label: "Next follow-up",  width: 14 },
-  { key: "attempt_count",    label: "Attempts",        width: 9,  numeric: true },
-  { key: "deal_count",       label: "Deals",           width: 9,  numeric: true },
-  { key: "estimated_agents", label: "Agents",          width: 9,  numeric: true },
-  { key: "rating",           label: "Rating",          width: 9,  numeric: true },
-  { key: "notes",            label: "Notes",           width: 38 },
+  { key: "rank",                 label: "Rank",            width: 6,  numeric: true },
+  { key: "company_name",         label: "Agency",          width: 34 },
+  { key: "emirate",              label: "Emirate",         width: 14 },
+  { key: "office_location",      label: "Office",          width: 28 },
+  { key: "primary_contact_name", label: "Primary contact", width: 22 },
+  { key: "phone",                label: "Phone",           width: 18 },
+  { key: "whatsapp",             label: "WhatsApp",        width: 16 },
+  { key: "email",                label: "Email",           width: 28 },
+  { key: "website",              label: "Website",         width: 24 },
+  { key: "instagram",            label: "Instagram",       width: 20 },
+  { key: "agency_status",        label: "Agency status",   width: 18, status: true },
+  { key: "outreach_status",      label: "Outreach status", width: 18, status: true },
+  { key: "last_message_at",      label: "Last message",    width: 14 },
+  { key: "next_followup_at",     label: "Next follow-up",  width: 14 },
+  { key: "attempt_count",        label: "Attempts",        width: 9,  numeric: true },
+  { key: "deal_count",           label: "Deals",           width: 9,  numeric: true },
+  { key: "estimated_agents",     label: "Agents",          width: 9,  numeric: true },
+  { key: "active_brokers",       label: "Active brokers",  width: 11, numeric: true },
+  { key: "inquiries",            label: "Inquiries",       width: 10, numeric: true },
+  { key: "rating",               label: "Rating",          width: 9,  numeric: true },
+  { key: "notes",                label: "Notes",           width: 38 },
 ];
 
 const triggerDownload = (blob: Blob, filename: string) => {
