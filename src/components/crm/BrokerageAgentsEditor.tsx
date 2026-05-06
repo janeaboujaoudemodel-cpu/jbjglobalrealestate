@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, User } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import QuickActivityActions from "@/components/crm/QuickActivityActions";
 
 export interface BrokerageAgentDraft {
   id?: string;
@@ -19,6 +20,7 @@ export interface BrokerageAgentDraft {
 interface Props {
   value: BrokerageAgentDraft[];
   onChange: (next: BrokerageAgentDraft[]) => void;
+  brokerageId?: string;
 }
 
 const STATUS_OPTIONS = [
