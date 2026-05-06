@@ -759,6 +759,16 @@ const BrokeragesTab = () => {
             ))}
           </SelectContent>
         </Select>
+        <Select value={regionFilter} onValueChange={setRegionFilter}>
+          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Region" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All regions</SelectItem>
+            <SelectItem value="UAE">UAE</SelectItem>
+            <SelectItem value="GCC">GCC</SelectItem>
+            <SelectItem value="MENA">MENA</SelectItem>
+            <SelectItem value="International">International</SelectItem>
+          </SelectContent>
+        </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
