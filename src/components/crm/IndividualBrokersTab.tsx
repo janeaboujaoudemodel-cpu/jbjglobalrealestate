@@ -148,15 +148,34 @@ export default function IndividualBrokersTab() {
     const ql = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (expertiseFilter !== "all") {
+        const et = r.expertise_type || "both";
+        if (expertiseFilter === "leasing" && !(et === "leasing" || et === "both")) return false;
+        if (expertiseFilter === "selling" && !(et === "selling" || et === "both")) return false;
+      }
       if (agencyFilter === "__none__" && r.brokerage_id) return false;
       if (agencyFilter !== "all" && agencyFilter !== "__none__" && r.brokerage_id !== agencyFilter) return false;
       if (!ql) return true;
-      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name].filter(Boolean).join(" ").toLowerCase();
+      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, ...(r.expertise_areas || [])].filter(Boolean).join(" ").toLowerCase();
       return hay.includes(ql);
     });
-  }, [rows, q, agencyFilter, statusFilter]);
+  }, [rows, q, agencyFilter, statusFilter, expertiseFilter]);
 
-  const openNew = () => { setEditing({ status: "active", source: "manual" }); setOpen(true); };
+  const openNew = () => { setEditing({ status: "active", source: "manual", expertise_type: "both", expertise_areas: [] }); setOpen(true); };
+
+  const exportExcel = () => {
+    if (filtered.length === 0) { toast.error("Nothing to export"); return; }
+    const out = filtered.map(r => ({
+      Name: r.name, Agency: r.brokerage?.company_name || "Standalone",
+      Role: r.role, Phone: r.phone, WhatsApp: r.whatsapp, Email: r.email,
+      Expertise: r.expertise_type || "both",
+      Areas: (r.expertise_areas || []).join(", "),
+      Status: r.status, Batch: r.import_label || "",
+      Added: new Date(r.created_at).toLocaleDateString(),
+    }));
+    exportRowsToXlsx(out, "individual-brokers");
+    toast.success(`Exported ${out.length} brokers`);
+  };
 
   return (
     <div className="space-y-4">
