@@ -476,6 +476,7 @@ const BrokeragesTab = () => {
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [exportOpen, setExportOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [importingDLD, setImportingDLD] = useState(false);
 
   const handleImportDLD = async () => {
