@@ -2029,6 +2029,22 @@ const DeveloperRegistryTab = () => {
                 </button>
               );
             })}
+            <button
+              type="button"
+              onClick={() => setStatusView(statusView === "contracts" ? "all" : "contracts")}
+              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
+                statusView === "contracts"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
+              }`}
+              title="Show developers with a contract sent or signed"
+            >
+              <FileSignature className="w-3 h-3" />
+              <span>Contracts</span>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                statusView === "contracts" ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
+              }`}>{contractsCount}</span>
+            </button>
           </div>
 
           {/* Detailed status cards (existing) */}
