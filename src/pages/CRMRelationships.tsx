@@ -1899,7 +1899,16 @@ const DeveloperRegistryTab = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col lg:flex-row gap-4 items-start">
+      <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} />
+      <div className="space-y-5 flex-1 min-w-0">
+      <CRMBulkActionsBar
+        table="crm_developer_registry"
+        ids={[...selected]}
+        view={devListView.kind}
+        onClear={() => setSelected(new Set())}
+        onChanged={onDevListChanged}
+      />
       <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
       <DeveloperDirectoryPanel />
       <DocumentPackPanel />
