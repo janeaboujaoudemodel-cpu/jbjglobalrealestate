@@ -734,7 +734,10 @@ const BrokeragesTab = () => {
               <strong>My Additions</strong> = brokerages you added yourself.
             </p>
             <p className="text-xs mt-1">
-              <strong>Existing Matches</strong> = your additions that match a licensed firm.
+              <strong>Already Sent</strong> = agencies you've previously emailed (any template).
+            </p>
+            <p className="text-xs mt-1">
+              <strong>New Messages</strong> = agencies who've replied — synced from your inbox.
             </p>
           </TooltipContent>
         </Tooltip>
