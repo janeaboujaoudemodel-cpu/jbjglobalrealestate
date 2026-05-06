@@ -3,12 +3,16 @@
  * Server classifies (real-estate brokerage / developer / mortgage / other),
  * de-duplicates strictly, reroutes mis-tab uploads, and reports the breakdown.
  */
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2, UploadCloud, FileSpreadsheet, AlertCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useCRMLists } from "@/hooks/useCRMLists";
 
 type UploadKind = "brokerage" | "developer";
 
