@@ -66,15 +66,17 @@ Deno.serve(async (req) => {
     // Load existing index keys (small payload)
     const { data: existing } = await supabase
       .from("crm_brokerages")
-      .select("id, dld_office_number, company_name, email");
+      .select("id, dld_office_number, company_name, email, phone");
 
     const byOffice = new Map<string, any>();
     const byName = new Map<string, any>();
     const byEmail = new Map<string, any>();
+    const byPhone = new Map<string, any>();
     for (const r of existing || []) {
       if (r.dld_office_number) byOffice.set(String(r.dld_office_number), r);
       if (r.company_name) byName.set(norm(r.company_name), r);
       if (r.email) byEmail.set(String(r.email).toLowerCase(), r);
+      if (r.phone) byPhone.set(cleanPhone(r.phone), r);
     }
 
     const inserts: any[] = [];
@@ -99,7 +101,8 @@ Deno.serve(async (req) => {
       const dupKey =
         (office && `o:${office}`) ||
         (nameKey && `n:${nameKey}`) ||
-        (email && `e:${email}`);
+        (email && `e:${email}`) ||
+        (phone && `p:${phone}`);
       if (dupKey) {
         if (seenInBatch.has(dupKey)) {
           skipped++;
@@ -111,7 +114,8 @@ Deno.serve(async (req) => {
       const match =
         (office && byOffice.get(office)) ||
         (nameKey && byName.get(nameKey)) ||
-        (email && byEmail.get(email));
+        (email && byEmail.get(email)) ||
+        (phone && byPhone.get(phone));
 
       if (match) {
         // Backfill only — never overwrite curated fields
@@ -145,6 +149,7 @@ Deno.serve(async (req) => {
       if (office) byOffice.set(office, { id: "_pending_" });
       if (nameKey) byName.set(nameKey, { id: "_pending_" });
       if (email) byEmail.set(email, { id: "_pending_" });
+      if (phone) byPhone.set(phone, { id: "_pending_" });
     }
 
     // Insert in chunks of 500
@@ -155,10 +160,13 @@ Deno.serve(async (req) => {
         .from("crm_brokerages")
         .insert(chunk, { count: "exact" });
       if (error) {
-        return new Response(
-          JSON.stringify({ error: error.message, inserted, at: i }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
+        // Fall back to row-by-row so one bad dup doesn't kill the batch
+        for (const row of chunk) {
+          const { error: rowErr } = await supabase.from("crm_brokerages").insert(row);
+          if (!rowErr) inserted++;
+          else skipped++;
+        }
+        continue;
       }
       inserted += count ?? chunk.length;
     }
