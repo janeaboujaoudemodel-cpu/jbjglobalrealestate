@@ -42,6 +42,7 @@ export const TestSendDialog = ({
     mode === "brokerage" ? "Sample Brokerage Group" : "Sample Developer Co.",
   );
   const [sending, setSending] = useState(false);
+  const [step, setStep] = useState<"review" | "confirm">("review");
   const hydratedRef = useRef(false);
 
   // Hydrate ONCE per open — never re-hydrate after persist refetches
