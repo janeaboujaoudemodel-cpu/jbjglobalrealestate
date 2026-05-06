@@ -1358,6 +1358,15 @@ const BrokeragesTab = () => {
         columns={BROKERAGE_EXPORT_COLUMNS.map((c) => ({ key: c.key as string, label: c.label, group: c.group, defaultOn: c.defaultOn }))}
         presets={BROKERAGE_EXPORT_PRESETS}
         storageKey="export.brokerages.columns"
+        statusFilters={[
+          { key: "not_contacted", label: "Not contacted" },
+          { key: "attempted", label: "Attempted" },
+          { key: "engaged", label: "Engaged" },
+          { key: "meeting_booked", label: "Meeting booked" },
+          { key: "active_partner", label: "Active partner" },
+          { key: "dormant", label: "Dormant" },
+          { key: "declined", label: "Declined" },
+        ]}
         onExport={handleExportConfigured}
       />
     </div>
