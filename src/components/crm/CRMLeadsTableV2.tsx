@@ -75,6 +75,7 @@ export default function CRMLeadsTableV2({
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
+  const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
