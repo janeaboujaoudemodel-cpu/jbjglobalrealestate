@@ -5081,7 +5081,11 @@ export type Database = {
           brokerage_id: string | null
           created_at: string
           email: string | null
+          expertise_areas: string[]
+          expertise_type: string
           id: string
+          import_batch_id: string | null
+          import_label: string | null
           metadata: Json
           name: string | null
           owner_id: string
@@ -5097,7 +5101,11 @@ export type Database = {
           brokerage_id?: string | null
           created_at?: string
           email?: string | null
+          expertise_areas?: string[]
+          expertise_type?: string
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
           metadata?: Json
           name?: string | null
           owner_id: string
@@ -5113,7 +5121,11 @@ export type Database = {
           brokerage_id?: string | null
           created_at?: string
           email?: string | null
+          expertise_areas?: string[]
+          expertise_type?: string
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
           metadata?: Json
           name?: string | null
           owner_id?: string
@@ -5311,10 +5323,14 @@ export type Database = {
           enrichment_status: string | null
           entry_source: string
           estimated_agent_count: number | null
+          expertise_areas: string[]
+          expertise_type: string
           field_sources: Json
           first_contact_at: string | null
           health_score: number | null
           id: string
+          import_batch_id: string | null
+          import_label: string | null
           inquiry_count: number
           instagram_url: string | null
           is_existing_match: boolean
@@ -5399,10 +5415,14 @@ export type Database = {
           enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
+          expertise_areas?: string[]
+          expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
@@ -5487,10 +5507,14 @@ export type Database = {
           enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
+          expertise_areas?: string[]
+          expertise_type?: string
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
@@ -6400,6 +6424,63 @@ export type Database = {
           field_name?: string
           id?: string
           show_masked?: boolean
+        }
+        Relationships: []
+      }
+      crm_import_batches: {
+        Row: {
+          created_at: string
+          default_expertise_areas: string[]
+          default_expertise_type: string
+          id: string
+          inserted: number
+          label: string
+          notes: string | null
+          owner_id: string
+          row_count: number
+          skipped: number
+          source_filename: string | null
+          status: string
+          strategy: string
+          target: string
+          updated: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_expertise_areas?: string[]
+          default_expertise_type?: string
+          id?: string
+          inserted?: number
+          label: string
+          notes?: string | null
+          owner_id: string
+          row_count?: number
+          skipped?: number
+          source_filename?: string | null
+          status?: string
+          strategy?: string
+          target: string
+          updated?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_expertise_areas?: string[]
+          default_expertise_type?: string
+          id?: string
+          inserted?: number
+          label?: string
+          notes?: string | null
+          owner_id?: string
+          row_count?: number
+          skipped?: number
+          source_filename?: string | null
+          status?: string
+          strategy?: string
+          target?: string
+          updated?: number
+          updated_at?: string
         }
         Relationships: []
       }
