@@ -616,7 +616,7 @@ export default function CreateEnvelope() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0">
-                              {(file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) && file !== pdfFile && (
+                              {file !== pdfFile && (
                                 <Button
                                   variant="outline"
                                   size="sm"
