@@ -827,6 +827,10 @@ const BrokeragesTab = () => {
         <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
           <FlaskConical className="w-4 h-4 mr-2" />Send Test
         </Button>
+        <Button variant="outline" onClick={handleSyncNow} disabled={syncing} title="Pull latest agency replies from your inbox now">
+          {syncing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-2" />}
+          {syncing ? "Syncing…" : "Sync Inbox"}
+        </Button>
         <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
           <Bell className="w-4 h-4 mr-2" />Activity Log
         </Button>
