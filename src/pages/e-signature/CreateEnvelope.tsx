@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
 import DocumentPreviewSummary from "@/components/e-signature/DocumentPreviewSummary";
 import { SUPABASE_URL } from "@/config/backend";
+import { normalizeToSignablePdf } from "@/utils/normalizeToSignablePdf";
 
 interface Recipient {
   id: string;
@@ -166,48 +167,39 @@ export default function CreateEnvelope() {
     ).slice(0, 5);
   }, [contactFilter, savedContacts]);
 
-  const ACCEPTED_TYPES = [
-    "application/pdf",
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/heic",
-    "image/heif",
-  ];
-
-  const addDocumentFiles = useCallback((files: FileList | File[]) => {
+  // Accept any common contract format. Non-PDFs are auto-converted to a
+  // signable PDF in the browser via normalizeToSignablePdf.
+  const addDocumentFiles = useCallback(async (files: FileList | File[]) => {
     const arr = Array.from(files);
-    const valid: File[] = [];
+    const accepted: File[] = [];
 
     for (const file of arr) {
-      if (file.size > 50 * 1024 * 1024) {
-        toast.error(`${file.name} is too large (max 50MB)`);
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 100MB)`);
         continue;
       }
+      accepted.push(file);
+    }
+    if (accepted.length === 0) return;
 
-      const isAccepted = ACCEPTED_TYPES.includes(file.type) ||
-        file.name.match(/\.(pdf|jpg|jpeg|png|webp|heic|heif)$/i);
+    setUploadedFiles(prev => [...prev, ...accepted]);
 
-      if (!isAccepted) {
-        toast.error(`${file.name}: unsupported format. Use PDF or images.`);
-        continue;
+    // Pick the first file that can become a signable PDF and convert it
+    if (!pdfFile) {
+      for (const f of accepted) {
+        try {
+          const normalized = await normalizeToSignablePdf(f);
+          setPdfFile(normalized);
+          setDocumentName(normalized.name.replace(/\.pdf$/i, ""));
+          setPdfUrl(URL.createObjectURL(normalized));
+          break;
+        } catch (e: any) {
+          toast.error(e.message || `${f.name}: cannot convert to PDF`);
+        }
       }
-      valid.push(file);
     }
 
-    if (valid.length === 0) return;
-
-    setUploadedFiles(prev => [...prev, ...valid]);
-
-    // Auto-select first PDF as the signing document
-    const firstPdf = valid.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
-    if (firstPdf && !pdfFile) {
-      setPdfFile(firstPdf);
-      setDocumentName(firstPdf.name.replace(/\.pdf$/i, ""));
-      setPdfUrl(URL.createObjectURL(firstPdf));
-    }
-
-    toast.success(`${valid.length} file(s) added`);
+    toast.success(`${accepted.length} file(s) added`);
   }, [pdfFile]);
 
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,27 +213,24 @@ export default function CreateEnvelope() {
     setUploadedFiles(prev => {
       const removed = prev[index];
       const next = prev.filter((_, i) => i !== index);
-      // If removed file was the active PDF, clear it
       if (removed === pdfFile) {
         setPdfFile(null);
         setPdfUrl(null);
-        // Auto-select next PDF if available
-        const nextPdf = next.find(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
-        if (nextPdf) {
-          setPdfFile(nextPdf);
-          setDocumentName(nextPdf.name.replace(/\.pdf$/i, ""));
-          setPdfUrl(URL.createObjectURL(nextPdf));
-        }
       }
       return next;
     });
   }, [pdfFile]);
 
-  const selectAsPdf = useCallback((file: File) => {
-    if (pdfUrl) URL.revokeObjectURL(pdfUrl);
-    setPdfFile(file);
-    setDocumentName(file.name.replace(/\.pdf$/i, ""));
-    setPdfUrl(URL.createObjectURL(file));
+  const selectAsPdf = useCallback(async (file: File) => {
+    try {
+      const normalized = await normalizeToSignablePdf(file);
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+      setPdfFile(normalized);
+      setDocumentName(normalized.name.replace(/\.pdf$/i, ""));
+      setPdfUrl(URL.createObjectURL(normalized));
+    } catch (e: any) {
+      toast.error(e.message || "Cannot convert to PDF");
+    }
   }, [pdfUrl]);
 
   // Drag & drop handlers
@@ -584,7 +573,7 @@ export default function CreateEnvelope() {
                         id="esign-file-input"
                         type="file"
                         multiple
-                        accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,application/pdf,image/*"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif,.gif,.tif,.tiff,.txt,.md,.markdown,.html,.htm,.rtf,application/pdf,image/*,text/*"
                         onChange={handleFileUpload}
                         className="hidden"
                       />
@@ -593,7 +582,8 @@ export default function CreateEnvelope() {
                         {isDragOver ? "Drop files here" : "Drop files or click to upload"}
                       </p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        PDFs, JPG, PNG — select multiple files at once (max 50MB each)
+                        Any document — PDF, photos, scans, JPG/PNG/HEIC, TXT, HTML, RTF (max 100MB each).
+                        Non-PDFs are auto-converted to a signable PDF.
                       </p>
                     </div>
 
