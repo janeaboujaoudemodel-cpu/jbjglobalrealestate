@@ -49,6 +49,7 @@ export const TestSendDialog = ({
   useEffect(() => {
     if (!open) {
       hydratedRef.current = false;
+      setStep("review");
       return;
     }
     if (hydratedRef.current || !settings) return;
