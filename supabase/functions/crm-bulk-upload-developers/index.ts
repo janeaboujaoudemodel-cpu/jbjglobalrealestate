@@ -81,7 +81,8 @@ serve(async (req) => {
     const {data:{user}} = await uc.auth.getUser();
     if(!user || !OWNER_EMAILS.includes(user.email||"")) return new Response(JSON.stringify({error:"Forbidden"}),{status:403,headers:{...corsHeaders,"Content-Type":"application/json"}});
     const svc=createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const {filename, content} = await req.json() as {filename:string;content:string};
+    const {filename, content, list_id} = await req.json() as {filename:string;content:string;list_id?:string|null};
+    const listId: string | null = list_id || null;
     if(!content) throw new Error("Empty file");
     const rows=parseRows(filename||"", content);
     const companies=rows.map(r=>{
