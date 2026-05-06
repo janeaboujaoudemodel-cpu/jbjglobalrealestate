@@ -5,7 +5,7 @@ import { BrandedLoader } from "@/components/ui/BrandedLoader";
  * DelayedLoader — prevents flash-of-loader on fast networks.
  * Renders nothing for the first `delay` ms, then shows children.
  */
-export function DelayedLoader({ children, delay = 300 }: { children: ReactNode; delay?: number }) {
+export function DelayedLoader({ children, delay = 600 }: { children: ReactNode; delay?: number }) {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setShow(true), delay);
@@ -15,27 +15,61 @@ export function DelayedLoader({ children, delay = 300 }: { children: ReactNode; 
 }
 
 /**
- * PageLoader - Global loading fallback for lazy-loaded pages
- * Displays the JBJ monogram with a gold fill animation
+ * Thin top progress bar — non-blocking, no full-screen splash.
+ * Replaces the previous monogram splash that flashed on every navigation.
+ */
+const TopProgressBar = () => (
+  <div
+    aria-hidden
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 2,
+      zIndex: 9999,
+      background: "transparent",
+      pointerEvents: "none",
+    }}
+  >
+    <div
+      style={{
+        height: "100%",
+        width: "30%",
+        background: "linear-gradient(90deg, transparent, #B89555, transparent)",
+        animation: "pageLoaderSlide 1.1s ease-in-out infinite",
+      }}
+    />
+    <style>{`
+      @keyframes pageLoaderSlide {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(400%); }
+      }
+    `}</style>
+  </div>
+);
+
+/**
+ * PageLoader - Global loading fallback for lazy-loaded pages.
+ * Now a thin gold progress bar — no monogram, no dark gradient, no min-h-screen.
  */
 const PageLoader = () => (
-  <DelayedLoader>
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
-      <BrandedLoader text="Loading..." className="min-h-screen" />
-    </div>
+  <DelayedLoader delay={400}>
+    <TopProgressBar />
   </DelayedLoader>
 );
 
 /**
- * InlinePageLoader - Layout-safe loader for use inside MainLayout
- * Does NOT replace the entire screen — keeps header/sidebar stable
+ * InlinePageLoader - Layout-safe loader for use inside MainLayout.
+ * Same thin top progress bar so the header/sidebar stay stable and visible.
  */
 export const InlinePageLoader = () => (
-  <DelayedLoader>
-    <div className="flex items-center justify-center py-32 min-h-[60vh] bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      <BrandedLoader text="Loading..." className="min-h-0" />
-    </div>
+  <DelayedLoader delay={400}>
+    <TopProgressBar />
   </DelayedLoader>
 );
+
+// Re-export for any boot screens that still need the full branded loader.
+export { BrandedLoader };
 
 export default PageLoader;

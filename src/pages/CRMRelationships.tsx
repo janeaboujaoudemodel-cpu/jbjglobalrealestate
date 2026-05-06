@@ -539,14 +539,7 @@ const BrokeragesAgenciesView = () => {
     }
   };
 
-  useEffect(() => {
-    if (isLoading || importingDLD || dldLoadedCount >= 10078) return;
-    const key = "crm:dld-full-sync:auto-ran";
-    if (sessionStorage.getItem(key) === "1") return;
-    sessionStorage.setItem(key, "1");
-    toast.info(`Completing DLD register in the background (${dldLoadedCount.toLocaleString()}/10,078 loaded)…`);
-    handleImportDLD(true);
-  }, [isLoading, importingDLD, dldLoadedCount]);
+  // DLD auto-sync removed — DLD register is fully imported. Top-ups are manual via the "Import DLD" button.
 
   const handleEnrichVisible = async () => {
     const targets = (filtered as any[])
