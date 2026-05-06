@@ -794,7 +794,26 @@ const BrokeragesTab = () => {
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
-      {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
+      {viewMode === "excel" ? (
+        <ExcelGridView
+          rows={filtered as any[]}
+          columns={[
+            { key: "company_name", label: "Agency", width: 220 },
+            { key: "emirate", label: "Emirate", width: 110 },
+            { key: "office_location", label: "Office", width: 200 },
+            { key: "phone", label: "Phone", width: 140 },
+            { key: "email", label: "Email", width: 200 },
+            { key: "status", label: "Status", width: 170, status: true },
+            { key: "outreach_stage", label: "Outreach", width: 140 },
+            { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
+            { key: "notes", label: "Notes", width: 280, editable: true },
+          ]}
+          getStatus={(r: any) => r.status}
+          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
+          onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
+          emptyLabel="No agencies match filters."
+        />
+      ) : isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         data.length > 0 ? (
           <Card className="border-amber-300 bg-amber-50">
             <CardContent className="p-6 text-center">
