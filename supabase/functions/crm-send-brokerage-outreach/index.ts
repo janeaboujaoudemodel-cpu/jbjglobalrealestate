@@ -516,7 +516,7 @@ serve(async (req: Request) => {
 </div>
 </body></html>`;
     }
-    const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
+    const subject = subjectRendered;
 
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
