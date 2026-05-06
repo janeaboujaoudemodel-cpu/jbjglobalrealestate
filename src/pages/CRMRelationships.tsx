@@ -1444,6 +1444,8 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
+  const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("crm.queue.collapsed") !== "false";
