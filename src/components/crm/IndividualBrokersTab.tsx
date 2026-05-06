@@ -52,24 +52,42 @@ export default function IndividualBrokersTab() {
   const { data: rows = [], isLoading } = useQuery<Row[]>({
     queryKey: ["crm-individual-brokers"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("crm_brokerage_agents")
-        .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, brokerage:crm_brokerages(company_name)")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as Row[];
+      const PAGE = 1000;
+      const all: Row[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("crm_brokerage_agents")
+          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, brokerage:crm_brokerages(company_name)")
+          .order("created_at", { ascending: false })
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = (data ?? []) as Row[];
+        all.push(...batch);
+        if (batch.length < PAGE) break;
+        if (from > 200_000) break;
+      }
+      return all;
     },
   });
 
   const { data: brokerages = [] } = useQuery<{ id: string; company_name: string }[]>({
     queryKey: ["crm-brokerages-min"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("crm_brokerages")
-        .select("id, company_name")
-        .order("company_name");
-      if (error) throw error;
-      return (data ?? []) as any[];
+      const PAGE = 1000;
+      const all: any[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await (supabase as any)
+          .from("crm_brokerages")
+          .select("id, company_name")
+          .order("company_name")
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        const batch = data ?? [];
+        all.push(...batch);
+        if (batch.length < PAGE) break;
+        if (from > 200_000) break;
+      }
+      return all;
     },
   });
 

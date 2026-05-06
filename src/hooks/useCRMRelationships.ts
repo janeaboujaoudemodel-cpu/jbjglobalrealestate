@@ -10,9 +10,22 @@ export const useBrokerages = () => useQuery({
   refetchOnWindowFocus: false,
   placeholderData: (prev) => prev,
   queryFn: async () => {
-    const { data, error } = await supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
-    if (error) throw error;
-    return data || [];
+    // Paginate past Supabase's default 1000-row cap so the entire directory loads.
+    const PAGE = 1000;
+    const all: any[] = [];
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await supabase
+        .from("crm_brokerages")
+        .select("*")
+        .order("updated_at", { ascending: false })
+        .range(from, from + PAGE - 1);
+      if (error) throw error;
+      const batch = data || [];
+      all.push(...batch);
+      if (batch.length < PAGE) break;
+      if (from > 200_000) break; // hard safety stop
+    }
+    return all;
   },
 });
 
