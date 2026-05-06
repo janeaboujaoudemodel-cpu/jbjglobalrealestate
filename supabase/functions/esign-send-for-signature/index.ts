@@ -29,7 +29,10 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id } = await req.json();
+    const { envelope_id, channels } = await req.json();
+    const channelList: string[] = Array.isArray(channels) && channels.length
+      ? channels
+      : ["email"];
 
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
@@ -140,7 +143,7 @@ Deno.serve(async (req) => {
 </html>`;
 
       // Send email via Resend (direct fetch to global API)
-      if (resendApiKey) {
+      if (channelList.includes("email") && resendApiKey) {
         try {
           const res = await fetch("https://api.resend.com/emails", {
             method: "POST",
@@ -148,6 +151,7 @@ Deno.serve(async (req) => {
             body: JSON.stringify({
               from: "JBJ E-Signature <contact@jbj.ae>",
               to: [recipient.email],
+              bcc: ["contact@jbj.ae"],
               subject: envelope.email_subject || `Please sign: ${envelope.name}`,
               html: emailHtml,
             }),
@@ -157,9 +161,30 @@ Deno.serve(async (req) => {
         } catch (emailError) {
           console.error("Failed to send email to", recipient.email, emailError);
         }
-      } else {
+      } else if (channelList.includes("email")) {
         console.log("Resend not configured, skipping email to:", recipient.email);
         console.log("Signing URL:", signingUrl);
+      }
+
+      // WhatsApp link generation (wa.me fallback when Twilio not configured)
+      if (channelList.includes("whatsapp") && recipient.phone) {
+        const phoneDigits = String(recipient.phone).replace(/[^\d]/g, "");
+        const waText = encodeURIComponent(
+          `Hi ${recipient.name}, please sign "${envelope.name}" here: ${signingUrl}`
+        );
+        const waUrl = `https://wa.me/${phoneDigits}?text=${waText}`;
+        // Persist link for client-side opening
+        await supabase
+          .from("esign_audit_log")
+          .insert({
+            envelope_id: envelope.id,
+            recipient_id: recipient.id,
+            action: "whatsapp_link_generated",
+            description: `WhatsApp signing link generated for ${recipient.name}`,
+            actor_id: user.id,
+            actor_email: user.email,
+            metadata: { wa_url: waUrl },
+          });
       }
 
       // Update recipient status

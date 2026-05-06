@@ -14,12 +14,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import InlineStatusSelect from "./InlineStatusSelect";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
+import SendAgreementDialog from "./SendAgreementDialog";
 
 interface LeadSource {
   source_group: string;
@@ -74,6 +75,7 @@ export default function CRMLeadsTableV2({
   const [assignLeadIds, setAssignLeadIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
+  const [agreementLead, setAgreementLead] = useState<Lead | null>(null);
 
   const groupedStatuses = useMemo(() => {
     const groups: Record<string, typeof PIPELINE_STATUSES> = {
@@ -509,6 +511,15 @@ export default function CRMLeadsTableV2({
                         <Button
                           type="button"
                           size="icon"
+                          className="h-9 w-9 bg-[#B89555] hover:bg-[#A08047] text-white border-0"
+                          onClick={() => setAgreementLead(lead)}
+                          title="Send Agreement"
+                        >
+                          <FileSignature className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          type="button"
+                          size="icon"
                           variant="destructive"
                           className="h-9 w-9"
                           onClick={() => openDeleteDialog(lead)}
@@ -539,6 +550,12 @@ export default function CRMLeadsTableV2({
         onOpenChange={setDeleteDialogOpen}
         leadName={leadToDelete?.full_name || "this lead"}
         onConfirm={handleDelete}
+      />
+
+      <SendAgreementDialog
+        open={!!agreementLead}
+        onClose={() => setAgreementLead(null)}
+        lead={agreementLead}
       />
     </div>
   );
