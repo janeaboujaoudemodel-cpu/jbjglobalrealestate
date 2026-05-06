@@ -288,7 +288,7 @@ export const BulkSendDialog = ({
   };
   const GROUP_LINES_LOCAL: Record<BrokerageGroupStatus, string> = {
     prospective:
-      "We'd love to introduce CITI Developer to your team and confirm if you're already registered with us.",
+      "We'd love to introduce CITI Developer to your team.",
     existing:
       "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
     priority:

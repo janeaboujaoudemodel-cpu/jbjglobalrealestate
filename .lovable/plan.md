@@ -1,70 +1,77 @@
-## Scope
 
-Four targeted fixes on the existing CRM Relationships + Brokerage system. No new modules, no duplication.
+## Goal
+Fix the brokerage outreach email template so it looks premium, never says "Dear Sample / Sample Brokerage Group", greets each recipient by their actual brokerage / contact name, centers the featured project block, makes the CTA a champagne-gold premium button, restructures the registration paragraph, and removes the "please disregard" line.
 
----
+## Files to change
 
-### 1. CC emails not persisting (auto-save fix)
+### 1. `supabase/functions/crm-send-brokerage-outreach/index.ts` (lines ~428–469, fallback HTML)
 
-**Problem.** In `DocumentPackPanel` (`src/pages/CRMRelationships.tsx`), `CcListEditor` writes both `saved` and `active` arrays into a local `draft` state. They only persist when the user clicks **Save settings**. Same for `PrimarySenderEditor` — the only reason senders feel "saved" is because the user clicks Save after adding one. CCs disappear because users add them just before sending and never hit Save.
+Rewrite the email body with this structure:
 
-**Fix.**
-- Add a small auto-save effect inside `DocumentPackPanel`: when the patch only touches `savedCc`, `savedSenders`, `activeCc`, `replyTo`, debounce 600 ms and call `upsert.mutateAsync` automatically. Anything else (drive URL, from-name) still requires the explicit **Save** click.
-- After a successful auto-save, clear the dirty state so the Save banner doesn't appear.
-- The CC chip rendering already shows every saved entry with a delete button — once persistence works, "always fixed with delete option" is satisfied.
+```text
+GREETINGS FROM CITI DEVELOPER!     ← brand banner (center, gold underline)
+Sales & Training · Channel Partner Activation
 
-### 2. "Attended briefing" tracking per agency
+Dear {Brokerage Name} team,         ← (or "Dear {Contact First Name}" if a real contact exists)
 
-**Problem.** No way to mark a brokerage as having attended the breakfast briefing.
+This is Jane Aboujaoude from CITI Developer, Sales & Training.
 
-**Fix.** Add to `crm_brokerages` (single migration, additive only):
-- `attended_briefing boolean NOT NULL DEFAULT false`
-- `attended_briefing_date date`
-- `briefing_notes text`
+{group_status_line}
 
-(`status` and `notes` already exist — reuse them, do NOT add duplicates.)
+Please let us know if {Brokerage Name} is already registered with CITI
+Developer. If you are not yet registered, kindly share the email address
+where your team would like to receive the registration documents and we
+will send everything required to complete onboarding.
 
-UI in the brokerage edit dialog (existing `<Dialog>` around the brokerage form) — new section "Briefing attendance":
-- Switch "Attended breakfast briefing"
-- Date input (enabled only when switch is on)
-- Textarea "Briefing notes"
+────────── FEATURED PROJECT (centered card) ──────────
+                  AMRA
+   Wellness-led beachfront resort residences…
+   [ Open AMRA e-catalogue → ]   ← champagne/gold premium CTA
+─────────────────────────────────────────────────────
 
-Also add a small badge on each brokerage card: "Attended ✓ — DD MMM YYYY" when `attended_briefing = true`. Hooked to existing `useUpsertBrokerage`.
+PRIVATE INVITATION — Partnership Briefing & Breakfast
+…existing breakfast block (unchanged content, slight polish)…
+[ Book your slot on the calendar → ]
 
-### 3. Brokerage "All" tab showing 0 vs per-emirate showing 377
+Warm regards,
+Jane Aboujaoude
+CITI Developer · Sales & Training
+```
 
-**Investigation.** DB shows 394 brokerages, all `entry_source = 'directory'`, none with NULL emirate. The page reads:
-- `data.length` → drives "All" labels → would be 394 ✓
-- `directoryCount` → 394
-- `ownerCount` → 0
-- `existingCount` → 0
+Specific edits:
+- **Greeting block (new):** replace the small uppercase header with a centered gold-accent line `GREETINGS FROM ${representedDeveloperName}!` (note the `!`, not a colon) plus a thin `#B89555` hairline underline.
+- **Salutation (line 433):** change to dynamic logic — if `pcRaw.name` exists use `Dear <strong>${resolvedContactFirstName}</strong>,`; otherwise `Dear <strong>${varsMap.brokerage_name}</strong> team,`. Never the words "Sample" or "from".
+- **Registration paragraph:** move it out of the bottom and place it directly after `${resolvedGroupLine}` (before the Featured Project card). New copy:
+  > *"Please let us know whether <strong>{brokerage_name}</strong> is already registered with {representedDeveloperName}. If not, kindly reply with the email address where your team would like to receive the registration documents, and we will send everything required to complete onboarding."*
+  No question mark; declarative tone.
+- **Delete** the entire "Could you also confirm…" paragraph (line 458) and the italic "Please disregard this message…" paragraph (line 459).
+- **Featured Project card (lines 436–441):** add `text-align:center` to the wrapper; center the project name, tagline, and CTA. Replace the black CTA with a premium champagne-gold button:
+  ```
+  background: linear-gradient(180deg,#D4B05A 0%,#B89555 100%);
+  color:#1A1A1A; border:1px solid #8A6F3E;
+  border-radius:10px; padding:14px 30px;
+  font-weight:600; letter-spacing:0.4px;
+  box-shadow:0 2px 8px rgba(184,149,85,0.35);
+  ```
+  Label stays `Open ${project.name} e-catalogue →`.
+- Apply the same gold-CTA style to the "Book your slot" button below for visual consistency (currently solid black).
+- Polish: increase outer container padding, refine spacing, keep champagne palette per memory.
 
-So if the user's "All" tab is showing **0** while emirates sum ~377, the most likely cause is the **My Additions** sub-tab being active (which is 0) or a stale `placeholderData` returning an empty cache. Need to confirm in build mode by:
-- Logging `data.length` and active `sourceTab` on the live page.
-- Verifying `useBrokerages` isn't returning a stale empty array on first paint (it uses `placeholderData: prev` — fine).
+### 2. `src/components/crm/TemplateEditorDialog.tsx` (preview, lines 65–67, 99, 137, 141)
+- Remove the literal default `"Sample Brokerage Group"` and `"Sample Developer Co."` — use `""` and show placeholder text "Recipient brokerage name (for preview only)" in the input. The preview substitution must fall back to `"Your Brokerage"` rather than the word "Sample".
+- Replace `{{contact_first_name}}` preview value `"Sample"` with empty (so the new salutation logic shows `Dear Your Brokerage team,`).
+- Update the `group_status_line` preview text to the new wording (no "confirm if you're already registered" trailer — the registration ask is now its own paragraph).
 
-**Fix candidates** (will pick during build once root cause is confirmed):
-- If "All" tab itself shows the correct number but the **list area** shows 0 — the bug is in `filtered`: `emirateLower` becomes `"all"` and a directory row with `emirate = "Dubai"` matches because `emirateFilter !== "all"` guard works… so this should not fail. We'll verify the active `sourceTab` default and ensure `setSourceTab` isn't being reset to `"owner"` by an effect.
-- If a status filter or `do_not_contact` flag is hiding rows, surface a "filters active" banner with a one-click reset.
-- Make the **All** sub-tab always read from `data.length` (already does) and add a defensive `sourceTab === 'all'` early-return that bypasses the `entry_source` filter (already does).
+### 3. `src/components/crm/BulkSendDialog.tsx` (line 291 and the GROUP_LINES_LOCAL block 289–302)
+- Update `prospective` line to: `"We'd love to introduce CITI Developer to your team."` (drop the "and confirm if you're already registered with us." tail — that ask now lives in a dedicated paragraph rendered by the edge function).
+- Keep all other group lines unchanged.
 
-### 4. Continue remaining items from prior plan
+### 4. Per-recipient name synchronization (already wired, verify)
+The edge function already resolves `varsMap.brokerage_name` from `brk.company_name` and `varsMap.contact_first_name` from the brokerage's `primary_contact.name` for **every recipient** in bulk sends (each `send-brokerage-outreach` invocation is per-brokerage). No code change needed — the new salutation logic above will automatically render `Dear Provident team,` for Provident and `Dear Farm team,` for Farm, etc. We will add a one-line code comment documenting that the salutation is per-recipient and never falls back to the word "Sample".
 
-Two items from the previous plan are not yet wired into the UI:
-- **Inbound AI extraction display** in `UAERegistryDetailPage.tsx` Communication tab: render `ai_extracted` JSONB (summary, requested documents, contact person, registration instructions, deadline, recommended next action). Add a "Use AI draft" button that pre-fills the outreach send form with `ai_extracted.draft_response_html` and reuses `uae-registry-send`.
-- **Last response summary + required next action** auto-displayed at the top of the Profile tab when the record has `last_response_summary` / `required_next_action` populated by `uae-registry-inbound-reply`.
+## Out of scope / not changed
+- Template variants other than `brokerage_partnership_intro` fallback (the edge function only renders this fallback when stored template lacks `{{project_name}}`; stored DB templates are untouched and remain owner-editable in the Template Editor).
+- Booking flow, CC auto-save, briefing fields, "All shows 0" fix — already shipped previously.
 
-No new edge functions, no new tables — the extraction is already saved by the inbound function from the previous turn; this is purely UI surfacing.
-
----
-
-## Files to edit
-
-- `src/pages/CRMRelationships.tsx` — auto-save effect in `DocumentPackPanel`; briefing fields in brokerage dialog + card badge; defensive checks on `sourceTab`/filters.
-- `src/hooks/useCRMRelationships.ts` — pass new fields through `useUpsertBrokerage` (no schema-typed changes needed; payload is `any`).
-- `src/pages/owner/uae-registry/UAERegistryDetailPage.tsx` — surface `ai_extracted`, `last_response_summary`, `required_next_action`, "Use AI draft" button.
-- New migration: add 3 columns to `crm_brokerages`.
-
-No new pages, no new edge functions, no duplicate state, no schema rebuild.
-
-Approve to switch to build mode.
+## Deploy
+After edits, redeploy the edge function `crm-send-brokerage-outreach`.
