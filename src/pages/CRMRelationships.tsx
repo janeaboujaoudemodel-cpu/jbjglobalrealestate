@@ -34,7 +34,7 @@ import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
 import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
 import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
-import { AGENCY_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
