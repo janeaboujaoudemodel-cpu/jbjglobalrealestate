@@ -24,32 +24,42 @@ const C: Record<CrmStatusTone, Omit<StatusColor, "label" | "tone">> = {
 
 // Map any status string (or human label) to a tone.
 const TONE_BY_KEY: Record<string, CrmStatusTone> = {
+  // RED — terminal / negative
   not_answering: "red",
   rejected: "red",
+  registration_rejected: "red",
   declined: "red",
   bounced: "red",
   unsubscribed: "red",
   blacklisted: "red",
 
+  // CHAMPAGNE — neutral / not started
   not_started: "champagne",
   prospect: "champagne",
   pending: "champagne",
   draft: "champagne",
   not_contacted: "champagne",
+  not_registered: "champagne",
   unknown: "champagne",
+  inquiries: "champagne",
 
+  // AMBER — in-progress / waiting
   documents_required: "amber",
   pending_documents: "amber",
+  documents_pending_review: "amber",
   pending_application: "amber",
   in_review: "amber",
   under_review: "amber",
   follow_up: "amber",
   attempted: "amber",
   negotiating: "amber",
+  closing_deal: "amber",
   nda_pending: "amber",
   introduced: "amber",
   expired: "amber",
+  partially_active: "amber",
 
+  // EMERALD — engaged / active
   interested: "emerald",
   meeting_booked: "emerald",
   attended_briefing: "emerald",
@@ -59,12 +69,14 @@ const TONE_BY_KEY: Record<string, CrmStatusTone> = {
   engaged: "emerald",
   closed_deals: "emerald",
 
+  // BLUE — registered / contracted
   registered: "blue",
   contract_signed: "blue",
   contracted: "blue",
   partner: "blue",
   nda_signed: "blue",
 
+  // VIOLET — paused
   on_hold: "violet",
   paused: "violet",
   dormant: "violet",
