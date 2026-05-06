@@ -31948,6 +31948,7 @@ export type Database = {
         | "event"
         | "cold_research"
         | "inbound"
+        | "dld_register"
       outreach_stage:
         | "not_contacted"
         | "attempted"
@@ -32571,6 +32572,7 @@ export const Constants = {
         "event",
         "cold_research",
         "inbound",
+        "dld_register",
       ],
       outreach_stage: [
         "not_contacted",
