@@ -320,8 +320,9 @@ export const TemplateEditorDialog = ({
                   className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
                 />
               ) : (
-                <VisualEditor
-                  content={html}
+                <WysiwygEmailEditor
+                  html={html}
+                  tokenSamples={tokenSamples}
                   onChange={setHtml}
                   disabled={isLocked}
                 />
