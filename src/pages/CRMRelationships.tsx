@@ -435,6 +435,33 @@ const TopAgentsEditor = ({ value, onChange }: { value: TopAgent[]; onChange: (v:
    Brokerages
 =========================================================== */
 const BrokeragesTab = () => {
+  const [innerTab, setInnerTab] = useState<"agencies" | "brokers">("agencies");
+  return (
+    <div className="space-y-4">
+      <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+        {([
+          { v: "agencies", label: "Agencies" },
+          { v: "brokers", label: "Individual Brokers" },
+        ] as const).map((t) => (
+          <button
+            key={t.v}
+            onClick={() => setInnerTab(t.v)}
+            className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors border ${
+              innerTab === t.v
+                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/60 shadow-sm"
+                : "text-[#1A1A1A] border-transparent hover:bg-[#EFE6D6]/60"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {innerTab === "agencies" ? <BrokeragesAgenciesView /> : <IndividualBrokersTab />}
+    </div>
+  );
+};
+
+const BrokeragesAgenciesView = () => {
   const navigate = useNavigate();
   const { data = [], isLoading, refetch } = useBrokerages();
   const upsert = useUpsertBrokerage();
