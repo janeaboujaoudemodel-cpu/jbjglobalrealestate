@@ -864,7 +864,30 @@ const BrokeragesTab = () => {
             <TableIcon className="w-3.5 h-3.5" /> Excel View
           </button>
         </div>
-        <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
+        <Button
+          variant="outline"
+          onClick={() => setExportOpen(true)}
+          disabled={!filtered.length}
+          title="Configure export — pick format, scope, and which columns (admin/broker contacts) to include"
+        >
+          <Download className="w-4 h-4 mr-2" /> Export
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleImportDLD}
+          disabled={importingDLD}
+          title="One-time bulk import of the official DLD register (10,078 UAE agencies). De-duplicates against existing entries."
+        >
+          {importingDLD ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+          Import DLD register
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleEnrichVisible}
+          title="Auto-fill missing website/phone/email/address for visible agencies via Google + AI."
+        >
+          <Sparkles className="w-4 h-4 mr-2" /> Enrich missing
+        </Button>
         <Button
           variant="outline"
           onClick={() => {
