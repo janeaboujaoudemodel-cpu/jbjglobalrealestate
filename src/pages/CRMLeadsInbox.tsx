@@ -35,8 +35,8 @@ export default function CRMLeadsInbox() {
       <div className="container mx-auto px-4 py-8 max-w-7xl flex flex-col lg:flex-row gap-4 items-start">
         <CRMListSidebar
           kind="leads"
-          value={cx.listView}
-          onChange={(v) => { cx.setListView(v); cx.setPage(1); }}
+          value={cx.listView as any}
+          onChange={(v) => { cx.setListView(v as any); cx.setPage(1); }}
         />
         <div className="flex-1 min-w-0">
         <CRMBulkActionsBar
