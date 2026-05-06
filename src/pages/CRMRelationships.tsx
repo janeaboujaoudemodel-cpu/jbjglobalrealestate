@@ -439,11 +439,29 @@ const BrokeragesTab = () => {
   }, [q]);
   const [statusFilter, setStatusFilterRaw] = useState("all");
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
-  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "existing">("all");
+  const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
+  const [regionFilter, setRegionFilterRaw] = useState<string>("all");
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
-  const setSourceTab = (v: "all" | "directory" | "owner" | "existing") => startTransition(() => setSourceTabRaw(v));
+  const setRegionFilter = (v: string) => startTransition(() => setRegionFilterRaw(v));
+  const setSourceTab = (v: "all" | "directory" | "owner" | "sent" | "inbox") => startTransition(() => setSourceTabRaw(v));
+  const [syncing, setSyncing] = useState(false);
+  const handleSyncNow = async () => {
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("crm-email-sync", { body: { manual: true } });
+      if (error) throw error;
+      const processed = (data as any)?.processed ?? 0;
+      const matched = (data as any)?.matched ?? 0;
+      toast.success(`Inbox synced — ${processed} messages scanned, ${matched} matched to CRM`);
+      refetch();
+    } catch (e: any) {
+      toast.error(e?.message || "Sync failed — check Gmail connection");
+    } finally {
+      setSyncing(false);
+    }
+  };
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkSel, setBulkSel] = useState<Set<string>>(new Set());
@@ -467,19 +485,18 @@ const BrokeragesTab = () => {
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Single pass over data — combine source counts and per-emirate counts to avoid 4× iteration on every render.
-  const { directoryCount, ownerCount, existingCount, emirateCounts } = useMemo(() => {
-    let directory = 0, owner = 0, existing = 0;
+  const { directoryCount, ownerCount, sentCount, inboxCount, emirateCounts } = useMemo(() => {
+    let directory = 0, owner = 0, sent = 0, inbox = 0;
     const emirates: Record<string, number> = {};
     for (const r of data as any[]) {
       if (r.entry_source === "directory") directory++;
-      else if (r.entry_source === "owner") {
-        owner++;
-        if (r.is_existing_match) existing++;
-      }
+      else if (r.entry_source === "owner") owner++;
+      if ((r as any).last_outreach_at) sent++;
+      if ((r as any).last_inbound_at) inbox++;
       const e = r.emirate || "Unknown";
       emirates[e] = (emirates[e] || 0) + 1;
     }
-    return { directoryCount: directory, ownerCount: owner, existingCount: existing, emirateCounts: emirates };
+    return { directoryCount: directory, ownerCount: owner, sentCount: sent, inboxCount: inbox, emirateCounts: emirates };
   }, [data]);
 
   // Sort the full list once per data change (heavy ranking) — filtering is a cheap pass.
@@ -524,13 +541,15 @@ const BrokeragesTab = () => {
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
+      if (regionFilter !== "all" && String(r.region || "UAE") !== regionFilter) continue;
       if (sourceTab === "directory" && r.entry_source !== "directory") continue;
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
-      else if (sourceTab === "existing" && !(r.entry_source === "owner" && r.is_existing_match)) continue;
+      else if (sourceTab === "sent" && !r.last_outreach_at) continue;
+      else if (sourceTab === "inbox" && !r.last_inbound_at) continue;
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab, excludedIds]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
@@ -661,7 +680,8 @@ const BrokeragesTab = () => {
           <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
           <div><span className="text-[#1A1A1A]/70">UAE Agencies:</span> <b>{directoryCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
-          <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">Already Sent:</span> <b>{sentCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">New Replies:</span> <b>{inboxCount}</b></div>
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#1A1A1A]/70">
           {EMIRATES.map((e) => (
@@ -678,7 +698,8 @@ const BrokeragesTab = () => {
             { v: "all", label: `All · ${data.length}` },
             { v: "directory", label: `UAE Agencies · ${directoryCount}` },
             { v: "owner", label: `My Additions · ${ownerCount}` },
-            { v: "existing", label: `Existing Matches · ${existingCount}` },
+            { v: "sent", label: `Already Sent · ${sentCount}` },
+            { v: "inbox", label: `New Messages · ${inboxCount}` },
           ].map((t) => (
             <button
               key={t.v}
@@ -713,7 +734,10 @@ const BrokeragesTab = () => {
               <strong>My Additions</strong> = brokerages you added yourself.
             </p>
             <p className="text-xs mt-1">
-              <strong>Existing Matches</strong> = your additions that match a licensed firm.
+              <strong>Already Sent</strong> = agencies you've previously emailed (any template).
+            </p>
+            <p className="text-xs mt-1">
+              <strong>New Messages</strong> = agencies who've replied — synced from your inbox.
             </p>
           </TooltipContent>
         </Tooltip>
@@ -733,6 +757,16 @@ const BrokeragesTab = () => {
                 {e} · {emirateCounts[e] || 0}
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <Select value={regionFilter} onValueChange={setRegionFilter}>
+          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Region" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All regions</SelectItem>
+            <SelectItem value="UAE">UAE</SelectItem>
+            <SelectItem value="GCC">GCC</SelectItem>
+            <SelectItem value="MENA">MENA</SelectItem>
+            <SelectItem value="International">International</SelectItem>
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -792,6 +826,10 @@ const BrokeragesTab = () => {
         </Button>
         <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
           <FlaskConical className="w-4 h-4 mr-2" />Send Test
+        </Button>
+        <Button variant="outline" onClick={handleSyncNow} disabled={syncing} title="Pull latest agency replies from your inbox now">
+          {syncing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-2" />}
+          {syncing ? "Syncing…" : "Sync Inbox"}
         </Button>
         <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
           <Bell className="w-4 h-4 mr-2" />Activity Log
