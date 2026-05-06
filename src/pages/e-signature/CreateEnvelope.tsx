@@ -160,9 +160,73 @@ export default function CreateEnvelope() {
   // Step 3: Fields
   const [signatureFields, setSignatureFields] = useState<SignatureField[]>([]);
 
-  // Step 4: Email customization
   const [emailSubject, setEmailSubject] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
+  const [channels, setChannels] = useState<{ email: boolean; whatsapp: boolean }>({
+    email: true,
+    whatsapp: false,
+  });
+  const [isExportingPreview, setIsExportingPreview] = useState(false);
+
+  // Saved signature/stamp for client-side preview export
+  const { data: signatureAssets } = useOwnerSignatureAssets("signature");
+  const { data: stampAssets } = useOwnerSignatureAssets("stamp");
+  const defaultSignatureUrl = useMemo(() => {
+    const list = signatureAssets || [];
+    return (list.find(a => a.is_default) || list[0])?.image_url || null;
+  }, [signatureAssets]);
+  const defaultStampUrl = useMemo(() => {
+    const list = stampAssets || [];
+    return (list.find(a => a.is_default) || list[0])?.image_url || null;
+  }, [stampAssets]);
+
+  const handleExportPreview = useCallback(async () => {
+    if (!pdfFile) {
+      toast.error("Upload a document first");
+      return;
+    }
+    setIsExportingPreview(true);
+    try {
+      // Convert remote signature/stamp URLs to data URLs for pdf-lib
+      async function urlToDataUrl(url: string | null): Promise<string | null> {
+        if (!url) return null;
+        try {
+          const r = await fetch(url);
+          const blob = await r.blob();
+          return await new Promise<string>((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onload = () => resolve(String(fr.result));
+            fr.onerror = reject;
+            fr.readAsDataURL(blob);
+          });
+        } catch {
+          return null;
+        }
+      }
+      const [sigData, stampData] = await Promise.all([
+        urlToDataUrl(defaultSignatureUrl),
+        urlToDataUrl(defaultStampUrl),
+      ]);
+      const blob = await exportPreviewPdf(pdfFile, signatureFields, recipients, {
+        signatureDataUrl: sigData,
+        stampDataUrl: stampData,
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(documentName || "preview").replace(/[^\w-]+/g, "_")}_preview.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30_000);
+      toast.success("Preview PDF downloaded");
+    } catch (err: any) {
+      console.error("Preview export failed:", err);
+      toast.error(err.message || "Failed to export preview");
+    } finally {
+      setIsExportingPreview(false);
+    }
+  }, [pdfFile, signatureFields, recipients, documentName, defaultSignatureUrl, defaultStampUrl]);
 
   const filteredContacts = useMemo(() => {
     if (!contactFilter || savedContacts.length === 0) return savedContacts.slice(0, 5);
