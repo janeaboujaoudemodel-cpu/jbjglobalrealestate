@@ -238,6 +238,8 @@ export const BulkSendDialog = ({
     setChecks({});
     setCheckRanFor("");
     setWarnOverrides({});
+    setExcludedIds(new Set());
+    setRefineSearch("");
   }, [variant, skipRecent, selected.length]);
 
   // Compute per-id check breakdown.
