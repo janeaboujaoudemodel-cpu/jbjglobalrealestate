@@ -519,6 +519,7 @@ const BrokeragesTab = () => {
     const out: any[] = [];
     for (const item of indexed) {
       const r = item.row;
+      if (excludedIds.has(r.id)) continue;
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
@@ -528,7 +529,7 @@ const BrokeragesTab = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab, excludedIds]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
