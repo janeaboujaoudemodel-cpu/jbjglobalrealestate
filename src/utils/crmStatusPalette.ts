@@ -102,21 +102,36 @@ export const STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone
   { value: "expired",             label: "Expired",             tone: "amber"     },
 ];
 
-// Agency / outreach activity statuses (how active the relationship is)
+// Agency / outreach activity statuses (how active the relationship is).
+// Used for BOTH brokerages (outreach_stage) and developer registry agency activity.
 export const AGENCY_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
-  { value: "not_contacted",   label: "Not contacted",   tone: "champagne" },
-  { value: "attempted",       label: "Attempted",       tone: "amber"     },
-  { value: "engaged",         label: "Engaged",         tone: "emerald"   },
-  { value: "meeting_booked",  label: "Meeting booked",  tone: "emerald"   },
-  { value: "nda_pending",     label: "NDA pending",     tone: "amber"     },
-  { value: "nda_signed",      label: "NDA signed",      tone: "blue"      },
-  { value: "active_partner",  label: "Active partner",  tone: "emerald"   },
-  { value: "dormant",         label: "Dormant",         tone: "violet"    },
-  { value: "declined",        label: "Declined",        tone: "red"       },
-  { value: "blacklisted",     label: "Blacklisted",     tone: "red"       },
+  { value: "not_contacted",    label: "Not contacted",    tone: "champagne" },
+  { value: "attempted",        label: "Attempted",        tone: "amber"     },
+  { value: "engaged",          label: "Engaged",          tone: "emerald"   },
+  { value: "inquiries",        label: "Inquiries",        tone: "champagne" },
+  { value: "meeting_booked",   label: "Meeting booked",   tone: "emerald"   },
+  { value: "closing_deal",     label: "Closing deal",     tone: "amber"     },
+  { value: "nda_pending",      label: "NDA pending",      tone: "amber"     },
+  { value: "nda_signed",       label: "NDA signed",       tone: "blue"      },
+  { value: "active_partner",   label: "Active partner",   tone: "emerald"   },
+  { value: "partially_active", label: "Partially active", tone: "amber"     },
+  { value: "dormant",          label: "Dormant",          tone: "violet"    },
+  { value: "declined",         label: "Declined",         tone: "red"       },
+  { value: "blacklisted",      label: "Blacklisted",      tone: "red"       },
 ];
 
-// Brokerage agency-level lifecycle (the existing crm_brokerage_status enum)
+// Brokerage REGISTRATION pipeline (separate from outreach activity).
+// Stored in crm_brokerages.registration_status.
+export const BROKERAGE_REGISTRATION_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
+  { value: "not_registered",           label: "Not registered",          tone: "champagne" },
+  { value: "pending_documents",        label: "Pending documents",       tone: "amber"     },
+  { value: "documents_pending_review", label: "Docs pending review",     tone: "amber"     },
+  { value: "registered",               label: "Registered",              tone: "blue"      },
+  { value: "registration_rejected",    label: "Rejected",                tone: "red"       },
+  { value: "expired",                  label: "Expired",                 tone: "amber"     },
+];
+
+// Brokerage agency-level lifecycle (legacy enum) — kept for backwards compat.
 export const BROKERAGE_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
   { value: "prospect",       label: "Prospect",       tone: "champagne" },
   { value: "negotiating",    label: "Negotiating",    tone: "amber"     },
