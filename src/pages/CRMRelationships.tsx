@@ -542,13 +542,15 @@ const BrokeragesTab = () => {
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
+      if (regionFilter !== "all" && String(r.region || "UAE") !== regionFilter) continue;
       if (sourceTab === "directory" && r.entry_source !== "directory") continue;
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
-      else if (sourceTab === "existing" && !(r.entry_source === "owner" && r.is_existing_match)) continue;
+      else if (sourceTab === "sent" && !r.last_outreach_at) continue;
+      else if (sourceTab === "inbox" && !r.last_inbound_at) continue;
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab, excludedIds]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
