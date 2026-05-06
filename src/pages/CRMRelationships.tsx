@@ -758,7 +758,17 @@ const BrokeragesTab = () => {
 
   return (
     <TooltipProvider>
-    <div className="space-y-4">
+    <div className="flex flex-col lg:flex-row gap-4 items-start">
+    <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} />
+    <div className="space-y-4 flex-1 min-w-0">
+    <CRMBulkActionsBar
+      table="crm_brokerages"
+      ids={[...bulkSel]}
+      view={listView.kind}
+      onClear={() => setBulkSel(new Set())}
+      onChanged={onListChanged}
+      onExport={() => setExportOpen(true)}
+    />
       <section aria-labelledby="brokerage-outreach-settings" className="rounded-2xl border-2 border-[#B89555]/40 bg-[#F7F2EA] p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <Mail className="w-5 h-5 text-[#1A1A1A]" />
