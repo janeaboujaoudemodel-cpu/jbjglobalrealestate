@@ -1,84 +1,106 @@
-## Brokerage Outreach — Copy + AMRA CTA + Booking CTA Fixes
+## Brokerage email — true WYSIWYG editor + content & branding fixes
 
-Targeted, frontend/template-only fixes against the issues you raised. No feature removed.
+### 1. True WYSIWYG editor (the big one)
 
-### 1. Rewrite the registration sentence (both templates + edge fallback)
+**Problem**: The "Visual editor" tab today is a TipTap rich-text editor fed raw template HTML — so `<table>`, inline styles, `<img>` logos, the calendar SVG and `{{placeholders}}` all collapse into a wall of text/code instead of showing the same rendered card the preview pane shows. You can't click on a sentence in the rendered email and just retype it.
 
-Replace the current line everywhere it appears:
+**Fix** — replace the TipTap pane with a **live contentEditable iframe** that mirrors the preview exactly:
+- Render the same `previewHtml` (placeholders already substituted) into an iframe that is **`contentEditable`**, not just a static preview. Logos, calendar SVG, gold buttons, mini-calendar tile — all visible.
+- Click any sentence → cursor lands on it → type. On blur (or `input` debounced 400ms), serialize the iframe `<body>` back to HTML, then re-tokenize: walk the DOM and replace the substituted sample strings (e.g. `Your Brokerage`, `AMRA`, `https://www.citidevelopers.com/...`, `Jane`, the breakfast `booking_url` sample) back into their `{{brokerage_name}}` / `{{project_name}}` / `{{project_url}}` / `{{owner_first_name}}` / `{{booking_url}}` tokens before writing back to `html` state. Tokens that aren't found in the body are preserved untouched (we keep the original tokenized HTML as the source of truth and only diff text/href changes).
+- Keep an "HTML source" toggle for power-edits, but make **WYSIWYG** the default and persistent.
+- Toolbar simplification: bold, italic, link, undo — operating directly on the iframe selection via `document.execCommand` (acceptable inside isolated iframes for this admin-only surface).
+- The right-side preview pane stays, but becomes redundant when WYSIWYG is on — collapse it by default to give the editor the full width.
 
-> "...if not, reply with the email address where the registration documents should be sent."
+Files: `src/components/crm/TemplateEditorDialog.tsx` (replace the `<VisualEditor>` block, expand `previewHtml` to expose a tokenize-back map), new `src/components/crm/WysiwygEmailEditor.tsx`.
 
-with:
+### 2. Lock / Unlock — make it round-trip cleanly
 
-> "Kindly share your email address so our **Channel Partner Department** can send the registration documents and onboard {{brokerage_name}} directly."
+The Unlock button already exists when `locked_at` is set. The friction is the scary `confirm()` and the fact that a locked template disables everything. Adjustments:
+- Drop the `confirm()` on Lock — replace with an inline toast "Locked. Click *Unlock template* anytime to edit again."
+- Show **Unlock template** as the primary footer button when locked (currently a faint amber outline) so it's obvious you can flip back.
+- While locked, the editor stays read-only but the "HTML source" toggle is still allowed for inspection.
 
-Files:
-- `crm_email_templates` rows: `brokerage_partnership_intro`, `brokerage_breakfast_invite` (data update on the `html` column)
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` line ~466 (legacy fallback string) — same rewrite, using `${varsMap.brokerage_name}`
+File: `src/components/crm/TemplateEditorDialog.tsx`.
 
-### 2. "your brokerage" → live brokerage name
+### 3. Developer logo — also at the bottom of the card
 
-Both templates and the edge fallback use `{{brokerage_name}}` already, but the edge function sets `brokerageNameResolved = brk.company_name || "your brokerage"` (line 397). Change the fallback to `"your team"` so it never literally reads "your brokerage". Bulk sends already synchronize the real `company_name` per recipient — confirm with a quick `read_query` on `crm_brokerages` that all targeted rows have `company_name`.
+Both `brokerage_partnership_intro` and `brokerage_breakfast_invite` currently show the Citi Developers gold logo only in the header. Add a second logo block at the **end of the body**, just above the signature footer, sized smaller (height ~36px), centred, with a single line beneath it: *"In partnership with CITI Developers."*
 
-### 3. AMRA e-Catalogue button — clickable + champagne
+Files: both DB rows in `crm_email_templates` (HTML update) + matching update to the legacy fallback in `supabase/functions/crm-send-brokerage-outreach/index.ts`.
 
-Current button uses `background:#1A1A1A;color:#FDFBF7` (black fill). Per your direction: light champagne, clean, clickable, gold hairline.
+### 4. Family name correction
 
-Replace the `<a>` styling for `Open {{project_name}} e-Catalogue →` in both DB templates and the edge-function fallback (`goldCta` helper, line ~454) with:
+Search the codebase + DB for any of: `Boujaoude`, `Bou jaoude`, `BouJaoude`, `Bou Jaoude` (any wrong casing/spacing) and normalise everywhere user-facing to **`Jane Bou Jaoude`** (three words, capital B, capital J). Confirmed locations to check first: email signatures in both brokerage templates, the developer registration template, the edge-function HTML fallbacks, and any seeded company-profile copy. Replace via `code--exec rg` then targeted SQL `UPDATE`s and edge-function edits.
 
-```
-background:#F7F2EA;color:#1A1A1A;border:1px solid #B89555;
-padding:14px 28px;border-radius:10px;font-weight:600;
-text-decoration:none;display:inline-block;letter-spacing:0.3px;
-```
+Files: `crm_email_templates` rows, `supabase/functions/crm-send-brokerage-outreach/index.ts`, plus any other matches `rg` finds.
 
-Confirm `href="{{project_url}}"` resolves (varsMap maps to `project.url` from `src/config/citi-projects.ts`) — verify it's an absolute `https://` URL so Gmail makes it clickable. If any project entry is relative, prefix with `https://www.citidevelopers.com`.
+### 5. Premium SVG icons in the email signature
 
-Also ensure the **TemplateEditorDialog preview pane** renders the same HTML (it already injects sample vars; just verify `project_url` is in the sample map so the preview link is live, not a dead `{{project_url}}` string).
+Replace the current emoji/low-quality icons used next to **Website**, **Location**, **WhatsApp** with inline gold-stroke SVGs (email-safe, no JS, 18×18, `stroke="#B89555" stroke-width="1.5"`). Designs:
+- Website: globe outline.
+- Location: pin outline.
+- WhatsApp: rounded chat bubble with a phone glyph (no green fill — keep the gold-hairline aesthetic to stay on-brand).
 
-### 4. Replace the 📅 emoji with a clean SVG icon
+Apply in both DB templates and the edge-function `signatureBlock` builder.
 
-In both templates, the breakfast tile currently shows `<div style="font-size:30px">📅</div>`. Replace with an inline gold-stroke calendar SVG (email-safe, no JS):
+### 6. Always prefix website with `www.`
 
-```html
-<div style="margin:6px 0 4px">
-  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
-       fill="none" stroke="#B89555" stroke-width="1.5"
-       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <rect x="3" y="4.5" width="18" height="16" rx="2"/>
-    <path d="M3 9h18M8 3v3M16 3v3"/>
-  </svg>
-</div>
-```
+Wherever the signature shows the website, render it as **`www.citidevelopers.com`** (display) and link it to `https://www.citidevelopers.com` (href). Same rule for the AMRA URL: `www.citidevelopers.com/e-catalogue/amra`. Update both DB templates, the preview sample map (`previewHtml`) and the edge function.
 
-### 5. "Pick any weekday slot" — make it a real CTA, not static text
+### 7. Phone number — replace + clickable for both call and WhatsApp
 
-Currently the line `Pick any weekday slot` sits inside a static tile and isn't actionable on its own. Wrap the entire mini-calendar tile in `<a href="{{booking_url}}" target="_blank" rel="noopener">` so the whole card is clickable, and add an explicit pill button under it:
+Current number `+971 58 589 3499` (and any other phone in the signature) → replace with **`+971 54 716 7107`** (user-supplied `054 716 7107`). Render as two interactive icons in the signature (no auto-popup — single tap behaviour is whatever the OS does with `tel:` / `https://wa.me/`):
 
 ```
-[ Reserve a weekday slot → ]
+[ phone-svg ] +971 54 716 7107   [ whatsapp-svg ] Chat on WhatsApp
 ```
 
-styled identical to the new champagne AMRA CTA (cream fill, gold hairline, ink text). The existing standalone "Book your slot on the calendar →" button below stays — both routes lead to `{{booking_url}}`.
+Both wrapped in `<a>`:
+- Phone: `<a href="tel:+971547167107">` — opens the dialer.
+- WhatsApp: `<a href="https://wa.me/971547167107">` — opens WhatsApp.
 
-### 6. Booking page redirects to relationship hub + slow
+This satisfies the "ask call or WhatsApp" intent without a custom JS prompt (which doesn't run in email clients). Apply in both DB templates and the edge-function signature builder.
 
-Reproduce on `/breakfast-booking?token=…`:
-- Investigate `src/pages/BreakfastBooking.tsx` initial fetch path (`breakfast-booking-lookup` edge fn). The slow redirect to `/owner/crm/relationships` is almost certainly: missing/expired token → catch block → `<Navigate to="/owner/crm/relationships">` or similar fallback. Replace any hard redirect with a friendly inline error state ("This invite link is no longer valid — request a new one") and a single clear CTA back to the homepage. Never bounce to an owner-only route.
-- Eliminate the perceived slowness: render the page chrome immediately, only the slot grid behind a small skeleton; lazy-load `html2canvas` (currently imported eagerly at the top, ~200KB). Move it inside the `downloadConfirmation` handler with `await import("html2canvas")`.
-- Verify `crm-create-breakfast-invite-token` is being invoked from the **owner** session when generating booking_url (it requires owner auth). For test sends, ensure `isTest:true` mints a preview token that the public lookup function accepts (check `breakfast-booking-lookup` for an `isTest`/preview path; if missing, add a preview branch returning sample slots so the test email link doesn't dead-end).
+### 8. Add the RSVP request block before "Please confirm"
 
-### 7. Verify in preview + send a real test
+Insert a new block **above** the existing "Please confirm" / sign-off line in both templates. Wording (final, drop-in):
 
-- Open `TemplateEditorDialog` for both variants → confirm: new copy, gold-hairline calendar SVG, champagne AMRA button, brokerage name interpolated, booking CTA visible.
-- Send a test to `jane@citidevelopers.com` from the Brokerages tab → click each link in Gmail → AMRA button opens the catalogue, "Reserve a weekday slot" opens `/breakfast-booking?token=…` and shows real slots, not the relationship hub.
+> **Before we lock your seats, kindly reply to this email with:**
+> • Whether your agency is already registered with CITI Developers.
+> • The existing WhatsApp group your team is on (if any).
+> • The date & time slot you would like to confirm.
+> • The full list of attendees — name, mobile, and email for each broker — so we can register them on the guest list.
+>
+> *This is a private breakfast hosted exclusively for your company. Kindly let us know at least **48 hours in advance** if you need to reschedule or cancel.*
+
+Render as an ink-on-champagne tile (`#F7F2EA` bg, `1px #B89555` hairline, 14/22 type) so it visually separates from the rest of the message.
+
+### 9. "Reserve a weekday slot" → "Reserve a slot" + hover style
+
+- Rename label everywhere: DB templates and edge function.
+- Add a hover state to the pill (email clients support `:hover` in `<style>`-in-`<head>` for desktop Gmail/Apple Mail). Wrap the CTA in a class `.jbj-cta` and inject:
+
+```css
+.jbj-cta { transition: background 120ms, transform 120ms; }
+.jbj-cta:hover { background:#EFE6D6 !important; transform: translateY(-1px); }
+```
+
+inside a `<style>` block at the top of both template HTMLs, plus the matching change in the edge function. Mobile clients ignore `:hover` gracefully.
+
+### 10. Verify
+
+After all edits:
+1. Open `TemplateEditorDialog` for both brokerage variants → confirm WYSIWYG renders the rendered card (logo top + bottom, gold-stroke icons, www. prefix, new phone, RSVP block, renamed CTA).
+2. Click a sentence in the rendered editor → retype → save → reopen → confirms tokens preserved.
+3. Lock → footer flips to a prominent **Unlock template** primary button → click → editor re-enabled.
+4. Send a real test to the user's inbox → click website link, phone link (dialer), WhatsApp link, AMRA CTA, Reserve a slot CTA → all behave correctly.
 
 ### Files expected to change
 
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — copy rewrite, fallback brokerage name, champagne `goldCta` style
-- `crm_email_templates` rows (`brokerage_partnership_intro`, `brokerage_breakfast_invite`) — copy, SVG icon, AMRA button, wrap booking tile in `<a>`, add explicit "Reserve a weekday slot" pill
-- `src/pages/BreakfastBooking.tsx` — remove hard redirect to `/owner/crm/relationships`, lazy-load `html2canvas`, friendly invalid-token state
-- `supabase/functions/breakfast-booking-lookup/index.ts` — add `isTest` preview branch (only if missing) so test-mode booking_url renders sample slots
-- `src/components/crm/TemplateEditorDialog.tsx` — ensure preview sample vars include `project_url` and `booking_url` so preview links are live
+- `src/components/crm/TemplateEditorDialog.tsx` — WYSIWYG swap, lock/unlock UX, default-hide preview pane.
+- `src/components/crm/WysiwygEmailEditor.tsx` — new contentEditable iframe component with tokenize-back logic.
+- `crm_email_templates` rows `brokerage_partnership_intro` & `brokerage_breakfast_invite` — bottom logo, premium SVG icons, www. prefix, new phone (tel:/wa.me), RSVP block, CTA rename, hover `<style>`.
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` — same content/branding updates in the legacy fallback HTML and signature builder.
+- Any file `rg` flags carrying the misspelt family name.
 
-No business-logic changes beyond the booking page redirect fix and lookup preview-mode branch.
+No business-logic changes beyond what's listed.

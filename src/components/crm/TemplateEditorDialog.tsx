@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Lock, Eye, Send, Loader2, Code2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VisualEditor } from "@/components/crm/VisualEditor";
+import { WysiwygEmailEditor } from "@/components/crm/WysiwygEmailEditor";
+import { toast } from "@/hooks/use-toast";
 import {
   useEmailTemplate,
   useUpsertEmailTemplate,
@@ -59,7 +61,7 @@ export const TemplateEditorDialog = ({
 
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const [sourceMode, setSourceMode] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testSampleName, setTestSampleName] = useState("");
@@ -115,48 +117,57 @@ export const TemplateEditorDialog = ({
 
   const isLocked = !!template?.locked_at;
 
-  const previewHtml = useMemo(() => {
+  const tokenSamples = useMemo<Record<string, string>>(() => {
     if (isBrokerage) {
-      // AMRA defaults — matches the live edge function default project.
-      const offerHtml = `<p style="margin:0 0 8px"><strong>AMRA</strong> is the project we are actively focused on. Brochures, floor plans, payment plans and amenity videos are all in the e-catalogue.</p><p style="margin:0">Marketing freedom: no QR required for AMRA marketing assets — videos are pre-branded and ready to use.</p>`;
-      const conditional = html.replace(
-        /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g,
-        (_, k, inner) => {
-          const map: Record<string, string> = {
-            project_offer_html: offerHtml,
-            booking_url: "#preview",
-          };
-          return map[k] && map[k].trim().length > 0 ? inner : "";
-        },
-      );
-      return conditional
-        .replace(/\{\{brokerage_name\}\}/g, testSampleName || "Your Brokerage")
-        .replace(/\{\{brokerage_location\}\}/g, "Dubai")
-        .replace(/\{\{contact_first_name\}\}/g, "")
-        .replace(/\{\{contact_full_name\}\}/g, "")
-        .replace(/\{\{owner_first_name\}\}/g, "Jane")
-        .replace(/\{\{represented_developer_name\}\}/g, "CITI Developer")
-        .replace(/\{\{group_status_line\}\}/g, "We'd love to introduce CITI Developer to your team.")
-        .replace(/\{\{project_name\}\}/g, "AMRA")
-        .replace(/\{\{project_url\}\}/g, "https://www.citidevelopers.com/e-catalogue/amra")
-        .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
-        .replace(/\{\{project_offer_html\}\}/g, offerHtml)
-        .replace(/\{\{booking_url\}\}/g, "#preview")
-        .replace(/\{\{reply_to\}\}/g, "jane@citideveloper.com")
-        .replace(/\{\{reply_to_lower\}\}/g, "jane@citideveloper.com")
-        .replace(/\{\{reply_to_display\}\}/g, "JANE@CITIDEVELOPER.COM")
-        .replace(/\{\{cc_email\}\}/g, "");
+      return {
+        brokerage_name: testSampleName || "Your Brokerage",
+        brokerage_location: "Dubai",
+        salutation: testSampleName ? `${testSampleName} team` : "Your Brokerage team",
+        contact_first_name: "",
+        contact_full_name: "",
+        owner_first_name: "Jane",
+        represented_developer_name: "CITI Developer",
+        group_status_line: "We'd love to introduce CITI Developer to your team.",
+        project_name: "AMRA",
+        project_url: "https://www.citidevelopers.com/e-catalogue/amra",
+        project_tagline: "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.",
+        project_offer_html: `<p style="margin:0 0 8px"><strong>AMRA</strong> is the project we are actively focused on. Brochures, floor plans, payment plans and amenity videos are all in the e-catalogue.</p><p style="margin:0">Marketing freedom: no QR required for AMRA marketing assets — videos are pre-branded and ready to use.</p>`,
+        booking_url: "#preview",
+        reply_to: "jane@citidevelopers.com",
+        reply_to_lower: "jane@citidevelopers.com",
+        reply_to_display: "JANE@CITIDEVELOPERS.COM",
+        cc_email: "",
+      };
     }
-    return html
-      .replace(/\{\{developer_name\}\}/g, testSampleName || "Your Company")
-      .replace(/\{\{drive_url\}\}/g, "https://drive.google.com/…")
-      .replace(/\{\{reply_to\}\}/g, "contact@jbj.ae")
-      .replace(/\{\{cc_email\}\}/g, "infoo.jane@gmail.com");
-  }, [html, testSampleName, isBrokerage]);
+    return {
+      developer_name: testSampleName || "Your Company",
+      drive_url: "https://drive.google.com/…",
+      reply_to: "contact@jbj.ae",
+      cc_email: "infoo.jane@gmail.com",
+    };
+  }, [isBrokerage, testSampleName]);
+
+  const previewHtml = useMemo(() => {
+    let out = html;
+    out = out.replace(/\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (_m, k, inner) => {
+      return tokenSamples[k] && tokenSamples[k].trim() ? inner : "";
+    });
+    for (const [tok, val] of Object.entries(tokenSamples)) {
+      out = out.split(`{{${tok}}}`).join(val ?? "");
+    }
+    return out;
+  }, [html, tokenSamples]);
 
   const handleLock = () => {
-    if (!confirm("Lock this template? After locking, the subject and body cannot be edited from the app — every email will use exactly this version.")) return;
-    lock.mutate(variant);
+    lock.mutate(variant, {
+      onSuccess: () => toast({ title: "Template locked", description: "Click Unlock template anytime to edit again." }),
+    });
+  };
+
+  const handleUnlock = () => {
+    unlock.mutate(variant, {
+      onSuccess: () => toast({ title: "Template unlocked", description: "You can edit and save changes now." }),
+    });
   };
 
   const handleSendTest = () => {
@@ -309,8 +320,9 @@ export const TemplateEditorDialog = ({
                   className="font-mono text-xs bg-[#FDFBF7] text-[#1A1A1A]"
                 />
               ) : (
-                <VisualEditor
-                  content={html}
+                <WysiwygEmailEditor
+                  html={html}
+                  tokenSamples={tokenSamples}
                   onChange={setHtml}
                   disabled={isLocked}
                 />
@@ -392,10 +404,9 @@ export const TemplateEditorDialog = ({
           </Button>
           {isLocked ? (
             <Button
-              variant="outline"
-              onClick={() => unlock.mutate(variant)}
+              onClick={handleUnlock}
               disabled={unlock.isPending}
-              className="border-amber-400 text-amber-800 hover:bg-amber-50"
+              className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]"
             >
               <Lock className="w-3 h-3 mr-1" /> {unlock.isPending ? "Unlocking…" : "Unlock template"}
             </Button>

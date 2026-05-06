@@ -420,9 +420,9 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       developer_website: "https://www.citidevelopers.com",
       developer_map: "https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18",
-      developer_phone_display: "+971 58 589 3499",
-      developer_phone_tel: "tel:+971585893499",
-      whatsapp_url: "https://wa.me/971585893499",
+      developer_phone_display: "+971 54 716 7107",
+      developer_phone_tel: "tel:+971547167107",
+      whatsapp_url: "https://wa.me/971547167107",
       developer_logo_url: "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/email-assets/brand/citi-developers-gold.png",
       cc_email: ccEmail,
       from_name: fromName,
@@ -487,7 +487,7 @@ serve(async (req: Request) => {
       ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, "Book your slot on the calendar &rarr;")}</div>` : ""}
     </div>
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
-      Warm regards,<br/><strong>${ownerFirstName} Aboujaoude</strong><br/>
+      Warm regards,<br/><strong>${ownerFirstName} Bou Jaoude</strong><br/>
       <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
       <span style="color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</span><br/>
       <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo.toUpperCase()}</a>
