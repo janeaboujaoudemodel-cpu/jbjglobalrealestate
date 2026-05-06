@@ -80,21 +80,28 @@ export const TestSendDialog = ({
   }, [open, settings, mode]);
 
   // Silent persist (no toast, no refetch loop)
-  const persist = async (next: { savedTo?: string[]; savedCc?: string[] }) => {
+  const persist = async (next: { savedTo?: string[]; savedCc?: string[]; savedSampleNames?: string[] }) => {
     try {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) return;
-      await supabase.from("crm_owner_settings").upsert(
-        {
-          owner_id: u.user.id,
-          saved_test_to_emails: next.savedTo ?? savedTo,
-          saved_test_cc_emails: next.savedCc ?? savedCc,
-        } as any,
-        { onConflict: "owner_id" },
-      );
+      const namesKey = mode === "brokerage" ? "saved_test_brokerage_names" : "saved_test_developer_names";
+      const payload: any = {
+        owner_id: u.user.id,
+        saved_test_to_emails: next.savedTo ?? savedTo,
+        saved_test_cc_emails: next.savedCc ?? savedCc,
+      };
+      if (next.savedSampleNames !== undefined) payload[namesKey] = next.savedSampleNames;
+      await supabase.from("crm_owner_settings").upsert(payload, { onConflict: "owner_id" });
     } catch (e) {
       console.warn("persist test recipients failed", e);
     }
+  };
+
+  const removeSampleName = (name: string) => {
+    const next = savedSampleNames.filter((n) => n !== name);
+    setSavedSampleNames(next);
+    if (sampleName === name) setSampleName(next[0] || "");
+    void persist({ savedSampleNames: next });
   };
 
   const recipientsForSend = useMemo(() => {
