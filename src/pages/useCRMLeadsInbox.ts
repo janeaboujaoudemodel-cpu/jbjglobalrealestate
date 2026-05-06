@@ -134,8 +134,19 @@ export default function useCRMLeadsInbox() {
     try {
       let query = supabase
         .from("crm_leads")
-        .select("full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags")
-        .is("deleted_at", null);
+        .select("full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags");
+
+      const effectiveKind = activeView === "deleted" ? "trash" : listView.kind;
+      if (effectiveKind === "trash") {
+        query = query.not("deleted_at", "is", null);
+      } else {
+        query = query.is("deleted_at", null);
+        if (effectiveKind === "junk") query = query.eq("is_junk", true);
+        else {
+          query = query.is("is_junk", false);
+          if (effectiveKind === "list" && listView.listId) query = query.eq("list_id", listView.listId);
+        }
+      }
 
       if (debouncedSearch) query = query.or(`full_name.ilike.%${debouncedSearch}%,email_lower.ilike.%${debouncedSearch}%,phone_e164.ilike.%${debouncedSearch}%`);
       if (statusFilter !== "all") query = query.eq("pipeline_stage", statusFilter);
