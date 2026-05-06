@@ -57,6 +57,7 @@ import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel }
 import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
 import { CRMListSidebar, type CRMListView } from "@/components/crm/CRMListSidebar";
 import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
+import QuickActivityActions from "@/components/crm/QuickActivityActions";
 import { useQueryClient } from "@tanstack/react-query";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
@@ -1182,6 +1183,11 @@ const BrokeragesTab = () => {
                     <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
+                    <QuickActivityActions
+                      entityType="brokerage"
+                      entityId={r.id}
+                      entityName={r.company_name}
+                    />
                     <Button
                       size="sm"
                       variant="secondary"
@@ -1266,7 +1272,7 @@ const BrokeragesTab = () => {
                 </div>
               </div>
               <div className="border-t pt-3">
-                <BrokerageAgentsEditor value={agents} onChange={setAgents} />
+                <BrokerageAgentsEditor value={agents} onChange={setAgents} brokerageId={editing.id} />
                 <BrokerageContactPhotoImporter
                   brokerageId={editing.id}
                   brokerageName={editing.company_name}
@@ -1459,6 +1465,7 @@ const ClientsTab = () => {
                   <div className="flex flex-wrap gap-1.5">
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("client", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
+                    <QuickActivityActions entityType="client" entityId={r.id} entityName={r.full_name} />
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                     <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}><Trash2 className="w-3 h-3" /></Button>
                   </div>
@@ -2447,6 +2454,7 @@ const DeveloperRegistryTab = () => {
                       Research
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
+                    <QuickActivityActions entityType="developer" entityId={r.id} entityName={r.developer_name || "Developer"} />
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                   </div>
                 </div>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2, User } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import QuickActivityActions from "@/components/crm/QuickActivityActions";
 
 export interface BrokerageAgentDraft {
   id?: string;
@@ -19,6 +20,7 @@ export interface BrokerageAgentDraft {
 interface Props {
   value: BrokerageAgentDraft[];
   onChange: (next: BrokerageAgentDraft[]) => void;
+  brokerageId?: string;
 }
 
 const STATUS_OPTIONS = [
@@ -27,7 +29,7 @@ const STATUS_OPTIONS = [
   { v: "unknown", label: "Unknown" },
 ];
 
-export function BrokerageAgentsEditor({ value, onChange }: Props) {
+export function BrokerageAgentsEditor({ value, onChange, brokerageId }: Props) {
   const [bulkPaste, setBulkPaste] = useState("");
 
   const update = (idx: number, patch: Partial<BrokerageAgentDraft>) => {
@@ -128,6 +130,16 @@ export function BrokerageAgentsEditor({ value, onChange }: Props) {
                 </SelectContent>
               </Select>
             </div>
+            {a.id && brokerageId && (
+              <div className="col-span-12 sm:col-span-12 sm:order-last">
+                <QuickActivityActions
+                  entityType="broker_agent"
+                  entityId={a.id}
+                  entityName={a.name || "Broker"}
+                  brokerageId={brokerageId}
+                />
+              </div>
+            )}
             <Button
               type="button"
               size="icon"
