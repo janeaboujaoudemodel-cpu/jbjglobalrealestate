@@ -1,68 +1,108 @@
-# CRM Relationships — UI cleanup pass
+# CRM Workspace Hardening — Lists, Junk Bin, Trash, Filtered Exports
 
-Five focused changes scoped to the CRM Relationships page and the directory widget. All in presentation code — no schema or business-logic changes.
+Scope: `crm_leads`, `crm_brokerages`, `crm_developers` and their pages
+(`CRMLeadsInbox`, `CRMRelationships` Brokerage + Developer tabs).
 
-## 1. Developer tab → same Outreach dropdown + Upload list
+## 1. "Lead Database" / List concept
 
-In `src/pages/CRMRelationships.tsx` (developer toolbar, ~lines 1856–1929):
+New table `crm_lead_lists`:
+- `id, owner_user_id, name (unique per owner), source_filename, kind` (`leads` | `brokerages` | `developers`)
+- `description, color, lead_count` (denormalized), `created_at, archived_at`
+- RLS: owner/admin only; no anon read.
 
-- Replace the standalone `Edit Template` button with `<OutreachActionsMenu />`, wired to:
-  - `onSendSelected` → existing `setBulkOpen(true)` (guarded if `selected.size === 0`)
-  - `onEditTemplate` → existing `setTplOpen(true)`
-  - `onSendTest` → open existing TestSendDialog (add `testSendOpen` state, mirror brokerage tab)
-  - `onActivityLog` → `navigate("/owner/crm/relationships/activity")`
-  - `sendLabel="Send to Selected Developers"`
-- Add an `Upload list` button + `<BulkUploadDialog kind="developer" />` (already implemented, just needs to be mounted on this tab).
-- Remove the now-duplicated `Send to Selected` button at line ~1950–1957 (moved into menu) — keep `Reset to Not Started` and selection helpers as-is.
+Add `list_id uuid` column to `crm_leads`, `crm_brokerages`, `crm_developers`
+(nullable → "Main CRM"). Indexed `(list_id, deleted_at)`.
 
-## 2. Collapse Outreach Queue / Sent History panels by default
+**Upload flow** (Clients, Brokerages, Developers — same UX in all 3):
+- Existing `BulkUploadDialog` gains a step:
+  1. Pick a file (auto-uses filename, stripped of extension, as default list name).
+  2. Choose **Add to Main CRM** *or* **Create new list "<filename>"** *or* **Append to existing list…**.
+- Edge functions (`crm-bulk-upload-brokerages`, `crm-bulk-upload-developers`,
+  `crm-import-leads`) accept `list_id` / `list_name` and create the list on the fly.
+- Sidebar in each tab: "📁 Lists" with counts; click filters table to that list.
+- Same-list de-dup is preserved; cross-list duplicates show a warning chip.
 
-Currently the queue's filter/toolbar block always renders. Wrap the inner content of both sub-tabs in `<Collapsible defaultOpen={false}>` with a header showing the count badge:
+## 2. Junk Bin (re-assignable)
 
-- `Outreach Queue (N)` — collapsed header at line ~1818, body = lines 1819–retain through end of queue block
-- `Sent History (N)` — collapsed header wrapping `<SentHistoryView />` at line ~1811
+- New `pipeline_stage = 'junk'` standardized + flag `is_junk` boolean (fast index).
+- Bulk action: **Select → Send to Junk Bin** in Leads, Brokerages, Developers.
+- Sidebar entry "🗑 Junk Bin" — shows all junk across lists.
+- From Junk Bin: **Assign to broker** restores stage to `new` and routes lead.
+- Stays forever until manually deleted. Auto-export "junk_bin.xlsx" snapshot
+  available on demand (one-click).
 
-Persist open state per tab to `localStorage` keys `crm.dev.queue.open` / `crm.dev.history.open` (default `false`). The existing `queueCollapsed` localStorage flag already exists — extend pattern.
+## 3. Trash with 30-day retention + Restore
 
-Same treatment for the brokerage tab's `Outreach Queue` / `Sent History` sub-views if they share the structure (verify; they currently do not have explicit panels — skip if absent).
+- Reuse `deleted_at` (already exists on leads). Add it to `crm_brokerages`,
+  `crm_developers` (currently hard-deletes).
+- "🗂 Trash" sidebar entry: lists rows where `deleted_at IS NOT NULL`.
+- **Restore** button → sets `deleted_at = NULL`.
+- Cron edge function `crm-purge-trash` (daily): hard-deletes rows where
+  `deleted_at < now() - interval '30 days'`.
+- `pg_cron` schedule entry added in migration.
 
-## 3. Contracts chip + panel next to Expired/Rejected
+## 4. Scoped Excel / CSV / PDF Exports
 
-In the developer status chips row (lines 1963–1999):
+Reuse existing `ExportConfigurator`. Add **Status filter** chips inside dialog:
+- **Clients (leads):** All · Interested · Not interested · Junk · Pending · Won · Lost · By list
+- **Brokerages:** All · Registered · Pending · Closed-deal · Expired · Rejected · Contracts · Junk · By list
+- **Developers:** All · Registered · Pending · Contracted · Expired · Rejected · Contracts · Junk · By list
 
-- Add a synthetic `Contracts` chip after `Expired`. It is not a `status` value but a derived view: developers with `contract_signed_at` set OR `status === "registered"` AND `contract_url` present.
-- Selecting the chip sets a new local state `view === "contracts"` and filters `queueIndexed` to that subset.
-- Render a small "Contracts" panel above the cards listing each developer's contract link (download button) and signed date when the chip is active. If no contract field exists in DB, fall back to filter-by `outreach_stage === "contract_sent"` / `contract_signed`. Verify column names against `developer_registry` types before wiring; if missing, use `notes` substring fallback and add a TODO to introduce a real column later.
+Scope still toggles Visible / Selected / All / **Current list**. Filename includes
+the chosen status (`leads-interested-2026-05-06.xlsx`).
 
-## 4. Single-line "Filters" popover
+## 5. Performance
 
-Compact the brokerage toolbar (lines 815–928) and developer toolbar (lines 1835–1930):
+- Add composite indexes:
+  `(owner_user_id, list_id, deleted_at, pipeline_stage)` on `crm_leads`,
+  same shape on brokerages/developers.
+- Move bulk-upload classify to chunks of 500, single insert per chunk
+  (`onConflict: dedupe_hash`), drop row-by-row fallback unless chunk fails.
+- Pagination + virtual list (already partly in `CRMLeadsTableV2`) extended to
+  brokerage/developer tabs.
+- `react-query` keys include `list_id` / `view` (junk/trash/active) so switching
+  lists is instant from cache.
 
-- Keep `Search`, `Outreach`, `Add` buttons inline.
-- Move `Emirate`, `Region`, `Status`, `Email status`, `Exclude`, `View mode (Cards/Excel)` into a single `<Popover>` triggered by a `Filters (n active)` button. Reuse shadcn `Popover` already imported.
-- Show a small chip strip below the bar listing each active filter with an `×` to clear individually.
+## 6. Security hardening
 
-## 5. Split UAE directory widget
+- RLS audit pass on `crm_leads`, `crm_brokerages`, `crm_developers`,
+  `crm_lead_lists`: only `owner`/`admin`/`is_crm_admin` or assigned user.
+  Confirm no `anon` SELECT.
+- Block public scrape: edge functions verify JWT + role; rate-limit
+  `crm-bulk-upload-*` to 10 req/min/user; add `request_id` audit log entry per
+  upload to `crm_audit_log`.
+- Server-side validation (zod) for filename, content size (≤ 10 MB), content-type.
+- Confirm storage buckets used for uploaded source files are **private**;
+  signed URLs only, 1-hour TTL.
+- Forbid `select *` from edge functions on PII columns; use views excluding
+  `phone_encrypted`, `email_encrypted`, `notes_encrypted`.
 
-`DirectoryToolsPanel` currently mixes brokerage + developer jobs. Split into:
+## 7. UX touches
 
-- `BrokerageDirectoryPanel` — renders only `brokerage_seed` + `brokerage_enrich` jobs. Mounted on Brokerage tab.
-- `DeveloperDirectoryPanel` — renders only `developer_enrich` jobs. Mounted on Developer tab.
+- Bulk bar ("Send to Junk", "Send to Trash", "Restore", "Export selected") shared
+  by all three tabs via a new `<CRMBulkActionsBar />`.
+- Sidebar groups: **Active · Lists · Junk Bin · Trash**.
+- Toasts confirm counts: "82 leads moved to Trash · Undo".
 
-Implementation: parameterize `DirectoryToolsPanel` with a `kinds: string[]` and `title` prop, then export two thin wrappers. The "Refresh now" button calls the same edge function but passes `{ action: "cron", kinds }` so the runner only triggers the relevant jobs (server already supports filtering — confirm; otherwise filter client-side display only and keep server behavior).
+---
 
-Replace the single `<DirectoryToolsPanel />` mount on the Brokerage tab with `<BrokerageDirectoryPanel />`, and add `<DeveloperDirectoryPanel />` to the Developer tab top.
+## Technical notes
 
-## Files touched
+**New files**
+- `supabase/migrations/<ts>_crm_lists_junk_trash.sql` — tables, columns, indexes, RLS, `pg_cron`.
+- `supabase/functions/crm-purge-trash/index.ts` — daily purge.
+- `src/components/crm/CRMListSidebar.tsx`
+- `src/components/crm/CRMBulkActionsBar.tsx`
+- `src/hooks/useCRMLists.ts`
 
-- `src/pages/CRMRelationships.tsx` — toolbar restructure, collapsibles, contracts chip, two directory panel mounts
-- `src/components/crm/DirectoryToolsPanel.tsx` — split into base + two wrappers
-- `src/components/crm/CRMFiltersPopover.tsx` *(new)* — single-line filters popover, used by both tabs
+**Edited files**
+- `BulkUploadDialog.tsx` — list picker step.
+- `crm-bulk-upload-brokerages/index.ts`, `crm-bulk-upload-developers/index.ts`,
+  `crm-import-leads/index.ts` — accept `list_id`/`list_name`.
+- `CRMLeadsInbox.tsx`, `CRMRelationships.tsx` — sidebar, junk/trash views, bulk bar.
+- `ExportConfigurator.tsx` — status filter chips.
+- `useCRMLeadsInbox.ts` and brokerage/developer hooks — `list_id` + `view` filters.
 
-## Verification
-
-- Visit `/owner/crm/relationships`, switch to Developer tab → confirm Outreach dropdown + Upload list visible, queue/history panels start collapsed.
-- Click Contracts chip → only contract-bearing developers shown.
-- Open Filters popover → all secondary filters live there; toolbar stays one line at 1028px viewport.
-- Brokerage tab shows brokerage-only directory widget; Developer tab shows developer-only widget.
-- Run the project's a11y + contrast checks (already wired in CI) to ensure no regressions on the new popover/collapsibles.
+**Out of scope (ask if needed)**
+- Per-broker list sharing (lists are private to owner for now).
+- Soft-delete cascade rules for `crm_activities` etc. — left untouched.
