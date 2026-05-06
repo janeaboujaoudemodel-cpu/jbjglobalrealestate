@@ -597,7 +597,8 @@ const BrokeragesTab = () => {
       return;
     }
     const rows: BrokerageExportRow[] = filtered.map((r: any, i: number) => {
-      const statusLabel = STATUS_BROKERAGE.find((s) => s.v === r.status)?.label || r.status || "—";
+      const regOpt = BROKERAGE_REGISTRATION_STATUS_OPTIONS.find((s) => s.value === r.registration_status);
+      const statusLabel = regOpt?.label || (r.registration_status || "Not registered");
       return {
         rank: i + 1,
         company_name: r.company_name || "",
