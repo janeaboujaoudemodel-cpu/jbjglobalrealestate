@@ -43,17 +43,21 @@ export function ExcelGridView<R extends { id: string }>({
         <table className="w-full text-sm border-collapse" style={{ fontFamily: "Inter, sans-serif" }}>
           <thead className="sticky top-0 z-20">
             <tr>
-              {columns.map((c, i) => (
-                <th
-                  key={String(c.key)}
-                  className={`bg-[#EFE6D6] text-[#1A1A1A] font-semibold text-left px-3 py-2 border-b-2 border-[#B89555] ${
-                    i === 0 ? "sticky left-0 z-30 bg-[#EFE6D6]" : ""
-                  }`}
-                  style={{ minWidth: c.width ?? 140, textAlign: c.align ?? "left" }}
-                >
-                  {c.label}
-                </th>
-              ))}
+              {columns.map((c, i) => {
+                const w = c.width ?? 140;
+                return (
+                  <th
+                    key={String(c.key)}
+                    className={`bg-[#EFE6D6] text-[#1A1A1A] font-semibold text-left px-3 py-2 border-b-2 border-[#B89555] whitespace-nowrap overflow-hidden text-ellipsis ${
+                      i === 0 ? "sticky left-0 z-30 bg-[#EFE6D6]" : ""
+                    }`}
+                    style={{ width: w, minWidth: w, maxWidth: w, textAlign: c.align ?? "left" }}
+                    title={c.label}
+                  >
+                    {c.label}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
