@@ -1,6 +1,7 @@
-// Bulk import DLD broker register into crm_brokerages with strict de-duplication.
+// Bulk import DLD broker register into crm_brokerages with strict per-owner de-duplication.
 // Body: { rows: [{ office_number, name_en, name_ar, website, phone, email }] }
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,31 +32,71 @@ const cleanEmail = (e: string) => {
   const s = (e || "").trim().toLowerCase();
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : "";
 };
+const uniqueNameKey = (s: string) => s.trim().toLowerCase();
+
+async function loadDldRows(req: Request) {
+  const candidates = [
+    req.headers.get("origin") ? `${req.headers.get("origin")}/dld-broker-offices.json` : "",
+    Deno.env.get("DLD_BROKER_OFFICES_URL") || "",
+    "https://www.jbj.ae/dld-broker-offices.json",
+    "https://jbjglobalrealestate.lovable.app/dld-broker-offices.json",
+  ].filter(Boolean);
+
+  let lastError = "DLD register unavailable";
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url, { headers: { "Accept": "application/json" } });
+      if (!res.ok) {
+        lastError = `${url} returned ${res.status}`;
+        continue;
+      }
+      const rows = await res.json();
+      if (Array.isArray(rows)) return rows;
+      lastError = `${url} did not return an array`;
+    } catch (e) {
+      lastError = String((e as Error)?.message || e);
+    }
+  }
+  throw new Error(lastError);
+}
+
+async function loadExistingBrokerages(supabase: any, ownerId: string) {
+  const all: any[] = [];
+  const page = 1000;
+  for (let from = 0; ; from += page) {
+    const { data, error } = await supabase
+      .from("crm_brokerages")
+      .select("id, dld_office_number, company_name, email, phone")
+      .eq("owner_id", ownerId)
+      .range(from, from + page - 1);
+    if (error) throw error;
+    const batch = data || [];
+    all.push(...batch);
+    if (batch.length < page) break;
+    if (from > 200_000) break;
+  }
+  return all;
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
+    const auth = await requireOwnerAuth(req, corsHeaders);
+    if (auth.response) return auth.response;
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+    const ownerId = auth.userId;
 
-    const authHeader = req.headers.get("Authorization") || "";
-    const userClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } },
-    );
-    const { data: u } = await userClient.auth.getUser();
-    if (!u?.user) {
-      return new Response(JSON.stringify({ error: "unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch {
+      body = {};
     }
-    const ownerId = u.user.id;
-
-    const { rows } = await req.json();
+    const rows = Array.isArray(body.rows) ? body.rows : await loadDldRows(req);
     if (!Array.isArray(rows)) {
       return new Response(JSON.stringify({ error: "rows must be an array" }), {
         status: 400,
@@ -63,18 +104,19 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Load existing index keys (small payload)
-    const { data: existing } = await supabase
-      .from("crm_brokerages")
-      .select("id, dld_office_number, company_name, email, phone");
+    // Load the full existing index for this owner only. A single select is capped at
+    // 1,000 rows, so pagination is required once the DLD directory is partially loaded.
+    const existing = await loadExistingBrokerages(supabase, ownerId);
 
     const byOffice = new Map<string, any>();
     const byName = new Map<string, any>();
     const byEmail = new Map<string, any>();
     const byPhone = new Map<string, any>();
+    const usedCompanyNames = new Set<string>();
     for (const r of existing || []) {
       if (r.dld_office_number) byOffice.set(String(r.dld_office_number), r);
       if (r.company_name) byName.set(norm(r.company_name), r);
+      if (r.company_name) usedCompanyNames.add(uniqueNameKey(r.company_name));
       if (r.email) byEmail.set(String(r.email).toLowerCase(), r);
       if (r.phone) byPhone.set(cleanPhone(r.phone), r);
     }
@@ -83,7 +125,8 @@ Deno.serve(async (req) => {
     const updates: { id: string; patch: any }[] = [];
     let skipped = 0;
 
-    const seenInBatch = new Set<string>();
+    const seenOfficesInBatch = new Set<string>();
+    const claimedExistingIds = new Set<string>();
 
     for (const raw of rows) {
       const office = String(raw.office_number || "").trim();
@@ -98,24 +141,21 @@ Deno.serve(async (req) => {
       const phone = cleanPhone(raw.phone);
       const nameAr = String(raw.name_ar || "").trim() || null;
 
-      const dupKey =
-        (office && `o:${office}`) ||
-        (nameKey && `n:${nameKey}`) ||
-        (email && `e:${email}`) ||
-        (phone && `p:${phone}`);
-      if (dupKey) {
-        if (seenInBatch.has(dupKey)) {
+      if (office) {
+        if (seenOfficesInBatch.has(office)) {
           skipped++;
           continue;
         }
-        seenInBatch.add(dupKey);
+        seenOfficesInBatch.add(office);
       }
 
+      const officeMatch = office ? byOffice.get(office) : null;
+      const nameMatch = nameKey ? byName.get(nameKey) : null;
+      const canClaim = (candidate: any) =>
+        candidate && !candidate.dld_office_number && !claimedExistingIds.has(candidate.id);
       const match =
-        (office && byOffice.get(office)) ||
-        (nameKey && byName.get(nameKey)) ||
-        (email && byEmail.get(email)) ||
-        (phone && byPhone.get(phone));
+        officeMatch ||
+        (canClaim(nameMatch) ? nameMatch : null);
 
       if (match) {
         // Backfill only — never overwrite curated fields
@@ -123,18 +163,25 @@ Deno.serve(async (req) => {
         if (office && !match.dld_office_number) patch.dld_office_number = office;
         if (nameAr) patch.name_arabic = nameAr;
         if (Object.keys(patch).length) updates.push({ id: match.id, patch });
+        claimedExistingIds.add(match.id);
+        if (office) {
+          match.dld_office_number = office;
+          byOffice.set(office, match);
+        }
         skipped++;
         continue;
       }
 
+      const companyName = usedCompanyNames.has(uniqueNameKey(nameEn)) && office ? `${nameEn} · DLD ${office}` : nameEn;
+      usedCompanyNames.add(uniqueNameKey(companyName));
       inserts.push({
         owner_id: ownerId,
-        company_name: nameEn,
+        company_name: companyName,
         name_arabic: nameAr,
         dld_office_number: office || null,
         website: website || null,
-        phone: phone || null,
-        email: email || null,
+        phone: phone && !byPhone.has(phone) ? phone : null,
+        email: email && !byEmail.has(email) ? email : null,
         emirate: "Dubai",
         region: "UAE",
         source: "dld_register",
@@ -181,7 +228,7 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ ok: true, inserted, updated, skipped, received: rows.length }),
+      JSON.stringify({ ok: true, inserted, updated, skipped, received: rows.length, ownerId }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
