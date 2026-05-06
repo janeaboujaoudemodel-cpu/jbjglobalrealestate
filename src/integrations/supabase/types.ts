@@ -11811,7 +11811,7 @@ export type Database = {
           is_system: boolean
           key: string
           name: string
-          owner_user_id: string
+          owner_user_id: string | null
           updated_at: string
         }
         Insert: {
@@ -11824,7 +11824,7 @@ export type Database = {
           is_system?: boolean
           key: string
           name: string
-          owner_user_id: string
+          owner_user_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -11837,7 +11837,7 @@ export type Database = {
           is_system?: boolean
           key?: string
           name?: string
-          owner_user_id?: string
+          owner_user_id?: string | null
           updated_at?: string
         }
         Relationships: []
