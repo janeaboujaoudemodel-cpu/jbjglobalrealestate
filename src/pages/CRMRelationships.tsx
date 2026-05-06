@@ -57,6 +57,7 @@ import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel }
 import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
 import { CRMListSidebar, type CRMListView } from "@/components/crm/CRMListSidebar";
 import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
+import QuickActivityActions from "@/components/crm/QuickActivityActions";
 import { useQueryClient } from "@tanstack/react-query";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
