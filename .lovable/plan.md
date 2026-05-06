@@ -1,46 +1,56 @@
-## Brokerage outreach — Send Test fix + remove JBJ Global from brokerage UI/emails
+# Activity Log + CRM Quick Actions (Note / Calendar / Reminder)
 
-### Problem 1 — "Send Test" silently does nothing on the brokerage card AND from the Outreach menu
+Two problems to fix:
 
-Two distinct dialog mounts exist for the brokerage Send Test flow inside `src/pages/CRMRelationships.tsx`:
+1. In **Agency Activity Log**, the KPI tiles (Total, Reminders, Notes, Calendar, Outreach) are not clickable filters and there is no way to add a new note/calendar/reminder directly from the page.
+2. Across **Brokerages, Clients, Developers, and individual Brokers/Agents**, there is no inline way to add a Note, Calendar event, or Reminder (with a chosen delivery channel) without opening Edit.
 
-- `BrokeragesTab` (line 480) owns its own `testSendOpen` state. The `OutreachActionsMenu → Send test` (line 1000) toggles it AND `Send test email` button on the Brokerage Outreach Pack card dispatches `crm:open-brokerage-test` (line 1658) which is also wired to that state via the listener at lines 537–544. **However, the matching `<TestSendDialog mode="brokerage" …/>` instance is mounted at the bottom of the FILE (line 2612) inside the outer page component, NOT inside `BrokeragesTab`.** That outer dialog reads its own `testSendOpen` state declared at line 2538, which is **never set to true by anything**. The two `setTestSendOpen` calls inside `BrokeragesTab` only toggle the inner state, which has no dialog mounted to listen to it. Net effect: clicking "Send test" in either place does nothing.
+## What to build
 
-  **Fix**: mount the brokerage `<TestSendDialog mode="brokerage" variant="brokerage_partnership_intro" …/>` **inside** `BrokeragesTab` (next to its `<TemplateEditorDialog>` mount), wired to the local `testSendOpen` / `setTestSendOpen`. Remove the orphan instance at line 2612 (and its dead state at 2538) from the outer wrapper.
+### 1. Agency Activity Log — make tiles work + inline creators
+File: `src/pages/owner/crm/AgencyActivityLog.tsx`
 
-- While editing, also confirm the variant matches what the user is actively editing — pass `variant={tplOpen ? <currently-edited-variant> : "brokerage_partnership_intro"}` only if needed; otherwise leave the default. No business-logic changes.
+- Convert the 5 stat tiles into real filter buttons. Each click sets both `view = "all"` and `typeFilter` to its corresponding action_type:
+  - Total → `typeFilter = "all"`
+  - Reminders → `reminder`
+  - Notes → `note`
+  - Calendar → `calendar_event`
+  - Outreach sent → `outreach_sent` (also matches `message_sent` via filter logic update)
+- Highlight the active tile (reuse existing `active` styling) based on current `typeFilter`.
+- Add a small `+` button next to each of: **Reminders**, **Notes**, **Calendar** tiles (and a "+ New" pill in the toolbar for outreach jumps to brokerage list). Clicking opens a unified `QuickActivityDialog` that lets the user:
+  - pick an Agency (searchable Select over `crm_brokerages`)
+  - pick type (Note / Calendar event / Reminder)
+  - title + body
+  - due date (for Calendar / Reminder)
+  - **delivery channel** for Reminder: Email, WhatsApp, SMS, Push (in-app)
+- On submit:
+  - Note → insert into `crm_brokerage_actions` (action_type=`note`)
+  - Calendar → insert into `crm_brokerage_actions` (action_type=`calendar_event`, due_at)
+  - Reminder → insert into `crm_relationship_reminders` with `metadata.delivery_channel` and mirror to `crm_brokerage_actions` (calendar_event + note) for activity log visibility.
+- Invalidate `["crm-unified-activity"]` and `["crm-reminders"]`.
 
-### Problem 2 — Strip "JBJ Global" / "Amra · JBJ Global" / "on behalf of JBJ Global Real Estate" wording from the brokerage area
+### 2. Inline quick actions across CRM rows
+A new shared component `src/components/crm/QuickActivityActions.tsx` rendering three small icon buttons (Note, Calendar, Reminder) and reusing the same `QuickActivityDialog`. Props: `entityType: "brokerage"|"client"|"developer"|"broker_agent"`, `entityId`, `entityName`, optional `brokerageId` for nested broker agents.
 
-User intent: brokerage outreach is on behalf of **CITI Developers** only. Amra is the sender, no co-branding with JBJ Global.
+Insert it into:
+- `BrokeragesTab` brokerage card action row in `src/pages/CRMRelationships.tsx` (next to existing Remind/Deals buttons; replaces the current bare `Bell→Remind` quick action with the richer Reminder dialog while keeping a "Quick 7-day remind" via the existing button).
+- `ClientsTab` and `DevelopersTab` action rows in the same file (parity).
+- Individual broker/agent rows rendered inside `BrokerageAgentsEditor` (or wherever agents render in the brokerage detail) — add the trio after the agent name.
 
-Hits to remove/rename in `src/pages/CRMRelationships.tsx`:
+For non-brokerage entities, persistence targets:
+- Reminder: `crm_relationship_reminders` with `client_id` / `dev_registry_id` (already supported by hook).
+- Note + Calendar: insert into `crm_brokerage_actions` only when entity is a brokerage (existing schema). For clients/developers/brokers, store as a `crm_relationship_reminders` row with `kind = "note"` / `kind = "calendar"` so they show up in their reminder lists. (No schema migration required.)
 
-1. Line 1551 — `headerTitle = "Brokerage Outreach Pack — Amra · JBJ Global"` → **"Brokerage Outreach Pack — Amra · CITI Developers"**.
-2. Line 1554 — lead copy `"…sent by Amra on behalf of JBJ Global Real Estate"` → **"…sent by Amra for CITI Developers."**.
-3. Line 1599 — `From name` placeholder `"Amra · JBJ Global Real Estate"` → **"Amra · CITI Developers"**.
+### 3. Reminder delivery channel
+Add a `Select` in the dialog with values: `email`, `whatsapp`, `sms`, `push`. Persist to `crm_relationship_reminders.metadata.delivery_channel`. Display the channel as a small badge in the activity log row metadata column. (Actual outbound delivery is out of scope here; backend already routes reminders.)
 
-Edge function `supabase/functions/crm-send-brokerage-outreach/index.ts`:
+## Out of scope
+- No DB migrations — using existing tables (`crm_brokerage_actions`, `crm_relationship_reminders`, `crm_brokerages.metadata`).
+- No edge function changes.
+- No changes to existing Remind quick button (still creates 7-day follow-up bundle).
 
-4. Line 103 — preamble line `"We'd love to introduce JBJ Global Real Estate to your team."` → **"We'd love to introduce CITI Developers to your team."**.
-
-DB row `crm_email_templates` where `variant = 'brokerage_breakfast_invite'`:
-
-5. The HTML contains `"On behalf of <strong>Citi Developers</strong>, I'd like to personally invite…"` — keep "Citi Developers" but ensure the wording reads naturally without any JBJ co-branding. **No JBJ references exist in either DB template** (verified — `position('JBJ' in html) = 0` for both). The only "behalf" string is the Citi Developers one which is correct.
-
-   No DB change required for JBJ removal — the only on-screen "JBJ Global" / "on behalf of JBJ Global" copy is in the React `DocumentPackPanel`, not in the email body.
-
-### Verify
-
-1. Open Brokerages tab → click **Outreach → Send test** → dialog opens.
-2. Open Brokerage Outreach Pack card → click **Send test email** → same dialog opens.
-3. Send a real test → email arrives; signature reads "Amra … CITI Developers" with no JBJ wording.
-4. Card header reads "Brokerage Outreach Pack — Amra · CITI Developers".
-5. Lead paragraph below reads "…sent by Amra for CITI Developers."
-
-### Files to change
-
-- `src/pages/CRMRelationships.tsx` — relocate brokerage `<TestSendDialog>` into `BrokeragesTab`, remove orphan instance + dead state, copy fixes (lines 1551, 1554, 1599).
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — line 103 copy fix; redeploy.
-
-No DB migration, no template HTML changes, no business-logic changes.
+## Files touched
+- `src/pages/owner/crm/AgencyActivityLog.tsx` — wire tiles, add `+` buttons, mount dialog.
+- `src/components/crm/QuickActivityDialog.tsx` (new) — unified Note/Calendar/Reminder modal with channel select.
+- `src/components/crm/QuickActivityActions.tsx` (new) — icon-button trio used in cards.
+- `src/pages/CRMRelationships.tsx` — embed `<QuickActivityActions />` in Brokerages, Clients, Developers, and agent rows.
