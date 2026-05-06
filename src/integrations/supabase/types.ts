@@ -18428,6 +18428,7 @@ export type Database = {
       meeting_requests: {
         Row: {
           attendee_count: number | null
+          attendees: Json | null
           booking_kind: string | null
           briefing_topics: string | null
           brokerage_id: string | null
@@ -18438,6 +18439,7 @@ export type Database = {
           cancelled_by: string | null
           completed_at: string | null
           confirmation_sent_at: string | null
+          consent_snapshot: Json | null
           created_at: string
           duration_minutes: number | null
           id: string
@@ -18463,6 +18465,7 @@ export type Database = {
         }
         Insert: {
           attendee_count?: number | null
+          attendees?: Json | null
           booking_kind?: string | null
           briefing_topics?: string | null
           brokerage_id?: string | null
@@ -18473,6 +18476,7 @@ export type Database = {
           cancelled_by?: string | null
           completed_at?: string | null
           confirmation_sent_at?: string | null
+          consent_snapshot?: Json | null
           created_at?: string
           duration_minutes?: number | null
           id?: string
@@ -18498,6 +18502,7 @@ export type Database = {
         }
         Update: {
           attendee_count?: number | null
+          attendees?: Json | null
           booking_kind?: string | null
           briefing_topics?: string | null
           brokerage_id?: string | null
@@ -18508,6 +18513,7 @@ export type Database = {
           cancelled_by?: string | null
           completed_at?: string | null
           confirmation_sent_at?: string | null
+          consent_snapshot?: Json | null
           created_at?: string
           duration_minutes?: number | null
           id?: string
