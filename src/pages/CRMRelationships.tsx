@@ -800,16 +800,24 @@ const BrokeragesTab = () => {
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
             { key: "emirate", label: "Emirate", width: 110 },
-            { key: "office_location", label: "Office", width: 200 },
+            { key: "office_location", label: "Office", width: 180 },
             { key: "phone", label: "Phone", width: 140 },
             { key: "email", label: "Email", width: 200 },
-            { key: "status", label: "Status", width: 170, status: true },
-            { key: "outreach_stage", label: "Outreach", width: 140 },
+            {
+              key: "status", label: "Agency status", width: 170, status: true,
+              statusOptions: BROKERAGE_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, status: next }),
+            },
+            {
+              key: "outreach_stage", label: "Outreach status", width: 170, status: true,
+              statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
+            },
+            { key: "primary_contact", label: "Primary contact", width: 180, render: (r: any) => r.primary_contact?.name || r.primary_contact?.email || "—" },
             { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
-            { key: "notes", label: "Notes", width: 280, editable: true },
+            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—" },
+            { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          getStatus={(r: any) => r.status}
-          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
           onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
           emptyLabel="No agencies match filters."
         />
