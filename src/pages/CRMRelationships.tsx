@@ -1760,6 +1760,18 @@ const DeveloperRegistryTab = () => {
     const out: any[] = [];
     const source = statusView === "contracts" ? (data as any[]) : queueIndexed.map((x) => x.row);
     for (const r of source) {
+      // List/Junk/Trash filter
+      if (devListView.kind === "trash") {
+        if (!r.deleted_at) continue;
+      } else {
+        if (r.deleted_at) continue;
+        if (devListView.kind === "junk") {
+          if (!r.is_junk) continue;
+        } else {
+          if (r.is_junk) continue;
+          if (devListView.kind === "list" && r.list_id !== devListView.listId) continue;
+        }
+      }
       if (devExcludedIds.has(r.id)) continue;
       const nameLower = (r.developer_name || "").toLowerCase();
       if (ql && !nameLower.includes(ql)) continue;
@@ -1773,7 +1785,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView]);
+  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView, devListView]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
