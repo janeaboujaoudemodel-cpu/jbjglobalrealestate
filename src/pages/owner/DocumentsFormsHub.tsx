@@ -10,7 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink } from "lucide-react";
+import { FileText, Send, CheckCircle2, Clock, PenTool, Stamp, FileSignature, Plus, Loader2, ExternalLink, Upload, Scale } from "lucide-react";
 import { toast } from "sonner";
 
 type Cat = "all" | "leasing" | "selling";
@@ -73,6 +73,46 @@ export default function DocumentsFormsHub() {
             <Plus className="w-4 h-4 mr-2" /> New Envelope
           </Button>
         </header>
+
+        {/* Quick actions — clear entry points so the workflow is never hidden */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("leasing"); setTab("templates"); }}>
+            <div className="flex items-start gap-3">
+              <FileText className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">Leasing Template</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">JBJ Property Advertising Agreement</div>
+              </div>
+            </div>
+          </Card>
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => { setCat("selling"); setTab("templates"); }}>
+            <div className="flex items-start gap-3">
+              <FileText className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">Selling Template</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">JBJ Listing Authorisation</div>
+              </div>
+            </div>
+          </Card>
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/e-signature/create")}>
+            <div className="flex items-start gap-3">
+              <Upload className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">Upload Contract</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">PDF, photos, text — auto-converted</div>
+              </div>
+            </div>
+          </Card>
+          <Card className="p-4 bg-[#F7F2EA] border-[#B89555]/30 cursor-pointer hover:border-[#B89555]" onClick={() => navigate("/e-signature/contract-review")}>
+            <div className="flex items-start gap-3">
+              <Scale className="w-5 h-5 text-[#B89555]" />
+              <div>
+                <div className="font-medium text-[#1A1A1A] text-sm">AI Contract Review</div>
+                <div className="text-xs text-[#1A1A1A]/70 mt-0.5">Lawyer-grade risk analysis</div>
+              </div>
+            </div>
+          </Card>
+        </div>
 
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">

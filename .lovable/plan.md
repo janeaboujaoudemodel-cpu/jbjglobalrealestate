@@ -1,107 +1,81 @@
+Current findings:
+- `DocumentFieldPlacer` is not a URL/page. It is an internal component that appears inside `/e-signature/create` only at Step 3: Place Fields. Opening `/document-field-placer` will always show 404 because no route exists for it.
+- The real template page is `/owner/documents/forms`, also reachable from the owner sidebar as Documents → Forms & Agreements. I verified the page loads and the two system templates exist in the database:
+  - JBJ Property Advertising Agreement — Leasing
+  - JBJ Listing Authorisation — Selling
+- Your current screenshot shows a “Pending Tasks” modal covering the template cards. The templates are behind that modal, so the UI needs to suppress/delay owner-dashboard popups on signing workflows.
+- The signing upload page is `/e-signature/create`. It currently only treats PDFs as the active signing document, even though the copy says mixed files are supported. Storage also only allows `application/pdf`, so non-PDF contract uploads can fail or cannot become signable.
 
-## What exists today
+Implementation plan:
 
-Two parallel signing systems live in the project — they were never wired together, which is why `/sign/:token` says "unable to load document":
+Batch 1 — Navigation and discoverability
+- Add clear entry points from `/owner/documents/forms`:
+  - Use Leasing Template
+  - Use Selling Template
+  - Upload Contract to Sign
+  - AI Contract Review
+  - Manage Signature & Stamp
+- Add an in-page “Where to find this” workflow strip so users do not need to guess URLs.
+- Prevent/disable unrelated owner popups like “Pending Tasks” while using `/owner/documents/forms`, `/e-signature/create`, `/e-signature/:id`, and `/sign/:token`.
+- Optional route safety: add a redirect/helper page for mistaken `/document-field-placer` searches that sends the user to `/e-signature/create` with a short explanation.
 
-**Engine A — Real e-Signature (working, DocuSign-style)**
-- Pages: `ESignatureDashboard`, `CreateEnvelope`, `EnvelopeDetail`, `SignDocument` (`/sign/:token`)
-- Tables: `esign_envelopes`, `esign_recipients`, `esign_fields`, `signed_contracts`, `esign_signature_assets`, `esign_stamp_assets`
-- Edge functions: `esign-send-for-signature`, `esign-process-signature`, `esign-complete-envelope`, `apply-adopt-signature`, `esign-auto-detect-fields`, `esign-send-reminder`
-- Flow: upload PDF → drag fields (signature, initials, date, text, stamp) onto pages → add recipients → send → recipient opens `/sign/:token` → signs → PDF stamped → stored in `signed_contracts` → emailed to all parties
-- Already supports: saved signature/stamp assets (`useOwnerSignatureAssets` + `apply-adopt-signature`), audit trail, multi-recipient routing
-- Migration just landed: `esign_envelopes` now has `category`, `template_key`, `template_html`, `template_field_values`, `client_lead_id`; new `esign_templates` table with `field_schema` exists; RLS recursion fixed
+Batch 2 — Upload/import upgrade
+- Replace the current PDF-only active document logic with a normalization layer:
+  - PDF: use directly.
+  - Images: convert into a PDF for signing.
+  - TXT/RTF/HTML: render into a clean PDF.
+  - DOCX: convert to readable HTML/PDF using a client-side converter.
+  - Other unsupported file types: allow upload as attachments, but show a clear message if they cannot be converted into a signable PDF.
+- Increase storage support for common contract formats and images while keeping private owner-scoped access.
+- Raise the contract upload limit where safe and align the UI copy with the real backend limit.
+- Ensure the selected signable PDF preview always appears immediately after import.
 
-**Engine B — Legacy PAA "Forms Hub" (the one giving you the error)**
-- Page: `/owner/documents` → `DocumentsFormsHub.tsx`
-- Tables: `crm_documents` (HTML form values, no PDF, no drag-drop fields)
-- Edge functions: `documents-send`, `documents-public-fill`
-- Public route: `/documents/sign/:token` → `PublicSignDocument.tsx` (single signature pad on rendered HTML)
-- Template: only the JBJ Property Advertising Agreement, hard-coded in `src/templates/jbjPropertyAdvertisingAgreement.ts`
-- This engine has no field placement, no stamp, no auto-date, no client signature placeholder, no integration with the saved signature/stamp library
+Batch 3 — Document preview, fields, signature, stamp, and export
+- Make Step 3 more obvious: preview on the left, fields/tools on the right, with high-contrast labels.
+- Auto-place owner date, owner signature, owner stamp, client signature, and client date when using JBJ templates.
+- Preserve manual click-to-place fields for any uploaded contract.
+- Fix the Step 4 preview so it shows the uploaded document with visible placed signature/stamp/date boxes before sending.
+- Add “Export Preview PDF” before sending, so you can immediately download a PDF proof with the current field placements.
+- Update the final completion function so the signed export is a real flattened PDF with signatures/stamps rendered onto the document, not just a link to the original file.
 
-The `/sign/:token` link you visited literally has the placeholder text `:token` — there is no envelope or document for it. Engine A returns "invalid link", and the fallback to Engine B 404s.
+Batch 4 — AI lawyer review inside the signing flow
+- Integrate the existing AI Contract Lawyer into `/e-signature/create` so uploaded contracts can be analyzed before sending.
+- Improve text extraction from uploaded PDFs/DOCX/text files before sending to AI.
+- Keep the legal disclaimer: this is contract analysis support, not legal/tax advice.
+- Add multilingual analysis controls where they already exist.
 
-## What's missing
+Batch 5 — Send workflow and delivery
+- Add channel toggles on Review & Send:
+  - Email
+  - WhatsApp link when phone exists
+- Pass selected channels into `esign-send-for-signature`.
+- Keep BCC to `contact@jbj.ae` for outgoing signing emails.
+- Ensure sender/receiver email fields are clear and validation blocks bad emails before sending.
 
-1. The two systems must become one. Right now Forms Hub doesn't talk to the e-Signature engine at all.
-2. Leasing/Selling templates don't exist as reusable templates — only the single hard-coded PAA HTML.
-3. Saved signature/stamp/auto-date are not auto-placed when the owner opens a template (you have to drag them every time).
-4. CRM has no "Send Agreement" button that pre-fills the client and opens a template.
-5. WhatsApp delivery of the signing link is not yet wired into `esign-send-for-signature` (only email works).
+Batch 6 — Contrast and software polish
+- Fix unreadable titles/buttons across `/owner/documents/forms`, `/e-signature/create`, `/e-signature/:id`, `/sign/:token`, and the contract review panel.
+- Replace low-contrast gold fills/white text combinations with the project champagne/ink/gold hairline standard.
+- Fix the current React warning from the Documents dialog header if it is still active after popup suppression.
+- Keep every existing feature; no feature removal.
 
-## Plan
-
-### 1. Make templates first-class (Leasing + Selling)
-
-Seed two system templates into `esign_templates`:
-- `jbj-paa-leasing` — the existing Property Advertising Agreement (category = `leasing`)
-- `jbj-listing-authorisation` — Selling listing authorisation (category = `selling`), based on the same legal frame
-Each template stores: `name`, `category`, `html_body`, and `field_schema` (the default positions for Owner Signature, Owner Stamp, Auto-Date, Client Signature, Client Initials, plus any text fields the owner wants pre-placed).
-
-You will be able to add more templates yourself from the hub.
-
-### 2. Rebuild `DocumentsFormsHub` as the unified Documents hub
-
-Single page at `/owner/documents` with tabs:
-- **Templates** — chips: All / Leasing / Selling. Cards for every template. Buttons: "Use template" (creates a draft envelope) and "Edit template" (opens the template editor — change HTML, add/remove/move fields, save).
-- **Drafts / Sent / Signed** — pulls from `esign_envelopes` filtered by status, with the Signed tab showing the final stamped PDF + audit trail from `signed_contracts`.
-- **Stamps & Signatures** — your existing saved-asset library (`esign_signature_assets`, `esign_stamp_assets`), with one designated "Default" for each.
-
-"Use template" will:
-1. Render the template HTML to a single-page PDF (jsPDF + html2canvas) and upload it as the envelope's `document_url`
-2. Create an `esign_envelopes` row with `template_key`, `template_html`, `category`
-3. Pre-place fields from `field_schema` on that PDF page
-4. Open `CreateEnvelope` with everything pre-filled, ready to set the recipient and send
-
-### 3. Auto-fill (signature, stamp, date) in `DocumentFieldPlacer`
-
-When the owner drops or opens a field on the editor:
-- `type = date` → today's date is filled in automatically
-- `type = signature` and recipient role = owner → preload `defaultSignatureAsset.image_url`
-- `type = stamp` and recipient role = owner → preload `defaultStampAsset.image_url`
-- `type = signature` and recipient role = client → stays empty/pending until the client signs at `/sign/:token`
-The owner can still click any field to swap the asset.
-
-### 4. Send → Sign → Save workflow (using Engine A end-to-end)
-
-1. Owner clicks **Send for Signature** in `CreateEnvelope`
-2. `esign-send-for-signature` creates `esign_recipients` with a unique `signing_token`, emails the client via Resend (BCC `contact@jbj.ae`), optionally sends a WhatsApp link (`wa.me` fallback if Twilio isn't configured)
-3. Client opens `/sign/:token` → `SignDocument.tsx` loads the PDF, draws the fields, lets them sign/initial
-4. `esign-process-signature` writes their signature into the field, `esign-complete-envelope` flattens the PDF, writes a row to `signed_contracts`, marks the envelope `completed`
-5. Final signed PDF is emailed to both parties and visible under the **Signed** tab in the hub. Downloadable from there.
-
-### 5. CRM "Send Agreement" button
-
-In `CRMLeadDrawer` add a button that opens a template picker (filtered to Leasing or Selling depending on lead type), pre-fills client name/email/phone from the lead, sets `client_lead_id` on the envelope, and jumps straight to `CreateEnvelope`.
-
-### 6. Decommission Engine B safely
-
-- Keep `crm_documents` table for audit/history but stop writing to it
-- Remove `/documents/sign/:token` route and `PublicSignDocument.tsx`
-- Delete edge functions `documents-send` and `documents-public-fill`
-- Add a redirect helper so any old `/documents/sign/:token` link surfaces a clear "this link is no longer valid — please request a new one" page
-
-### 7. Redeploy
-
-After the code changes I will redeploy: `esign-send-for-signature`, `esign-process-signature`, `esign-complete-envelope`, `apply-adopt-signature`, `esign-auto-detect-fields`, `esign-send-reminder`. Engine B functions get deleted.
-
-## Where you'll find everything after the merge
-
-- **Sidebar → Documents** → unified hub
-  - **Templates** (Leasing / Selling chips) → Use template / Edit template
-  - **Drafts** → envelopes you haven't sent yet
-  - **Sent** → awaiting signature, with reminder + revoke
-  - **Signed** → final PDFs, downloadable
-  - **Stamps & Signatures** → set default
-- **CRM lead drawer** → "Send Agreement" button
-- **Public link** → `/sign/:token` (the real one with a UUID, not the literal `:token`)
-
-## Technical details
-
-- Migration adds two seed rows in `esign_templates` for Leasing + Selling, with `is_system = true` and pre-positioned `field_schema`
-- New helper `useEsignTemplates()` for CRUD on templates
-- New helper `createEnvelopeFromTemplate(templateKey, lead?)` that does HTML→PDF→upload→envelope insert→fields insert
-- `DocumentFieldPlacer.tsx` reads `useOwnerSignatureAssets` and auto-applies on drop based on field type and recipient role
-- `esign-send-for-signature` extended: optional `channel: "email" | "whatsapp" | "both"`; WhatsApp uses Twilio if `TWILIO_*` secrets exist, else opens `https://wa.me/<phone>?text=<link>` from the client
-- `SignDocument.tsx` already redirects gracefully when the token is invalid; keep as-is
-- All edge functions redeployed in one batch at the end
+Batch 7 — Backend deployment and verification
+- Apply the storage/database migration for expanded upload support and secure private access.
+- Deploy these backend functions after edits:
+  - `esign-send-for-signature`
+  - `esign-process-signature`
+  - `esign-complete-envelope`
+  - `esign-auto-detect-fields`
+  - `esign-contract-analyzer`
+- Test the workflow end-to-end:
+  1. Open `/owner/documents/forms` and confirm both templates are visible.
+  2. Create a leasing template draft.
+  3. Upload a custom contract at `/e-signature/create`.
+  4. Preview the PDF.
+  5. Place signature/date/stamp fields.
+  6. Run AI contract review.
+  7. Export preview PDF.
+  8. Send to a recipient.
+  9. Open the generated `/sign/<real-token>` link.
+  10. Sign as client.
+  11. Confirm completed signed PDF is generated and downloadable.
+- Capture screenshot proof for the fixed pages and the preview/export state after implementation.
