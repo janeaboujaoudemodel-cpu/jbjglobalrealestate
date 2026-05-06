@@ -167,13 +167,13 @@ export const TemplateEditorDialog = ({
       sendBrokerageTest.mutate({
         variant: variant as BrokerageVariant,
         testRecipient: recipient,
-        testBrokerageName: testSampleName || "Sample Brokerage Group",
+        testBrokerageName: testSampleName || "Your Brokerage",
       });
     } else {
       sendDeveloperTest.mutate({
         variant: variant as RegistrationVariant,
         testRecipient: recipient,
-        testDeveloperName: testSampleName || "Sample Developer Co.",
+        testDeveloperName: testSampleName || "Your Company",
       });
     }
   };
