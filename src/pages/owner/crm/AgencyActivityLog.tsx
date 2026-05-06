@@ -15,6 +15,8 @@ import {
   CheckCircle2, RotateCcw, Trash2, X, Circle,
 } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
+import QuickActivityDialog, { type QuickActivityType } from "@/components/crm/QuickActivityDialog";
+import { Plus } from "lucide-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
