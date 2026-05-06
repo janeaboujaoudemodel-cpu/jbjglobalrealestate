@@ -287,6 +287,9 @@ export default function IndividualBrokersTab() {
             statusOptions: STATUS_OPTS,
             onStatusChange: (r: any, next) => updateStatus(r, next),
           },
+          { key: "expertise_type", label: "Expertise", width: 110, render: (r: any) => r.expertise_type || "both" },
+          { key: "expertise_areas", label: "Areas", width: 200, render: (r: any) => (r.expertise_areas || []).join(", ") || "—" },
+          { key: "import_label", label: "Batch", width: 160, render: (r: any) => r.import_label || "—" },
           { key: "created_at", label: "Added", width: 130, render: (r: any) => new Date(r.created_at).toLocaleDateString() },
         ]}
         onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, brokerage_id: r.brokerage_id, [key]: value } as any)}
