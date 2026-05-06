@@ -612,25 +612,31 @@ const BrokeragesTab = () => {
     remind.mutate({ brokerageId: b.id, brokerageName: b.company_name, daysFromNow: 7 });
   };
 
-  const handleExport = async (format: "csv" | "xlsx" | "pdf") => {
-    if (!filtered.length) {
-      toast.error("Nothing to export");
-      return;
-    }
-    const rows: BrokerageExportRow[] = filtered.map((r: any, i: number) => {
+  const buildBrokerageRows = (sourceRows: any[]): BrokerageExportRow[] =>
+    sourceRows.map((r: any, i: number) => {
       const regOpt = BROKERAGE_REGISTRATION_STATUS_OPTIONS.find((s) => s.value === r.registration_status);
       const statusLabel = regOpt?.label || (r.registration_status || "Not registered");
+      const admin = r.admin_contact || {};
+      const broker = r.primary_contact || {};
       return {
         rank: i + 1,
         company_name: r.company_name || "",
+        name_arabic: r.name_arabic || "",
+        dld_office_number: r.dld_office_number || "",
         emirate: r.emirate || "",
         office_location: r.office_location || r.office_address || "",
         website: r.website || "",
         instagram: r.instagram_url || "",
-        phone: r.phone || r.primary_contact?.phone || "",
-        whatsapp: r.whatsapp_e164 || r.primary_contact?.whatsapp || "",
-        email: r.email || r.primary_contact?.email || "",
-        primary_contact_name: r.primary_contact?.name || "",
+        phone: r.phone || broker.phone || "",
+        whatsapp: r.whatsapp_e164 || broker.whatsapp || "",
+        email: r.email || broker.email || "",
+        primary_contact_name: broker.name || "",
+        admin_contact_name: admin.name || "",
+        admin_contact_phone: admin.phone || "",
+        admin_contact_email: admin.email || "",
+        broker_contact_name: broker.name || "",
+        broker_contact_phone: broker.phone || "",
+        broker_contact_email: broker.email || "",
         agency_status: statusLabel,
         outreach_status: r.outreach_stage || "not_contacted",
         last_message_at: r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—",
@@ -645,11 +651,23 @@ const BrokeragesTab = () => {
         active_brokers: r.active_broker_count ?? r.active_agents ?? "—",
         inquiries: r.inquiry_count ?? 0,
         rating: r.star_rating ? Number(r.star_rating).toFixed(1) : "—",
-        notes: (r.notes || "").slice(0, 240),
+        notes: (r.notes || "").slice(0, 500),
+        ai_summary: r.ai_summary || "",
       };
     });
-    await exportBrokerages(rows, format);
-    toast.success(`Exported ${rows.length} agencies as ${format.toUpperCase()}`);
+
+  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[] }) => {
+    const source =
+      opts.scope === "all" ? (data as any[]) :
+      opts.scope === "selected" ? (data as any[]).filter((r: any) => bulkSel.has(r.id)) :
+      (filtered as any[]);
+    if (!source.length) {
+      toast.error("Nothing to export");
+      return;
+    }
+    const rows = buildBrokerageRows(source);
+    await exportBrokerages(rows, opts.format, opts.columns);
+    toast.success(`Exported ${rows.length} agencies (${opts.columns.length} columns) as ${opts.format.toUpperCase()}`);
   };
 
   const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
