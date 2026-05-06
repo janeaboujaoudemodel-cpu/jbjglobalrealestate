@@ -32,6 +32,7 @@ const cleanEmail = (e: string) => {
   const s = (e || "").trim().toLowerCase();
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : "";
 };
+const uniqueNameKey = (s: string) => s.trim().toLowerCase();
 
 async function loadDldRows(req: Request) {
   const candidates = [
@@ -111,9 +112,11 @@ Deno.serve(async (req) => {
     const byName = new Map<string, any>();
     const byEmail = new Map<string, any>();
     const byPhone = new Map<string, any>();
+    const usedCompanyNames = new Set<string>();
     for (const r of existing || []) {
       if (r.dld_office_number) byOffice.set(String(r.dld_office_number), r);
       if (r.company_name) byName.set(norm(r.company_name), r);
+      if (r.company_name) usedCompanyNames.add(uniqueNameKey(r.company_name));
       if (r.email) byEmail.set(String(r.email).toLowerCase(), r);
       if (r.phone) byPhone.set(cleanPhone(r.phone), r);
     }
@@ -169,9 +172,11 @@ Deno.serve(async (req) => {
         continue;
       }
 
+      const companyName = usedCompanyNames.has(uniqueNameKey(nameEn)) && office ? `${nameEn} · DLD ${office}` : nameEn;
+      usedCompanyNames.add(uniqueNameKey(companyName));
       inserts.push({
         owner_id: ownerId,
-        company_name: nameEn,
+        company_name: companyName,
         name_arabic: nameAr,
         dld_office_number: office || null,
         website: website || null,
