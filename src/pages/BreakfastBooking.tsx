@@ -496,6 +496,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
               <p className="text-xs text-foreground/50 mt-2">Preview link — confirmation is disabled.</p>
             )}
           </div>
+        </form>
       </div>
     </div>
   );
