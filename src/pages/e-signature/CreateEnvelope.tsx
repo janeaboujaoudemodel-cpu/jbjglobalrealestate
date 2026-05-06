@@ -25,13 +25,18 @@ import {
   Loader2,
   Clock,
   CheckCircle2,
-  ShieldCheck
+  ShieldCheck,
+  Download,
+  Mail,
+  MessageCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
 import DocumentPreviewSummary from "@/components/e-signature/DocumentPreviewSummary";
 import { SUPABASE_URL } from "@/config/backend";
 import { normalizeToSignablePdf } from "@/utils/normalizeToSignablePdf";
+import { exportPreviewPdf } from "@/utils/exportPreviewPdf";
+import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 
 interface Recipient {
   id: string;
