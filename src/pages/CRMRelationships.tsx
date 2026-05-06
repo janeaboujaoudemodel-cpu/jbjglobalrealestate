@@ -2504,6 +2504,7 @@ const DeveloperRegistryTab = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 };
