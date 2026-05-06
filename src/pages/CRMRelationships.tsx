@@ -2150,76 +2150,8 @@ const DeveloperRegistryTab = () => {
         </Button>
       </div>
 
-      {data.length > 0 && (
-        <>
-          {/* Quick filter chips — queue-relevant statuses only */}
-          <div className="flex flex-wrap gap-1.5 items-center">
-            <button
-              type="button"
-              onClick={() => setStatusFilter("all")}
-              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition ${
-                statusFilter === "all"
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-              }`}
-            >
-              All ({queuePool.length})
-            </button>
-            {STATUS_DEV.filter((s) => s.v !== "registered").map((s) => {
-              const n = counts[s.v] || 0;
-              const active = statusFilter === s.v;
-              return (
-                <button
-                  key={s.v}
-                  type="button"
-                  onClick={() => setStatusFilter(active ? "all" : s.v)}
-                  disabled={n === 0 && !active}
-                  className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
-                    active
-                      ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                      : n === 0
-                      ? "bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#1A1A1A]/10 cursor-not-allowed"
-                      : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-                  }`}
-                >
-                  <span>{s.label}</span>
-                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    active ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
-                  }`}>{n}</span>
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              onClick={() => setStatusView(statusView === "contracts" ? "all" : "contracts")}
-              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
-                statusView === "contracts"
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-              }`}
-              title="Show developers with a contract sent or signed"
-            >
-              <FileSignature className="w-3 h-3" />
-              <span>Contracts</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                statusView === "contracts" ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
-              }`}>{contractsCount}</span>
-            </button>
-          </div>
-
-          {/* Detailed status cards (existing) */}
-          <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
-            {STATUS_DEV.map((s) => (
-              <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
-                <CardContent className="p-3 text-center">
-                  <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                  <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1">{s.label}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
+      {/* Stat tiles + chip row removed from here — moved above the sub-tab toggle so they
+          stay visible whether the user is in Outreach Queue or Sent History. */}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70 space-y-4">
