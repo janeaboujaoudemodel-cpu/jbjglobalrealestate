@@ -818,56 +818,87 @@ const BrokeragesTab = () => {
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, location, emirate, or developer" className="pl-10" />
         </div>
-        <Select value={emirateFilter} onValueChange={setEmirateFilter}>
-          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All emirates · {data.length}</SelectItem>
-            {EMIRATES.map((e) => (
-              <SelectItem key={e} value={e}>
-                {e} · {emirateCounts[e] || 0}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Region" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All regions</SelectItem>
-            <SelectItem value="UAE">UAE</SelectItem>
-            <SelectItem value="GCC">GCC</SelectItem>
-            <SelectItem value="MENA">MENA</SelectItem>
-            <SelectItem value="International">International</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <ExcludeFilterPopover
-          scope="brokerage"
-          options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
-          excludedIds={excludedIds}
-          onChange={setExcludedIds}
-        />
-        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
-          <button
-            type="button"
-            onClick={() => setViewMode("cards")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" /> Cards
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode("excel")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
-          >
-            <TableIcon className="w-3.5 h-3.5" /> Excel View
-          </button>
-        </div>
+        <CRMFiltersPopover
+          activeCount={
+            (emirateFilter !== "all" ? 1 : 0) +
+            (regionFilter !== "all" ? 1 : 0) +
+            (statusFilter !== "all" ? 1 : 0) +
+            (excludedIds.size > 0 ? 1 : 0)
+          }
+          chips={[
+            ...(emirateFilter !== "all" ? [{ key: "em", label: `Emirate: ${emirateFilter}`, onClear: () => setEmirateFilter("all") }] : []),
+            ...(regionFilter !== "all" ? [{ key: "rg", label: `Region: ${regionFilter}`, onClear: () => setRegionFilter("all") }] : []),
+            ...(statusFilter !== "all" ? [{ key: "st", label: `Status: ${statusFilter}`, onClear: () => setStatusFilter("all") }] : []),
+            ...(excludedIds.size > 0 ? [{ key: "ex", label: `Excluded: ${excludedIds.size}`, onClear: () => setExcludedIds(new Set()) }] : []),
+          ] as FilterChip[]}
+          onResetAll={() => { setEmirateFilter("all"); setRegionFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
+        >
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Emirate</Label>
+              <Select value={emirateFilter} onValueChange={setEmirateFilter}>
+                <SelectTrigger><SelectValue placeholder="Emirate" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All emirates · {data.length}</SelectItem>
+                  {EMIRATES.map((e) => (
+                    <SelectItem key={e} value={e}>{e} · {emirateCounts[e] || 0}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Region</Label>
+              <Select value={regionFilter} onValueChange={setRegionFilter}>
+                <SelectTrigger><SelectValue placeholder="Region" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All regions</SelectItem>
+                  <SelectItem value="UAE">UAE</SelectItem>
+                  <SelectItem value="GCC">GCC</SelectItem>
+                  <SelectItem value="MENA">MENA</SelectItem>
+                  <SelectItem value="International">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Status</Label>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Exclude agencies</Label>
+              <ExcludeFilterPopover
+                scope="brokerage"
+                options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
+                excludedIds={excludedIds}
+                onChange={setExcludedIds}
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">View</Label>
+              <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("cards")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" /> Cards
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("excel")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+                >
+                  <TableIcon className="w-3.5 h-3.5" /> Excel View
+                </button>
+              </div>
+            </div>
+          </div>
+        </CRMFiltersPopover>
         <Button
           variant="outline"
           onClick={() => setExportOpen(true)}
