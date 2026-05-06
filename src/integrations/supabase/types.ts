@@ -31296,6 +31296,18 @@ export type Database = {
       }
     }
     Functions: {
+      _esign_envelope_has_token_recipient: {
+        Args: { _envelope_id: string }
+        Returns: boolean
+      }
+      _esign_envelope_is_draft_of_user: {
+        Args: { _envelope_id: string }
+        Returns: boolean
+      }
+      _esign_is_envelope_sender: {
+        Args: { _envelope_id: string }
+        Returns: boolean
+      }
       acquire_function_lock: {
         Args: { p_function_name: string; p_timeout_minutes?: number }
         Returns: boolean
