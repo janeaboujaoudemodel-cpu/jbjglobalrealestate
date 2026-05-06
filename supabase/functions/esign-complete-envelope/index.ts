@@ -488,6 +488,36 @@ Deno.serve(async (req) => {
       },
     };
 
+    // ── Build flattened signed PDF ─────────────────────────────────────────
+    let signedDocumentUrl: string | null = null;
+    try {
+      const { data: fields } = await supabase
+        .from("esign_fields")
+        .select("*")
+        .eq("envelope_id", envelope.id);
+
+      const signedBytes = await buildSignedPdf(envelope, fields || [], envelope.esign_recipients);
+      if (signedBytes) {
+        const signedFilename = `signed_${envelope.id}.pdf`;
+        const { error: upErr } = await supabase.storage
+          .from("esign-certificates")
+          .upload(signedFilename, signedBytes, {
+            contentType: "application/pdf",
+            upsert: true,
+          });
+        if (upErr) {
+          console.error("Failed to upload signed PDF:", upErr);
+        } else {
+          const { data: urlData } = supabase.storage
+            .from("esign-certificates")
+            .getPublicUrl(signedFilename);
+          signedDocumentUrl = urlData?.publicUrl ?? null;
+        }
+      }
+    } catch (signErr) {
+      console.error("Failed to flatten signed PDF:", signErr);
+    }
+
     // Create or update signed document record
     const { data: existingDoc } = await supabase
       .from("esign_signed_documents")
@@ -500,6 +530,7 @@ Deno.serve(async (req) => {
         .from("esign_signed_documents")
         .update({
           certificate_data: certificateData,
+          ...(signedDocumentUrl ? { document_url: signedDocumentUrl } : {}),
           ...(certificateUrl ? { certificate_url: certificateUrl } : {}),
         })
         .eq("id", existingDoc.id);
@@ -508,7 +539,7 @@ Deno.serve(async (req) => {
         .from("esign_signed_documents")
         .insert({
           envelope_id: envelope.id,
-          document_url: envelope.document_url,
+          document_url: signedDocumentUrl || envelope.document_url,
           document_filename: `signed_${envelope.document_filename}`,
           certificate_data: certificateData,
           ...(certificateUrl ? { certificate_url: certificateUrl } : {}),
@@ -523,7 +554,7 @@ Deno.serve(async (req) => {
     await supabase
       .from("esign_envelopes")
       .update({
-        signed_document_url: envelope.document_url,
+        signed_document_url: signedDocumentUrl || envelope.document_url,
       })
       .eq("id", envelope.id);
 
