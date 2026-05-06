@@ -423,24 +423,36 @@ serve(async (req: Request) => {
     if (!refsProject) {
       subjectRendered = `${project.name} — Private Briefing & Breakfast for ${varsMap.brokerage_name}`;
       const offerBlock = project.offerHtml
-        ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px">${project.offerHtml}</div>`
+        ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px;text-align:left">${project.offerHtml}</div>`
         : "";
+      // NOTE: Salutation is resolved per-recipient from brk.company_name and primary_contact.name.
+      // It NEVER falls back to the words "Sample" or "from <Brokerage>" — bulk sends synchronize
+      // each recipient's own name automatically (e.g. "Dear Provident team," / "Dear Farm team,").
+      const hasContactName = !!(pcRaw.name && String(pcRaw.name).trim());
+      const salutation = hasContactName
+        ? `Dear <strong>${varsMap.contact_first_name}</strong>,`
+        : `Dear <strong>${varsMap.brokerage_name}</strong> team,`;
+      const goldCta = (href: string, label: string) =>
+        `<a href="${href}" style="display:inline-block;padding:14px 30px;background:linear-gradient(180deg,#D4B05A 0%,#B89555 100%);color:#1A1A1A;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.4px;border:1px solid #8A6F3E;box-shadow:0 2px 8px rgba(184,149,85,0.35)">${label}</a>`;
       html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
-<div style="background:#F7F2EA;padding:40px 16px">
-  <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:36px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
-    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:6px">${representedDeveloperName}</div>
-    <div style="font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1A1A1A99;margin-bottom:24px">Sales &amp; Training · Channel Partner Activation</div>
-    <p style="margin:0 0 16px;font-size:15px">Dear <strong>${varsMap.contact_first_name}</strong> from <strong>${varsMap.brokerage_name}</strong>,</p>
+<div style="background:#F7F2EA;padding:48px 16px">
+  <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:44px 44px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
+    <div style="text-align:center;padding-bottom:18px;border-bottom:1px solid #B89555;margin-bottom:28px">
+      <div style="font-size:13px;letter-spacing:4px;text-transform:uppercase;color:#1A1A1A;font-weight:700">Greetings from ${representedDeveloperName}!</div>
+      <div style="margin-top:6px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</div>
+    </div>
+    <p style="margin:0 0 16px;font-size:15px">${salutation}</p>
     <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>${representedDeveloperName}</strong>, Sales &amp; Training department.</p>
-    <p style="margin:0 0 24px;font-size:14px">${resolvedGroupLine}</p>
-    <div style="margin:24px 0;padding:22px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Featured Project</div>
-      <div style="font-size:22px;font-weight:600;color:#1A1A1A;margin-bottom:8px">${project.name}</div>
-      <div style="font-size:14px;color:#1A1A1A;margin-bottom:18px">${project.tagline}</div>
-      <a href="${project.url}" style="display:inline-block;padding:13px 26px;background:#1A1A1A;color:#FDFBF7;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #1A1A1A">Open ${project.name} e-catalogue &rarr;</a>
+    <p style="margin:0 0 16px;font-size:14px">${resolvedGroupLine}</p>
+    <p style="margin:0 0 24px;font-size:14px">Please let us know whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}. If you are not yet registered, kindly reply with the email address where your team would like to receive the registration documents, and we will send everything required to complete onboarding.</p>
+    <div style="margin:28px 0;padding:28px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px;text-align:center">
+      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:10px">Featured Project</div>
+      <div style="font-size:26px;font-weight:600;color:#1A1A1A;margin-bottom:10px;letter-spacing:1px">${project.name}</div>
+      <div style="font-size:14px;color:#1A1A1A;margin:0 auto 22px;max-width:460px">${project.tagline}</div>
+      ${goldCta(project.url, `Open ${project.name} e-catalogue &rarr;`)}
     </div>
     ${offerBlock}
-    <div style="margin:28px 0;padding:26px;background:#FDFBF7;border:1px solid #B89555;border-radius:14px">
+    <div style="margin:28px 0;padding:28px;background:#FDFBF7;border:1px solid #B89555;border-radius:14px">
       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Private Invitation</div>
       <div style="font-size:18px;font-weight:600;margin-bottom:10px">Partnership Briefing &amp; Breakfast</div>
       <p style="margin:0 0 14px;font-size:14px">I'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private breakfast at our Dubai office — exclusive for your company. Agenda covers ${project.name}, commissions, sales training and channel partner activation.</p>
@@ -453,12 +465,10 @@ serve(async (req: Request) => {
           <li>Please also book directly from the calendar and reply back with the slot you have selected.</li>
         </ul>
       </div>
-      ${bookingUrl ? `<div style="text-align:center;margin-top:18px"><a href="${bookingUrl}" style="display:inline-block;padding:13px 28px;background:#1A1A1A;color:#FDFBF7;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600;border:1px solid #1A1A1A">Book your slot on the calendar &rarr;</a></div>` : ""}
+      ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, "Book your slot on the calendar &rarr;")}</div>` : ""}
     </div>
-    <p style="margin:20px 0 14px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}? If not, we'll fast-track your registration and add the right contact to our WhatsApp group for breakfast logistics.</p>
-    <p style="margin:14px 0 24px;font-size:13px;color:#1A1A1A99"><em>Please disregard this message if ${varsMap.brokerage_name} is already registered with ${representedDeveloperName}, already part of our active WhatsApp group, or actively selling with us.</em></p>
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
-      Warm regards,<br/><strong>${ownerFirstName}</strong><br/>
+      Warm regards,<br/><strong>${ownerFirstName} Aboujaoude</strong><br/>
       <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
       <span style="color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</span><br/>
       <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo}</a>
@@ -467,34 +477,6 @@ serve(async (req: Request) => {
   <div style="max-width:640px;margin:16px auto 0;text-align:center;font-size:11px;color:#1A1A1A66">${representedDeveloperName} · Sales &amp; Training · Channel Partner Activation</div>
 </div>
 </body></html>`;
-    }
-    const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
-
-    const raw = buildRawMime({
-      from: `${fromName} <${replyTo}>`,
-      to: recipient,
-      cc,
-      subject,
-      html,
-      replyTo,
-    });
-
-    const gmailRes = await fetch(`${GMAIL_GATEWAY}/users/me/messages/send`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "X-Connection-Api-Key": GMAIL_API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ raw }),
-    });
-
-    const gmailJson = await gmailRes.json();
-    if (!gmailRes.ok) {
-      console.error("Gmail send failed:", gmailRes.status, gmailJson);
-      return new Response(JSON.stringify({ error: gmailJson?.error?.message || "Gmail send failed", details: gmailJson }), {
-        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     }
 
     const messageId: string | null = gmailJson?.id || null;
