@@ -1002,7 +1002,7 @@ const BrokeragesTab = () => {
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
-      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} />
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} defaultListId={listView.kind === "list" ? listView.listId : null} />
 
       {viewMode === "excel" ? (
         <ExcelGridView
