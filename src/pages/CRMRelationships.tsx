@@ -2345,6 +2345,7 @@ const DeveloperRegistryTab = () => {
       </div>
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
+      <TestSendDialog open={testSendOpen} onOpenChange={setTestSendOpen} mode="developer" variant="developer_registration" />
       <BulkSendDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
