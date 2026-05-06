@@ -903,31 +903,30 @@ const BrokeragesTab = () => {
           {bulkSel.size > 0 ? `${bulkSel.size} selected` : "Select all visible"}
         </Button>
         <Button
-          variant="gold"
-          onClick={() => {
+          variant="outline"
+          onClick={() => setUploadOpen(true)}
+          title="Upload Excel/CSV/HTML list — auto-classifies real-estate brokerages vs developers vs mortgage brokers, dedups by name + DLD number, and reroutes mis-categorised rows."
+        >
+          <Plus className="w-4 h-4 mr-2" />Upload list
+        </Button>
+        <OutreachActionsMenu
+          selectedCount={bulkSel.size}
+          sendLabel="Email Selected Agencies"
+          onSendSelected={() => {
             if (bulkSel.size === 0) { toast.error("Tick at least one agency first"); return; }
             setBulkOpen(true);
           }}
-          className="shadow-md"
-          title="Send your branded outreach email to every ticked agency. A test copy is sent to you first so you can review before the real send."
-        >
-          <Send className="w-4 h-4 mr-2" />Email Selected Agencies{bulkSel.size > 0 ? ` (${bulkSel.size})` : ""}
-        </Button>
-        <Button variant="outline" onClick={() => setTplOpen(true)} title="Edit brokerage email templates">
-          <Mail className="w-4 h-4 mr-2" />Edit Templates
-        </Button>
-        <Button variant="outline" onClick={() => setTestSendOpen(true)} title="Send a test email with CC options">
-          <FlaskConical className="w-4 h-4 mr-2" />Send Test
-        </Button>
+          onEditTemplate={() => setTplOpen(true)}
+          onSendTest={() => setTestSendOpen(true)}
+          onActivityLog={() => navigate("/owner/crm/relationships/activity")}
+        />
         <Button variant="outline" onClick={handleSyncNow} disabled={syncing} title="Pull latest agency replies from your inbox now">
           {syncing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-2" />}
           {syncing ? "Syncing…" : "Sync Inbox"}
         </Button>
-        <Button variant="outline" onClick={() => navigate("/owner/crm/relationships/activity")} title="View every reminder, call, calendar event and note logged against agencies">
-          <Bell className="w-4 h-4 mr-2" />Activity Log
-        </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} />
 
       {viewMode === "excel" ? (
         <ExcelGridView
