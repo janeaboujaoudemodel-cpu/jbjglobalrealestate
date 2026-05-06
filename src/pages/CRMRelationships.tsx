@@ -451,6 +451,8 @@ const BrokeragesTab = () => {
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const [testSendOpen, setTestSendOpen] = useState(false);
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
   useEffect(() => {
     const openTpl = () => setTplOpen(true);
     const openTest = () => setTestSendOpen(true);
