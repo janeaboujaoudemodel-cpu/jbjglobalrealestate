@@ -31,6 +31,10 @@ import {
   useEmailTemplate,
 } from "@/hooks/useCRMRelationships";
 import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
+import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
+import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
+import { ExcelGridView } from "@/components/crm/ExcelGridView";
+import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
