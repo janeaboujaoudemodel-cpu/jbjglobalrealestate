@@ -81,7 +81,8 @@ serve(async (req) => {
     const {data:{user}} = await uc.auth.getUser();
     if(!user || !OWNER_EMAILS.includes(user.email||"")) return new Response(JSON.stringify({error:"Forbidden"}),{status:403,headers:{...corsHeaders,"Content-Type":"application/json"}});
     const svc=createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const {filename, content} = await req.json() as {filename:string;content:string};
+    const {filename, content, list_id} = await req.json() as {filename:string;content:string;list_id?:string|null};
+    const listId: string | null = list_id || null;
     if(!content) throw new Error("Empty file");
     const rows=parseRows(filename||"", content);
     const companies=rows.map(r=>{
@@ -107,11 +108,11 @@ serve(async (req) => {
       if(k==="mortgage"||k==="other"){ rej++; if(sRej.length<10) sRej.push(c.name); continue; }
       if(k==="brokerage"){
         if(ebN.has(n)){dup++;continue;} ebN.add(n);
-        brkIns.push({company_name:c.name, phone:c.phone||null, email:c.email||null, website:c.website||null, emirate:c.emirate||null, owner_id:user.id});
+        brkIns.push({company_name:c.name, phone:c.phone||null, email:c.email||null, website:c.website||null, emirate:c.emirate||null, owner_id:user.id, list_id:listId});
         rer++; continue;
       }
       if(edN.has(n)){dup++;continue;} edN.add(n);
-      devIns.push({owner_id:user.id, developer_name:c.name, developer_slug:slugify(c.name), status:"not_started", phone:c.phone||null, developer_email:c.email||null, website:c.website||null, emirate:c.emirate||null});
+      devIns.push({owner_id:user.id, developer_name:c.name, developer_slug:slugify(c.name), status:"not_started", phone:c.phone||null, developer_email:c.email||null, website:c.website||null, emirate:c.emirate||null, list_id:listId});
       if(sIns.length<10) sIns.push(c.name);
       ins++;
     }

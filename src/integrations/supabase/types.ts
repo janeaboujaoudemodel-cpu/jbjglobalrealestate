@@ -5299,6 +5299,7 @@ export type Database = {
           created_at: string
           deal_count: number
           deal_count_cached: number
+          deleted_at: string | null
           directory_rank: number | null
           dld_office_number: string | null
           dnc_reason: string | null
@@ -5317,6 +5318,7 @@ export type Database = {
           inquiry_count: number
           instagram_url: string | null
           is_existing_match: boolean
+          is_junk: boolean
           last_auto_reply_at: string | null
           last_contact_log_at: string | null
           last_deal_at: string | null
@@ -5329,6 +5331,7 @@ export type Database = {
           last_response_at: string | null
           last_verified_at: string | null
           linkedin_url: string | null
+          list_id: string | null
           logo_url: string | null
           match_directory_id: string | null
           name_arabic: string | null
@@ -5384,6 +5387,7 @@ export type Database = {
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
+          deleted_at?: string | null
           directory_rank?: number | null
           dld_office_number?: string | null
           dnc_reason?: string | null
@@ -5402,6 +5406,7 @@ export type Database = {
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
+          is_junk?: boolean
           last_auto_reply_at?: string | null
           last_contact_log_at?: string | null
           last_deal_at?: string | null
@@ -5414,6 +5419,7 @@ export type Database = {
           last_response_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          list_id?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
           name_arabic?: string | null
@@ -5469,6 +5475,7 @@ export type Database = {
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
+          deleted_at?: string | null
           directory_rank?: number | null
           dld_office_number?: string | null
           dnc_reason?: string | null
@@ -5487,6 +5494,7 @@ export type Database = {
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
+          is_junk?: boolean
           last_auto_reply_at?: string | null
           last_contact_log_at?: string | null
           last_deal_at?: string | null
@@ -5499,6 +5507,7 @@ export type Database = {
           last_response_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          list_id?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
           name_arabic?: string | null
@@ -5537,7 +5546,15 @@ export type Database = {
           website?: string | null
           whatsapp_e164?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerages_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_lists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_brokers: {
         Row: {
@@ -5901,6 +5918,7 @@ export type Database = {
           health_score: number | null
           id: string
           instagram_url: string | null
+          is_junk: boolean
           last_auto_reply_at: string | null
           last_email_synced_at: string | null
           last_inbound_at: string | null
@@ -5910,6 +5928,7 @@ export type Database = {
           last_response_at: string | null
           last_verified_at: string | null
           linkedin_url: string | null
+          list_id: string | null
           logo_url: string | null
           nda_signed_at: string | null
           nda_status: Database["public"]["Enums"]["nda_status"]
@@ -5966,6 +5985,7 @@ export type Database = {
           health_score?: number | null
           id?: string
           instagram_url?: string | null
+          is_junk?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
@@ -5975,6 +5995,7 @@ export type Database = {
           last_response_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          list_id?: string | null
           logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
@@ -6031,6 +6052,7 @@ export type Database = {
           health_score?: number | null
           id?: string
           instagram_url?: string | null
+          is_junk?: boolean
           last_auto_reply_at?: string | null
           last_email_synced_at?: string | null
           last_inbound_at?: string | null
@@ -6040,6 +6062,7 @@ export type Database = {
           last_response_at?: string | null
           last_verified_at?: string | null
           linkedin_url?: string | null
+          list_id?: string | null
           logo_url?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
@@ -6071,6 +6094,13 @@ export type Database = {
           whatsapp_e164?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "crm_developer_registry_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_lists"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "crm_developer_registry_uae_developer_id_fkey"
             columns: ["uae_developer_id"]
@@ -6419,6 +6449,45 @@ export type Database = {
           },
         ]
       }
+      crm_lead_lists: {
+        Row: {
+          archived_at: string | null
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          kind: string
+          name: string
+          owner_user_id: string
+          source_filename: string | null
+          updated_at: string
+        }
+        Insert: {
+          archived_at?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind: string
+          name: string
+          owner_user_id: string
+          source_filename?: string | null
+          updated_at?: string
+        }
+        Update: {
+          archived_at?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: string
+          name?: string
+          owner_user_id?: string
+          source_filename?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       crm_lead_reports: {
         Row: {
           created_at: string | null
@@ -6740,11 +6809,13 @@ export type Database = {
           imported_at: string | null
           internal_comments: string | null
           is_duplicate: boolean | null
+          is_junk: boolean
           last_contacted_at: string | null
           lead_intent: string | null
           lead_score_band: string | null
           lead_source_type: string | null
           lead_type: string | null
+          list_id: string | null
           nationality: string | null
           next_followup_at: string | null
           notes: string | null
@@ -6824,11 +6895,13 @@ export type Database = {
           imported_at?: string | null
           internal_comments?: string | null
           is_duplicate?: boolean | null
+          is_junk?: boolean
           last_contacted_at?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
           lead_source_type?: string | null
           lead_type?: string | null
+          list_id?: string | null
           nationality?: string | null
           next_followup_at?: string | null
           notes?: string | null
@@ -6908,11 +6981,13 @@ export type Database = {
           imported_at?: string | null
           internal_comments?: string | null
           is_duplicate?: boolean | null
+          is_junk?: boolean
           last_contacted_at?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
           lead_source_type?: string | null
           lead_type?: string | null
+          list_id?: string | null
           nationality?: string | null
           next_followup_at?: string | null
           notes?: string | null
@@ -6985,6 +7060,13 @@ export type Database = {
             columns: ["duplicate_of_id"]
             isOneToOne: false
             referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_lists"
             referencedColumns: ["id"]
           },
           {

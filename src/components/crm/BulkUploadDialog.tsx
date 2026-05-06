@@ -3,12 +3,16 @@
  * Server classifies (real-estate brokerage / developer / mortgage / other),
  * de-duplicates strictly, reroutes mis-tab uploads, and reports the breakdown.
  */
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader2, UploadCloud, FileSpreadsheet, AlertCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useCRMLists } from "@/hooks/useCRMLists";
 
 type UploadKind = "brokerage" | "developer";
 
@@ -33,11 +37,25 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
+  const [target, setTarget] = useState<"main" | "new" | "existing">("new");
+  const [existingListId, setExistingListId] = useState<string>("");
+  const [newListName, setNewListName] = useState<string>("");
+
+  const listsKind = kind === "brokerage" ? "brokerages" : "developers";
+  const { data: lists = [], createList } = useCRMLists(listsKind);
+
+  const defaultListName = useMemo(() => {
+    if (!file) return "";
+    return file.name.replace(/\.[^.]+$/, "").slice(0, 80);
+  }, [file]);
 
   const reset = () => {
     setFile(null);
     setBusy(false);
     setResult(null);
+    setTarget("new");
+    setExistingListId("");
+    setNewListName("");
   };
 
   const handleClose = (v: boolean) => {
@@ -52,10 +70,25 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
     setBusy(true);
     setResult(null);
     try {
+      let list_id: string | null = null;
+      if (target === "existing") {
+        list_id = existingListId || null;
+      } else if (target === "new") {
+        const nameToUse = (newListName || defaultListName).trim();
+        if (!nameToUse) throw new Error("Please name the new database");
+        // Reuse existing list with same name if present (avoids unique constraint failure)
+        const existing = lists.find((l) => l.name.toLowerCase() === nameToUse.toLowerCase());
+        if (existing) {
+          list_id = existing.id;
+        } else {
+          const created = await createList.mutateAsync({ name: nameToUse, source_filename: file.name });
+          list_id = created.id;
+        }
+      }
       const text = await file.text();
       const fnName = kind === "brokerage" ? "crm-bulk-upload-brokerages" : "crm-bulk-upload-developers";
       const { data, error } = await supabase.functions.invoke(fnName, {
-        body: { filename: file.name, content: text },
+        body: { filename: file.name, content: text, list_id },
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
@@ -103,6 +136,45 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               />
             </label>
+
+            {file && (
+              <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
+                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Where to save these rows</Label>
+                <RadioGroup value={target} onValueChange={(v) => setTarget(v as any)} className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="new" /> Create new database
+                    {target === "new" && (
+                      <Input
+                        autoFocus
+                        value={newListName}
+                        placeholder={defaultListName || "Database name"}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        className="h-7 ml-2 text-sm flex-1"
+                      />
+                    )}
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="existing" disabled={lists.length === 0} />
+                    Append to existing
+                    {target === "existing" && (
+                      <select
+                        className="h-7 ml-2 text-sm border border-[#B89555]/30 rounded px-2 bg-white flex-1"
+                        value={existingListId}
+                        onChange={(e) => setExistingListId(e.target.value)}
+                      >
+                        <option value="">Choose…</option>
+                        {lists.map((l) => (
+                          <option key={l.id} value={l.id}>{l.name}</option>
+                        ))}
+                      </select>
+                    )}
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="main" /> Add to Main CRM (no list)
+                  </label>
+                </RadioGroup>
+              </div>
+            )}
           </div>
         )}
 

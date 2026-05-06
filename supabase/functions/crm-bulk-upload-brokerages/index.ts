@@ -209,8 +209,9 @@ serve(async (req: Request) => {
     }
 
     const service = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const { filename, content } = await req.json() as { filename: string; content: string };
+    const { filename, content, list_id } = await req.json() as { filename: string; content: string; list_id?: string | null };
     if (!content) throw new Error("Empty file");
+    const listId: string | null = list_id || null;
 
     const rows = parseRows(filename || "", content);
     const companies = rows.map(extractCompany).filter(Boolean) as CompanyRow[];
@@ -266,6 +267,7 @@ serve(async (req: Request) => {
           developer_email: c.email || null,
           website: c.website || null,
           emirate: c.emirate || null,
+          list_id: listId,
         });
         rerouted++;
         continue;
@@ -283,6 +285,7 @@ serve(async (req: Request) => {
         email: c.email || null,
         website: c.website || null,
         owner_id: user.id,
+        list_id: listId,
       });
       if (sampleInserted.length < 10) sampleInserted.push(c.name);
       inserted++;
