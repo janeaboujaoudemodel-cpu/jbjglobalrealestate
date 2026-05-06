@@ -1961,7 +1961,45 @@ const DeveloperRegistryTab = () => {
       <DeveloperDirectoryPanel />
       <DocumentPackPanel />
 
-      {/* Sub-tabs: collapsed by default. Click a panel to expand; click again to collapse. */}
+      {/* Unified status tiles — single source of truth. Each tile auto-routes to the
+          correct sub-tab so a click never lands in an empty pool (Registered → History). */}
+      {data.length > 0 && (
+        <div className="grid grid-cols-3 md:grid-cols-8 gap-2">
+          {STATUS_DEV.map((s) => {
+            const n = counts[s.v] || 0;
+            const isHistoryTile = s.v === "registered";
+            const active = isHistoryTile
+              ? subTab === "history" && historyTab === "registered"
+              : statusFilter === s.v && subTab === "queue";
+            return (
+              <Card
+                key={s.v}
+                className={`cursor-pointer transition ${active ? "ring-2 ring-[#1A1A1A]" : "hover:ring-1 hover:ring-[#1A1A1A]/30"}`}
+                onClick={() => selectStatus(s.v)}
+                title={isHistoryTile ? "Open Sent History · Registered" : `Filter Outreach Queue by ${s.label}`}
+              >
+                <CardContent className="p-3 text-center">
+                  <div className="text-2xl font-bold">{n}</div>
+                  <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1">{s.label}</div>
+                </CardContent>
+              </Card>
+            );
+          })}
+          <Card
+            className={`cursor-pointer transition ${statusView === "contracts" ? "ring-2 ring-[#1A1A1A]" : "hover:ring-1 hover:ring-[#1A1A1A]/30"}`}
+            onClick={() => selectStatus("contracts")}
+            title="Show developers with a contract sent or signed"
+          >
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold">{contractsCount}</div>
+              <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1 flex items-center justify-center gap-1">
+                <FileSignature className="w-3 h-3" />Contracts
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className="text-xs text-[#1A1A1A]/70">Click a panel to expand · both start collapsed</div>
       <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
