@@ -49,6 +49,8 @@ export default function useCRMLeadsInbox() {
   const [page, setPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [activeView, setActiveView] = useState<"active" | "deleted">("active");
+  const [listView, setListView] = useState<{ kind: "active" | "list" | "junk" | "trash"; listId: string | null }>({ kind: "active", listId: null });
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
