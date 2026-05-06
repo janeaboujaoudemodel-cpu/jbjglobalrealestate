@@ -376,9 +376,9 @@ export const TemplateEditorDialog = ({
               </div>
               <iframe
                 title="Email preview"
-                srcDoc={previewHtml}
+                srcDoc={`<base target="_blank" /><style>a{pointer-events:none;cursor:default}</style>` + previewHtml}
                 className="flex-1 w-full bg-[#FDFBF7]"
-                sandbox=""
+                sandbox="allow-same-origin"
               />
             </div>
           )}
