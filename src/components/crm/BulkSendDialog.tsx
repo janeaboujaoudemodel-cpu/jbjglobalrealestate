@@ -263,15 +263,33 @@ export const BulkSendDialog = ({
       targets.every((t) => !!checks[t.id]));
 
   const effectiveTargets = useMemo(() => {
-    if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+    const base = (() => {
+      if (!isBrokerageFlow || Object.keys(checks).length === 0) return targets;
+      return targets.filter((t) => {
+        const r = checks[t.id];
+        if (!r) return true;
+        if (r.status === "ok") return true;
+        if (r.status === "warn") return !!warnOverrides[t.id];
+        return false; // block
+      });
+    })();
+    return base.filter((t) => !excludedIds.has(t.id));
+  }, [targets, checks, warnOverrides, isBrokerageFlow, excludedIds]);
+
+  const refinedTargets = useMemo(
+    () => targets.filter((t) => !excludedIds.has(t.id)),
+    [targets, excludedIds],
+  );
+
+  const filteredRefineList = useMemo(() => {
+    const q = refineSearch.trim().toLowerCase();
+    if (!q) return targets;
     return targets.filter((t) => {
-      const r = checks[t.id];
-      if (!r) return true;
-      if (r.status === "ok") return true;
-      if (r.status === "warn") return !!warnOverrides[t.id];
-      return false; // block
+      const name = getName(t, entityType).toLowerCase();
+      const email = getEmail(t, entityType).toLowerCase();
+      return name.includes(q) || email.includes(q);
     });
-  }, [targets, checks, warnOverrides, isBrokerageFlow]);
+  }, [targets, refineSearch, entityType]);
 
   useEffect(() => {
     if (!previewDevId && (targets[0] || selected[0])) {
