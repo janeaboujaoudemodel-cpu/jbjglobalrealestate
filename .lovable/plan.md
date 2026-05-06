@@ -1,52 +1,43 @@
-## Goal
+## Why you only see ~504 brokerages
 
-Inside the **Brokerages** tab of CRM Relationships, restructure into two top-level tabs and make sure newly added agencies land in your personal pipeline ("My Additions") with both Card view and Excel view available at all times.
+The `useCRMRelationships` hook fetches every brokerage in a single call:
 
-## What changes
-
-### 1. Two new tabs inside Brokerages
-
-Add a tab strip at the top of the Brokerages section:
-
-```text
-[ Agencies ]   [ Individual Brokers ]
+```ts
+supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
 ```
 
-- **Agencies** — the existing brokerage directory (everything currently shown).
-- **Individual Brokers** — a new view listing every broker (person) you have on file. Source = union of:
-  - `crm_brokerage_agents` (brokers added under any agency, with the agency name shown as a column), AND
-  - Standalone brokers not tied to any agency (we'll allow `brokerage_id = null` rows in the same `crm_brokerage_agents` table so you can add a lone broker without first creating an agency).
-  - Columns: Name · Phone · WhatsApp · Email · Role · Status · Agency · Last contacted · Actions.
-  - Same Card / Excel toggle as Agencies.
-  - "+ Add broker" button works with or without selecting an agency.
+Two limits cap that result:
 
-### 2. New agencies auto-land in "My Additions"
+1. **Supabase caps every query at 1,000 rows by default.** Even though the database currently holds **4,872 brokerage rows**, a single `select("*")` will never return more than 1,000.
+2. The **504** you actually see is what's left **after the active filters** (search / status / Emirate / sub-tab) are applied to the first 1,000 rows that came back — so increasing filters or scrolling will never reveal the rest, because the rest were never fetched.
 
-`openNew()` already stamps `entry_source: "owner"`, so any agency you create is already part of My Additions. We will:
-- After save, **switch the source sub-tab to `owner` ("My Additions")** and scroll the new row into view, so you immediately see your new entry.
-- Toast confirmation: "Added to My Additions — ready for outreach".
+So the issue is purely a data-loading bug, not RLS or UI.
 
-### 3. Always show Card view AND Excel view for My Additions
+## Fix
 
-Today there is one shared `viewMode` toggle (`cards | excel`) that hides the other view. Change to:
-- **My Additions** sub-tab: always renders **both** the Card grid (top) and the Excel grid (bottom), with a small "Jump to Excel ↓ / Jump to Cards ↑" anchor.
-- All other sub-tabs (All / UAE Agencies / Already Sent / New Replies): keep the existing Card/Excel toggle (unchanged), so we don't slow down 10k-row views.
+Switch the brokerage fetch to a **paginated loop** that pulls every row in 1,000-row pages until the table is exhausted, then feeds the full list into the existing UI.
 
-### 4. Counts & filters
+```text
+page 0:    rows   0 –  999
+page 1:    rows 1000 – 1999
+page 2:    rows 2000 – 2999
+…until a page returns < 1000 rows
+```
 
-- Tab badges show live counts: `Agencies · {data.length}` and `Individual Brokers · {brokerCount}`.
-- Filters (search, list sidebar, status, emirate) apply to whichever tab is active. The Individual Brokers tab gets its own search box plus an "Agency" filter dropdown.
+### Changes
 
-## Out of scope
+1. **`src/hooks/useCRMRelationships.ts`** — replace the single `select("*")` with a `while` loop using `.range(from, from + 999)`, accumulating into one array, then returning it. Same ordering (`updated_at desc`). No schema or RLS change.
+2. **Lightweight progress signal** — while the loop runs, expose a `loading` / `loadedCount` value the directory header can show ("Loading 3,000 / 4,872…"), so it's visible that all agencies are being pulled. Optional, but useful given the size.
+3. **Apply the same pattern to `IndividualBrokersTab.tsx`** (it currently does a single `select` on `crm_brokerage_agents`, which will hit the same 1,000-row ceiling once that table grows).
 
-- No changes to email templates, breakfast invitation, registration card, or developer tabs.
-- No schema changes beyond making `crm_brokerage_agents.brokerage_id` nullable (one migration) so standalone brokers are storable.
+### Out of scope
 
-## Technical notes
+- No DB migration, no RLS change, no edge function.
+- No change to filters, tabs, card/Excel views, or "My Additions" logic.
+- The 10,000 figure you mentioned is the long-term target; today the table actually has **4,872 rows**, and after this fix you'll see all of them.
 
-- File: `src/pages/CRMRelationships.tsx` — wrap `BrokeragesTab` body in a Radix `Tabs` (`agencies` | `brokers`).
-- New component: `src/components/crm/IndividualBrokersTab.tsx` — fetches `crm_brokerage_agents` joined to `crm_brokerages(company_name)`, reuses `ExcelGridView` + a card grid built from the existing card markup.
-- Migration: `ALTER TABLE crm_brokerage_agents ALTER COLUMN brokerage_id DROP NOT NULL;` (only if it's currently NOT NULL — we'll verify first).
-- `BrokerageAgentsEditor` stays as the per-agency editor; the new tab is read/write at the broker level.
-- "My Additions" dual-view: conditionally render both `<CardsGrid />` and `<ExcelGridView />` when `sourceTab === "owner"`; otherwise keep the toggle.
-- After `save()` succeeds for a new agency: `setSourceTab("owner")` + `qc.invalidateQueries(["crm-brokerages"])`.
+### Files
+
+- `src/hooks/useCRMRelationships.ts` (paginated fetch + loadedCount)
+- `src/components/crm/IndividualBrokersTab.tsx` (same pagination)
+- `src/pages/CRMRelationships.tsx` (only to surface the "Loading X / Y" line in the directory header — no logic change)
