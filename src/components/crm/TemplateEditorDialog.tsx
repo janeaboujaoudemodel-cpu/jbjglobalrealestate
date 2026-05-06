@@ -138,7 +138,7 @@ export const TemplateEditorDialog = ({
         .replace(/\{\{represented_developer_name\}\}/g, "CITI Developer")
         .replace(/\{\{group_status_line\}\}/g, "We'd love to introduce CITI Developer to your team.")
         .replace(/\{\{project_name\}\}/g, "AMRA")
-        .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
+        .replace(/\{\{project_url\}\}/g, "https://www.citidevelopers.com/e-catalogue/amra")
         .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
         .replace(/\{\{project_offer_html\}\}/g, offerHtml)
         .replace(/\{\{booking_url\}\}/g, "#preview")
