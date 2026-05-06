@@ -1,73 +1,167 @@
-## Phase 2 — Wire CRM list management into the three CRM surfaces
+## Audit — what already exists (do NOT duplicate)
 
-Phase 1 created the plumbing (`crm_lead_lists` table, `list_id` / `is_junk` / `deleted_at` columns, `useCRMLists` hook, `CRMListSidebar`, `CRMBulkActionsBar`, list-aware `BulkUploadDialog`). This phase plugs those pieces into the actual screens and updates query keys + export.
+| Existing module | Route | Purpose |
+|---|---|---|
+| Documents (rich editor) | `/documents` and `/owner/documents` (`src/pages/Documents.tsx`, 769 lines) | WYSIWYG editor, font/color picker, OCR, find&replace, stamp + signature placement, template library (Offer Letter, MOU, NOC, **Broker Agreement**, Tenancy, Handover, Commission Invoice). Already supports `<Stamp />` + `<PenTool />` insertion. |
+| Contract Forms | `/contract-forms` (`ContractForms.tsx`) | Template grid for UAE real-estate contracts (MoU, **Form F – Listing Agreement**, Ejari, Form A, etc.). |
+| Form Builder | `/form-builder` (`FormBuilder.tsx`) | Drag-and-drop fillable form fields + responses view. |
+| Scan & Sign | `/document-scanner` (`ScanSignDocuments.tsx` + hook) | Scan → annotate → sign → submit flow. |
+| Exclusive Documents | `/owner/exclusive-documents` | Owner vault. |
+| Signature/Stamp store | `useOwnerSignatureAssets` + `owner_signature_assets` table + `owner-signature-assets` storage bucket + `apply-adopt-signature` edge function | Already handles upload, list, apply, BG-removal pipeline for signature / initial / stamp. |
+| Owner sidebar | `OwnerSidebarNav.tsx` | Has a top-level **Documents** entry pointing to `/owner/documents`. |
 
-### 1. `src/pages/CRMRelationships.tsx` — Brokerages tab (`BrokeragesTab`)
+**Verdict:** every primitive the prompt asks for is already in the codebase. The right move is to **merge** the JBJ "Property Advertising Agreement" + the workflow polish into these modules, not to spin up a parallel system.
 
-- Add state `listView: CRMListView` (default `{ kind: "active", listId: null }`).
-- Wrap the existing tab body in a flex row: left = `<CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={…} />`, right = current content (unchanged width-wise on ≥md, sidebar collapses above the content on small screens).
-- Extend the brokerages query (`useBrokerages` / `refetch` source — found around the `indexed`/`filtered` memo, ~line 540–605) to include:
-  - `listView.kind === "active"` → `.is("deleted_at", null).is("is_junk", false)`
-  - `kind === "list"` → same + `.eq("list_id", listView.listId)`
-  - `kind === "junk"` → `.is("deleted_at", null).eq("is_junk", true)`
-  - `kind === "trash"` → `.not("deleted_at", "is", null)`
-- Add `listView` to the React Query key so caches don't bleed across views.
-- Compute counts (active / junk / trash / per-list) via a small parallel `count: "exact", head: true` query in a `useQuery(["crm_brokerages_counts"])` and pass to the sidebar.
-- Below the table, render `<CRMBulkActionsBar table="crm_brokerages" ids={[...bulkSel]} view={listView.kind} onClear={() => setBulkSel(new Set())} onChanged={refetch} onExport={() => setExportOpen(true)} />`.
-- Bulk-upload button already opens `BulkUploadDialog`; pass `defaultListId={listView.kind === "list" ? listView.listId : undefined}` so the dialog defaults to "append to current database".
+---
 
-### 2. `src/pages/CRMRelationships.tsx` — `DeveloperRegistryTab` (~line 1620+)
+## Where users will find the new feature
 
-Same treatment, mirrored:
-- New `listView` state, `<CRMListSidebar kind="developers" …>`.
-- Extend the developer-registry query to apply the same `list_id / is_junk / deleted_at` filters and add `listView` to its query key.
-- `<CRMBulkActionsBar table="crm_developer_registry" ids={selectedDevIds} view={listView.kind} … />`.
-- `BulkUploadDialog` already has `kind="developer"` — add `defaultListId` plumbing identical to brokerages.
+```text
+Owner Dashboard
+└── Documents          (existing top-level item)
+    ├── Editor                  ← /owner/documents               (existing — gets the new template)
+    ├── Forms & Agreements      ← /owner/documents/forms         (NEW landing — this prompt's hub)
+    │     ├── Templates                 (Property Advertising Agreement + existing ones)
+    │     ├── Create New Document
+    │     ├── Uploaded Documents
+    │     ├── Sent Documents
+    │     ├── Signed Documents
+    │     ├── Stamps & Signatures       (reuses owner_signature_assets)
+    │     └── Settings
+    └── Contract Library        ← /contract-forms                (existing — adds JBJ template card)
+```
 
-### 3. `src/pages/CRMLeadsInbox.tsx` + `src/pages/useCRMLeadsInbox.ts`
+A second entry point appears in **CRM → Lead/Client detail → "Send Agreement"** so a contract can be generated pre-filled from CRM data.
 
-- In the hook:
-  - Add `listView` state (replace existing `activeView: "active" | "deleted"` — keep backward-compatible by mapping `"deleted"` to `{ kind: "trash" }`).
-  - Update the query key to `["crm-leads-inbox", debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page, listView.kind, listView.listId]`.
-  - Apply filters in the query:
-    - active → `is("deleted_at", null).is("is_junk", false)`
-    - list → above + `eq("list_id", listView.listId)`
-    - junk → `is("deleted_at", null).eq("is_junk", true)`
-    - trash → `not("deleted_at", "is", null)`
-  - Expose `listView`, `setListView`, plus `selectedIds`/`setSelectedIds` for bulk operations.
-  - Same filters applied inside `handleExport`.
-- In `CRMLeadsInbox.tsx`:
-  - Render `<CRMListSidebar kind="leads" value={listView} onChange={setListView} counts={counts} />` to the left of the table.
-  - Add `<CRMBulkActionsBar table="crm_leads" ids={selectedIds} view={listView.kind} onClear={…} onChanged={refetch} onExport={openExport} />`.
-  - Leads `BulkUploadDialog` (if present on this page; else the entry button already in the toolbar) gets `defaultListId` like the other tabs.
+---
 
-### 4. `src/components/crm/ExportConfigurator.tsx` — status filter chips
+## Plan
 
-Add an optional `statusFilters?: { key: string; label: string }[]` and `selectedStatuses: string[] / setSelectedStatuses` prop driven by callers. When provided:
-- Render a row of chips above the Columns block: "Active", "Junk", "Trash", plus pipeline statuses for the leads caller (e.g. `new`, `contacted`, `interested`, `closed_won`, `closed_lost`).
-- Pass `statuses` through `onExport({ format, scope, columns, statuses })`.
-- Update the three export handlers (`handleExportConfigured` for brokerages, the developer equivalent, and `handleExport` in leads) to apply the chosen status filters before generating the file.
+### 1. Brand-correct PAA template (data, not a new page)
 
-### 5. Query-key & cache invalidation hygiene
+- Add a single template record to `DOC_TEMPLATES` in `src/pages/Documents.tsx` and to the grid in `ContractForms.tsx`:
+  - id `jbj-property-advertising-agreement`
+  - name "Property Advertising Agreement for Real Estate Owners"
+  - JBJ letterhead: black wordmark, champagne hairline (#B89555 1px), footer with `+971 5471 67107` · `contact@jbj.ae` · `jbj.ae`
+  - Sections exactly as requested: Landlord/Owner Details (incl. **Emirates ID**, **Mobile**, **Email**), Property Details (incl. **Additional Notes**), Terms & Conditions (Exclusive/Non-Exclusive · 1/2/3/6 months/until-date · advertise via portals/website/social/CRM/WhatsApp/email/partners · accuracy + termination clauses), Signature block (Landlord + JBJ Representative + dates).
+- Pure white page, black headings, champagne-gold dividers — no blue/red/purple. Lives at `src/templates/jbj-paa.ts` so both Documents editor and the structured filler import the same HTML.
 
-After any bulk action, `CRMBulkActionsBar.onChanged` already triggers a refetch callback. Ensure each page's `onChanged` invalidates:
-- `["crm-leads-inbox"]` (leads page)
-- `["crm_brokerages"]` and `["crm_brokerages_counts"]`
-- `["crm_developer_registry"]` and its counts
+### 2. Forms & Agreements hub (the "system" layer)
 
-…so the sidebar badges stay in sync.
+New page `src/pages/owner/DocumentsFormsHub.tsx` mounted at `/owner/documents/forms`, plus child routes:
 
-### Files touched
+| Tab | Component | What it does |
+|---|---|---|
+| Templates | grid of cards | Lists JBJ PAA + existing templates; "Use template" → split-pane filler |
+| Create New Document | `PAAFiller.tsx` (split-pane) | Left: structured fields (CRM client picker + manual). Right: live preview = template HTML with `{{tokens}}` replaced. Buttons: Save Draft · Export PDF · Send Email · Send WhatsApp · Request Signature |
+| Uploaded Documents | reuse upload pipeline | Drag-drop PDF/DOCX/image → `convert-to-fillable` edge function tags `{{field}}` placeholders → renders inside the same filler |
+| Sent Documents | table | Status pills: Draft · Sent · Opened · Filled · Signed · Completed · Expired |
+| Signed Documents | table | Final PDFs with stamp+signature burned in |
+| Stamps & Signatures | reuses `useOwnerSignatureAssets` | Upload, BG-remove (existing edge fn), drag-position on doc, save default |
+| Settings | small form | Default sender, default expiry, default footer, watermark toggle |
 
-- `src/pages/CRMRelationships.tsx` — Brokerages + Developers tab wiring (~250 lines diff, mostly additive).
-- `src/pages/CRMLeadsInbox.tsx` — sidebar + bulk bar + export status chips wiring (~80 lines).
-- `src/pages/useCRMLeadsInbox.ts` — listView state, query-key + filter updates, selection state (~60 lines).
-- `src/components/crm/ExportConfigurator.tsx` — optional `statusFilters` prop + chip UI (~40 lines).
+The hub is the only **new page**; everything else is composed from existing components.
 
-No DB migrations, no edge-function changes, no new files. Pure frontend wiring on top of phase-1 primitives.
+### 3. Data model (one new table + 2 migration tweaks)
 
-### Out of scope for this PR
+```text
+crm_documents
+  id uuid pk
+  owner_user_id uuid
+  template_id text                 -- 'jbj-property-advertising-agreement' etc.
+  title text
+  status text  CHECK in (draft|sent|opened|filled|signed|completed|expired)
+  field_values jsonb               -- structured form state
+  rendered_html text                -- snapshot for audit
+  pdf_path text                     -- storage key in 'documents' bucket
+  client_lead_id uuid null fk crm_leads
+  client_email text  client_phone text
+  recipient_token text unique       -- for the public sign link
+  sent_at / opened_at / filled_at / signed_at / completed_at / expires_at
+  signature_asset_id / stamp_asset_id  -- fk owner_signature_assets
+RLS: owner-only read/write; public SELECT allowed by recipient_token via SECURITY DEFINER fn
+```
 
-- Email-template work (already shipped).
-- New list management screens (rename/archive UI for lists) — covered by `useCRMLists` mutations but a dedicated dialog can ship in a later pass.
-- Leads junk-bin cron / purge automation (already in place from phase 1).
+Storage: reuse existing `documents` bucket if present, else create one (private, owner-prefixed paths).
+
+### 4. Edge functions (3 new, all small)
+
+- `documents-render-pdf` — server-side jsPDF render of `rendered_html` with embedded stamp/signature; respects `Institutional PDF Reporting` standard.
+- `documents-send` — channel router: `email` (Resend, reuse Dual-Inbox sender), `whatsapp` (existing Twilio path), `sign-link` (returns public URL with `recipient_token`). Always BCCs `contact@jbj.ae`.
+- `documents-public-fill` — public endpoint the recipient hits via the token to fetch + submit fields and signature; flips status sent → opened → filled → signed.
+
+### 5. Public signing route
+
+`/sign/:token` (PublicRoutes) — bare champagne page, same template renderer, missing fields editable, signature-pad component (already used by `useScanSignDocuments`), submit returns to "Thank you" + emails the final PDF to client + `contact@jbj.ae`.
+
+### 6. CRM integration
+
+- In `CRMLeadDrawer` / `useActiveLead`, add **"Send Agreement"** button → opens `PAAFiller` pre-filled with `full_name`, `email_lower`, `phone_e164`.
+- New document gets `client_lead_id` linked; resulting status appears as a timeline event in the lead profile.
+
+### 7. UI rules (locked to project memory)
+
+- White paper card, champagne hairlines (`border-[#B89555]/40`), black titles, body `text-[#1A1A1A]`, no gold fills (memory: `no-gold-fills`).
+- Inter font only (memory: typography standard).
+- All icons via `<IconTile />`.
+- Buttons: `variant="gold"` (champagne) for primary, `secondary` for ghost, never raw blue/red/purple.
+- Status pills use semantic palette from `crmStatusPalette.ts` (champagne/amber/emerald/blue/red).
+
+### 8. Out of scope (keep existing behaviour)
+
+- Existing rich-text Documents editor stays — this only **adds** a structured filler alongside it.
+- Existing Form Builder, Scan & Sign, Exclusive Documents are untouched.
+- No removal of any current template.
+
+---
+
+## Technical file list
+
+```text
+NEW
+  src/templates/jbj-paa.ts                              # branded HTML template + token list
+  src/pages/owner/DocumentsFormsHub.tsx                 # tabs shell
+  src/pages/owner/forms/PAAFiller.tsx                   # split-pane filler
+  src/pages/owner/forms/SentDocumentsTable.tsx
+  src/pages/owner/forms/SignedDocumentsTable.tsx
+  src/pages/owner/forms/UploadedDocumentsList.tsx
+  src/pages/owner/forms/StampsAndSignaturesPanel.tsx    # wraps useOwnerSignatureAssets
+  src/pages/PublicSignDocument.tsx                      # /sign/:token
+  src/hooks/useCrmDocuments.ts
+  supabase/functions/documents-render-pdf/index.ts
+  supabase/functions/documents-send/index.ts
+  supabase/functions/documents-public-fill/index.ts
+  supabase/migrations/<ts>_crm_documents.sql
+
+EDITED
+  src/pages/Documents.tsx                # add JBJ PAA template object
+  src/pages/ContractForms.tsx            # add card linking to filler
+  src/routes/OwnerRoutes.tsx             # /owner/documents/forms + children
+  src/routes/PublicRoutes.tsx            # /sign/:token
+  src/components/owner-dashboard/OwnerSidebarNav.tsx   # secondary "Forms & Agreements" under Documents
+  src/pages/CRMLeadsInbox.tsx (lead drawer) — Send Agreement button
+```
+
+No new dependencies. jsPDF, DOMPurify, Tailwind tokens, Resend, Twilio, Supabase storage are all already wired.
+
+---
+
+## After implementation — quick tour
+
+1. **Where it lives:** Owner sidebar → **Documents → Forms & Agreements** (`/owner/documents/forms`). Also surfaced from `/contract-forms` and from any CRM lead's "Send Agreement" button.
+2. **New PAA:** Templates tab → "Property Advertising Agreement" → "Use template" → pick CRM client (or fill manually) → live preview → Save Draft / Export PDF / Send Email / Send WhatsApp / Request Signature.
+3. **Stamp & signature:** Stamps & Signatures tab → upload → background auto-removed → drag onto document → "Save as default".
+4. **Email send:** "Send by Email" → uses Resend, BCCs `contact@jbj.ae`, recipient gets a champagne-branded message with signed link.
+5. **WhatsApp send:** "Send by WhatsApp" → opens Twilio template with the same signed link prefilled to `client.phone_e164`.
+6. **Final signed PDF:** once recipient signs at `/sign/<token>`, the system burns the signature+stamp, stores PDF in the `documents` bucket, marks status **Signed/Completed**, emails copies to client + `contact@jbj.ae`, and the file appears under **Signed Documents**.
+
+---
+
+## Clarifying questions before I implement
+
+1. **Single template vs. full template family in this PR?** I can ship just the JBJ PAA now and reuse the same filler shell for the next 6 contracts later — recommended — or wire MOU + NOC + Tenancy + Form F together with the PAA in this same change.
+2. **Signing flow:** in-app token link only, or do you also want **DocuSign / SignNow** as an option? (current code has neither — staying in-app keeps zero new vendor cost).
+3. **WhatsApp channel:** use the existing **Twilio WhatsApp Business** sender already in `useCrossChannelSend`, or fall back to a `wa.me` deep link if Twilio isn't approved for this template yet?
+4. **Footer requirement:** show `+971 5471 67107` and `contact@jbj.ae` on **every page** of the PDF, or just the cover page?
+
+Tell me anything you want adjusted and I'll implement on approval.
