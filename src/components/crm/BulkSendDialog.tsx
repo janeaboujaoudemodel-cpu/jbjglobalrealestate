@@ -1046,13 +1046,13 @@ export const BulkSendDialog = ({
               Back
             </Button>
           )}
-          <Button onClick={sendAll} disabled={running || !targets.length || (reviewing && isBrokerageFlow && effectiveTargets.length === 0)} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
+          <Button onClick={sendAll} disabled={running || !refinedTargets.length || (reviewing && effectiveTargets.length === 0)} className="bg-[#1A1A1A] text-white hover:bg-[#1A1A1A]">
             <Send className="w-3 h-3 mr-1" />
             {running
               ? "Sending…"
               : reviewing
-                ? `Confirm & send to ${isBrokerageFlow ? effectiveTargets.length : targets.length}`
-                : `Review & send (${targets.length})`}
+                ? `Confirm & send to ${effectiveTargets.length}`
+                : `Review & send (${refinedTargets.length}${excludedIds.size > 0 ? ` · ${excludedIds.size} excluded` : ""})`}
           </Button>
         </DialogFooter>
       </DialogContent>
