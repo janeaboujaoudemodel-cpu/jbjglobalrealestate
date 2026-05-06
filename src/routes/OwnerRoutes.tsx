@@ -7,9 +7,14 @@ import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
 
-const OwnerDashboardShell = lazy(() => import("@/pages/OwnerDashboardShell"));
-const OwnerDashboardOverview = lazy(() => import("@/pages/OwnerDashboardOverview"));
-const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
+// Hot owner pages — eager-loaded so navigation between them is instant (no Suspense flash).
+import OwnerDashboardShell from "@/pages/OwnerDashboardShell";
+import OwnerDashboardOverview from "@/pages/OwnerDashboardOverview";
+import OwnerInbox from "@/pages/OwnerInbox";
+import CRM from "@/pages/CRM";
+import CRMRelationships from "@/pages/CRMRelationships";
+import CRMLeadsInbox from "@/pages/CRMLeadsInbox";
+
 const OwnerTemplates = lazy(() => import("@/pages/OwnerTemplates"));
 const OwnerCommSettings = lazy(() => import("@/pages/OwnerCommSettings"));
 const OwnerAgenda = lazy(() => import("@/pages/OwnerAgenda"));
@@ -22,15 +27,12 @@ const PodcastStudio = lazy(() => import("@/pages/owner/PodcastStudio"));
 const GlobalRecommendationsHub = lazy(() => import("@/pages/owner/GlobalRecommendationsHub"));
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
-const CRM = lazy(() => import("@/pages/CRM"));
 const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
-const CRMLeadsInbox = lazy(() => import("@/pages/CRMLeadsInbox"));
 const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
 const CRMReminders = lazy(() => import("@/pages/CRMReminders"));
 const CRMEmployees = lazy(() => import("@/pages/CRMEmployees"));
-const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
