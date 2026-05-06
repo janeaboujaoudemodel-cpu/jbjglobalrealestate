@@ -322,7 +322,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
 
         <form onSubmit={onSubmit} className="mt-8 space-y-8 bg-card border border-border rounded-2xl p-6 sm:p-10">
           {/* Slot picker */}
-          <section>
+          <section ref={slotRef}>
             <div className="flex items-center gap-2 mb-3">
               <Calendar className="h-4 w-4 text-primary" />
               <h2 className="font-semibold text-foreground">Pick a breakfast time</h2>
@@ -349,8 +349,8 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
                             className={[
                               "inline-flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition",
                               active
-                                ? "bg-primary text-primary-foreground border-primary"
-                                : "bg-background text-foreground border-border hover:border-primary",
+                                ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]"
+                                : "bg-background text-foreground border-border hover:border-[#B89555]",
                             ].join(" ")}
                           >
                             <Clock className="h-3.5 w-3.5" />
@@ -367,7 +367,7 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
 
           <div className="h-px bg-border" />
 
-          {/* Attendee details */}
+          {/* Booking lead — your details */}
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="fullName">Your name</Label>
@@ -377,24 +377,69 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
-            <div>
+            <div className="sm:col-span-2">
               <Label htmlFor="phone">Phone (optional)</Label>
               <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </div>
-            <div>
-              <Label htmlFor="attendeeCount">
-                <span className="inline-flex items-center gap-1"><Users className="h-3.5 w-3.5" />Attendees</span>
-              </Label>
-              <Input
-                id="attendeeCount"
-                type="number"
-                min={1}
-                max={6}
-                value={attendeeCount}
-                onChange={(e) => setAttendeeCount(e.target.value)}
-                required
-              />
+          </section>
+
+          {/* Attendees: head-count or per-broker rows */}
+          <section className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-primary" />
+              <h2 className="font-semibold text-foreground">Attendees from {brokerageLabel}</h2>
             </div>
+            <div className="flex gap-2 text-sm">
+              <button
+                type="button"
+                onClick={() => setAttendeeMode("count")}
+                className={`px-3 py-1.5 rounded-md border ${attendeeMode === "count" ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-background border-border text-foreground/70"}`}
+              >Just give a head‑count</button>
+              <button
+                type="button"
+                onClick={() => setAttendeeMode("list")}
+                className={`px-3 py-1.5 rounded-md border ${attendeeMode === "list" ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]" : "bg-background border-border text-foreground/70"}`}
+              >Add each broker</button>
+            </div>
+
+            {attendeeMode === "count" ? (
+              <div className="max-w-[200px]">
+                <Label htmlFor="attendeeCount">Number of attendees</Label>
+                <Input
+                  id="attendeeCount"
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={attendeeCount}
+                  onChange={(e) => setAttendeeCount(e.target.value)}
+                  required
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {attendees.map((a, i) => (
+                  <div key={i} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+                    <div className="sm:col-span-4">
+                      {i === 0 && <Label className="text-xs">Name</Label>}
+                      <Input value={a.name} onChange={(e) => updateAttendee(i, { name: e.target.value })} placeholder="Broker name" />
+                    </div>
+                    <div className="sm:col-span-3">
+                      {i === 0 && <Label className="text-xs">Phone</Label>}
+                      <Input value={a.phone} onChange={(e) => updateAttendee(i, { phone: e.target.value })} placeholder="+971…" />
+                    </div>
+                    <div className="sm:col-span-4">
+                      {i === 0 && <Label className="text-xs">Email</Label>}
+                      <Input type="email" value={a.email} onChange={(e) => updateAttendee(i, { email: e.target.value })} placeholder="email" />
+                    </div>
+                    <div className="sm:col-span-1">
+                      <Button type="button" variant="outline" onClick={() => removeAttendee(i)} disabled={attendees.length === 1} className="w-full">−</Button>
+                    </div>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addAttendee} className="mt-1">+ Add another broker</Button>
+                <p className="text-xs text-foreground/60">All fields are optional — leave blank if you'd rather just provide a head‑count.</p>
+              </div>
+            )}
           </section>
 
           {/* Briefing context */}
@@ -430,12 +475,16 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
             </div>
           </section>
 
-          <div className="flex items-start gap-3">
-            <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(!!v)} />
-            <Label htmlFor="consent" className="text-sm text-foreground/80 leading-relaxed cursor-pointer">
-              I confirm the details above are accurate and consent to JBJ Global Real Estate contacting
-              me about this private breakfast and ongoing partnership matters.
-            </Label>
+          {/* Consent — binding 2-day cancellation policy */}
+          <div className="rounded-xl border border-[#B89555] bg-[#FDFBF7] p-4 space-y-3">
+            <div className="text-[10px] tracking-[2px] uppercase text-[#1A1A1A] font-bold">Confirmation & Cancellation Policy</div>
+            <p className="text-sm text-[#1A1A1A] leading-relaxed">{consentText}</p>
+            <div className="flex items-start gap-3">
+              <Checkbox id="consent" checked={consent} onCheckedChange={(v) => setConsent(!!v)} />
+              <Label htmlFor="consent" className="text-sm text-[#1A1A1A] leading-relaxed cursor-pointer">
+                I agree and confirm that <strong>{brokerageLabel}</strong> will attend, and I accept the 2‑day cancellation policy.
+              </Label>
+            </div>
           </div>
 
           <div className="pt-2">
@@ -447,7 +496,6 @@ When you reach the building, call or WhatsApp ${HOST_NAME.split(" ")[0]} on the 
               <p className="text-xs text-foreground/50 mt-2">Preview link — confirmation is disabled.</p>
             )}
           </div>
-        </form>
       </div>
     </div>
   );
