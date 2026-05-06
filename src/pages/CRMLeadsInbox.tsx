@@ -20,14 +20,34 @@ import InlineStatusSelect from "@/components/crm/InlineStatusSelect";
 import AddNoteDialog from "@/components/crm/AddNoteDialog";
 import DeleteLeadDialog from "@/components/crm/DeleteLeadDialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CRMListSidebar } from "@/components/crm/CRMListSidebar";
+import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
+import { useQueryClient } from "@tanstack/react-query";
 import useCRMLeadsInbox, { SOURCE_OPTIONS } from "./useCRMLeadsInbox";
 
 export default function CRMLeadsInbox() {
   const cx = useCRMLeadsInbox();
+  const qc = useQueryClient();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-7xl flex flex-col lg:flex-row gap-4 items-start">
+        <CRMListSidebar
+          kind="leads"
+          value={cx.listView as any}
+          onChange={(v) => { cx.setListView(v as any); cx.setPage(1); }}
+        />
+        <div className="flex-1 min-w-0">
+        <CRMBulkActionsBar
+          table="crm_leads"
+          ids={cx.selectedIds}
+          view={cx.listView.kind}
+          onClear={() => cx.setSelectedIds([])}
+          onChanged={() => qc.invalidateQueries({ queryKey: ["crm-leads-inbox"] })}
+          onExport={cx.handleExport}
+        />
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
@@ -281,6 +301,7 @@ export default function CRMLeadsInbox() {
             )}
           </CardContent>
         </Card>
+        </div>
       </div>
 
       <DeleteLeadDialog open={cx.deleteDialogOpen} onOpenChange={cx.setDeleteDialogOpen}

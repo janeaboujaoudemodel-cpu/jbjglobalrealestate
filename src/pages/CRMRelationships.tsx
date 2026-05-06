@@ -55,6 +55,9 @@ import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel } from "@/components/crm/DirectoryToolsPanel";
 import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
+import { CRMListSidebar, type CRMListView } from "@/components/crm/CRMListSidebar";
+import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
+import { useQueryClient } from "@tanstack/react-query";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -479,6 +482,12 @@ const BrokeragesTab = () => {
   const [exportOpen, setExportOpen] = useState(false);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [importingDLD, setImportingDLD] = useState(false);
+  const [listView, setListView] = useState<CRMListView>({ kind: "active", listId: null });
+  const qc = useQueryClient();
+  const onListChanged = () => {
+    qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+    refetch();
+  };
 
   const handleImportDLD = async () => {
     if (importingDLD) return;
@@ -589,6 +598,18 @@ const BrokeragesTab = () => {
     const out: any[] = [];
     for (const item of indexed) {
       const r = item.row;
+      // List/Junk/Trash filtering — operates on soft-delete + is_junk + list_id columns.
+      if (listView.kind === "trash") {
+        if (!r.deleted_at) continue;
+      } else {
+        if (r.deleted_at) continue;
+        if (listView.kind === "junk") {
+          if (!r.is_junk) continue;
+        } else {
+          if (r.is_junk) continue;
+          if (listView.kind === "list" && r.list_id !== listView.listId) continue;
+        }
+      }
       if (excludedIds.has(r.id)) continue;
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
@@ -601,12 +622,25 @@ const BrokeragesTab = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds, listView]);
+
+  // Sidebar counts derived from full data set
+  const listCounts = useMemo(() => {
+    let active = 0, junk = 0, trash = 0;
+    const perList: Record<string, number> = {};
+    for (const r of data as any[]) {
+      if (r.deleted_at) { trash++; continue; }
+      if (r.is_junk) { junk++; continue; }
+      active++;
+      if (r.list_id) perList[r.list_id] = (perList[r.list_id] || 0) + 1;
+    }
+    return { active, junk, trash, perList };
+  }, [data]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
   const [visibleCount, setVisibleCount] = useState(60);
-  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab, listView]);
   const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
@@ -724,7 +758,17 @@ const BrokeragesTab = () => {
 
   return (
     <TooltipProvider>
-    <div className="space-y-4">
+    <div className="flex flex-col lg:flex-row gap-4 items-start">
+    <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} />
+    <div className="space-y-4 flex-1 min-w-0">
+    <CRMBulkActionsBar
+      table="crm_brokerages"
+      ids={[...bulkSel]}
+      view={listView.kind}
+      onClear={() => setBulkSel(new Set())}
+      onChanged={onListChanged}
+      onExport={() => setExportOpen(true)}
+    />
       <section aria-labelledby="brokerage-outreach-settings" className="rounded-2xl border-2 border-[#B89555]/40 bg-[#F7F2EA] p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <Mail className="w-5 h-5 text-[#1A1A1A]" />
@@ -958,7 +1002,7 @@ const BrokeragesTab = () => {
         </Button>
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
-      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} />
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} defaultListId={listView.kind === "list" ? listView.listId : null} />
 
       {viewMode === "excel" ? (
         <ExcelGridView
@@ -1313,6 +1357,7 @@ const BrokeragesTab = () => {
         onExport={handleExportConfigured}
       />
     </div>
+    </div>
     </TooltipProvider>
   );
 };
@@ -1647,6 +1692,23 @@ const DeveloperRegistryTab = () => {
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
+  const [devListView, setDevListView] = useState<CRMListView>({ kind: "active", listId: null });
+  const devQc = useQueryClient();
+  const onDevListChanged = () => {
+    devQc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+    refetch();
+  };
+  const devListCounts = useMemo(() => {
+    let active = 0, junk = 0, trash = 0;
+    const perList: Record<string, number> = {};
+    for (const r of data as any[]) {
+      if (r.deleted_at) { trash++; continue; }
+      if (r.is_junk) { junk++; continue; }
+      active++;
+      if (r.list_id) perList[r.list_id] = (perList[r.list_id] || 0) + 1;
+    }
+    return { active, junk, trash, perList };
+  }, [data]);
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("crm.queue.collapsed") !== "false";
@@ -1698,6 +1760,18 @@ const DeveloperRegistryTab = () => {
     const out: any[] = [];
     const source = statusView === "contracts" ? (data as any[]) : queueIndexed.map((x) => x.row);
     for (const r of source) {
+      // List/Junk/Trash filter
+      if (devListView.kind === "trash") {
+        if (!r.deleted_at) continue;
+      } else {
+        if (r.deleted_at) continue;
+        if (devListView.kind === "junk") {
+          if (!r.is_junk) continue;
+        } else {
+          if (r.is_junk) continue;
+          if (devListView.kind === "list" && r.list_id !== devListView.listId) continue;
+        }
+      }
       if (devExcludedIds.has(r.id)) continue;
       const nameLower = (r.developer_name || "").toLowerCase();
       if (ql && !nameLower.includes(ql)) continue;
@@ -1711,7 +1785,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView]);
+  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView, devListView]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
@@ -1825,7 +1899,16 @@ const DeveloperRegistryTab = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col lg:flex-row gap-4 items-start">
+      <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} />
+      <div className="space-y-5 flex-1 min-w-0">
+      <CRMBulkActionsBar
+        table="crm_developer_registry"
+        ids={[...selected]}
+        view={devListView.kind}
+        onClear={() => setSelected(new Set())}
+        onChanged={onDevListChanged}
+      />
       <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
       <DeveloperDirectoryPanel />
       <DocumentPackPanel />
@@ -1996,7 +2079,7 @@ const DeveloperRegistryTab = () => {
         </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
-      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} />
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} defaultListId={devListView.kind === "list" ? devListView.listId : null} />
 
       <div className="flex flex-wrap gap-2 items-center bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-xl p-3">
         <div className="text-sm text-[#1A1A1A]"><strong>{selected.size}</strong> of {filtered.length} selected</div>
@@ -2421,6 +2504,7 @@ const DeveloperRegistryTab = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 };

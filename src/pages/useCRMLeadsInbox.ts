@@ -49,6 +49,8 @@ export default function useCRMLeadsInbox() {
   const [page, setPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [activeView, setActiveView] = useState<"active" | "deleted">("active");
+  const [listView, setListView] = useState<{ kind: "active" | "list" | "junk" | "trash"; listId: string | null }>({ kind: "active", listId: null });
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
@@ -70,15 +72,25 @@ export default function useCRMLeadsInbox() {
   }, [search, statusFilter, sourceFilter, dateStart, dateEnd, setSearchParams]);
 
   const { data: leadsData, isLoading, isFetching } = useQuery({
-    queryKey: ["crm-leads-inbox", debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page, activeView],
+    queryKey: ["crm-leads-inbox", debouncedSearch, statusFilter, sourceFilter, dateStart, dateEnd, page, activeView, listView.kind, listView.listId],
     queryFn: async () => {
-      const selectFields = "id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags, deleted_at";
+      const selectFields = "id, full_name, email_lower, phone_e164, source, pipeline_stage, created_at, updated_at, tags, deleted_at, is_junk, list_id";
       let query = supabase.from("crm_leads").select(selectFields, { count: "exact" });
 
-      if (activeView === "deleted") {
+      // listView takes precedence; legacy activeView="deleted" still maps to trash.
+      const effectiveKind = activeView === "deleted" ? "trash" : listView.kind;
+      if (effectiveKind === "trash") {
         query = query.not("deleted_at", "is", null);
       } else {
         query = query.is("deleted_at", null);
+        if (effectiveKind === "junk") {
+          query = query.eq("is_junk", true);
+        } else {
+          query = query.is("is_junk", false);
+          if (effectiveKind === "list" && listView.listId) {
+            query = query.eq("list_id", listView.listId);
+          }
+        }
       }
 
       if (debouncedSearch) {
@@ -228,10 +240,12 @@ export default function useCRMLeadsInbox() {
     // State
     search, statusFilter, sourceFilter, dateStart, dateEnd, page,
     activeView, deleteDialogOpen, leadToDelete,
+    listView, selectedIds,
     leads, totalLeads, totalPages, isLoading, isFetching, hasActiveFilters,
     // Setters
     setSearch, setStatusFilter, setSourceFilter, setDateStart, setDateEnd,
     setPage, setActiveView, setDeleteDialogOpen, setLeadToDelete,
+    setListView, setSelectedIds,
     // Actions
     clearFilters, handleRefresh, handleExport,
     openWhatsApp, openCall, openEmail,

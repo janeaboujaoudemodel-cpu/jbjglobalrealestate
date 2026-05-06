@@ -31,14 +31,16 @@ interface Props {
   onOpenChange: (v: boolean) => void;
   kind: UploadKind;
   onDone?: () => void;
+  /** When the caller is currently viewing a specific database, default to "Append to existing" with that list pre-selected. */
+  defaultListId?: string | null;
 }
 
-export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
+export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultListId }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
-  const [target, setTarget] = useState<"main" | "new" | "existing">("new");
-  const [existingListId, setExistingListId] = useState<string>("");
+  const [target, setTarget] = useState<"main" | "new" | "existing">(defaultListId ? "existing" : "new");
+  const [existingListId, setExistingListId] = useState<string>(defaultListId ?? "");
   const [newListName, setNewListName] = useState<string>("");
 
   const listsKind = kind === "brokerage" ? "brokerages" : "developers";
