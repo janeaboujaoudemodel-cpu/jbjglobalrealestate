@@ -1272,7 +1272,7 @@ const BrokeragesTab = () => {
                 </div>
               </div>
               <div className="border-t pt-3">
-                <BrokerageAgentsEditor value={agents} onChange={setAgents} />
+                <BrokerageAgentsEditor value={agents} onChange={setAgents} brokerageId={editing.id} />
                 <BrokerageContactPhotoImporter
                   brokerageId={editing.id}
                   brokerageName={editing.company_name}
