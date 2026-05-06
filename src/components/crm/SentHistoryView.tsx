@@ -45,12 +45,16 @@ interface SentHistoryViewProps {
   developers: any[];
   onResend: (dev: any) => void;
   onMarkRegistered: (dev: any) => void;
+  /** When provided, overrides the internal sub-tab (used when the Queue's stat tiles route here). */
+  tabOverride?: TabKey;
 }
 
-export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: SentHistoryViewProps) => {
+export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOverride }: SentHistoryViewProps) => {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
-  const [tab, setTab] = useState<TabKey>("all");
+  const [internalTab, setInternalTab] = useState<TabKey>("all");
+  const tab = tabOverride ?? internalTab;
+  const setTab = (k: TabKey) => setInternalTab(k);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [variantFilter, setVariantFilter] = useState<string>("all");
   const [logDev, setLogDev] = useState<any | null>(null);
