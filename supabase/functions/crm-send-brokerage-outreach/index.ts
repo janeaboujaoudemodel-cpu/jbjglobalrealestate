@@ -329,11 +329,14 @@ serve(async (req: Request) => {
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
 
-    // owner first name — defaults to "Jane" because the template is authored as Jane
-    const ownerFirstName =
+    // owner first name — defaults to "Jane" because the template is authored as Jane.
+    // Hard-fallback to "Jane" if any source resolves to "JBJ" (legacy brand confusion).
+    let ownerFirstName =
+      firstName(settings?.brokerage_from_name as string | undefined) ||
       firstName(settings?.from_name) ||
       firstName((user.user_metadata as any)?.full_name as string | undefined) ||
       "Jane";
+    if (/^jbj/i.test(ownerFirstName)) ownerFirstName = "Jane";
 
     // ---------- Personalization resolution ----------
     const personalization: Personalization = body.personalization || {};
