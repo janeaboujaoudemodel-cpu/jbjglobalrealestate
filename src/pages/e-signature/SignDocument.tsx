@@ -246,11 +246,11 @@ export default function SignDocument() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">Loading document...</p>
+            <Loader2 className="w-12 h-12 text-[#B89555] animate-spin mx-auto mb-4" />
+            <p className="text-[#1A1A1A]/70">Loading document...</p>
           </CardContent>
         </Card>
       </div>
@@ -260,12 +260,15 @@ export default function SignDocument() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2">Unable to Load Document</h2>
-            <p className="text-muted-foreground">{error}</p>
+            <AlertTriangle className="w-16 h-16 text-red-600 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2 text-[#1A1A1A]">Unable to Load Document</h2>
+            <p className="text-[#1A1A1A]/70">{error}</p>
+            <p className="text-xs text-[#1A1A1A]/60 mt-4">
+              If you reached this page from a search bar, signing links require a real token sent by email. Open the link in your inbox or contact <a href="mailto:contact@jbj.ae" className="underline">contact@jbj.ae</a>.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -275,15 +278,15 @@ export default function SignDocument() {
   // Completed state
   if (completed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <CheckCircle2 className="w-20 h-20 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Document Signed!</h2>
-            <p className="text-muted-foreground mb-6">
+            <CheckCircle2 className="w-20 h-20 text-emerald-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Document Signed!</h2>
+            <p className="text-[#1A1A1A]/70 mb-6">
               Thank you for signing. A confirmation email will be sent to you shortly.
             </p>
-            <div className="p-4 bg-green-50 rounded-lg text-sm text-green-800">
+            <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-900">
               <p className="font-medium">What happens next?</p>
               <p className="mt-1">
                 You will receive an email with the completed document once all parties have signed.
@@ -298,12 +301,12 @@ export default function SignDocument() {
   // Declined state
   if (declined) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-lg">
+      <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center p-4">
+        <Card className="w-full max-w-lg bg-[#F7F2EA] border-[#B89555]/30">
           <CardContent className="p-8 text-center">
-            <XCircle className="w-20 h-20 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Signing Declined</h2>
-            <p className="text-muted-foreground">
+            <XCircle className="w-20 h-20 text-red-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2 text-[#1A1A1A]">Signing Declined</h2>
+            <p className="text-[#1A1A1A]/70">
               You have declined to sign this document. The sender has been notified.
             </p>
           </CardContent>
