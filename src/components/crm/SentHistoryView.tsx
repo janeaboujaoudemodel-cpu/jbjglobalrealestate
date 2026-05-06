@@ -179,6 +179,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOve
     { k: "inbox",           label: "Inbox",           icon: Inbox,        count: counts.inbox },
     { k: "contacted",       label: "Contacted",       icon: Mail,         count: counts.contacted },
     { k: "pending_actions", label: "Pending Actions", icon: AlertCircle,  count: counts.pending_actions },
+    { k: "registered",      label: "Registered",      icon: CheckCircle2, count: counts.registered },
     { k: "under_review",    label: "Under Review",    icon: Clock,        count: counts.under_review },
     { k: "rejected",        label: "Rejected",        icon: AlertCircle,  count: counts.rejected },
     { k: "expired",         label: "Expired",         icon: Clock,        count: counts.expired },
