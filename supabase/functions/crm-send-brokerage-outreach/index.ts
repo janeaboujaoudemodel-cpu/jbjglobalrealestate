@@ -487,7 +487,7 @@ serve(async (req: Request) => {
       ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, "Book your slot on the calendar &rarr;")}</div>` : ""}
     </div>
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
-      Warm regards,<br/><strong>${ownerFirstName} Aboujaoude</strong><br/>
+      Warm regards,<br/><strong>${ownerFirstName} Bou Jaoude</strong><br/>
       <span style="color:#1A1A1A">${representedDeveloperName}</span><br/>
       <span style="color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</span><br/>
       <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo.toUpperCase()}</a>
