@@ -7321,6 +7321,7 @@ export type Database = {
           default_brokerage_sender_developer_name: string | null
           drive_doc_pack_url: string | null
           from_name: string
+          google_calendar_booking_url: string | null
           owner_id: string
           reply_to_email: string
           saved_cc_emails: Json
@@ -7345,6 +7346,7 @@ export type Database = {
           default_brokerage_sender_developer_name?: string | null
           drive_doc_pack_url?: string | null
           from_name?: string
+          google_calendar_booking_url?: string | null
           owner_id: string
           reply_to_email?: string
           saved_cc_emails?: Json
@@ -7369,6 +7371,7 @@ export type Database = {
           default_brokerage_sender_developer_name?: string | null
           drive_doc_pack_url?: string | null
           from_name?: string
+          google_calendar_booking_url?: string | null
           owner_id?: string
           reply_to_email?: string
           saved_cc_emails?: Json
