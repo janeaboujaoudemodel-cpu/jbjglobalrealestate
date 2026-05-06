@@ -324,7 +324,12 @@ serve(async (req: Request) => {
     // so JBJ addresses never accidentally CC on a CITI Developer email.
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
-      : brkActiveCc;
+      : [...brkActiveCc];
+    // Always CC info.jane@gmail.com so both inboxes stay in sync.
+    const SECONDARY_CC = "info.jane@gmail.com";
+    if (!ccList.some((c) => c.toLowerCase() === SECONDARY_CC)) {
+      ccList.push(SECONDARY_CC);
+    }
     const ccEmail = ccList[0] || "";
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
