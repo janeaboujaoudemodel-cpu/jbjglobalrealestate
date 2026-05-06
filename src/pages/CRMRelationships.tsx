@@ -1465,6 +1465,7 @@ const ClientsTab = () => {
                   <div className="flex flex-wrap gap-1.5">
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("client", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
+                    <QuickActivityActions entityType="client" entityId={r.id} entityName={r.full_name} />
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                     <Button size="sm" variant="outline" onClick={() => { if (confirm("Delete?")) del.mutate(r.id); }}><Trash2 className="w-3 h-3" /></Button>
                   </div>
