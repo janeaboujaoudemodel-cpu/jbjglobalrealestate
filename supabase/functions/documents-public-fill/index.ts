@@ -34,8 +34,22 @@ Deno.serve(async (req) => {
     }
 
     if (req.method === "POST") {
-      const { token, field_values, client_signature_data_url, action } = await req.json();
+      const body = await req.json();
+      const { token, field_values, action } = body;
+      const client_signature_data_url = body.client_signature_data_url ?? body.signature_data_url;
       if (!token || !action) return j({ error: "token and action required" }, 400);
+
+      if (action === "get") {
+        const { data } = await admin.rpc("get_document_by_token", { p_token: token });
+        const row = Array.isArray(data) ? data[0] : data;
+        if (!row) return j({ error: "not found" }, 404);
+        await admin.from("crm_documents")
+          .update({ opened_at: new Date().toISOString(),
+            status: row.status === "sent" ? "opened" : row.status })
+          .eq("recipient_token", token).is("opened_at", null);
+        return j({ document: row });
+      }
+
       const { data: docArr } = await admin.from("crm_documents").select("*")
         .eq("recipient_token", token).maybeSingle();
       const doc = docArr as any;
