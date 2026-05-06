@@ -1692,6 +1692,23 @@ const DeveloperRegistryTab = () => {
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
+  const [devListView, setDevListView] = useState<CRMListView>({ kind: "active", listId: null });
+  const devQc = useQueryClient();
+  const onDevListChanged = () => {
+    devQc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+    refetch();
+  };
+  const devListCounts = useMemo(() => {
+    let active = 0, junk = 0, trash = 0;
+    const perList: Record<string, number> = {};
+    for (const r of data as any[]) {
+      if (r.deleted_at) { trash++; continue; }
+      if (r.is_junk) { junk++; continue; }
+      active++;
+      if (r.list_id) perList[r.list_id] = (perList[r.list_id] || 0) + 1;
+    }
+    return { active, junk, trash, perList };
+  }, [data]);
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("crm.queue.collapsed") !== "false";
