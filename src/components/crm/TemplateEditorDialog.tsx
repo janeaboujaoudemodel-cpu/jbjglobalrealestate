@@ -94,7 +94,7 @@ export const TemplateEditorDialog = ({
   // Reset to a valid variant whenever the editor mode (or `open`) changes
   useEffect(() => {
     setVariant(initialVariant ?? defaultVariant);
-    setTestSampleName(isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co.");
+    setTestSampleName("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, initialVariant, open]);
 
