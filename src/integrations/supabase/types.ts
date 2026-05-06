@@ -6177,6 +6177,112 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_documents: {
+        Row: {
+          client_email: string | null
+          client_lead_id: string | null
+          client_name: string | null
+          client_phone: string | null
+          client_signature_data_url: string | null
+          completed_at: string | null
+          created_at: string
+          expires_at: string | null
+          field_values: Json
+          filled_at: string | null
+          id: string
+          opened_at: string | null
+          owner_user_id: string
+          pdf_path: string | null
+          recipient_token: string | null
+          rendered_html: string | null
+          sent_at: string | null
+          signature_asset_id: string | null
+          signature_data_url: string | null
+          signed_at: string | null
+          stamp_asset_id: string | null
+          status: string
+          template_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          client_email?: string | null
+          client_lead_id?: string | null
+          client_name?: string | null
+          client_phone?: string | null
+          client_signature_data_url?: string | null
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string | null
+          field_values?: Json
+          filled_at?: string | null
+          id?: string
+          opened_at?: string | null
+          owner_user_id: string
+          pdf_path?: string | null
+          recipient_token?: string | null
+          rendered_html?: string | null
+          sent_at?: string | null
+          signature_asset_id?: string | null
+          signature_data_url?: string | null
+          signed_at?: string | null
+          stamp_asset_id?: string | null
+          status?: string
+          template_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          client_email?: string | null
+          client_lead_id?: string | null
+          client_name?: string | null
+          client_phone?: string | null
+          client_signature_data_url?: string | null
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string | null
+          field_values?: Json
+          filled_at?: string | null
+          id?: string
+          opened_at?: string | null
+          owner_user_id?: string
+          pdf_path?: string | null
+          recipient_token?: string | null
+          rendered_html?: string | null
+          sent_at?: string | null
+          signature_asset_id?: string | null
+          signature_data_url?: string | null
+          signed_at?: string | null
+          stamp_asset_id?: string | null
+          status?: string
+          template_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_documents_client_lead_id_fkey"
+            columns: ["client_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_documents_client_lead_id_fkey"
+            columns: ["client_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_documents_client_lead_id_fkey"
+            columns: ["client_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_email_campaigns: {
         Row: {
           created_at: string | null
@@ -31446,6 +31552,19 @@ export type Database = {
           can_view: boolean
           field_name: string
           show_masked: boolean
+        }[]
+      }
+      get_document_by_token: {
+        Args: { p_token: string }
+        Returns: {
+          client_name: string
+          expires_at: string
+          field_values: Json
+          id: string
+          rendered_html: string
+          status: string
+          template_id: string
+          title: string
         }[]
       }
       get_employee_full_bank_details: {
