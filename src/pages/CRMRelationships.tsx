@@ -1183,6 +1183,11 @@ const BrokeragesTab = () => {
                     <Button size="sm" variant="secondary" onClick={() => quickReminder(r)}>
                       <Bell className="w-3 h-3 mr-1" />Remind
                     </Button>
+                    <QuickActivityActions
+                      entityType="brokerage"
+                      entityId={r.id}
+                      entityName={r.company_name}
+                    />
                     <Button
                       size="sm"
                       variant="secondary"
