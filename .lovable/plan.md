@@ -1,78 +1,57 @@
-# Polish Breakfast Invite Email + Google Calendar Booking
+## Email template polish — `brokerage_breakfast_invite`
 
-Fixes to the **brokerage_breakfast_invite** template + the `crm-send-brokerage-outreach` edge function.
+Update the `crm_email_templates` row (`variant = 'brokerage_breakfast_invite'`) via migration. No edge function changes needed.
 
-## 1. Subject line
-- Remove the `[TEST]` prefix on test sends. Same subject for test and real sends.
-- Encode the Subject header as RFC 2047 UTF-8 (`=?utf-8?B?…?=`) so unicode punctuation (`×`, `—`, `&`) no longer appears as `Ã—` / `ÃƒÆ'…` / `ACAECA` mojibake in some clients.
-- Update `brokerage_breakfast_invite.subject` (DB) to a premium line (no `×`, no `—` glyphs that historically broke):
+### 1. Brand name — always uppercase
+Replace every visible instance of "Citi Developers" with **"CITI DEVELOPERS"** inside the email body (header subtitle, intro paragraph, invitation card title, footer signature line). The image alt text stays as-is.
 
-  ```
-  Private Breakfast & Partnership Briefing with Citi Developers — {{brokerage_name}}
-  ```
+### 2. Sender email address
+Change `jane@citidevelopers.com` → **`jane@citideveloper.com`** (singular, no "s") in both the `mailto:` href and the visible link text.
 
-  And `brokerage_partnership_intro.subject` to:
+### 3. "Before we lock your seats" card — force full width
+This card is already on its own row, but on narrow renderers it can collapse. Wrap it in a `<table width="100%" role="presentation">` with `width="100%"` and `style="width:100%;table-layout:fixed"` so Outlook/Gmail keep it spanning the full content column. Reduce inner padding from `28px 26px` → `22px 22px` and tighten list spacing to shave height.
 
-  ```
-  Citi Developers and {{brokerage_name}} — Partnership for {{project_name}}
-  ```
-
-## 2. Card structure
-Currently 3 stacked cards inside the invitation block: (a) Pick-a-slot tile, (b) "Reserve a slot" CTA, (c) "Before we lock your seats" details. Restructure to **two cards**:
+### 4. New closing line before footer logo
+Directly above the footer divider (after the "...long, successful collaboration" paragraph and outside the cream card), add a centered closing block:
 
 ```
-┌──────────────────────────────────┐
-│ Card 1 — Pick a slot that suits  │
-│ you (calendar tile + Reserve a   │
-│ slot CTA inline directly under)  │
-└──────────────────────────────────┘
-┌──────────────────────────────────┐
-│ Card 2 — Full-width details:     │
-│ "Before we lock your seats" list │
-│ + closing premium message        │
-└──────────────────────────────────┘
+Looking forward to a long-lasting partnership.
+— {{owner_first_name}} Bou Jaoude, CITI DEVELOPERS
 ```
-- Move the `Reserve a slot →` CTA into the same card as the calendar tile (immediately below the tile, not a separate cream block).
-- Make the "Before we lock your seats" card full-width (remove its inset, use the same outer padding as Card 1). It currently looks compressed because it's nested inside the invitation card with extra padding.
 
-## 3. Closing message (inside Card 2)
-After the existing "…48 hours in advance if you need to reschedule or cancel." line, append (same paragraph block, premium tone):
+Styling: centered, `font-size:13.5px`, ink color, italic first line, 18px top margin. This sits just before the gold hairline that precedes the footer logo, giving a warm sign-off.
 
-> *"Thank you for considering this partnership. We look forward to welcoming the {{brokerage_name}} team to our office and to a long, successful collaboration with Citi Developers."*
+### 5. Footer contact tiles — 4 equal cards on one line
+Today the four tiles use `display:inline-block; width:140px; margin:6px` which wraps to 2×2 on ~600px renderers. Rebuild as a true email table so they stay in a single row at equal widths and the overall footer height shrinks:
 
-## 4. Footer logo + sender name
-- Increase the footer logo: `width="180"` (matching header), wrap it with the same padded container styling as the header (18px vertical padding, divider line above only).
-- Remove the line `In partnership with CITI Developers` under the footer logo.
-- Replace `{{owner_first_name}} Bou Jaoude` rendering: when settings/user metadata return "JBJ", force the display name to **Jane** (hard fallback). Update the variable resolution in `index.ts`:
-  ```ts
-  const ownerFirstName = (settings?.brokerage_from_name && firstName(settings.brokerage_from_name))
-    || firstName(user.user_metadata?.full_name)
-    || "Jane";
-  if (/jbj/i.test(ownerFirstName)) ownerFirstName = "Jane";
-  ```
+```text
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:8px 0">
+  <tr>
+    <td width="25%"> Website tile </td>
+    <td width="25%"> Visit office tile </td>
+    <td width="25%"> Call us tile </td>
+    <td width="25%"> WhatsApp tile </td>
+  </tr>
+</table>
+```
 
-## 5. Footer 4 contact tiles alignment
-The 4 tiles (Website, Visit our office, Phone, WhatsApp) currently render in 2 rows because the `wa.me` and `tel:` tiles are in a second `<div>`. Fix:
-- Put all 4 anchors inside a single centered container using `display:inline-block` with consistent `min-width:160px` and equal padding.
-- Add `text-decoration:underline` on hover (keep underline always visible underneath the icon-text using a 1px gold underline) to make clickability obvious.
-- Increase top margin so they don't crowd the logo above and the contact lines below.
+Tile changes:
+- Each `<a>` becomes `display:block;width:auto` filling its `<td>`
+- Reduce padding `12px 10px` → `10px 6px`
+- Reduce icon size `16` → `14`, font-size `12.5px` → `12px`
+- Keep the gold hairline-underline on the label for the "clickable" cue
 
-## 6. Google Calendar booking (replace in-app booking page)
-Today the `Reserve a slot` button points to an internal `bookingUrl` minted by `crm-create-breakfast-invite-token` (sends recipient back to the JBJ website). Change to:
+This gives 4 equal-width cards on one line in Gmail / Apple Mail / Outlook and lowers the footer height noticeably.
 
-- Add an owner setting `google_calendar_booking_url` (text). Owner pastes their **Google Calendar Appointment Schedule** public link (e.g. `https://calendar.app.google/xxxxxx`). This is the standard Google-hosted booking page — when a brokerage picks a slot, Google sends the brokerage a confirmation email AND emails the calendar owner automatically. No website redirect.
-- In the edge function, prefer `settings.google_calendar_booking_url` over the minted in-app `bookingUrl`. Only fall back to the old token URL if Google Calendar URL is blank.
-- The internal booking page route stays in the codebase (not deleted, per "No Removal" policy) but is no longer referenced from the email.
-- UI: add a single text input in the existing brokerage outreach settings panel (label: "Google Calendar booking link", helper: "Paste your Google Calendar appointment scheduling link. Used by the breakfast invite email so brokerages book directly on your calendar.").
+### 6. Overall height trim
+- Outer card padding `36px` → `30px`
+- Top header padding `22px 0 26px` → `16px 0 20px`
+- Footer top padding `26px` → `20px`, footer logo block `22px 0 26px` → `14px 0 18px`
 
-No connector OAuth needed for v1 — pasting the public Google booking URL is the simplest premium-feeling integration. (Future: optional Google Calendar connector to create events server-side.)
+### Files touched
+- New migration: `supabase/migrations/<timestamp>_brokerage_invite_polish.sql` containing a single `UPDATE public.crm_email_templates SET html = $$...$$ WHERE variant = 'brokerage_breakfast_invite';`
 
-## Files touched
-- `supabase/functions/crm-send-brokerage-outreach/index.ts` — RFC 2047 subject, drop `[TEST]`, force `Jane`, prefer Google Calendar URL.
-- DB migration — update both template subjects + new column `crm_owner_settings.google_calendar_booking_url`.
-- DB migration — update `brokerage_breakfast_invite.html` to merged 2-card layout, full-width details, premium closing line, larger footer logo, single 4-tile contact row, no "In partnership with CITI Developers".
-- `src/components/crm/…` brokerage outreach settings panel — new input for Google Calendar booking URL (locate existing settings editor and append the field).
+No code in `supabase/functions/crm-send-brokerage-outreach/index.ts` needs to change — it already reads the template from the DB.
 
-## Out of scope
-- Server-side calendar event creation via Google Calendar API (handled by Google's own booking page).
-- Touching `brokerage_partnership_intro` body (only its subject).
+### One small clarification
+You said "always the emails keep it three capital letter". I'm interpreting this as **"always write CITI DEVELOPERS in all caps"** (which matches your next sentence). If you actually meant something else (e.g. capitalize only the first 3 letters, or display the email address in caps), tell me and I'll adjust before applying.
