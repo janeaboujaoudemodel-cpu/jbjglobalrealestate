@@ -1938,8 +1938,16 @@ const DeveloperRegistryTab = () => {
           {enrich.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BookOpen className="w-4 h-4 mr-2" />}
           {enrich.isPending ? "Researching…" : "Research & enrich"}
         </Button>
+        <Button
+          variant="outline"
+          onClick={() => setUploadOpen(true)}
+          title="Upload Excel/CSV/HTML developer list — auto-classifies brokerages vs developers vs mortgage firms and dedups."
+        >
+          <Plus className="w-4 h-4 mr-2" />Upload list
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} />
 
       <div className="flex flex-wrap gap-2 items-center bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-xl p-3">
         <div className="text-sm text-[#1A1A1A]"><strong>{selected.size}</strong> of {filtered.length} selected</div>
