@@ -304,6 +304,7 @@ export default function CRMLeadsInbox() {
             )}
           </CardContent>
         </Card>
+        </div>
       </div>
 
       <DeleteLeadDialog open={cx.deleteDialogOpen} onOpenChange={cx.setDeleteDialogOpen}
