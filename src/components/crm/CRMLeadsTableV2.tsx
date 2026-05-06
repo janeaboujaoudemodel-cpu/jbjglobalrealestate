@@ -551,6 +551,12 @@ export default function CRMLeadsTableV2({
         leadName={leadToDelete?.full_name || "this lead"}
         onConfirm={handleDelete}
       />
+
+      <SendAgreementDialog
+        open={!!agreementLead}
+        onClose={() => setAgreementLead(null)}
+        lead={agreementLead}
+      />
     </div>
   );
 }
