@@ -1692,13 +1692,49 @@ const DeveloperRegistryTab = () => {
           <FileEdit className="w-4 h-4 mr-2" />
           {tplMain?.locked_at ? <><Lock className="w-3 h-3 mr-1" />Template</> : "Edit Template"}
         </Button>
-        <Button variant="outline" onClick={() => exportCSV(filtered, `developer-registry-${Date.now()}.csv`, [
-          { key: "developer_name", label: "Developer" }, { key: "status", label: "Status" },
-          { key: "developer_email", label: "Email" }, { key: "phone", label: "Phone" },
-          { key: "emirate", label: "Emirate" }, { key: "agency_code", label: "Agency Code" },
-          { key: "registration_date", label: "Registered" }, { key: "expiry_date", label: "Expiry" },
-          { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export</Button>
+        <ExcludeFilterPopover
+          scope="developer"
+          options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
+          excludedIds={devExcludedIds}
+          onChange={setDevExcludedIds}
+        />
+        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setDevViewMode("cards")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${devViewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" /> Cards
+          </button>
+          <button
+            type="button"
+            onClick={() => setDevViewMode("excel")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${devViewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <TableIcon className="w-3.5 h-3.5" /> Excel View
+          </button>
+        </div>
+        <ExportMenu
+          disabled={!filtered.length}
+          onExport={async (f) => {
+            const rows: DeveloperExportRow[] = (filtered as any[]).map((r: any, i: number) => ({
+              rank: i + 1,
+              developer_name: r.developer_name || "",
+              status: r.status || "",
+              developer_email: r.developer_email || "",
+              phone: r.phone || "",
+              emirate: r.emirate || "",
+              agency_code: r.agency_code || "",
+              registration_date: r.registration_date ? new Date(r.registration_date).toLocaleDateString() : "",
+              expiry_date: r.expiry_date ? new Date(r.expiry_date).toLocaleDateString() : "",
+              attended_briefing: r.attended_briefing ? "attended_briefing" : "",
+              briefing_date: r.briefing_date ? new Date(r.briefing_date).toLocaleDateString() : "",
+              notes: (r.notes || "").slice(0, 240),
+            }));
+            await exportDevelopers(rows, f);
+            toast.success(`Exported ${rows.length} developers as ${f.toUpperCase()}`);
+          }}
+        />
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill"}
         </Button>
