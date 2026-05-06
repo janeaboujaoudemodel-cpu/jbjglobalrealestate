@@ -5078,7 +5078,7 @@ export type Database = {
       }
       crm_brokerage_agents: {
         Row: {
-          brokerage_id: string
+          brokerage_id: string | null
           created_at: string
           email: string | null
           id: string
@@ -5094,7 +5094,7 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
-          brokerage_id: string
+          brokerage_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -5110,7 +5110,7 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
-          brokerage_id?: string
+          brokerage_id?: string | null
           created_at?: string
           email?: string | null
           id?: string

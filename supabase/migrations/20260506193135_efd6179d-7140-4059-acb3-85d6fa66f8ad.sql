@@ -1,0 +1,1 @@
+ALTER TABLE public.crm_brokerage_agents ALTER COLUMN brokerage_id DROP NOT NULL;
