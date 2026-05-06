@@ -311,6 +311,25 @@ export default function IndividualBrokersTab() {
                   <SelectContent>{STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
+              <div>
+                <Label>Expertise *</Label>
+                <Select value={editing?.expertise_type || "both"} onValueChange={(v) => setEditing({ ...editing, expertise_type: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="leasing">Leasing</SelectItem>
+                    <SelectItem value="selling">Selling</SelectItem>
+                    <SelectItem value="both">Both (leasing + selling)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <Label>Areas of expertise (comma-separated)</Label>
+                <Input
+                  value={(editing?.expertise_areas || []).join(", ")}
+                  placeholder="e.g. Dubai Marina, Downtown, JVC"
+                  onChange={(e) => setEditing({ ...editing, expertise_areas: e.target.value.split(",").map(s => s.trim()).filter(Boolean) })}
+                />
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -319,6 +338,13 @@ export default function IndividualBrokersTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <BrokerBulkUploadDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        brokerages={brokerages}
+        onDone={() => qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] })}
+      />
     </div>
   );
 }
