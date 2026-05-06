@@ -1597,7 +1597,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             <Input
               value={s[F.fromName] || ""}
               onChange={(e) => update({ [F.fromName]: e.target.value })}
-              placeholder={isBrk ? "Amra · JBJ Global Real Estate" : "JBJ Global Real Estate"}
+              placeholder={isBrk ? "Amra · CITI Developers" : "JBJ Global Real Estate"}
             />
           </div>
           <div className="md:col-span-2">
