@@ -19,7 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
-import { Plus, Search, User, Phone, Mail, MessageCircle, Trash2 } from "lucide-react";
+import BrokerBulkUploadDialog from "@/components/crm/BrokerBulkUploadDialog";
+import { exportRowsToXlsx } from "@/utils/exportXlsx";
+import { Plus, Search, User, Phone, Mail, MessageCircle, Trash2, UploadCloud, FileDown } from "lucide-react";
 
 type Row = {
   id: string;
@@ -32,6 +34,9 @@ type Row = {
   status: string;
   source: string;
   created_at: string;
+  expertise_type?: string | null;
+  expertise_areas?: string[] | null;
+  import_label?: string | null;
   brokerage?: { company_name: string | null } | null;
 };
 
@@ -46,7 +51,9 @@ export default function IndividualBrokersTab() {
   const [q, setQ] = useState("");
   const [agencyFilter, setAgencyFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [expertiseFilter, setExpertiseFilter] = useState<string>("all");
   const [open, setOpen] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [editing, setEditing] = useState<Partial<Row> | null>(null);
 
   const { data: rows = [], isLoading } = useQuery<Row[]>({
@@ -57,7 +64,7 @@ export default function IndividualBrokersTab() {
       for (let from = 0; ; from += PAGE) {
         const { data, error } = await (supabase as any)
           .from("crm_brokerage_agents")
-          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, brokerage:crm_brokerages(company_name)")
+          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, brokerage:crm_brokerages(company_name)")
           .order("created_at", { ascending: false })
           .range(from, from + PAGE - 1);
         if (error) throw error;
@@ -105,6 +112,8 @@ export default function IndividualBrokersTab() {
         role: patch.role || null,
         status: patch.status || "active",
         source: patch.source || "manual",
+        expertise_type: patch.expertise_type || "both",
+        expertise_areas: patch.expertise_areas || [],
       };
       if (patch.id) {
         const { error } = await (supabase as any).from("crm_brokerage_agents").update(payload).eq("id", patch.id);
@@ -139,15 +148,34 @@ export default function IndividualBrokersTab() {
     const ql = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      if (expertiseFilter !== "all") {
+        const et = r.expertise_type || "both";
+        if (expertiseFilter === "leasing" && !(et === "leasing" || et === "both")) return false;
+        if (expertiseFilter === "selling" && !(et === "selling" || et === "both")) return false;
+      }
       if (agencyFilter === "__none__" && r.brokerage_id) return false;
       if (agencyFilter !== "all" && agencyFilter !== "__none__" && r.brokerage_id !== agencyFilter) return false;
       if (!ql) return true;
-      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name].filter(Boolean).join(" ").toLowerCase();
+      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, ...(r.expertise_areas || [])].filter(Boolean).join(" ").toLowerCase();
       return hay.includes(ql);
     });
-  }, [rows, q, agencyFilter, statusFilter]);
+  }, [rows, q, agencyFilter, statusFilter, expertiseFilter]);
 
-  const openNew = () => { setEditing({ status: "active", source: "manual" }); setOpen(true); };
+  const openNew = () => { setEditing({ status: "active", source: "manual", expertise_type: "both", expertise_areas: [] }); setOpen(true); };
+
+  const exportExcel = () => {
+    if (filtered.length === 0) { toast.error("Nothing to export"); return; }
+    const out = filtered.map(r => ({
+      Name: r.name, Agency: r.brokerage?.company_name || "Standalone",
+      Role: r.role, Phone: r.phone, WhatsApp: r.whatsapp, Email: r.email,
+      Expertise: r.expertise_type || "both",
+      Areas: (r.expertise_areas || []).join(", "),
+      Status: r.status, Batch: r.import_label || "",
+      Added: new Date(r.created_at).toLocaleDateString(),
+    }));
+    exportRowsToXlsx(out, "individual-brokers");
+    toast.success(`Exported ${out.length} brokers`);
+  };
 
   return (
     <div className="space-y-4">
@@ -167,12 +195,22 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             {STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={expertiseFilter} onValueChange={setExpertiseFilter}>
+          <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All expertise</SelectItem>
+            <SelectItem value="leasing">Leasing</SelectItem>
+            <SelectItem value="selling">Selling</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export Excel</Button>
+        <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
 
@@ -208,6 +246,17 @@ export default function IndividualBrokersTab() {
                       {r.role ? `${r.role} · ` : ""}{r.brokerage?.company_name || "Standalone"}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
+                      {(r.expertise_type === "leasing" || r.expertise_type === "both") && (
+                        <span className="px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">Leasing</span>
+                      )}
+                      {(r.expertise_type === "selling" || r.expertise_type === "both") && (
+                        <span className="px-2 py-0.5 rounded-full border border-blue-300 bg-blue-50 text-blue-900">Selling</span>
+                      )}
+                      {(r.expertise_areas || []).slice(0, 3).map((a) => (
+                        <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
+                      ))}
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                       {r.phone && <a href={`tel:${r.phone}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Phone className="w-3 h-3" />{r.phone}</a>}
                       {r.whatsapp && <a href={`https://wa.me/${r.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><MessageCircle className="w-3 h-3" />WhatsApp</a>}
                       {r.email && <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Mail className="w-3 h-3" />{r.email}</a>}
@@ -238,6 +287,9 @@ export default function IndividualBrokersTab() {
             statusOptions: STATUS_OPTS,
             onStatusChange: (r: any, next) => updateStatus(r, next),
           },
+          { key: "expertise_type", label: "Expertise", width: 110, render: (r: any) => r.expertise_type || "both" },
+          { key: "expertise_areas", label: "Areas", width: 200, render: (r: any) => (r.expertise_areas || []).join(", ") || "—" },
+          { key: "import_label", label: "Batch", width: 160, render: (r: any) => r.import_label || "—" },
           { key: "created_at", label: "Added", width: 130, render: (r: any) => new Date(r.created_at).toLocaleDateString() },
         ]}
         onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, brokerage_id: r.brokerage_id, [key]: value } as any)}
@@ -273,6 +325,25 @@ export default function IndividualBrokersTab() {
                   <SelectContent>{STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
+              <div>
+                <Label>Expertise *</Label>
+                <Select value={editing?.expertise_type || "both"} onValueChange={(v) => setEditing({ ...editing, expertise_type: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="leasing">Leasing</SelectItem>
+                    <SelectItem value="selling">Selling</SelectItem>
+                    <SelectItem value="both">Both (leasing + selling)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2">
+                <Label>Areas of expertise (comma-separated)</Label>
+                <Input
+                  value={(editing?.expertise_areas || []).join(", ")}
+                  placeholder="e.g. Dubai Marina, Downtown, JVC"
+                  onChange={(e) => setEditing({ ...editing, expertise_areas: e.target.value.split(",").map(s => s.trim()).filter(Boolean) })}
+                />
+              </div>
             </div>
           </div>
           <DialogFooter>
@@ -281,6 +352,13 @@ export default function IndividualBrokersTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <BrokerBulkUploadDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        brokerages={brokerages}
+        onDone={() => qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] })}
+      />
     </div>
   );
 }

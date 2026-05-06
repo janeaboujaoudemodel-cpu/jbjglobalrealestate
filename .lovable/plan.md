@@ -1,43 +1,99 @@
-## Why you only see ~504 brokerages
 
-The `useCRMRelationships` hook fetches every brokerage in a single call:
+# Relationship Hub — Bulk Upload, Views, Access Fix & Performance
 
-```ts
-supabase.from("crm_brokerages").select("*").order("updated_at", { ascending: false });
-```
+## 1. Bulk database upload for Individual Brokers & Brokerages
 
-Two limits cap that result:
+### Schema additions (one migration)
+Add to `crm_brokerage_agents` and `crm_brokerages`:
+- `expertise_type` text — `'leasing' | 'selling' | 'both'` (default `'both'`)
+- `expertise_areas` text[] — multi-select areas (Dubai Marina, Downtown, JVC, Business Bay, Palm, etc.)
+- `import_batch_id` uuid — group rows from same upload
+- `import_label` text — friendly batch name shown in filters
 
-1. **Supabase caps every query at 1,000 rows by default.** Even though the database currently holds **4,872 brokerage rows**, a single `select("*")` will never return more than 1,000.
-2. The **504** you actually see is what's left **after the active filters** (search / status / Emirate / sub-tab) are applied to the first 1,000 rows that came back — so increasing filters or scrolling will never reveal the rest, because the rest were never fetched.
+New table `crm_import_batches`:
+- `id`, `owner_id`, `target` (`brokers` | `brokerages`), `label`, `strategy` (`merge` | `separate` | `replace`), `default_expertise_type`, `default_expertise_areas[]`, `row_count`, `inserted`, `updated`, `skipped`, `status`, `created_at`.
 
-So the issue is purely a data-loading bug, not RLS or UI.
+RLS: owner-only (matches existing pattern).
 
-## Fix
+### New `<UniversalImportDialog />` (replaces ad-hoc dialogs)
+Step wizard:
+1. **Drop files** — accepts multiple `.csv` / `.xlsx` / `.xls`, no row cap. Parsed in a Web Worker via `xlsx` (already in deps) so 33k rows don't freeze the UI.
+2. **Strategy** — radio:
+   - *Merge all into one batch* (default)
+   - *One batch per file* (each file becomes its own labelled batch / category)
+   - *Append to existing batch* (pick from dropdown)
+3. **Tagging (mandatory)** — for each batch:
+   - Expertise type: Leasing / Selling / Both
+   - Area(s) of expertise: tag input with autocomplete from existing values
+   - Optional batch label (e.g. "JVC Leasing Specialists – Oct 2026")
+4. **Column mapping** — auto-detected (name, phone, email, brokerage, role, whatsapp) with manual override, preview first 10 rows.
+5. **Server import** — new edge function `crm-bulk-import-brokers` (and reuse hardened `crm-import-dld-brokerages` for brokerage rows):
+   - Server-side dedupe (paginated lookup, same pattern shipped last loop).
+   - Inserts in 500-row batches with progress streamed back via SSE / polling.
+   - Returns `{ inserted, updated, skipped, batchId }`.
 
-Switch the brokerage fetch to a **paginated loop** that pulls every row in 1,000-row pages until the table is exhausted, then feeds the full list into the existing UI.
+Wired into:
+- `IndividualBrokersTab.tsx` → "Upload database" button (next to existing Add Broker).
+- `BrokeragesAgenciesView` in `CRMRelationships.tsx` → "Upload database" button.
+- Single-broker "Add Broker" form also gains the **Expertise type** + **Areas** fields (mandatory).
 
-```text
-page 0:    rows   0 –  999
-page 1:    rows 1000 – 1999
-page 2:    rows 2000 – 2999
-…until a page returns < 1000 rows
-```
+## 2. Card view + Excel export — unified across Developers, Brokerages, Individual Brokers
 
-### Changes
+New shared primitive `src/components/crm/EntityViewSwitcher.tsx`:
+- Three modes: **Table** (current), **Cards** (champagne tile grid using `<IconTile />` standard), **Compact list**.
+- View choice persisted per-section in `localStorage`.
+- "Export to Excel" button in the header — uses `xlsx` to export the **currently filtered** rows with all visible columns + expertise fields. Filename: `{section}-{YYYY-MM-DD}.xlsx`.
 
-1. **`src/hooks/useCRMRelationships.ts`** — replace the single `select("*")` with a `while` loop using `.range(from, from + 999)`, accumulating into one array, then returning it. Same ordering (`updated_at desc`). No schema or RLS change.
-2. **Lightweight progress signal** — while the loop runs, expose a `loading` / `loadedCount` value the directory header can show ("Loading 3,000 / 4,872…"), so it's visible that all agencies are being pulled. Optional, but useful given the size.
-3. **Apply the same pattern to `IndividualBrokersTab.tsx`** (it currently does a single `select` on `crm_brokerage_agents`, which will hit the same 1,000-row ceiling once that table grows).
+Applied to:
+- `IndividualBrokersTab.tsx`
+- `BrokeragesAgenciesView` (in `CRMRelationships.tsx`)
+- Developers tab (same page) — same switcher + export.
 
-### Out of scope
+Cards show: avatar/logo, name, brokerage, expertise badges (Leasing/Selling), area chips, last contact, quick-actions.
 
-- No DB migration, no RLS change, no edge function.
-- No change to filters, tabs, card/Excel views, or "My Additions" logic.
-- The 10,000 figure you mentioned is the long-term target; today the table actually has **4,872 rows**, and after this fix you'll see all of them.
+## 3. Fix "Verifying access, please wait…" → kicked out bug
 
-### Files
+Root cause: `ExecutiveAccessGate` runs `has_role` RPCs while `AuthContext` is still hydrating the session after a token refresh. When the refresh races (see auth log: `bad_jwt` → `token_revoked` → re-login at 20:30:01), the RPC returns false and the gate flips to "Access denied" before `isOwner` resolves.
 
-- `src/hooks/useCRMRelationships.ts` (paginated fetch + loadedCount)
-- `src/components/crm/IndividualBrokersTab.tsx` (same pagination)
-- `src/pages/CRMRelationships.tsx` (only to surface the "Loading X / Y" line in the directory header — no logic change)
+Fix:
+- Add `useAuthReady()` hook that resolves only after `supabase.auth.getSession()` has returned **and** `onAuthStateChange` has fired at least once.
+- `ExecutiveAccessGate` waits on `isReady` (no longer just `authLoading`), and treats `isOwner === undefined` as still-loading instead of denying.
+- On RPC error (network / 403), retry once with backoff before showing the denied screen.
+- Owner email match is checked **first** synchronously from the JWT claim, so the verified Owner never sees the gate at all.
+
+Also fixes the related `Error creating session: 42P10` console error by adding the missing unique constraint `(user_id, session_key)` on the session-tracking table referenced by the upsert (`ON CONFLICT` target).
+
+## 4. Performance — remove lazy loading on hot routes
+
+- Replace `React.lazy` + `Suspense` for `/crm/*`, `/relationships`, `/admin/*` and the home shell with eager imports (kept lazy for low-traffic standalone tools).
+- Add `<link rel="preload" as="fetch">` for the brokerages JSON in `index.html`.
+- Move heavy CSV/XLSX parsing to a Web Worker (`src/workers/importParser.ts`) so the main thread stays at 60fps during 33k-row imports.
+- Memoise table rows (`React.memo` + stable keys) in `IndividualBrokersTab` and brokerages grid; switch list rendering to `@tanstack/react-virtual` (already a sibling of installed deps) for >500 rows.
+- Reuse existing paginated fetch (shipped last loop) so initial paint shows first 1k rows immediately, then streams the rest.
+
+## 5. Verification before I confirm done
+
+- Manually import a 33k-row sample CSV — confirm full count lands, batches tagged, no UI freeze.
+- Toggle Card / Table / Excel export on all three sections.
+- Sign out → sign in → reload `/crm/relationships` 5× — confirm no "Access denied" flash.
+- Lighthouse on `/crm/relationships` — target TBT < 300ms, LCP < 2.5s.
+
+## Files touched (preview)
+
+- `supabase/migrations/<new>.sql` — schema + RLS for expertise + import batches
+- `supabase/functions/crm-bulk-import-brokers/index.ts` — new
+- `supabase/functions/crm-import-dld-brokerages/index.ts` — extend for expertise tagging
+- `src/components/crm/UniversalImportDialog.tsx` — new
+- `src/components/crm/EntityViewSwitcher.tsx` — new
+- `src/components/crm/IndividualBrokersTab.tsx` — wire upload, view switcher, export, expertise fields
+- `src/pages/CRMRelationships.tsx` — wire for Brokerages + Developers tabs
+- `src/components/executive/ExecutiveAccessGate.tsx` — auth-ready fix
+- `src/hooks/useAuthReady.ts` — new
+- `src/workers/importParser.ts` — new
+- `src/App.tsx` — eager import hot CRM routes
+
+## Out of scope (won't touch)
+
+- Filter UI (already shipped).
+- DLD auto-sync (already live).
+- Brokerage outreach document layout.
