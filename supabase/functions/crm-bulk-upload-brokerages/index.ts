@@ -267,6 +267,7 @@ serve(async (req: Request) => {
           developer_email: c.email || null,
           website: c.website || null,
           emirate: c.emirate || null,
+          list_id: listId,
         });
         rerouted++;
         continue;
