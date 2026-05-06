@@ -171,5 +171,5 @@ export async function exportPreviewPdf(
   }
 
   const bytes = await pdfDoc.save();
-  return new Blob([bytes], { type: "application/pdf" });
+  return new Blob([bytes as BlobPart], { type: "application/pdf" });
 }
