@@ -28,7 +28,7 @@ interface Props {
 function substituteTokens(html: string, samples: TokenMap): string {
   let out = html;
   for (const [tok, val] of Object.entries(samples)) {
-    out = out.replaceAll(`{{${tok}}}`, val ?? "");
+    out = out.split(`{{${tok}}}`).join(val ?? "");
   }
   // Strip handlebars conditionals — keep inner content if sample is non-empty.
   out = out.replace(/\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (_m, k, inner) => {
