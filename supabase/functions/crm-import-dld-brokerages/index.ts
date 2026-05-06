@@ -101,7 +101,8 @@ Deno.serve(async (req) => {
       const dupKey =
         (office && `o:${office}`) ||
         (nameKey && `n:${nameKey}`) ||
-        (email && `e:${email}`);
+        (email && `e:${email}`) ||
+        (phone && `p:${phone}`);
       if (dupKey) {
         if (seenInBatch.has(dupKey)) {
           skipped++;
@@ -113,7 +114,8 @@ Deno.serve(async (req) => {
       const match =
         (office && byOffice.get(office)) ||
         (nameKey && byName.get(nameKey)) ||
-        (email && byEmail.get(email));
+        (email && byEmail.get(email)) ||
+        (phone && byPhone.get(phone));
 
       if (match) {
         // Backfill only — never overwrite curated fields
@@ -147,6 +149,7 @@ Deno.serve(async (req) => {
       if (office) byOffice.set(office, { id: "_pending_" });
       if (nameKey) byName.set(nameKey, { id: "_pending_" });
       if (email) byEmail.set(email, { id: "_pending_" });
+      if (phone) byPhone.set(phone, { id: "_pending_" });
     }
 
     // Insert in chunks of 500
