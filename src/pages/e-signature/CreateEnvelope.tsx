@@ -882,6 +882,68 @@ export default function CreateEnvelope() {
                   </CardContent>
                 </Card>
 
+                {/* Delivery Channels */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Delivery Channels</CardTitle>
+                    <CardDescription className="text-xs">
+                      Choose how recipients receive their signing link
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-wrap gap-3">
+                    <label className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background cursor-pointer">
+                      <Checkbox
+                        checked={channels.email}
+                        onCheckedChange={(v) => setChannels(c => ({ ...c, email: v === true }))}
+                      />
+                      <Mail className="w-4 h-4 text-[hsl(var(--gold))]" />
+                      <span className="text-sm font-medium">Email</span>
+                    </label>
+                    <label className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background cursor-pointer">
+                      <Checkbox
+                        checked={channels.whatsapp}
+                        onCheckedChange={(v) => setChannels(c => ({ ...c, whatsapp: v === true }))}
+                      />
+                      <MessageCircle className="w-4 h-4 text-emerald-600" />
+                      <span className="text-sm font-medium">WhatsApp</span>
+                      <span className="text-xs text-muted-foreground">(requires phone)</span>
+                    </label>
+                  </CardContent>
+                </Card>
+
+                {/* Export Preview PDF */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Download className="w-4 h-4 text-[hsl(var(--gold))]" />
+                      Export Preview PDF
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Download a flattened proof PDF with your fields, signature, and stamp drawn in place — before sending.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleExportPreview}
+                      disabled={isExportingPreview || !pdfFile}
+                      className="border-[hsl(var(--gold)/.5)] hover:bg-[hsl(var(--gold)/.05)]"
+                    >
+                      {isExportingPreview ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Building preview…
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-4 h-4 mr-2" />
+                          Download Preview PDF
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
                 {/* Visual Document Preview */}
                 {pdfUrl && (
                   <DocumentPreviewSummary
