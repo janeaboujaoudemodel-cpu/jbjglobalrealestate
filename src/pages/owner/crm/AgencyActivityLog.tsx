@@ -394,10 +394,10 @@ export default function AgencyActivityLog() {
 
         <div className="flex flex-wrap gap-2">
           <Stat label="Total" value={counts.total} />
-          <Stat label="Reminders" value={counts.reminder} />
-          <Stat label="Notes" value={counts.note} />
-          <Stat label="Calendar" value={counts.calendar_event} />
-          <Stat label="Outreach sent" value={counts.outreach} />
+          <Stat label="Reminders" value={counts.reminder} typeKey="reminder" addType="reminder" />
+          <Stat label="Notes" value={counts.note} typeKey="note" addType="note" />
+          <Stat label="Calendar" value={counts.calendar_event} typeKey="calendar_event" addType="calendar_event" />
+          <Stat label="Outreach sent" value={counts.outreach} typeKey="outreach_sent" />
         </div>
 
         <div className="flex flex-wrap gap-2 items-center">
