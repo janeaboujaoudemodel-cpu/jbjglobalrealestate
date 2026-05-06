@@ -31,6 +31,10 @@ import {
   useEmailTemplate,
 } from "@/hooks/useCRMRelationships";
 import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
+import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
+import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
+import { ExcelGridView } from "@/components/crm/ExcelGridView";
+import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
@@ -447,6 +451,8 @@ const BrokeragesTab = () => {
   const [dealOpen, setDealOpen] = useState<{ id: string; name: string } | null>(null);
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const [testSendOpen, setTestSendOpen] = useState(false);
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
   useEffect(() => {
     const openTpl = () => setTplOpen(true);
     const openTest = () => setTestSendOpen(true);
@@ -513,6 +519,7 @@ const BrokeragesTab = () => {
     const out: any[] = [];
     for (const item of indexed) {
       const r = item.row;
+      if (excludedIds.has(r.id)) continue;
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
@@ -522,7 +529,7 @@ const BrokeragesTab = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, sourceTab, excludedIds]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
@@ -583,7 +590,7 @@ const BrokeragesTab = () => {
     remind.mutate({ brokerageId: b.id, brokerageName: b.company_name, daysFromNow: 7 });
   };
 
-  const handleExport = (format: "csv" | "xlsx" | "pdf") => {
+  const handleExport = async (format: "csv" | "xlsx" | "pdf") => {
     if (!filtered.length) {
       toast.error("Nothing to export");
       return;
@@ -615,7 +622,7 @@ const BrokeragesTab = () => {
         notes: (r.notes || "").slice(0, 240),
       };
     });
-    exportBrokerages(rows, format);
+    await exportBrokerages(rows, format);
     toast.success(`Exported ${rows.length} agencies as ${format.toUpperCase()}`);
   };
 
@@ -730,6 +737,28 @@ const BrokeragesTab = () => {
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <ExcludeFilterPopover
+          scope="brokerage"
+          options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
+          excludedIds={excludedIds}
+          onChange={setExcludedIds}
+        />
+        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setViewMode("cards")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" /> Cards
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("excel")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <TableIcon className="w-3.5 h-3.5" /> Excel View
+          </button>
+        </div>
         <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
         <Button
           variant="outline"
@@ -765,7 +794,26 @@ const BrokeragesTab = () => {
         <Button variant="gold" onClick={openNew} className="shadow-md"><Plus className="w-4 h-4 mr-2" />Add Brokerage</Button>
       </div>
 
-      {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
+      {viewMode === "excel" ? (
+        <ExcelGridView
+          rows={filtered as any[]}
+          columns={[
+            { key: "company_name", label: "Agency", width: 220 },
+            { key: "emirate", label: "Emirate", width: 110 },
+            { key: "office_location", label: "Office", width: 200 },
+            { key: "phone", label: "Phone", width: 140 },
+            { key: "email", label: "Email", width: 200 },
+            { key: "status", label: "Status", width: 170, status: true },
+            { key: "outreach_stage", label: "Outreach", width: 140 },
+            { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
+            { key: "notes", label: "Notes", width: 280, editable: true },
+          ]}
+          getStatus={(r: any) => r.status}
+          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
+          onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
+          emptyLabel="No agencies match filters."
+        />
+      ) : isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         data.length > 0 ? (
           <Card className="border-amber-300 bg-amber-50">
             <CardContent className="p-6 text-center">
@@ -1396,6 +1444,8 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
+  const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return true;
     return localStorage.getItem("crm.queue.collapsed") !== "false";
@@ -1437,6 +1487,7 @@ const DeveloperRegistryTab = () => {
     const out: any[] = [];
     for (const item of queueIndexed) {
       const r = item.row;
+      if (devExcludedIds.has(r.id)) continue;
       if (ql && !item.nameLower.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emailFilter !== "all") {
@@ -1447,7 +1498,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, debouncedQ, statusFilter, emailFilter]);
+  }, [queueIndexed, debouncedQ, statusFilter, emailFilter, devExcludedIds]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
@@ -1641,13 +1692,49 @@ const DeveloperRegistryTab = () => {
           <FileEdit className="w-4 h-4 mr-2" />
           {tplMain?.locked_at ? <><Lock className="w-3 h-3 mr-1" />Template</> : "Edit Template"}
         </Button>
-        <Button variant="outline" onClick={() => exportCSV(filtered, `developer-registry-${Date.now()}.csv`, [
-          { key: "developer_name", label: "Developer" }, { key: "status", label: "Status" },
-          { key: "developer_email", label: "Email" }, { key: "phone", label: "Phone" },
-          { key: "emirate", label: "Emirate" }, { key: "agency_code", label: "Agency Code" },
-          { key: "registration_date", label: "Registered" }, { key: "expiry_date", label: "Expiry" },
-          { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export</Button>
+        <ExcludeFilterPopover
+          scope="developer"
+          options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
+          excludedIds={devExcludedIds}
+          onChange={setDevExcludedIds}
+        />
+        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setDevViewMode("cards")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${devViewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" /> Cards
+          </button>
+          <button
+            type="button"
+            onClick={() => setDevViewMode("excel")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${devViewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <TableIcon className="w-3.5 h-3.5" /> Excel View
+          </button>
+        </div>
+        <ExportMenu
+          disabled={!filtered.length}
+          onExport={async (f) => {
+            const rows: DeveloperExportRow[] = (filtered as any[]).map((r: any, i: number) => ({
+              rank: i + 1,
+              developer_name: r.developer_name || "",
+              status: r.status || "",
+              developer_email: r.developer_email || "",
+              phone: r.phone || "",
+              emirate: r.emirate || "",
+              agency_code: r.agency_code || "",
+              registration_date: r.registration_date ? new Date(r.registration_date).toLocaleDateString() : "",
+              expiry_date: r.expiry_date ? new Date(r.expiry_date).toLocaleDateString() : "",
+              attended_briefing: r.attended_briefing ? "attended_briefing" : "",
+              briefing_date: r.briefing_date ? new Date(r.briefing_date).toLocaleDateString() : "",
+              notes: (r.notes || "").slice(0, 240),
+            }));
+            await exportDevelopers(rows, f);
+            toast.success(`Exported ${rows.length} developers as ${f.toUpperCase()}`);
+          }}
+        />
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill"}
         </Button>
@@ -1812,6 +1899,25 @@ const DeveloperRegistryTab = () => {
             </div>
           )}
         </CardContent></Card>
+      ) : devViewMode === "excel" ? (
+        <ExcelGridView
+          rows={filtered as any[]}
+          columns={[
+            { key: "developer_name", label: "Developer", width: 220 },
+            { key: "status", label: "Status", width: 180, status: true },
+            { key: "developer_email", label: "Email", width: 200 },
+            { key: "phone", label: "Phone", width: 140 },
+            { key: "emirate", label: "Emirate", width: 110 },
+            { key: "agency_code", label: "Agency code", width: 130 },
+            { key: "attended_briefing", label: "Attended briefing", width: 140, status: true },
+            { key: "briefing_date", label: "Briefing date", width: 130, render: (r: any) => r.briefing_date ? new Date(r.briefing_date).toLocaleDateString() : "—" },
+            { key: "notes", label: "Notes", width: 280, editable: true },
+          ]}
+          getStatus={(r: any) => r.status}
+          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
+          onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
+          emptyLabel="No developers match filters."
+        />
       ) : (
         <div className="grid gap-2">
           {devVisible.map((r: any) => {

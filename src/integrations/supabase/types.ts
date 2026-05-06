@@ -7328,6 +7328,39 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_saved_filters: {
+        Row: {
+          created_at: string
+          excluded_ids: string[]
+          excluded_names: string[]
+          id: string
+          name: string
+          scope: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          excluded_ids?: string[]
+          excluded_names?: string[]
+          id?: string
+          name: string
+          scope: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          excluded_ids?: string[]
+          excluded_names?: string[]
+          id?: string
+          name?: string
+          scope?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       crm_security_events: {
         Row: {
           created_at: string
