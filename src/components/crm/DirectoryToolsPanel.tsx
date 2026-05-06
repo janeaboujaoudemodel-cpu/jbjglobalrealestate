@@ -36,11 +36,17 @@ const KIND_LABEL: Record<string, string> = {
 
 /**
  * Background-only directory health card.
- * Collapsed by default — only the title row + Refresh now button are visible.
- * Refresh now is locked while any background job is running so it can never
- * be triggered twice in parallel.
+ * Filters jobs by `kinds` so the Brokerage tab and Developer tab each see
+ * their own pipeline only.
  */
-export const DirectoryToolsPanel = () => {
+type Props = {
+  kinds?: string[];
+  title?: string;
+};
+export const DirectoryToolsPanel = ({
+  kinds = ["brokerage_seed", "brokerage_enrich", "developer_enrich"],
+  title = "UAE Brokerage & Developer Directory",
+}: Props = {}) => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -50,6 +56,7 @@ export const DirectoryToolsPanel = () => {
     const { data, error } = await (supabase as any)
       .from("crm_directory_jobs")
       .select("*")
+      .in("kind", kinds)
       .order("started_at", { ascending: false })
       .limit(6);
     if (!error) setJobs(data ?? []);
@@ -87,12 +94,10 @@ export const DirectoryToolsPanel = () => {
     }
   };
 
-  const latestByKind = ["brokerage_seed", "brokerage_enrich", "developer_enrich"].map(
-    (kind) => {
-      const j = jobs.find((x) => x.kind === kind);
-      return { kind, job: j };
-    },
-  );
+  const latestByKind = kinds.map((kind) => {
+    const j = jobs.find((x) => x.kind === kind);
+    return { kind, job: j };
+  });
   const allFinished = latestByKind.every(
     ({ job }) => job && job.status === "completed",
   );
@@ -118,7 +123,7 @@ export const DirectoryToolsPanel = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <Globe2 className="w-4 h-4 text-[#B89555]" />
           <h3 className="text-sm font-semibold text-[#1A1A1A]">
-            UAE Brokerage &amp; Developer Directory
+            {title}
           </h3>
           <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">
             Auto-runs daily
@@ -307,3 +312,17 @@ export const DirectoryToolsPanel = () => {
     </Card>
   );
 };
+
+export const BrokerageDirectoryPanel = () => (
+  <DirectoryToolsPanel
+    kinds={["brokerage_seed", "brokerage_enrich"]}
+    title="UAE Brokerage Directory"
+  />
+);
+
+export const DeveloperDirectoryPanel = () => (
+  <DirectoryToolsPanel
+    kinds={["developer_enrich"]}
+    title="UAE Developer Directory"
+  />
+);

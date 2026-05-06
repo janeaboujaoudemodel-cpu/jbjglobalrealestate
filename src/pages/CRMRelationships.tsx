@@ -53,7 +53,8 @@ import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
-import { DirectoryToolsPanel } from "@/components/crm/DirectoryToolsPanel";
+import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel } from "@/components/crm/DirectoryToolsPanel";
+import { CRMFiltersPopover, type FilterChip } from "@/components/crm/CRMFiltersPopover";
 import { LeadAIStar } from "@/components/crm/LeadAIStar";
 import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -737,7 +738,7 @@ const BrokeragesTab = () => {
         <DocumentPackPanel context="brokerage" />
       </section>
       <BreakfastBookingsSection />
-      <DirectoryToolsPanel />
+      <BrokerageDirectoryPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
       <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-4">
@@ -817,56 +818,87 @@ const BrokeragesTab = () => {
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, location, emirate, or developer" className="pl-10" />
         </div>
-        <Select value={emirateFilter} onValueChange={setEmirateFilter}>
-          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Emirate" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All emirates · {data.length}</SelectItem>
-            {EMIRATES.map((e) => (
-              <SelectItem key={e} value={e}>
-                {e} · {emirateCounts[e] || 0}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={regionFilter} onValueChange={setRegionFilter}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Region" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All regions</SelectItem>
-            <SelectItem value="UAE">UAE</SelectItem>
-            <SelectItem value="GCC">GCC</SelectItem>
-            <SelectItem value="MENA">MENA</SelectItem>
-            <SelectItem value="International">International</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
-        <ExcludeFilterPopover
-          scope="brokerage"
-          options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
-          excludedIds={excludedIds}
-          onChange={setExcludedIds}
-        />
-        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
-          <button
-            type="button"
-            onClick={() => setViewMode("cards")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" /> Cards
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode("excel")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
-          >
-            <TableIcon className="w-3.5 h-3.5" /> Excel View
-          </button>
-        </div>
+        <CRMFiltersPopover
+          activeCount={
+            (emirateFilter !== "all" ? 1 : 0) +
+            (regionFilter !== "all" ? 1 : 0) +
+            (statusFilter !== "all" ? 1 : 0) +
+            (excludedIds.size > 0 ? 1 : 0)
+          }
+          chips={[
+            ...(emirateFilter !== "all" ? [{ key: "em", label: `Emirate: ${emirateFilter}`, onClear: () => setEmirateFilter("all") }] : []),
+            ...(regionFilter !== "all" ? [{ key: "rg", label: `Region: ${regionFilter}`, onClear: () => setRegionFilter("all") }] : []),
+            ...(statusFilter !== "all" ? [{ key: "st", label: `Status: ${statusFilter}`, onClear: () => setStatusFilter("all") }] : []),
+            ...(excludedIds.size > 0 ? [{ key: "ex", label: `Excluded: ${excludedIds.size}`, onClear: () => setExcludedIds(new Set()) }] : []),
+          ] as FilterChip[]}
+          onResetAll={() => { setEmirateFilter("all"); setRegionFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
+        >
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Emirate</Label>
+              <Select value={emirateFilter} onValueChange={setEmirateFilter}>
+                <SelectTrigger><SelectValue placeholder="Emirate" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All emirates · {data.length}</SelectItem>
+                  {EMIRATES.map((e) => (
+                    <SelectItem key={e} value={e}>{e} · {emirateCounts[e] || 0}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Region</Label>
+              <Select value={regionFilter} onValueChange={setRegionFilter}>
+                <SelectTrigger><SelectValue placeholder="Region" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All regions</SelectItem>
+                  <SelectItem value="UAE">UAE</SelectItem>
+                  <SelectItem value="GCC">GCC</SelectItem>
+                  <SelectItem value="MENA">MENA</SelectItem>
+                  <SelectItem value="International">International</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Status</Label>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">Exclude agencies</Label>
+              <ExcludeFilterPopover
+                scope="brokerage"
+                options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
+                excludedIds={excludedIds}
+                onChange={setExcludedIds}
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold mb-1 block">View</Label>
+              <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl w-fit">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("cards")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+                >
+                  <LayoutGrid className="w-3.5 h-3.5" /> Cards
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("excel")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+                >
+                  <TableIcon className="w-3.5 h-3.5" /> Excel View
+                </button>
+              </div>
+            </div>
+          </div>
+        </CRMFiltersPopover>
         <Button
           variant="outline"
           onClick={() => setExportOpen(true)}
@@ -1587,6 +1619,10 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
 DocumentPackPanel.displayName = "DocumentPackPanel";
 
 const DeveloperRegistryTab = () => {
+  const navigate = useNavigate();
+  const [testSendOpen, setTestSendOpen] = useState(false);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [statusView, setStatusView] = useState<"all" | "contracts">("all");
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
   const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
@@ -1608,7 +1644,7 @@ const DeveloperRegistryTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
-  const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
@@ -1647,15 +1683,27 @@ const DeveloperRegistryTab = () => {
     [queuePool],
   );
 
+  const isContractRow = (r: any) =>
+    !!r.contract_signed ||
+    r.outreach_stage === "contract_signed" ||
+    r.outreach_stage === "contract_sent" ||
+    r.outreach_stage === "contracted";
+  const contractsCount = useMemo(
+    () => (data as any[]).filter(isContractRow).length,
+    [data],
+  );
+
   const filtered = useMemo(() => {
     const ql = debouncedQ.trim().toLowerCase();
     const out: any[] = [];
-    for (const item of queueIndexed) {
-      const r = item.row;
+    const source = statusView === "contracts" ? (data as any[]) : queueIndexed.map((x) => x.row);
+    for (const r of source) {
       if (devExcludedIds.has(r.id)) continue;
-      if (ql && !item.nameLower.includes(ql)) continue;
-      if (statusFilter !== "all" && r.status !== statusFilter) continue;
-      if (emailFilter !== "all") {
+      const nameLower = (r.developer_name || "").toLowerCase();
+      if (ql && !nameLower.includes(ql)) continue;
+      if (statusView === "contracts" && !isContractRow(r)) continue;
+      if (statusView !== "contracts" && statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (statusView !== "contracts" && emailFilter !== "all") {
         if (emailFilter === "not_sent" && !(!r.last_outreach_at && r.status !== "registered")) continue;
         else if (emailFilter === "sent" && !(!!r.last_outreach_at && r.status !== "registered")) continue;
         else if (emailFilter === "registered" && r.status !== "registered") continue;
@@ -1663,7 +1711,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, debouncedQ, statusFilter, emailFilter, devExcludedIds]);
+  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
@@ -1779,13 +1827,15 @@ const DeveloperRegistryTab = () => {
   return (
     <div className="space-y-5">
       <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
+      <DeveloperDirectoryPanel />
       <DocumentPackPanel />
 
-      {/* Sub-tabs: Outreach Queue vs Sent History */}
+      {/* Sub-tabs: collapsed by default. Click a panel to expand; click again to collapse. */}
+      <div className="text-xs text-[#1A1A1A]/70">Click a panel to expand · both start collapsed</div>
       <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
           type="button"
-          onClick={() => setSubTab("queue")}
+          onClick={() => setSubTab(subTab === "queue" ? null : "queue")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
             subTab === "queue"
               ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
@@ -1796,7 +1846,7 @@ const DeveloperRegistryTab = () => {
         </button>
         <button
           type="button"
-          onClick={() => setSubTab("history")}
+          onClick={() => setSubTab(subTab === "history" ? null : "history")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
             subTab === "history"
               ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
@@ -1827,9 +1877,13 @@ const DeveloperRegistryTab = () => {
               {queuePool.length}
             </span>
           </div>
-          <span className="text-[11px] text-[#1A1A1A]/70">
-            Always expanded — Document Pack &amp; Outreach Settings stay collapsible
-          </span>
+          <button
+            type="button"
+            onClick={() => setSubTab(null)}
+            className="text-[11px] text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline"
+          >
+            Collapse
+          </button>
         </div>
         <div className="space-y-5">
       <div className="flex flex-wrap gap-2 items-center">
@@ -1853,10 +1907,17 @@ const DeveloperRegistryTab = () => {
             <SelectItem value="registered">Confirmed registered</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => setTplOpen(true)}>
-          <FileEdit className="w-4 h-4 mr-2" />
-          {tplMain?.locked_at ? <><Lock className="w-3 h-3 mr-1" />Template</> : "Edit Template"}
-        </Button>
+        <OutreachActionsMenu
+          selectedCount={selected.size}
+          sendLabel="Send to Selected Developers"
+          onSendSelected={() => {
+            if (selected.size === 0) { toast.error("Select at least one developer first"); return; }
+            setBulkOpen(true);
+          }}
+          onEditTemplate={() => setTplOpen(true)}
+          onSendTest={() => setTestSendOpen(true)}
+          onActivityLog={() => navigate("/owner/crm/relationships/activity")}
+        />
         <ExcludeFilterPopover
           scope="developer"
           options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
@@ -1926,8 +1987,16 @@ const DeveloperRegistryTab = () => {
           {enrich.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BookOpen className="w-4 h-4 mr-2" />}
           {enrich.isPending ? "Researching…" : "Research & enrich"}
         </Button>
+        <Button
+          variant="outline"
+          onClick={() => setUploadOpen(true)}
+          title="Upload Excel/CSV/HTML developer list — auto-classifies brokerages vs developers vs mortgage firms and dedups."
+        >
+          <Plus className="w-4 h-4 mr-2" />Upload list
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
+      <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="developer" onDone={refetch} />
 
       <div className="flex flex-wrap gap-2 items-center bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-xl p-3">
         <div className="text-sm text-[#1A1A1A]"><strong>{selected.size}</strong> of {filtered.length} selected</div>
@@ -1996,6 +2065,22 @@ const DeveloperRegistryTab = () => {
                 </button>
               );
             })}
+            <button
+              type="button"
+              onClick={() => setStatusView(statusView === "contracts" ? "all" : "contracts")}
+              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
+                statusView === "contracts"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
+              }`}
+              title="Show developers with a contract sent or signed"
+            >
+              <FileSignature className="w-3 h-3" />
+              <span>Contracts</span>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                statusView === "contracts" ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
+              }`}>{contractsCount}</span>
+            </button>
           </div>
 
           {/* Detailed status cards (existing) */}
@@ -2291,6 +2376,7 @@ const DeveloperRegistryTab = () => {
       </div>
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
+      <TestSendDialog open={testSendOpen} onOpenChange={setTestSendOpen} mode="developer" variant="developer_registration" />
       <BulkSendDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
