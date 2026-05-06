@@ -1,57 +1,48 @@
-## Email template polish — `brokerage_breakfast_invite`
+## Developer Registry — fix "Registered" card + dedupe filters
 
-Update the `crm_email_templates` row (`variant = 'brokerage_breakfast_invite'`) via migration. No edge function changes needed.
+### The two problems
 
-### 1. Brand name — always uppercase
-Replace every visible instance of "Citi Developers" with **"CITI DEVELOPERS"** inside the email body (header subtitle, intro paragraph, invitation card title, footer signature line). The image alt text stays as-is.
+**1. The "Registered" card (and any history-only status) is a dead end**
+The Outreach Queue panel applies `statusFilter` against `queuePool`, and `queuePool` deliberately excludes anyone whose `status === 'registered'` (they live in Sent History). So clicking the **Registered** stat card sets `statusFilter = 'registered'`, the queue filter returns 0 rows, and the user sees "No developer match the current filters / Show full queue". The card is wired to state but routes the user to an empty pool.
 
-### 2. Sender email address
-Change `jane@citidevelopers.com` → **`jane@citideveloper.com`** (singular, no "s") in both the `mailto:` href and the visible link text.
+**2. Filters are duplicated three times**
+The same status concept currently appears as:
+- `<Select>` "All statuses" dropdown (line 2013) — full STATUS_DEV list
+- Pill chips row (lines 2151–2203) — STATUS_DEV minus `registered` + a Contracts toggle
+- Stat cards grid (lines 2206–2215) — full STATUS_DEV list, also clickable as filter
 
-### 3. "Before we lock your seats" card — force full width
-This card is already on its own row, but on narrow renderers it can collapse. Wrap it in a `<table width="100%" role="presentation">` with `width="100%"` and `style="width:100%;table-layout:fixed"` so Outlook/Gmail keep it spanning the full content column. Reduce inner padding from `28px 26px` → `22px 22px` and tighten list spacing to shave height.
+Three controls drive the same `statusFilter` state. Plus the email filter (`Not sent / Sent / Confirmed registered`) overlaps with the status filter (`registered`), giving the user a fourth way to express the same thing.
 
-### 4. New closing line before footer logo
-Directly above the footer divider (after the "...long, successful collaboration" paragraph and outside the cream card), add a centered closing block:
+### Fix
 
-```
-Looking forward to a long-lasting partnership.
-— {{owner_first_name}} Bou Jaoude, CITI DEVELOPERS
-```
-
-Styling: centered, `font-size:13.5px`, ink color, italic first line, 18px top margin. This sits just before the gold hairline that precedes the footer logo, giving a warm sign-off.
-
-### 5. Footer contact tiles — 4 equal cards on one line
-Today the four tiles use `display:inline-block; width:140px; margin:6px` which wraps to 2×2 on ~600px renderers. Rebuild as a true email table so they stay in a single row at equal widths and the overall footer height shrinks:
+**A. Smart routing for status tiles**
+Make every tile / chip / select option open the right sub-tab automatically, so no click ever lands in an empty view.
 
 ```text
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:8px 0">
-  <tr>
-    <td width="25%"> Website tile </td>
-    <td width="25%"> Visit office tile </td>
-    <td width="25%"> Call us tile </td>
-    <td width="25%"> WhatsApp tile </td>
-  </tr>
-</table>
+not_started, pending_application, documents_required,
+under_review, rejected, expired       → setSubTab("queue")
+registered                             → setSubTab("history") + filter history by registered
+contracts                              → setSubTab("history") + filter by contract rows
 ```
 
-Tile changes:
-- Each `<a>` becomes `display:block;width:auto` filling its `<td>`
-- Reduce padding `12px 10px` → `10px 6px`
-- Reduce icon size `16` → `14`, font-size `12.5px` → `12px`
-- Keep the gold hairline-underline on the label for the "clickable" cue
+The Sent History view (`SentHistoryView`) already receives `historyPool`. Add a lightweight status filter prop so it can narrow to `registered` or contract rows when the user lands there from a tile. The `statusFilter` state stays a single source of truth, but each consumer (queue list vs. history list) reads from the appropriate pool.
 
-This gives 4 equal-width cards on one line in Gmail / Apple Mail / Outlook and lowers the footer height noticeably.
+**B. Remove duplicate filter UI**
+Keep ONE consolidated filter strip and delete the redundant ones:
 
-### 6. Overall height trim
-- Outer card padding `36px` → `30px`
-- Top header padding `22px 0 26px` → `16px 0 20px`
-- Footer top padding `26px` → `20px`, footer logo block `22px 0 26px` → `14px 0 18px`
+- **Keep**: the stat cards grid (line 2206) — visual, shows counts, click-to-filter, includes Registered. This is the most useful surface.
+- **Keep**: the search input + the single "All emails / Not sent / Sent" select (drop the `registered` option from the email filter since it duplicates the status).
+- **Remove**: the chip row (lines 2151–2203). Move the Contracts toggle into the stat-cards grid as the 8th tile so it sits with the rest.
+- **Remove**: the "All statuses" `<Select>` at line 2013 (replaced by the cards).
+- **Drop** the `registered` option from the email-filter select since it's now redundant with the Registered card.
+
+Result: one filter row (search + email-state select + actions) and one stats grid where every tile filters and routes correctly.
+
+**C. Empty-state copy**
+When the user is on Queue and a tile would yield zero rows but rows exist in History, replace "No developer match" with a single CTA: *"3 developers in this status are in Sent History — Open Sent History"* that flips `subTab = "history"` and applies the filter. Same in reverse from History.
 
 ### Files touched
-- New migration: `supabase/migrations/<timestamp>_brokerage_invite_polish.sql` containing a single `UPDATE public.crm_email_templates SET html = $$...$$ WHERE variant = 'brokerage_breakfast_invite';`
+- `src/pages/CRMRelationships.tsx` (only the `DeveloperRegistryTab` section, ~lines 1937–2280)
+- `src/pages/owner/crm/SentHistoryView.tsx` — add an optional `statusFilter` prop and a small filter chip row mirroring the queue's smart routing
 
-No code in `supabase/functions/crm-send-brokerage-outreach/index.ts` needs to change — it already reads the template from the DB.
-
-### One small clarification
-You said "always the emails keep it three capital letter". I'm interpreting this as **"always write CITI DEVELOPERS in all caps"** (which matches your next sentence). If you actually meant something else (e.g. capitalize only the first 3 letters, or display the email address in caps), tell me and I'll adjust before applying.
+No DB, no edge function, no schema changes. Pure UI consolidation + routing fix.

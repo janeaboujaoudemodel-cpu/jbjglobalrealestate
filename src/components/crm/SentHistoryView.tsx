@@ -36,6 +36,7 @@ type TabKey =
   | "inbox"
   | "contacted"
   | "pending_actions"
+  | "registered"
   | "under_review"
   | "rejected"
   | "expired"
@@ -45,12 +46,16 @@ interface SentHistoryViewProps {
   developers: any[];
   onResend: (dev: any) => void;
   onMarkRegistered: (dev: any) => void;
+  /** When provided, overrides the internal sub-tab (used when the Queue's stat tiles route here). */
+  tabOverride?: TabKey;
 }
 
-export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: SentHistoryViewProps) => {
+export const SentHistoryView = ({ developers, onResend, onMarkRegistered, tabOverride }: SentHistoryViewProps) => {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
-  const [tab, setTab] = useState<TabKey>("all");
+  const [internalTab, setInternalTab] = useState<TabKey>("all");
+  const tab = tabOverride ?? internalTab;
+  const setTab = (k: TabKey) => setInternalTab(k);
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [variantFilter, setVariantFilter] = useState<string>("all");
   const [logDev, setLogDev] = useState<any | null>(null);
@@ -100,6 +105,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
       inbox: 0,
       contacted: 0,
       pending_actions: 0,
+      registered: 0,
       under_review: 0,
       rejected: 0,
       expired: 0,
@@ -109,6 +115,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
       if (d._inboxCount > 0) c.inbox++;
       if (d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= thirtyDaysAgo && d._inboxCount === 0) c.contacted++;
       if (d._pendingCount > 0) c.pending_actions++;
+      if (d.status === "registered") c.registered++;
       if (d.status === "under_review") c.under_review++;
       if (d.status === "rejected") c.rejected++;
       if (d.status === "expired") c.expired++;
@@ -126,6 +133,8 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
           return d.last_outreach_at && new Date(d.last_outreach_at).getTime() >= thirtyDaysAgo && d._inboxCount === 0;
         case "pending_actions":
           return d._pendingCount > 0;
+        case "registered":
+          return d.status === "registered" && !d.deleted_at;
         case "under_review":
           return d.status === "under_review";
         case "rejected":
@@ -170,6 +179,7 @@ export const SentHistoryView = ({ developers, onResend, onMarkRegistered }: Sent
     { k: "inbox",           label: "Inbox",           icon: Inbox,        count: counts.inbox },
     { k: "contacted",       label: "Contacted",       icon: Mail,         count: counts.contacted },
     { k: "pending_actions", label: "Pending Actions", icon: AlertCircle,  count: counts.pending_actions },
+    { k: "registered",      label: "Registered",      icon: CheckCircle2, count: counts.registered },
     { k: "under_review",    label: "Under Review",    icon: Clock,        count: counts.under_review },
     { k: "rejected",        label: "Rejected",        icon: AlertCircle,  count: counts.rejected },
     { k: "expired",         label: "Expired",         icon: Clock,        count: counts.expired },

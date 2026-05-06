@@ -1726,6 +1726,18 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
+  const [historyTab, setHistoryTab] = useState<any>(undefined);
+  // Smart routing: clicking a status tile/chip routes to the correct sub-tab automatically
+  // so the user is never left staring at an empty pool.
+  const selectStatus = (v: string) => {
+    if (v === "all") { setStatusFilter("all"); setSubTab("queue"); setHistoryTab(undefined); return; }
+    if (v === "registered") { setStatusFilter("all"); setSubTab("history"); setHistoryTab("registered"); return; }
+    if (v === "contracts") { setStatusView(statusView === "contracts" ? "all" : "contracts"); setSubTab("queue"); return; }
+    // queue-pool statuses
+    setStatusFilter(statusFilter === v ? "all" : v);
+    setSubTab("queue");
+    setHistoryTab(undefined);
+  };
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [devListView, setDevListView] = useState<CRMListView>({ kind: "active", listId: null });
@@ -1949,7 +1961,45 @@ const DeveloperRegistryTab = () => {
       <DeveloperDirectoryPanel />
       <DocumentPackPanel />
 
-      {/* Sub-tabs: collapsed by default. Click a panel to expand; click again to collapse. */}
+      {/* Unified status tiles — single source of truth. Each tile auto-routes to the
+          correct sub-tab so a click never lands in an empty pool (Registered → History). */}
+      {data.length > 0 && (
+        <div className="grid grid-cols-3 md:grid-cols-8 gap-2">
+          {STATUS_DEV.map((s) => {
+            const n = counts[s.v] || 0;
+            const isHistoryTile = s.v === "registered";
+            const active = isHistoryTile
+              ? subTab === "history" && historyTab === "registered"
+              : statusFilter === s.v && subTab === "queue";
+            return (
+              <Card
+                key={s.v}
+                className={`cursor-pointer transition ${active ? "ring-2 ring-[#1A1A1A]" : "hover:ring-1 hover:ring-[#1A1A1A]/30"}`}
+                onClick={() => selectStatus(s.v)}
+                title={isHistoryTile ? "Open Sent History · Registered" : `Filter Outreach Queue by ${s.label}`}
+              >
+                <CardContent className="p-3 text-center">
+                  <div className="text-2xl font-bold">{n}</div>
+                  <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1">{s.label}</div>
+                </CardContent>
+              </Card>
+            );
+          })}
+          <Card
+            className={`cursor-pointer transition ${statusView === "contracts" ? "ring-2 ring-[#1A1A1A]" : "hover:ring-1 hover:ring-[#1A1A1A]/30"}`}
+            onClick={() => selectStatus("contracts")}
+            title="Show developers with a contract sent or signed"
+          >
+            <CardContent className="p-3 text-center">
+              <div className="text-2xl font-bold">{contractsCount}</div>
+              <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1 flex items-center justify-center gap-1">
+                <FileSignature className="w-3 h-3" />Contracts
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className="text-xs text-[#1A1A1A]/70">Click a panel to expand · both start collapsed</div>
       <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
@@ -1980,6 +2030,7 @@ const DeveloperRegistryTab = () => {
       <div className={subTab === "history" ? "block" : "hidden"}>
         <SentHistoryView
           developers={historyPool}
+          tabOverride={historyTab}
           onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
@@ -2010,20 +2061,12 @@ const DeveloperRegistryTab = () => {
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_DEV.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
         <Select value={emailFilter} onValueChange={(v: any) => setEmailFilter(v)}>
           <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All emails</SelectItem>
             <SelectItem value="not_sent">Not sent yet</SelectItem>
             <SelectItem value="sent">Email sent</SelectItem>
-            <SelectItem value="registered">Confirmed registered</SelectItem>
           </SelectContent>
         </Select>
         <OutreachActionsMenu
@@ -2145,76 +2188,8 @@ const DeveloperRegistryTab = () => {
         </Button>
       </div>
 
-      {data.length > 0 && (
-        <>
-          {/* Quick filter chips — queue-relevant statuses only */}
-          <div className="flex flex-wrap gap-1.5 items-center">
-            <button
-              type="button"
-              onClick={() => setStatusFilter("all")}
-              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition ${
-                statusFilter === "all"
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-              }`}
-            >
-              All ({queuePool.length})
-            </button>
-            {STATUS_DEV.filter((s) => s.v !== "registered").map((s) => {
-              const n = counts[s.v] || 0;
-              const active = statusFilter === s.v;
-              return (
-                <button
-                  key={s.v}
-                  type="button"
-                  onClick={() => setStatusFilter(active ? "all" : s.v)}
-                  disabled={n === 0 && !active}
-                  className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
-                    active
-                      ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                      : n === 0
-                      ? "bg-[#FDFBF7] text-[#1A1A1A]/70 border-[#1A1A1A]/10 cursor-not-allowed"
-                      : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-                  }`}
-                >
-                  <span>{s.label}</span>
-                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    active ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
-                  }`}>{n}</span>
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              onClick={() => setStatusView(statusView === "contracts" ? "all" : "contracts")}
-              className={`text-xs px-3 py-1.5 rounded-full border font-semibold transition flex items-center gap-1.5 ${
-                statusView === "contracts"
-                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
-                  : "bg-[#FDFBF7] text-[#1A1A1A] border-[#1A1A1A]/15 hover:border-[#1A1A1A]/40"
-              }`}
-              title="Show developers with a contract sent or signed"
-            >
-              <FileSignature className="w-3 h-3" />
-              <span>Contracts</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                statusView === "contracts" ? "bg-[#FDFBF7]/20 text-white" : "bg-[#1A1A1A]/5 text-[#1A1A1A]"
-              }`}>{contractsCount}</span>
-            </button>
-          </div>
-
-          {/* Detailed status cards (existing) */}
-          <div className="grid grid-cols-3 md:grid-cols-7 gap-2">
-            {STATUS_DEV.map((s) => (
-              <Card key={s.v} className={`cursor-pointer ${statusFilter === s.v ? "ring-2 ring-black" : ""}`} onClick={() => setStatusFilter(statusFilter === s.v ? "all" : s.v)}>
-                <CardContent className="p-3 text-center">
-                  <div className="text-2xl font-bold">{counts[s.v] || 0}</div>
-                  <div className="text-[10px] uppercase text-[#1A1A1A]/70 mt-1">{s.label}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </>
-      )}
+      {/* Stat tiles + chip row removed from here — moved above the sub-tab toggle so they
+          stay visible whether the user is in Outreach Queue or Sent History. */}
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-[#1A1A1A]/70 space-y-4">
