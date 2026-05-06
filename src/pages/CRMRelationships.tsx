@@ -680,7 +680,8 @@ const BrokeragesTab = () => {
           <div><span className="text-[#1A1A1A]/70">All:</span> <b>{data.length}</b></div>
           <div><span className="text-[#1A1A1A]/70">UAE Agencies:</span> <b>{directoryCount}</b></div>
           <div><span className="text-[#1A1A1A]/70">My Additions:</span> <b>{ownerCount}</b></div>
-          <div><span className="text-[#1A1A1A]/70">Existing Matches:</span> <b>{existingCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">Already Sent:</span> <b>{sentCount}</b></div>
+          <div><span className="text-[#1A1A1A]/70">New Replies:</span> <b>{inboxCount}</b></div>
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#1A1A1A]/70">
           {EMIRATES.map((e) => (
