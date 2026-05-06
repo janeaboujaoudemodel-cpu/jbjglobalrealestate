@@ -622,7 +622,7 @@ const BrokeragesTab = () => {
         notes: (r.notes || "").slice(0, 240),
       };
     });
-    exportBrokerages(rows, format);
+    await exportBrokerages(rows, format);
     toast.success(`Exported ${rows.length} agencies as ${format.toUpperCase()}`);
   };
 
