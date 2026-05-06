@@ -1044,7 +1044,38 @@ const BrokeragesAgenciesView = () => {
       </div>
       <BulkUploadDialog open={uploadOpen} onOpenChange={setUploadOpen} kind="brokerage" onDone={refetch} defaultListId={listView.kind === "list" ? listView.listId : null} />
 
-      {viewMode === "excel" ? (
+      {sourceTab === "owner" && (
+        <>
+          <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-3 text-xs text-[#1A1A1A]/80">
+            <b className="text-[#1A1A1A]">My Additions</b> — every agency you add lands here automatically. Card view and Excel view are both shown below.
+          </div>
+          <ExcelGridView
+            rows={filtered as any[]}
+            columns={[
+              { key: "company_name", label: "Agency", width: 220 },
+              { key: "emirate", label: "Emirate / City", width: 140, editable: true },
+              { key: "office_location", label: "Office", width: 200, editable: true },
+              {
+                key: "registration_status", label: "Agency status", width: 200, status: true,
+                statusOptions: BROKERAGE_REGISTRATION_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+                onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, registration_status: next }),
+              },
+              {
+                key: "outreach_stage", label: "Outreach", width: 170, status: true,
+                statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+                onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
+              },
+              { key: "phone", label: "Phone", width: 150, editable: true },
+              { key: "email", label: "Email", width: 220, editable: true },
+              { key: "notes", label: "Notes", width: 260, editable: true },
+            ]}
+            onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
+            emptyLabel="No additions yet — click Add Brokerage."
+          />
+        </>
+      )}
+
+      {viewMode === "excel" && sourceTab !== "owner" ? (
         <ExcelGridView
           rows={filtered as any[]}
           columns={[
