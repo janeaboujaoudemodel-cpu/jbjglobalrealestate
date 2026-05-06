@@ -14,12 +14,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2 } from "lucide-react";
 import { PIPELINE_STATUSES, STATUS_GROUPS } from "./LeadStatusBadge";
 import InlineStatusSelect from "./InlineStatusSelect";
 import CRMLeadsBulkBar from "./CRMLeadsBulkBar";
 import LeadAssignModal from "./LeadAssignModal";
 import DeleteLeadDialog from "./DeleteLeadDialog";
+import SendAgreementDialog from "./SendAgreementDialog";
 
 interface LeadSource {
   source_group: string;
