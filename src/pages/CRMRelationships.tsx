@@ -1613,7 +1613,7 @@ const DeveloperRegistryTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
-  const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [queueCollapsed, setQueueCollapsed] = useState<boolean>(() => {
