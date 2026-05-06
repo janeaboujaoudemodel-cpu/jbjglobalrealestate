@@ -153,6 +153,10 @@ export const BulkSendDialog = ({
   const [showPreview, setShowPreview] = useState(true);
   const [reviewing, setReviewing] = useState(false);
 
+  // Manual exclusion list (owner ticks rows out of the broadcast)
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [refineSearch, setRefineSearch] = useState("");
+
   // Pre-flight registration check (brokerage only).
   // Map of brokerageId → result. `null` value = "OK to send" but record exists.
   const [checks, setChecks] = useState<Record<string, BrokerageCheckResult>>({});
