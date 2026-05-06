@@ -598,6 +598,18 @@ const BrokeragesTab = () => {
     const out: any[] = [];
     for (const item of indexed) {
       const r = item.row;
+      // List/Junk/Trash filtering — operates on soft-delete + is_junk + list_id columns.
+      if (listView.kind === "trash") {
+        if (!r.deleted_at) continue;
+      } else {
+        if (r.deleted_at) continue;
+        if (listView.kind === "junk") {
+          if (!r.is_junk) continue;
+        } else {
+          if (r.is_junk) continue;
+          if (listView.kind === "list" && r.list_id !== listView.listId) continue;
+        }
+      }
       if (excludedIds.has(r.id)) continue;
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
@@ -610,12 +622,25 @@ const BrokeragesTab = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds, listView]);
+
+  // Sidebar counts derived from full data set
+  const listCounts = useMemo(() => {
+    let active = 0, junk = 0, trash = 0;
+    const perList: Record<string, number> = {};
+    for (const r of data as any[]) {
+      if (r.deleted_at) { trash++; continue; }
+      if (r.is_junk) { junk++; continue; }
+      active++;
+      if (r.list_id) perList[r.list_id] = (perList[r.list_id] || 0) + 1;
+    }
+    return { active, junk, trash, perList };
+  }, [data]);
 
   // Window the long card list — render first N rows, grow on demand. Keeps filter
   // updates and status flips snappy even when the directory has 1000+ agencies.
   const [visibleCount, setVisibleCount] = useState(60);
-  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab]);
+  useEffect(() => { setVisibleCount(60); }, [debouncedQ, statusFilter, emirateFilter, sourceTab, listView]);
   const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
