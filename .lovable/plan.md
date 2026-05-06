@@ -1,48 +1,52 @@
-## Developer Registry — fix "Registered" card + dedupe filters
+## Goal
 
-### The two problems
+Inside the **Brokerages** tab of CRM Relationships, restructure into two top-level tabs and make sure newly added agencies land in your personal pipeline ("My Additions") with both Card view and Excel view available at all times.
 
-**1. The "Registered" card (and any history-only status) is a dead end**
-The Outreach Queue panel applies `statusFilter` against `queuePool`, and `queuePool` deliberately excludes anyone whose `status === 'registered'` (they live in Sent History). So clicking the **Registered** stat card sets `statusFilter = 'registered'`, the queue filter returns 0 rows, and the user sees "No developer match the current filters / Show full queue". The card is wired to state but routes the user to an empty pool.
+## What changes
 
-**2. Filters are duplicated three times**
-The same status concept currently appears as:
-- `<Select>` "All statuses" dropdown (line 2013) — full STATUS_DEV list
-- Pill chips row (lines 2151–2203) — STATUS_DEV minus `registered` + a Contracts toggle
-- Stat cards grid (lines 2206–2215) — full STATUS_DEV list, also clickable as filter
+### 1. Two new tabs inside Brokerages
 
-Three controls drive the same `statusFilter` state. Plus the email filter (`Not sent / Sent / Confirmed registered`) overlaps with the status filter (`registered`), giving the user a fourth way to express the same thing.
-
-### Fix
-
-**A. Smart routing for status tiles**
-Make every tile / chip / select option open the right sub-tab automatically, so no click ever lands in an empty view.
+Add a tab strip at the top of the Brokerages section:
 
 ```text
-not_started, pending_application, documents_required,
-under_review, rejected, expired       → setSubTab("queue")
-registered                             → setSubTab("history") + filter history by registered
-contracts                              → setSubTab("history") + filter by contract rows
+[ Agencies ]   [ Individual Brokers ]
 ```
 
-The Sent History view (`SentHistoryView`) already receives `historyPool`. Add a lightweight status filter prop so it can narrow to `registered` or contract rows when the user lands there from a tile. The `statusFilter` state stays a single source of truth, but each consumer (queue list vs. history list) reads from the appropriate pool.
+- **Agencies** — the existing brokerage directory (everything currently shown).
+- **Individual Brokers** — a new view listing every broker (person) you have on file. Source = union of:
+  - `crm_brokerage_agents` (brokers added under any agency, with the agency name shown as a column), AND
+  - Standalone brokers not tied to any agency (we'll allow `brokerage_id = null` rows in the same `crm_brokerage_agents` table so you can add a lone broker without first creating an agency).
+  - Columns: Name · Phone · WhatsApp · Email · Role · Status · Agency · Last contacted · Actions.
+  - Same Card / Excel toggle as Agencies.
+  - "+ Add broker" button works with or without selecting an agency.
 
-**B. Remove duplicate filter UI**
-Keep ONE consolidated filter strip and delete the redundant ones:
+### 2. New agencies auto-land in "My Additions"
 
-- **Keep**: the stat cards grid (line 2206) — visual, shows counts, click-to-filter, includes Registered. This is the most useful surface.
-- **Keep**: the search input + the single "All emails / Not sent / Sent" select (drop the `registered` option from the email filter since it duplicates the status).
-- **Remove**: the chip row (lines 2151–2203). Move the Contracts toggle into the stat-cards grid as the 8th tile so it sits with the rest.
-- **Remove**: the "All statuses" `<Select>` at line 2013 (replaced by the cards).
-- **Drop** the `registered` option from the email-filter select since it's now redundant with the Registered card.
+`openNew()` already stamps `entry_source: "owner"`, so any agency you create is already part of My Additions. We will:
+- After save, **switch the source sub-tab to `owner` ("My Additions")** and scroll the new row into view, so you immediately see your new entry.
+- Toast confirmation: "Added to My Additions — ready for outreach".
 
-Result: one filter row (search + email-state select + actions) and one stats grid where every tile filters and routes correctly.
+### 3. Always show Card view AND Excel view for My Additions
 
-**C. Empty-state copy**
-When the user is on Queue and a tile would yield zero rows but rows exist in History, replace "No developer match" with a single CTA: *"3 developers in this status are in Sent History — Open Sent History"* that flips `subTab = "history"` and applies the filter. Same in reverse from History.
+Today there is one shared `viewMode` toggle (`cards | excel`) that hides the other view. Change to:
+- **My Additions** sub-tab: always renders **both** the Card grid (top) and the Excel grid (bottom), with a small "Jump to Excel ↓ / Jump to Cards ↑" anchor.
+- All other sub-tabs (All / UAE Agencies / Already Sent / New Replies): keep the existing Card/Excel toggle (unchanged), so we don't slow down 10k-row views.
 
-### Files touched
-- `src/pages/CRMRelationships.tsx` (only the `DeveloperRegistryTab` section, ~lines 1937–2280)
-- `src/pages/owner/crm/SentHistoryView.tsx` — add an optional `statusFilter` prop and a small filter chip row mirroring the queue's smart routing
+### 4. Counts & filters
 
-No DB, no edge function, no schema changes. Pure UI consolidation + routing fix.
+- Tab badges show live counts: `Agencies · {data.length}` and `Individual Brokers · {brokerCount}`.
+- Filters (search, list sidebar, status, emirate) apply to whichever tab is active. The Individual Brokers tab gets its own search box plus an "Agency" filter dropdown.
+
+## Out of scope
+
+- No changes to email templates, breakfast invitation, registration card, or developer tabs.
+- No schema changes beyond making `crm_brokerage_agents.brokerage_id` nullable (one migration) so standalone brokers are storable.
+
+## Technical notes
+
+- File: `src/pages/CRMRelationships.tsx` — wrap `BrokeragesTab` body in a Radix `Tabs` (`agencies` | `brokers`).
+- New component: `src/components/crm/IndividualBrokersTab.tsx` — fetches `crm_brokerage_agents` joined to `crm_brokerages(company_name)`, reuses `ExcelGridView` + a card grid built from the existing card markup.
+- Migration: `ALTER TABLE crm_brokerage_agents ALTER COLUMN brokerage_id DROP NOT NULL;` (only if it's currently NOT NULL — we'll verify first).
+- `BrokerageAgentsEditor` stays as the per-agency editor; the new tab is read/write at the broker level.
+- "My Additions" dual-view: conditionally render both `<CardsGrid />` and `<ExcelGridView />` when `sourceTab === "owner"`; otherwise keep the toggle.
+- After `save()` succeeds for a new agency: `setSourceTab("owner")` + `qc.invalidateQueries(["crm-brokerages"])`.
