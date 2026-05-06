@@ -148,16 +148,24 @@ const base64UrlEncode = (str: string) => {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
+// RFC 2047 encoded-word for non-ASCII subject lines (prevents Ã—/ÃƒÆ' mojibake)
+const encodeSubject = (s: string) => {
+  // ASCII-only? leave as-is.
+  if (/^[\x20-\x7E]*$/.test(s)) return s;
+  const b64 = btoa(unescape(encodeURIComponent(s)));
+  return `=?UTF-8?B?${b64}?=`;
+};
+
 const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: string; html: string; replyTo: string; }) => {
   const headers = [
     `From: ${opts.from}`,
     `To: ${opts.to}`,
     opts.cc.length ? `Cc: ${opts.cc.join(", ")}` : "",
     `Reply-To: ${opts.replyTo}`,
-    `Subject: ${opts.subject}`,
+    `Subject: ${encodeSubject(opts.subject)}`,
     "MIME-Version: 1.0",
     'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: 7bit",
+    "Content-Transfer-Encoding: 8bit",
   ].filter(Boolean).join("\r\n");
   return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
