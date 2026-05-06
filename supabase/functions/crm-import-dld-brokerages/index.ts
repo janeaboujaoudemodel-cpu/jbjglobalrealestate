@@ -160,10 +160,13 @@ Deno.serve(async (req) => {
         .from("crm_brokerages")
         .insert(chunk, { count: "exact" });
       if (error) {
-        return new Response(
-          JSON.stringify({ error: error.message, inserted, at: i }),
-          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
+        // Fall back to row-by-row so one bad dup doesn't kill the batch
+        for (const row of chunk) {
+          const { error: rowErr } = await supabase.from("crm_brokerages").insert(row);
+          if (!rowErr) inserted++;
+          else skipped++;
+        }
+        continue;
       }
       inserted += count ?? chunk.length;
     }
