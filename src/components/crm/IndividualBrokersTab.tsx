@@ -112,6 +112,8 @@ export default function IndividualBrokersTab() {
         role: patch.role || null,
         status: patch.status || "active",
         source: patch.source || "manual",
+        expertise_type: patch.expertise_type || "both",
+        expertise_areas: patch.expertise_areas || [],
       };
       if (patch.id) {
         const { error } = await (supabase as any).from("crm_brokerage_agents").update(payload).eq("id", patch.id);
