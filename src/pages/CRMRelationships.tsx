@@ -513,37 +513,40 @@ const BrokeragesAgenciesView = () => {
   const [importingDLD, setImportingDLD] = useState(false);
   const [listView, setListView] = useState<CRMListView>({ kind: "active", listId: null });
   const qc = useQueryClient();
+  const dldLoadedCount = useMemo(
+    () => (data as any[]).filter((r: any) => r.dld_office_number || r.source === "dld_register").length,
+    [data],
+  );
   const onListChanged = () => {
     qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
     refetch();
   };
 
-  const handleImportDLD = async () => {
+  const handleImportDLD = async (silent = false) => {
     if (importingDLD) return;
-    if (!confirm("Import the full DLD broker register (10,078 agencies)? Duplicates with existing entries will be skipped — never overwritten.")) return;
     setImportingDLD(true);
     try {
-      toast.info("Loading DLD register…");
-      const res = await fetch("/dld-broker-offices.json");
-      const all = await res.json();
-      let inserted = 0, updated = 0, skipped = 0;
-      const chunkSize = 500;
-      for (let i = 0; i < all.length; i += chunkSize) {
-        const chunk = all.slice(i, i + chunkSize);
-        toast.info(`Importing ${i + chunk.length}/${all.length}…`, { id: "dld-import" });
-        const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", { body: { rows: chunk } });
-        if (error) throw error;
-        inserted += r?.inserted || 0;
-        updated += r?.updated || 0;
-        skipped += r?.skipped || 0;
-      }
-      toast.success(`DLD import done — ${inserted} new, ${updated} updated, ${skipped} duplicates skipped`, { id: "dld-import", duration: 8000 });
+      if (!silent) toast.info("Syncing the full DLD register…", { id: "dld-import" });
+      const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", { body: {} });
+      if (error) throw error;
+      const message = `DLD sync complete — ${(r?.inserted || 0).toLocaleString()} new, ${(r?.updated || 0).toLocaleString()} preserved/backfilled, ${(r?.skipped || 0).toLocaleString()} already existed`;
+      silent ? toast.success(message, { duration: 7000 }) : toast.success(message, { id: "dld-import", duration: 8000 });
+      await refetch();
     } catch (e: any) {
-      toast.error("Import failed: " + (e?.message || e));
+      toast.error("DLD sync failed: " + (e?.message || e), { id: "dld-import" });
     } finally {
       setImportingDLD(false);
     }
   };
+
+  useEffect(() => {
+    if (isLoading || importingDLD || dldLoadedCount >= 10078) return;
+    const key = "crm:dld-full-sync:auto-ran";
+    if (sessionStorage.getItem(key) === "1") return;
+    sessionStorage.setItem(key, "1");
+    toast.info(`Completing DLD register in the background (${dldLoadedCount.toLocaleString()}/10,078 loaded)…`);
+    handleImportDLD(true);
+  }, [isLoading, importingDLD, dldLoadedCount]);
 
   const handleEnrichVisible = async () => {
     const targets = (filtered as any[])
