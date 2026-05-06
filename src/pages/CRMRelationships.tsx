@@ -740,11 +740,15 @@ const BrokeragesTab = () => {
       };
     });
 
-  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[] }) => {
-    const source =
+  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[]; statuses?: string[] }) => {
+    let source =
       opts.scope === "all" ? (data as any[]) :
       opts.scope === "selected" ? (data as any[]).filter((r: any) => bulkSel.has(r.id)) :
       (filtered as any[]);
+    if (opts.statuses && opts.statuses.length) {
+      const set = new Set(opts.statuses);
+      source = source.filter((r: any) => set.has(String(r.outreach_stage || r.registration_status || r.status || "").toLowerCase()));
+    }
     if (!source.length) {
       toast.error("Nothing to export");
       return;
@@ -1354,6 +1358,15 @@ const BrokeragesTab = () => {
         columns={BROKERAGE_EXPORT_COLUMNS.map((c) => ({ key: c.key as string, label: c.label, group: c.group, defaultOn: c.defaultOn }))}
         presets={BROKERAGE_EXPORT_PRESETS}
         storageKey="export.brokerages.columns"
+        statusFilters={[
+          { key: "not_contacted", label: "Not contacted" },
+          { key: "attempted", label: "Attempted" },
+          { key: "engaged", label: "Engaged" },
+          { key: "meeting_booked", label: "Meeting booked" },
+          { key: "active_partner", label: "Active partner" },
+          { key: "dormant", label: "Dormant" },
+          { key: "declined", label: "Declined" },
+        ]}
         onExport={handleExportConfigured}
       />
     </div>

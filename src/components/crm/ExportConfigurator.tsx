@@ -38,10 +38,12 @@ interface Props {
   columns: ColumnDef[];
   presets?: ExportPreset[];
   storageKey: string; // e.g. "export.brokerages"
+  statusFilters?: { key: string; label: string }[];
   onExport: (opts: {
     format: ExportFormat;
     scope: "visible" | "selected" | "all";
     columns: string[];
+    statuses?: string[];
   }) => Promise<void> | void;
 }
 
@@ -54,12 +56,14 @@ export function ExportConfigurator({
   columns,
   presets = [],
   storageKey,
+  statusFilters,
   onExport,
 }: Props) {
   const defaultCols = columns.filter((c) => c.defaultOn !== false).map((c) => c.key);
   const [format, setFormat] = useState<ExportFormat>("xlsx");
   const [scope, setScope] = useState<"visible" | "selected" | "all">("visible");
   const [selected, setSelected] = useState<string[]>(defaultCols);
+  const [statuses, setStatuses] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   // Load saved selection
@@ -77,6 +81,9 @@ export function ExportConfigurator({
   const toggle = (k: string) =>
     setSelected((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
 
+  const toggleStatus = (k: string) =>
+    setStatuses((s) => (s.includes(k) ? s.filter((x) => x !== k) : [...s, k]));
+
   const applyPreset = (p: ExportPreset) => setSelected(p.columns);
 
   const groups = Array.from(
@@ -88,7 +95,7 @@ export function ExportConfigurator({
     setBusy(true);
     try {
       localStorage.setItem(storageKey, JSON.stringify(selected));
-      await onExport({ format, scope, columns: selected });
+      await onExport({ format, scope, columns: selected, statuses: statuses.length ? statuses : undefined });
       onClose();
     } finally {
       setBusy(false);
@@ -157,6 +164,46 @@ export function ExportConfigurator({
               )}
             </RadioGroup>
           </div>
+
+          {/* Status filters */}
+          {statusFilters && statusFilters.length > 0 && (
+            <div>
+              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">
+                Filter by status {statuses.length > 0 && `(${statuses.length})`}
+              </Label>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {statusFilters.map((s) => {
+                  const active = statuses.includes(s.key);
+                  return (
+                    <button
+                      key={s.key}
+                      type="button"
+                      onClick={() => toggleStatus(s.key)}
+                      className={`px-2.5 py-1 rounded-full border text-xs ${
+                        active
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-semibold"
+                          : "bg-white border-[#B89555]/30 text-[#1A1A1A]/80"
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  );
+                })}
+                {statuses.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setStatuses([])}
+                    className="px-2.5 py-1 rounded-full border border-[#B89555]/30 bg-white text-xs text-[#1A1A1A]/70"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <p className="mt-1 text-[11px] text-[#1A1A1A]/60">
+                {statuses.length === 0 ? "No filter — all statuses included." : "Only rows matching selected statuses will be exported."}
+              </p>
+            </div>
+          )}
 
           {/* Presets */}
           {presets.length > 0 && (
