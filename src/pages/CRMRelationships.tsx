@@ -738,7 +738,7 @@ const BrokeragesTab = () => {
         <DocumentPackPanel context="brokerage" />
       </section>
       <BreakfastBookingsSection />
-      <DirectoryToolsPanel />
+      <BrokerageDirectoryPanel />
 
       {/* Directory status summary — always reflects actual counts available */}
       <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-4">
