@@ -28,6 +28,25 @@ import useCRMLeadsInbox, { SOURCE_OPTIONS } from "./useCRMLeadsInbox";
 
 export default function CRMLeadsInbox() {
   const cx = useCRMLeadsInbox();
+  const qc = useQueryClient();
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <div className="container mx-auto px-4 py-8 max-w-7xl flex flex-col lg:flex-row gap-4 items-start">
+        <CRMListSidebar
+          kind="leads"
+          value={cx.listView}
+          onChange={(v) => { cx.setListView(v); cx.setPage(1); }}
+        />
+        <div className="flex-1 min-w-0">
+        <CRMBulkActionsBar
+          table="crm_leads"
+          ids={cx.selectedIds}
+          view={cx.listView.kind}
+          onClear={() => cx.setSelectedIds([])}
+          onChanged={() => qc.invalidateQueries({ queryKey: ["crm-leads-inbox"] })}
+          onExport={cx.handleExport}
+        />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
