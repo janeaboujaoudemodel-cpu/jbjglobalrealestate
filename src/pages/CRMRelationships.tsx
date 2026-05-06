@@ -1992,6 +1992,7 @@ const DeveloperRegistryTab = () => {
       <div className={subTab === "history" ? "block" : "hidden"}>
         <SentHistoryView
           developers={historyPool}
+          tabOverride={historyTab}
           onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
           onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
         />
