@@ -146,7 +146,7 @@ export const TemplateEditorDialog = ({
         .replace(/\{\{cc_email\}\}/g, "");
     }
     return html
-      .replace(/\{\{developer_name\}\}/g, testSampleName || "Sample Developer Co.")
+      .replace(/\{\{developer_name\}\}/g, testSampleName || "Your Company")
       .replace(/\{\{drive_url\}\}/g, "https://drive.google.com/…")
       .replace(/\{\{reply_to\}\}/g, "contact@jbj.ae")
       .replace(/\{\{cc_email\}\}/g, "infoo.jane@gmail.com");
