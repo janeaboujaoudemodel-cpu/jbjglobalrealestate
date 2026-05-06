@@ -37,11 +37,25 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
+  const [target, setTarget] = useState<"main" | "new" | "existing">("new");
+  const [existingListId, setExistingListId] = useState<string>("");
+  const [newListName, setNewListName] = useState<string>("");
+
+  const listsKind = kind === "brokerage" ? "brokerages" : "developers";
+  const { data: lists = [], createList } = useCRMLists(listsKind);
+
+  const defaultListName = useMemo(() => {
+    if (!file) return "";
+    return file.name.replace(/\.[^.]+$/, "").slice(0, 80);
+  }, [file]);
 
   const reset = () => {
     setFile(null);
     setBusy(false);
     setResult(null);
+    setTarget("new");
+    setExistingListId("");
+    setNewListName("");
   };
 
   const handleClose = (v: boolean) => {
@@ -56,10 +70,25 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
     setBusy(true);
     setResult(null);
     try {
+      let list_id: string | null = null;
+      if (target === "existing") {
+        list_id = existingListId || null;
+      } else if (target === "new") {
+        const nameToUse = (newListName || defaultListName).trim();
+        if (!nameToUse) throw new Error("Please name the new database");
+        // Reuse existing list with same name if present (avoids unique constraint failure)
+        const existing = lists.find((l) => l.name.toLowerCase() === nameToUse.toLowerCase());
+        if (existing) {
+          list_id = existing.id;
+        } else {
+          const created = await createList.mutateAsync({ name: nameToUse, source_filename: file.name });
+          list_id = created.id;
+        }
+      }
       const text = await file.text();
       const fnName = kind === "brokerage" ? "crm-bulk-upload-brokerages" : "crm-bulk-upload-developers";
       const { data, error } = await supabase.functions.invoke(fnName, {
-        body: { filename: file.name, content: text },
+        body: { filename: file.name, content: text, list_id },
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
