@@ -236,13 +236,14 @@ serve(async (req: Request) => {
     let contactName = "";
     if (isTest && !body.brokerageId) {
       recipient = body.testRecipient!;
-      const guess = prettifyFromEmail(recipient);
-      const brokerageName = (body.testBrokerageName && body.testBrokerageName.trim()) || guess.brokerage || "Your Brokerage";
+      const brokerageName = (body.testBrokerageName && body.testBrokerageName.trim()) || "Your agency";
+      // Test sends MUST address the agency name — never derive a person name
+      // from the recipient email local-part (would produce "Dear Info").
       brk = {
         company_name: brokerageName,
-        primary_contact: { name: guess.fullName },
+        primary_contact: {},
       };
-      contactName = guess.fullName;
+      contactName = "";
     } else {
       if (!body.brokerageId) throw new Error("brokerageId required");
       const { data: b, error: bErr } = await service
