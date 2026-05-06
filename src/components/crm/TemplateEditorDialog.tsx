@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Lock, Eye, Send, Loader2, Code2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VisualEditor } from "@/components/crm/VisualEditor";
+import { WysiwygEmailEditor } from "@/components/crm/WysiwygEmailEditor";
+import { toast } from "@/hooks/use-toast";
 import {
   useEmailTemplate,
   useUpsertEmailTemplate,
