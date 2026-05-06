@@ -209,8 +209,9 @@ serve(async (req: Request) => {
     }
 
     const service = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-    const { filename, content } = await req.json() as { filename: string; content: string };
+    const { filename, content, list_id } = await req.json() as { filename: string; content: string; list_id?: string | null };
     if (!content) throw new Error("Empty file");
+    const listId: string | null = list_id || null;
 
     const rows = parseRows(filename || "", content);
     const companies = rows.map(extractCompany).filter(Boolean) as CompanyRow[];
