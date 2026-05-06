@@ -1799,7 +1799,8 @@ const DeveloperRegistryTab = () => {
       <DeveloperDirectoryPanel />
       <DocumentPackPanel />
 
-      {/* Sub-tabs: Outreach Queue vs Sent History */}
+      {/* Sub-tabs: collapsed by default. Click a panel to expand; click again to collapse. */}
+      <div className="text-xs text-[#1A1A1A]/70">Click a panel to expand · both start collapsed</div>
       <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
           type="button"
