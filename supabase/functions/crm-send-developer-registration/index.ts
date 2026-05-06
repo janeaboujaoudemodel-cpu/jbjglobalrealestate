@@ -140,7 +140,9 @@ serve(async (req: Request) => {
     const html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
       drive_url: settings.drive_doc_pack_url,
-      reply_to: replyTo,
+      reply_to: replyTo.toUpperCase(),
+      reply_to_display: replyTo.toUpperCase(),
+      reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
     });
