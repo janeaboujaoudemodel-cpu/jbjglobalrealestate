@@ -29,7 +29,10 @@ Deno.serve(async (req) => {
       return corsErrorResponse("Unauthorized", 401, origin);
     }
 
-    const { envelope_id } = await req.json();
+    const { envelope_id, channels } = await req.json();
+    const channelList: string[] = Array.isArray(channels) && channels.length
+      ? channels
+      : ["email"];
 
     if (!envelope_id) {
       return corsErrorResponse("envelope_id is required", 400, origin);
