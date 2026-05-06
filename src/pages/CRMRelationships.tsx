@@ -1549,10 +1549,10 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   const activeCc: string[] = Array.isArray(s[F.activeCc]) ? s[F.activeCc] : [];
 
   const headerTitle = isBrk
-    ? "Brokerage Outreach Pack — Amra · JBJ Global"
+    ? "Brokerage Outreach Pack — Amra · CITI Developers"
     : "Developer Registration Pack & Outreach Settings";
   const lead = isBrk
-    ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra on behalf of JBJ Global Real Estate)."
+    ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra for CITI Developers)."
     : "Used ONLY for developer registrations. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs.";
 
   return (
