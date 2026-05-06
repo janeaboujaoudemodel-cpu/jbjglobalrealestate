@@ -16,6 +16,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+interface AttendeeRow { name?: string; phone?: string; email?: string }
 interface Body {
   token: string;
   slotId: string;
@@ -23,10 +24,12 @@ interface Body {
   email: string;
   phone?: string;
   attendeeCount: number;
+  attendees?: AttendeeRow[];
   briefingTopics?: string;
   partnershipFocus?: string;
   notes?: string;
   consent: boolean;
+  consentSnapshot?: Record<string, any>;
 }
 
 serve(async (req: Request) => {
