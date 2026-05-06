@@ -131,6 +131,13 @@ export const TestSendDialog = ({
         setActiveTo(q);
         void persist({ savedTo: next });
       }
+      // Auto-save the sample agency/developer name
+      const sn = sampleName.trim();
+      if (sn && !savedSampleNames.includes(sn)) {
+        const nextNames = [...savedSampleNames, sn];
+        setSavedSampleNames(nextNames);
+        void persist({ savedSampleNames: nextNames });
+      }
       const fnName = mode === "brokerage" ? "crm-send-brokerage-outreach" : "crm-send-developer-registration";
       const results = await Promise.allSettled(
         recipientsForSend.map((to) =>
