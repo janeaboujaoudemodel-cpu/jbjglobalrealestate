@@ -473,6 +473,52 @@ const BrokeragesTab = () => {
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [exportOpen, setExportOpen] = useState(false);
+  const [importingDLD, setImportingDLD] = useState(false);
+
+  const handleImportDLD = async () => {
+    if (importingDLD) return;
+    if (!confirm("Import the full DLD broker register (10,078 agencies)? Duplicates with existing entries will be skipped — never overwritten.")) return;
+    setImportingDLD(true);
+    try {
+      toast.info("Loading DLD register…");
+      const res = await fetch("/dld-broker-offices.json");
+      const all = await res.json();
+      let inserted = 0, updated = 0, skipped = 0;
+      const chunkSize = 500;
+      for (let i = 0; i < all.length; i += chunkSize) {
+        const chunk = all.slice(i, i + chunkSize);
+        toast.info(`Importing ${i + chunk.length}/${all.length}…`, { id: "dld-import" });
+        const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", { body: { rows: chunk } });
+        if (error) throw error;
+        inserted += r?.inserted || 0;
+        updated += r?.updated || 0;
+        skipped += r?.skipped || 0;
+      }
+      toast.success(`DLD import done — ${inserted} new, ${updated} updated, ${skipped} duplicates skipped`, { id: "dld-import", duration: 8000 });
+    } catch (e: any) {
+      toast.error("Import failed: " + (e?.message || e));
+    } finally {
+      setImportingDLD(false);
+    }
+  };
+
+  const handleEnrichVisible = async () => {
+    const targets = (filtered as any[])
+      .filter((r: any) => !r.website || !r.phone || !r.email || !r.office_address)
+      .slice(0, 50)
+      .map((r: any) => r.id);
+    if (!targets.length) { toast.info("No agencies with missing fields in the visible list"); return; }
+    toast.info(`Enriching ${targets.length} agencies from Google…`, { id: "enrich" });
+    try {
+      const { data: r, error } = await supabase.functions.invoke("crm-enrich-brokerage-from-google", { body: { brokerage_ids: targets } });
+      if (error) throw error;
+      toast.success(`Enriched ${r?.enriched || 0}/${r?.processed || 0}`, { id: "enrich" });
+    } catch (e: any) {
+      toast.error("Enrichment failed: " + (e?.message || e), { id: "enrich" });
+    }
+  };
+
   const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
   useEffect(() => {
     const openTpl = () => setTplOpen(true);
