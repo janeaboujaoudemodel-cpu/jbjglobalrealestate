@@ -312,3 +312,17 @@ export const DirectoryToolsPanel = ({
     </Card>
   );
 };
+
+export const BrokerageDirectoryPanel = () => (
+  <DirectoryToolsPanel
+    kinds={["brokerage_seed", "brokerage_enrich"]}
+    title="UAE Brokerage Directory"
+  />
+);
+
+export const DeveloperDirectoryPanel = () => (
+  <DirectoryToolsPanel
+    kinds={["developer_enrich"]}
+    title="UAE Developer Directory"
+  />
+);
