@@ -1,0 +1,1 @@
+ALTER TYPE outreach_source ADD VALUE IF NOT EXISTS 'dld_register';
