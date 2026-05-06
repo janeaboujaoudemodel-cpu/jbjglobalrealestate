@@ -176,7 +176,10 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
   const canShow = useCallback((id: PopupId): boolean => {
     // QA Mode: Block all popups for testing/screenshots
     if (isQAMode) return false;
-    
+
+    // Block all popups on signing & document workflow routes
+    if (isPopupSuppressedRoute()) return false;
+
     // Enforce delay between popups
     if (lastDismissedAt > 0 && Date.now() - lastDismissedAt < POPUP_DELAY_MS) {
       // Schedule a re-check after the delay
