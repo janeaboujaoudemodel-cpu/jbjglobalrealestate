@@ -525,7 +525,10 @@ export default function CreateEnvelope() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({ envelope_id: envelope.id }),
+          body: JSON.stringify({
+            envelope_id: envelope.id,
+            channels: Object.entries(channels).filter(([, v]) => v).map(([k]) => k),
+          }),
         }
       );
 
