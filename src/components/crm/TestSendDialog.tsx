@@ -38,9 +38,8 @@ export const TestSendDialog = ({
   const [activeCc, setActiveCc] = useState<string[]>([]);
   const [allTo, setAllTo] = useState<boolean>(false);
 
-  const [sampleName, setSampleName] = useState(
-    mode === "brokerage" ? "Sample Brokerage Group" : "Sample Developer Co.",
-  );
+  const [sampleName, setSampleName] = useState("");
+  const [savedSampleNames, setSavedSampleNames] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [step, setStep] = useState<"review" | "confirm">("review");
   const hydratedRef = useRef(false);
