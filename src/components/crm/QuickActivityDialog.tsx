@@ -160,14 +160,16 @@ export default function QuickActivityDialog({
             },
           });
         } else {
-          // Client / developer: use reminders row with kind=note/calendar
+          // Client / developer fallback: use reminders table with allowed kinds
+          // (kind enum: follow_up | document_expiry | birthday | meeting | renewal | custom)
           const row: any = {
             owner_id: user.id,
-            kind: type === "note" ? "note" : "calendar",
+            kind: type === "calendar_event" ? "meeting" : "custom",
             title: title.trim(),
             body: body.trim() || null,
-            due_at: dueIso,
-            metadata: { source: "quick_activity" },
+            // due_at is NOT NULL on this table — fall back to "now" for plain notes
+            due_at: dueIso || new Date().toISOString(),
+            metadata: { source: "quick_activity", subtype: type },
           };
           if (entityType === "client") row.client_id = entityId;
           if (entityType === "developer") row.dev_registry_id = entityId;
