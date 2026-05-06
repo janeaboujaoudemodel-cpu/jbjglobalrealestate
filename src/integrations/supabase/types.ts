@@ -5300,10 +5300,14 @@ export type Database = {
           deal_count: number
           deal_count_cached: number
           directory_rank: number | null
+          dld_office_number: string | null
           dnc_reason: string | null
           do_not_contact: boolean
           email: string | null
           emirate: string | null
+          enrichment_attempts: number | null
+          enrichment_last_run_at: string | null
+          enrichment_status: string | null
           entry_source: string
           estimated_agent_count: number | null
           field_sources: Json
@@ -5327,6 +5331,7 @@ export type Database = {
           linkedin_url: string | null
           logo_url: string | null
           match_directory_id: string | null
+          name_arabic: string | null
           nda_signed_at: string | null
           nda_status: Database["public"]["Enums"]["nda_status"]
           next_action_at: string | null
@@ -5380,10 +5385,14 @@ export type Database = {
           deal_count?: number
           deal_count_cached?: number
           directory_rank?: number | null
+          dld_office_number?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
+          enrichment_attempts?: number | null
+          enrichment_last_run_at?: string | null
+          enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
           field_sources?: Json
@@ -5407,6 +5416,7 @@ export type Database = {
           linkedin_url?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
+          name_arabic?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null
@@ -5460,10 +5470,14 @@ export type Database = {
           deal_count?: number
           deal_count_cached?: number
           directory_rank?: number | null
+          dld_office_number?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
           email?: string | null
           emirate?: string | null
+          enrichment_attempts?: number | null
+          enrichment_last_run_at?: string | null
+          enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
           field_sources?: Json
@@ -5487,6 +5501,7 @@ export type Database = {
           linkedin_url?: string | null
           logo_url?: string | null
           match_directory_id?: string | null
+          name_arabic?: string | null
           nda_signed_at?: string | null
           nda_status?: Database["public"]["Enums"]["nda_status"]
           next_action_at?: string | null

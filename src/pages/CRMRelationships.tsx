@@ -39,6 +39,8 @@ import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
+import { ExportConfigurator } from "@/components/crm/ExportConfigurator";
+import { BROKERAGE_EXPORT_COLUMNS, BROKERAGE_EXPORT_PRESETS } from "@/utils/exportBrokerages";
 import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
@@ -471,6 +473,52 @@ const BrokeragesTab = () => {
   const [ledgerOpen, setLedgerOpen] = useState<{ id: string; name: string } | null>(null);
   const [testSendOpen, setTestSendOpen] = useState(false);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [exportOpen, setExportOpen] = useState(false);
+  const [importingDLD, setImportingDLD] = useState(false);
+
+  const handleImportDLD = async () => {
+    if (importingDLD) return;
+    if (!confirm("Import the full DLD broker register (10,078 agencies)? Duplicates with existing entries will be skipped — never overwritten.")) return;
+    setImportingDLD(true);
+    try {
+      toast.info("Loading DLD register…");
+      const res = await fetch("/dld-broker-offices.json");
+      const all = await res.json();
+      let inserted = 0, updated = 0, skipped = 0;
+      const chunkSize = 500;
+      for (let i = 0; i < all.length; i += chunkSize) {
+        const chunk = all.slice(i, i + chunkSize);
+        toast.info(`Importing ${i + chunk.length}/${all.length}…`, { id: "dld-import" });
+        const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", { body: { rows: chunk } });
+        if (error) throw error;
+        inserted += r?.inserted || 0;
+        updated += r?.updated || 0;
+        skipped += r?.skipped || 0;
+      }
+      toast.success(`DLD import done — ${inserted} new, ${updated} updated, ${skipped} duplicates skipped`, { id: "dld-import", duration: 8000 });
+    } catch (e: any) {
+      toast.error("Import failed: " + (e?.message || e));
+    } finally {
+      setImportingDLD(false);
+    }
+  };
+
+  const handleEnrichVisible = async () => {
+    const targets = (filtered as any[])
+      .filter((r: any) => !r.website || !r.phone || !r.email || !r.office_address)
+      .slice(0, 50)
+      .map((r: any) => r.id);
+    if (!targets.length) { toast.info("No agencies with missing fields in the visible list"); return; }
+    toast.info(`Enriching ${targets.length} agencies from Google…`, { id: "enrich" });
+    try {
+      const { data: r, error } = await supabase.functions.invoke("crm-enrich-brokerage-from-google", { body: { brokerage_ids: targets } });
+      if (error) throw error;
+      toast.success(`Enriched ${r?.enriched || 0}/${r?.processed || 0}`, { id: "enrich" });
+    } catch (e: any) {
+      toast.error("Enrichment failed: " + (e?.message || e), { id: "enrich" });
+    }
+  };
+
   const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
   useEffect(() => {
     const openTpl = () => setTplOpen(true);
@@ -610,25 +658,31 @@ const BrokeragesTab = () => {
     remind.mutate({ brokerageId: b.id, brokerageName: b.company_name, daysFromNow: 7 });
   };
 
-  const handleExport = async (format: "csv" | "xlsx" | "pdf") => {
-    if (!filtered.length) {
-      toast.error("Nothing to export");
-      return;
-    }
-    const rows: BrokerageExportRow[] = filtered.map((r: any, i: number) => {
+  const buildBrokerageRows = (sourceRows: any[]): BrokerageExportRow[] =>
+    sourceRows.map((r: any, i: number) => {
       const regOpt = BROKERAGE_REGISTRATION_STATUS_OPTIONS.find((s) => s.value === r.registration_status);
       const statusLabel = regOpt?.label || (r.registration_status || "Not registered");
+      const admin = r.admin_contact || {};
+      const broker = r.primary_contact || {};
       return {
         rank: i + 1,
         company_name: r.company_name || "",
+        name_arabic: r.name_arabic || "",
+        dld_office_number: r.dld_office_number || "",
         emirate: r.emirate || "",
         office_location: r.office_location || r.office_address || "",
         website: r.website || "",
         instagram: r.instagram_url || "",
-        phone: r.phone || r.primary_contact?.phone || "",
-        whatsapp: r.whatsapp_e164 || r.primary_contact?.whatsapp || "",
-        email: r.email || r.primary_contact?.email || "",
-        primary_contact_name: r.primary_contact?.name || "",
+        phone: r.phone || broker.phone || "",
+        whatsapp: r.whatsapp_e164 || broker.whatsapp || "",
+        email: r.email || broker.email || "",
+        primary_contact_name: broker.name || "",
+        admin_contact_name: admin.name || "",
+        admin_contact_phone: admin.phone || "",
+        admin_contact_email: admin.email || "",
+        broker_contact_name: broker.name || "",
+        broker_contact_phone: broker.phone || "",
+        broker_contact_email: broker.email || "",
         agency_status: statusLabel,
         outreach_status: r.outreach_stage || "not_contacted",
         last_message_at: r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—",
@@ -643,11 +697,23 @@ const BrokeragesTab = () => {
         active_brokers: r.active_broker_count ?? r.active_agents ?? "—",
         inquiries: r.inquiry_count ?? 0,
         rating: r.star_rating ? Number(r.star_rating).toFixed(1) : "—",
-        notes: (r.notes || "").slice(0, 240),
+        notes: (r.notes || "").slice(0, 500),
+        ai_summary: r.ai_summary || "",
       };
     });
-    await exportBrokerages(rows, format);
-    toast.success(`Exported ${rows.length} agencies as ${format.toUpperCase()}`);
+
+  const handleExportConfigured = async (opts: { format: "xlsx" | "csv" | "pdf"; scope: "visible" | "selected" | "all"; columns: string[] }) => {
+    const source =
+      opts.scope === "all" ? (data as any[]) :
+      opts.scope === "selected" ? (data as any[]).filter((r: any) => bulkSel.has(r.id)) :
+      (filtered as any[]);
+    if (!source.length) {
+      toast.error("Nothing to export");
+      return;
+    }
+    const rows = buildBrokerageRows(source);
+    await exportBrokerages(rows, opts.format, opts.columns);
+    toast.success(`Exported ${rows.length} agencies (${opts.columns.length} columns) as ${opts.format.toUpperCase()}`);
   };
 
   const EMIRATES = ["Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah", "Umm Al Quwain"];
@@ -798,7 +864,30 @@ const BrokeragesTab = () => {
             <TableIcon className="w-3.5 h-3.5" /> Excel View
           </button>
         </div>
-        <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
+        <Button
+          variant="outline"
+          onClick={() => setExportOpen(true)}
+          disabled={!filtered.length}
+          title="Configure export — pick format, scope, and which columns (admin/broker contacts) to include"
+        >
+          <Download className="w-4 h-4 mr-2" /> Export
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleImportDLD}
+          disabled={importingDLD}
+          title="One-time bulk import of the official DLD register (10,078 UAE agencies). De-duplicates against existing entries."
+        >
+          {importingDLD ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
+          Import DLD register
+        </Button>
+        <Button
+          variant="outline"
+          onClick={handleEnrichVisible}
+          title="Auto-fill missing website/phone/email/address for visible agencies via Google + AI."
+        >
+          <Sparkles className="w-4 h-4 mr-2" /> Enrich missing
+        </Button>
         <Button
           variant="outline"
           onClick={() => {
@@ -1177,6 +1266,18 @@ const BrokeragesTab = () => {
           brokerageName={ledgerOpen.name}
         />
       )}
+
+      <ExportConfigurator
+        open={exportOpen}
+        onClose={() => setExportOpen(false)}
+        totalVisible={(filtered as any[]).length}
+        totalSelected={bulkSel.size}
+        totalAll={(data as any[]).length}
+        columns={BROKERAGE_EXPORT_COLUMNS.map((c) => ({ key: c.key as string, label: c.label, group: c.group, defaultOn: c.defaultOn }))}
+        presets={BROKERAGE_EXPORT_PRESETS}
+        storageKey="export.brokerages.columns"
+        onExport={handleExportConfigured}
+      />
     </div>
     </TooltipProvider>
   );
