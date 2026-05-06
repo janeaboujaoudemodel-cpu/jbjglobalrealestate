@@ -587,6 +587,13 @@ export default function AgencyActivityLog() {
           </div>
         </div>
       )}
+      {quickOpen && (
+        <QuickActivityDialog
+          open={!!quickOpen}
+          onOpenChange={(v) => !v && setQuickOpen(null)}
+          defaultType={quickOpen}
+        />
+      )}
     </div>
     </TooltipProvider>
   );
