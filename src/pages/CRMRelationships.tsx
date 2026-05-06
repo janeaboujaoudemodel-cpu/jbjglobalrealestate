@@ -1487,6 +1487,7 @@ const DeveloperRegistryTab = () => {
     const out: any[] = [];
     for (const item of queueIndexed) {
       const r = item.row;
+      if (devExcludedIds.has(r.id)) continue;
       if (ql && !item.nameLower.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emailFilter !== "all") {
@@ -1497,7 +1498,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, debouncedQ, statusFilter, emailFilter]);
+  }, [queueIndexed, debouncedQ, statusFilter, emailFilter, devExcludedIds]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
