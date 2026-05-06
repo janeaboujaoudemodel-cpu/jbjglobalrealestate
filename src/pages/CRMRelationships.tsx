@@ -1330,6 +1330,7 @@ const BrokeragesTab = () => {
       />
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} mode="brokerage" />
+      <TestSendDialog open={testSendOpen} onOpenChange={setTestSendOpen} mode="brokerage" variant="brokerage_partnership_intro" />
 
       {dealOpen && (
         <BrokerageDealModal
