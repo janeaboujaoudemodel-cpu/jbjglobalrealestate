@@ -254,8 +254,37 @@ export const TestSendDialog = ({
                 <Input
                   value={sampleName}
                   onChange={(e) => setSampleName(e.target.value)}
+                  placeholder={mode === "brokerage" ? "e.g. ABC Real Estate" : "e.g. Citi Developer"}
                   className="bg-white border-[#1A1A1A]/15 focus-visible:ring-[#B89555]"
                 />
+                {savedSampleNames.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {savedSampleNames.map((n) => (
+                      <span
+                        key={n}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border cursor-pointer ${
+                          sampleName === n
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                            : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:border-[#B89555]"
+                        }`}
+                        onClick={() => setSampleName(n)}
+                      >
+                        {n}
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); removeSampleName(n); }}
+                          className="ml-0.5 opacity-70 hover:opacity-100"
+                          aria-label={`Remove ${n}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p className="text-[11px] text-[#1A1A1A]/70">
+                  Saved automatically when you send. Click a chip to reuse, × to remove.
+                </p>
               </div>
             </div>
 
