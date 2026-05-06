@@ -346,7 +346,7 @@ export const TemplateEditorDialog = ({
                   <Input
                     value={testSampleName}
                     onChange={(e) => setTestSampleName(e.target.value)}
-                    placeholder={isBrokerage ? "Sample Brokerage Group" : "Sample Developer Co."}
+                    placeholder={isBrokerage ? "Recipient brokerage name (preview only)" : "Recipient company name (preview only)"}
                     className="bg-[#FDFBF7] text-[#1A1A1A]"
                   />
                 </div>
