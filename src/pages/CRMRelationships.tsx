@@ -1330,6 +1330,7 @@ const BrokeragesTab = () => {
       />
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} mode="brokerage" />
+      <TestSendDialog open={testSendOpen} onOpenChange={setTestSendOpen} mode="brokerage" variant="brokerage_partnership_intro" />
 
       {dealOpen && (
         <BrokerageDealModal
@@ -1548,10 +1549,10 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   const activeCc: string[] = Array.isArray(s[F.activeCc]) ? s[F.activeCc] : [];
 
   const headerTitle = isBrk
-    ? "Brokerage Outreach Pack — Amra · JBJ Global"
+    ? "Brokerage Outreach Pack — Amra · CITI Developers"
     : "Developer Registration Pack & Outreach Settings";
   const lead = isBrk
-    ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra on behalf of JBJ Global Real Estate)."
+    ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra for CITI Developers)."
     : "Used ONLY for developer registrations. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs.";
 
   return (
@@ -1596,7 +1597,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             <Input
               value={s[F.fromName] || ""}
               onChange={(e) => update({ [F.fromName]: e.target.value })}
-              placeholder={isBrk ? "Amra · JBJ Global Real Estate" : "JBJ Global Real Estate"}
+              placeholder={isBrk ? "Amra · CITI Developers" : "JBJ Global Real Estate"}
             />
           </div>
           <div className="md:col-span-2">
@@ -2535,7 +2536,7 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 const CRMRelationships = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState("brokerages");
-  const [testSendOpen, setTestSendOpen] = useState(false);
+  
   const [mounted, setMounted] = useState<Set<string>>(new Set(["brokerages"]));
   useEffect(() => {
     setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
@@ -2609,12 +2610,6 @@ const CRMRelationships = () => {
           </Tabs>
         </div>
       </div>
-      <TestSendDialog
-        open={testSendOpen}
-        onOpenChange={setTestSendOpen}
-        mode="brokerage"
-        variant="brokerage_partnership_intro"
-      />
     </>
   );
 };

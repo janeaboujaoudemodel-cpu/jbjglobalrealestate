@@ -100,7 +100,7 @@ const GROUP_STATUS_LABELS: Record<GroupStatusKey, string> = {
 
 const GROUP_STATUS_LINES: Record<GroupStatusKey, string> = {
   prospective:
-    "We'd love to introduce JBJ Global Real Estate to your team.",
+    "We'd love to introduce CITI Developers to your team.",
   existing:
     "Given the relationship our teams already share, I wanted to deepen the conversation directly with your leadership.",
   priority:
