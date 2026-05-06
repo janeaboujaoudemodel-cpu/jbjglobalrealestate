@@ -148,16 +148,24 @@ const base64UrlEncode = (str: string) => {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
+// RFC 2047 encoded-word for non-ASCII subject lines (prevents Ã—/ÃƒÆ' mojibake)
+const encodeSubject = (s: string) => {
+  // ASCII-only? leave as-is.
+  if (/^[\x20-\x7E]*$/.test(s)) return s;
+  const b64 = btoa(unescape(encodeURIComponent(s)));
+  return `=?UTF-8?B?${b64}?=`;
+};
+
 const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: string; html: string; replyTo: string; }) => {
   const headers = [
     `From: ${opts.from}`,
     `To: ${opts.to}`,
     opts.cc.length ? `Cc: ${opts.cc.join(", ")}` : "",
     `Reply-To: ${opts.replyTo}`,
-    `Subject: ${opts.subject}`,
+    `Subject: ${encodeSubject(opts.subject)}`,
     "MIME-Version: 1.0",
     'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: 7bit",
+    "Content-Transfer-Encoding: 8bit",
   ].filter(Boolean).join("\r\n");
   return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
@@ -321,11 +329,14 @@ serve(async (req: Request) => {
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
 
-    // owner first name — defaults to "Jane" because the template is authored as Jane
-    const ownerFirstName =
+    // owner first name — defaults to "Jane" because the template is authored as Jane.
+    // Hard-fallback to "Jane" if any source resolves to "JBJ" (legacy brand confusion).
+    let ownerFirstName =
+      firstName(settings?.brokerage_from_name as string | undefined) ||
       firstName(settings?.from_name) ||
       firstName((user.user_metadata as any)?.full_name as string | undefined) ||
       "Jane";
+    if (/^jbj/i.test(ownerFirstName)) ownerFirstName = "Jane";
 
     // ---------- Personalization resolution ----------
     const personalization: Personalization = body.personalization || {};
@@ -372,22 +383,30 @@ serve(async (req: Request) => {
       preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
     }
 
-    // Mint (or reuse) a breakfast booking invite token
-    let bookingUrl = "";
-    try {
-      const tokenRes = await userClient.functions.invoke(
-        "crm-create-breakfast-invite-token",
-        {
-          body: {
-            brokerageId: isTest ? undefined : body.brokerageId,
-            isTest,
-            preferredSlotId: personalization.preferredSlotId,
+    // Booking URL: prefer the owner's Google Calendar appointment link so the
+    // brokerage books directly on Google (auto confirmation email to both
+    // sides, no website redirect). Fall back to the in-app booking page only
+    // if the Google link is not configured.
+    let bookingUrl: string = (
+      (settings?.google_calendar_booking_url && String(settings.google_calendar_booking_url).trim()) ||
+      ""
+    );
+    if (!bookingUrl) {
+      try {
+        const tokenRes = await userClient.functions.invoke(
+          "crm-create-breakfast-invite-token",
+          {
+            body: {
+              brokerageId: isTest ? undefined : body.brokerageId,
+              isTest,
+              preferredSlotId: personalization.preferredSlotId,
+            },
           },
-        },
-      );
-      bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
-    } catch (tokErr) {
-      console.warn("Booking token mint failed (continuing):", tokErr);
+        );
+        bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
+      } catch (tokErr) {
+        console.warn("Booking token mint failed (continuing):", tokErr);
+      }
     }
 
     // Resolve featured Citi project (defaults to AMRA).
@@ -497,7 +516,7 @@ serve(async (req: Request) => {
 </div>
 </body></html>`;
     }
-    const subject = isTest ? `[TEST] ${subjectRendered}` : subjectRendered;
+    const subject = subjectRendered;
 
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,

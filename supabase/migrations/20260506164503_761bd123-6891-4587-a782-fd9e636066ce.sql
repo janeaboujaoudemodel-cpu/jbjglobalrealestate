@@ -1,0 +1,1 @@
+ALTER TABLE public.crm_owner_settings ADD COLUMN IF NOT EXISTS google_calendar_booking_url text;
