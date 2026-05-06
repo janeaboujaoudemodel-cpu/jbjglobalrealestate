@@ -1266,6 +1266,18 @@ const BrokeragesTab = () => {
           brokerageName={ledgerOpen.name}
         />
       )}
+
+      <ExportConfigurator
+        open={exportOpen}
+        onClose={() => setExportOpen(false)}
+        totalVisible={(filtered as any[]).length}
+        totalSelected={bulkSel.size}
+        totalAll={(data as any[]).length}
+        columns={BROKERAGE_EXPORT_COLUMNS.map((c) => ({ key: c.key as string, label: c.label, group: c.group, defaultOn: c.defaultOn }))}
+        presets={BROKERAGE_EXPORT_PRESETS}
+        storageKey="export.brokerages.columns"
+        onExport={handleExportConfigured}
+      />
     </div>
     </TooltipProvider>
   );
