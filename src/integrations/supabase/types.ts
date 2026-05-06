@@ -7407,6 +7407,7 @@ export type Database = {
           reply_to_email: string
           saved_cc_emails: Json
           saved_sender_emails: Json
+          saved_test_brokerage_names: Json
           saved_test_cc_emails: Json
           saved_test_to_emails: Json
           signature_html: string | null
@@ -7432,6 +7433,7 @@ export type Database = {
           reply_to_email?: string
           saved_cc_emails?: Json
           saved_sender_emails?: Json
+          saved_test_brokerage_names?: Json
           saved_test_cc_emails?: Json
           saved_test_to_emails?: Json
           signature_html?: string | null
@@ -7457,6 +7459,7 @@ export type Database = {
           reply_to_email?: string
           saved_cc_emails?: Json
           saved_sender_emails?: Json
+          saved_test_brokerage_names?: Json
           saved_test_cc_emails?: Json
           saved_test_to_emails?: Json
           signature_html?: string | null
