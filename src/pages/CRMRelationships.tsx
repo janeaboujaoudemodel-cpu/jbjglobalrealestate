@@ -719,6 +719,13 @@ const BrokeragesAgenciesView = () => {
       }
     }
     setOpen(false);
+    // New / edited agencies always belong to "My Additions" — jump there so the user sees their entry.
+    const wasNew = !editing?.id;
+    if (wasNew) {
+      setSourceTab("owner");
+      qc.invalidateQueries({ queryKey: ["crm-individual-brokers"] });
+      toast.success("Added to My Additions — ready for outreach");
+    }
   };
 
   const quickReminder = (b: any) => {
