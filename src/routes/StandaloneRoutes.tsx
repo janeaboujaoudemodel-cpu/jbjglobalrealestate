@@ -13,6 +13,7 @@ const AccessDenied = lazy(() => import("@/pages/AccessDenied"));
 const DigitalCard = lazy(() => import("@/pages/DigitalCard"));
 const ComingSoon = lazy(() => import("@/pages/ComingSoon"));
 const SignDocument = lazy(() => import("@/pages/e-signature/SignDocument"));
+const PublicSignDocument = lazy(() => import("@/pages/PublicSignDocument"));
 const FooterPreviewPage = lazy(() => import("@/pages/dev/FooterPreviewPage"));
 
 export const StandaloneRoutes = () => (
@@ -38,6 +39,11 @@ export const StandaloneRoutes = () => (
     <Route path="/sign/:token" element={
       <Suspense fallback={<PageLoader />}>
         <SignDocument />
+      </Suspense>
+    } />
+    <Route path="/documents/sign/:token" element={
+      <Suspense fallback={<PageLoader />}>
+        <PublicSignDocument />
       </Suspense>
     } />
     <Route path="/dev/footer-preview" element={

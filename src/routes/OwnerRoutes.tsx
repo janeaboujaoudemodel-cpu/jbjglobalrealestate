@@ -72,6 +72,7 @@ const ContractVault = lazy(() => import("@/pages/owner/contracts/ContractVault")
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
+const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -94,6 +95,7 @@ export const OwnerRoutes = () => (
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
     <Route path="documents" element={<Documents />} />
+    <Route path="documents/forms" element={<DocumentsFormsHub />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     <Route path="crm" element={<CRM />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
