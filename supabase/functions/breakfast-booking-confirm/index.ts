@@ -129,6 +129,8 @@ serve(async (req: Request) => {
         preferred_date: dateStr,
         preferred_time: timeStr,
         attendee_count: body.attendeeCount,
+        attendees: body.attendees || [],
+        consent_snapshot: body.consentSnapshot || { checked: true, signedAt: new Date().toISOString() },
         briefing_topics: body.briefingTopics || null,
         partnership_focus: body.partnershipFocus || null,
         notes: body.notes || null,
