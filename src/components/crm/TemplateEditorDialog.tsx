@@ -159,8 +159,15 @@ export const TemplateEditorDialog = ({
   }, [html, tokenSamples]);
 
   const handleLock = () => {
-    if (!confirm("Lock this template? After locking, the subject and body cannot be edited from the app — every email will use exactly this version.")) return;
-    lock.mutate(variant);
+    lock.mutate(variant, {
+      onSuccess: () => toast({ title: "Template locked", description: "Click Unlock template anytime to edit again." }),
+    });
+  };
+
+  const handleUnlock = () => {
+    unlock.mutate(variant, {
+      onSuccess: () => toast({ title: "Template unlocked", description: "You can edit and save changes now." }),
+    });
   };
 
   const handleSendTest = () => {
