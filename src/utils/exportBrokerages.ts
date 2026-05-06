@@ -19,13 +19,16 @@ export interface BrokerageExportRow {
   phone: string;
   whatsapp: string;
   email: string;
-  crm_status: string;
-  outreach_stage: string;
+  primary_contact_name: string;
+  agency_status: string;
+  outreach_status: string;
   last_message_at: string;
   next_followup_at: string;
   attempt_count: number | string;
   deal_count: number | string;
   estimated_agents: number | string;
+  active_brokers: number | string;
+  inquiries: number | string;
   rating: number | string;
   notes: string;
 }
