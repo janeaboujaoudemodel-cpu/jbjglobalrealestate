@@ -39,6 +39,8 @@ interface LookupResult {
   slots: Slot[];
 }
 
+interface AttendeeRow { name: string; phone: string; email: string }
+
 export default function BreakfastBooking() {
   const [params] = useSearchParams();
   const token = params.get("token") || "";
@@ -50,13 +52,16 @@ export default function BreakfastBooking() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [attendeeMode, setAttendeeMode] = useState<"count" | "list">("count");
   const [attendeeCount, setAttendeeCount] = useState("2");
+  const [attendees, setAttendees] = useState<AttendeeRow[]>([{ name: "", phone: "", email: "" }]);
   const [briefingTopics, setBriefingTopics] = useState("");
   const [partnershipFocus, setPartnershipFocus] = useState("");
   const [notes, setNotes] = useState("");
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState<{ slotAt: string } | null>(null);
+  const slotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!token) {
