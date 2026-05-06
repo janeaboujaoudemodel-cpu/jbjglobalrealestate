@@ -212,6 +212,8 @@ serve(async (req: Request) => {
       ${body.phone ? `<tr><td style="padding:6px 0;color:#1A1A1A99">Phone</td><td><a href="tel:${body.phone}" style="color:#1A1A1A">${body.phone}</a></td></tr>` : ""}
       <tr><td style="padding:6px 0;color:#1A1A1A99">Attendees</td><td>${body.attendeeCount}</td></tr>
     </table>
+    ${(body.attendees && body.attendees.length) ? `<div style="margin-top:14px;padding:14px;background:#FDFBF7;border:1px solid #B89555;border-radius:8px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:8px">Broker list</div><ol style="margin:0;padding-left:18px;font-size:13px">${body.attendees.map((a:any)=>`<li>${(a.name||"—").replace(/</g,"&lt;")}${a.phone?` · ${a.phone}`:""}${a.email?` · ${a.email}`:""}</li>`).join("")}</ol></div>` : ""}
+    ${body.consentSnapshot ? `<div style="margin-top:14px;padding:14px;background:#FDFBF7;border:1px solid #B89555;border-radius:8px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:8px">Signed consent</div><p style="margin:0;font-size:12px;color:#1A1A1A">${String(body.consentSnapshot.text||"").replace(/</g,"&lt;")}</p><p style="margin:6px 0 0;font-size:11px;color:#1A1A1A99">Signed by ${String(body.consentSnapshot.signerName||body.fullName).replace(/</g,"&lt;")} at ${String(body.consentSnapshot.signedAt||"")}</p></div>` : ""}
     ${body.briefingTopics ? `<div style="margin-top:16px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Briefing</div>${body.briefingTopics.replace(/</g,"&lt;")}</div>` : ""}
     ${body.partnershipFocus ? `<div style="margin-top:12px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Partnership focus</div>${body.partnershipFocus.replace(/</g,"&lt;")}</div>` : ""}
     ${body.notes ? `<div style="margin-top:12px;padding:14px;background:#FDFBF7;border-left:3px solid #B89555;border-radius:6px"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B89555;font-weight:700;margin-bottom:6px">Notes</div>${body.notes.replace(/</g,"&lt;")}</div>` : ""}
@@ -222,6 +224,7 @@ serve(async (req: Request) => {
         const headers = [
           `From: JBJ Breakfast <contact@jbj.ae>`,
           `To: janeaboujaoudenails@gmail.com`,
+          `Cc: info.jane@gmail.com`,
           `Reply-To: ${body.email}`,
           `Subject: ${subj}`,
           "MIME-Version: 1.0",
