@@ -94,12 +94,10 @@ export const DirectoryToolsPanel = ({
     }
   };
 
-  const latestByKind = ["brokerage_seed", "brokerage_enrich", "developer_enrich"].map(
-    (kind) => {
-      const j = jobs.find((x) => x.kind === kind);
-      return { kind, job: j };
-    },
-  );
+  const latestByKind = kinds.map((kind) => {
+    const j = jobs.find((x) => x.kind === kind);
+    return { kind, job: j };
+  });
   const allFinished = latestByKind.every(
     ({ job }) => job && job.status === "completed",
   );
