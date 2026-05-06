@@ -136,6 +136,45 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone }: Props) {
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               />
             </label>
+
+            {file && (
+              <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
+                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Where to save these rows</Label>
+                <RadioGroup value={target} onValueChange={(v) => setTarget(v as any)} className="space-y-1.5">
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="new" /> Create new database
+                    {target === "new" && (
+                      <Input
+                        autoFocus
+                        value={newListName}
+                        placeholder={defaultListName || "Database name"}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        className="h-7 ml-2 text-sm flex-1"
+                      />
+                    )}
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="existing" disabled={lists.length === 0} />
+                    Append to existing
+                    {target === "existing" && (
+                      <select
+                        className="h-7 ml-2 text-sm border border-[#B89555]/30 rounded px-2 bg-white flex-1"
+                        value={existingListId}
+                        onChange={(e) => setExistingListId(e.target.value)}
+                      >
+                        <option value="">Choose…</option>
+                        {lists.map((l) => (
+                          <option key={l.id} value={l.id}>{l.name}</option>
+                        ))}
+                      </select>
+                    )}
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]">
+                    <RadioGroupItem value="main" /> Add to Main CRM (no list)
+                  </label>
+                </RadioGroup>
+              </div>
+            )}
           </div>
         )}
 
