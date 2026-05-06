@@ -13,6 +13,9 @@ export interface ExcelGridColumn<R> {
   status?: boolean;       // render colored status cell with dropdown
   editable?: boolean;     // text-edit on double-click (notes)
   render?: (row: R) => React.ReactNode;
+  // Optional per-column overrides for multi-status grids
+  statusOptions?: { value: string; label: string }[];
+  onStatusChange?: (row: R, next: string) => void;
 }
 
 interface Props<R extends { id: string }> {
