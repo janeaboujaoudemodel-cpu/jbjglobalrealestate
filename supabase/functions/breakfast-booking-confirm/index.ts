@@ -224,7 +224,7 @@ serve(async (req: Request) => {
         const headers = [
           `From: JBJ Breakfast <contact@jbj.ae>`,
           `To: janeaboujaoudenails@gmail.com`,
-          `Cc: info.jane@gmail.com`,
+          `Cc: infoo.jane@gmail.com`,
           `Reply-To: ${body.email}`,
           `Subject: ${subj}`,
           "MIME-Version: 1.0",
