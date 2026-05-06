@@ -1017,7 +1017,10 @@ export const BulkSendDialog = ({
               <div className="flex-1">
                 <div className="font-bold mb-1">Confirm bulk send</div>
                 <div className="text-xs leading-relaxed">
-                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{targets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{targets.length === 1 ? "" : "s"}.
+                  About to send <strong>"{VARIANT_LABELS[variant]}"</strong> to <strong className="text-emerald-700">{effectiveTargets.length}</strong> {entityType === "brokerage" ? "brokerage" : "developer"}{effectiveTargets.length === 1 ? "" : "s"}
+                  {excludedIds.size > 0 && (
+                    <span> · <strong className="text-red-700">{excludedIds.size} excluded</strong> by you</span>
+                  )}.
                   {statusBreakdown.length > 0 && (
                     <span> Includes:{" "}
                       {statusBreakdown.map(([s, n], i) => (
