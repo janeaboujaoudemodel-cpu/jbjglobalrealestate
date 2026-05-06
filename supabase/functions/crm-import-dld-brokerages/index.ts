@@ -148,15 +148,11 @@ Deno.serve(async (req) => {
 
       const officeMatch = office ? byOffice.get(office) : null;
       const nameMatch = nameKey ? byName.get(nameKey) : null;
-      const emailMatch = email ? byEmail.get(email) : null;
-      const phoneMatch = phone ? byPhone.get(phone) : null;
       const canClaim = (candidate: any) =>
         candidate && !candidate.dld_office_number && !claimedExistingIds.has(candidate.id);
       const match =
         officeMatch ||
-        (canClaim(nameMatch) ? nameMatch : null) ||
-        (canClaim(emailMatch) ? emailMatch : null) ||
-        (canClaim(phoneMatch) ? phoneMatch : null);
+        (canClaim(nameMatch) ? nameMatch : null);
 
       if (match) {
         // Backfill only — never overwrite curated fields
@@ -179,8 +175,8 @@ Deno.serve(async (req) => {
         name_arabic: nameAr,
         dld_office_number: office || null,
         website: website || null,
-        phone: phone || null,
-        email: email || null,
+        phone: phone && !byPhone.has(phone) ? phone : null,
+        email: email && !byEmail.has(email) ? email : null,
         emirate: "Dubai",
         region: "UAE",
         source: "dld_register",
