@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Send, Loader2, Mail } from "lucide-react";
+import { Send, Loader2, Mail, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useOwnerSettings } from "@/hooks/useCRMRelationships";
@@ -38,9 +38,8 @@ export const TestSendDialog = ({
   const [activeCc, setActiveCc] = useState<string[]>([]);
   const [allTo, setAllTo] = useState<boolean>(false);
 
-  const [sampleName, setSampleName] = useState(
-    mode === "brokerage" ? "Sample Brokerage Group" : "Sample Developer Co.",
-  );
+  const [sampleName, setSampleName] = useState("");
+  const [savedSampleNames, setSavedSampleNames] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [step, setStep] = useState<"review" | "confirm">("review");
   const hydratedRef = useRef(false);
@@ -64,6 +63,12 @@ export const TestSendDialog = ({
     setActiveTo(to[0] || "");
     setSavedCc(cc);
     setActiveCc(cc);
+    const savedNamesKey = mode === "brokerage" ? "saved_test_brokerage_names" : "saved_test_developer_names";
+    const savedNames = Array.isArray((settings as any)[savedNamesKey])
+      ? (settings as any)[savedNamesKey]
+      : [];
+    setSavedSampleNames(savedNames);
+    if (savedNames.length > 0) setSampleName(savedNames[0]);
     if (to.length === 0) {
       supabase.auth.getUser().then(({ data }) => {
         const email = data.user?.email;
@@ -72,24 +77,31 @@ export const TestSendDialog = ({
         }
       });
     }
-  }, [open, settings]);
+  }, [open, settings, mode]);
 
   // Silent persist (no toast, no refetch loop)
-  const persist = async (next: { savedTo?: string[]; savedCc?: string[] }) => {
+  const persist = async (next: { savedTo?: string[]; savedCc?: string[]; savedSampleNames?: string[] }) => {
     try {
       const { data: u } = await supabase.auth.getUser();
       if (!u.user) return;
-      await supabase.from("crm_owner_settings").upsert(
-        {
-          owner_id: u.user.id,
-          saved_test_to_emails: next.savedTo ?? savedTo,
-          saved_test_cc_emails: next.savedCc ?? savedCc,
-        } as any,
-        { onConflict: "owner_id" },
-      );
+      const namesKey = mode === "brokerage" ? "saved_test_brokerage_names" : "saved_test_developer_names";
+      const payload: any = {
+        owner_id: u.user.id,
+        saved_test_to_emails: next.savedTo ?? savedTo,
+        saved_test_cc_emails: next.savedCc ?? savedCc,
+      };
+      if (next.savedSampleNames !== undefined) payload[namesKey] = next.savedSampleNames;
+      await supabase.from("crm_owner_settings").upsert(payload, { onConflict: "owner_id" });
     } catch (e) {
       console.warn("persist test recipients failed", e);
     }
+  };
+
+  const removeSampleName = (name: string) => {
+    const next = savedSampleNames.filter((n) => n !== name);
+    setSavedSampleNames(next);
+    if (sampleName === name) setSampleName(next[0] || "");
+    void persist({ savedSampleNames: next });
   };
 
   const recipientsForSend = useMemo(() => {
@@ -118,6 +130,13 @@ export const TestSendDialog = ({
         setSavedTo(next);
         setActiveTo(q);
         void persist({ savedTo: next });
+      }
+      // Auto-save the sample agency/developer name
+      const sn = sampleName.trim();
+      if (sn && !savedSampleNames.includes(sn)) {
+        const nextNames = [...savedSampleNames, sn];
+        setSavedSampleNames(nextNames);
+        void persist({ savedSampleNames: nextNames });
       }
       const fnName = mode === "brokerage" ? "crm-send-brokerage-outreach" : "crm-send-developer-registration";
       const results = await Promise.allSettled(
@@ -235,8 +254,37 @@ export const TestSendDialog = ({
                 <Input
                   value={sampleName}
                   onChange={(e) => setSampleName(e.target.value)}
+                  placeholder={mode === "brokerage" ? "e.g. ABC Real Estate" : "e.g. Citi Developer"}
                   className="bg-white border-[#1A1A1A]/15 focus-visible:ring-[#B89555]"
                 />
+                {savedSampleNames.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {savedSampleNames.map((n) => (
+                      <span
+                        key={n}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border cursor-pointer ${
+                          sampleName === n
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                            : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:border-[#B89555]"
+                        }`}
+                        onClick={() => setSampleName(n)}
+                      >
+                        {n}
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); removeSampleName(n); }}
+                          className="ml-0.5 opacity-70 hover:opacity-100"
+                          aria-label={`Remove ${n}`}
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p className="text-[11px] text-[#1A1A1A]/70">
+                  Saved automatically when you send. Click a chip to reuse, × to remove.
+                </p>
               </div>
             </div>
 
