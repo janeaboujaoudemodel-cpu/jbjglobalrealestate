@@ -1,6 +1,7 @@
-// Bulk import DLD broker register into crm_brokerages with strict de-duplication.
+// Bulk import DLD broker register into crm_brokerages with strict per-owner de-duplication.
 // Body: { rows: [{ office_number, name_en, name_ar, website, phone, email }] }
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "npm:@supabase/supabase-js@2";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -32,28 +33,35 @@ const cleanEmail = (e: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : "";
 };
 
+async function loadExistingBrokerages(supabase: any, ownerId: string) {
+  const all: any[] = [];
+  const page = 1000;
+  for (let from = 0; ; from += page) {
+    const { data, error } = await supabase
+      .from("crm_brokerages")
+      .select("id, dld_office_number, company_name, email, phone")
+      .eq("owner_id", ownerId)
+      .range(from, from + page - 1);
+    if (error) throw error;
+    const batch = data || [];
+    all.push(...batch);
+    if (batch.length < page) break;
+    if (from > 200_000) break;
+  }
+  return all;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
+    const auth = await requireOwnerAuth(req, corsHeaders);
+    if (auth.response) return auth.response;
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-
-    const authHeader = req.headers.get("Authorization") || "";
-    const userClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } },
-    );
-    const { data: u } = await userClient.auth.getUser();
-    if (!u?.user) {
-      return new Response(JSON.stringify({ error: "unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    const ownerId = u.user.id;
+    const ownerId = auth.userId;
 
     const { rows } = await req.json();
     if (!Array.isArray(rows)) {
@@ -63,10 +71,9 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Load existing index keys (small payload)
-    const { data: existing } = await supabase
-      .from("crm_brokerages")
-      .select("id, dld_office_number, company_name, email, phone");
+    // Load the full existing index for this owner only. A single select is capped at
+    // 1,000 rows, so pagination is required once the DLD directory is partially loaded.
+    const existing = await loadExistingBrokerages(supabase, ownerId);
 
     const byOffice = new Map<string, any>();
     const byName = new Map<string, any>();
@@ -83,7 +90,8 @@ Deno.serve(async (req) => {
     const updates: { id: string; patch: any }[] = [];
     let skipped = 0;
 
-    const seenInBatch = new Set<string>();
+    const seenOfficesInBatch = new Set<string>();
+    const claimedExistingIds = new Set<string>();
 
     for (const raw of rows) {
       const office = String(raw.office_number || "").trim();
@@ -98,24 +106,23 @@ Deno.serve(async (req) => {
       const phone = cleanPhone(raw.phone);
       const nameAr = String(raw.name_ar || "").trim() || null;
 
-      const dupKey =
-        (office && `o:${office}`) ||
-        (nameKey && `n:${nameKey}`) ||
-        (email && `e:${email}`) ||
-        (phone && `p:${phone}`);
-      if (dupKey) {
-        if (seenInBatch.has(dupKey)) {
+      if (office) {
+        if (seenOfficesInBatch.has(office)) {
           skipped++;
           continue;
         }
-        seenInBatch.add(dupKey);
+        seenOfficesInBatch.add(office);
       }
 
+      const officeMatch = office ? byOffice.get(office) : null;
+      const canClaim = (candidate: any) =>
+        candidate && !candidate.dld_office_number && !claimedExistingIds.has(candidate.id);
       const match =
-        (office && byOffice.get(office)) ||
-        (nameKey && byName.get(nameKey)) ||
-        (email && byEmail.get(email)) ||
-        (phone && byPhone.get(phone));
+        officeMatch ||
+        canClaim(byName.get(nameKey)) ? byName.get(nameKey) :
+        canClaim(byEmail.get(email)) ? byEmail.get(email) :
+        canClaim(byPhone.get(phone)) ? byPhone.get(phone) :
+        null;
 
       if (match) {
         // Backfill only — never overwrite curated fields
@@ -123,6 +130,11 @@ Deno.serve(async (req) => {
         if (office && !match.dld_office_number) patch.dld_office_number = office;
         if (nameAr) patch.name_arabic = nameAr;
         if (Object.keys(patch).length) updates.push({ id: match.id, patch });
+        claimedExistingIds.add(match.id);
+        if (office) {
+          match.dld_office_number = office;
+          byOffice.set(office, match);
+        }
         skipped++;
         continue;
       }
@@ -181,7 +193,7 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ ok: true, inserted, updated, skipped, received: rows.length }),
+      JSON.stringify({ ok: true, inserted, updated, skipped, received: rows.length, ownerId }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
