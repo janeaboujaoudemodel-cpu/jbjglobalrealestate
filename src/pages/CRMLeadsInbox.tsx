@@ -20,6 +20,10 @@ import InlineStatusSelect from "@/components/crm/InlineStatusSelect";
 import AddNoteDialog from "@/components/crm/AddNoteDialog";
 import DeleteLeadDialog from "@/components/crm/DeleteLeadDialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CRMListSidebar } from "@/components/crm/CRMListSidebar";
+import { CRMBulkActionsBar } from "@/components/crm/CRMBulkActionsBar";
+import { useQueryClient } from "@tanstack/react-query";
 import useCRMLeadsInbox, { SOURCE_OPTIONS } from "./useCRMLeadsInbox";
 
 export default function CRMLeadsInbox() {
