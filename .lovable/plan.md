@@ -1,167 +1,171 @@
-## Audit — what already exists (do NOT duplicate)
 
-| Existing module | Route | Purpose |
-|---|---|---|
-| Documents (rich editor) | `/documents` and `/owner/documents` (`src/pages/Documents.tsx`, 769 lines) | WYSIWYG editor, font/color picker, OCR, find&replace, stamp + signature placement, template library (Offer Letter, MOU, NOC, **Broker Agreement**, Tenancy, Handover, Commission Invoice). Already supports `<Stamp />` + `<PenTool />` insertion. |
-| Contract Forms | `/contract-forms` (`ContractForms.tsx`) | Template grid for UAE real-estate contracts (MoU, **Form F – Listing Agreement**, Ejari, Form A, etc.). |
-| Form Builder | `/form-builder` (`FormBuilder.tsx`) | Drag-and-drop fillable form fields + responses view. |
-| Scan & Sign | `/document-scanner` (`ScanSignDocuments.tsx` + hook) | Scan → annotate → sign → submit flow. |
-| Exclusive Documents | `/owner/exclusive-documents` | Owner vault. |
-| Signature/Stamp store | `useOwnerSignatureAssets` + `owner_signature_assets` table + `owner-signature-assets` storage bucket + `apply-adopt-signature` edge function | Already handles upload, list, apply, BG-removal pipeline for signature / initial / stamp. |
-| Owner sidebar | `OwnerSidebarNav.tsx` | Has a top-level **Documents** entry pointing to `/owner/documents`. |
+## Why "unable to load document"
 
-**Verdict:** every primitive the prompt asks for is already in the codebase. The right move is to **merge** the JBJ "Property Advertising Agreement" + the workflow polish into these modules, not to spin up a parallel system.
+Your project has two parallel signing engines:
 
----
+- **Engine A — DocuSign-style (existing, mature):** `esign_envelopes` + `esign_recipients` + `esign_fields` + drag-drop `DocumentFieldPlacer` + adopt-signature/stamp + Contract Vault + public route `/sign/:token` (`SignDocument.tsx`) + edge functions `esign-send-for-signature`, `esign-process-signature`, `esign-complete-envelope`, `apply-adopt-signature`.
+- **Engine B — PAA HTML (built last turn):** `crm_documents` table + HTML template + public route `/documents/sign/:token` (`PublicSignDocument.tsx`) + edge functions `documents-send`, `documents-public-fill`.
 
-## Where users will find the new feature
+The link you opened is `/sign/:token` (Engine A) but the token belongs to a `crm_documents` row (Engine B). Engine A queries `esign_recipients` → no row → **"unable to load document"**.
+
+## Decision (you approved)
+
+Merge Engine B into Engine A. Drop the parallel `crm_documents` flow. The PAA becomes a first-class **template** that produces a real `esign_envelope` with placed fields, sent via the existing pipeline. This gives you:
+
+- Drag-drop / edit / add / remove fields anytime.
+- Adopt-stamp, adopt-signature (already saved per user via `owner_signature_assets`).
+- Auto-fill **Date** field with today on placement; auto-fill **Owner Signature** + **Owner Stamp** from your saved defaults.
+- Client signs at `/sign/:token` (the existing branded flow) — no second route.
+- Signed PDF auto-archived in Contract Vault (`signed_contracts`) — already wired by `apply-adopt-signature`.
+- Email/WhatsApp delivery from your domain via existing `esign-send-for-signature` (Resend) + Twilio.
+
+## What you already have (keep, no changes)
 
 ```text
-Owner Dashboard
-└── Documents          (existing top-level item)
-    ├── Editor                  ← /owner/documents               (existing — gets the new template)
-    ├── Forms & Agreements      ← /owner/documents/forms         (NEW landing — this prompt's hub)
-    │     ├── Templates                 (Property Advertising Agreement + existing ones)
-    │     ├── Create New Document
-    │     ├── Uploaded Documents
-    │     ├── Sent Documents
-    │     ├── Signed Documents
-    │     ├── Stamps & Signatures       (reuses owner_signature_assets)
-    │     └── Settings
-    └── Contract Library        ← /contract-forms                (existing — adds JBJ template card)
+Engine A (full DocuSign workflow)
+├─ Tables       esign_envelopes, esign_recipients, esign_fields,
+│               signed_contracts, owner_signature_assets
+├─ Editor       src/pages/e-signature/CreateEnvelope.tsx
+├─ Field placer src/components/e-signature/DocumentFieldPlacer.tsx
+│               (signature, initials, date, text, checkbox, stamp)
+├─ Sign pad     src/components/e-signature/ESignaturePad.tsx
+├─ Adopt studio src/pages/owner/sign/AdoptSignatureStudio.tsx
+├─ Public sign  src/pages/e-signature/SignDocument.tsx  →  /sign/:token
+├─ Vault        src/pages/owner/contracts/ContractVault.tsx
+└─ Edge fns     esign-send-for-signature, esign-process-signature,
+                esign-complete-envelope, esign-auto-detect-fields,
+                esign-send-reminder, apply-adopt-signature
 ```
 
-A second entry point appears in **CRM → Lead/Client detail → "Send Agreement"** so a contract can be generated pre-filled from CRM data.
+## What's missing / broken (this PR fixes)
 
----
+1. **Templates are HTML-only** — no path from PAA → envelope. `Documents & Forms Hub` saves to `crm_documents`, which Engine A can't sign.
+2. **No Leasing/Selling categories.**
+3. **Date / Stamp / Signature fields don't auto-populate on placement** — the placer drops empty fields; the owner must re-sign each time even though the asset is saved.
+4. **No client-side editor for the PAA fields** before sending.
+5. **`crm_documents` flow + `/documents/sign/:token` route are dead-ends.**
 
 ## Plan
 
-### 1. Brand-correct PAA template (data, not a new page)
+### 1. Database migration
 
-- Add a single template record to `DOC_TEMPLATES` in `src/pages/Documents.tsx` and to the grid in `ContractForms.tsx`:
-  - id `jbj-property-advertising-agreement`
-  - name "Property Advertising Agreement for Real Estate Owners"
-  - JBJ letterhead: black wordmark, champagne hairline (#B89555 1px), footer with `+971 5471 67107` · `contact@jbj.ae` · `jbj.ae`
-  - Sections exactly as requested: Landlord/Owner Details (incl. **Emirates ID**, **Mobile**, **Email**), Property Details (incl. **Additional Notes**), Terms & Conditions (Exclusive/Non-Exclusive · 1/2/3/6 months/until-date · advertise via portals/website/social/CRM/WhatsApp/email/partners · accuracy + termination clauses), Signature block (Landlord + JBJ Representative + dates).
-- Pure white page, black headings, champagne-gold dividers — no blue/red/purple. Lives at `src/templates/jbj-paa.ts` so both Documents editor and the structured filler import the same HTML.
+```sql
+-- Add category + template metadata to envelopes
+ALTER TABLE public.esign_envelopes
+  ADD COLUMN IF NOT EXISTS category text
+    CHECK (category IN ('leasing','selling','other')) DEFAULT 'other',
+  ADD COLUMN IF NOT EXISTS template_key text,            -- e.g. 'jbj-paa'
+  ADD COLUMN IF NOT EXISTS template_html text,           -- editable HTML body
+  ADD COLUMN IF NOT EXISTS template_field_values jsonb DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS client_lead_id uuid;
 
-### 2. Forms & Agreements hub (the "system" layer)
+-- Reusable template library (owner-editable)
+CREATE TABLE IF NOT EXISTS public.esign_templates (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  owner_user_id uuid NOT NULL,
+  key text NOT NULL,                 -- 'jbj-paa', 'jbj-tenancy', ...
+  name text NOT NULL,
+  category text NOT NULL CHECK (category IN ('leasing','selling','other')),
+  html_body text NOT NULL,           -- editable HTML
+  field_schema jsonb NOT NULL,       -- [{key,label,type,page,x,y,w,h,role}]
+  is_system boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now(),
+  UNIQUE(owner_user_id, key)
+);
+ALTER TABLE public.esign_templates ENABLE ROW LEVEL SECURITY;
+-- RLS: owner-only read/write (admin/founder via has_role).
 
-New page `src/pages/owner/DocumentsFormsHub.tsx` mounted at `/owner/documents/forms`, plus child routes:
-
-| Tab | Component | What it does |
-|---|---|---|
-| Templates | grid of cards | Lists JBJ PAA + existing templates; "Use template" → split-pane filler |
-| Create New Document | `PAAFiller.tsx` (split-pane) | Left: structured fields (CRM client picker + manual). Right: live preview = template HTML with `{{tokens}}` replaced. Buttons: Save Draft · Export PDF · Send Email · Send WhatsApp · Request Signature |
-| Uploaded Documents | reuse upload pipeline | Drag-drop PDF/DOCX/image → `convert-to-fillable` edge function tags `{{field}}` placeholders → renders inside the same filler |
-| Sent Documents | table | Status pills: Draft · Sent · Opened · Filled · Signed · Completed · Expired |
-| Signed Documents | table | Final PDFs with stamp+signature burned in |
-| Stamps & Signatures | reuses `useOwnerSignatureAssets` | Upload, BG-remove (existing edge fn), drag-position on doc, save default |
-| Settings | small form | Default sender, default expiry, default footer, watermark toggle |
-
-The hub is the only **new page**; everything else is composed from existing components.
-
-### 3. Data model (one new table + 2 migration tweaks)
-
-```text
-crm_documents
-  id uuid pk
-  owner_user_id uuid
-  template_id text                 -- 'jbj-property-advertising-agreement' etc.
-  title text
-  status text  CHECK in (draft|sent|opened|filled|signed|completed|expired)
-  field_values jsonb               -- structured form state
-  rendered_html text                -- snapshot for audit
-  pdf_path text                     -- storage key in 'documents' bucket
-  client_lead_id uuid null fk crm_leads
-  client_email text  client_phone text
-  recipient_token text unique       -- for the public sign link
-  sent_at / opened_at / filled_at / signed_at / completed_at / expires_at
-  signature_asset_id / stamp_asset_id  -- fk owner_signature_assets
-RLS: owner-only read/write; public SELECT allowed by recipient_token via SECURITY DEFINER fn
+-- Deprecate Engine B (keep table for audit, stop writing)
+-- crm_documents stays; new sends go through esign_envelopes.
 ```
 
-Storage: reuse existing `documents` bucket if present, else create one (private, owner-prefixed paths).
+### 2. Template registry
 
-### 4. Edge functions (3 new, all small)
+- Seed two system templates owned by founder:
+  - `jbj-paa` (Property Advertising Agreement) → category `leasing`.
+  - `jbj-listing-authorisation` (sales listing authorisation) → category `selling`.
+- Template `field_schema` enumerates default field positions: Owner Signature, Owner Stamp, Auto-Date, Client Signature, Client Initials, plus text fields (price, address, etc).
 
-- `documents-render-pdf` — server-side jsPDF render of `rendered_html` with embedded stamp/signature; respects `Institutional PDF Reporting` standard.
-- `documents-send` — channel router: `email` (Resend, reuse Dual-Inbox sender), `whatsapp` (existing Twilio path), `sign-link` (returns public URL with `recipient_token`). Always BCCs `contact@jbj.ae`.
-- `documents-public-fill` — public endpoint the recipient hits via the token to fetch + submit fields and signature; flips status sent → opened → filled → signed.
+### 3. New unified hub: replace `DocumentsFormsHub`
 
-### 5. Public signing route
+`src/pages/owner/DocumentsFormsHub.tsx` becomes:
+- Tabs: **Templates · Drafts · Sent · Signed · Stamps & Signatures**.
+- Filter chips: `All · Leasing · Selling`.
+- "Create from template" → opens `CreateEnvelope` pre-loaded with the template HTML rendered to a single-page PDF (jsPDF) and `field_schema` placed onto that PDF.
 
-`/sign/:token` (PublicRoutes) — bare champagne page, same template renderer, missing fields editable, signature-pad component (already used by `useScanSignDocuments`), submit returns to "Thank you" + emails the final PDF to client + `contact@jbj.ae`.
+### 4. Wire auto-fill into `DocumentFieldPlacer`
 
-### 6. CRM integration
+Edit `src/components/e-signature/DocumentFieldPlacer.tsx`:
+- On field drop, if `recipient.role === 'owner'`:
+  - `type==='date'` → set `field.value = today` (locked, re-evaluated at send).
+  - `type==='signature'` → preload `field.value = defaultSignatureAsset.image_url`.
+  - `type==='stamp'` → preload `field.value = defaultStampAsset.image_url`.
+- New `FieldContentRenderer` already handles image rendering — just pass the asset URL.
+- Owner can still click any field to swap.
 
-- In `CRMLeadDrawer` / `useActiveLead`, add **"Send Agreement"** button → opens `PAAFiller` pre-filled with `full_name`, `email_lower`, `phone_e164`.
-- New document gets `client_lead_id` linked; resulting status appears as a timeline event in the lead profile.
+### 5. Client signing — keep `/sign/:token` (Engine A)
 
-### 7. UI rules (locked to project memory)
+No new route. `SignDocument.tsx` already:
+- Loads document from `esign_recipients` by token.
+- Renders PDF via `pdfjs`.
+- Shows only fields assigned to the client.
+- Submits via `esign-process-signature` → triggers `esign-complete-envelope` → writes to `signed_contracts` → emails sender + recipient with the final PDF.
 
-- White paper card, champagne hairlines (`border-[#B89555]/40`), black titles, body `text-[#1A1A1A]`, no gold fills (memory: `no-gold-fills`).
-- Inter font only (memory: typography standard).
-- All icons via `<IconTile />`.
-- Buttons: `variant="gold"` (champagne) for primary, `secondary` for ghost, never raw blue/red/purple.
-- Status pills use semantic palette from `crmStatusPalette.ts` (champagne/amber/emerald/blue/red).
+### 6. Send by Email / WhatsApp
 
-### 8. Out of scope (keep existing behaviour)
+Already done by `esign-send-for-signature` (Resend, BCC `contact@jbj.ae`). Extend it to accept `channel: 'whatsapp'` and call Twilio (gateway) or fall back to `wa.me?text=...&url=signing_link`.
 
-- Existing rich-text Documents editor stays — this only **adds** a structured filler alongside it.
-- Existing Form Builder, Scan & Sign, Exclusive Documents are untouched.
-- No removal of any current template.
+### 7. CRM link
 
----
+Add "Send Agreement" button in `CRMLeadDrawer`:
+- Pre-fills client name / email / phone.
+- Opens template picker (filtered to user's category context).
+- Creates envelope with `client_lead_id` set; logs activity on lead timeline.
 
-## Technical file list
+### 8. Decommission dead routes
+
+- Remove `/documents/sign/:token` from `StandaloneRoutes`.
+- Delete `PublicSignDocument.tsx`.
+- Delete `documents-send` and `documents-public-fill` edge functions.
+- Keep `crm_documents` table (audit) but stop inserting into it; redirect old PAA tokens to a migration helper that creates an envelope on the fly.
+
+### 9. Token migration / fix the broken link
+
+For your already-broken link, add a one-shot redirect: if `/sign/:token` doesn't find an `esign_recipients` row, look up `crm_documents.recipient_token`, build an envelope from the PAA template + saved field values, then redirect to the new envelope's signing URL. This rescues any links you already shared.
+
+### 10. Redeploy
 
 ```text
-NEW
-  src/templates/jbj-paa.ts                              # branded HTML template + token list
-  src/pages/owner/DocumentsFormsHub.tsx                 # tabs shell
-  src/pages/owner/forms/PAAFiller.tsx                   # split-pane filler
-  src/pages/owner/forms/SentDocumentsTable.tsx
-  src/pages/owner/forms/SignedDocumentsTable.tsx
-  src/pages/owner/forms/UploadedDocumentsList.tsx
-  src/pages/owner/forms/StampsAndSignaturesPanel.tsx    # wraps useOwnerSignatureAssets
-  src/pages/PublicSignDocument.tsx                      # /sign/:token
-  src/hooks/useCrmDocuments.ts
-  supabase/functions/documents-render-pdf/index.ts
-  supabase/functions/documents-send/index.ts
-  supabase/functions/documents-public-fill/index.ts
-  supabase/migrations/<ts>_crm_documents.sql
-
-EDITED
-  src/pages/Documents.tsx                # add JBJ PAA template object
-  src/pages/ContractForms.tsx            # add card linking to filler
-  src/routes/OwnerRoutes.tsx             # /owner/documents/forms + children
-  src/routes/PublicRoutes.tsx            # /sign/:token
-  src/components/owner-dashboard/OwnerSidebarNav.tsx   # secondary "Forms & Agreements" under Documents
-  src/pages/CRMLeadsInbox.tsx (lead drawer) — Send Agreement button
+esign-send-for-signature   (extended for WhatsApp)
+esign-process-signature    (no change but redeploy)
+esign-complete-envelope    (no change but redeploy)
+apply-adopt-signature      (no change but redeploy)
++ delete documents-send, documents-public-fill
 ```
 
-No new dependencies. jsPDF, DOMPurify, Tailwind tokens, Resend, Twilio, Supabase storage are all already wired.
+## Where you'll find it after merge
 
----
+```text
+Sidebar → Documents → Forms & Agreements
+  ├─ Templates    [Leasing | Selling | All]
+  │     "Property Advertising Agreement"  → Use template
+  ├─ Drafts       envelopes status='draft'
+  ├─ Sent         envelopes status in (sent,opened,partially_signed)
+  ├─ Signed       envelopes status='completed'  (also in Contract Vault)
+  └─ Stamps & Signatures  (existing AdoptSignatureStudio)
+```
 
-## After implementation — quick tour
+### How to use
 
-1. **Where it lives:** Owner sidebar → **Documents → Forms & Agreements** (`/owner/documents/forms`). Also surfaced from `/contract-forms` and from any CRM lead's "Send Agreement" button.
-2. **New PAA:** Templates tab → "Property Advertising Agreement" → "Use template" → pick CRM client (or fill manually) → live preview → Save Draft / Export PDF / Send Email / Send WhatsApp / Request Signature.
-3. **Stamp & signature:** Stamps & Signatures tab → upload → background auto-removed → drag onto document → "Save as default".
-4. **Email send:** "Send by Email" → uses Resend, BCCs `contact@jbj.ae`, recipient gets a champagne-branded message with signed link.
-5. **WhatsApp send:** "Send by WhatsApp" → opens Twilio template with the same signed link prefilled to `client.phone_e164`.
-6. **Final signed PDF:** once recipient signs at `/sign/<token>`, the system burns the signature+stamp, stores PDF in the `documents` bucket, marks status **Signed/Completed**, emails copies to client + `contact@jbj.ae`, and the file appears under **Signed Documents**.
+1. **Create PAA**: Forms & Agreements → Templates → Leasing → "Property Advertising Agreement" → fill owner/property fields → opens field-placer with date/signature/stamp pre-positioned and pre-filled from your saved assets → set recipient (client email + phone) → Send.
+2. **Upload stamp/signature**: sidebar → Documents → Adopt Signature Studio (or Stamps & Signatures tab inside the hub). Marked default is auto-injected into every future envelope.
+3. **Email**: choose `email` channel on send — Resend, BCC `contact@jbj.ae`.
+4. **WhatsApp**: choose `whatsapp` — Twilio if configured, else opens `wa.me` with prefilled signing link.
+5. **Export signed PDF**: appears in Contract Vault → Download. Also auto-emailed to both parties on completion.
 
----
+## Risks / notes
 
-## Clarifying questions before I implement
-
-1. **Single template vs. full template family in this PR?** I can ship just the JBJ PAA now and reuse the same filler shell for the next 6 contracts later — recommended — or wire MOU + NOC + Tenancy + Form F together with the PAA in this same change.
-2. **Signing flow:** in-app token link only, or do you also want **DocuSign / SignNow** as an option? (current code has neither — staying in-app keeps zero new vendor cost).
-3. **WhatsApp channel:** use the existing **Twilio WhatsApp Business** sender already in `useCrossChannelSend`, or fall back to a `wa.me` deep link if Twilio isn't approved for this template yet?
-4. **Footer requirement:** show `+971 5471 67107` and `contact@jbj.ae` on **every page** of the PDF, or just the cover page?
-
-Tell me anything you want adjusted and I'll implement on approval.
+- The PAA HTML currently lives in `src/templates/jbjPropertyAdvertisingAgreement.ts`. We'll convert it to a one-page jsPDF render at envelope-creation time so the existing PDF-based field placer works unmodified.
+- Owner default signature/stamp must already exist; if missing, the placer prompts to adopt before sending (existing `AdoptSignatureStudio` flow).
+- CI has a "no removal" policy — `crm_documents` table is preserved (audit only).
