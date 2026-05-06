@@ -698,7 +698,8 @@ const BrokeragesTab = () => {
             { v: "all", label: `All · ${data.length}` },
             { v: "directory", label: `UAE Agencies · ${directoryCount}` },
             { v: "owner", label: `My Additions · ${ownerCount}` },
-            { v: "existing", label: `Existing Matches · ${existingCount}` },
+            { v: "sent", label: `Already Sent · ${sentCount}` },
+            { v: "inbox", label: `New Messages · ${inboxCount}` },
           ].map((t) => (
             <button
               key={t.v}
