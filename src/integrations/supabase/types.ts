@@ -5292,6 +5292,7 @@ export type Database = {
           attempt_count: number
           attended_briefing: boolean
           attended_briefing_date: string | null
+          briefing_count: number
           briefing_notes: string | null
           company_name: string
           confidence: string | null
@@ -5313,9 +5314,12 @@ export type Database = {
           instagram_url: string | null
           is_existing_match: boolean
           last_auto_reply_at: string | null
+          last_contact_log_at: string | null
           last_deal_at: string | null
           last_directory_sync_at: string | null
           last_email_synced_at: string | null
+          last_inbound_at: string | null
+          last_inbound_subject: string | null
           last_interaction_at: string | null
           last_outreach_at: string | null
           last_response_at: string | null
@@ -5336,8 +5340,11 @@ export type Database = {
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          pending_documents_notes: string | null
           phone: string | null
           primary_contact: Json | null
+          region: string
+          registration_status: string
           represented_developer_id: string | null
           represented_developer_name: string | null
           rera_license: string | null
@@ -5365,6 +5372,7 @@ export type Database = {
           attempt_count?: number
           attended_briefing?: boolean
           attended_briefing_date?: string | null
+          briefing_count?: number
           briefing_notes?: string | null
           company_name: string
           confidence?: string | null
@@ -5386,9 +5394,12 @@ export type Database = {
           instagram_url?: string | null
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
+          last_contact_log_at?: string | null
           last_deal_at?: string | null
           last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
+          last_inbound_at?: string | null
+          last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
@@ -5409,8 +5420,11 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id: string
+          pending_documents_notes?: string | null
           phone?: string | null
           primary_contact?: Json | null
+          region?: string
+          registration_status?: string
           represented_developer_id?: string | null
           represented_developer_name?: string | null
           rera_license?: string | null
@@ -5438,6 +5452,7 @@ export type Database = {
           attempt_count?: number
           attended_briefing?: boolean
           attended_briefing_date?: string | null
+          briefing_count?: number
           briefing_notes?: string | null
           company_name?: string
           confidence?: string | null
@@ -5459,9 +5474,12 @@ export type Database = {
           instagram_url?: string | null
           is_existing_match?: boolean
           last_auto_reply_at?: string | null
+          last_contact_log_at?: string | null
           last_deal_at?: string | null
           last_directory_sync_at?: string | null
           last_email_synced_at?: string | null
+          last_inbound_at?: string | null
+          last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
           last_response_at?: string | null
@@ -5482,8 +5500,11 @@ export type Database = {
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
           owner_id?: string
+          pending_documents_notes?: string | null
           phone?: string | null
           primary_contact?: Json | null
+          region?: string
+          registration_status?: string
           represented_developer_id?: string | null
           represented_developer_name?: string | null
           rera_license?: string | null
