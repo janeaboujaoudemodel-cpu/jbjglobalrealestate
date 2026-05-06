@@ -383,22 +383,30 @@ serve(async (req: Request) => {
       preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
     }
 
-    // Mint (or reuse) a breakfast booking invite token
-    let bookingUrl = "";
-    try {
-      const tokenRes = await userClient.functions.invoke(
-        "crm-create-breakfast-invite-token",
-        {
-          body: {
-            brokerageId: isTest ? undefined : body.brokerageId,
-            isTest,
-            preferredSlotId: personalization.preferredSlotId,
+    // Booking URL: prefer the owner's Google Calendar appointment link so the
+    // brokerage books directly on Google (auto confirmation email to both
+    // sides, no website redirect). Fall back to the in-app booking page only
+    // if the Google link is not configured.
+    let bookingUrl: string = (
+      (settings?.google_calendar_booking_url && String(settings.google_calendar_booking_url).trim()) ||
+      ""
+    );
+    if (!bookingUrl) {
+      try {
+        const tokenRes = await userClient.functions.invoke(
+          "crm-create-breakfast-invite-token",
+          {
+            body: {
+              brokerageId: isTest ? undefined : body.brokerageId,
+              isTest,
+              preferredSlotId: personalization.preferredSlotId,
+            },
           },
-        },
-      );
-      bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
-    } catch (tokErr) {
-      console.warn("Booking token mint failed (continuing):", tokErr);
+        );
+        bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
+      } catch (tokErr) {
+        console.warn("Booking token mint failed (continuing):", tokErr);
+      }
     }
 
     // Resolve featured Citi project (defaults to AMRA).
