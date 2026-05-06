@@ -39,6 +39,8 @@ import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
 import { ExportMenu, type ExportFormat } from "@/components/crm/ExportMenu";
+import { ExportConfigurator } from "@/components/crm/ExportConfigurator";
+import { BROKERAGE_EXPORT_COLUMNS, BROKERAGE_EXPORT_PRESETS } from "@/utils/exportBrokerages";
 import { BrokerageAgentsEditor, type BrokerageAgentDraft } from "@/components/crm/BrokerageAgentsEditor";
 import { BrokerageContactPhotoImporter } from "@/components/crm/BrokerageContactPhotoImporter";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
