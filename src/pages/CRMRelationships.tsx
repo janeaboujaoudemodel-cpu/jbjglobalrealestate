@@ -1726,6 +1726,18 @@ const DeveloperRegistryTab = () => {
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
+  const [historyTab, setHistoryTab] = useState<any>(undefined);
+  // Smart routing: clicking a status tile/chip routes to the correct sub-tab automatically
+  // so the user is never left staring at an empty pool.
+  const selectStatus = (v: string) => {
+    if (v === "all") { setStatusFilter("all"); setSubTab("queue"); setHistoryTab(undefined); return; }
+    if (v === "registered") { setStatusFilter("all"); setSubTab("history"); setHistoryTab("registered"); return; }
+    if (v === "contracts") { setStatusView(statusView === "contracts" ? "all" : "contracts"); setSubTab("queue"); return; }
+    // queue-pool statuses
+    setStatusFilter(statusFilter === v ? "all" : v);
+    setSubTab("queue");
+    setHistoryTab(undefined);
+  };
   const [devExcludedIds, setDevExcludedIds] = useState<Set<string>>(new Set());
   const [devViewMode, setDevViewMode] = useState<"cards" | "excel">("cards");
   const [devListView, setDevListView] = useState<CRMListView>({ kind: "active", listId: null });
