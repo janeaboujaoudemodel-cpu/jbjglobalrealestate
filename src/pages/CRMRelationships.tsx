@@ -1854,10 +1854,17 @@ const DeveloperRegistryTab = () => {
             <SelectItem value="registered">Confirmed registered</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" onClick={() => setTplOpen(true)}>
-          <FileEdit className="w-4 h-4 mr-2" />
-          {tplMain?.locked_at ? <><Lock className="w-3 h-3 mr-1" />Template</> : "Edit Template"}
-        </Button>
+        <OutreachActionsMenu
+          selectedCount={selected.size}
+          sendLabel="Send to Selected Developers"
+          onSendSelected={() => {
+            if (selected.size === 0) { toast.error("Select at least one developer first"); return; }
+            setBulkOpen(true);
+          }}
+          onEditTemplate={() => setTplOpen(true)}
+          onSendTest={() => setTestSendOpen(true)}
+          onActivityLog={() => navigate("/owner/crm/relationships/activity")}
+        />
         <ExcludeFilterPopover
           scope="developer"
           options={(data as any[]).map((r) => ({ id: r.id, name: r.developer_name || "Unnamed" }))}
