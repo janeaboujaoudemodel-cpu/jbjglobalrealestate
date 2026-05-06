@@ -34,7 +34,7 @@ import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
 import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
 import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
-import { AGENCY_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
@@ -597,7 +597,8 @@ const BrokeragesTab = () => {
       return;
     }
     const rows: BrokerageExportRow[] = filtered.map((r: any, i: number) => {
-      const statusLabel = STATUS_BROKERAGE.find((s) => s.v === r.status)?.label || r.status || "—";
+      const regOpt = BROKERAGE_REGISTRATION_STATUS_OPTIONS.find((s) => s.value === r.registration_status);
+      const statusLabel = regOpt?.label || (r.registration_status || "Not registered");
       return {
         rank: i + 1,
         company_name: r.company_name || "",
@@ -803,26 +804,37 @@ const BrokeragesTab = () => {
           rows={filtered as any[]}
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
-            { key: "emirate", label: "Emirate", width: 110 },
-            { key: "office_location", label: "Office", width: 180 },
-            { key: "phone", label: "Phone", width: 140 },
-            { key: "email", label: "Email", width: 200 },
+            { key: "region", label: "Region", width: 110, editable: true },
+            { key: "emirate", label: "Emirate / City", width: 120, editable: true },
+            { key: "office_location", label: "Office", width: 180, editable: true },
             {
-              key: "status", label: "Agency status", width: 170, status: true,
-              statusOptions: BROKERAGE_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
-              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, status: next }),
+              key: "registration_status", label: "Agency status (registration)", width: 200, status: true,
+              statusOptions: BROKERAGE_REGISTRATION_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, registration_status: next }),
             },
+            { key: "pending_documents_notes", label: "Pending documents", width: 220, editable: true },
             {
               key: "outreach_stage", label: "Outreach status", width: 170, status: true,
               statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
               onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
             },
-            { key: "primary_contact", label: "Primary contact", width: 180, render: (r: any) => r.primary_contact?.name || r.primary_contact?.email || "—" },
+            { key: "active_broker_count", label: "Active brokers", width: 110, align: "right", editable: true },
+            { key: "primary_contact", label: "Admin name", width: 160, render: (r: any) => r.admin_contact?.name || r.primary_contact?.name || "—" },
+            { key: "admin_phone", label: "Admin number", width: 150, render: (r: any) => r.admin_contact?.phone || r.primary_contact?.phone || r.phone || "—" },
+            { key: "phone", label: "Phone", width: 140, editable: true },
+            { key: "email", label: "Email", width: 200, editable: true },
+            { key: "briefing_count", label: "Briefings", width: 90, align: "right", editable: true },
+            { key: "attended_briefing_date", label: "Last briefing", width: 130, render: (r: any) => r.attended_briefing_date ? new Date(r.attended_briefing_date).toLocaleDateString() : "—" },
+            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_contact_log_at ? new Date(r.last_contact_log_at).toLocaleDateString() : (r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—") },
             { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
-            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—" },
+            { key: "inquiry_count", label: "Inquiries", width: 90, align: "right" },
             { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
+          onCellEdit={(r: any, key, value) => {
+            const numericKeys = ["active_broker_count", "briefing_count"];
+            const v = numericKeys.includes(String(key)) ? Number(value) || 0 : value;
+            upsert.mutate({ id: r.id, [key]: v });
+          }}
           emptyLabel="No agencies match filters."
         />
       ) : isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
