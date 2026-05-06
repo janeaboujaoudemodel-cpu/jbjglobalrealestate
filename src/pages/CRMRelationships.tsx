@@ -1021,6 +1021,23 @@ const BrokeragesAgenciesView = () => {
         >
           <Plus className="w-4 h-4 mr-2" />Upload list
         </Button>
+        <Button
+          variant="gold"
+          className="shadow-md"
+          onClick={() => {
+            if (bulkSel.size === 0) { toast.error("Tick at least one agency first"); return; }
+            setBulkOpen(true);
+          }}
+          title="Open the brokerage outreach send dialog for the ticked agencies"
+        >
+          <Send className="w-4 h-4 mr-2" />
+          Send Selected Agencies
+          {bulkSel.size > 0 && (
+            <span className="ml-2 px-1.5 py-0.5 rounded-full bg-[#1A1A1A]/15 text-[10px] font-bold">
+              {bulkSel.size}
+            </span>
+          )}
+        </Button>
         <OutreachActionsMenu
           selectedCount={bulkSel.size}
           sendLabel="Email Selected Agencies"
