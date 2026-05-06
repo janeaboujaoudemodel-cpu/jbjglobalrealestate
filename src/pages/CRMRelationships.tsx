@@ -2023,20 +2023,12 @@ const DeveloperRegistryTab = () => {
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70" />
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {STATUS_DEV.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
         <Select value={emailFilter} onValueChange={(v: any) => setEmailFilter(v)}>
           <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All emails</SelectItem>
             <SelectItem value="not_sent">Not sent yet</SelectItem>
             <SelectItem value="sent">Email sent</SelectItem>
-            <SelectItem value="registered">Confirmed registered</SelectItem>
           </SelectContent>
         </Select>
         <OutreachActionsMenu
