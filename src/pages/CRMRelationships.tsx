@@ -1652,15 +1652,27 @@ const DeveloperRegistryTab = () => {
     [queuePool],
   );
 
+  const isContractRow = (r: any) =>
+    !!r.contract_signed ||
+    r.outreach_stage === "contract_signed" ||
+    r.outreach_stage === "contract_sent" ||
+    r.outreach_stage === "contracted";
+  const contractsCount = useMemo(
+    () => (data as any[]).filter(isContractRow).length,
+    [data],
+  );
+
   const filtered = useMemo(() => {
     const ql = debouncedQ.trim().toLowerCase();
     const out: any[] = [];
-    for (const item of queueIndexed) {
-      const r = item.row;
+    const source = statusView === "contracts" ? (data as any[]) : queueIndexed.map((x) => x.row);
+    for (const r of source) {
       if (devExcludedIds.has(r.id)) continue;
-      if (ql && !item.nameLower.includes(ql)) continue;
-      if (statusFilter !== "all" && r.status !== statusFilter) continue;
-      if (emailFilter !== "all") {
+      const nameLower = (r.developer_name || "").toLowerCase();
+      if (ql && !nameLower.includes(ql)) continue;
+      if (statusView === "contracts" && !isContractRow(r)) continue;
+      if (statusView !== "contracts" && statusFilter !== "all" && r.status !== statusFilter) continue;
+      if (statusView !== "contracts" && emailFilter !== "all") {
         if (emailFilter === "not_sent" && !(!r.last_outreach_at && r.status !== "registered")) continue;
         else if (emailFilter === "sent" && !(!!r.last_outreach_at && r.status !== "registered")) continue;
         else if (emailFilter === "registered" && r.status !== "registered") continue;
@@ -1668,7 +1680,7 @@ const DeveloperRegistryTab = () => {
       out.push(r);
     }
     return out;
-  }, [queueIndexed, debouncedQ, statusFilter, emailFilter, devExcludedIds]);
+  }, [queueIndexed, data, debouncedQ, statusFilter, emailFilter, devExcludedIds, statusView]);
 
   const [devVisibleCount, setDevVisibleCount] = useState(60);
   useEffect(() => { setDevVisibleCount(60); }, [debouncedQ, statusFilter, emailFilter]);
