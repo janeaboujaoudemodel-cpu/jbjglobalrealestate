@@ -270,10 +270,11 @@ serve(async (req: Request) => {
         }
       }
 
-      // 3. Previous identical outreach already sent
+      // 3. Previous identical outreach already sent — warn (allow resend with override),
+      // do not hard-block, so the owner can include them deliberately.
       const priorAt = priorByBrokerage.get(id);
       if (priorAt) {
-        blocked = true;
+        warned = true;
         const variantWord =
           variant === "brokerage_breakfast_invite"
             ? "breakfast invitation"
@@ -283,7 +284,7 @@ serve(async (req: Request) => {
             variant === "brokerage_breakfast_invite"
               ? "previous_breakfast_invite"
               : "previous_partnership_intro",
-          label: `Same ${variantWord} already sent on ${new Date(priorAt).toLocaleDateString()}`,
+          label: `This agency already received this ${variantWord} on ${new Date(priorAt).toLocaleDateString()}. Send same email again, or change template.`,
           matchedTable: "crm_relationship_email_log",
         });
       }
