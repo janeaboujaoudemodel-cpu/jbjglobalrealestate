@@ -737,6 +737,28 @@ const BrokeragesTab = () => {
             {STATUS_BROKERAGE.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <ExcludeFilterPopover
+          scope="brokerage"
+          options={(data as any[]).map((r) => ({ id: r.id, name: r.company_name || "Unnamed" }))}
+          excludedIds={excludedIds}
+          onChange={setExcludedIds}
+        />
+        <div className="flex p-1 bg-[#F7F2EA] border border-[#B89555]/30 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setViewMode("cards")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "cards" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <LayoutGrid className="w-3.5 h-3.5" /> Cards
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("excel")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 ${viewMode === "excel" ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60" : "text-[#1A1A1A]/70"}`}
+          >
+            <TableIcon className="w-3.5 h-3.5" /> Excel View
+          </button>
+        </div>
         <ExportMenu onExport={(f) => handleExport(f)} disabled={!filtered.length} />
         <Button
           variant="outline"
