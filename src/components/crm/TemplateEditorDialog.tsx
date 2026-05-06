@@ -132,13 +132,13 @@ export const TemplateEditorDialog = ({
         },
       );
       return conditional
-        .replace(/\{\{brokerage_name\}\}/g, testSampleName || "Sample Brokerage Group")
+        .replace(/\{\{brokerage_name\}\}/g, testSampleName || "Your Brokerage")
         .replace(/\{\{brokerage_location\}\}/g, "Dubai")
-        .replace(/\{\{contact_first_name\}\}/g, "Sample")
-        .replace(/\{\{contact_full_name\}\}/g, "Sample Manager")
+        .replace(/\{\{contact_first_name\}\}/g, "")
+        .replace(/\{\{contact_full_name\}\}/g, "")
         .replace(/\{\{owner_first_name\}\}/g, "Jane")
         .replace(/\{\{represented_developer_name\}\}/g, "CITI Developer")
-        .replace(/\{\{group_status_line\}\}/g, "We'd love to introduce CITI Developer to your team and confirm if you're already registered with us.")
+        .replace(/\{\{group_status_line\}\}/g, "We'd love to introduce CITI Developer to your team.")
         .replace(/\{\{project_name\}\}/g, "AMRA")
         .replace(/\{\{project_url\}\}/g, "https://citideveloper.com/e-catalogue/amra")
         .replace(/\{\{project_tagline\}\}/g, "Wellness-led beachfront resort residences in Umm Al Quwain — our current launch focus.")
