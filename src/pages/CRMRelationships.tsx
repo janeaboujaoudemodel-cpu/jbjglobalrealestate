@@ -34,6 +34,7 @@ import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
 import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
 import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
+import { AGENCY_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
@@ -800,16 +801,24 @@ const BrokeragesTab = () => {
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
             { key: "emirate", label: "Emirate", width: 110 },
-            { key: "office_location", label: "Office", width: 200 },
+            { key: "office_location", label: "Office", width: 180 },
             { key: "phone", label: "Phone", width: 140 },
             { key: "email", label: "Email", width: 200 },
-            { key: "status", label: "Status", width: 170, status: true },
-            { key: "outreach_stage", label: "Outreach", width: 140 },
+            {
+              key: "status", label: "Agency status", width: 170, status: true,
+              statusOptions: BROKERAGE_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, status: next }),
+            },
+            {
+              key: "outreach_stage", label: "Outreach status", width: 170, status: true,
+              statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
+            },
+            { key: "primary_contact", label: "Primary contact", width: 180, render: (r: any) => r.primary_contact?.name || r.primary_contact?.email || "—" },
             { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
-            { key: "notes", label: "Notes", width: 280, editable: true },
+            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—" },
+            { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          getStatus={(r: any) => r.status}
-          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
           onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
           emptyLabel="No agencies match filters."
         />
@@ -1721,6 +1730,7 @@ const DeveloperRegistryTab = () => {
               rank: i + 1,
               developer_name: r.developer_name || "",
               status: r.status || "",
+              agency_status: r.outreach_stage || "",
               developer_email: r.developer_email || "",
               phone: r.phone || "",
               emirate: r.emirate || "",
@@ -1904,17 +1914,24 @@ const DeveloperRegistryTab = () => {
           rows={filtered as any[]}
           columns={[
             { key: "developer_name", label: "Developer", width: 220 },
-            { key: "status", label: "Status", width: 180, status: true },
+            {
+              key: "status", label: "Registration status", width: 180, status: true,
+              statusOptions: DEV_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, status: next }),
+            },
+            {
+              key: "outreach_stage", label: "Agency status", width: 170, status: true,
+              statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
+            },
             { key: "developer_email", label: "Email", width: 200 },
             { key: "phone", label: "Phone", width: 140 },
             { key: "emirate", label: "Emirate", width: 110 },
             { key: "agency_code", label: "Agency code", width: 130 },
-            { key: "attended_briefing", label: "Attended briefing", width: 140, status: true },
             { key: "briefing_date", label: "Briefing date", width: 130, render: (r: any) => r.briefing_date ? new Date(r.briefing_date).toLocaleDateString() : "—" },
-            { key: "notes", label: "Notes", width: 280, editable: true },
+            { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—" },
+            { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          getStatus={(r: any) => r.status}
-          onStatusChange={(r: any, next) => upsert.mutate({ id: r.id, status: next })}
           onCellEdit={(r: any, key, value) => upsert.mutate({ id: r.id, [key]: value })}
           emptyLabel="No developers match filters."
         />
