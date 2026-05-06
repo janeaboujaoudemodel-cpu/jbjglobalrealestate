@@ -29,31 +29,45 @@ const TONE_BY_KEY: Record<string, CrmStatusTone> = {
   declined: "red",
   bounced: "red",
   unsubscribed: "red",
+  blacklisted: "red",
 
   not_started: "champagne",
   prospect: "champagne",
   pending: "champagne",
   draft: "champagne",
+  not_contacted: "champagne",
+  unknown: "champagne",
 
   documents_required: "amber",
   pending_documents: "amber",
   pending_application: "amber",
   in_review: "amber",
+  under_review: "amber",
   follow_up: "amber",
+  attempted: "amber",
+  negotiating: "amber",
+  nda_pending: "amber",
+  introduced: "amber",
+  expired: "amber",
 
   interested: "emerald",
   meeting_booked: "emerald",
   attended_briefing: "emerald",
   active: "emerald",
+  active_partner: "emerald",
   responded: "emerald",
+  engaged: "emerald",
+  closed_deals: "emerald",
 
   registered: "blue",
   contract_signed: "blue",
   contracted: "blue",
   partner: "blue",
+  nda_signed: "blue",
 
   on_hold: "violet",
   paused: "violet",
+  dormant: "violet",
 };
 
 export function statusColor(raw?: string | null): StatusColor {
@@ -65,18 +79,39 @@ export function statusColor(raw?: string | null): StatusColor {
   return { tone, label, ...C[tone] };
 }
 
+// Registration / developer pipeline statuses
 export const STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
   { value: "not_started",         label: "Not started",         tone: "champagne" },
-  { value: "interested",          label: "Interested",          tone: "emerald"   },
-  { value: "meeting_booked",      label: "Meeting booked",      tone: "emerald"   },
-  { value: "attended_briefing",   label: "Attended briefing",   tone: "emerald"   },
-  { value: "documents_required",  label: "Documents required",  tone: "amber"     },
   { value: "pending_application", label: "Pending application", tone: "amber"     },
+  { value: "documents_required",  label: "Documents required",  tone: "amber"     },
+  { value: "under_review",        label: "Under review",        tone: "amber"     },
   { value: "registered",          label: "Registered",          tone: "blue"      },
-  { value: "contract_signed",     label: "Contract signed",     tone: "blue"      },
-  { value: "not_answering",       label: "Not answering",       tone: "red"       },
   { value: "rejected",            label: "Rejected",            tone: "red"       },
-  { value: "on_hold",             label: "On hold",             tone: "violet"    },
+  { value: "expired",             label: "Expired",             tone: "amber"     },
+];
+
+// Agency / outreach activity statuses (how active the relationship is)
+export const AGENCY_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
+  { value: "not_contacted",   label: "Not contacted",   tone: "champagne" },
+  { value: "attempted",       label: "Attempted",       tone: "amber"     },
+  { value: "engaged",         label: "Engaged",         tone: "emerald"   },
+  { value: "meeting_booked",  label: "Meeting booked",  tone: "emerald"   },
+  { value: "nda_pending",     label: "NDA pending",     tone: "amber"     },
+  { value: "nda_signed",      label: "NDA signed",      tone: "blue"      },
+  { value: "active_partner",  label: "Active partner",  tone: "emerald"   },
+  { value: "dormant",         label: "Dormant",         tone: "violet"    },
+  { value: "declined",        label: "Declined",        tone: "red"       },
+  { value: "blacklisted",     label: "Blacklisted",     tone: "red"       },
+];
+
+// Brokerage agency-level lifecycle (the existing crm_brokerage_status enum)
+export const BROKERAGE_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
+  { value: "prospect",       label: "Prospect",       tone: "champagne" },
+  { value: "negotiating",    label: "Negotiating",    tone: "amber"     },
+  { value: "active_partner", label: "Active partner", tone: "emerald"   },
+  { value: "closed_deals",   label: "Closed deals",   tone: "blue"      },
+  { value: "dormant",        label: "Dormant",        tone: "violet"    },
+  { value: "blacklisted",    label: "Blacklisted",    tone: "red"       },
 ];
 
 export const BRAND = {
