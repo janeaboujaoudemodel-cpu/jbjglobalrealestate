@@ -61,7 +61,7 @@ export const TemplateEditorDialog = ({
 
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("");
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const [sourceMode, setSourceMode] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testSampleName, setTestSampleName] = useState("");
