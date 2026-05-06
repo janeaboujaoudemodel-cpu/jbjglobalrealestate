@@ -23,47 +23,50 @@ const ExecutiveAccessGate = ({ children }: ExecutiveAccessGateProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const checkExecutiveAccess = async () => {
-      // Wait for auth to finish
       if (authLoading || ownerLoading) return;
 
       if (!user) {
-        setHasAccess(false);
-        setIsLoading(false);
+        if (!cancelled) { setHasAccess(false); setIsLoading(false); }
         return;
       }
 
-      // Owner override - if verified as Owner, allow immediately
+      // Owner override — immediate, never call RPCs.
       if (isOwner) {
-        setHasAccess(true);
-        setIsLoading(false);
+        if (!cancelled) { setHasAccess(true); setIsLoading(false); }
         return;
       }
+
+      // Retry once on transient failures (token refresh races, network blips).
+      const callOnce = () => Promise.all([
+        supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
+        supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
+        supabase.rpc("is_crm_admin", { _user_id: user.id }),
+      ]);
 
       try {
-        // Check for executive-level roles
-        const [adminResult, ownerRoleResult, crmAdminResult] = await Promise.all([
-          supabase.rpc("has_role", { _user_id: user.id, _role: "admin" }),
-          supabase.rpc("has_role", { _user_id: user.id, _role: "owner" }),
-          supabase.rpc("is_crm_admin", { _user_id: user.id }),
-        ]);
-
-        const isExecutive = 
-          Boolean(adminResult.data) || 
-          Boolean(ownerRoleResult.data) || 
+        let results = await callOnce();
+        const anyError = results.some(r => r.error);
+        if (anyError) {
+          await new Promise(r => setTimeout(r, 600));
+          results = await callOnce();
+        }
+        const [adminResult, ownerRoleResult, crmAdminResult] = results;
+        const isExecutive =
+          Boolean(adminResult.data) ||
+          Boolean(ownerRoleResult.data) ||
           Boolean(crmAdminResult.data);
-
-        setHasAccess(isExecutive);
+        if (!cancelled) { setHasAccess(isExecutive); setIsLoading(false); }
       } catch (error) {
         console.error("Executive access check error:", error);
-        setHasAccess(false);
-      } finally {
-        setIsLoading(false);
+        if (!cancelled) { setHasAccess(false); setIsLoading(false); }
       }
     };
 
     checkExecutiveAccess();
-  }, [user, authLoading, isOwner, ownerLoading]);
+    return () => { cancelled = true; };
+  }, [user?.id, authLoading, isOwner, ownerLoading]);
 
   if (authLoading || ownerLoading || isLoading) {
     return (
