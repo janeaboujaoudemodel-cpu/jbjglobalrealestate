@@ -996,7 +996,7 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button
           variant="outline"
-          onClick={handleImportDLD}
+          onClick={() => handleImportDLD(false)}
           disabled={importingDLD}
           title="One-time bulk import of the official DLD register (10,078 UAE agencies). De-duplicates against existing entries."
         >
