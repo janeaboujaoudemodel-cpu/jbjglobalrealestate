@@ -1,77 +1,94 @@
+## Goals
 
-## Goal
-Fix the brokerage outreach email template so it looks premium, never says "Dear Sample / Sample Brokerage Group", greets each recipient by their actual brokerage / contact name, centers the featured project block, makes the CTA a champagne-gold premium button, restructures the registration paragraph, and removes the "please disregard" line.
+Add three new capabilities to **Relationships → Brokerages** and **Relationships → Developers**:
 
-## Files to change
+1. **Exclusion Filters** — searchable multi-select to exclude specific agencies/developers, with named saved filter sets.
+2. **Premium Excel-style Export** — colored XLSX (and matching PDF) with status-driven cell colors, frozen header, banded rows, and brand styling.
+3. **Excel View** — in-app spreadsheet-like grid with inline status labeling and color coding that matches the export.
 
-### 1. `supabase/functions/crm-send-brokerage-outreach/index.ts` (lines ~428–469, fallback HTML)
+---
 
-Rewrite the email body with this structure:
+## 1. Exclusion Filters (saved)
 
-```text
-GREETINGS FROM CITI DEVELOPER!     ← brand banner (center, gold underline)
-Sales & Training · Channel Partner Activation
+**Schema** — new table `crm_saved_filters`:
+- `id`, `user_id` (auth.uid), `scope` (`'brokerage' | 'developer'`), `name`, `excluded_ids uuid[]`, `excluded_names text[]`, `created_at`, `updated_at`
+- RLS: owner-only (using `requireOwnerAuth` pattern + `auth.uid()` policies).
 
-Dear {Brokerage Name} team,         ← (or "Dear {Contact First Name}" if a real contact exists)
+**UI** — new component `src/components/crm/ExcludeFilterPopover.tsx`:
+- Trigger button "Exclude" next to Export.
+- Searchable list of all current rows with checkboxes.
+- Footer: `Reset`, `Save as…`, `Done`.
+- Dropdown to load any saved filter for the current scope.
+- Selected-state badge (e.g. "12 excluded · Tier-1 list") on the trigger button.
 
-This is Jane Aboujaoude from CITI Developer, Sales & Training.
+Wire into both Brokerages and Developers tabs in `src/pages/CRMRelationships.tsx`. The active exclusion is applied to `filtered` BEFORE rendering, before Export, and before the new Excel View.
 
-{group_status_line}
+---
 
-Please let us know if {Brokerage Name} is already registered with CITI
-Developer. If you are not yet registered, kindly share the email address
-where your team would like to receive the registration documents and we
-will send everything required to complete onboarding.
+## 2. Premium Colored Export
 
-────────── FEATURED PROJECT (centered card) ──────────
-                  AMRA
-   Wellness-led beachfront resort residences…
-   [ Open AMRA e-catalogue → ]   ← champagne/gold premium CTA
-─────────────────────────────────────────────────────
+Rewrite `src/utils/exportBrokerages.ts` (and add `src/utils/exportDevelopers.ts`) using **`exceljs`** (richer styling than `xlsx`).
 
-PRIVATE INVITATION — Partnership Briefing & Breakfast
-…existing breakfast block (unchanged content, slight polish)…
-[ Book your slot on the calendar → ]
+XLSX styling:
+- **Header row**: champagne fill `#EFE6D6`, ink `#1A1A1A`, bold, gold bottom border `#B89555`, frozen.
+- **Banded rows**: alternating `#FFFFFF` / `#FAF6EE`.
+- **Status column**: solid fill by status —
+  - `not_answering` / `rejected` → red `#FCA5A5` fg, dark red `#7F1D1D` text
+  - `interested` / `meeting_booked` → emerald `#A7F3D0` / `#065F46`
+  - `documents_required` → amber `#FDE68A` / `#92400E`
+  - `registered` / `contract_signed` → blue `#BFDBFE` / `#1E3A8A`
+  - `not_started` → champagne `#EFE6D6` / `#1A1A1A`
+- **Number columns**: right-aligned, `#,##0` format.
+- **Title block** (rows 1–3): merged "JBJ GLOBAL REAL ESTATE — UAE Brokerage Tracker" with date and total count.
+- Auto-filter on data range, column widths from existing `COLUMNS`.
 
-Warm regards,
-Jane Aboujaoude
-CITI Developer · Sales & Training
-```
+PDF: keep `jspdf-autotable` but add the same status fills and the brand letterhead.
 
-Specific edits:
-- **Greeting block (new):** replace the small uppercase header with a centered gold-accent line `GREETINGS FROM ${representedDeveloperName}!` (note the `!`, not a colon) plus a thin `#B89555` hairline underline.
-- **Salutation (line 433):** change to dynamic logic — if `pcRaw.name` exists use `Dear <strong>${resolvedContactFirstName}</strong>,`; otherwise `Dear <strong>${varsMap.brokerage_name}</strong> team,`. Never the words "Sample" or "from".
-- **Registration paragraph:** move it out of the bottom and place it directly after `${resolvedGroupLine}` (before the Featured Project card). New copy:
-  > *"Please let us know whether <strong>{brokerage_name}</strong> is already registered with {representedDeveloperName}. If not, kindly reply with the email address where your team would like to receive the registration documents, and we will send everything required to complete onboarding."*
-  No question mark; declarative tone.
-- **Delete** the entire "Could you also confirm…" paragraph (line 458) and the italic "Please disregard this message…" paragraph (line 459).
-- **Featured Project card (lines 436–441):** add `text-align:center` to the wrapper; center the project name, tagline, and CTA. Replace the black CTA with a premium champagne-gold button:
-  ```
-  background: linear-gradient(180deg,#D4B05A 0%,#B89555 100%);
-  color:#1A1A1A; border:1px solid #8A6F3E;
-  border-radius:10px; padding:14px 30px;
-  font-weight:600; letter-spacing:0.4px;
-  box-shadow:0 2px 8px rgba(184,149,85,0.35);
-  ```
-  Label stays `Open ${project.name} e-catalogue →`.
-- Apply the same gold-CTA style to the "Book your slot" button below for visual consistency (currently solid black).
-- Polish: increase outer container padding, refine spacing, keep champagne palette per memory.
+CSV stays plain.
 
-### 2. `src/components/crm/TemplateEditorDialog.tsx` (preview, lines 65–67, 99, 137, 141)
-- Remove the literal default `"Sample Brokerage Group"` and `"Sample Developer Co."` — use `""` and show placeholder text "Recipient brokerage name (for preview only)" in the input. The preview substitution must fall back to `"Your Brokerage"` rather than the word "Sample".
-- Replace `{{contact_first_name}}` preview value `"Sample"` with empty (so the new salutation logic shows `Dear Your Brokerage team,`).
-- Update the `group_status_line` preview text to the new wording (no "confirm if you're already registered" trailer — the registration ask is now its own paragraph).
+---
 
-### 3. `src/components/crm/BulkSendDialog.tsx` (line 291 and the GROUP_LINES_LOCAL block 289–302)
-- Update `prospective` line to: `"We'd love to introduce CITI Developer to your team."` (drop the "and confirm if you're already registered with us." tail — that ask now lives in a dedicated paragraph rendered by the edge function).
-- Keep all other group lines unchanged.
+## 3. Excel View tab
 
-### 4. Per-recipient name synchronization (already wired, verify)
-The edge function already resolves `varsMap.brokerage_name` from `brk.company_name` and `varsMap.contact_first_name` from the brokerage's `primary_contact.name` for **every recipient** in bulk sends (each `send-brokerage-outreach` invocation is per-brokerage). No code change needed — the new salutation logic above will automatically render `Dear Provident team,` for Provident and `Dear Farm team,` for Farm, etc. We will add a one-line code comment documenting that the salutation is per-recipient and never falls back to the word "Sample".
+New component `src/components/crm/ExcelGridView.tsx` — virtualized grid (built on `@tanstack/react-table` + plain CSS grid; no new heavy dep needed).
 
-## Out of scope / not changed
-- Template variants other than `brokerage_partnership_intro` fallback (the edge function only renders this fallback when stored template lacks `{{project_name}}`; stored DB templates are untouched and remain owner-editable in the Template Editor).
-- Booking flow, CC auto-save, briefing fields, "All shows 0" fix — already shipped previously.
+- Toggle pill in section header: `Cards | Excel View`.
+- Sticky header, sticky first column (Agency / Developer name).
+- Status cell is an inline dropdown (`not_answering`, `rejected`, `interested`, `documents_required`, `registered`, `contract_signed`, `meeting_booked`, `not_started`). Selecting a status:
+  - calls existing update mutation (`brokerages.crm_status` / equivalent on developers),
+  - immediately repaints the cell with the same color used in the export.
+- Notes cell becomes editable inline (debounced save).
+- "Export" from inside Excel View uses the same colored XLSX → 1-to-1 visual parity.
 
-## Deploy
-After edits, redeploy the edge function `crm-send-brokerage-outreach`.
+Excluded rows from filter #1 are hidden here too.
+
+---
+
+## Technical Details
+
+- Add dep: `exceljs`. Remove direct use of `xlsx` for styled output (keep it only if other modules use it).
+- Status palette centralised in `src/utils/crmStatusPalette.ts` and consumed by `ExcelGridView`, `exportBrokerages`, `exportDevelopers`, and the existing card badges so colors stay consistent everywhere.
+- Saved filters are scoped per user; `OwnerGuard` already protects `/owner/crm/relationships`.
+- Migration for `crm_saved_filters` + RLS policies (`select/insert/update/delete` where `user_id = auth.uid()`).
+
+---
+
+## Files
+
+**New**
+- `supabase/migrations/<ts>_crm_saved_filters.sql`
+- `src/components/crm/ExcludeFilterPopover.tsx`
+- `src/components/crm/ExcelGridView.tsx`
+- `src/utils/crmStatusPalette.ts`
+- `src/utils/exportDevelopers.ts`
+
+**Edited**
+- `src/pages/CRMRelationships.tsx` — wire Exclude button, Cards/Excel toggle, pass excluded set into Export and grid.
+- `src/utils/exportBrokerages.ts` — switch to `exceljs`, add colored title + status fills + banding + frozen header + autofilter.
+- `package.json` — add `exceljs`.
+
+---
+
+## Out of Scope (for this round)
+
+- No changes to email templates, breakfast booking page, or developer/brokerage classification (those are tracked separately).
