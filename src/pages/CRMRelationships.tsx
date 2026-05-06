@@ -590,7 +590,7 @@ const BrokeragesTab = () => {
     remind.mutate({ brokerageId: b.id, brokerageName: b.company_name, daysFromNow: 7 });
   };
 
-  const handleExport = (format: "csv" | "xlsx" | "pdf") => {
+  const handleExport = async (format: "csv" | "xlsx" | "pdf") => {
     if (!filtered.length) {
       toast.error("Nothing to export");
       return;
