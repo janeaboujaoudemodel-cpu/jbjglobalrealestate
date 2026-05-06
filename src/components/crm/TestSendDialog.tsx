@@ -63,6 +63,12 @@ export const TestSendDialog = ({
     setActiveTo(to[0] || "");
     setSavedCc(cc);
     setActiveCc(cc);
+    const savedNamesKey = mode === "brokerage" ? "saved_test_brokerage_names" : "saved_test_developer_names";
+    const savedNames = Array.isArray((settings as any)[savedNamesKey])
+      ? (settings as any)[savedNamesKey]
+      : [];
+    setSavedSampleNames(savedNames);
+    if (savedNames.length > 0) setSampleName(savedNames[0]);
     if (to.length === 0) {
       supabase.auth.getUser().then(({ data }) => {
         const email = data.user?.email;
@@ -71,7 +77,7 @@ export const TestSendDialog = ({
         }
       });
     }
-  }, [open, settings]);
+  }, [open, settings, mode]);
 
   // Silent persist (no toast, no refetch loop)
   const persist = async (next: { savedTo?: string[]; savedCc?: string[] }) => {
