@@ -143,6 +143,8 @@ export const TemplateEditorDialog = ({
         .replace(/\{\{project_offer_html\}\}/g, offerHtml)
         .replace(/\{\{booking_url\}\}/g, "#preview")
         .replace(/\{\{reply_to\}\}/g, "jane@citideveloper.com")
+        .replace(/\{\{reply_to_lower\}\}/g, "jane@citideveloper.com")
+        .replace(/\{\{reply_to_display\}\}/g, "JANE@CITIDEVELOPER.COM")
         .replace(/\{\{cc_email\}\}/g, "");
     }
     return html
@@ -376,9 +378,9 @@ export const TemplateEditorDialog = ({
               </div>
               <iframe
                 title="Email preview"
-                srcDoc={previewHtml}
+                srcDoc={`<base target="_blank" /><style>a{pointer-events:none;cursor:default}</style>` + previewHtml}
                 className="flex-1 w-full bg-[#FDFBF7]"
-                sandbox=""
+                sandbox="allow-same-origin"
               />
             </div>
           )}
