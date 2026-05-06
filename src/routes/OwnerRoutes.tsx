@@ -95,6 +95,7 @@ export const OwnerRoutes = () => (
         Redirect to the canonical /properties listing so the full filter set is preserved. */}
     <Route path="properties" element={<Navigate to="/properties" replace />} />
     <Route path="documents" element={<Documents />} />
+    <Route path="documents/forms" element={<DocumentsFormsHub />} />
     <Route path="settings" element={<OwnerCommSettings />} />
     <Route path="crm" element={<CRM />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
