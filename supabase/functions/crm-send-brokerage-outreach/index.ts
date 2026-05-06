@@ -394,7 +394,7 @@ serve(async (req: Request) => {
     const project = resolveProject(personalization.featuredProjectKey);
 
     // Salutation: prefer real first name; otherwise "<Brokerage> team"; final fallback "team".
-    const brokerageNameResolved = brk.company_name || "your brokerage";
+    const brokerageNameResolved = brk.company_name || "your team";
     const hasRealFirstName =
       resolvedContactFirstName &&
       resolvedContactFirstName.toLowerCase() !== "team" &&
@@ -452,7 +452,7 @@ serve(async (req: Request) => {
         ? `Dear <strong>${varsMap.contact_first_name}</strong>,`
         : `Dear <strong>${varsMap.brokerage_name}</strong> team,`;
       const goldCta = (href: string, label: string) =>
-        `<a href="${href}" style="display:inline-block;padding:14px 30px;background:linear-gradient(180deg,#D4B05A 0%,#B89555 100%);color:#1A1A1A;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.4px;border:1px solid #8A6F3E;box-shadow:0 2px 8px rgba(184,149,85,0.35)">${label}</a>`;
+        `<a href="${href}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;background:#F7F2EA;color:#1A1A1A;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.3px;border:1px solid #B89555">${label}</a>`;
       html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
 <div style="background:#F7F2EA;padding:48px 16px">
   <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:44px 44px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
@@ -463,7 +463,7 @@ serve(async (req: Request) => {
     <p style="margin:0 0 16px;font-size:15px">${salutation}</p>
     <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>${representedDeveloperName}</strong>, Sales &amp; Training department.</p>
     <p style="margin:0 0 16px;font-size:14px">${resolvedGroupLine}</p>
-    <p style="margin:0 0 24px;font-size:14px">Please let us know whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}. If you are not yet registered, kindly reply with the email address where your team would like to receive the registration documents, and we will send everything required to complete onboarding.</p>
+    <p style="margin:0 0 24px;font-size:14px">Please let us know whether <strong>${varsMap.brokerage_name}</strong> is already registered with ${representedDeveloperName}. If not, kindly share your email address so our <strong>Channel Partner Department</strong> can send the registration documents and onboard <strong>${varsMap.brokerage_name}</strong> directly.</p>
     <div style="margin:28px 0;padding:28px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px;text-align:center">
       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:10px">Featured Project</div>
       <div style="font-size:26px;font-weight:600;color:#1A1A1A;margin-bottom:10px;letter-spacing:1px">${project.name}</div>

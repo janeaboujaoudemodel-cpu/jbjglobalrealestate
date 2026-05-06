@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 import { Calendar, Clock, Users, Check, Loader2, AlertCircle, ArrowRight, MapPin, Phone, Download, Copy, CalendarPlus } from "lucide-react";
-import html2canvas from "html2canvas";
+// html2canvas is lazy-loaded inside downloadPng to keep the initial booking page lean.
 import { supabase } from "@/integrations/supabase/client";
 import { edgeFnUrl, anonHeaders } from "@/config/backend";
 import { Button } from "@/components/ui/button";
@@ -163,6 +163,7 @@ export default function BreakfastBooking() {
   const downloadPng = async () => {
     if (!cardRef.current) return;
     try {
+      const { default: html2canvas } = await import("html2canvas");
       const canvas = await html2canvas(cardRef.current, { backgroundColor: "#FDFBF7", scale: 2 });
       const a = document.createElement("a");
       a.download = "jbj-breakfast-invitation.png";
