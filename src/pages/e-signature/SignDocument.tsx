@@ -80,13 +80,17 @@ export default function SignDocument() {
         if (recipientError || !recipient) {
           // Fallback: token may belong to the legacy PAA crm_documents flow.
           // Redirect to the public HTML signing route which queries crm_documents.
-          const { data: legacy } = await supabase.functions.invoke(
-            "documents-public-fill",
-            { body: { action: "get", token } }
-          );
-          if (legacy && (legacy as any).document) {
-            window.location.replace(`/documents/sign/${token}`);
-            return;
+          try {
+            const { data: legacy } = await supabase.functions.invoke(
+              "documents-public-fill",
+              { body: { action: "get", token } }
+            );
+            if (legacy && (legacy as any).document) {
+              window.location.replace(`/documents/sign/${token}`);
+              return;
+            }
+          } catch {
+            // 404 / not found — fall through to error state
           }
           setError("This signing link is invalid or has expired");
           setLoading(false);
