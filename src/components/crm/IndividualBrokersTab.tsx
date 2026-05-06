@@ -246,6 +246,17 @@ export default function IndividualBrokersTab() {
                       {r.role ? `${r.role} · ` : ""}{r.brokerage?.company_name || "Standalone"}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
+                      {(r.expertise_type === "leasing" || r.expertise_type === "both") && (
+                        <span className="px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">Leasing</span>
+                      )}
+                      {(r.expertise_type === "selling" || r.expertise_type === "both") && (
+                        <span className="px-2 py-0.5 rounded-full border border-blue-300 bg-blue-50 text-blue-900">Selling</span>
+                      )}
+                      {(r.expertise_areas || []).slice(0, 3).map((a) => (
+                        <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
+                      ))}
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
                       {r.phone && <a href={`tel:${r.phone}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Phone className="w-3 h-3" />{r.phone}</a>}
                       {r.whatsapp && <a href={`https://wa.me/${r.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><MessageCircle className="w-3 h-3" />WhatsApp</a>}
                       {r.email && <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"><Mail className="w-3 h-3" />{r.email}</a>}
