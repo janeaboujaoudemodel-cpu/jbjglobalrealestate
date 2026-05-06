@@ -307,20 +307,42 @@ export default function AgencyActivityLog() {
     toast.success(`Exported ${data.length} entries`);
   };
 
-  const Stat = ({ label, value, mode, active }: { label: string; value: number; mode?: ViewMode; active?: boolean }) => (
-    <button
-      type="button"
-      onClick={() => mode && setView(mode)}
-      className={`px-3 py-2 rounded-lg border text-left transition-all ${
-        active
-          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
-          : "bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA]"
-      } ${mode ? "cursor-pointer" : "cursor-default"}`}
-    >
-      <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">{label}</div>
-      <div className="font-bold text-lg">{value}</div>
-    </button>
-  );
+  const [quickOpen, setQuickOpen] = useState<QuickActivityType | null>(null);
+
+  const Stat = ({
+    label, value, typeKey, addType,
+  }: {
+    label: string; value: number;
+    typeKey?: string; // typeFilter value to set on click; undefined => "all"
+    addType?: QuickActivityType; // if set, show + to create
+  }) => {
+    const isActive = typeKey ? typeFilter === typeKey : typeFilter === "all";
+    return (
+      <div className={`flex items-stretch rounded-lg border overflow-hidden transition-all ${
+        isActive ? "border-[#B89555] bg-[#EFE6D6]" : "border-[#B89555]/30 bg-[#FDFBF7] hover:bg-[#F7F2EA]"
+      }`}>
+        <button
+          type="button"
+          onClick={() => { setTypeFilter(typeKey || "all"); setView("all"); }}
+          className="px-3 py-2 text-left cursor-pointer text-[#1A1A1A]"
+        >
+          <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/70">{label}</div>
+          <div className="font-bold text-lg">{value}</div>
+        </button>
+        {addType && (
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setQuickOpen(addType); }}
+            className="px-2 border-l border-[#B89555]/30 hover:bg-[#F7F2EA] text-[#1A1A1A]"
+            title={`Add ${label.toLowerCase()}`}
+            aria-label={`Add ${label.toLowerCase()}`}
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+    );
+  };
 
   const selectedIds = useMemo(() => Array.from(selected), [selected]);
   const busy = markDone.isPending || markUndone.isPending || softDelete.isPending || restore.isPending || purge.isPending;
