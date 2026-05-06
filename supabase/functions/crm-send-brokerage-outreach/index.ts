@@ -325,8 +325,8 @@ serve(async (req: Request) => {
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
-    // Always CC info.jane@gmail.com so both inboxes stay in sync.
-    const SECONDARY_CC = "info.jane@gmail.com";
+    // Always CC infoo.jane@gmail.com so both inboxes stay in sync.
+    const SECONDARY_CC = "infoo.jane@gmail.com";
     if (!ccList.some((c) => c.toLowerCase() === SECONDARY_CC)) {
       ccList.push(SECONDARY_CC);
     }
@@ -493,7 +493,7 @@ serve(async (req: Request) => {
     <p style="margin:0 0 24px;font-size:14px">If <strong>${varsMap.brokerage_name}</strong> already runs an internal <strong>WhatsApp group</strong> for project updates, please add me so I can keep your team posted on launches, inventory and commissions. If not, I'll create a dedicated WhatsApp group with your team.</p>
 
     <div style="margin:24px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px;text-align:center;color:#1A1A1A">
-      Please <strong>reply to this email</strong> at <strong>${replyTo}</strong> and CC <strong>info.jane@gmail.com</strong> so both inboxes stay in sync.
+      Please <strong>reply to this email</strong> at <strong>${replyTo}</strong> and CC <strong>infoo.jane@gmail.com</strong> so both inboxes stay in sync.
     </div>
 
     <div style="margin:28px 0;padding:28px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px;text-align:center">
