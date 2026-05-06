@@ -1,59 +1,46 @@
-## Plan: Fix Brokerage Outreach Email Workflow
+## Continue Brokerage Outreach Fix — Steps 1–5
 
-### What is broken now
-- The brokerage template preview is rendering inside a sandboxed iframe, so any Gmail-style link or embedded external mail page can show “mail.google.com refused to connect.” I will make preview links safe and open externally instead of trying to load blocked pages inside the preview.
-- The template is exposing awkward placeholders like reply-to lower/reply-to display in the email body instead of showing polished contact CTAs.
-- The current “Send test” flow sends too quickly from some places and does not force a final review of primary recipient + CC before sending.
-- Citi Developers branding is not fully applied: the uploaded logo, official website, office address, maps link, WhatsApp link, and footer need to be integrated consistently.
+Using the confirmed contact: **jane@citideveloper.com** (primary sender + reply-to), website **https://citideveloper.com/**, and office map **https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18**.
 
-### Batch 1 — Citi Developers brand asset + contact constants
-- Copy the uploaded `Citi_Developers_Gold.png` into the project assets.
-- Add a small shared brokerage-email brand configuration for:
-  - Developer name: `Citi Developers`
-  - Website: `https://citideveloper.com/`
-  - Contact page: `https://citideveloper.com/contact-us`
-  - Office: `Sales and Experience Center: Villa no 1 & 2 - 625 Jumeira St - Umm Suqeim - Umm Suqeim 1 - Dubai`
-  - Official map redirect: `https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18`
-  - Citi phone: `80044440` and `044031000`
-  - WhatsApp deep link generated with `https://wa.me/...` for the owner direct contact number already used in the system.
+### Step 1 — Apply branded template migration (DB)
+Push the prepared `UPDATE public.crm_email_templates` for `brokerage_partnership_intro` and `brokerage_breakfast_invite`:
+- Replace footer with Citi Developers branded block (logo, website button, map button, WhatsApp button, jane@citideveloper.com reply link, office address).
+- Remove `{{reply_to_lower}}` / `{{reply_to}}` raw placeholders from body.
+- Set `reply_to` default = `jane@citideveloper.com`.
 
-### Batch 2 — Fix the branded email template HTML
-- Replace the brokerage template footer with a polished footer containing:
-  - Uploaded Citi Developers logo
-  - Website button
-  - Map/location button
-  - WhatsApp contact button
-  - Email reply contact
-  - Office address
-- Remove visible technical placeholders like `reply_to_lower` from the rendered email body.
-- Ensure all external links use normal `target=_blank` behavior in app previews and absolute HTTPS links in real emails.
-- Keep the app’s champagne/ink/gold hairline style, but avoid heavy gold fill buttons.
+### Step 2 — Fix template preview iframe
+In the brokerage template preview component:
+- Render only sanitized email HTML in `srcDoc` (sandbox = `allow-same-origin` only — no `allow-top-navigation`, no `allow-popups-to-escape-sandbox`).
+- Rewrite all `<a>` links to `target="_blank" rel="noopener"` so Gmail/maps never embed inside the iframe.
+- Strip any link that points to `mail.google.com/...` and replace with a plain `mailto:jane@citideveloper.com`.
 
-### Batch 3 — Fix preview so Gmail/blocked pages do not break the UI
-- Update the template preview iframe behavior so clicks do not navigate inside the iframe to Gmail or other external sites.
-- Add link rewriting/sanitization for preview mode: external links open in a new tab, while `mailto:` and WhatsApp links remain clickable but never embedded.
-- Use `srcDoc` preview only for the email HTML, not external mail pages.
+### Step 3 — Two-step Send Test confirmation
+Update the Send Test dialog (used from `OutreachActionsMenu` → Send test):
+1. **Step A — Review:** show editable Primary recipient (defaults to `jane@citideveloper.com`) using `PrimarySenderEditor`, editable CC list using `CcListEditor`, template variant selector, sample brokerage name. Persist saved recipients in `localStorage`.
+2. **Step B — Confirm:** show final summary (To / CC / template / sample) with **Send Test** + **Back** buttons. Sending only fires from this confirm screen.
 
-### Batch 4 — Fix “Send test email” confirmation flow
-- Replace instant test send with a two-step confirmation:
-  1. Edit/review primary test email and CC list.
-  2. Confirm and send.
-- Show a clear final summary before sending:
-  - Template variant
-  - Primary recipient(s)
-  - CC recipients
-  - Sample brokerage name
-- Allow add/remove/edit of CC emails before sending.
-- Keep saved test recipients persistent for next time.
+### Step 4 — Backend hardening (`crm-send-brokerage-outreach`)
+- Inject brand variables server-side with safe fallbacks:
+  - `developer_name = "Citi Developers"`
+  - `developer_website = "https://citideveloper.com/"`
+  - `developer_map = "https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18"`
+  - `developer_office = "Sales and Experience Center: Villa no 1 & 2 - 625 Jumeira St - Umm Suqeim 1 - Dubai"`
+  - `developer_phone_primary = "80044440"`, `developer_phone_secondary = "044031000"`
+  - `reply_to = "jane@citideveloper.com"`, `whatsapp_url` from owner number
+  - `developer_logo_url = "<site>/brand/citi-developers-gold.png"`
+- Honor CC overrides from test sends.
+- Strip stray `reply_to_lower` tokens before render.
+- Redeploy.
 
-### Batch 5 — Backend sender hardening + redeploy
-- Update `crm-send-brokerage-outreach` to render the new brand/contact variables server-side.
-- Add safe fallback values if a template is missing the new variables.
-- Ensure test sends accept CC overrides properly.
-- Redeploy the updated brokerage outreach edge function.
+### Step 5 — Verification
+- Open `/owner/crm/relationships` → Brokerages → Outreach menu.
+- Verify preview renders branded footer, no Gmail embed, links open new tab.
+- Trigger Send Test → confirm two-step flow → send to `jane@citideveloper.com`.
+- Capture screenshots of: preview, review step, confirm step, delivered test (or backend response).
 
-### Batch 6 — Verification
-- Test the route `/owner/crm/relationships` brokerage outreach/template flow in preview.
-- Verify the template preview no longer tries to embed Gmail.
-- Send/attempt a test email through the app flow and inspect any backend error if the connector rejects it.
-- Provide screenshot proof after implementation using the browser preview screenshot tool.
+### Files expected to change
+- `supabase/migrations/<new>_brokerage_brand_footer.sql` (Step 1)
+- `src/components/crm/BrokerageTemplatePreview.tsx` or equivalent preview iframe (Step 2)
+- `src/components/crm/SendTestEmailDialog.tsx` (or create if missing) (Step 3)
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` (Step 4)
+- `.lovable/plan.md` (mark complete)
