@@ -195,12 +195,22 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             {STATUS_OPTS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={expertiseFilter} onValueChange={setExpertiseFilter}>
+          <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All expertise</SelectItem>
+            <SelectItem value="leasing">Leasing</SelectItem>
+            <SelectItem value="selling">Selling</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export Excel</Button>
+        <Button variant="outline" onClick={() => setBulkOpen(true)}><UploadCloud className="w-4 h-4 mr-2" /> Upload database</Button>
         <Button variant="gold" onClick={openNew}><Plus className="w-4 h-4 mr-2" /> Add broker</Button>
       </div>
 
