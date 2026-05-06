@@ -165,6 +165,46 @@ export function ExportConfigurator({
             </RadioGroup>
           </div>
 
+          {/* Status filters */}
+          {statusFilters && statusFilters.length > 0 && (
+            <div>
+              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">
+                Filter by status {statuses.length > 0 && `(${statuses.length})`}
+              </Label>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {statusFilters.map((s) => {
+                  const active = statuses.includes(s.key);
+                  return (
+                    <button
+                      key={s.key}
+                      type="button"
+                      onClick={() => toggleStatus(s.key)}
+                      className={`px-2.5 py-1 rounded-full border text-xs ${
+                        active
+                          ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A] font-semibold"
+                          : "bg-white border-[#B89555]/30 text-[#1A1A1A]/80"
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  );
+                })}
+                {statuses.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setStatuses([])}
+                    className="px-2.5 py-1 rounded-full border border-[#B89555]/30 bg-white text-xs text-[#1A1A1A]/70"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <p className="mt-1 text-[11px] text-[#1A1A1A]/60">
+                {statuses.length === 0 ? "No filter — all statuses included." : "Only rows matching selected statuses will be exported."}
+              </p>
+            </div>
+          )}
+
           {/* Presets */}
           {presets.length > 0 && (
             <div>
