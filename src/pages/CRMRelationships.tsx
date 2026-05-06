@@ -1803,7 +1803,7 @@ const DeveloperRegistryTab = () => {
       <div className="flex gap-1 p-1 bg-[#F7F2EA] border border-[#1A1A1A]/10 rounded-xl w-fit">
         <button
           type="button"
-          onClick={() => setSubTab("queue")}
+          onClick={() => setSubTab(subTab === "queue" ? null : "queue")}
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
             subTab === "queue"
               ? "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/60"
