@@ -393,9 +393,20 @@ serve(async (req: Request) => {
     // Resolve featured Citi project (defaults to AMRA).
     const project = resolveProject(personalization.featuredProjectKey);
 
+    // Salutation: prefer real first name; otherwise "<Brokerage> team"; final fallback "team".
+    const brokerageNameResolved = brk.company_name || "your brokerage";
+    const hasRealFirstName =
+      resolvedContactFirstName &&
+      resolvedContactFirstName.toLowerCase() !== "team" &&
+      resolvedContactFirstName.trim().length > 0;
+    const salutation = hasRealFirstName
+      ? resolvedContactFirstName
+      : (brk.company_name ? `${brk.company_name} team` : "team");
+
     const varsMap: Record<string, string> = {
-      brokerage_name: brk.company_name || "your brokerage",
+      brokerage_name: brokerageNameResolved,
       brokerage_location: brokerageLocation,
+      salutation,
       contact_first_name: resolvedContactFirstName,
       contact_full_name: resolvedContactFullName || (brk.company_name || "your team"),
       contact_title: pcRaw.title || "",
