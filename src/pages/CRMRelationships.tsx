@@ -1730,6 +1730,7 @@ const DeveloperRegistryTab = () => {
               rank: i + 1,
               developer_name: r.developer_name || "",
               status: r.status || "",
+              agency_status: r.outreach_stage || "",
               developer_email: r.developer_email || "",
               phone: r.phone || "",
               emirate: r.emirate || "",
