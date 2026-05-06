@@ -281,6 +281,137 @@ async function buildAuditTrailPdf(envelope: any): Promise<Uint8Array> {
 }
 
 // ---------------------------------------------------------------------------
+// Flatten signed fields onto the original PDF
+// ---------------------------------------------------------------------------
+
+async function fetchBytes(url: string): Promise<Uint8Array> {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`Failed to fetch ${url}: ${r.status}`);
+  return new Uint8Array(await r.arrayBuffer());
+}
+
+async function embedDataUrl(pdfDoc: PDFDocument, dataUrl: string) {
+  const commaIdx = dataUrl.indexOf(",");
+  if (commaIdx === -1) return null;
+  const base64 = dataUrl.slice(commaIdx + 1);
+  const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+  if (dataUrl.startsWith("data:image/png")) return await pdfDoc.embedPng(bytes);
+  return await pdfDoc.embedJpg(bytes);
+}
+
+/**
+ * Flatten placed esign_fields onto the source PDF.
+ * Field coordinates: x/y are percent (0-100) from top-left; width/height in CSS px
+ * at the PDF's natural viewport scale = 1.
+ */
+async function buildSignedPdf(
+  envelope: any,
+  fields: any[],
+  recipients: any[],
+): Promise<Uint8Array | null> {
+  try {
+    const srcBytes = await fetchBytes(envelope.document_url);
+    const pdfDoc = await PDFDocument.load(srcBytes);
+    const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    // Cache embedded signature/initials per recipient
+    const sigCache = new Map<string, any>();
+    const initCache = new Map<string, any>();
+    for (const r of recipients) {
+      if (r.signature_data) {
+        try { sigCache.set(r.id, await embedDataUrl(pdfDoc, r.signature_data)); } catch {}
+      }
+      if (r.initials_data) {
+        try { initCache.set(r.id, await embedDataUrl(pdfDoc, r.initials_data)); } catch {}
+      }
+    }
+
+    const recipientById = new Map(recipients.map((r: any) => [r.id, r]));
+    const pages = pdfDoc.getPages();
+
+    for (const f of fields) {
+      const pageIdx = Math.max(0, (f.page_number || 1) - 1);
+      if (pageIdx >= pages.length) continue;
+      const page = pages[pageIdx];
+      const { width: pageW, height: pageH } = page.getSize();
+
+      const w = Number(f.width) || 160;
+      const h = Number(f.height) || 36;
+      // Convert percent (top-left origin) → PDF points (bottom-left origin)
+      const xPct = Number(f.x_position) || 0;
+      const yPct = Number(f.y_position) || 0;
+      const x = (xPct / 100) * pageW;
+      const yTop = (yPct / 100) * pageH;
+      const y = pageH - yTop - h;
+
+      const recipient = recipientById.get(f.recipient_id);
+      const type = f.field_type;
+
+      if (type === "signature" && recipient && sigCache.get(recipient.id)) {
+        const img = sigCache.get(recipient.id)!;
+        const dim = img.scale(1);
+        const scale = Math.min(w / dim.width, h / dim.height);
+        page.drawImage(img, {
+          x,
+          y: y + (h - dim.height * scale) / 2,
+          width: dim.width * scale,
+          height: dim.height * scale,
+        });
+      } else if (type === "initials" && recipient && initCache.get(recipient.id)) {
+        const img = initCache.get(recipient.id)!;
+        const dim = img.scale(1);
+        const scale = Math.min(w / dim.width, h / dim.height);
+        page.drawImage(img, {
+          x,
+          y: y + (h - dim.height * scale) / 2,
+          width: dim.width * scale,
+          height: dim.height * scale,
+        });
+      } else if (type === "stamp" && f.field_value) {
+        // Stamp may be stored as data URL in field_value
+        try {
+          const img = await embedDataUrl(pdfDoc, f.field_value);
+          if (img) {
+            const dim = img.scale(1);
+            const scale = Math.min(w / dim.width, h / dim.height);
+            page.drawImage(img, {
+              x, y: y + (h - dim.height * scale) / 2,
+              width: dim.width * scale, height: dim.height * scale,
+            });
+          }
+        } catch {}
+      } else if (type === "date") {
+        const value = f.field_value || (recipient?.signed_at
+          ? new Date(recipient.signed_at).toLocaleDateString("en-GB")
+          : new Date().toLocaleDateString("en-GB"));
+        page.drawText(String(value), {
+          x: x + 4, y: y + h / 2 - 5, size: 11, font: fontRegular, color: rgb(0.05, 0.05, 0.05),
+        });
+      } else if (type === "checkbox") {
+        if (f.is_completed || f.field_value) {
+          page.drawText("X", {
+            x: x + w / 2 - 4, y: y + h / 2 - 5, size: 14, font: fontBold, color: rgb(0, 0, 0),
+          });
+        }
+        page.drawRectangle({
+          x, y, width: w, height: h, borderWidth: 1, borderColor: rgb(0.4, 0.4, 0.4),
+        });
+      } else if (type === "text" || f.field_value) {
+        page.drawText(String(f.field_value || ""), {
+          x: x + 4, y: y + h / 2 - 5, size: 11, font: fontRegular, color: rgb(0.05, 0.05, 0.05),
+        });
+      }
+    }
+
+    return await pdfDoc.save();
+  } catch (err) {
+    console.error("buildSignedPdf failed:", err);
+    return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main handler
 // ---------------------------------------------------------------------------
 
@@ -357,6 +488,36 @@ Deno.serve(async (req) => {
       },
     };
 
+    // ── Build flattened signed PDF ─────────────────────────────────────────
+    let signedDocumentUrl: string | null = null;
+    try {
+      const { data: fields } = await supabase
+        .from("esign_fields")
+        .select("*")
+        .eq("envelope_id", envelope.id);
+
+      const signedBytes = await buildSignedPdf(envelope, fields || [], envelope.esign_recipients);
+      if (signedBytes) {
+        const signedFilename = `signed_${envelope.id}.pdf`;
+        const { error: upErr } = await supabase.storage
+          .from("esign-certificates")
+          .upload(signedFilename, signedBytes, {
+            contentType: "application/pdf",
+            upsert: true,
+          });
+        if (upErr) {
+          console.error("Failed to upload signed PDF:", upErr);
+        } else {
+          const { data: urlData } = supabase.storage
+            .from("esign-certificates")
+            .getPublicUrl(signedFilename);
+          signedDocumentUrl = urlData?.publicUrl ?? null;
+        }
+      }
+    } catch (signErr) {
+      console.error("Failed to flatten signed PDF:", signErr);
+    }
+
     // Create or update signed document record
     const { data: existingDoc } = await supabase
       .from("esign_signed_documents")
@@ -369,6 +530,7 @@ Deno.serve(async (req) => {
         .from("esign_signed_documents")
         .update({
           certificate_data: certificateData,
+          ...(signedDocumentUrl ? { document_url: signedDocumentUrl } : {}),
           ...(certificateUrl ? { certificate_url: certificateUrl } : {}),
         })
         .eq("id", existingDoc.id);
@@ -377,7 +539,7 @@ Deno.serve(async (req) => {
         .from("esign_signed_documents")
         .insert({
           envelope_id: envelope.id,
-          document_url: envelope.document_url,
+          document_url: signedDocumentUrl || envelope.document_url,
           document_filename: `signed_${envelope.document_filename}`,
           certificate_data: certificateData,
           ...(certificateUrl ? { certificate_url: certificateUrl } : {}),
@@ -392,7 +554,7 @@ Deno.serve(async (req) => {
     await supabase
       .from("esign_envelopes")
       .update({
-        signed_document_url: envelope.document_url,
+        signed_document_url: signedDocumentUrl || envelope.document_url,
       })
       .eq("id", envelope.id);
 

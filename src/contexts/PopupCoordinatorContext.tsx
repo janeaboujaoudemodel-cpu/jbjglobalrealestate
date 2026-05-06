@@ -87,6 +87,23 @@ const checkQAMode = (): boolean => {
   }
 };
 
+/**
+ * Routes where ALL coordinated popups must be suppressed (e-signature workflow,
+ * document signing pages, owner forms hub). Users complained that the "Pending
+ * Tasks" / "Welcome" modals covered the templates and signing UI.
+ */
+const POPUP_SUPPRESSED_PATH_PATTERNS: RegExp[] = [
+  /^\/sign\//i,
+  /^\/e-signature(\/|$)/i,
+  /^\/owner\/documents\/forms(\/|$)/i,
+];
+
+const isPopupSuppressedRoute = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname || '';
+  return POPUP_SUPPRESSED_PATH_PATTERNS.some(rx => rx.test(path));
+};
+
 export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> = ({ children }) => {
   const isMobile = useIsMobile();
   const [requests, setRequests] = useState<Map<PopupId, PopupRequest>>(new Map());
@@ -159,7 +176,10 @@ export const PopupCoordinatorProvider: React.FC<PopupCoordinatorProviderProps> =
   const canShow = useCallback((id: PopupId): boolean => {
     // QA Mode: Block all popups for testing/screenshots
     if (isQAMode) return false;
-    
+
+    // Block all popups on signing & document workflow routes
+    if (isPopupSuppressedRoute()) return false;
+
     // Enforce delay between popups
     if (lastDismissedAt > 0 && Date.now() - lastDismissedAt < POPUP_DELAY_MS) {
       // Schedule a re-check after the delay

@@ -25,13 +25,18 @@ import {
   Loader2,
   Clock,
   CheckCircle2,
-  ShieldCheck
+  ShieldCheck,
+  Download,
+  Mail,
+  MessageCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
 import DocumentPreviewSummary from "@/components/e-signature/DocumentPreviewSummary";
 import { SUPABASE_URL } from "@/config/backend";
 import { normalizeToSignablePdf } from "@/utils/normalizeToSignablePdf";
+import { exportPreviewPdf } from "@/utils/exportPreviewPdf";
+import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 
 interface Recipient {
   id: string;
@@ -155,9 +160,73 @@ export default function CreateEnvelope() {
   // Step 3: Fields
   const [signatureFields, setSignatureFields] = useState<SignatureField[]>([]);
 
-  // Step 4: Email customization
   const [emailSubject, setEmailSubject] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
+  const [channels, setChannels] = useState<{ email: boolean; whatsapp: boolean }>({
+    email: true,
+    whatsapp: false,
+  });
+  const [isExportingPreview, setIsExportingPreview] = useState(false);
+
+  // Saved signature/stamp for client-side preview export
+  const { data: signatureAssets } = useOwnerSignatureAssets("signature");
+  const { data: stampAssets } = useOwnerSignatureAssets("stamp");
+  const defaultSignatureUrl = useMemo(() => {
+    const list = signatureAssets || [];
+    return (list.find(a => a.is_default) || list[0])?.image_url || null;
+  }, [signatureAssets]);
+  const defaultStampUrl = useMemo(() => {
+    const list = stampAssets || [];
+    return (list.find(a => a.is_default) || list[0])?.image_url || null;
+  }, [stampAssets]);
+
+  const handleExportPreview = useCallback(async () => {
+    if (!pdfFile) {
+      toast.error("Upload a document first");
+      return;
+    }
+    setIsExportingPreview(true);
+    try {
+      // Convert remote signature/stamp URLs to data URLs for pdf-lib
+      async function urlToDataUrl(url: string | null): Promise<string | null> {
+        if (!url) return null;
+        try {
+          const r = await fetch(url);
+          const blob = await r.blob();
+          return await new Promise<string>((resolve, reject) => {
+            const fr = new FileReader();
+            fr.onload = () => resolve(String(fr.result));
+            fr.onerror = reject;
+            fr.readAsDataURL(blob);
+          });
+        } catch {
+          return null;
+        }
+      }
+      const [sigData, stampData] = await Promise.all([
+        urlToDataUrl(defaultSignatureUrl),
+        urlToDataUrl(defaultStampUrl),
+      ]);
+      const blob = await exportPreviewPdf(pdfFile, signatureFields, recipients, {
+        signatureDataUrl: sigData,
+        stampDataUrl: stampData,
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(documentName || "preview").replace(/[^\w-]+/g, "_")}_preview.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30_000);
+      toast.success("Preview PDF downloaded");
+    } catch (err: any) {
+      console.error("Preview export failed:", err);
+      toast.error(err.message || "Failed to export preview");
+    } finally {
+      setIsExportingPreview(false);
+    }
+  }, [pdfFile, signatureFields, recipients, documentName, defaultSignatureUrl, defaultStampUrl]);
 
   const filteredContacts = useMemo(() => {
     if (!contactFilter || savedContacts.length === 0) return savedContacts.slice(0, 5);
@@ -456,7 +525,10 @@ export default function CreateEnvelope() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session.access_token}`,
           },
-          body: JSON.stringify({ envelope_id: envelope.id }),
+          body: JSON.stringify({
+            envelope_id: envelope.id,
+            channels: Object.entries(channels).filter(([, v]) => v).map(([k]) => k),
+          }),
         }
       );
 
@@ -810,6 +882,68 @@ export default function CreateEnvelope() {
                   </CardContent>
                 </Card>
 
+                {/* Delivery Channels */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Delivery Channels</CardTitle>
+                    <CardDescription className="text-xs">
+                      Choose how recipients receive their signing link
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-wrap gap-3">
+                    <label className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background cursor-pointer">
+                      <Checkbox
+                        checked={channels.email}
+                        onCheckedChange={(v) => setChannels(c => ({ ...c, email: v === true }))}
+                      />
+                      <Mail className="w-4 h-4 text-[hsl(var(--gold))]" />
+                      <span className="text-sm font-medium">Email</span>
+                    </label>
+                    <label className="flex items-center gap-2 px-3 py-2 rounded-lg border bg-background cursor-pointer">
+                      <Checkbox
+                        checked={channels.whatsapp}
+                        onCheckedChange={(v) => setChannels(c => ({ ...c, whatsapp: v === true }))}
+                      />
+                      <MessageCircle className="w-4 h-4 text-emerald-600" />
+                      <span className="text-sm font-medium">WhatsApp</span>
+                      <span className="text-xs text-muted-foreground">(requires phone)</span>
+                    </label>
+                  </CardContent>
+                </Card>
+
+                {/* Export Preview PDF */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Download className="w-4 h-4 text-[hsl(var(--gold))]" />
+                      Export Preview PDF
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Download a flattened proof PDF with your fields, signature, and stamp drawn in place — before sending.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleExportPreview}
+                      disabled={isExportingPreview || !pdfFile}
+                      className="border-[hsl(var(--gold)/.5)] hover:bg-[hsl(var(--gold)/.05)]"
+                    >
+                      {isExportingPreview ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Building preview…
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-4 h-4 mr-2" />
+                          Download Preview PDF
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
                 {/* Visual Document Preview */}
                 {pdfUrl && (
                   <DocumentPreviewSummary
