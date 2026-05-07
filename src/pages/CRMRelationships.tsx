@@ -1204,7 +1204,7 @@ const BrokeragesAgenciesView = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setStatusFilter("all"); }}
+                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setCountryFilter("all"); setStatusFilter("all"); }}
               >
                 Reset all filters
               </Button>
