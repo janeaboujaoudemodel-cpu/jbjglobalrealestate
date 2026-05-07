@@ -184,7 +184,7 @@ export default function BreakfastBooking() {
       "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JBJ Global Real Estate//Breakfast//EN",
       "BEGIN:VEVENT", `UID:${token}@jbj.ae`, `DTSTAMP:${fmt(new Date())}`,
       `DTSTART:${fmt(dt)}`, `DTEND:${fmt(dtEnd)}`,
-      "SUMMARY:Private Partnership Breakfast — JBJ Global Real Estate",
+      `SUMMARY:Private Breakfast for ${brokerageLabel}`,
       `DESCRIPTION:${desc}`, `LOCATION:${OFFICE_LOCATION}`,
       `ORGANIZER;CN=${HOST_NAME}:mailto:contact@jbj.ae`,
       "END:VEVENT","END:VCALENDAR",
