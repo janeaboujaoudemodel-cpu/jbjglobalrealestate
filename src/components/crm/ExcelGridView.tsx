@@ -38,10 +38,18 @@ export function ExcelGridView<R extends { id: string }>({
   emptyLabel = "No rows match the current filters.",
 }: Props<R>) {
   const [editing, setEditing] = useState<{ id: string; key: string } | null>(null);
+  const [page, setPage] = useState(0);
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages - 1);
+  const pagedRows = useMemo(
+    () => rows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE),
+    [rows, safePage],
+  );
 
   return (
     <div className="border border-[#B89555]/40 rounded-xl overflow-hidden bg-[#FDFBF7]">
       <div className="overflow-auto max-h-[640px]">
+
         <table className="w-full text-sm border-collapse" style={{ fontFamily: "Inter, sans-serif" }}>
           <thead className="sticky top-0 z-20">
             <tr>
