@@ -1,94 +1,86 @@
-## Goal
+# Plan — Sender lock + subject update + remaining CRM grid features
 
-Upgrade `BrokerBulkUploadDialog` so when multiple databases are uploaded at once, **each file** gets its own:
+## 1. Why the email still arrives from `janeaboujaoudemodel@gmail.com`
 
-1. **Editable database name** — auto-synced from filename (without extension), with a clear (✕) button and free-text edit.
-2. **Category / specialty** — Leasing / Sales / Leasing+Sales / Other (custom).
-3. **Source name** + **Source type** (e.g. "DLD Export", "Bayut scrape", "Manual list", Other).
+The outreach edge function `crm-send-brokerage-outreach` already hard-codes:
+- `From: Jane Bou Jaoude <jane@citideveloper.com>`
+- `Reply-To: jane@citideveloper.com`
+- A guard that blocks any rendered output containing `janeaboujaoudemodel@gmail.com`.
 
-The per-file selections must persist all the way to the registry so the **chosen labels appear on broker cards and in the Excel grid view** — not just the global batch-level label that's currently used.
+So the code is correct. The reason recipients still see `janeaboujaoudemodel@gmail.com` is a **Gmail-side limitation**, not a code bug:
 
----
+> Gmail's API ignores the `From:` header in `users.messages.send` unless the address is registered AND verified as a **Send-As alias** on the authenticated Gmail account. If it isn't, Gmail silently rewrites `From:` to the authenticated mailbox.
 
-## What changes
+The Gmail account currently linked through the Lovable Gmail connector is `janeaboujaoudemodel@gmail.com`, and `jane@citideveloper.com` is not yet a verified send-as alias on it — so Gmail rewrites every send.
 
-### 1. Upload dialog (`src/components/crm/BrokerBulkUploadDialog.tsx`)
+### Fix (two parts)
 
-Replace the single global "Specialty / Source" block with a **per-file metadata card** rendered for every uploaded file:
+**A. One-time Gmail account configuration (you do this — I'll surface the exact steps in the UI):**
+1. In `janeaboujaoudemodel@gmail.com` → Settings → Accounts → "Send mail as" → Add `jane@citideveloper.com`.
+2. Use SMTP `smtp.zoho.com` / `smtp.google.com` (Workspace) — the Citi Developer email host — so Gmail can authenticate as the alias.
+3. Click the verification link Gmail sends to `jane@citideveloper.com`.
+4. Set "Reply from the same address the message was sent to".
 
-```text
-┌─────────────────────────────────────────────────┐
-│ 📄 Database name: [DLD Leasing May 2026  ] [✕] │  ← editable, prefilled from filename
-│    Original file: dld_leasing_may2026.xlsx       │
-│    Rows: 12,430                                  │
-│ ─────────────────────────────────────────────── │
-│ Category:   [ Leasing ▾ ]  (Sales / Both / Other)│
-│ Source name:[ DLD Export        ]                │
-│ Source type:[ Government ▾ ]                     │
-│ Notes:      [ ............... ]                  │
-└─────────────────────────────────────────────────┘
-```
+(Alternative, cleaner: disconnect the Gmail connector and reconnect using the `jane@citideveloper.com` Google Workspace account directly. Then no alias is needed.)
 
-Behaviour:
-- On file add: `displayName` defaults to `file.name` minus extension. Editable via input. Clear (✕) wipes the field; if empty on submit, fall back to the original filename.
-- "Apply to all" quick action at the top so the user can copy the first card's category/source to every other file in one click (helpful for the common case).
-- Validation: each file must have a category; "Other" requires a custom label.
+**B. Code changes I'll add so this can never silently regress:**
+1. Add an edge-function preflight that calls Gmail's `users.settings.sendAs` API on every send. If `jane@citideveloper.com` is missing OR `verificationStatus !== 'accepted'`, the function blocks the send and returns:
+   > `SENDER_ALIAS_UNVERIFIED — jane@citideveloper.com is not a verified Send-As alias on the connected Gmail account. Add and verify it in Gmail → Settings → Accounts before sending.`
+2. Surface that error in `BulkSendDialog`, `TemplateEditorDialog`, and the brokerage row send action with a one-click "Open Gmail Send-As settings" link.
+3. Add a `crm-gmail-sender-status` edge function used by a small banner on `/owner/crm/relationships` showing "Sender alias verified ✓ jane@citideveloper.com" or a red "Action required" card with the same fix link. This way you see the status at a glance and never wonder again.
 
-State shape becomes:
-```ts
-interface ParsedFile {
-  file: File;
-  rows: Record<string, any>[];
-  meta: {
-    displayName: string;
-    specialty: Specialty;
-    customLabel: string;
-    sourceName: string;
-    sourceType: string;
-    notes: string;
-  };
-}
-```
+## 2. Subject line update
 
-### 2. Batch + row pipeline
+Replace the current subject of the breakfast invite template:
+- Old: `Private Breakfast for {{brokerage_name}}`
+- New: `You Are Invited! Book Your Exclusive Breakfast Briefing for {{brokerage_name}}`
 
-- Create **one `crm_import_batches` row per uploaded file** (instead of one batch for the whole upload session). Each batch carries that file's `label` (= displayName), `specialty_label`, `specialty_custom_label`, `source_name`, `source_type`, `notes`, `source_filename`.
-- Group `allRows` by file; dispatch each file's rows to the existing fast-mode/slow-mode pipeline using its own `batch_id`.
-- Pass per-row `specialty_label` + `custom_label` + `source_name` through the request body so the edge function applies the *file's* label, not a batch default.
+Applied via a database update on `crm_email_templates` for `variant = brokerage_breakfast_invite` (and the matching `outreach_locked_payloads` row regenerated so the lock-and-send pipeline stays byte-equal to the preview).
 
-### 3. Edge functions
+The Subject field stays editable in `TemplateEditorDialog` so you can refine wording later.
 
-- `crm-broker-bulk-import` and `crm-broker-import-finalize`: accept `specialty_label`, `specialty_custom_label`, `source_name`, `source_type`, `display_name` in the request body (still per-batch, since we now create one batch per file). Apply these to:
-  - `crm_brokerage_agents.specialty_labels` (append, dedup) — same as today, but using per-file label.
-  - `crm_brokerage_agents.import_label` (set on insert; append-on-merge string list).
-  - `crm_brokerage_agents.source_history` JSONB — append `{ batch_id, display_name, source_name, source_type, specialty, at }` so each broker carries the trail of every database they came from.
-- No DB migration needed — `crm_import_batches` and `crm_brokerage_agents` already have these columns (verified above: `specialty_label`, `specialty_custom_label`, `source_name`, `source_type`, `specialty_labels`, `import_label`, `source_history`, `source_batch_ids`).
+## 3. Daily sending limits (your question)
 
-### 4. Display in cards + grid (`src/components/crm/IndividualBrokersTab.tsx`)
+| Path | Free daily cap | Notes |
+|---|---|---|
+| **Current — Gmail connector (free Gmail)** | ~500 recipients/day | Google's hard cap on `gmail.googleapis.com` for consumer accounts. Going over triggers a 24-hr block. |
+| **Gmail connector (Google Workspace)** | ~2,000 recipients/day | If `jane@citideveloper.com` is on Workspace, switching the connector to it unlocks this. |
+| **Lovable Emails (Mailgun-backed)** | No fixed daily cap on Lovable's side. Throughput defaults to ~120/min (configurable). Subject to Mailgun's free-tier monthly volume on your account. | Best path for **transactional** sends (booking confirmations, etc.) — not for cold outreach to brokerages. |
+| **Resend free plan** | **100 emails/day**, 3,000/month, 1 verified domain, no scheduled sends, single team seat. Paid plans start at 50,000/month. | Reasonable for low-volume transactional, not enough for brokerage outreach campaigns. |
 
-Already reads `specialty_labels` and `source_history`. Two small visual upgrades:
-- **Cards**: render the chip row from `specialty_labels` (already done) and add a small muted "From: <displayName>" line sourced from the most recent `source_history` entry.
-- **Excel grid view**: ensure the columns `Category` (joined `specialty_labels`) and `Source database` (latest `source_history.display_name` or the batch label via `source_batch_ids` join) are visible and sortable. Add a quick `Source database` filter chip row above the grid using the distinct values from `crm_import_batches.label`.
+**Recommendation:** keep brokerage outreach on Gmail (so replies land in your inbox and conversations thread), and switch the connector to the Workspace account for `jane@citideveloper.com` to get the 2,000/day ceiling and remove the alias-verification problem at the same time.
 
-### 5. Source-database history panel
+## 4. Deferred CRM grid features (now shipping)
 
-The existing "Database history" / batches list keeps working unchanged — it now just shows one row per uploaded file (with displayName, category, source, row count, inserted/merged counts), which is exactly what the user wants.
+From the original spec, these were queued and remain undone:
 
----
+1. **Column drag-to-reorder** in `ExcelGridView` (header drag handles, persisted per-user in `crm_grid_prefs`).
+2. **Freeze first N columns** (sticky left columns, default 2 — name + status — toggleable from a header menu).
+3. **Undo** for destructive grid edits (cell delete, row delete) — 10-step in-memory stack with toast "Undo".
+4. **Multi-select bulk delete**:
+   - Row checkbox column + shift-click range select + select-all.
+   - Bulk action bar appears at bottom: Delete / Tag / Move to list / Export.
+   - Server-side delete via existing `crm_brokerage_agents` RLS (owner-only).
+5. **Inline contract section in the registration row** of the grid:
+   - Replace the current standalone "Contract" column with an expandable sub-row beneath each registration row showing: contract status, file link, signed date, expiry, "Open in drawer" button.
+   - Drawer remains the source of truth; the inline view is read + quick-action only (download, mark signed, request resign).
 
-## Out of scope (kept as-is)
+Files touched:
+- `src/components/crm/ExcelGridView.tsx` (reorder, freeze, undo stack, selection model, inline contract row).
+- `src/pages/CRMRelationships.tsx` (bulk action bar wiring).
+- `src/components/crm/IndividualBrokersTab.tsx` (selection state passthrough).
+- New: `src/hooks/useGridPrefs.ts` (load/save column order + freeze count to `crm_grid_prefs`).
+- New migration: `crm_grid_prefs` table (`owner_id`, `view_key`, `column_order jsonb`, `frozen_count int`, `updated_at`).
+- New edge function: `crm-gmail-sender-status` (read-only Gmail Send-As check).
 
-- Dedup engine, fast-mode parallel import, review panel, AI clean — all unchanged.
-- Brokerage-level upload (this prompt is about the **individual brokers** registry).
-- No schema migration.
+## 5. Proof I'll capture once implemented
 
----
+1. Screenshot of the Gmail Send-As status banner on `/owner/crm/relationships` showing "✓ jane@citideveloper.com verified".
+2. A test send from the dialog with the new subject; screenshot of the recipient inbox showing `From: Jane Bou Jaoude <jane@citideveloper.com>` and the new subject.
+3. A second test send while the alias is intentionally unverified, showing the new `SENDER_ALIAS_UNVERIFIED` error blocking the send (so you can confirm the guard actually fires).
+4. Short Loom-style screen captures of: column drag, freeze toggle, multi-select bulk delete with undo, and the inline contract sub-row expanding under a registration row.
 
-## Files to edit
-
-- `src/components/crm/BrokerBulkUploadDialog.tsx` — per-file meta cards, "Apply to all", batch-per-file dispatch, editable/clearable name.
-- `supabase/functions/crm-broker-bulk-import/index.ts` — accept and apply per-batch specialty/source, write `source_history`.
-- `supabase/functions/crm-broker-import-finalize/index.ts` — same.
-- `src/components/crm/IndividualBrokersTab.tsx` — show "From: <db name>" on cards; ensure `Category` + `Source database` columns + filter chips in the grid.
-
-No new files, no migrations.
+## Out of scope for this pass
+- Switching brokerage outreach off Gmail entirely.
+- Building a new marketing-grade ESP integration.
+- Changing the locked-template hash format (preview = sent stays intact).
