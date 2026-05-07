@@ -35,6 +35,7 @@ interface Body {
   overrideEmail?: string;
   fromEmailOverride?: string;
   ccEmailOverride?: string;
+  subjectOverride?: string;
 }
 
 const base64UrlEncode = (str: string) => {
