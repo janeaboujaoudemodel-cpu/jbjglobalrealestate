@@ -152,7 +152,11 @@ export function useCreateEnvelopeFromTemplate() {
         .from("esign_recipients")
         .insert(recipientsToInsert)
         .select();
-      if (recErr) throw recErr;
+      if (recErr) {
+        // rollback envelope so we don't leave orphan drafts
+        await supabase.from("esign_envelopes").delete().eq("id", envelope.id);
+        throw recErr;
+      }
 
       const ownerRec = createdRecipients.find((r: any) => r.metadata?.role === "owner") ?? createdRecipients[createdRecipients.length - 1];
       const clientRec = createdRecipients.find((r: any) => r.metadata?.role === "client");
