@@ -81,8 +81,10 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
   const [batchId, setBatchId] = useState<string | null>(null);
   const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
   const [summary, setSummary] = useState<any | null>(null);
+  const [progress, setProgress] = useState<{ done: number; total: number; inserted: number; merged: number; skipped: number } | null>(null);
 
   const totalRows = useMemo(() => files.reduce((s, f) => s + f.rows.length, 0), [files]);
+  const fastMode = totalRows > FAST_MODE_THRESHOLD;
 
   const handleFiles = async (list: FileList | null) => {
     if (!list || list.length === 0) return;
