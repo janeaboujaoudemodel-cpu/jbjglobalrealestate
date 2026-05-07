@@ -124,9 +124,12 @@ export const AGENCY_STATUS_OPTIONS: { value: string; label: string; tone: CrmSta
 // Stored in crm_brokerages.registration_status.
 export const BROKERAGE_REGISTRATION_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
   { value: "not_registered",           label: "Not registered",          tone: "champagne" },
-  { value: "pending_documents",        label: "Pending documents",       tone: "amber"     },
-  { value: "documents_pending_review", label: "Docs pending review",     tone: "amber"     },
-  { value: "registered",               label: "Registered",              tone: "blue"      },
+  { value: "pending_registration",     label: "Pending registration",    tone: "amber"     },
+  { value: "pending_documents",        label: "Waiting for documents",   tone: "amber"     },
+  { value: "documents_pending_review", label: "Docs under review",       tone: "amber"     },
+  { value: "under_review",             label: "Under review",            tone: "amber"     },
+  { value: "registered",               label: "Registered",              tone: "emerald"   },
+  { value: "approved",                 label: "Approved",                tone: "emerald"   },
   { value: "registration_rejected",    label: "Rejected",                tone: "red"       },
   { value: "expired",                  label: "Expired",                 tone: "amber"     },
 ];
