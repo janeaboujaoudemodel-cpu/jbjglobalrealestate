@@ -333,12 +333,11 @@ serve(async (req: Request) => {
 
     // owner first name — defaults to "Jane" because the template is authored as Jane.
     // Hard-fallback to "Jane" if any source resolves to "JBJ" (legacy brand confusion).
-    let ownerFirstName =
-      firstName(settings?.brokerage_from_name as string | undefined) ||
-      firstName(settings?.from_name) ||
-      firstName((user.user_metadata as any)?.full_name as string | undefined) ||
-      "Jane";
-    if (/^jbj/i.test(ownerFirstName)) ownerFirstName = "Jane";
+    // Owner identity is HARDCODED — never derived from a company-name setting
+    // (which previously turned "Citi Developer" into a first name "Citi").
+    const ownerFirstName = "Jane";
+    const ownerFullName = "Jane Bou Jaoude";
+    const ownerDepartment = "Sales & Channel Partner Activation";
 
     // ---------- Personalization resolution ----------
     const personalization: Personalization = body.personalization || {};
