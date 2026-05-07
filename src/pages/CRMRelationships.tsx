@@ -855,9 +855,10 @@ const BrokeragesAgenciesView = () => {
 
   return (
     <TooltipProvider>
-    <div className="flex flex-col lg:flex-row gap-4 items-start">
-    <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} />
-    <div className="space-y-4 flex-1 min-w-0">
+    <div className="space-y-4 w-full min-w-0">
+    <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+      <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} orientation="horizontal" />
+    </div>
     <CRMBulkActionsBar
       table="crm_brokerages"
       ids={[...bulkSel]}
