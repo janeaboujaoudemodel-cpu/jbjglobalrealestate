@@ -61,9 +61,18 @@ export function BrokerageAgentsEditor({ value, onChange, brokerageId }: Props) {
         <div className="text-sm font-semibold text-[#1A1A1A]">
           Brokers under this agency ({value.length})
         </div>
-        <div className="ml-auto flex gap-2">
-          <Button type="button" size="sm" variant="outline" onClick={add}>
-            <Plus className="w-3 h-3 mr-1" /> Add broker
+        <div className="ml-auto flex flex-wrap gap-2">
+          <Button type="button" size="sm" variant="outline" onClick={() => add("broker")}>
+            <Plus className="w-3 h-3 mr-1" /> Add Broker
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => add("admin")}>
+            <Plus className="w-3 h-3 mr-1" /> Add Admin
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => add("manager")}>
+            <Plus className="w-3 h-3 mr-1" /> Add Manager
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => add("attendee")}>
+            <Plus className="w-3 h-3 mr-1" /> Add Attendee
           </Button>
         </div>
       </div>
