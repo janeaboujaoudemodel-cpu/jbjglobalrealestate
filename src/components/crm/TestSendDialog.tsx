@@ -223,7 +223,7 @@ export const TestSendDialog = ({
               <p className="text-[11px] text-[#1A1A1A]/70">
                 These values are saved between sends. Click the pencil on any field to change it — it will stay locked until you do.
               </p>
-              {fieldUI("to", "Send test to", "info.jane@gmail.com")}
+              {fieldUI("to", "Send test to", "infoo.jane@gmail.com")}
               {fieldUI("from_email", "From / Reply-to", "jane@citideveloper.com")}
               {fieldUI("sample_name", mode === "brokerage" ? "Sample brokerage name" : "Sample developer name", "ABC REAL ESTATE")}
               {fieldUI("subject_override", "Subject (override)", "Leave empty to use template subject")}
