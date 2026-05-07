@@ -816,6 +816,7 @@ const BrokeragesAgenciesView = () => {
   const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
+  const attendanceCounts = useAttendanceCounts();
 
   const openNew = () => {
     setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {}, admin_contact: {} });
