@@ -454,7 +454,7 @@ export function ExcelGridView<R extends { id: string }>({
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </tbody>
