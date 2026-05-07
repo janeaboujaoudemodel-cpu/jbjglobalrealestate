@@ -4,7 +4,7 @@
 // expandable rows (used by the brokerage grid for the inline Contract section
 // under the Registration row).
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { statusColor, STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronDown, ChevronRight, GripVertical, Pin, PinOff, Trash2, Undo2 } from "lucide-react";
