@@ -23,6 +23,7 @@ import {
   Globe,
   Shield,
   Loader2,
+  Link as LinkIcon,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
@@ -324,6 +325,26 @@ export default function EnvelopeDetail() {
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <Badge className={rConfig.color}>{rConfig.label}</Badge>
+                            {recipient.signing_token && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 gap-1.5 text-xs border-[#C8A766]/30 text-[#1A1A1A] hover:bg-[#C8A766]/10"
+                                onClick={async () => {
+                                  const url = `${window.location.origin}/sign/${recipient.signing_token}`;
+                                  try {
+                                    await navigator.clipboard.writeText(url);
+                                    toast.success("Signing link copied", { description: url });
+                                  } catch {
+                                    window.prompt("Copy signing link:", url);
+                                  }
+                                }}
+                                title="Copy the recipient's personal signing URL (for testing or manual delivery)"
+                              >
+                                <LinkIcon className="w-3 h-3" />
+                                Copy link
+                              </Button>
+                            )}
                             {canRemind && (
                               <Button
                                 variant="outline"
