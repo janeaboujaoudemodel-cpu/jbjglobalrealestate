@@ -272,13 +272,14 @@ Deno.serve(async (req) => {
     });
 
     // bump batch counters (best-effort)
-    await supabase.rpc("noop").catch(() => {});
-    await supabase.from("crm_import_batches").update({
-      inserted: (batch.inserted ?? 0) + inserted,
-      updated: (batch.updated ?? 0) + merged,
-      skipped: (batch.skipped ?? 0) + skipped,
-      status: "running",
-    }).eq("id", batchId).catch?.(() => {});
+    try {
+      await supabase.from("crm_import_batches").update({
+        inserted: (batch.inserted ?? 0) + inserted,
+        updated: (batch.updated ?? 0) + merged,
+        skipped: (batch.skipped ?? 0) + skipped,
+        status: "running",
+      }).eq("id", batchId);
+    } catch (_) { /* best effort */ }
 
     return new Response(JSON.stringify({
       inserted, merged, skipped,
