@@ -42,6 +42,10 @@ interface ParsedFile {
 
 type Step = "meta" | "matching" | "review" | "done";
 
+const FAST_MODE_THRESHOLD = 2000; // rows — above this we skip the per-row Review panel
+const CHUNK_SIZE = 1000;
+const CONCURRENCY = 4;
+
 function pick(row: Record<string, any>, keys: string[]): string | null {
   for (const k of keys) {
     for (const rk of Object.keys(row)) {
