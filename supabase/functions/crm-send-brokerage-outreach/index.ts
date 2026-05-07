@@ -302,39 +302,10 @@ serve(async (req: Request) => {
       throw new Error("Gmail connector not configured");
     }
 
-    // Send-As alias preflight: Gmail silently rewrites From: to the
-    // authenticated mailbox unless jane@citideveloper.com is registered AND
-    // verified as a Send-As alias. Block the send when not verified so the
-    // user sees a clear error instead of a silently-rewritten From: header.
-    const REQUIRED_FROM = "jane@citideveloper.com";
-    try {
-      const aliasRes = await fetch(`${GMAIL_GATEWAY}/users/me/settings/sendAs`, {
-        headers: {
-          "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-          "X-Connection-Api-Key": GMAIL_API_KEY,
-        },
-      });
-      if (aliasRes.ok) {
-        const aliasJson = await aliasRes.json() as { sendAs?: Array<{ sendAsEmail: string; verificationStatus?: string; isPrimary?: boolean }> };
-        const aliases = Array.isArray(aliasJson?.sendAs) ? aliasJson.sendAs : [];
-        const match = aliases.find(a => (a.sendAsEmail || "").toLowerCase() === REQUIRED_FROM);
-        const isPrimary = !!match?.isPrimary;
-        const isVerified = isPrimary || (match?.verificationStatus || "").toLowerCase() === "accepted";
-        if (!match || !isVerified) {
-          return new Response(JSON.stringify({
-            error: "SENDER_ALIAS_UNVERIFIED",
-            message: `Send blocked — ${REQUIRED_FROM} is not a verified Send-As alias on the connected Gmail account. In Gmail → Settings → Accounts → "Send mail as", add ${REQUIRED_FROM}, then click the verification link Gmail emails to that address. Without this, Gmail rewrites every send back to the connected mailbox.`,
-            requiredAlias: REQUIRED_FROM,
-            present: !!match,
-            verificationStatus: match?.verificationStatus || null,
-          }), { status: 412, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-        }
-      } else {
-        console.warn("[sendAs preflight] non-OK from Gmail:", aliasRes.status);
-      }
-    } catch (aliasErr) {
-      console.warn("[sendAs preflight] failed (continuing):", aliasErr);
-    }
+    // Outbound sender = the connected Gmail mailbox itself
+    // (infoo.jane@gmail.com). No Send-As alias verification is required
+    // because we send directly from the authenticated account, so Gmail
+    // will not rewrite the From: header.
 
     // Sender brand = represented developer (per-row → owner default → CITI Developer)
     const representedDeveloperName: string =
