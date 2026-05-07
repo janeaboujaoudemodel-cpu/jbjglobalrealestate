@@ -7,7 +7,7 @@ import { toast } from "sonner";
 // Slim column set covers everything CRMRelationships renders + filters/sorts on.
 // Fetching `*` on a 10k+ row table was the dominant cost of the page open.
 const BROKERAGE_LIST_COLUMNS = [
-  "id","owner_id","company_name","name_arabic","emirate","region","country",
+  "id","owner_id","company_name","name_arabic","emirate","region",
   "office_location","office_address","office_map_url","website","instagram_url",
   "phone","whatsapp_e164","email","logo_url",
   "primary_contact","secondary_contact","admin_contact","top_active_agents","field_sources",
