@@ -419,30 +419,25 @@ serve(async (req: Request) => {
       preferredSlotLabel = personalization.preferredEventTimeOverride.trim();
     }
 
-    // Booking URL: prefer the owner's Google Calendar appointment link so the
-    // brokerage books directly on Google (auto confirmation email to both
-    // sides, no website redirect). Fall back to the in-app booking page only
-    // if the Google link is not configured.
+    // Booking URL: ALWAYS the owner's Google Calendar appointment link.
+    // Brokerages must book directly on Google — Google sends the
+    // confirmation email and writes the event to Jane's dedicated
+    // breakfast calendar. No website redirect, no jbj.ae link, ever.
     let bookingUrl: string = (
       (settings?.google_calendar_booking_url && String(settings.google_calendar_booking_url).trim()) ||
       ""
     );
-    if (!bookingUrl) {
-      try {
-        const tokenRes = await userClient.functions.invoke(
-          "crm-create-breakfast-invite-token",
-          {
-            body: {
-              brokerageId: isTest ? undefined : body.brokerageId,
-              isTest,
-              preferredSlotId: personalization.preferredSlotId,
-            },
-          },
-        );
-        bookingUrl = (tokenRes?.data as any)?.bookingUrl || "";
-      } catch (tokErr) {
-        console.warn("Booking token mint failed (continuing):", tokErr);
-      }
+    // Hard guard: reject any booking URL that points back at the website.
+    const FORBIDDEN_BOOKING_HOSTS = ["jbj.ae", "www.jbj.ae", "/breakfast-booking"];
+    const bookingUrlLower = bookingUrl.toLowerCase();
+    const bookingUrlForbidden = FORBIDDEN_BOOKING_HOSTS.some((h) => bookingUrlLower.includes(h));
+    if (variant === "brokerage_breakfast_invite" && (!bookingUrl || bookingUrlForbidden)) {
+      return new Response(JSON.stringify({
+        error: "BREAKFAST_BOOKING_URL_MISSING",
+        message: bookingUrlForbidden
+          ? "Send blocked — the saved booking URL points back to jbj.ae. Replace it with your Google Calendar appointment link (https://calendar.app.google/…) in CRM Settings → Brokerage Outreach."
+          : "Send blocked — no Google Calendar booking link configured. Open CRM Settings → Brokerage Outreach and paste your dedicated breakfast Google Calendar appointment link.",
+      }), { status: 412, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     // Resolve featured Citi project (defaults to AMRA).
