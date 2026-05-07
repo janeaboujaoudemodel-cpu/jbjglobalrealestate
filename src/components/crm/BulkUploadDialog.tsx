@@ -244,9 +244,13 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
               <Button variant="outline" onClick={() => handleClose(false)} disabled={busy}>
                 Cancel
               </Button>
-              <Button variant="gold" disabled={!file || busy} onClick={handleUpload}>
+              <Button
+                variant="gold"
+                disabled={busy || (mode === "file" ? !file : !pasteText.trim())}
+                onClick={handleUpload}
+              >
                 {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <UploadCloud className="w-4 h-4 mr-2" />}
-                {busy ? "Processing…" : "Upload & classify"}
+                {busy ? "Processing…" : mode === "paste" ? "Parse with AI & save" : "Upload & classify"}
               </Button>
             </>
           )}
