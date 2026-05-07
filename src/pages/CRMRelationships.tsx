@@ -1235,6 +1235,7 @@ const BrokeragesAgenciesView = () => {
           rows={filtered as any[]}
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
+            { key: "country", label: "Country", width: 130, editable: true, render: (r: any) => r.country || "United Arab Emirates" },
             { key: "region", label: "Region", width: 110, editable: true },
             { key: "emirate", label: "Emirate / City", width: 120, editable: true },
             { key: "office_location", label: "Office", width: 180, editable: true },
@@ -1255,15 +1256,29 @@ const BrokeragesAgenciesView = () => {
             { key: "phone", label: "Phone", width: 140, editable: true },
             { key: "email", label: "Email", width: 200, editable: true },
             { key: "briefing_count", label: "Briefings", width: 90, align: "right", editable: true },
+            { key: "briefing_attendee_count", label: "Briefing attendees", width: 130, align: "right", editable: true },
             { key: "attended_briefing_date", label: "Last briefing", width: 130, render: (r: any) => r.attended_briefing_date ? new Date(r.attended_briefing_date).toLocaleDateString() : "—" },
+            {
+              key: "attended_breakfast", label: "Breakfast attended", width: 150, status: true,
+              statusOptions: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, attended_breakfast: next === "yes" }),
+            },
+            { key: "breakfast_date", label: "Breakfast date", width: 130, editable: true, render: (r: any) => r.breakfast_date ? new Date(r.breakfast_date).toLocaleDateString() : "—" },
+            { key: "breakfast_attendee_count", label: "Breakfast attendees", width: 140, align: "right", editable: true },
+            { key: "attendee_notes", label: "Attendee notes", width: 220, editable: true },
             { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_contact_log_at ? new Date(r.last_contact_log_at).toLocaleDateString() : (r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—") },
             { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
             { key: "inquiry_count", label: "Inquiries", width: 90, align: "right" },
             { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
+          getStatus={(r: any) => undefined}
+          onStatusChange={() => {}}
           onCellEdit={(r: any, key, value) => {
-            const numericKeys = ["active_broker_count", "briefing_count"];
-            const v = numericKeys.includes(String(key)) ? Number(value) || 0 : value;
+            const numericKeys = ["active_broker_count", "briefing_count", "briefing_attendee_count", "breakfast_attendee_count"];
+            const dateKeys = ["breakfast_date"];
+            let v: any = value;
+            if (numericKeys.includes(String(key))) v = Number(value) || 0;
+            else if (dateKeys.includes(String(key))) v = value || null;
             upsert.mutate({ id: r.id, [key]: v });
           }}
           emptyLabel="No agencies match filters."
