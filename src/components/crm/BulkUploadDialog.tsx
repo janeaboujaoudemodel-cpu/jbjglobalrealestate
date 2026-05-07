@@ -73,29 +73,30 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+    const hasInput = mode === "file" ? !!file : pasteText.trim().length > 0;
+    if (!hasInput) return;
     setBusy(true);
     setResult(null);
     try {
       let list_id: string | null = null;
+      const sourceName = mode === "file" ? file!.name : `pasted-${Date.now()}.txt`;
       if (target === "existing") {
         list_id = existingListId || null;
       } else if (target === "new") {
         const nameToUse = (newListName || defaultListName).trim();
         if (!nameToUse) throw new Error("Please name the new database");
-        // Reuse existing list with same name if present (avoids unique constraint failure)
         const existing = lists.find((l) => l.name.toLowerCase() === nameToUse.toLowerCase());
         if (existing) {
           list_id = existing.id;
         } else {
-          const created = await createList.mutateAsync({ name: nameToUse, source_filename: file.name });
+          const created = await createList.mutateAsync({ name: nameToUse, source_filename: sourceName });
           list_id = created.id;
         }
       }
-      const text = await file.text();
+      const text = mode === "file" ? await file!.text() : pasteText;
       const fnName = kind === "brokerage" ? "crm-bulk-upload-brokerages" : "crm-bulk-upload-developers";
       const { data, error } = await supabase.functions.invoke(fnName, {
-        body: { filename: file.name, content: text, list_id },
+        body: { filename: sourceName, content: text, list_id },
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
