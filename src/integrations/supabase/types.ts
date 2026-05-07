@@ -19204,6 +19204,78 @@ export type Database = {
         }
         Relationships: []
       }
+      outreach_locked_payloads: {
+        Row: {
+          cc_emails: string[]
+          created_at: string
+          from_email: string
+          from_name: string
+          html: string
+          id: string
+          locked_at: string
+          locked_by: string
+          metadata: Json
+          payload_hash: string
+          plain_text: string
+          preheader: string | null
+          provider_message_id: string | null
+          provider_thread_id: string | null
+          recipient_email: string
+          reply_to: string
+          send_error: string | null
+          sent_at: string | null
+          status: string
+          subject: string
+          surface: string
+        }
+        Insert: {
+          cc_emails?: string[]
+          created_at?: string
+          from_email: string
+          from_name: string
+          html: string
+          id?: string
+          locked_at?: string
+          locked_by: string
+          metadata?: Json
+          payload_hash: string
+          plain_text: string
+          preheader?: string | null
+          provider_message_id?: string | null
+          provider_thread_id?: string | null
+          recipient_email: string
+          reply_to: string
+          send_error?: string | null
+          sent_at?: string | null
+          status?: string
+          subject: string
+          surface: string
+        }
+        Update: {
+          cc_emails?: string[]
+          created_at?: string
+          from_email?: string
+          from_name?: string
+          html?: string
+          id?: string
+          locked_at?: string
+          locked_by?: string
+          metadata?: Json
+          payload_hash?: string
+          plain_text?: string
+          preheader?: string | null
+          provider_message_id?: string | null
+          provider_thread_id?: string | null
+          recipient_email?: string
+          reply_to?: string
+          send_error?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          surface?: string
+        }
+        Relationships: []
+      }
       owner_calendar_events: {
         Row: {
           created_at: string | null
