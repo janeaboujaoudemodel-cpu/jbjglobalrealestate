@@ -2089,9 +2089,10 @@ const DeveloperRegistryTab = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 items-start">
-      <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} />
-      <div className="space-y-5 flex-1 min-w-0">
+    <div className="space-y-5 w-full min-w-0">
+      <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+        <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} orientation="horizontal" />
+      </div>
       <CRMBulkActionsBar
         table="crm_developer_registry"
         ids={[...selected]}
