@@ -70,7 +70,7 @@ export default function IndividualBrokersTab() {
       for (let from = 0; ; from += PAGE) {
         const { data, error } = await (supabase as any)
           .from("crm_brokerage_agents")
-          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, brokerage:crm_brokerages(company_name)")
+          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, specialty_labels, source_history, source_batch_ids, country, license_number, rera_number, brokerage:crm_brokerages(company_name)")
           .order("created_at", { ascending: false })
           .range(from, from + PAGE - 1);
         if (error) throw error;
