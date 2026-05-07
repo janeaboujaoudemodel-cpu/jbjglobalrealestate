@@ -212,11 +212,14 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Select value={expertiseFilter} onValueChange={setExpertiseFilter}>
-          <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All expertise</SelectItem>
+            <SelectItem value="all">All specialties</SelectItem>
             <SelectItem value="leasing">Leasing</SelectItem>
-            <SelectItem value="selling">Selling</SelectItem>
+            <SelectItem value="sales">Sales</SelectItem>
+            <SelectItem value="leasing_sales">Leasing + Sales</SelectItem>
+            <SelectItem value="developer_relations">Developer Relations</SelectItem>
+            <SelectItem value="event_attendees">Event Attendees</SelectItem>
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export Excel</Button>
