@@ -2786,19 +2786,6 @@ const CRMRelationships = () => {
   useEffect(() => {
     setMounted((prev) => prev.has(tab) ? prev : new Set([...prev, tab]));
   }, [tab]);
-  // Idle-prefetch the other tab so switching is instant.
-  useEffect(() => {
-    const w: any = window;
-    const idle = w.requestIdleCallback || ((cb: any) => setTimeout(cb, 1200));
-    const cancel = w.cancelIdleCallback || clearTimeout;
-    const handle = idle(() => {
-      setMounted((prev) => {
-        if (prev.has("brokerages") && prev.has("developers")) return prev;
-        return new Set([...prev, "brokerages", "developers"]);
-      });
-    });
-    return () => cancel(handle);
-  }, []);
 
   return (
     <>
@@ -2846,12 +2833,12 @@ const CRMRelationships = () => {
                 <TabsTrigger value="developers" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
               </TabsList>
             </div>
-            {mounted.has("brokerages") && (
-              <TabsContent value="brokerages" forceMount className={tab === "brokerages" ? "block" : "hidden"}><BrokeragesTab /></TabsContent>
-            )}
-            {mounted.has("developers") && (
-              <TabsContent value="developers" forceMount className={tab === "developers" ? "block" : "hidden"}><DeveloperRegistryTab /></TabsContent>
-            )}
+            <TabsContent value="brokerages">
+              {mounted.has("brokerages") && <BrokeragesTab />}
+            </TabsContent>
+            <TabsContent value="developers">
+              {mounted.has("developers") && <DeveloperRegistryTab />}
+            </TabsContent>
           </Tabs>
         </div>
       </div>
