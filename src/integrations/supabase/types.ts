@@ -19402,6 +19402,119 @@ export type Database = {
         }
         Relationships: []
       }
+      outreach_bulk_jobs: {
+        Row: {
+          created_at: string
+          failed: number
+          finished_at: string | null
+          html_template: string
+          id: string
+          last_error: string | null
+          owner_id: string
+          payload_hash: string
+          plain_text_template: string | null
+          preheader: string | null
+          sent: number
+          started_at: string | null
+          status: string
+          subject: string
+          surface: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          failed?: number
+          finished_at?: string | null
+          html_template: string
+          id?: string
+          last_error?: string | null
+          owner_id: string
+          payload_hash: string
+          plain_text_template?: string | null
+          preheader?: string | null
+          sent?: number
+          started_at?: string | null
+          status?: string
+          subject: string
+          surface?: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          failed?: number
+          finished_at?: string | null
+          html_template?: string
+          id?: string
+          last_error?: string | null
+          owner_id?: string
+          payload_hash?: string
+          plain_text_template?: string | null
+          preheader?: string | null
+          sent?: number
+          started_at?: string | null
+          status?: string
+          subject?: string
+          surface?: string
+          total?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      outreach_bulk_recipients: {
+        Row: {
+          attempts: number
+          brokerage_id: string | null
+          brokerage_name: string
+          created_at: string
+          email: string
+          error: string | null
+          id: string
+          job_id: string
+          next_attempt_at: string
+          provider_message_id: string | null
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          attempts?: number
+          brokerage_id?: string | null
+          brokerage_name: string
+          created_at?: string
+          email: string
+          error?: string | null
+          id?: string
+          job_id: string
+          next_attempt_at?: string
+          provider_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          attempts?: number
+          brokerage_id?: string | null
+          brokerage_name?: string
+          created_at?: string
+          email?: string
+          error?: string | null
+          id?: string
+          job_id?: string
+          next_attempt_at?: string
+          provider_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outreach_bulk_recipients_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "outreach_bulk_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       outreach_locked_payloads: {
         Row: {
           cc_emails: string[]

@@ -53,6 +53,7 @@ import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { TestSendDialog } from "@/components/crm/TestSendDialog";
 import { BreakfastBookingsSection } from "@/components/crm/BreakfastBookingsSection";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { BulkOutreachPanel } from "@/components/crm/BulkOutreachPanel";
 import { BulkUploadDialog } from "@/components/crm/BulkUploadDialog";
 import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
@@ -1236,6 +1237,7 @@ const BrokeragesAgenciesView = () => {
 
       {viewMode === "excel" && sourceTab !== "owner" ? (
         <div className="space-y-3">
+          <BulkOutreachPanel brokerages={(filtered as any[]).map((b) => ({ id: b.id, name: b.company_name || b.name || "", email: b.email }))} />
           <BrokerageAnalyticsStrip rows={filtered as any[]} />
           <ExcelGridView
           rows={filtered as any[]}
