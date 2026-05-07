@@ -223,7 +223,7 @@ export default function BreakfastBooking() {
   const copyText = () => {
     if (!confirmed) return;
     const dt = new Date(confirmed.slotAt);
-    const text = `Private Partnership Breakfast — JBJ Global Real Estate
+    const text = `Private Breakfast for ${brokerageLabel}
 ${format(dt, "EEEE, d MMMM yyyy")} at ${format(dt, "HH:mm")}
 Location: ${OFFICE_LOCATION}
 Host on arrival: ${HOST_NAME} — ${HOST_PHONE}
