@@ -283,8 +283,8 @@ export function ExcelGridView<R extends { id: string }>({
               const isExpanded = expanded.has(row.id);
               const canExpand = expandable && (expandable.isExpandable ? expandable.isExpandable(row) : true);
               return (
-                <>
-                  <tr
+                <FragmentWithKey key={row.id}>
+                   <tr
                     key={row.id}
                     className={rowBg}
                     onDragOver={(e) => { if (enableReorder) e.preventDefault(); }}
