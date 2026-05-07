@@ -313,13 +313,13 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach is always sent as Jane from jane@citideveloper.com.
-    // No setting, override, or env value can change this — preview must equal sent.
-    const FORCED_FROM_EMAIL = "jane@citideveloper.com";
+    // HARD LOCK: brokerage outreach is always sent as Jane from infoo.jane@gmail.com
+    // (the connected Gmail mailbox — Gmail cannot rewrite this header).
+    const FORCED_FROM_EMAIL = "infoo.jane@gmail.com";
     const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
     const fromName = FORCED_FROM_DISPLAY;
     const replyTo = FORCED_FROM_EMAIL;
-    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com"];
+    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com", "jane@citideveloper.com"];
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
