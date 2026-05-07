@@ -969,17 +969,17 @@ const BrokeragesAgenciesView = () => {
         <CRMFiltersPopover
           activeCount={
             (emirateFilter !== "all" ? 1 : 0) +
-            (regionFilter !== "all" ? 1 : 0) +
+            (countryFilter !== "all" ? 1 : 0) +
             (statusFilter !== "all" ? 1 : 0) +
             (excludedIds.size > 0 ? 1 : 0)
           }
           chips={[
             ...(emirateFilter !== "all" ? [{ key: "em", label: `Emirate: ${emirateFilter}`, onClear: () => setEmirateFilter("all") }] : []),
-            ...(regionFilter !== "all" ? [{ key: "rg", label: `Region: ${regionFilter}`, onClear: () => setRegionFilter("all") }] : []),
+            ...(countryFilter !== "all" ? [{ key: "co", label: `Country: ${countryFilter}`, onClear: () => setCountryFilter("all") }] : []),
             ...(statusFilter !== "all" ? [{ key: "st", label: `Status: ${statusFilter}`, onClear: () => setStatusFilter("all") }] : []),
             ...(excludedIds.size > 0 ? [{ key: "ex", label: `Excluded: ${excludedIds.size}`, onClear: () => setExcludedIds(new Set()) }] : []),
           ] as FilterChip[]}
-          onResetAll={() => { setEmirateFilter("all"); setRegionFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
+          onResetAll={() => { setEmirateFilter("all"); setCountryFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
         >
           <div className="space-y-3">
             <div>
@@ -995,17 +995,12 @@ const BrokeragesAgenciesView = () => {
               </Select>
             </div>
             <div>
-              <Label className="text-xs font-semibold mb-1 block">Region</Label>
-              <Select value={regionFilter} onValueChange={setRegionFilter}>
-                <SelectTrigger><SelectValue placeholder="Region" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All regions</SelectItem>
-                  <SelectItem value="UAE">UAE</SelectItem>
-                  <SelectItem value="GCC">GCC</SelectItem>
-                  <SelectItem value="MENA">MENA</SelectItem>
-                  <SelectItem value="International">International</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-xs font-semibold mb-1 block">Country</Label>
+              <CountryCombobox
+                value={countryFilter}
+                onChange={setCountryFilter}
+                rows={data as any[]}
+              />
             </div>
             <div>
               <Label className="text-xs font-semibold mb-1 block">Status</Label>
