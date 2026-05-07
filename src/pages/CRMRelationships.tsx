@@ -1704,13 +1704,33 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
     ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra for CITI Developers)."
     : "Used ONLY for developer registrations. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs.";
 
+  const collapseKey = `crm.pack.${context}.collapsed`;
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(collapseKey) === "true";
+  });
+  useEffect(() => {
+    try { localStorage.setItem(collapseKey, String(collapsed)); } catch { /* noop */ }
+  }, [collapsed, collapseKey]);
+
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
-          <h3 className="font-semibold text-[#1A1A1A]">{headerTitle}</h3>
-        </div>
+        <button
+          type="button"
+          onClick={() => setCollapsed((v) => !v)}
+          className="w-full flex items-center justify-between gap-2 mb-3 text-left"
+          aria-expanded={!collapsed}
+        >
+          <div className="flex items-center gap-2">
+            <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
+            <h3 className="font-semibold text-[#1A1A1A]">{headerTitle}</h3>
+          </div>
+          <span className="text-[11px] text-[#1A1A1A]/70 underline">
+            {collapsed ? "Expand" : "Collapse"}
+          </span>
+        </button>
+        {collapsed ? null : (<>
         <p className="text-xs text-[#1A1A1A]/70 mb-4">{lead}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
