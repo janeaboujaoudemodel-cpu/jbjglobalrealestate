@@ -2949,7 +2949,12 @@ const CRMRelationships = () => {
             </div>
           </div>
 
+          <div className="mb-6">
+            <GmailSenderStatusBanner />
+          </div>
+
           <Tabs value={tab} onValueChange={setTab}>
+
             <div className="overflow-x-auto -mx-1 px-1 mb-6">
               <TabsList className="bg-[#FDFBF7] border border-[#B89555]/30 p-1.5 rounded-xl inline-flex w-auto gap-2">
                 <TabsTrigger value="brokerages" className="min-w-fit text-[#1A1A1A] data-[state=active]:bg-[#EFE6D6] data-[state=active]:text-[#1A1A1A] data-[state=active]:border data-[state=active]:border-[#B89555]/60 data-[state=active]:shadow-sm hover:bg-[#F7F2EA] rounded-lg px-5 py-2 font-semibold whitespace-nowrap transition-colors"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
