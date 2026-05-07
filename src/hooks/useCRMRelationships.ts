@@ -39,7 +39,7 @@ export const useBrokerages = () => useQuery({
         .select(BROKERAGE_LIST_COLUMNS)
         .order("updated_at", { ascending: false })
         .range(from, from + PAGE - 1);
-      if (error) throw error;
+      if (error) { console.error("[useBrokerages] select failed:", error); throw error; }
       const batch = data || [];
       all.push(...batch);
       if (batch.length < PAGE) break;
