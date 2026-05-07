@@ -462,7 +462,9 @@ serve(async (req: Request) => {
     // No fallback rewriter. No AI paraphrase. No subject regeneration.
     const html = renderTemplate(template.html, varsMap);
     const subjectRendered = renderTemplate(template.subject, varsMap);
-    const subject = subjectRendered;
+    const subject = isTest && body.subjectOverride && body.subjectOverride.trim()
+      ? renderTemplate(body.subjectOverride.trim(), varsMap)
+      : subjectRendered;
 
     // Reject any unresolved {{var}} placeholders — never guess missing values.
     const unresolved = new Set<string>();
