@@ -1884,6 +1884,16 @@ const DeveloperRegistryTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
+  useEffect(() => {
+    const openTpl = () => setTplOpen(true);
+    const openTest = () => setTestSendOpen(true);
+    window.addEventListener("crm:open-developer-template", openTpl);
+    window.addEventListener("crm:open-developer-test", openTest);
+    return () => {
+      window.removeEventListener("crm:open-developer-template", openTpl);
+      window.removeEventListener("crm:open-developer-test", openTest);
+    };
+  }, []);
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [historyTab, setHistoryTab] = useState<any>(undefined);
   // Smart routing: clicking a status tile/chip routes to the correct sub-tab automatically
