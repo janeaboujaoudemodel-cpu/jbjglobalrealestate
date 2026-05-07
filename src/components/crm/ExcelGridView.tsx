@@ -18,6 +18,7 @@ export interface ExcelGridColumn<R> {
   // Optional per-column overrides for multi-status grids
   statusOptions?: { value: string; label: string }[];
   onStatusChange?: (row: R, next: string) => void;
+  getStatus?: (row: R) => string | undefined;
 }
 
 interface Props<R extends { id: string }> {
