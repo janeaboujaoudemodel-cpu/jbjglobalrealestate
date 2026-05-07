@@ -1241,6 +1241,73 @@ const BrokeragesAgenciesView = () => {
           <BrokerageAnalyticsStrip rows={filtered as any[]} />
           <ExcelGridView
           rows={filtered as any[]}
+          enableSelection
+          enableReorder
+          defaultFreezeColumns={1}
+          onBulkDelete={async (ids) => {
+            for (const id of ids) await del.mutateAsync(id);
+            await refetch();
+          }}
+          expandable={{
+            isExpandable: () => true,
+            render: (r: any) => (
+              <div className="grid md:grid-cols-4 gap-3 text-[12px] text-[#1A1A1A]">
+                <div className="md:col-span-4 font-semibold text-[#1A1A1A] uppercase tracking-wide text-[11px]">
+                  Contract — inline edit (saves immediately)
+                </div>
+                <label className="flex flex-col gap-1">
+                  <span className="text-[11px] text-[#1A1A1A]/70">Contract status</span>
+                  <select
+                    className="h-8 px-2 rounded border border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                    value={r.contract_status || "none"}
+                    onChange={(e) => upsert.mutate({ id: r.id, contract_status: e.target.value })}
+                  >
+                    {CONTRACT_STATUS_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col gap-1">
+                  <span className="text-[11px] text-[#1A1A1A]/70">Signed on</span>
+                  <input
+                    type="date"
+                    className="h-8 px-2 rounded border border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                    defaultValue={r.contract_signed_at ? String(r.contract_signed_at).slice(0, 10) : ""}
+                    onBlur={(e) => upsert.mutate({ id: r.id, contract_signed_at: e.target.value || null })}
+                  />
+                </label>
+                <label className="flex flex-col gap-1">
+                  <span className="text-[11px] text-[#1A1A1A]/70">Expires on</span>
+                  <input
+                    type="date"
+                    className="h-8 px-2 rounded border border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                    defaultValue={r.contract_expires_at || ""}
+                    onBlur={(e) => upsert.mutate({ id: r.id, contract_expires_at: e.target.value || null })}
+                  />
+                </label>
+                <label className="flex flex-col gap-1 md:col-span-1">
+                  <span className="text-[11px] text-[#1A1A1A]/70">Document URL</span>
+                  <input
+                    type="url"
+                    placeholder="https://…"
+                    className="h-8 px-2 rounded border border-[#B89555]/40 bg-white text-[#1A1A1A]"
+                    defaultValue={r.contract_document_url || ""}
+                    onBlur={(e) => upsert.mutate({ id: r.id, contract_document_url: e.target.value || null })}
+                  />
+                </label>
+                {r.contract_document_url && (
+                  <a
+                    href={r.contract_document_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="md:col-span-4 inline-block text-[11px] underline decoration-[#B89555] underline-offset-4 text-[#1A1A1A]"
+                  >
+                    Open contract document ↗
+                  </a>
+                )}
+              </div>
+            ),
+          }}
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
             { key: "country", label: "Country", width: 150, editable: true, render: (r: any) => r.country || "United Arab Emirates" },
