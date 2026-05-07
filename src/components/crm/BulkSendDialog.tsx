@@ -690,6 +690,17 @@ export const BulkSendDialog = ({
                     </SelectContent>
                   </Select>
                 )}
+                {entityType === "brokerage" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-xs"
+                    title="Preview only — does not affect the email that gets sent"
+                    onClick={() => setBorderedCard((b) => !b)}
+                  >
+                    {borderedCard ? "◼ Bordered card" : "◻ Bordered card"}
+                  </Button>
+                )}
                 <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setShowPreview((s) => !s)}>
                   {showPreview ? "Hide" : "Show"}
                 </Button>
