@@ -1,47 +1,39 @@
-## Goal
+## Diagnosis
+- The Relationships page does open, but it is heavy: first usable paint was about 16.5s in preview, with about 7,479 DOM elements and 18,541 event listeners.
+- The main slowdown is frontend work, not a 3-minute database query: `crm_brokerages` loads 10,558 rows, and the current hook fetches full `select(*)` pages, then the page sorts/indexes/counts those rows client-side before it becomes comfortable to use.
+- The page also mounts extra hidden work shortly after load: the Developer Registry tab is force-mounted during idle, which triggers `crm_developer_registry` and related settings/template queries even when the user only clicked Relationships > Brokerages.
+- I also found visible bugs/noise during audit: the pending-tasks modal blocks the page, `meeting_requests` returns 403 on this page, `email_send_log` returns 404, and `app_settings` returns 403. Some are unrelated to the country dropdown but add user-facing friction and console errors.
 
-Replace the 4-option "Region" dropdown (UAE / GCC / MENA / International) on the CRM Brokerages tab with a **searchable Country dropdown showing every country with its flag**, and apply the same upgrade to the Developer Registry tab if it has the same filter.
+## Fix plan
+1. **Make Relationships open fast**
+   - Change `useBrokerages()` to fetch only the columns the Relationships UI actually renders instead of `select(*)`.
+   - Keep pagination, but reduce the payload size and parsing cost for the 10,558-row directory.
+   - Add a lightweight `updated_at` index so ordered loads do not require a full sort as the table grows.
 
-Also remove the per-row country flag I previously added next to each agency name (you didn't ask for that).
+2. **Stop hidden tabs from slowing initial open**
+   - Remove the idle force-mount of the Developer Registry tab.
+   - Keep the Developer Registry loading only when the user clicks that tab.
+   - Remove `forceMount` on hidden tab content so hidden heavy tables/components do not stay active unnecessarily.
 
----
+3. **Fix page-blocking and noisy Relationships queries**
+   - Prevent the Pending Tasks alert from blocking the Relationships page on open.
+   - Fix `BreakfastBookingsSection` so forbidden `meeting_requests` access does not keep retrying or showing broken state.
+   - Guard/fallback the missing `email_send_log` call path so a 404 does not appear on page load.
 
-## Changes
+4. **Improve large-list rendering safety**
+   - Ensure the Country filter reset also resets visible pagination.
+   - Keep cards windowed and avoid accidentally rendering the full 10k list in normal card mode.
+   - Leave Excel view functional, but avoid opening it automatically for huge lists.
 
-### 1. `src/pages/CRMRelationships.tsx` — brokerage filters
-- Remove `🇨🇨` flag chip rendered next to each agency row in the table/cards.
-- Replace the "Region" `<Select>` (lines ~991-1003) with a **Country combobox**:
-  - Source: full `COUNTRIES` list from `src/data/countries.ts` (already used by `CRMLeadModal`, contains all ~250 countries with flags).
-  - Renders as a searchable popover (Command + CommandInput) so the user can type "Sing…" and pick **🇸🇬 Singapore**.
-  - Each item: `{flag}  {name}  ·  {count}` (count = brokerages whose `country` matches).
-  - Default option: **🌐 All countries · {total}**.
-  - Selected value displays the flag + name in the trigger.
-- Rename internal state `regionFilter` → `countryFilter`. Filter logic compares against `r.country` (fall back to `r.region === "UAE" ? "United Arab Emirates" : r.region`).
-- Update active-filter chip + reset-all to use the new key/label.
-- Keep the `Emirate` dropdown unchanged (UAE-specific sub-filter, only meaningful when country = UAE — optionally hide it when country ≠ UAE / All).
+5. **Validation after implementation**
+   - Re-open `/owner/crm/relationships` in the preview.
+   - Check performance profile again for improved FCP/load time and reduced resource/DOM pressure.
+   - Check network requests for remaining 403/404/500 errors tied to Relationships.
+   - Confirm the country dropdown remains in the Filters popover and still shows detailed countries with flags.
 
-### 2. Developer Registry tab (same file, ~line 2030+)
-- If the Developer view has an identical "Region" filter, apply the same Country combobox swap there for parity. If it doesn't, skip.
-
-### 3. No backend changes
-- No migration, no edge-function change. The `country` column already exists on `crm_brokerages` / `crm_developers` (used elsewhere in the file).
-
----
-
-## Out of scope
-- Per-row flags next to agency names (being removed, not re-added).
-- Editing the `COUNTRIES` data file.
-- Any email / template / RLS work.
-
----
-
-## Files touched
-- `src/pages/CRMRelationships.tsx` (one filter swap on brokerage tab, optional same swap on developer tab, remove inline flag chip from rows).
-
----
-
-## Verification
-- Open CRM → Brokerages → click "Country" → search "Sin" → see 🇸🇬 Singapore with count → select → list filters to Singaporean offices only.
-- "All countries" restores the full list.
-- Agency rows no longer show a flag next to the name.
-- Developer Registry tab shows the same searchable country dropdown (if it had a region filter).
+## Files expected to change
+- `src/hooks/useCRMRelationships.ts`
+- `src/pages/CRMRelationships.tsx`
+- `src/components/crm/BreakfastBookingsSection.tsx`
+- likely the component/hook that triggers Pending Tasks and the `email_send_log` lookup
+- one database migration for the ordered brokerage-load index
