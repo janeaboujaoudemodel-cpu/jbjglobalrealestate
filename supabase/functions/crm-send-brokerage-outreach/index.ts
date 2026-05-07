@@ -488,7 +488,7 @@ serve(async (req: Request) => {
       if (hit) {
         return new Response(JSON.stringify({
           error: "FORBIDDEN_ADDRESS_IN_WORKFLOW",
-          message: `Send blocked — address ${hit} is forbidden in brokerage outreach. Use jane@citideveloper.com.`,
+          message: `Send blocked — address ${hit} is forbidden in brokerage outreach. Use infoo.jane@gmail.com.`,
         }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     }
