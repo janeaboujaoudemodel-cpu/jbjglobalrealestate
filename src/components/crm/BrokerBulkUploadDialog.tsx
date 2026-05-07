@@ -513,7 +513,10 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
             <>
               <Button variant="outline" onClick={() => close(false)} disabled={busy}>Cancel</Button>
               <Button variant="gold" onClick={startMatching} disabled={busy || files.length === 0}>
-                <ArrowRight className="w-4 h-4 mr-2" /> Continue ({totalRows} rows)
+                <ArrowRight className="w-4 h-4 mr-2" />
+                {fastMode
+                  ? `Fast import ${totalRows.toLocaleString()} rows`
+                  : `Continue (${totalRows.toLocaleString()} rows)`}
               </Button>
             </>
           )}
