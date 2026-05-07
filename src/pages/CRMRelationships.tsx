@@ -703,7 +703,10 @@ const BrokeragesAgenciesView = () => {
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
-      if (regionFilter !== "all" && String(r.region || "UAE") !== regionFilter) continue;
+      if (countryFilter !== "all") {
+        const rc = String(r.country || (r.region === "UAE" ? "United Arab Emirates" : r.region || "")).toLowerCase();
+        if (rc !== countryFilter.toLowerCase()) continue;
+      }
       if (sourceTab === "directory" && r.entry_source !== "directory") continue;
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
       else if (sourceTab === "sent" && !r.last_outreach_at) continue;
@@ -711,7 +714,7 @@ const BrokeragesAgenciesView = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds, listView]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView]);
 
   // Sidebar counts derived from full data set
   const listCounts = useMemo(() => {
