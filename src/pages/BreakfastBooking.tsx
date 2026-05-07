@@ -204,7 +204,7 @@ export default function BreakfastBooking() {
     const dt = new Date(confirmed.slotAt);
     const dtEnd = new Date(dt.getTime() + 60 * 60 * 1000);
     const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Private Breakfast — JBJ Global Real Estate")}&dates=${fmt(dt)}/${fmt(dtEnd)}&details=${encodeURIComponent(`Host on arrival: ${HOST_NAME} — ${HOST_PHONE}\nLocation: ${OFFICE_LOCATION}`)}&location=${encodeURIComponent(OFFICE_LOCATION)}`;
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Private Breakfast for ${brokerageLabel}`)}&dates=${fmt(dt)}/${fmt(dtEnd)}&details=${encodeURIComponent(`Host on arrival: ${HOST_NAME} — ${HOST_PHONE}\nLocation: ${OFFICE_LOCATION}`)}&location=${encodeURIComponent(OFFICE_LOCATION)}`;
     window.open(url, "_blank");
   };
 
