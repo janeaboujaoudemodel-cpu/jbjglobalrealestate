@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useTransition } from "react";
+import React, { useState, useMemo, useEffect, useTransition, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -568,6 +568,67 @@ const BrokeragesAgenciesView = () => {
       window.removeEventListener("crm:open-brokerage-test", openTest);
     };
   }, []);
+
+  // DLD batched import — drives a sticky toast with real per-batch progress.
+  const [dldProgress, setDldProgress] = useState<{ done: number; total: number } | null>(null);
+  const dldCancelRef = useRef(false);
+  const handleImportDLDBatched = async () => {
+    if (importingDLD) return;
+    setImportingDLD(true);
+    dldCancelRef.current = false;
+    const tId = "dld-import";
+    let allRows: any[] = [];
+    let inserted = 0, updated = 0, skipped = 0;
+    try {
+      toast.loading("Loading DLD register…", { id: tId });
+      // Fetch the public registry once on the client so we can chunk it.
+      const res = await fetch("/dld-broker-offices.json", { headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error(`Could not load /dld-broker-offices.json (${res.status})`);
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error("DLD register is not a list");
+      allRows = json;
+      const total = allRows.length;
+      const CHUNK = 500;
+      setDldProgress({ done: 0, total });
+      for (let i = 0; i < total; i += CHUNK) {
+        if (dldCancelRef.current) {
+          toast.error(`Import cancelled at ${i.toLocaleString()} / ${total.toLocaleString()}`, { id: tId });
+          break;
+        }
+        const chunk = allRows.slice(i, i + CHUNK);
+        const batchNum = Math.floor(i / CHUNK) + 1;
+        const totalBatches = Math.ceil(total / CHUNK);
+        toast.loading(
+          `Importing DLD batch ${batchNum}/${totalBatches} — ${i.toLocaleString()} / ${total.toLocaleString()} done · ${(total - i).toLocaleString()} pending`,
+          {
+            id: tId,
+            action: { label: "Cancel", onClick: () => { dldCancelRef.current = true; } },
+          },
+        );
+        const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", {
+          body: { rows: chunk },
+        });
+        if (error) throw error;
+        inserted += r?.inserted || 0;
+        updated += r?.updated || 0;
+        skipped += r?.skipped || 0;
+        setDldProgress({ done: Math.min(i + CHUNK, total), total });
+      }
+      if (!dldCancelRef.current) {
+        toast.success(
+          `DLD sync complete — ${inserted.toLocaleString()} new · ${updated.toLocaleString()} backfilled · ${skipped.toLocaleString()} already existed`,
+          { id: tId, duration: 8000 },
+        );
+      }
+      await refetch();
+    } catch (e: any) {
+      toast.error("DLD sync failed: " + (e?.message || e), { id: tId });
+    } finally {
+      setImportingDLD(false);
+      setDldProgress(null);
+      dldCancelRef.current = false;
+    }
+  };
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Single pass over data — combine source counts and per-emirate counts to avoid 4× iteration on every render.
@@ -794,9 +855,10 @@ const BrokeragesAgenciesView = () => {
 
   return (
     <TooltipProvider>
-    <div className="flex flex-col lg:flex-row gap-4 items-start">
-    <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} />
-    <div className="space-y-4 flex-1 min-w-0">
+    <div className="space-y-4 w-full min-w-0">
+    <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+      <CRMListSidebar kind="brokerages" value={listView} onChange={setListView} counts={listCounts} orientation="horizontal" />
+    </div>
     <CRMBulkActionsBar
       table="crm_brokerages"
       ids={[...bulkSel]}
@@ -989,12 +1051,14 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button
           variant="outline"
-          onClick={() => handleImportDLD(false)}
+          onClick={() => handleImportDLDBatched()}
           disabled={importingDLD}
-          title="One-time bulk import of the official DLD register (10,078 UAE agencies). De-duplicates against existing entries."
+          title="Batched import of the official DLD register — shows live progress per 500-row batch."
         >
           {importingDLD ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
-          Import DLD register
+          {importingDLD && dldProgress
+            ? `Importing ${dldProgress.done.toLocaleString()} / ${dldProgress.total.toLocaleString()}`
+            : "Import DLD register"}
         </Button>
         <Button
           variant="outline"
@@ -1456,7 +1520,6 @@ const BrokeragesAgenciesView = () => {
         onExport={handleExportConfigured}
       />
     </div>
-    </div>
     </TooltipProvider>
   );
 };
@@ -1641,13 +1704,33 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
     ? "Independent of the developer pack. This drive link, senders and CCs are used ONLY for brokerage partnership outreach (sent by Amra for CITI Developers)."
     : "Used ONLY for developer registrations. Drop in your Trade Licence + RERA + MOU pack and pick the senders + CCs.";
 
+  const collapseKey = `crm.pack.${context}.collapsed`;
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(collapseKey) === "true";
+  });
+  useEffect(() => {
+    try { localStorage.setItem(collapseKey, String(collapsed)); } catch { /* noop */ }
+  }, [collapsed, collapseKey]);
+
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
       <CardContent className="p-5">
-        <div className="flex items-center gap-2 mb-3">
-          <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
-          <h3 className="font-semibold text-[#1A1A1A]">{headerTitle}</h3>
-        </div>
+        <button
+          type="button"
+          onClick={() => setCollapsed((v) => !v)}
+          className="w-full flex items-center justify-between gap-2 mb-3 text-left"
+          aria-expanded={!collapsed}
+        >
+          <div className="flex items-center gap-2">
+            <LinkIcon className="w-4 h-4 text-[#1A1A1A]" />
+            <h3 className="font-semibold text-[#1A1A1A]">{headerTitle}</h3>
+          </div>
+          <span className="text-[11px] text-[#1A1A1A]/70 underline">
+            {collapsed ? "Expand" : "Collapse"}
+          </span>
+        </button>
+        {collapsed ? null : (<>
         <p className="text-xs text-[#1A1A1A]/70 mb-4">{lead}</p>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
@@ -1741,29 +1824,25 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
           <div className="text-[11px] text-[#1A1A1A]/70">
             {isBrk
               ? "Edit the briefing + breakfast email template, or send yourself a test before launching."
-              : "Saved settings apply on the next outreach."}
+              : "Edit the developer registration template, or send yourself a test before launching."}
           </div>
           <div className="flex flex-wrap gap-2">
-            {isBrk && (
-              <>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-template"))}
-                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                >
-                  Open template editor
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.dispatchEvent(new CustomEvent("crm:open-brokerage-test"))}
-                  className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
-                >
-                  Send test email
-                </Button>
-              </>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.dispatchEvent(new CustomEvent(isBrk ? "crm:open-brokerage-template" : "crm:open-developer-template"))}
+              className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              Open template editor
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.dispatchEvent(new CustomEvent(isBrk ? "crm:open-brokerage-test" : "crm:open-developer-test"))}
+              className="border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+            >
+              Send test email
+            </Button>
             {dirty && (
               <>
                 <Button variant="outline" size="sm" onClick={() => setDraft(null)}>Cancel</Button>
@@ -1772,6 +1851,7 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
             )}
           </div>
         </div>
+        </>)}
       </CardContent>
     </Card>
   );
@@ -1804,6 +1884,16 @@ const DeveloperRegistryTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
+  useEffect(() => {
+    const openTpl = () => setTplOpen(true);
+    const openTest = () => setTestSendOpen(true);
+    window.addEventListener("crm:open-developer-template", openTpl);
+    window.addEventListener("crm:open-developer-test", openTest);
+    return () => {
+      window.removeEventListener("crm:open-developer-template", openTpl);
+      window.removeEventListener("crm:open-developer-test", openTest);
+    };
+  }, []);
   const [subTab, setSubTab] = useState<"queue" | "history" | null>(null);
   const [historyTab, setHistoryTab] = useState<any>(undefined);
   // Smart routing: clicking a status tile/chip routes to the correct sub-tab automatically
@@ -2026,9 +2116,10 @@ const DeveloperRegistryTab = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 items-start">
-      <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} />
-      <div className="space-y-5 flex-1 min-w-0">
+    <div className="space-y-5 w-full min-w-0">
+      <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+        <CRMListSidebar kind="developers" value={devListView} onChange={setDevListView} counts={devListCounts} orientation="horizontal" />
+      </div>
       <CRMBulkActionsBar
         table="crm_developer_registry"
         ids={[...selected]}
@@ -2595,7 +2686,6 @@ const DeveloperRegistryTab = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      </div>
     </div>
   );
 };

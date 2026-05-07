@@ -533,6 +533,55 @@ serve(async (req: Request) => {
     }
     const subject = subjectRendered;
 
+    // === SINGLE-AGENCY GUARD ===
+    // Hard rule: one outbound email = one brokerage. Reject if rendered subject/body
+    // mentions any other brokerage from this owner's directory.
+    {
+      const targetName = String(varsMap.brokerage_name || "").trim();
+      if (!targetName) {
+        return new Response(JSON.stringify({ error: "Single-agency guard: brokerage_name is empty" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      // Reject leftover unresolved placeholders (e.g. {{brokerage_name}} still present).
+      const haystack = `${subject}\n${html}`;
+      if (/\{\{\s*brokerage_[a-z_]+\s*\}\}/i.test(haystack)) {
+        return new Response(JSON.stringify({ error: "Single-agency guard: unresolved {{brokerage_*}} placeholder in template" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      try {
+        const { data: others } = await service
+          .from("crm_brokerages")
+          .select("company_name")
+          .eq("owner_id", user.id)
+          .neq("company_name", targetName);
+        const lowerHay = haystack.toLowerCase();
+        const targetLower = targetName.toLowerCase();
+        const offending: string[] = [];
+        for (const row of (others || []) as any[]) {
+          const name = String(row.company_name || "").trim();
+          if (!name || name.length < 4) continue; // skip noise / single-letter
+          const lower = name.toLowerCase();
+          if (lower === targetLower) continue;
+          // Whole-name appearance only (avoid substring false positives like "ABC" matching "ABCD")
+          if (lowerHay.includes(lower) && !targetLower.includes(lower)) {
+            offending.push(name);
+          }
+          if (offending.length >= 3) break;
+        }
+        if (offending.length > 0) {
+          console.error("[single-agency-guard] cross-agency contamination blocked", { target: targetName, offending });
+          return new Response(JSON.stringify({
+            error: `Cross-agency contamination blocked — email mentions: ${offending.join(", ")}`,
+            offending,
+          }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+      } catch (guardErr) {
+        console.warn("[single-agency-guard] lookup failed (allowing send):", guardErr);
+      }
+    }
+
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
       to: recipient,

@@ -1,51 +1,111 @@
-I will fix this as a hard correction, not a style tweak.
+## Goal
 
-## Plan
+Four fixes across the CRM Relationships page (Brokerages + Developer Registry tabs).
 
-1. **Lock the correct identity and wording**
-   - Add/update project memory so these errors do not come back:
-     - Jane Bou Jaoude spelling only.
-     - Correct CC email: `infoo.jane@gmail.com`.
-     - Brokerage outreach brand: `Citi Developer` singular, not `Citi Developers`.
-     - Never generate `Citi Bou Jaoude` or mix developer name with Jane’s family name.
-     - Test and bulk brokerage emails address the agency name, not the first word of the recipient email.
+---
 
-2. **Fix the real sent email logic**
-   - Update `crm-send-brokerage-outreach` so test sends use the selected agency/sample agency name as the greeting target.
-   - Remove the `Dear Info` behavior by preventing email-local-part guessing from becoming the salutation when a brokerage name is provided.
-   - Update the registration paragraph to first ask, in premium wording, whether the agency is already registered with Citi Developer; only if not, ask them to send the best email/contact to the Channel Partner Department.
-   - Replace `CITI DEVELOPERS` / `City Developer` / `Citi Developers` with locked `Citi Developer` in the sent template variables and fallback copy.
-   - Remove any footer wording that can create `Citi Bou Jaoude`; signature will keep Jane’s full name separate from Citi Developer.
+## 1. Developer Registration Pack card — match the brokerage card
 
-3. **Fix subject line**
-   - Replace the current subject format (`City Developers and ABC Brokerage Real Estate Partnership for Amra`) with a cleaner premium subject, for example:
-     - `Private Citi Developer Briefing for ABC Real Estate | AMRA`
-   - Use no underscores and no awkward “and … partnership for …” wording.
-   - Ensure the preview and the live sent subject use the same format.
+In `src/pages/CRMRelationships.tsx` `DocumentPackPanel`:
 
-4. **Fix sender behavior explanation in code/UI**
-   - Keep `jane@citideveloper.com` as `Reply-To` / visible header value from the Primary Sender field.
-   - Add clear UI copy where the primary sender is edited: because the message is sent through the connected Gmail account, Gmail may show the connected account as the technical sender unless that address is configured as a Gmail sending alias. The reply-to still routes replies to `jane@citideveloper.com`.
-   - Do not overwrite the saved sender email.
+- Currently the **"Open template editor"** and **"Send test email"** buttons render only when `context === "brokerage"`. Render them for `context === "developer"` as well, dispatching new events `crm:open-developer-template` and `crm:open-developer-test`.
+- Wrap the entire card in the same `<Collapsible>` minimiser pattern already used in the developer page (header row with chevron + "Collapse" link). Persist open/closed state in `localStorage` per-context (`crm.pack.brokerage.collapsed`, `crm.pack.developer.collapsed`). Both cards (brokerage card at line 818 and developer card at line 2041) get the identical collapsible chrome.
+- In the developer tab (`DeveloperRegistryView`), wire the new events so they open the existing `TemplateEditorDialog` / `TestSendDialog` for the **developer** template (not the brokerage one). Pass `context="developer"` so the dialogs target the developer pack, not the brokerage pack.
 
-5. **Auto-save test agency names**
-   - Extend owner settings with a saved test brokerage-name list.
-   - In `TestSendDialog`, when you type/select `ABC Real Estate` for a brokerage test, save it automatically.
-   - Show saved agency-name chips with delete support, same pattern as saved test recipient emails.
-   - Allow adding/replacing/deleting saved test agency names without fake defaults like “Sample Brokerage Group”.
+No business logic changes — only UI parity + collapse.
 
-6. **Fix email layout and footer cards**
-   - Update the stored brokerage email template HTML:
-     - Remove “In partnership with Citi Developer”.
-     - Keep the four footer action cards (website, office, phone, WhatsApp), but make them small, equal-size, and one-line aligned on desktop.
-     - Use responsive email CSS so on mobile the “Before we lock your seats” card loses the extra outer border/padding and becomes wider, avoiding the stacked triple-border look.
-     - Remove any third decorative border around that card.
+---
 
-7. **Deploy and verify**
-   - Deploy the updated brokerage outreach function.
-   - Run a project-wide search to verify banned strings are gone from active code/templates:
-     - `Citi Bou`
-     - `City Developers`
-     - `CITI DEVELOPERS` in brokerage outreach
-     - one-O wrong Jane email
-   - Test the deployed edge function with a brokerage test payload using `ABC Real Estate` and confirm the returned/send path uses the corrected subject/greeting/footer rules.
+## 2. DLD import — show real per-batch progress
+
+Today `handleImportDLD` calls the edge function once and the function inserts everything internally, so the UI only sees a single final toast. Replace with a client-driven batched flow:
+
+1. Fetch `/dld-broker-offices.json` once on the client (already public).
+2. Slice into chunks of **500 rows**.
+3. For each chunk, call `crm-import-dld-brokerages` with `{ rows: chunk }`. The edge function already supports `body.rows`.
+4. After every chunk, update a single sticky toast:
+   `Importing DLD register — 4,500 / 10,078 done · 5,500 remaining · +312 new this batch`
+5. Track running totals (`insertedTotal`, `updatedTotal`, `skippedTotal`) and show them in the final success toast.
+6. Add a `Cancel` action on the toast that aborts the loop between batches.
+7. Disable the button + show progress bar (reuse the existing `Progress` component) inline next to the button.
+
+No edge-function change needed — the function is already idempotent and accepts `rows`. Only `handleImportDLD` in `CRMRelationships.tsx` is rewritten.
+
+---
+
+## 3. CRMListSidebar — convert to horizontal toggle
+
+`src/components/crm/CRMListSidebar.tsx` currently renders as a 224px-wide left rail (`w-56 shrink-0 … sticky`). On the brokerage and developer tabs it squeezes the main content into a narrow column.
+
+Plan:
+
+- Add a new layout variant `orientation: "horizontal" | "vertical"` (default `horizontal`).
+- In horizontal mode it renders as a single-row pill bar above the filter bar:
+  `[ All active 1,240 ] [ Databases ▾ 3 ] [ Junk Bin 12 ] [ Trash 5 ]`
+  - "Databases" becomes a dropdown popover (no horizontal sprawl when many lists exist).
+  - Same active styling as today (champagne fill + ink text + hairline gold border) — keeps the design-system contract.
+- Update `CRMRelationships.tsx` brokerage view (line ~798) and developer view (line ~2030) to use the horizontal variant, and remove `flex-col lg:flex-row` wrapper so the main column reclaims full width.
+- Keep the vertical variant available (no callers right now, but harmless) so we can revert per-page if needed.
+
+---
+
+## 4. Lock "one agency per email" rule
+
+The user's hard rule: **a single outreach email must reference exactly one brokerage everywhere** — greeting, subject, body, footer. No mixing of two agency names.
+
+Steps:
+
+1. **Edge function guard** (`supabase/functions/crm-send-brokerage-outreach/index.ts`):
+   - After template substitution, run a guard that:
+     - Confirms the resolved `brokerage_name` is a non-empty string.
+     - Scans the rendered subject + html + text for any **other** brokerage name from `crm_brokerages` for this owner that is NOT the recipient. If found → return `400 { error: "Cross-agency contamination blocked", offending: [...] }` and DO NOT send.
+     - Confirms no leftover `{{brokerage_*}}` placeholders remain.
+   - Lock greeting to `Dear {{brokerage_name}} team,` when no contact name exists — never `Dear Info`, never another brokerage.
+2. **Test send** path uses `testBrokerageName` (already added) and applies the same guard.
+3. **DB-level safety**: add a CHECK trigger on `crm_email_send_log` (or whichever audit table records sends) that rejects rows where `subject` or `body` contains the literal text of a different `brokerage_name` from the same owner. (Implemented as a `BEFORE INSERT` plpgsql trigger doing a single `EXISTS` lookup against `crm_brokerages`.)
+4. **Template editor**: when the owner edits the brokerage template, show a red banner if the saved subject/body contains a hard-coded agency name from the directory (`Provident`, `Fine Properties`, etc.) instead of `{{brokerage_name}}`. Block "Save" until cleaned.
+5. Memory: write `mem://compliance/single-agency-email-rule` capturing the rule + enforcement points so it can never be re-broken silently.
+
+---
+
+## 5. Tighten RLS / exposed-data audit (scoped)
+
+Run the Supabase linter and review RLS only for the tables touched by this change:
+
+- `crm_owner_settings` — confirm `owner_id = auth.uid()` on every policy (select/insert/update/delete).
+- `crm_brokerages` — confirm same and that no policy uses `USING (true)`.
+- `crm_email_send_log` (or equivalent) — owner-scoped read; service-role-only insert from edge function.
+- `crm_email_templates` — owner-scoped CRUD.
+
+Fix any finding in a single migration. No schema changes beyond what step 4.3 requires (the cross-agency trigger).
+
+---
+
+## Out of scope
+
+- Calendar / Google integration changes
+- Email design beyond the single-agency lock
+- Bulk newsletters
+- Auth flow
+
+---
+
+## Files touched
+
+- `src/pages/CRMRelationships.tsx` (sections 1, 2, 3 wiring)
+- `src/components/crm/CRMListSidebar.tsx` (section 3)
+- `src/components/crm/TemplateEditorDialog.tsx` + `TestSendDialog.tsx` (accept `context="developer"`, listen for new events; section 4.4 banner)
+- `supabase/functions/crm-send-brokerage-outreach/index.ts` (section 4.1, 4.2)
+- New migration: cross-agency trigger + any RLS tightening (section 4.3, 5)
+- New `mem://compliance/single-agency-email-rule`
+
+---
+
+## Verification
+
+- Click both pack cards → collapse/expand persists across reload.
+- Developer pack shows the two new buttons; clicking opens the developer template/test.
+- Trigger DLD import → toast updates every batch with `done / total · remaining`.
+- Brokerage and developer tabs render full-width; list filter bar sits horizontally above filters.
+- Send a test brokerage email containing two different agency names in the body → server returns 400, nothing sent, toast explains the block.
+- Supabase linter is clean for the four tables listed.
