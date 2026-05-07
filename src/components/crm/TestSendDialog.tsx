@@ -124,13 +124,16 @@ export const TestSendDialog = ({
     if (hydratedRef.current || !settings) return;
     hydratedRef.current = true;
     const saved = ((settings as any).test_profile || {}) as Partial<TestProfile>;
-    setProfile({
-      to: saved.to || DEFAULT_PROFILE.to,
-      cc: saved.cc || DEFAULT_PROFILE.cc,
-      from_email: saved.from_email || DEFAULT_PROFILE.from_email,
+    const next: TestProfile = {
+      to: fixEmail(saved.to) || DEFAULT_PROFILE.to,
+      cc: fixEmail(saved.cc) || DEFAULT_PROFILE.cc,
+      from_email: fixEmail(saved.from_email) || DEFAULT_PROFILE.from_email,
       sample_name: saved.sample_name || DEFAULT_PROFILE.sample_name,
       subject_override: saved.subject_override || DEFAULT_PROFILE.subject_override,
-    });
+    };
+    setProfile(next);
+    // If we corrected a wrong saved value, persist the fix immediately.
+    if (saved.to && fixEmail(saved.to) !== saved.to) void persist(next);
   }, [open, settings]);
 
   const persist = async (next: TestProfile) => {
