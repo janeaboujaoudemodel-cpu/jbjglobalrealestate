@@ -259,14 +259,22 @@ export default function IndividualBrokersTab() {
                       {r.role ? `${r.role} · ` : ""}{r.brokerage?.company_name || "Standalone"}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
-                      {(r.expertise_type === "leasing" || r.expertise_type === "both") && (
+                      {(r.specialty_labels || []).map((lbl) => (
+                        <span key={lbl} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] capitalize">{lbl.replace(/_/g, " ")}</span>
+                      ))}
+                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "leasing" || r.expertise_type === "both") && (
                         <span className="px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">Leasing</span>
                       )}
-                      {(r.expertise_type === "selling" || r.expertise_type === "both") && (
+                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "selling" || r.expertise_type === "both") && (
                         <span className="px-2 py-0.5 rounded-full border border-blue-300 bg-blue-50 text-blue-900">Selling</span>
                       )}
                       {(r.expertise_areas || []).slice(0, 3).map((a) => (
                         <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
+                      ))}
+                      {(r.source_history || []).slice(0, 2).map((sh: any, i: number) => (
+                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/70" title={`From: ${sh.file || sh.label || ""}`}>
+                          src: {sh.label || sh.file || "import"}
+                        </span>
                       ))}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
