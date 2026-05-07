@@ -1050,12 +1050,14 @@ const BrokeragesAgenciesView = () => {
         </Button>
         <Button
           variant="outline"
-          onClick={() => handleImportDLD(false)}
+          onClick={() => handleImportDLDBatched()}
           disabled={importingDLD}
-          title="One-time bulk import of the official DLD register (10,078 UAE agencies). De-duplicates against existing entries."
+          title="Batched import of the official DLD register — shows live progress per 500-row batch."
         >
           {importingDLD ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
-          Import DLD register
+          {importingDLD && dldProgress
+            ? `Importing ${dldProgress.done.toLocaleString()} / ${dldProgress.total.toLocaleString()}`
+            : "Import DLD register"}
         </Button>
         <Button
           variant="outline"
