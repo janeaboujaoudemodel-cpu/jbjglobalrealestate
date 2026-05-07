@@ -2,8 +2,10 @@
 // Sticky header, sticky first column, inline status dropdown that paints the
 // cell with the same palette used by the colored XLSX export.
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { statusColor, STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+
+const PAGE_SIZE = 100;
 
 export interface ExcelGridColumn<R> {
   key: keyof R | string;
