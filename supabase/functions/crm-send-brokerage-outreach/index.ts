@@ -307,17 +307,13 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // Brokerage outreach uses its OWN settings ONLY — never falls back to developer
-    // (JBJ) settings, so brokerage emails are never accidentally sent as JBJ.
-    const brkFromName: string =
-      (settings?.brokerage_from_name && String(settings.brokerage_from_name).trim()) ||
-      representedDeveloperName;
-    const fromName = brkFromName;
-    const replyTo = (
-      body.fromEmailOverride ||
-      settings?.brokerage_reply_to_email ||
-      "jane@citideveloper.com"
-    ).toString().trim();
+    // HARD LOCK: brokerage outreach is always sent as Jane from jane@citideveloper.com.
+    // No setting, override, or env value can change this — preview must equal sent.
+    const FORCED_FROM_EMAIL = "jane@citideveloper.com";
+    const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
+    const fromName = FORCED_FROM_DISPLAY;
+    const replyTo = FORCED_FROM_EMAIL;
+    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com"];
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
