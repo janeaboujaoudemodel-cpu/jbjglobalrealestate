@@ -1769,8 +1769,6 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
     }
   }, [upsert]);
 
-  if (isLoading) return <Skeleton className="h-32" />;
-
   // Field aliases — brokerage and developer packs are independent.
   const isBrk = context === "brokerage";
   const F = {
@@ -1803,6 +1801,8 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   useEffect(() => {
     try { localStorage.setItem(collapseKey, String(collapsed)); } catch { /* noop */ }
   }, [collapsed, collapseKey]);
+
+  if (isLoading) return <Skeleton className="h-32" />;
 
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
