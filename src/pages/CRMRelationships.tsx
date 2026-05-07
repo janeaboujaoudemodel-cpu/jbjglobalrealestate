@@ -480,11 +480,11 @@ const BrokeragesAgenciesView = () => {
   const [statusFilter, setStatusFilterRaw] = useState("all");
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
   const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
-  const [regionFilter, setRegionFilterRaw] = useState<string>("all");
+  const [countryFilter, setCountryFilterRaw] = useState<string>("all");
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
-  const setRegionFilter = (v: string) => startTransition(() => setRegionFilterRaw(v));
+  const setCountryFilter = (v: string) => startTransition(() => setCountryFilterRaw(v));
   const setSourceTab = (v: "all" | "directory" | "owner" | "sent" | "inbox") => startTransition(() => setSourceTabRaw(v));
   const [syncing, setSyncing] = useState(false);
   const handleSyncNow = async () => {
