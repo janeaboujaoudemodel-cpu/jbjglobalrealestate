@@ -28,11 +28,18 @@ interface TestProfile {
 }
 
 const DEFAULT_PROFILE: TestProfile = {
-  to: "info.jane@gmail.com",
+  to: "infoo.jane@gmail.com",
   cc: "",
   from_email: "jane@citideveloper.com",
   sample_name: "ABC REAL ESTATE",
   subject_override: "",
+};
+
+// Normalize legacy/wrong single-o variant -> correct double-o address.
+const fixEmail = (v: string | undefined | null): string => {
+  const s = (v || "").trim();
+  if (!s) return "";
+  return s.replace(/\binfo\.jane@gmail\.com\b/gi, "infoo.jane@gmail.com");
 };
 
 type FieldKey = keyof TestProfile;
