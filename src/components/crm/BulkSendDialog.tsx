@@ -384,9 +384,15 @@ export const BulkSendDialog = ({
 
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
-    return renderPreview(String(template.html));
+    const rendered = renderPreview(String(template.html));
+    if (!borderedCard) return rendered;
+    // Preview-only: re-apply the original bordered look on .jbj-flat. Does NOT affect the bytes that get sent.
+    const overrideStyle = `<style>.jbj-flat{padding:18px 20px !important;background:#FDFBF7 !important;border:1px solid #B89555 !important;border-radius:12px !important;margin-top:22px !important;}</style>`;
+    return rendered.includes("</head>")
+      ? rendered.replace("</head>", `${overrideStyle}</head>`)
+      : overrideStyle + rendered;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template, previewVars]);
+  }, [template, previewVars, borderedCard]);
 
   const previewSubject = useMemo(() => {
     if (!template?.subject) return "";
