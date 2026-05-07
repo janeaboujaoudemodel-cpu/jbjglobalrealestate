@@ -18,6 +18,9 @@ import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Dow
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { COUNTRIES } from "@/data/countries";
+import { Check, ChevronsUpDown } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import {
   useBrokerages, useUpsertBrokerage, useDeleteBrokerage,
@@ -122,6 +125,83 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
             This value was inferred from the website domain. Verify before using.
           </div>
         )}
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+/** Searchable country combobox with flag emojis + per-country counts. */
+const CountryCombobox = ({
+  value,
+  onChange,
+  rows,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  rows: any[];
+}) => {
+  const [open, setOpen] = useState(false);
+  const counts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const r of rows) {
+      const c = String(r?.country || (r?.region === "UAE" ? "United Arab Emirates" : r?.region || "")).trim();
+      if (!c) continue;
+      m[c.toLowerCase()] = (m[c.toLowerCase()] || 0) + 1;
+    }
+    return m;
+  }, [rows]);
+  const selected = COUNTRIES.find((c) => c.name.toLowerCase() === value.toLowerCase());
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          className="w-full justify-between font-normal bg-white"
+        >
+          <span className="truncate">
+            {value === "all"
+              ? `🌐 All countries · ${rows.length}`
+              : selected
+              ? `${selected.flag} ${selected.name}`
+              : value}
+          </span>
+          <ChevronsUpDown className="h-4 w-4 opacity-60 shrink-0 ml-2" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0 w-[280px] bg-[#FDFBF7] border-[#1A1A1A]/10" align="start">
+        <Command>
+          <CommandInput placeholder="Search country…" />
+          <CommandList className="max-h-72">
+            <CommandEmpty>No country found.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem
+                value="all"
+                onSelect={() => { onChange("all"); setOpen(false); }}
+              >
+                <Check className={`mr-2 h-4 w-4 ${value === "all" ? "opacity-100" : "opacity-0"}`} />
+                <span className="mr-2">🌐</span>
+                <span className="flex-1">All countries</span>
+                <span className="text-[#1A1A1A]/60 text-xs">{rows.length}</span>
+              </CommandItem>
+              {COUNTRIES.map((c) => {
+                const n = counts[c.name.toLowerCase()] || 0;
+                return (
+                  <CommandItem
+                    key={c.code}
+                    value={`${c.name} ${c.code} ${c.nationality}`}
+                    onSelect={() => { onChange(c.name); setOpen(false); }}
+                  >
+                    <Check className={`mr-2 h-4 w-4 ${value.toLowerCase() === c.name.toLowerCase() ? "opacity-100" : "opacity-0"}`} />
+                    <span className="mr-2">{c.flag}</span>
+                    <span className="flex-1 truncate">{c.name}</span>
+                    {n > 0 && <span className="text-[#1A1A1A]/60 text-xs ml-2">{n}</span>}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </PopoverContent>
     </Popover>
   );
@@ -477,11 +557,11 @@ const BrokeragesAgenciesView = () => {
   const [statusFilter, setStatusFilterRaw] = useState("all");
   const [emirateFilter, setEmirateFilterRaw] = useState("all");
   const [sourceTab, setSourceTabRaw] = useState<"all" | "directory" | "owner" | "sent" | "inbox">("all");
-  const [regionFilter, setRegionFilterRaw] = useState<string>("all");
+  const [countryFilter, setCountryFilterRaw] = useState<string>("all");
   const [, startTransition] = useTransition();
   const setStatusFilter = (v: string) => startTransition(() => setStatusFilterRaw(v));
   const setEmirateFilter = (v: string) => startTransition(() => setEmirateFilterRaw(v));
-  const setRegionFilter = (v: string) => startTransition(() => setRegionFilterRaw(v));
+  const setCountryFilter = (v: string) => startTransition(() => setCountryFilterRaw(v));
   const setSourceTab = (v: "all" | "directory" | "owner" | "sent" | "inbox") => startTransition(() => setSourceTabRaw(v));
   const [syncing, setSyncing] = useState(false);
   const handleSyncNow = async () => {
@@ -700,7 +780,10 @@ const BrokeragesAgenciesView = () => {
       if (ql && !item.haystack.includes(ql)) continue;
       if (statusFilter !== "all" && r.status !== statusFilter) continue;
       if (emirateFilter !== "all" && item.emirateLower !== emirateLower) continue;
-      if (regionFilter !== "all" && String(r.region || "UAE") !== regionFilter) continue;
+      if (countryFilter !== "all") {
+        const rc = String(r.country || (r.region === "UAE" ? "United Arab Emirates" : r.region || "")).toLowerCase();
+        if (rc !== countryFilter.toLowerCase()) continue;
+      }
       if (sourceTab === "directory" && r.entry_source !== "directory") continue;
       else if (sourceTab === "owner" && r.entry_source !== "owner") continue;
       else if (sourceTab === "sent" && !r.last_outreach_at) continue;
@@ -708,7 +791,7 @@ const BrokeragesAgenciesView = () => {
       out.push(r);
     }
     return out;
-  }, [indexed, debouncedQ, statusFilter, emirateFilter, regionFilter, sourceTab, excludedIds, listView]);
+  }, [indexed, debouncedQ, statusFilter, emirateFilter, countryFilter, sourceTab, excludedIds, listView]);
 
   // Sidebar counts derived from full data set
   const listCounts = useMemo(() => {
@@ -963,17 +1046,17 @@ const BrokeragesAgenciesView = () => {
         <CRMFiltersPopover
           activeCount={
             (emirateFilter !== "all" ? 1 : 0) +
-            (regionFilter !== "all" ? 1 : 0) +
+            (countryFilter !== "all" ? 1 : 0) +
             (statusFilter !== "all" ? 1 : 0) +
             (excludedIds.size > 0 ? 1 : 0)
           }
           chips={[
             ...(emirateFilter !== "all" ? [{ key: "em", label: `Emirate: ${emirateFilter}`, onClear: () => setEmirateFilter("all") }] : []),
-            ...(regionFilter !== "all" ? [{ key: "rg", label: `Region: ${regionFilter}`, onClear: () => setRegionFilter("all") }] : []),
+            ...(countryFilter !== "all" ? [{ key: "co", label: `Country: ${countryFilter}`, onClear: () => setCountryFilter("all") }] : []),
             ...(statusFilter !== "all" ? [{ key: "st", label: `Status: ${statusFilter}`, onClear: () => setStatusFilter("all") }] : []),
             ...(excludedIds.size > 0 ? [{ key: "ex", label: `Excluded: ${excludedIds.size}`, onClear: () => setExcludedIds(new Set()) }] : []),
           ] as FilterChip[]}
-          onResetAll={() => { setEmirateFilter("all"); setRegionFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
+          onResetAll={() => { setEmirateFilter("all"); setCountryFilter("all"); setStatusFilter("all"); setExcludedIds(new Set()); }}
         >
           <div className="space-y-3">
             <div>
@@ -989,17 +1072,12 @@ const BrokeragesAgenciesView = () => {
               </Select>
             </div>
             <div>
-              <Label className="text-xs font-semibold mb-1 block">Region</Label>
-              <Select value={regionFilter} onValueChange={setRegionFilter}>
-                <SelectTrigger><SelectValue placeholder="Region" /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All regions</SelectItem>
-                  <SelectItem value="UAE">UAE</SelectItem>
-                  <SelectItem value="GCC">GCC</SelectItem>
-                  <SelectItem value="MENA">MENA</SelectItem>
-                  <SelectItem value="International">International</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-xs font-semibold mb-1 block">Country</Label>
+              <CountryCombobox
+                value={countryFilter}
+                onChange={setCountryFilter}
+                rows={data as any[]}
+              />
             </div>
             <div>
               <Label className="text-xs font-semibold mb-1 block">Status</Label>
@@ -1203,7 +1281,7 @@ const BrokeragesAgenciesView = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setStatusFilter("all"); }}
+                onClick={() => { setQ(""); setSourceTab("all"); setEmirateFilter("all"); setCountryFilter("all"); setStatusFilter("all"); }}
               >
                 Reset all filters
               </Button>
