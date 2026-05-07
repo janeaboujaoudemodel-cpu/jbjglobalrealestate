@@ -35,6 +35,7 @@ interface Body {
   overrideEmail?: string;
   fromEmailOverride?: string;
   ccEmailOverride?: string;
+  subjectOverride?: string;
 }
 
 const base64UrlEncode = (str: string) => {
@@ -146,9 +147,10 @@ serve(async (req: Request) => {
       cc_email: ccEmail,
       from_name: fromName,
     });
-    const subject = isTest
-      ? `[TEST] ${template.subject}`
+    const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
+      ? body.subjectOverride.trim()
       : template.subject;
+    const subject = isTest ? `[TEST] ${baseSubject}` : baseSubject;
 
     const raw = buildRawMime({
       from: `${fromName} <${replyTo}>`,
