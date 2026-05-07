@@ -140,8 +140,33 @@ export function ExcelGridView<R extends { id: string }>({
           </tbody>
         </table>
       </div>
-      <div className="px-3 py-2 text-[11px] text-[#1A1A1A]/60 border-t border-[#B89555]/20 bg-[#F7F2EA]">
-        Tip: change a status to recolor the row · double-click a notes cell to edit · matching colors export to Excel.
+      <div className="flex items-center justify-between gap-3 px-3 py-2 text-[11px] text-[#1A1A1A]/70 border-t border-[#B89555]/20 bg-[#F7F2EA]">
+        <span>
+          Showing {rows.length === 0 ? 0 : safePage * PAGE_SIZE + 1}–
+          {Math.min(rows.length, safePage * PAGE_SIZE + PAGE_SIZE)} of {rows.length.toLocaleString()} ·
+          double-click a cell to edit · status colors export to Excel.
+        </span>
+        {totalPages > 1 && (
+          <span className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={safePage === 0}
+              className="px-2 py-1 rounded border border-[#B89555]/40 bg-white disabled:opacity-40"
+            >
+              ← Prev
+            </button>
+            <span>Page {safePage + 1} / {totalPages}</span>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={safePage >= totalPages - 1}
+              className="px-2 py-1 rounded border border-[#B89555]/40 bg-white disabled:opacity-40"
+            >
+              Next →
+            </button>
+          </span>
+        )}
       </div>
     </div>
   );
