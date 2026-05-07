@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEsignTemplates, useCreateEnvelopeFromTemplate, type EsignTemplate } from "@/hooks/useEsignTemplates";
+import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
