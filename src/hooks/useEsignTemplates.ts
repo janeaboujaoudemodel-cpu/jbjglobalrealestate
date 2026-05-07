@@ -58,11 +58,19 @@ export function useCreateEnvelopeFromTemplate() {
       const user = userData.user;
       if (!user) throw new Error("Not signed in");
 
+      // Merge client info into template values so the rendered PDF is pre-filled
+      const mergedValues: Record<string, string> = {
+        ...(client?.name ? { landlord_name: client.name } : {}),
+        ...(client?.email ? { email_address: client.email } : {}),
+        ...(client?.phone ? { mobile_number: client.phone } : {}),
+        ...values,
+      };
+
       // 1. Render HTML
       const html =
         template.key === "jbj-listing-authorisation-selling"
-          ? buildSellingHtml(values as any)
-          : buildPAAHtml(values as any);
+          ? buildSellingHtml(mergedValues as any)
+          : buildPAAHtml(mergedValues as any);
 
       // 2. Render to PDF using html2canvas + jsPDF
       const container = document.createElement("div");
