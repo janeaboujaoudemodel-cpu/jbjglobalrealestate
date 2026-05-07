@@ -129,23 +129,56 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
 
         {!result && (
           <div className="space-y-3">
-            <label
-              className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#B89555]/50 rounded-xl py-10 cursor-pointer bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
-            >
-              <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
-              <div className="text-sm font-semibold text-[#1A1A1A]">
-                {file ? file.name : "Click to choose a file"}
-              </div>
-              <div className="text-xs text-[#1A1A1A]/70">.xlsx, .csv, .html, .xls</div>
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv,.html,.htm,.tsv"
-                className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              />
-            </label>
+            <div className="inline-flex rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] p-0.5 text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setMode("file")}
+                className={`px-3 py-1.5 rounded-md ${mode === "file" ? "bg-white text-[#1A1A1A] shadow" : "text-[#1A1A1A]/60"}`}
+              >
+                Upload file
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("paste")}
+                className={`px-3 py-1.5 rounded-md ${mode === "paste" ? "bg-white text-[#1A1A1A] shadow" : "text-[#1A1A1A]/60"}`}
+              >
+                Paste list (AI parse)
+              </button>
+            </div>
 
-            {file && (
+            {mode === "file" ? (
+              <label
+                className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#B89555]/50 rounded-xl py-10 cursor-pointer bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
+              >
+                <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
+                <div className="text-sm font-semibold text-[#1A1A1A]">
+                  {file ? file.name : "Click to choose a file"}
+                </div>
+                <div className="text-xs text-[#1A1A1A]/70">.xlsx, .csv, .html, .xls</div>
+                <input
+                  type="file"
+                  accept=".xlsx,.xls,.csv,.html,.htm,.tsv"
+                  className="hidden"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
+              </label>
+            ) : (
+              <div className="space-y-1.5">
+                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Paste any list — AI will parse names, phones, emails</Label>
+                <textarea
+                  rows={8}
+                  value={pasteText}
+                  onChange={(e) => setPasteText(e.target.value)}
+                  placeholder={`Paste rows in any format. Examples:\nABC Real Estate, Dubai, +971501234567, info@abc.ae\nXYZ Properties — Abu Dhabi — sales@xyz.ae\nOr a copied table from Excel/Google Sheets…`}
+                  className="w-full rounded-lg border border-[#B89555]/40 bg-white p-3 text-sm text-[#1A1A1A] font-mono"
+                />
+                <div className="text-[11px] text-[#1A1A1A]/60">
+                  {pasteText.split(/\r?\n/).filter((l) => l.trim()).length} non-empty line(s) detected
+                </div>
+              </div>
+            )}
+
+            {(file || (mode === "paste" && pasteText.trim())) && (
               <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
                 <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Where to save these rows</Label>
                 <RadioGroup value={target} onValueChange={(v) => setTarget(v as any)} className="space-y-1.5">
