@@ -74,7 +74,7 @@ export function ExcelGridView<R extends { id: string }>({
             {rows.length === 0 && (
               <tr><td colSpan={columns.length} className="text-center py-8 text-[#1A1A1A]/60">{emptyLabel}</td></tr>
             )}
-            {rows.map((row, idx) => {
+            {pagedRows.map((row, idx) => {
               const banded = idx % 2 === 1;
               return (
                 <tr key={row.id} className={banded ? "bg-[#FAF6EE]" : "bg-white"} style={{ height: 36 }}>
