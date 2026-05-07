@@ -36,7 +36,9 @@ interface Props {
 }
 
 export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultListId }: Props) {
+  const [mode, setMode] = useState<"file" | "paste">("file");
   const [file, setFile] = useState<File | null>(null);
+  const [pasteText, setPasteText] = useState<string>("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
   const [target, setTarget] = useState<"main" | "new" | "existing">(defaultListId ? "existing" : "new");
@@ -47,17 +49,20 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
   const { data: lists = [], createList } = useCRMLists(listsKind);
 
   const defaultListName = useMemo(() => {
+    if (mode === "paste") return `Pasted ${kind} list — ${new Date().toLocaleDateString()}`;
     if (!file) return "";
     return file.name.replace(/\.[^.]+$/, "").slice(0, 80);
-  }, [file]);
+  }, [file, mode, kind]);
 
   const reset = () => {
     setFile(null);
+    setPasteText("");
     setBusy(false);
     setResult(null);
     setTarget("new");
     setExistingListId("");
     setNewListName("");
+    setMode("file");
   };
 
   const handleClose = (v: boolean) => {
@@ -68,29 +73,30 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+    const hasInput = mode === "file" ? !!file : pasteText.trim().length > 0;
+    if (!hasInput) return;
     setBusy(true);
     setResult(null);
     try {
       let list_id: string | null = null;
+      const sourceName = mode === "file" ? file!.name : `pasted-${Date.now()}.txt`;
       if (target === "existing") {
         list_id = existingListId || null;
       } else if (target === "new") {
         const nameToUse = (newListName || defaultListName).trim();
         if (!nameToUse) throw new Error("Please name the new database");
-        // Reuse existing list with same name if present (avoids unique constraint failure)
         const existing = lists.find((l) => l.name.toLowerCase() === nameToUse.toLowerCase());
         if (existing) {
           list_id = existing.id;
         } else {
-          const created = await createList.mutateAsync({ name: nameToUse, source_filename: file.name });
+          const created = await createList.mutateAsync({ name: nameToUse, source_filename: sourceName });
           list_id = created.id;
         }
       }
-      const text = await file.text();
+      const text = mode === "file" ? await file!.text() : pasteText;
       const fnName = kind === "brokerage" ? "crm-bulk-upload-brokerages" : "crm-bulk-upload-developers";
       const { data, error } = await supabase.functions.invoke(fnName, {
-        body: { filename: file.name, content: text, list_id },
+        body: { filename: sourceName, content: text, list_id },
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
@@ -123,23 +129,56 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
 
         {!result && (
           <div className="space-y-3">
-            <label
-              className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#B89555]/50 rounded-xl py-10 cursor-pointer bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
-            >
-              <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
-              <div className="text-sm font-semibold text-[#1A1A1A]">
-                {file ? file.name : "Click to choose a file"}
-              </div>
-              <div className="text-xs text-[#1A1A1A]/70">.xlsx, .csv, .html, .xls</div>
-              <input
-                type="file"
-                accept=".xlsx,.xls,.csv,.html,.htm,.tsv"
-                className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              />
-            </label>
+            <div className="inline-flex rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] p-0.5 text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setMode("file")}
+                className={`px-3 py-1.5 rounded-md ${mode === "file" ? "bg-white text-[#1A1A1A] shadow" : "text-[#1A1A1A]/60"}`}
+              >
+                Upload file
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("paste")}
+                className={`px-3 py-1.5 rounded-md ${mode === "paste" ? "bg-white text-[#1A1A1A] shadow" : "text-[#1A1A1A]/60"}`}
+              >
+                Paste list (AI parse)
+              </button>
+            </div>
 
-            {file && (
+            {mode === "file" ? (
+              <label
+                className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#B89555]/50 rounded-xl py-10 cursor-pointer bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors"
+              >
+                <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
+                <div className="text-sm font-semibold text-[#1A1A1A]">
+                  {file ? file.name : "Click to choose a file"}
+                </div>
+                <div className="text-xs text-[#1A1A1A]/70">.xlsx, .csv, .html, .xls</div>
+                <input
+                  type="file"
+                  accept=".xlsx,.xls,.csv,.html,.htm,.tsv"
+                  className="hidden"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
+              </label>
+            ) : (
+              <div className="space-y-1.5">
+                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Paste any list — AI will parse names, phones, emails</Label>
+                <textarea
+                  rows={8}
+                  value={pasteText}
+                  onChange={(e) => setPasteText(e.target.value)}
+                  placeholder={`Paste rows in any format. Examples:\nABC Real Estate, Dubai, +971501234567, info@abc.ae\nXYZ Properties — Abu Dhabi — sales@xyz.ae\nOr a copied table from Excel/Google Sheets…`}
+                  className="w-full rounded-lg border border-[#B89555]/40 bg-white p-3 text-sm text-[#1A1A1A] font-mono"
+                />
+                <div className="text-[11px] text-[#1A1A1A]/60">
+                  {pasteText.split(/\r?\n/).filter((l) => l.trim()).length} non-empty line(s) detected
+                </div>
+              </div>
+            )}
+
+            {(file || (mode === "paste" && pasteText.trim())) && (
               <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
                 <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Where to save these rows</Label>
                 <RadioGroup value={target} onValueChange={(v) => setTarget(v as any)} className="space-y-1.5">
@@ -205,9 +244,13 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
               <Button variant="outline" onClick={() => handleClose(false)} disabled={busy}>
                 Cancel
               </Button>
-              <Button variant="gold" disabled={!file || busy} onClick={handleUpload}>
+              <Button
+                variant="gold"
+                disabled={busy || (mode === "file" ? !file : !pasteText.trim())}
+                onClick={handleUpload}
+              >
                 {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <UploadCloud className="w-4 h-4 mr-2" />}
-                {busy ? "Processing…" : "Upload & classify"}
+                {busy ? "Processing…" : mode === "paste" ? "Parse with AI & save" : "Upload & classify"}
               </Button>
             </>
           )}

@@ -5302,12 +5302,18 @@ export type Database = {
           ai_summary: string | null
           assigned_to: string | null
           attempt_count: number
+          attended_breakfast: boolean
           attended_briefing: boolean
           attended_briefing_date: string | null
+          attendee_notes: string | null
+          breakfast_attendee_count: number
+          breakfast_date: string | null
+          briefing_attendee_count: number
           briefing_count: number
           briefing_notes: string | null
           company_name: string
           confidence: string | null
+          country: string | null
           created_at: string
           deal_count: number
           deal_count_cached: number
@@ -5394,12 +5400,18 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          attended_breakfast?: boolean
           attended_briefing?: boolean
           attended_briefing_date?: string | null
+          attendee_notes?: string | null
+          breakfast_attendee_count?: number
+          breakfast_date?: string | null
+          briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
           company_name: string
           confidence?: string | null
+          country?: string | null
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
@@ -5486,12 +5498,18 @@ export type Database = {
           ai_summary?: string | null
           assigned_to?: string | null
           attempt_count?: number
+          attended_breakfast?: boolean
           attended_briefing?: boolean
           attended_briefing_date?: string | null
+          attendee_notes?: string | null
+          breakfast_attendee_count?: number
+          breakfast_date?: string | null
+          briefing_attendee_count?: number
           briefing_count?: number
           briefing_notes?: string | null
           company_name?: string
           confidence?: string | null
+          country?: string | null
           created_at?: string
           deal_count?: number
           deal_count_cached?: number
