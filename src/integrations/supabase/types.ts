@@ -5074,6 +5074,13 @@ export type Database = {
             referencedRelation: "crm_brokerages"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_brokerage_actions_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
         ]
       }
       crm_brokerage_agents: {
@@ -5145,6 +5152,13 @@ export type Database = {
             referencedRelation: "crm_brokerages"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
         ]
       }
       crm_brokerage_deals: {
@@ -5214,11 +5228,141 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "crm_brokerage_deals_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
+          {
             foreignKeyName: "crm_brokerage_deals_developer_id_fkey"
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "developers"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_brokerage_event_attendees: {
+        Row: {
+          agent_id: string | null
+          brokerage_id: string
+          created_at: string
+          email: string | null
+          event_id: string
+          id: string
+          matched_via: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          brokerage_id: string
+          created_at?: string
+          email?: string | null
+          event_id: string
+          id?: string
+          matched_via?: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          brokerage_id?: string
+          created_at?: string
+          email?: string | null
+          event_id?: string
+          id?: string
+          matched_via?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_event_attendees_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerage_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_event_attendees_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "v_broker_attendance_counts"
+            referencedColumns: ["agent_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_event_attendees_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_event_attendees_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_event_attendees_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerage_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_brokerage_events: {
+        Row: {
+          brokerage_id: string
+          created_at: string
+          created_by: string | null
+          event_date: string
+          event_type: string
+          id: string
+          notes: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string
+          created_by?: string | null
+          event_date?: string
+          event_type: string
+          id?: string
+          notes?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string
+          created_by?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          notes?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_events_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_events_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
           },
         ]
       }
@@ -5251,6 +5395,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_brokerages"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_notes_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
           },
         ]
       }
@@ -5313,6 +5464,10 @@ export type Database = {
           briefing_notes: string | null
           company_name: string
           confidence: string | null
+          contract_document_url: string | null
+          contract_expires_at: string | null
+          contract_signed_at: string | null
+          contract_status: string
           country: string | null
           created_at: string
           deal_count: number
@@ -5411,6 +5566,10 @@ export type Database = {
           briefing_notes?: string | null
           company_name: string
           confidence?: string | null
+          contract_document_url?: string | null
+          contract_expires_at?: string | null
+          contract_signed_at?: string | null
+          contract_status?: string
           country?: string | null
           created_at?: string
           deal_count?: number
@@ -5509,6 +5668,10 @@ export type Database = {
           briefing_notes?: string | null
           company_name?: string
           confidence?: string | null
+          contract_document_url?: string | null
+          contract_expires_at?: string | null
+          contract_signed_at?: string | null
+          contract_status?: string
           country?: string | null
           created_at?: string
           deal_count?: number
@@ -7604,6 +7767,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_brokerages"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_relationship_reminders_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
           },
           {
             foreignKeyName: "crm_relationship_reminders_client_id_fkey"
@@ -18568,6 +18738,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "crm_brokerages"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_requests_brokerage_fk"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
           },
         ]
       }
@@ -31218,6 +31395,42 @@ export type Database = {
           nationality?: string | null
           phone_e164?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      v_broker_attendance_counts: {
+        Row: {
+          agent_id: string | null
+          breakfast_count: number | null
+          briefing_count: number | null
+          brokerage_id: string | null
+          total_attendance: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
+        ]
+      }
+      v_brokerage_attendance_counts: {
+        Row: {
+          breakfast_count: number | null
+          briefing_count: number | null
+          brokerage_id: string | null
+          last_breakfast_date: string | null
+          last_briefing_date: string | null
+          total_attendance: number | null
         }
         Relationships: []
       }

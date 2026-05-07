@@ -37,7 +37,10 @@ import { exportBrokerages, BrokerageExportRow } from "@/utils/exportBrokerages";
 import { exportDevelopers, DeveloperExportRow } from "@/utils/exportDevelopers";
 import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
-import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, CONTRACT_STATUS_OPTIONS, ATTENDANCE_STATUS_OPTIONS, attendanceBucket, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import { BrokerageAnalyticsStrip } from "@/components/crm/BrokerageAnalyticsStrip";
+import { AgencyAttendancePanel } from "@/components/crm/AgencyAttendancePanel";
+import { useAttendanceCounts } from "@/hooks/useBrokerageEvents";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
 import { sortBrokeragesForDirectory, normalizeForSearch } from "@/utils/brokerageRanking";
 import { FileSpreadsheet, FileText as FileTextIcon } from "lucide-react";
@@ -813,6 +816,7 @@ const BrokeragesAgenciesView = () => {
   const visible = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const [agents, setAgents] = useState<BrokerageAgentDraft[]>([]);
+  const attendanceCounts = useAttendanceCounts();
 
   const openNew = () => {
     setEditing({ status: "prospect", entry_source: "owner", primary_contact: {}, secondary_contact: {}, admin_contact: {} });
@@ -1231,56 +1235,60 @@ const BrokeragesAgenciesView = () => {
       )}
 
       {viewMode === "excel" && sourceTab !== "owner" ? (
-        <ExcelGridView
+        <div className="space-y-3">
+          <BrokerageAnalyticsStrip rows={filtered as any[]} />
+          <ExcelGridView
           rows={filtered as any[]}
           columns={[
             { key: "company_name", label: "Agency", width: 220 },
-            { key: "country", label: "Country", width: 130, editable: true, render: (r: any) => r.country || "United Arab Emirates" },
-            { key: "region", label: "Region", width: 110, editable: true },
-            { key: "emirate", label: "Emirate / City", width: 120, editable: true },
+            { key: "country", label: "Country", width: 150, editable: true, render: (r: any) => r.country || "United Arab Emirates" },
+            { key: "emirate", label: "Emirate / City", width: 130, editable: true },
             { key: "office_location", label: "Office", width: 180, editable: true },
             {
-              key: "registration_status", label: "Agency status (registration)", width: 200, status: true,
+              key: "registration_status", label: "Registration", width: 180, status: true,
               statusOptions: BROKERAGE_REGISTRATION_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
               onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, registration_status: next }),
             },
-            { key: "pending_documents_notes", label: "Pending documents", width: 220, editable: true },
             {
-              key: "outreach_stage", label: "Outreach status", width: 170, status: true,
+              key: "contract_status", label: "Contract", width: 170, status: true,
+              statusOptions: CONTRACT_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, contract_status: next }),
+            },
+            {
+              key: "attendance_health", label: "Attendance", width: 140, status: true,
+              statusOptions: ATTENDANCE_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
+              getStatus: (r: any) => attendanceBucket(attendanceCounts.data?.[r.id]?.total_attendance),
+              onStatusChange: () => { /* derived; no-op */ },
+            },
+            {
+              key: "outreach_stage", label: "Agency status", width: 170, status: true,
               statusOptions: AGENCY_STATUS_OPTIONS.map(({ value, label }) => ({ value, label })),
               onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, outreach_stage: next }),
             },
-            { key: "active_broker_count", label: "Active brokers", width: 110, align: "right", editable: true },
+            { key: "active_broker_count", label: "Active brokers", width: 120, align: "right", editable: true },
             { key: "primary_contact", label: "Admin name", width: 160, render: (r: any) => r.admin_contact?.name || r.primary_contact?.name || "—" },
             { key: "admin_phone", label: "Admin number", width: 150, render: (r: any) => r.admin_contact?.phone || r.primary_contact?.phone || r.phone || "—" },
             { key: "phone", label: "Phone", width: 140, editable: true },
-            { key: "email", label: "Email", width: 200, editable: true },
-            { key: "briefing_count", label: "Briefings", width: 90, align: "right", editable: true },
-            { key: "briefing_attendee_count", label: "Briefing attendees", width: 130, align: "right", editable: true },
-            { key: "attended_briefing_date", label: "Last briefing", width: 130, render: (r: any) => r.attended_briefing_date ? new Date(r.attended_briefing_date).toLocaleDateString() : "—" },
-            {
-              key: "attended_breakfast", label: "Breakfast attended", width: 150, status: true,
-              statusOptions: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
-              onStatusChange: (r: any, next) => upsert.mutate({ id: r.id, attended_breakfast: next === "yes" }),
-            },
-            { key: "breakfast_date", label: "Breakfast date", width: 130, editable: true, render: (r: any) => r.breakfast_date ? new Date(r.breakfast_date).toLocaleDateString() : "—" },
-            { key: "breakfast_attendee_count", label: "Breakfast attendees", width: 140, align: "right", editable: true },
-            { key: "attendee_notes", label: "Attendee notes", width: 220, editable: true },
+            { key: "email", label: "Email", width: 220, editable: true },
+            { key: "briefings_attended", label: "Briefings attended", width: 130, align: "right", readOnly: true, render: (r: any) => attendanceCounts.data?.[r.id]?.briefing_count ?? 0 },
+            { key: "breakfasts_attended", label: "Breakfasts attended", width: 140, align: "right", readOnly: true, render: (r: any) => attendanceCounts.data?.[r.id]?.breakfast_count ?? 0 },
+            { key: "total_attendance", label: "Total attendance", width: 130, align: "right", readOnly: true, render: (r: any) => attendanceCounts.data?.[r.id]?.total_attendance ?? 0 },
+            { key: "last_briefing_at", label: "Last briefing", width: 130, render: (r: any) => attendanceCounts.data?.[r.id]?.last_briefing_date ? new Date(attendanceCounts.data[r.id].last_briefing_date as string).toLocaleDateString() : "—" },
+            { key: "last_breakfast_at", label: "Last breakfast", width: 130, render: (r: any) => attendanceCounts.data?.[r.id]?.last_breakfast_date ? new Date(attendanceCounts.data[r.id].last_breakfast_date as string).toLocaleDateString() : "—" },
             { key: "last_outreach_at", label: "Last contact", width: 130, render: (r: any) => r.last_contact_log_at ? new Date(r.last_contact_log_at).toLocaleDateString() : (r.last_outreach_at ? new Date(r.last_outreach_at).toLocaleDateString() : "—") },
             { key: "deal_count_cached", label: "Deals", width: 80, align: "right" },
             { key: "inquiry_count", label: "Inquiries", width: 90, align: "right" },
-            { key: "notes", label: "Notes", width: 260, editable: true },
+            { key: "notes", label: "Notes", width: 280, editable: true },
           ]}
           onCellEdit={(r: any, key, value) => {
-            const numericKeys = ["active_broker_count", "briefing_count", "briefing_attendee_count", "breakfast_attendee_count"];
-            const dateKeys = ["breakfast_date"];
+            const numericKeys = ["active_broker_count"];
             let v: any = value;
             if (numericKeys.includes(String(key))) v = Number(value) || 0;
-            else if (dateKeys.includes(String(key))) v = value || null;
             upsert.mutate({ id: r.id, [key]: v });
           }}
           emptyLabel="No agencies match filters."
-        />
+          />
+        </div>
       ) : isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         data.length > 0 ? (
           <Card className="border-amber-300 bg-amber-50">
@@ -1512,6 +1520,40 @@ const BrokeragesAgenciesView = () => {
                   brokerageName={editing.company_name}
                   onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
                 />
+              </div>
+              {editing.id && (
+                <div className="border-t pt-3">
+                  <AgencyAttendancePanel brokerageId={editing.id} brokerageName={editing.company_name || "Agency"} agents={agents} />
+                </div>
+              )}
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  <FileSignature className="w-4 h-4 text-[#B89555]" /> Contract
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Contract status">
+                    <Select
+                      value={editing.contract_status || "none"}
+                      onValueChange={(v) => setEditing({ ...editing, contract_status: v })}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {CONTRACT_STATUS_OPTIONS.map((o) => (
+                          <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Signed at">
+                    <Input type="date" value={editing.contract_signed_at ? String(editing.contract_signed_at).slice(0,10) : ""} onChange={(e) => setEditing({ ...editing, contract_signed_at: e.target.value || null })} />
+                  </Field>
+                  <Field label="Expires">
+                    <Input type="date" value={editing.contract_expires_at || ""} onChange={(e) => setEditing({ ...editing, contract_expires_at: e.target.value || null })} />
+                  </Field>
+                  <Field label="Document URL">
+                    <Input value={editing.contract_document_url || ""} onChange={(e) => setEditing({ ...editing, contract_document_url: e.target.value })} placeholder="https://…" />
+                  </Field>
+                </div>
               </div>
               <div className="border-t pt-3">
                 <div className="text-sm font-semibold mb-2 flex items-center gap-2">
@@ -1769,8 +1811,6 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
     }
   }, [upsert]);
 
-  if (isLoading) return <Skeleton className="h-32" />;
-
   // Field aliases — brokerage and developer packs are independent.
   const isBrk = context === "brokerage";
   const F = {
@@ -1803,6 +1843,8 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
   useEffect(() => {
     try { localStorage.setItem(collapseKey, String(collapsed)); } catch { /* noop */ }
   }, [collapsed, collapseKey]);
+
+  if (isLoading) return <Skeleton className="h-32" />;
 
   return (
     <Card className="bg-[#FDFBF7] border border-[#1A1A1A]/10 rounded-2xl">
