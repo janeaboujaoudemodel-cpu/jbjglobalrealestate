@@ -180,6 +180,79 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         }
       }
 
+      // ============ FAST MODE: skip Review panel, parallel bulk import ============
+      if (fastMode) {
+        // Pre-normalize for the edge function (so it doesn't have to)
+        const normalized = allRows.map((r) => ({
+          ...r,
+          // edge function will recompute, but include for clarity
+        }));
+
+        const chunks: any[][] = [];
+        for (let i = 0; i < normalized.length; i += CHUNK_SIZE) {
+          chunks.push(normalized.slice(i, i + CHUNK_SIZE));
+        }
+
+        let agg = { done: 0, total: chunks.length, inserted: 0, merged: 0, skipped: 0 };
+        setProgress({ ...agg });
+
+        let cursor = 0;
+        const runOne = async () => {
+          while (cursor < chunks.length) {
+            const myIdx = cursor++;
+            const chunk = chunks[myIdx];
+            let attempts = 0;
+            while (attempts < 2) {
+              try {
+                const { data, error } = await supabase.functions.invoke("crm-broker-bulk-import", {
+                  body: { rows: chunk, batch_id: batch.id },
+                });
+                if (error) throw error;
+                const d = data as any;
+                agg = {
+                  done: agg.done + 1,
+                  total: agg.total,
+                  inserted: agg.inserted + (d?.inserted ?? 0),
+                  merged: agg.merged + (d?.merged ?? 0),
+                  skipped: agg.skipped + (d?.skipped ?? 0),
+                };
+                setProgress({ ...agg });
+                break;
+              } catch (e) {
+                attempts++;
+                if (attempts >= 2) {
+                  agg = { ...agg, done: agg.done + 1, skipped: agg.skipped + chunk.length };
+                  setProgress({ ...agg });
+                }
+              }
+            }
+          }
+        };
+        const workers = Array(Math.min(CONCURRENCY, chunks.length)).fill(0).map(runOne);
+        await Promise.all(workers);
+
+        // Mark batch complete
+        await (supabase as any).from("crm_import_batches").update({
+          status: "complete",
+          inserted: agg.inserted, updated: agg.merged, skipped: agg.skipped,
+        }).eq("id", batch.id);
+
+        setSummary({
+          batch_id: batch.id,
+          total: totalRows,
+          new_brokers: agg.inserted,
+          merged: agg.merged,
+          skipped: agg.skipped,
+          missing_phone: 0, missing_email: 0,
+          labels_applied: [specialty, ...(specialty === "other" ? [customLabel] : [])],
+          source_database: sourceName || files.map((f) => f.file.name).join(", "),
+        });
+        setStep("done");
+        onDone?.();
+        return;
+      }
+
+      // ============ SLOW MODE (≤2k rows): per-row Review panel ============
       // Match in chunks
       const matchByIndex = new Map<number, { match_agent_id: string | null; confidence: number; reasons: string[] }>();
       for (let i = 0; i < allRows.length; i += 500) {
@@ -217,13 +290,21 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         await (supabase as any).from("crm_broker_import_staging").insert(chunk);
       }
 
-      // Fetch back the staging rows + matched agent details for review
-      const { data: rows } = await (supabase as any)
-        .from("crm_broker_import_staging")
-        .select("*")
-        .eq("batch_id", batch.id);
+      // Paginated fetch — never cap at 1000
+      const PAGE = 1000;
+      const allStaging: any[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data: p } = await (supabase as any)
+          .from("crm_broker_import_staging")
+          .select("*")
+          .eq("batch_id", batch.id)
+          .range(from, from + PAGE - 1);
+        const arr = (p ?? []) as any[];
+        allStaging.push(...arr);
+        if (arr.length < PAGE) break;
+      }
 
-      const matchIds = Array.from(new Set((rows || []).map((r: any) => r.match_agent_id).filter(Boolean)));
+      const matchIds = Array.from(new Set(allStaging.map((r: any) => r.match_agent_id).filter(Boolean)));
       let matchedAgents: any[] = [];
       if (matchIds.length) {
         const { data: a } = await (supabase as any)
@@ -233,7 +314,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         matchedAgents = a ?? [];
       }
       const byId = new Map(matchedAgents.map((a) => [a.id, a]));
-      setStagingRows((rows || []).map((r: any) => ({ ...r, matched_agent: r.match_agent_id ? byId.get(r.match_agent_id) : null })));
+      setStagingRows(allStaging.map((r: any) => ({ ...r, matched_agent: r.match_agent_id ? byId.get(r.match_agent_id) : null })));
       setStep("review");
     } catch (e: any) {
       toast.error(e?.message || "Matching failed");
