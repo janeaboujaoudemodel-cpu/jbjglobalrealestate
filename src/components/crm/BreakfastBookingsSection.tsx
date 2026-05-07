@@ -27,27 +27,43 @@ export const BreakfastBookingsSection = () => {
 
   const load = async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("meeting_requests")
-      .select("id, preferred_date, preferred_time, brokerage_name, brokerage_id, requester_name, requester_email, requester_phone, attendee_count, briefing_topics, partnership_focus, status, created_at")
-      .eq("booking_kind", "brokerage_breakfast")
-      .in("status", ["pending", "completed"])
-      .order("preferred_date", { ascending: true });
-    setRows((data as any) || []);
-    setLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from("meeting_requests")
+        .select("id, preferred_date, preferred_time, brokerage_name, brokerage_id, requester_name, requester_email, requester_phone, attendee_count, briefing_topics, partnership_focus, status, created_at")
+        .eq("booking_kind", "brokerage_breakfast")
+        .in("status", ["pending", "completed"])
+        .order("preferred_date", { ascending: true });
+      if (error) {
+        // RLS forbids this account — render empty state instead of spamming 403s.
+        setRows([]);
+      } else {
+        setRows((data as any) || []);
+      }
+    } catch {
+      setRows([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     load();
-    const ch = supabase
-      .channel("breakfast-bookings-realtime")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "meeting_requests", filter: "booking_kind=eq.brokerage_breakfast" },
-        () => load(),
-      )
-      .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    let cleanup: (() => void) | undefined;
+    try {
+      const ch = supabase
+        .channel("breakfast-bookings-realtime")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "meeting_requests", filter: "booking_kind=eq.brokerage_breakfast" },
+          () => load(),
+        )
+        .subscribe();
+      cleanup = () => { supabase.removeChannel(ch); };
+    } catch {
+      // realtime not available — non-fatal
+    }
+    return () => cleanup?.();
   }, []);
 
   const today = new Date().toISOString().slice(0, 10);
