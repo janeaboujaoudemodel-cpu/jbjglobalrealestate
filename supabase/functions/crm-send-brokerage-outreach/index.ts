@@ -55,6 +55,7 @@ interface Body {
   overrideEmail?: string;
   fromEmailOverride?: string;
   ccEmailOverride?: string;
+  subjectOverride?: string;
   personalization?: Personalization;
 }
 
