@@ -201,7 +201,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         target: "brokers",
         label: m.displayName.trim() || stripExt(pf.file.name),
         strategy: "merge",
-        default_expertise_type: m.specialty === "leasing_sales" ? "both" : m.specialty,
+        default_expertise_type: m.specialty,
         default_expertise_areas: [],
         row_count: pf.rows.length,
         status: "running",
@@ -213,7 +213,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         notes: m.notes || null,
       })
       .select().single();
-    if (bErr) throw bErr;
+    if (bErr) throw new Error(`"${m.displayName || pf.file.name}": ${bErr.message}`);
     return batch;
   };
 
