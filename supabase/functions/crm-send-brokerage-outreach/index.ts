@@ -307,17 +307,13 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // Brokerage outreach uses its OWN settings ONLY — never falls back to developer
-    // (JBJ) settings, so brokerage emails are never accidentally sent as JBJ.
-    const brkFromName: string =
-      (settings?.brokerage_from_name && String(settings.brokerage_from_name).trim()) ||
-      representedDeveloperName;
-    const fromName = brkFromName;
-    const replyTo = (
-      body.fromEmailOverride ||
-      settings?.brokerage_reply_to_email ||
-      "jane@citideveloper.com"
-    ).toString().trim();
+    // HARD LOCK: brokerage outreach is always sent as Jane from jane@citideveloper.com.
+    // No setting, override, or env value can change this — preview must equal sent.
+    const FORCED_FROM_EMAIL = "jane@citideveloper.com";
+    const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
+    const fromName = FORCED_FROM_DISPLAY;
+    const replyTo = FORCED_FROM_EMAIL;
+    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com"];
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
@@ -337,12 +333,11 @@ serve(async (req: Request) => {
 
     // owner first name — defaults to "Jane" because the template is authored as Jane.
     // Hard-fallback to "Jane" if any source resolves to "JBJ" (legacy brand confusion).
-    let ownerFirstName =
-      firstName(settings?.brokerage_from_name as string | undefined) ||
-      firstName(settings?.from_name) ||
-      firstName((user.user_metadata as any)?.full_name as string | undefined) ||
-      "Jane";
-    if (/^jbj/i.test(ownerFirstName)) ownerFirstName = "Jane";
+    // Owner identity is HARDCODED — never derived from a company-name setting
+    // (which previously turned "Citi Developer" into a first name "Citi").
+    const ownerFirstName = "Jane";
+    const ownerFullName = "Jane Bou Jaoude";
+    const ownerDepartment = "Sales & Channel Partner Activation";
 
     // ---------- Personalization resolution ----------
     const personalization: Personalization = body.personalization || {};
@@ -440,6 +435,9 @@ serve(async (req: Request) => {
       preferred_event_time_label: preferredSlotLabel || "",
       preferred_event_time_iso: preferredSlotIso || "",
       owner_first_name: ownerFirstName,
+      owner_full_name: ownerFullName,
+      owner_last_name: "Bou Jaoude",
+      owner_department: ownerDepartment,
       reply_to: replyTo,
       reply_to_display: replyTo,
       reply_to_lower: replyTo,
@@ -459,79 +457,37 @@ serve(async (req: Request) => {
       project_offer_html: project.offerHtml || "",
     };
 
-    // If the stored template doesn't reference {{project_name}}, build a fallback
-    // body so test sends and legacy templates still showcase the project picker.
-    const refsProject = /\{\{\s*project_name\s*\}\}/.test(template.html + " " + template.subject);
-    let html = renderTemplate(template.html, varsMap);
-    let subjectRendered = renderTemplate(template.subject, varsMap);
-    if (!refsProject) {
-      subjectRendered = `${project.name} — Private Briefing & Breakfast for ${varsMap.brokerage_name}`;
-      const offerBlock = project.offerHtml
-        ? `<div style="margin:20px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:8px;font-size:13px;text-align:left">${project.offerHtml}</div>`
-        : "";
-      // Salutation: NEVER fall back to "your brokerage" — always use the resolved
-      // brokerage name (Provident, Farm, etc.) so bulk sends stay personalized.
-      const hasContactName = !!(pcRaw.name && String(pcRaw.name).trim());
-      const salutation = hasContactName
-        ? `Dear <strong>${varsMap.contact_first_name}</strong>,`
-        : `Dear <strong>${varsMap.brokerage_name}</strong> team,`;
-      // Champagne‑gold CTA (cream tile + ink text + 1px gold hairline — no yellow fill)
-      const goldCta = (href: string, label: string) =>
-        `<a href="${href}" target="_blank" rel="noopener" style="display:inline-block;padding:14px 28px;background:#EFE6D6;color:#1A1A1A;text-decoration:none;border-radius:12px;font-size:13px;font-weight:600;letter-spacing:0.3px;border:1px solid #B89555">${label}</a>`;
-      html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F7F2EA;font-family:Inter,-apple-system,Segoe UI,Arial,sans-serif;color:#1A1A1A;line-height:1.6">
-<div style="background:#F7F2EA;padding:48px 16px">
-  <div style="max-width:640px;margin:0 auto;background:#FDFBF7;border:1px solid #B89555;border-radius:14px;padding:44px 44px;box-shadow:0 4px 24px rgba(0,0,0,0.06)">
-    <div style="text-align:center;padding-bottom:18px;border-bottom:1px solid #B89555;margin-bottom:28px">
-      <div style="font-size:13px;letter-spacing:4px;text-transform:uppercase;color:#1A1A1A;font-weight:700">Greetings from ${representedDeveloperName}!</div>
-      <div style="margin-top:6px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#1A1A1A99">Sales &amp; Training · Channel Partner Activation</div>
-    </div>
-    <p style="margin:0 0 16px;font-size:15px">${salutation}</p>
-    <p style="margin:0 0 16px;font-size:14px">This is <strong>${ownerFirstName}</strong> from <strong>${representedDeveloperName}</strong>, Sales &amp; Training department. We'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private briefing with ${representedDeveloperName}.</p>
-    <p style="margin:0 0 16px;font-size:14px">${resolvedGroupLine}</p>
-
-    <p style="margin:0 0 16px;font-size:14px">Could you also confirm whether <strong>${varsMap.brokerage_name}</strong> is <strong>already registered with ${representedDeveloperName}</strong>? If not, simply <strong>reply to this email</strong> and our <strong>Channel Partner Department</strong> will follow up with the registration documents to onboard <strong>${varsMap.brokerage_name}</strong> directly.</p>
-
-    <p style="margin:0 0 24px;font-size:14px">If <strong>${varsMap.brokerage_name}</strong> already runs an internal <strong>WhatsApp group</strong> for project updates, please add me so I can keep your team posted on launches, inventory and commissions. If not, I'll create a dedicated WhatsApp group with your team.</p>
-
-    <div style="margin:24px 0;padding:14px 16px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px;text-align:center;color:#1A1A1A">
-      Please <strong>reply to this email</strong> at <strong>${replyTo}</strong> and CC <strong>infoo.jane@gmail.com</strong> so both inboxes stay in sync.
-    </div>
-
-    <div style="margin:28px 0;padding:28px 24px;background:#F7F2EA;border:1px solid #B89555;border-radius:12px;text-align:center">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:10px">Featured Project</div>
-      <div style="font-size:26px;font-weight:600;color:#1A1A1A;margin-bottom:10px;letter-spacing:1px">${project.name}</div>
-      <div style="font-size:14px;color:#1A1A1A;margin:0 auto 22px;max-width:460px">${project.tagline}</div>
-      ${goldCta(project.url, `Open ${project.name} e‑catalogue &rarr;`)}
-    </div>
-    ${offerBlock}
-    <div style="margin:28px 0;padding:28px;background:#FDFBF7;border:1px solid #B89555;border-radius:14px">
-      <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Private Invitation</div>
-      <div style="font-size:18px;font-weight:600;margin-bottom:10px">Partnership Briefing &amp; Breakfast</div>
-      <p style="margin:0 0 14px;font-size:14px">I'd like to invite <strong>${varsMap.brokerage_name}</strong> to a private breakfast at our Dubai office — exclusive for your company. Agenda covers ${project.name}, commissions, sales training and channel partner activation.</p>
-      <div style="margin:14px 0;padding:16px 18px;background:#F7F2EA;border:1px solid #B89555;border-radius:10px;font-size:13px">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#1A1A1A;font-weight:700;margin-bottom:8px">Please Confirm</div>
-        <ul style="margin:0;padding-left:18px">
-          <li style="margin-bottom:6px">The <strong>names of attendees</strong> from ${varsMap.brokerage_name} (optional — you may also just give a head‑count).</li>
-          <li style="margin-bottom:6px">The <strong>number of brokers</strong> attending and the <strong>total members</strong> joining the breakfast.</li>
-          <li style="margin-bottom:6px">A <strong>date and time that suits ${varsMap.brokerage_name}</strong> — any slot from <strong>Monday to Friday</strong>, between <strong>11:00 and 17:00</strong> Dubai time.</li>
-          <li>Use the button below to <strong>book your slot directly on our calendar</strong> — you'll see live availability and receive an instant confirmation.</li>
-        </ul>
-      </div>
-      ${bookingUrl ? `<div style="text-align:center;margin-top:20px">${goldCta(bookingUrl, `Reserve a seat for ${varsMap.brokerage_name} &rarr;`)}</div>` : ""}
-    </div>
-    <div style="margin-top:32px;padding-top:20px;border-top:1px solid #B8955540;font-size:13px">
-      Warm regards,<br/><strong>${ownerFirstName} Bou Jaoude</strong> — Sales &amp; Training, Channel Partner Activation<br/>
-      <span style="color:#1A1A1A">${representedDeveloperName} · Sales &amp; Experience Center, Dubai</span><br/>
-      <a href="tel:+971547167107" style="color:#1A1A1A;text-decoration:none">+971 54 716 7107</a> ·
-      <a href="mailto:${replyTo}" style="color:#1A1A1A;text-decoration:none;border-bottom:1px solid #B89555">${replyTo}</a><br/>
-      <a href="https://maps.app.goo.gl/oK1Ts4Y3bsq8m3u18" target="_blank" rel="noopener" style="color:#1A1A1A99;text-decoration:none;font-size:12px">View office location on map &rarr;</a>
-    </div>
-  </div>
-  <div style="max-width:640px;margin:16px auto 0;text-align:center;font-size:11px;color:#1A1A1A66">${representedDeveloperName} · Sales &amp; Training · Channel Partner Activation</div>
-</div>
-</body></html>`;
-    }
+    // STRICT: always send the locked DB template — preview MUST equal sent.
+    // No fallback rewriter. No AI paraphrase. No subject regeneration.
+    const html = renderTemplate(template.html, varsMap);
+    const subjectRendered = renderTemplate(template.subject, varsMap);
     const subject = subjectRendered;
+
+    // Reject any unresolved {{var}} placeholders — never guess missing values.
+    const unresolved = new Set<string>();
+    for (const src of [subject, html]) {
+      const m = src.match(/\{\{\s*([a-zA-Z_][\w]*)\s*\}\}/g);
+      if (m) m.forEach((t) => unresolved.add(t.replace(/[{}\s]/g, "")));
+    }
+    if (unresolved.size > 0) {
+      return new Response(JSON.stringify({
+        error: "LOCKED_TEMPLATE_MISSING_VAR",
+        message: `Send blocked — locked template has unresolved variables: ${[...unresolved].join(", ")}. Add the data on the brokerage row or unlock + edit the template.`,
+        missing: [...unresolved],
+      }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // Forbidden-address guard — janeaboujaoudemodel@gmail.com must never appear in this workflow.
+    {
+      const haystack = `${subject}\n${html}\n${replyTo}\n${cc.join(",")}\n${recipient}`.toLowerCase();
+      const hit = WORKFLOW_FORBIDDEN_ADDRESSES.find((a) => haystack.includes(a.toLowerCase()));
+      if (hit) {
+        return new Response(JSON.stringify({
+          error: "FORBIDDEN_ADDRESS_IN_WORKFLOW",
+          message: `Send blocked — address ${hit} is forbidden in brokerage outreach. Use jane@citideveloper.com.`,
+        }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
 
     // === SINGLE-AGENCY GUARD ===
     // Hard rule: one outbound email = one brokerage. Reject if rendered subject/body
