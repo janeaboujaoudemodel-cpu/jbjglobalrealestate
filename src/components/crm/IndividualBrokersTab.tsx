@@ -37,6 +37,12 @@ type Row = {
   expertise_type?: string | null;
   expertise_areas?: string[] | null;
   import_label?: string | null;
+  specialty_labels?: string[] | null;
+  source_history?: any[] | null;
+  source_batch_ids?: string[] | null;
+  country?: string | null;
+  license_number?: string | null;
+  rera_number?: string | null;
   brokerage?: { company_name: string | null } | null;
 };
 
