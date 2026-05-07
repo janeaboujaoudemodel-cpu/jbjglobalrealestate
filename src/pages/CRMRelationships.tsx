@@ -1521,6 +1521,40 @@ const BrokeragesAgenciesView = () => {
                   onExtracted={(rows) => setAgents((cur) => [...cur, ...rows])}
                 />
               </div>
+              {editing.id && (
+                <div className="border-t pt-3">
+                  <AgencyAttendancePanel brokerageId={editing.id} brokerageName={editing.company_name || "Agency"} agents={agents} />
+                </div>
+              )}
+              <div className="border-t pt-3">
+                <div className="text-sm font-semibold mb-2 flex items-center gap-2">
+                  <FileSignature className="w-4 h-4 text-[#B89555]" /> Contract
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="Contract status">
+                    <Select
+                      value={editing.contract_status || "none"}
+                      onValueChange={(v) => setEditing({ ...editing, contract_status: v })}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {CONTRACT_STATUS_OPTIONS.map((o) => (
+                          <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Signed at">
+                    <Input type="date" value={editing.contract_signed_at ? String(editing.contract_signed_at).slice(0,10) : ""} onChange={(e) => setEditing({ ...editing, contract_signed_at: e.target.value || null })} />
+                  </Field>
+                  <Field label="Expires">
+                    <Input type="date" value={editing.contract_expires_at || ""} onChange={(e) => setEditing({ ...editing, contract_expires_at: e.target.value || null })} />
+                  </Field>
+                  <Field label="Document URL">
+                    <Input value={editing.contract_document_url || ""} onChange={(e) => setEditing({ ...editing, contract_document_url: e.target.value })} placeholder="https://…" />
+                  </Field>
+                </div>
+              </div>
               <div className="border-t pt-3">
                 <div className="text-sm font-semibold mb-2 flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#B89555]" /> Breakfast briefing attendance
