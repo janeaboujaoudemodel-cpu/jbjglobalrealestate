@@ -1,62 +1,72 @@
-## What is happening now
+## Root cause
 
-- **Verifying `jane@citideveloper.com`**: the connected Gmail account must have `jane@citideveloper.com` added and accepted as a Gmail **Send mail as** alias. The app already has a sender-status banner and send-blocker; if the alias is not accepted, outreach sending is blocked so Gmail cannot silently rewrite the sender.
-- **Breakfast booking issue**: the send function only uses a Google Calendar booking link if `crm_owner_settings.google_calendar_booking_url` is saved. If that field is empty, it falls back to generating `https://www.jbj.ae/breakfast-booking?token=...`, which is the restricted website redirect you do not want.
-- **Dedicated Google Calendar exists but is not linked to this project yet**: I found a workspace connection named **Jane's Google Calendar**, but it is **not linked to the project**, so backend functions cannot use it yet.
+The error visible in the preview toast is the smoking gun:
 
-## Verification steps for `jane@citideveloper.com`
+> "Could not find the 'metadata' column of 'esign_recipients' in the schema cache"
 
-1. Open Gmail for the currently connected mailbox.
-2. Go to **Settings → See all settings → Accounts and Import → Send mail as**.
-3. Add `jane@citideveloper.com`.
-4. Use the mailbox provider SMTP for `citideveloper.com` and complete the verification link/code sent to `jane@citideveloper.com`.
-5. Return to CRM Relationships and click **Recheck** in the sender banner.
+`useCreateEnvelopeFromTemplate` (in `src/hooks/useEsignTemplates.ts`) inserts into `esign_recipients` with a `metadata: { role: "owner" | "client" }` field, but **that column was never added to the table**. Migration `20260209063019` created `esign_recipients` with no `metadata` column, and no later migration adds one. The recipient INSERT therefore fails, the template-from-envelope mutation throws, no envelope row is committed in a usable state, no fields are written, and the navigation to `/e-signature/:id` never happens — which is exactly what the user reports: "preview not opening, fields not filled, envelope not created."
 
-Important: Gmail must show this alias as accepted/verified. If it is missing or pending, Gmail will keep rewriting the sender.
+A second, related issue: even if creation succeeded, the dialog only collects client `name / email / phone`. None of those values are mapped into the template (`landlord_name`, `mobile_number`, `email_address`, etc.), so the generated PDF would still render with `PAA_DEFAULT_VALUES` placeholders — the user would still see "fields not filled."
 
-## Implementation plan
+## Fix plan
 
-### 1. Link the dedicated Google Calendar connection
-- Link the existing **Jane's Google Calendar** connector to this project.
-- Confirm the function environment has `GOOGLE_CALENDAR_API_KEY` and `LOVABLE_API_KEY` available.
-- Use the Google Calendar connector server-side only; no visitor sees Google connector credentials.
+### 1. DB migration — add `metadata` to `esign_recipients`
 
-### 2. Stop all breakfast invitation links from pointing to jbj.ae
-- Update `crm-send-brokerage-outreach` so `brokerage_breakfast_invite` no longer falls back to `crm-create-breakfast-invite-token` / `/breakfast-booking` links.
-- If no approved external Google booking link is configured, block the send with a clear error instead of inserting a restricted website URL.
-- Add a guard that rejects any breakfast `booking_url` containing `jbj.ae`, `www.jbj.ae`, or `/breakfast-booking`.
+New migration:
 
-### 3. Replace website booking with Google Calendar-backed booking
-- Create a backend function for breakfast availability/bookings using the Google Calendar connector.
-- It will:
-  - read free/busy or managed slots from the dedicated breakfast calendar,
-  - create a Google Calendar event when a brokerage confirms,
-  - invite the brokerage attendee email,
-  - store the booking record in the backend `meeting_requests` table,
-  - log the booking in CRM timeline/notifications.
+```sql
+ALTER TABLE public.esign_recipients
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb;
+CREATE INDEX IF NOT EXISTS idx_esign_recipients_metadata_role
+  ON public.esign_recipients ((metadata->>'role'));
+```
 
-### 4. Keep backend sync even though users do not visit jbj.ae
-- Add a backend endpoint/webhook-style confirmation path for Google booking events.
-- Store Google event IDs on `meeting_requests.calendar_event_id` so records can be reconciled.
-- Ensure `BreakfastBookingsSection` continues showing bookings from the backend.
+This unblocks the recipient insert and the auto-generated `types.ts` will pick up the column.
 
-### 5. Update CRM settings UI
-- Replace the vague “Google Calendar booking link” field with a safer **Breakfast Calendar** setup area.
-- Show whether the Google Calendar connector is linked.
-- Show whether booking links are safe or blocked.
-- Remove wording that implies brokerages should visit the website.
+### 2. Map client info into template values
 
-### 6. Proof after implementation
-- Verify the generated breakfast invite HTML contains **no `jbj.ae/breakfast-booking` link**.
-- Verify the send function blocks if a restricted jbj.ae booking URL is about to be used.
-- Verify a test booking creates/saves a backend booking row and returns a Google Calendar event ID.
-- Show the exact function responses/log evidence from the project tools.
+In `useCreateEnvelopeFromTemplate`, build a `mergedValues` before rendering HTML:
 
-## Note on “without redirecting to my website”
+```ts
+const mergedValues = {
+  landlord_name:  client?.name  ?? "",
+  email_address:  client?.email ?? "",
+  mobile_number:  client?.phone ?? "",
+  ...values,
+};
+```
 
-A pure Google Appointment Schedule link can let guests book without visiting jbj.ae, but Google does not automatically write every booking into your backend unless we either:
+Pass `mergedValues` to both `buildSellingHtml` / `buildPAAHtml` and store in `template_field_values`. Result: at minimum the client identity fields render in the PDF instead of placeholders.
 
-- create bookings through our backend and then create Google Calendar events, or
-- receive/sync Google Calendar events back into the backend.
+### 3. Expand the "Use template" dialog (`DocumentsFormsHub.tsx`)
 
-So the safe implementation is: **broker-facing booking happens through Google Calendar, backend sync happens privately server-side.**
+Add an optional collapsible "Property details" section in the dialog that exposes the most important `PAA_FIELD_GROUPS` keys (property type, building, unit, community, BUA, bedrooms, bathrooms, sales/rent amount, listing period, exclusivity, dates). Bind each input to a local `values` state and forward to `createFromTpl.mutateAsync({ template, values, client })`. Defaults stay as today, so the dialog still works with just name+email if the user wants to skip the details.
+
+### 4. Defensive guards
+
+- In the mutation, after `supabase.storage.upload`, catch RLS upload errors with a clear toast.
+- Wrap the recipient insert and field insert in a `try/catch` that, on failure, deletes the just-created envelope to avoid orphan drafts.
+- Make sure navigation only fires after the mutation resolves successfully (already the case in the dialog).
+
+### 5. Proof / verification
+
+After the migration and code edits:
+
+1. `supabase--read_query`: confirm `metadata` column exists on `esign_recipients`.
+2. Open `/owner/documents/forms`, pick the Selling template, fill name/email/phone (and optionally a couple of property fields), click **Create Envelope**.
+3. Confirm:
+   - Toast shows "Draft created" (no schema-cache error).
+   - Browser navigates to `/e-signature/<envelope_id>`.
+   - `esign_envelopes` row exists with `template_field_values` containing the entered values.
+   - `esign_recipients` has 2 rows (client, owner) with correct `metadata.role`.
+   - `esign_fields` rows exist for each schema entry.
+   - Generated PDF preview displays the client name / email / phone instead of `{{landlord_name}}` etc.
+4. Open a sent draft and verify the **Preview** opens (currently failing because no envelope existed).
+
+## Files to change
+
+- New: `supabase/migrations/<ts>_add_metadata_to_esign_recipients.sql`
+- Edit: `src/hooks/useEsignTemplates.ts` (merge client→template values, harden error path)
+- Edit: `src/pages/owner/DocumentsFormsHub.tsx` (expand template dialog with optional property fields, pass `values`)
+
+No edge-function changes are needed for this bug.

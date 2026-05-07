@@ -12054,6 +12054,7 @@ export type Database = {
           envelope_id: string
           id: string
           initials_data: string | null
+          metadata: Json
           name: string
           phone: string | null
           sent_at: string | null
@@ -12076,6 +12077,7 @@ export type Database = {
           envelope_id: string
           id?: string
           initials_data?: string | null
+          metadata?: Json
           name: string
           phone?: string | null
           sent_at?: string | null
@@ -12098,6 +12100,7 @@ export type Database = {
           envelope_id?: string
           id?: string
           initials_data?: string | null
+          metadata?: Json
           name?: string
           phone?: string | null
           sent_at?: string | null

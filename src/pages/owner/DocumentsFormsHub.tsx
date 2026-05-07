@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEsignTemplates, useCreateEnvelopeFromTemplate, type EsignTemplate } from "@/hooks/useEsignTemplates";
+import { PAA_FIELD_GROUPS } from "@/templates/jbjPropertyAdvertisingAgreement";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -42,6 +43,8 @@ export default function DocumentsFormsHub() {
 
   const [picker, setPicker] = useState<EsignTemplate | null>(null);
   const [client, setClient] = useState({ name: "", email: "", phone: "" });
+  const [extraValues, setExtraValues] = useState<Record<string, string>>({});
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleUseTemplate = async () => {
     if (!picker) return;
@@ -50,7 +53,7 @@ export default function DocumentsFormsHub() {
       return;
     }
     try {
-      const env = await createFromTpl.mutateAsync({ template: picker, client });
+      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
       toast.success("Draft created — review fields and send");
       navigate(`/e-signature/${env.id}`);
     } catch (e: any) {
@@ -232,8 +235,8 @@ export default function DocumentsFormsHub() {
       </div>
 
       {/* Use template dialog */}
-      <Dialog open={!!picker} onOpenChange={(o) => !o && setPicker(null)}>
-        <DialogContent className="bg-[#FDFBF7]">
+      <Dialog open={!!picker} onOpenChange={(o) => { if (!o) { setPicker(null); setExtraValues({}); setShowDetails(false); } }}>
+        <DialogContent className="bg-[#FDFBF7] max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#1A1A1A]">{picker?.name}</DialogTitle>
           </DialogHeader>
@@ -250,12 +253,77 @@ export default function DocumentsFormsHub() {
               <Label>Client Phone (optional)</Label>
               <Input value={client.phone} onChange={(e) => setClient({ ...client, phone: e.target.value })} />
             </div>
+
+            <button
+              type="button"
+              onClick={() => setShowDetails(s => !s)}
+              className="text-xs uppercase tracking-[0.16em] text-[#1A1A1A]/70 underline underline-offset-4"
+            >
+              {showDetails ? "Hide property & contract details" : "Add property & contract details (optional)"}
+            </button>
+
+            {showDetails && (
+              <div className="border-t border-[#B89555]/30 pt-3 space-y-4">
+                {PAA_FIELD_GROUPS.filter(g => g.title !== "Signatures").map(group => (
+                  <div key={group.title}>
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 mb-2">{group.title}</div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {group.fields.map(f => {
+                        // skip the 3 fields that are already covered by the client inputs
+                        if (f.key === "landlord_name" || f.key === "email_address" || f.key === "mobile_number") return null;
+                        const val = extraValues[f.key] ?? "";
+                        const onChange = (v: string) => setExtraValues(prev => ({ ...prev, [f.key]: v }));
+                        if (f.type === "select" && f.options) {
+                          return (
+                            <div key={f.key}>
+                              <Label className="text-xs">{f.label}</Label>
+                              <select
+                                value={val}
+                                onChange={(e) => onChange(e.target.value)}
+                                className="w-full h-9 px-2 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]"
+                              >
+                                <option value="">—</option>
+                                {f.options.map(o => <option key={o} value={o}>{o}</option>)}
+                              </select>
+                            </div>
+                          );
+                        }
+                        if (f.type === "textarea") {
+                          return (
+                            <div key={f.key} className="col-span-2">
+                              <Label className="text-xs">{f.label}</Label>
+                              <textarea
+                                value={val}
+                                onChange={(e) => onChange(e.target.value)}
+                                rows={2}
+                                className="w-full px-2 py-1 rounded border border-[#B89555]/40 bg-white text-sm text-[#1A1A1A]"
+                              />
+                            </div>
+                          );
+                        }
+                        return (
+                          <div key={f.key}>
+                            <Label className="text-xs">{f.label}</Label>
+                            <Input
+                              type={f.type === "date" ? "date" : f.type === "number" ? "number" : "text"}
+                              value={val}
+                              onChange={(e) => onChange(e.target.value)}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <p className="text-xs text-[#1A1A1A]/70">
               We'll generate the PDF, pre-place client + JBJ signature, stamp and date fields, then open the envelope so you can adjust before sending.
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPicker(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => { setPicker(null); setExtraValues({}); setShowDetails(false); }}>Cancel</Button>
             <Button variant="gold" onClick={handleUseTemplate} disabled={createFromTpl.isPending}>
               {createFromTpl.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Create Envelope
