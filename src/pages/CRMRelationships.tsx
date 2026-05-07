@@ -2950,8 +2950,9 @@ const CRMRelationships = () => {
             </div>
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 space-y-3">
             <GmailSenderStatusBanner />
+            <BreakfastCalendarStatusBanner />
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
