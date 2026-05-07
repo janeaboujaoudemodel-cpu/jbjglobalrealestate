@@ -5029,6 +5029,51 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_broker_import_staging: {
+        Row: {
+          batch_id: string
+          created_at: string
+          decision: string
+          edited: Json | null
+          id: string
+          match_agent_id: string | null
+          match_confidence: number
+          match_reasons: string[]
+          normalized: Json
+          owner_id: string
+          raw: Json
+          updated_at: string
+        }
+        Insert: {
+          batch_id: string
+          created_at?: string
+          decision?: string
+          edited?: Json | null
+          id?: string
+          match_agent_id?: string | null
+          match_confidence?: number
+          match_reasons?: string[]
+          normalized?: Json
+          owner_id: string
+          raw?: Json
+          updated_at?: string
+        }
+        Update: {
+          batch_id?: string
+          created_at?: string
+          decision?: string
+          edited?: Json | null
+          id?: string
+          match_agent_id?: string | null
+          match_confidence?: number
+          match_reasons?: string[]
+          normalized?: Json
+          owner_id?: string
+          raw?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       crm_brokerage_actions: {
         Row: {
           action_type: string
@@ -5086,63 +5131,102 @@ export type Database = {
       crm_brokerage_agents: {
         Row: {
           brokerage_id: string | null
+          city: string | null
+          country: string | null
           created_at: string
           email: string | null
+          email_normalized: string | null
           expertise_areas: string[]
           expertise_type: string
+          first_imported_at: string
           id: string
           import_batch_id: string | null
           import_label: string | null
+          license_number: string | null
+          merge_history: Json
           metadata: Json
           name: string | null
+          nationality: string | null
           owner_id: string
           phone: string | null
+          phone_normalized: string | null
           photo_path: string | null
+          rera_number: string | null
           role: string | null
           source: string
+          source_batch_ids: string[]
+          source_history: Json
+          specialty_labels: string[]
           status: string
           updated_at: string
           whatsapp: string | null
+          whatsapp_normalized: string | null
         }
         Insert: {
           brokerage_id?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
           email?: string | null
+          email_normalized?: string | null
           expertise_areas?: string[]
           expertise_type?: string
+          first_imported_at?: string
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          license_number?: string | null
+          merge_history?: Json
           metadata?: Json
           name?: string | null
+          nationality?: string | null
           owner_id: string
           phone?: string | null
+          phone_normalized?: string | null
           photo_path?: string | null
+          rera_number?: string | null
           role?: string | null
           source?: string
+          source_batch_ids?: string[]
+          source_history?: Json
+          specialty_labels?: string[]
           status?: string
           updated_at?: string
           whatsapp?: string | null
+          whatsapp_normalized?: string | null
         }
         Update: {
           brokerage_id?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
           email?: string | null
+          email_normalized?: string | null
           expertise_areas?: string[]
           expertise_type?: string
+          first_imported_at?: string
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          license_number?: string | null
+          merge_history?: Json
           metadata?: Json
           name?: string | null
+          nationality?: string | null
           owner_id?: string
           phone?: string | null
+          phone_normalized?: string | null
           photo_path?: string | null
+          rera_number?: string | null
           role?: string | null
           source?: string
+          source_batch_ids?: string[]
+          source_history?: Json
+          specialty_labels?: string[]
           status?: string
           updated_at?: string
           whatsapp?: string | null
+          whatsapp_normalized?: string | null
         }
         Relationships: [
           {
@@ -6621,11 +6705,16 @@ export type Database = {
           row_count: number
           skipped: number
           source_filename: string | null
+          source_name: string | null
+          source_type: string | null
+          specialty_custom_label: string | null
+          specialty_label: string | null
           status: string
           strategy: string
           target: string
           updated: number
           updated_at: string
+          upload_date: string
         }
         Insert: {
           created_at?: string
@@ -6639,11 +6728,16 @@ export type Database = {
           row_count?: number
           skipped?: number
           source_filename?: string | null
+          source_name?: string | null
+          source_type?: string | null
+          specialty_custom_label?: string | null
+          specialty_label?: string | null
           status?: string
           strategy?: string
           target: string
           updated?: number
           updated_at?: string
+          upload_date?: string
         }
         Update: {
           created_at?: string
@@ -6657,11 +6751,16 @@ export type Database = {
           row_count?: number
           skipped?: number
           source_filename?: string | null
+          source_name?: string | null
+          source_type?: string | null
+          specialty_custom_label?: string | null
+          specialty_label?: string | null
           status?: string
           strategy?: string
           target?: string
           updated?: number
           updated_at?: string
+          upload_date?: string
         }
         Relationships: []
       }

@@ -1,119 +1,152 @@
 
-## Brokerage Outreach — Enterprise Upgrade Plan
+# Broker Registry — Merge, Label & Dedup Upgrade
 
-The outreach system already exists (`outreach-lock-payload`, `outreach-send-locked`, `crm-send-brokerage-outreach`, `TestSendDialog`, `crm_owner_settings`). This plan **upgrades** it — no parallel workflow, no new templates, no UI duplication.
+Builds on the existing `crm_brokerage_agents` + `crm_import_batches` + `BrokerBulkUploadDialog` already in the project. **No outreach/email code is touched** (BulkOutreachPanel, outreachIdentity, outreach-bulk-* edge functions stay exactly as-is).
 
 ---
 
-### 1. Single source of truth for sender/CC
+## 1. Schema changes (one migration)
 
-Create `supabase/functions/_shared/outreachIdentity.ts`:
+Extend the existing tables — no new parallel registry.
 
-```
-PRIMARY_SENDER     = "jane@citideveloper.com"   // hard-coded, no override
-PRIMARY_SENDER_NAME = "Jane Bou Jaoude"
-DEFAULT_CC         = "infoo.jane@gmail.com"     // hard-coded, always added
-DEFAULT_REPLY_TO   = "jane@citideveloper.com"
-```
+**`crm_import_batches`** — add:
+- `specialty_label text` (`leasing | sales | leasing_sales | developer_relations | event_attendees | other`)
+- `specialty_custom_label text` (filled when `other`)
+- `source_name text`, `source_type text`, `notes text` *(notes already exists)*
+- `upload_date timestamptz default now()`
 
-Every outreach edge function imports from this one file. Any incoming `from_email` from the client is **ignored** in production mode and forced to `PRIMARY_SENDER`. `DEFAULT_CC` is always merged into the cc list (deduped). Same constants are mirrored frontend-side in `src/config/outreachIdentity.ts` for display only.
+**`crm_brokerage_agents`** — add:
+- `specialty_labels text[] default '{}'` (combined, deduped)
+- `source_batch_ids uuid[] default '{}'` (every batch this broker came from)
+- `source_history jsonb default '[]'` (`[{batch_id, file, label, imported_at}]`)
+- `phone_normalized text`, `whatsapp_normalized text`, `email_normalized text`
+- `license_number text`, `rera_number text`, `nationality text`, `country text`, `city text`
+- `first_imported_at timestamptz default now()`
+- `merge_history jsonb default '[]'`
+- Partial unique indexes on `(owner_id, phone_normalized)`, `(owner_id, email_normalized)`, `(owner_id, license_number)` where not null — used only for fast lookup, not a hard constraint (we resolve via app code so we can present the merge screen).
 
-This kills the current scatter (`crm-send-brokerage-outreach`, `verify-owner`, `crm-bulk-upload-*`, `breakfast-booking-confirm`, etc. each have their own copy).
+**New table `crm_broker_import_staging`** — holds parsed rows pending the duplicate-review screen:
+- `id, batch_id, owner_id, raw jsonb, normalized jsonb, match_agent_id uuid?, match_confidence numeric, match_reasons text[], decision text` (`pending|merge|keep|skip|edit`), `edited jsonb`, timestamps.
+- RLS: owner-only.
 
-### 2. Test mode vs Production mode (locked)
+All new RLS mirrors existing `crm_brokerage_agents` policies (owner-only via `owner_id = auth.uid()`).
 
-Extend `crm_owner_settings.test_profile` with a clear shape:
+---
 
-```
-{
-  mode: "test" | "production",
-  test: { to, cc, from_email, sample_name: "ABC Real Estates", subject_override },
-  production: { /* read-only mirror of constants above, shown for transparency */ }
-}
-```
+## 2. Normalization helpers (`src/lib/crm/brokerNormalize.ts` — new)
 
-- `TestSendDialog` keeps its locked-field UI (already built). Defaults reset to: from `jane@citideveloper.com`, to `infoo.jane@gmail.com`, sample name `ABC Real Estates`. Existing `fixEmail()` normalizer stays.
-- A **production preview** dialog is added (reuses `DeliveryPreviewDialog`) — read-only chips show locked sender/CC, only Subject is editable then locked.
-- Edge functions accept `mode: "test" | "production"`. In production, sender/CC are forced; in test, the saved test profile is used.
+- `normalizePhone(raw, defaultCountry='AE')` → E.164 (`+971501234567`); strips spaces/dashes/parens; treats `0501234567` and `971501234567` as `+971501234567`.
+- `normalizeEmail(raw)` → trimmed lowercase.
+- `normalizeName(raw)` → collapsed whitespace, lowercase, strip diacritics for fuzzy compare.
+- `nameSimilarity(a,b)` → token-set Jaccard (no extra deps).
+- `combineSpecialties(existing[], incoming)` → dedup + auto-collapse `['leasing','sales']` → keep both as separate tags but compute a derived `'leasing_sales'` virtual filter (UI-side).
 
-### 3. Bulk delivery via Resend (recommended)
+Same helpers re-used by edge function via copy in `supabase/functions/_shared/brokerNormalize.ts`.
 
-**Why Resend over Gmail API for >200/day:** Gmail API caps at ~2,000 sends/day per account and throttles aggressively after a few hundred in a short window. Resend handles 10k+ with proper rate limits, suppression list, bounce/complaint webhooks, and dedicated IP options on `citideveloper.com`. Lovable already has a Resend integration pattern.
+---
 
-Steps:
-1. Connect Resend via `standard_connectors--connect` (one-click, the user already uses connectors).
-2. Verify domain `citideveloper.com` in Resend (DNS records: SPF, DKIM, DMARC). The user adds these at the registrar — I'll surface the exact records once Resend is connected.
-3. Replace the direct-send path in `outreach-send-locked` with: lookup locked payload → call Resend `/emails` via gateway → write `email_send_log` row.
+## 3. Upload flow (rework `BrokerBulkUploadDialog.tsx`)
 
-Gmail-API path stays for 1:1 conversational replies (small volume, threading), Resend handles bulk + transactional outreach.
+Three steps inside the existing dialog (no new modal):
 
-### 4. Bulk queue (true scale)
+**Step A — Files & metadata**
+- Existing file picker stays.
+- Replace the current `expertise` radio with **Specialty Label** dropdown: Leasing / Sales / Leasing + Sales / Developer Relations / Event Attendees / Other. If `Other`, show a custom-label input.
+- Add: Source Name, Source Type, Notes (all optional except Specialty).
+- Areas section stays (still useful, unchanged).
 
-New table `outreach_bulk_jobs` + per-recipient `outreach_bulk_recipients`:
+**Step B — Parse & match (client-side)**
+- Parse all files with `xlsx` (already used).
+- Normalize each row; call new edge function `crm-broker-match` with the normalized batch (in 500-row chunks). It returns `{ row, match_agent_id, confidence, reasons }`.
+- Insert into `crm_broker_import_staging` with `decision='pending'` for any row with `confidence >= 0.6`; rows below threshold are auto-marked `decision='merge'` if confidence ≥ 0.95, else `decision='keep'` (= new broker) so the review list only shows real ambiguities.
 
-```
-outreach_bulk_jobs(id, owner_id, template_id, subject, html_template, status,
-                   total, sent, failed, started_at, finished_at)
-outreach_bulk_recipients(job_id, brokerage_id, brokerage_name, email,
-                         status, attempts, error, sent_at, payload_hash)
-```
+**Step C — Merge confirmation screen** (new component `BrokerMergeReviewPanel.tsx`)
+- Two-column comparison table with the exact fields the user listed: existing vs new (name, agency, phone, email, labels, source DB, confidence, recommended action).
+- Per-row action: Merge / Keep Separate / Edit Before Merge / Skip. Bulk actions: Apply recommended, Merge all, Keep all.
+- "Confirm import" calls edge function `crm-broker-import-finalize` which:
+  - For `merge`: updates the matched agent — combines `specialty_labels`, appends to `source_batch_ids`, `source_history`, `merge_history`, fills any empty fields from the new row (never overwrites non-null), updates `updated_at`.
+  - For `keep` / `edit`: inserts new row into `crm_brokerage_agents` with normalized fields and full source history.
+  - For `skip`: marks staging row `decision='skip'`.
+- Returns the **bulk import summary** (total, new, merged, skipped, dup warnings, missing phone/email counts, labels applied, batch id) and shows it in-dialog.
 
-- One **locked** master payload is created (sha256 hashed) — covers the "no rewriting after approval" rule.
-- Per-recipient send interpolates **only** `{{brokerage_name}}` (per your answer) into the locked HTML/subject; rest is byte-identical.
-- New edge function `outreach-bulk-worker` processes batches of ~50 from the queue (Resend's safe rate), invoked every minute by `pg_cron` until `pending = 0`.
-- Retries: 3 attempts with exponential backoff, then DLQ on the row.
-- Owner sees a live progress card on the CRM Relationships page (sent/total, failed count, ETA) — wired to the existing `OutreachActionsMenu`.
+---
 
-### 5. Per-recipient personalization (fix "Dear Firm Properties" bug)
+## 4. Duplicate detection rules (server, in `crm-broker-match`)
 
-Single canonical interpolator `src/lib/outreach/renderTemplate.ts`:
+Confidence = max of:
+- 1.00 → exact match on normalized phone OR normalized whatsapp OR normalized email OR license/RERA number.
+- 0.85 → same normalized phone last 9 digits + same agency.
+- 0.75 → name similarity ≥ 0.85 + same agency.
+- 0.60 → name similarity ≥ 0.9 alone.
 
-```
-render(html, { brokerage_name }) → replaces {{brokerage_name}} (whitespace-tolerant)
-                                   throws if any {{...}} remains unresolved
-```
+Reasons array surfaces in the review screen (e.g. `['phone match', 'same agency']`).
 
-Both `outreach-lock-payload` (for previews) and `outreach-bulk-worker` (per send) use the same function. Pre-flight validator on bulk job creation:
-- All recipients must have non-empty `brokerage_name`.
-- Locked HTML must contain at least one `{{brokerage_name}}` occurrence.
-- No other unresolved tokens allowed.
+---
 
-### 6. Delivery consistency guarantees
+## 5. Broker Registry view (rework existing list on `/owner/crm/relationships`)
 
-- One locked payload = one canonical HTML (already enforced via `outreach_locked_payloads`).
-- Resend gets the **same** HTML for every recipient with only the brokerage_name token replaced server-side.
-- Cc list always includes `DEFAULT_CC` (forced merge in worker, not trusted from client).
-- `email_send_log` records `payload_hash` per send so any drift is auditable.
+The Brokerage tab already renders `ExcelGridView`. Replace its agents sub-grid with a unified **Broker Registry grid** (`BrokerRegistryGrid.tsx`):
 
-### 7. QA / verification before launch
+- Columns: Name, Agency, Mobile, WhatsApp, Email, Specialty (chip list), Source DBs (chip list), Country, BRN/RERA, Status, Last Updated, Actions.
+- All cells editable inline (reuses `ExcelGridView` editable + status pattern).
+- Row actions: Split (undo a merge using `merge_history`), Delete, View profile drawer.
+- Toolbar:
+  - Filters: Specialty multi-select (Leasing / Sales / Leasing+Sales virtual / Developer Relations / Event Attendees / Other), Source Database, Upload Batch, Agency, Country, Registration Status, Attendance Status.
+  - Search box (name/phone/email).
+  - Bulk update labels button (applies to current filter selection).
+  - Export filtered → reuses `exportRowsToXlsx`.
+  - "Upload more" button → opens the same upgraded dialog and merges into the same registry.
+- Manual "Add broker" button + manual "Merge selected" / "Split" actions.
 
-- New script `scripts/outreach/verify-config.mjs` greps the codebase to assert no other sender email exists outside `outreachIdentity.ts`. Runs in CI.
-- New test `supabase/functions/_tests/outreach-personalization.test.ts` renders the locked template against 3 sample brokerages and asserts byte-exact match outside the name slot.
-- Send-test action (already in `TestSendDialog`) runs the **identical** worker code path against a single recipient — preview === delivered.
+Agency profile cards get four computed counts (active / leasing / sales / both) derived from `specialty_labels` — no schema work needed.
 
-### 8. Where everything lives (your final checklist)
+---
 
-| # | Concern | Location |
-|---|---|---|
-| 1 | Sender email (locked) | `supabase/functions/_shared/outreachIdentity.ts` → `PRIMARY_SENDER` |
-| 2 | CC email (locked) | same file → `DEFAULT_CC` (auto-merged in worker) |
-| 3 | Production mode | `crm_owner_settings.test_profile.mode = "production"` + forced constants |
-| 4 | Test mode | `TestSendDialog.tsx` + `crm_owner_settings.test_profile.test` |
-| 5 | Brokerage personalization | `src/lib/outreach/renderTemplate.ts` + bulk worker |
-| 6 | Bulk automation | `outreach_bulk_jobs` table + `outreach-bulk-worker` cron |
-| 7 | Delivery consistency | one locked payload + payload_hash audit per send |
-| 8 | Locked subject/template | existing `outreach_locked_payloads` + new pre-flight validator |
-| 9 | Sender enforcement proof | `scripts/outreach/verify-config.mjs` in CI |
-| 10 | CC delivery proof | worker test asserts `infoo.jane@gmail.com` in every send's cc list |
+## 6. AI-assisted cleaning (`crm-broker-ai-clean` edge function — new)
 
-### Prerequisites I'll need from you during implementation
+One endpoint, called from a "Clean & Suggest" button on the registry toolbar. Uses Lovable AI Gateway (`google/gemini-2.5-flash`) with structured output to:
 
-1. Approve this plan.
-2. Confirm I should run `standard_connectors--connect` for **Resend** (or say "use Gmail-only and accept the ~200/day cap").
-3. After Resend is connected, you'll need to add 3 DNS records (SPF, DKIM, DMARC) at your `citideveloper.com` registrar — I'll give you the exact values.
+- Re-normalize phones the regex missed.
+- Suggest agency-name canonicalization (`"Allsopp & Allsopp LLC"` ≈ `"Allsopp and Allsopp"`).
+- Suggest country canonicalization.
+- Surface candidate duplicate pairs the rule engine missed.
+- Suggest filling empty fields **only** from another duplicate record — never invented.
 
-### Out of scope
+All suggestions land in a side panel as accept/reject; nothing auto-writes.
 
-- Marketing newsletters / drip campaigns (not what brokerage outreach is).
-- Replacing Gmail integration for 1:1 inbox (kept as-is).
-- Changing existing CRM relationships UI beyond adding the bulk-progress card.
+---
+
+## 7. Out of scope (explicitly untouched)
+
+- `outreachIdentity.ts`, `BulkOutreachPanel`, `outreach-bulk-*` edge functions, `email_send_log`, locked subject/template flow, sender/CC enforcement.
+- Existing `BulkUploadDialog` for **brokerages** (companies) — only the **broker** (individual agents) flow is upgraded.
+- Lead/CRM contact import (`CRMImportModalV3`) — separate domain.
+
+---
+
+## 8. Final delivery (what you'll see)
+
+- **Upload entry**: existing "Upload broker database" button on `/owner/crm/relationships` → upgraded dialog with Specialty selector.
+- **Duplicate review**: Step 3 of the same dialog before final commit.
+- **Registry**: same Brokerage tab on `/owner/crm/relationships`, now backed by the merged registry grid with specialty/source filters.
+- **Agency profile**: existing brokerage drawer, with the new specialty counts + source-history chips.
+- **AI clean**: button on the registry toolbar.
+- **Import summary**: shown inline at the end of every upload.
+
+---
+
+## Technical file list
+
+New:
+- `supabase/migrations/<ts>_broker_registry_dedup.sql`
+- `src/lib/crm/brokerNormalize.ts` + `supabase/functions/_shared/brokerNormalize.ts`
+- `supabase/functions/crm-broker-match/index.ts`
+- `supabase/functions/crm-broker-import-finalize/index.ts`
+- `supabase/functions/crm-broker-ai-clean/index.ts`
+- `src/components/crm/BrokerMergeReviewPanel.tsx`
+- `src/components/crm/BrokerRegistryGrid.tsx`
+
+Edited:
+- `src/components/crm/BrokerBulkUploadDialog.tsx` (specialty selector + 3-step flow + staging insert).
+- `src/pages/CRMRelationships.tsx` (mount `BrokerRegistryGrid` in the Brokerage tab; pass filters).
+- `src/integrations/supabase/types.ts` regenerates automatically after migration.

@@ -37,6 +37,12 @@ type Row = {
   expertise_type?: string | null;
   expertise_areas?: string[] | null;
   import_label?: string | null;
+  specialty_labels?: string[] | null;
+  source_history?: any[] | null;
+  source_batch_ids?: string[] | null;
+  country?: string | null;
+  license_number?: string | null;
+  rera_number?: string | null;
   brokerage?: { company_name: string | null } | null;
 };
 
@@ -64,7 +70,7 @@ export default function IndividualBrokersTab() {
       for (let from = 0; ; from += PAGE) {
         const { data, error } = await (supabase as any)
           .from("crm_brokerage_agents")
-          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, brokerage:crm_brokerages(company_name)")
+          .select("id, brokerage_id, name, phone, whatsapp, email, role, status, source, created_at, expertise_type, expertise_areas, import_label, specialty_labels, source_history, source_batch_ids, country, license_number, rera_number, brokerage:crm_brokerages(company_name)")
           .order("created_at", { ascending: false })
           .range(from, from + PAGE - 1);
         if (error) throw error;
@@ -148,15 +154,19 @@ export default function IndividualBrokersTab() {
     const ql = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      const labels = r.specialty_labels || [];
+      const et = r.expertise_type || "both";
       if (expertiseFilter !== "all") {
-        const et = r.expertise_type || "both";
-        if (expertiseFilter === "leasing" && !(et === "leasing" || et === "both")) return false;
-        if (expertiseFilter === "selling" && !(et === "selling" || et === "both")) return false;
+        if (expertiseFilter === "leasing" && !(labels.includes("leasing") || et === "leasing" || et === "both")) return false;
+        if (expertiseFilter === "sales" && !(labels.includes("sales") || et === "selling" || et === "both")) return false;
+        if (expertiseFilter === "leasing_sales" && !(labels.includes("leasing") && labels.includes("sales"))) return false;
+        if (expertiseFilter === "developer_relations" && !labels.includes("developer_relations")) return false;
+        if (expertiseFilter === "event_attendees" && !labels.includes("event_attendees")) return false;
       }
       if (agencyFilter === "__none__" && r.brokerage_id) return false;
       if (agencyFilter !== "all" && agencyFilter !== "__none__" && r.brokerage_id !== agencyFilter) return false;
       if (!ql) return true;
-      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, ...(r.expertise_areas || [])].filter(Boolean).join(" ").toLowerCase();
+      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, r.import_label, ...(r.expertise_areas || []), ...labels].filter(Boolean).join(" ").toLowerCase();
       return hay.includes(ql);
     });
   }, [rows, q, agencyFilter, statusFilter, expertiseFilter]);
@@ -202,11 +212,14 @@ export default function IndividualBrokersTab() {
           </SelectContent>
         </Select>
         <Select value={expertiseFilter} onValueChange={setExpertiseFilter}>
-          <SelectTrigger className="w-[150px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All expertise</SelectItem>
+            <SelectItem value="all">All specialties</SelectItem>
             <SelectItem value="leasing">Leasing</SelectItem>
-            <SelectItem value="selling">Selling</SelectItem>
+            <SelectItem value="sales">Sales</SelectItem>
+            <SelectItem value="leasing_sales">Leasing + Sales</SelectItem>
+            <SelectItem value="developer_relations">Developer Relations</SelectItem>
+            <SelectItem value="event_attendees">Event Attendees</SelectItem>
           </SelectContent>
         </Select>
         <Button variant="outline" onClick={exportExcel}><FileDown className="w-4 h-4 mr-2" /> Export Excel</Button>
@@ -246,14 +259,22 @@ export default function IndividualBrokersTab() {
                       {r.role ? `${r.role} · ` : ""}{r.brokerage?.company_name || "Standalone"}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
-                      {(r.expertise_type === "leasing" || r.expertise_type === "both") && (
+                      {(r.specialty_labels || []).map((lbl) => (
+                        <span key={lbl} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] capitalize">{lbl.replace(/_/g, " ")}</span>
+                      ))}
+                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "leasing" || r.expertise_type === "both") && (
                         <span className="px-2 py-0.5 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-900">Leasing</span>
                       )}
-                      {(r.expertise_type === "selling" || r.expertise_type === "both") && (
+                      {(r.specialty_labels || []).length === 0 && (r.expertise_type === "selling" || r.expertise_type === "both") && (
                         <span className="px-2 py-0.5 rounded-full border border-blue-300 bg-blue-50 text-blue-900">Selling</span>
                       )}
                       {(r.expertise_areas || []).slice(0, 3).map((a) => (
                         <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
+                      ))}
+                      {(r.source_history || []).slice(0, 2).map((sh: any, i: number) => (
+                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/70" title={`From: ${sh.file || sh.label || ""}`}>
+                          src: {sh.label || sh.file || "import"}
+                        </span>
                       ))}
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5 text-[11px]">
