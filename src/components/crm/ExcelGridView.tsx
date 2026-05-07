@@ -88,7 +88,10 @@ export function ExcelGridView<R extends { id: string }>({
                     const cellWidth = c.width ?? 140;
 
                     if (c.status) {
-                      const current = getStatus ? getStatus(row) : String(raw ?? "");
+                      let current: string | undefined;
+                      if (c.getStatus) current = c.getStatus(row);
+                      else if (typeof raw === "boolean") current = raw ? "yes" : "no";
+                      else current = getStatus ? getStatus(row) : String(raw ?? "");
                       const sc = statusColor(current);
                       const opts = c.statusOptions ?? STATUS_OPTIONS;
                       return (
