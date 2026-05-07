@@ -460,9 +460,28 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         )}
 
         {step === "matching" && (
-          <div className="py-12 flex flex-col items-center gap-3 text-[#1A1A1A]">
+          <div className="py-10 flex flex-col items-center gap-4 text-[#1A1A1A]">
             <Loader2 className="w-8 h-8 animate-spin text-[#B89555]" />
-            <div className="text-sm">Parsing and matching {totalRows} rows against the Broker Registry…</div>
+            {progress ? (
+              <>
+                <div className="text-sm font-semibold">
+                  Importing {totalRows.toLocaleString()} brokers — chunk {progress.done} / {progress.total}
+                </div>
+                <div className="w-full max-w-md h-2 rounded-full bg-[#EFE6D6] overflow-hidden border border-[#B89555]/30">
+                  <div
+                    className="h-full bg-[#1A1A1A] transition-all"
+                    style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }}
+                  />
+                </div>
+                <div className="text-xs text-[#1A1A1A]/70 flex gap-4">
+                  <span>New: <b className="text-[#1A1A1A]">{progress.inserted.toLocaleString()}</b></span>
+                  <span>Merged: <b className="text-[#1A1A1A]">{progress.merged.toLocaleString()}</b></span>
+                  <span>Skipped: <b className="text-[#1A1A1A]">{progress.skipped.toLocaleString()}</b></span>
+                </div>
+              </>
+            ) : (
+              <div className="text-sm">Parsing and matching {totalRows.toLocaleString()} rows against the Broker Registry…</div>
+            )}
           </div>
         )}
 
