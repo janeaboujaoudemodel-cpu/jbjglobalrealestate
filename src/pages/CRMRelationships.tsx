@@ -1236,6 +1236,7 @@ const BrokeragesAgenciesView = () => {
 
       {viewMode === "excel" && sourceTab !== "owner" ? (
         <div className="space-y-3">
+          <BulkOutreachPanel brokerages={(filtered as any[]).map((b) => ({ id: b.id, name: b.company_name || b.name || "", email: b.email }))} />
           <BrokerageAnalyticsStrip rows={filtered as any[]} />
           <ExcelGridView
           rows={filtered as any[]}
