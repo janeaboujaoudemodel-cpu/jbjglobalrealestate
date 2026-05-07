@@ -1,35 +1,39 @@
-## Goal
+## Plan
 
-Stop forcing `jane@citideveloper.com` as the outbound sender (which Gmail rewrites because the alias isn't verified) and instead send brokerage outreach directly from `infoo.jane@gmail.com` — the connected Gmail mailbox itself. No Gmail "Send mail as" verification will be needed.
+1. **Fix the import-blocking database constraint**
+   - Update `crm_import_batches.default_expertise_type` so it accepts the newer broker categories currently used by the uploader: `sales`, `leasing_sales`, `developer_relations`, `event_attendees`, and `other`.
+   - Keep existing allowed values (`leasing`, `selling`, `both`) so older data continues to work.
+   - This directly resolves the current error: `crm_import_batches_default_expertise_type_check` rejecting `sales`.
 
-## Changes
+2. **Make category mapping consistent end-to-end**
+   - Update the upload dialog so “Sales” maps safely for both legacy fields and modern labels.
+   - Keep `specialty_label` as the true category shown on broker cards/grid.
+   - Ensure “Leasing + Sales” imports as both `leasing` and `sales`, not an invalid category.
 
-### 1. `supabase/functions/crm-send-brokerage-outreach/index.ts`
-- Replace the hard-locked `FORCED_FROM_EMAIL = "jane@citideveloper.com"` with `FORCED_FROM_EMAIL = "infoo.jane@gmail.com"`.
-- Remove the `REQUIRED_FROM` alias-verification gate that blocks sends when Gmail's `sendAs` list doesn't include the address as `verificationStatus: "accepted"`. Since we're now sending from the connected mailbox itself, no Send-As verification is required.
-- Update the forbidden-address guard message and any error copy that references `jane@citideveloper.com`.
-- Keep the single-agency rule, locked-payload pipeline, and signature/branding intact.
+3. **Fix drag-and-drop file upload**
+   - Add real `dragOver`, `dragLeave`, and `drop` handlers to the upload zone.
+   - Allow dropping multiple `.xlsx`, `.xls`, `.csv`, and `.tsv` files directly into the box.
+   - Add clear visual feedback while dragging over the drop area.
 
-### 2. `supabase/functions/crm-gmail-sender-status/index.ts`
-- Change `REQUIRED_FROM` to `infoo.jane@gmail.com`.
-- Simplify the check: report `ok: true` whenever the connected Gmail account's primary address equals `infoo.jane@gmail.com` (case-insensitive). No alias lookup needed.
-- If a different mailbox is connected, return a clear "wrong mailbox connected" message asking the user to reconnect Gmail using `infoo.jane@gmail.com`.
+4. **Improve “Add new / add more database” workflow**
+   - Ensure the upload dialog can add more files after the first file is already loaded.
+   - Reset the hidden file input after each selection so selecting the same file again works.
+   - Keep existing metadata cards intact while appending additional databases.
 
-### 3. `src/components/crm/GmailSenderStatusBanner.tsx`
-- Replace alias-verification copy with a simpler status:
-  - **Green**: "Outbound sender verified — emails will be sent directly from `infoo.jane@gmail.com`."
-  - **Red** (only when wrong account is connected): "The connected Gmail mailbox is `<connectedEmail>`, not `infoo.jane@gmail.com`. Reconnect Gmail using the correct account." with a button to open Connectors.
-- Drop the 4-step "Send mail as" instructions entirely.
+5. **Harden import reliability for large files**
+   - Improve error messages so constraint/import failures name the affected file and reason.
+   - Keep the existing fast import path for large databases, but prevent a failed batch from leaving the UI stuck.
+   - Refresh the broker registry after successful import so new database rows appear immediately.
 
-### 4. Deploy
-Redeploy `crm-send-brokerage-outreach` and `crm-gmail-sender-status`.
+6. **Validate the workflow**
+   - Confirm the current failing payload with `default_expertise_type: "sales"` is accepted after the migration.
+   - Test the upload dialog interaction logic locally through code-level checks and inspect the import request path.
+   - Deploy any changed backend functions only if needed.
 
-## Out of scope
-- The `citideveloper.com` e-catalogue project URLs in the email body (Amra/Allura/etc.) stay — those are content links, not the sender.
-- No DB migration needed.
-- No Gmail connector reconfiguration needed if `infoo.jane@gmail.com` is already the connected account.
+## Technical details
 
-## Verification
-1. Open `/owner/crm/relationships` → banner should show green "verified, sending from infoo.jane@gmail.com".
-2. Send a test brokerage outreach → recipient sees `From: infoo.jane@gmail.com` with no header rewrite.
-3. Confirm `crm-send-brokerage-outreach` logs no longer reference the alias-verification block.
+- Files expected to change:
+  - `src/components/crm/BrokerBulkUploadDialog.tsx`
+  - Possibly `src/lib/crm/brokerNormalize.ts`
+  - A new database migration for the `crm_import_batches_default_expertise_type_check` constraint
+- No existing import features will be removed.
