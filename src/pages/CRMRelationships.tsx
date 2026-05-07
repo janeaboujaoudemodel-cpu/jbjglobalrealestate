@@ -568,6 +568,67 @@ const BrokeragesAgenciesView = () => {
       window.removeEventListener("crm:open-brokerage-test", openTest);
     };
   }, []);
+
+  // DLD batched import — drives a sticky toast with real per-batch progress.
+  const [dldProgress, setDldProgress] = useState<{ done: number; total: number } | null>(null);
+  const dldCancelRef = useRef(false);
+  const handleImportDLDBatched = async () => {
+    if (importingDLD) return;
+    setImportingDLD(true);
+    dldCancelRef.current = false;
+    const tId = "dld-import";
+    let allRows: any[] = [];
+    let inserted = 0, updated = 0, skipped = 0;
+    try {
+      toast.loading("Loading DLD register…", { id: tId });
+      // Fetch the public registry once on the client so we can chunk it.
+      const res = await fetch("/dld-broker-offices.json", { headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error(`Could not load /dld-broker-offices.json (${res.status})`);
+      const json = await res.json();
+      if (!Array.isArray(json)) throw new Error("DLD register is not a list");
+      allRows = json;
+      const total = allRows.length;
+      const CHUNK = 500;
+      setDldProgress({ done: 0, total });
+      for (let i = 0; i < total; i += CHUNK) {
+        if (dldCancelRef.current) {
+          toast.error(`Import cancelled at ${i.toLocaleString()} / ${total.toLocaleString()}`, { id: tId });
+          break;
+        }
+        const chunk = allRows.slice(i, i + CHUNK);
+        const batchNum = Math.floor(i / CHUNK) + 1;
+        const totalBatches = Math.ceil(total / CHUNK);
+        toast.loading(
+          `Importing DLD batch ${batchNum}/${totalBatches} — ${i.toLocaleString()} / ${total.toLocaleString()} done · ${(total - i).toLocaleString()} pending`,
+          {
+            id: tId,
+            action: { label: "Cancel", onClick: () => { dldCancelRef.current = true; } },
+          },
+        );
+        const { data: r, error } = await supabase.functions.invoke("crm-import-dld-brokerages", {
+          body: { rows: chunk },
+        });
+        if (error) throw error;
+        inserted += r?.inserted || 0;
+        updated += r?.updated || 0;
+        skipped += r?.skipped || 0;
+        setDldProgress({ done: Math.min(i + CHUNK, total), total });
+      }
+      if (!dldCancelRef.current) {
+        toast.success(
+          `DLD sync complete — ${inserted.toLocaleString()} new · ${updated.toLocaleString()} backfilled · ${skipped.toLocaleString()} already existed`,
+          { id: tId, duration: 8000 },
+        );
+      }
+      await refetch();
+    } catch (e: any) {
+      toast.error("DLD sync failed: " + (e?.message || e), { id: tId });
+    } finally {
+      setImportingDLD(false);
+      setDldProgress(null);
+      dldCancelRef.current = false;
+    }
+  };
   const toggleBulk = (id: string) => setBulkSel((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   // Single pass over data — combine source counts and per-emirate counts to avoid 4× iteration on every render.
