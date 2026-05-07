@@ -100,6 +100,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
   const [activeBatchId, setActiveBatchId] = useState<string | null>(null);
   const [summary, setSummary] = useState<any | null>(null);
   const [progress, setProgress] = useState<{ phase: string; done: number; total: number; inserted: number; merged: number; skipped: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const totalRows = useMemo(() => files.reduce((s, f) => s + f.rows.length, 0), [files]);
   const fastMode = totalRows > FAST_MODE_THRESHOLD;
@@ -455,12 +456,34 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
 
         {step === "meta" && (
           <div className="space-y-4">
-            <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#B89555]/50 rounded-xl py-8 cursor-pointer bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors">
+            <label
+              onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (!isDragging) setIsDragging(true); }}
+              onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); }}
+              onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); }}
+              onDrop={(e) => {
+                e.preventDefault(); e.stopPropagation(); setIsDragging(false);
+                if (e.dataTransfer?.files?.length) handleFiles(e.dataTransfer.files);
+              }}
+              className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl py-8 cursor-pointer transition-colors ${
+                isDragging ? "border-[#B89555] bg-[#EFE6D6]" : "border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6]"
+              }`}
+            >
               <FileSpreadsheet className="w-8 h-8 text-[#B89555]" />
-              <div className="text-sm font-semibold text-[#1A1A1A]">Click or drop files here</div>
+              <div className="text-sm font-semibold text-[#1A1A1A]">
+                {isDragging ? "Drop files to add" : files.length > 0 ? "Click or drop to add more files" : "Click or drop files here"}
+              </div>
               <div className="text-xs text-[#1A1A1A]/70">.xlsx, .xls, .csv — multiple files OK</div>
-              <input type="file" multiple accept=".xlsx,.xls,.csv,.tsv" className="hidden"
-                onChange={(e) => handleFiles(e.target.files)} />
+              <input
+                type="file"
+                multiple
+                accept=".xlsx,.xls,.csv,.tsv"
+                className="hidden"
+                onChange={(e) => {
+                  handleFiles(e.target.files);
+                  // Reset so selecting the same filename again still triggers onChange
+                  e.target.value = "";
+                }}
+              />
             </label>
 
             {files.length > 1 && (
