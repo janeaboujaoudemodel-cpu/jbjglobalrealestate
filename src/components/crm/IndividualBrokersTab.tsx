@@ -271,9 +271,9 @@ export default function IndividualBrokersTab() {
                       {(r.expertise_areas || []).slice(0, 3).map((a) => (
                         <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
                       ))}
-                      {(r.source_history || []).slice(0, 2).map((sh: any, i: number) => (
-                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/70" title={`From: ${sh.file || sh.label || ""}`}>
-                          src: {sh.label || sh.file || "import"}
+                      {(r.source_history || []).slice(-2).map((sh: any, i: number) => (
+                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/80" title={`Source: ${sh.source_name || ""} (${sh.source_type || "—"})`}>
+                          📂 {sh.label || sh.file || "import"}
                         </span>
                       ))}
                     </div>
@@ -308,8 +308,18 @@ export default function IndividualBrokersTab() {
             statusOptions: STATUS_OPTS,
             onStatusChange: (r: any, next) => updateStatus(r, next),
           },
-          { key: "expertise_type", label: "Expertise", width: 110, render: (r: any) => r.expertise_type || "both" },
+          { key: "specialty_labels", label: "Category", width: 160, render: (r: any) => (r.specialty_labels || []).join(", ") || r.expertise_type || "—" },
           { key: "expertise_areas", label: "Areas", width: 200, render: (r: any) => (r.expertise_areas || []).join(", ") || "—" },
+          { key: "source_database", label: "Source database", width: 200, render: (r: any) => {
+            const sh = r.source_history || [];
+            const last = sh[sh.length - 1];
+            return last?.label || last?.file || r.import_label || "—";
+          } },
+          { key: "source_type", label: "Source type", width: 140, render: (r: any) => {
+            const sh = r.source_history || [];
+            const last = sh[sh.length - 1];
+            return last?.source_type || "—";
+          } },
           { key: "import_label", label: "Batch", width: 160, render: (r: any) => r.import_label || "—" },
           { key: "created_at", label: "Added", width: 130, render: (r: any) => new Date(r.created_at).toLocaleDateString() },
         ]}

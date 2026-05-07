@@ -1,11 +1,9 @@
 /**
  * BrokerBulkUploadDialog — multi-file CSV/XLSX uploader for INDIVIDUAL brokers.
- * Three-step flow:
- *   A. Files & metadata (specialty label, source name/type, areas, default agency).
- *   B. Parse + dedup match against the existing Broker Registry.
- *   C. Merge confirmation review → finalize via crm-broker-import-finalize.
- * Multiple databases merge into ONE registry — duplicates are detected and
- * specialty labels combine instead of overwrite.
+ * Each file gets its own editable database name, category (specialty), source
+ * name and source type. One crm_import_batches row is created per file so that
+ * the labels chosen at upload time flow through to the registry cards and the
+ * Excel grid view.
  */
 import { useMemo, useState } from "react";
 import * as XLSX from "xlsx";
@@ -15,17 +13,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UploadCloud, FileSpreadsheet, Loader2, X, Tag, ArrowRight, CheckCircle2 } from "lucide-react";
+import { UploadCloud, FileSpreadsheet, Loader2, X, ArrowRight, CheckCircle2, Copy, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { SPECIALTY_OPTIONS, normalizePhone, normalizeEmail, type Specialty } from "@/lib/crm/brokerNormalize";
 import BrokerMergeReviewPanel, { type StagingRow } from "@/components/crm/BrokerMergeReviewPanel";
 
-const COMMON_AREAS = [
-  "Dubai Marina", "Downtown Dubai", "Business Bay", "JVC", "JLT", "Palm Jumeirah",
-  "DIFC", "Arabian Ranches", "Dubai Hills", "Emirates Hills", "Meydan", "Damac Hills",
-  "Mirdif", "Al Barsha", "Jumeirah", "Deira", "Bur Dubai", "Sharjah", "Abu Dhabi",
-  "Ajman", "Ras Al Khaimah",
+const SOURCE_TYPE_OPTIONS = [
+  "Government registry",
+  "Portal export",
+  "Event attendees",
+  "Partner share",
+  "Manual list",
+  "Scrape",
+  "Other",
 ];
 
 interface Props {
@@ -35,16 +36,41 @@ interface Props {
   brokerages: { id: string; company_name: string }[];
 }
 
+interface FileMeta {
+  displayName: string;
+  specialty: Specialty;
+  customLabel: string;
+  sourceName: string;
+  sourceType: string;
+  notes: string;
+}
+
 interface ParsedFile {
   file: File;
   rows: Record<string, any>[];
+  meta: FileMeta;
 }
 
 type Step = "meta" | "matching" | "review" | "done";
 
-const FAST_MODE_THRESHOLD = 2000; // rows — above this we skip the per-row Review panel
+const FAST_MODE_THRESHOLD = 2000;
 const CHUNK_SIZE = 1000;
 const CONCURRENCY = 4;
+
+function stripExt(name: string) {
+  return name.replace(/\.(xlsx|xls|csv|tsv)$/i, "");
+}
+
+function defaultMeta(file: File): FileMeta {
+  return {
+    displayName: stripExt(file.name),
+    specialty: "leasing",
+    customLabel: "",
+    sourceName: "",
+    sourceType: "",
+    notes: "",
+  };
+}
 
 function pick(row: Record<string, any>, keys: string[]): string | null {
   for (const k of keys) {
@@ -68,20 +94,12 @@ async function parseFile(file: File): Promise<Record<string, any>[]> {
 export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, brokerages }: Props) {
   const [step, setStep] = useState<Step>("meta");
   const [files, setFiles] = useState<ParsedFile[]>([]);
-  const [specialty, setSpecialty] = useState<Specialty>("leasing");
-  const [customLabel, setCustomLabel] = useState("");
-  const [sourceName, setSourceName] = useState("");
-  const [sourceType, setSourceType] = useState("");
-  const [notes, setNotes] = useState("");
-  const [areas, setAreas] = useState<string[]>([]);
-  const [areaInput, setAreaInput] = useState("");
-  const [batchLabel, setBatchLabel] = useState("");
   const [defaultBrokerage, setDefaultBrokerage] = useState<string>("__none__");
   const [busy, setBusy] = useState(false);
-  const [batchId, setBatchId] = useState<string | null>(null);
   const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
+  const [activeBatchId, setActiveBatchId] = useState<string | null>(null);
   const [summary, setSummary] = useState<any | null>(null);
-  const [progress, setProgress] = useState<{ done: number; total: number; inserted: number; merged: number; skipped: number } | null>(null);
+  const [progress, setProgress] = useState<{ phase: string; done: number; total: number; inserted: number; merged: number; skipped: number } | null>(null);
 
   const totalRows = useMemo(() => files.reduce((s, f) => s + f.rows.length, 0), [files]);
   const fastMode = totalRows > FAST_MODE_THRESHOLD;
@@ -92,7 +110,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     for (const f of Array.from(list)) {
       try {
         const rows = await parseFile(f);
-        next.push({ file: f, rows });
+        next.push({ file: f, rows, meta: defaultMeta(f) });
       } catch (e: any) {
         toast.error(`Could not read ${f.name}: ${e?.message || "parse error"}`);
       }
@@ -100,20 +118,31 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     setFiles((prev) => [...prev, ...next]);
   };
 
-  const addArea = (a: string) => {
-    const t = a.trim();
-    if (!t) return;
-    setAreas((prev) => (prev.includes(t) ? prev : [...prev, t]));
-    setAreaInput("");
+  const updateMeta = (i: number, patch: Partial<FileMeta>) => {
+    setFiles((prev) => prev.map((f, idx) => (idx === i ? { ...f, meta: { ...f.meta, ...patch } } : f)));
   };
 
   const removeFile = (i: number) => setFiles((prev) => prev.filter((_, idx) => idx !== i));
 
+  const applyFirstToAll = () => {
+    if (files.length < 2) return;
+    const src = files[0].meta;
+    setFiles((prev) => prev.map((f, idx) => idx === 0 ? f : ({
+      ...f,
+      meta: {
+        ...f.meta,
+        specialty: src.specialty,
+        customLabel: src.customLabel,
+        sourceName: src.sourceName,
+        sourceType: src.sourceType,
+      },
+    })));
+    toast.success("Applied first file's category & source to all");
+  };
+
   const reset = () => {
-    setStep("meta"); setFiles([]); setSpecialty("leasing"); setCustomLabel("");
-    setSourceName(""); setSourceType(""); setNotes(""); setAreas([]); setAreaInput("");
-    setBatchLabel(""); setDefaultBrokerage("__none__"); setBusy(false);
-    setBatchId(null); setStagingRows([]); setSummary(null); setProgress(null);
+    setStep("meta"); setFiles([]); setDefaultBrokerage("__none__"); setBusy(false);
+    setStagingRows([]); setActiveBatchId(null); setSummary(null); setProgress(null);
   };
 
   const close = (v: boolean) => {
@@ -122,186 +151,226 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     if (!v) setTimeout(reset, 200);
   };
 
+  /** Validate metadata before submit. */
+  const validate = (): string | null => {
+    if (files.length === 0) return "Add at least one file";
+    for (const f of files) {
+      if (!f.meta.displayName.trim()) return `"${f.file.name}": database name required`;
+      if (f.meta.specialty === "other" && !f.meta.customLabel.trim()) {
+        return `"${f.meta.displayName}": custom label required for "Other"`;
+      }
+    }
+    return null;
+  };
+
+  /** Build normalized broker rows for a single file. */
+  const buildRows = (pf: ParsedFile): any[] => {
+    const out: any[] = [];
+    let idx = 0;
+    for (const row of pf.rows) {
+      const name = pick(row, ["name", "fullname", "agent", "broker"]) || "Unknown";
+      const phone = pick(row, ["phone", "mobile", "tel"]);
+      const whatsapp = pick(row, ["whatsapp", "wa"]) || phone;
+      const email = pick(row, ["email"]);
+      const license = pick(row, ["license", "licence"]);
+      const rera = pick(row, ["rera", "brn"]);
+      const country = pick(row, ["country"]);
+      const city = pick(row, ["city"]);
+      const nationality = pick(row, ["nationality"]);
+      const role = pick(row, ["role", "title", "position", "designation"]);
+      const brokerage_id = defaultBrokerage === "__none__" ? null : defaultBrokerage;
+      out.push({
+        index: idx++,
+        file: pf.file.name,
+        name, phone, whatsapp, email, role, brokerage_id,
+        license_number: license, rera_number: rera,
+        country, city, nationality,
+      });
+    }
+    return out;
+  };
+
+  /** Create one crm_import_batches row for a single file with its metadata. */
+  const createBatchForFile = async (userId: string, pf: ParsedFile) => {
+    const m = pf.meta;
+    const { data: batch, error: bErr } = await (supabase as any)
+      .from("crm_import_batches")
+      .insert({
+        owner_id: userId,
+        target: "brokers",
+        label: m.displayName.trim() || stripExt(pf.file.name),
+        strategy: "merge",
+        default_expertise_type: m.specialty === "leasing_sales" ? "both" : m.specialty,
+        default_expertise_areas: [],
+        row_count: pf.rows.length,
+        status: "running",
+        source_filename: pf.file.name,
+        specialty_label: m.specialty,
+        specialty_custom_label: m.specialty === "other" ? m.customLabel.trim() : null,
+        source_name: m.sourceName || null,
+        source_type: m.sourceType || null,
+        notes: m.notes || null,
+      })
+      .select().single();
+    if (bErr) throw bErr;
+    return batch;
+  };
+
+  /** Run fast import for a single file using its own batch_id. */
+  const runFastImportForFile = async (
+    pf: ParsedFile,
+    batch: any,
+    accAgg: { inserted: number; merged: number; skipped: number },
+    overall: { fileIdx: number; fileTotal: number },
+  ) => {
+    const rows = buildRows(pf);
+    const chunks: any[][] = [];
+    for (let i = 0; i < rows.length; i += CHUNK_SIZE) chunks.push(rows.slice(i, i + CHUNK_SIZE));
+
+    let cursor = 0;
+    let chunksDone = 0;
+    const runOne = async () => {
+      while (cursor < chunks.length) {
+        const myIdx = cursor++;
+        const chunk = chunks[myIdx];
+        let attempts = 0;
+        while (attempts < 2) {
+          try {
+            const { data, error } = await supabase.functions.invoke("crm-broker-bulk-import", {
+              body: { rows: chunk, batch_id: batch.id },
+            });
+            if (error) throw error;
+            const d = data as any;
+            accAgg.inserted += d?.inserted ?? 0;
+            accAgg.merged += d?.merged ?? 0;
+            accAgg.skipped += d?.skipped ?? 0;
+            chunksDone++;
+            setProgress({
+              phase: `File ${overall.fileIdx}/${overall.fileTotal}: ${pf.meta.displayName}`,
+              done: chunksDone, total: chunks.length,
+              inserted: accAgg.inserted, merged: accAgg.merged, skipped: accAgg.skipped,
+            });
+            break;
+          } catch (e) {
+            attempts++;
+            if (attempts >= 2) {
+              accAgg.skipped += chunk.length;
+              chunksDone++;
+              setProgress({
+                phase: `File ${overall.fileIdx}/${overall.fileTotal}: ${pf.meta.displayName}`,
+                done: chunksDone, total: chunks.length,
+                inserted: accAgg.inserted, merged: accAgg.merged, skipped: accAgg.skipped,
+              });
+            }
+          }
+        }
+      }
+    };
+    const workers = Array(Math.min(CONCURRENCY, chunks.length || 1)).fill(0).map(runOne);
+    await Promise.all(workers);
+
+    await (supabase as any).from("crm_import_batches").update({
+      status: "complete",
+    }).eq("id", batch.id);
+  };
+
   const startMatching = async () => {
-    if (files.length === 0) { toast.error("Add at least one file"); return; }
-    if (specialty === "other" && !customLabel.trim()) { toast.error("Custom label required"); return; }
+    const err = validate();
+    if (err) { toast.error(err); return; }
     setBusy(true);
     setStep("matching");
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
 
-      // Create batch
-      const { data: batch, error: bErr } = await (supabase as any)
-        .from("crm_import_batches")
-        .insert({
-          owner_id: user.id,
-          target: "brokers",
-          label: batchLabel || `Import ${new Date().toLocaleDateString()}`,
-          strategy: "merge",
-          default_expertise_type: specialty === "leasing_sales" ? "both" : specialty,
-          default_expertise_areas: areas,
-          row_count: totalRows,
-          status: "running",
-          source_filename: files.map((f) => f.file.name).join(", "),
-          specialty_label: specialty,
-          specialty_custom_label: specialty === "other" ? customLabel.trim() : null,
-          source_name: sourceName || null,
-          source_type: sourceType || null,
-          notes: notes || null,
-        })
-        .select().single();
-      if (bErr) throw bErr;
-      setBatchId(batch.id);
-
-      // Build normalized rows
-      const allRows: any[] = [];
-      let idx = 0;
-      for (const pf of files) {
-        for (const row of pf.rows) {
-          const name = pick(row, ["name", "fullname", "agent", "broker"]) || "Unknown";
-          const phone = pick(row, ["phone", "mobile", "tel"]);
-          const whatsapp = pick(row, ["whatsapp", "wa"]) || phone;
-          const email = pick(row, ["email"]);
-          const license = pick(row, ["license", "licence"]);
-          const rera = pick(row, ["rera", "brn"]);
-          const country = pick(row, ["country"]);
-          const city = pick(row, ["city"]);
-          const nationality = pick(row, ["nationality"]);
-          const role = pick(row, ["role", "title", "position", "designation"]);
-          const brokerage_id = defaultBrokerage === "__none__" ? null : defaultBrokerage;
-          allRows.push({
-            index: idx++,
-            file: pf.file.name,
-            name, phone, whatsapp, email, role, brokerage_id,
-            license_number: license, rera_number: rera,
-            country, city, nationality,
-          });
-        }
-      }
-
-      // ============ FAST MODE: skip Review panel, parallel bulk import ============
+      // ============ FAST MODE: per-file batches, parallel chunks per file ============
       if (fastMode) {
-        // Pre-normalize for the edge function (so it doesn't have to)
-        const normalized = allRows.map((r) => ({
-          ...r,
-          // edge function will recompute, but include for clarity
-        }));
+        const accAgg = { inserted: 0, merged: 0, skipped: 0 };
+        const labelsApplied = new Set<string>();
+        const sourceNames: string[] = [];
 
-        const chunks: any[][] = [];
-        for (let i = 0; i < normalized.length; i += CHUNK_SIZE) {
-          chunks.push(normalized.slice(i, i + CHUNK_SIZE));
+        for (let fi = 0; fi < files.length; fi++) {
+          const pf = files[fi];
+          const batch = await createBatchForFile(user.id, pf);
+          labelsApplied.add(pf.meta.specialty);
+          if (pf.meta.specialty === "other" && pf.meta.customLabel) labelsApplied.add(pf.meta.customLabel);
+          sourceNames.push(pf.meta.displayName || pf.file.name);
+          await runFastImportForFile(pf, batch, accAgg, { fileIdx: fi + 1, fileTotal: files.length });
         }
-
-        let agg = { done: 0, total: chunks.length, inserted: 0, merged: 0, skipped: 0 };
-        setProgress({ ...agg });
-
-        let cursor = 0;
-        const runOne = async () => {
-          while (cursor < chunks.length) {
-            const myIdx = cursor++;
-            const chunk = chunks[myIdx];
-            let attempts = 0;
-            while (attempts < 2) {
-              try {
-                const { data, error } = await supabase.functions.invoke("crm-broker-bulk-import", {
-                  body: { rows: chunk, batch_id: batch.id },
-                });
-                if (error) throw error;
-                const d = data as any;
-                agg = {
-                  done: agg.done + 1,
-                  total: agg.total,
-                  inserted: agg.inserted + (d?.inserted ?? 0),
-                  merged: agg.merged + (d?.merged ?? 0),
-                  skipped: agg.skipped + (d?.skipped ?? 0),
-                };
-                setProgress({ ...agg });
-                break;
-              } catch (e) {
-                attempts++;
-                if (attempts >= 2) {
-                  agg = { ...agg, done: agg.done + 1, skipped: agg.skipped + chunk.length };
-                  setProgress({ ...agg });
-                }
-              }
-            }
-          }
-        };
-        const workers = Array(Math.min(CONCURRENCY, chunks.length)).fill(0).map(runOne);
-        await Promise.all(workers);
-
-        // Mark batch complete
-        await (supabase as any).from("crm_import_batches").update({
-          status: "complete",
-          inserted: agg.inserted, updated: agg.merged, skipped: agg.skipped,
-        }).eq("id", batch.id);
 
         setSummary({
-          batch_id: batch.id,
           total: totalRows,
-          new_brokers: agg.inserted,
-          merged: agg.merged,
-          skipped: agg.skipped,
+          new_brokers: accAgg.inserted,
+          merged: accAgg.merged,
+          skipped: accAgg.skipped,
           missing_phone: 0, missing_email: 0,
-          labels_applied: [specialty, ...(specialty === "other" ? [customLabel] : [])],
-          source_database: sourceName || files.map((f) => f.file.name).join(", "),
+          labels_applied: Array.from(labelsApplied),
+          source_database: sourceNames.join(", "),
         });
         setStep("done");
         onDone?.();
         return;
       }
 
-      // ============ SLOW MODE (≤2k rows): per-row Review panel ============
-      // Match in chunks
-      const matchByIndex = new Map<number, { match_agent_id: string | null; confidence: number; reasons: string[] }>();
-      for (let i = 0; i < allRows.length; i += 500) {
-        const chunk = allRows.slice(i, i + 500);
-        const { data, error } = await supabase.functions.invoke("crm-broker-match", {
-          body: { rows: chunk },
-        });
-        if (error) throw error;
-        for (const m of (data as any)?.matches ?? []) matchByIndex.set(m.index, m);
-      }
-
-      // Insert into staging with auto-decisions
-      const staging = allRows.map((r) => {
-        const m = matchByIndex.get(r.index) || { match_agent_id: null, confidence: 0, reasons: [] };
-        let decision: StagingRow["decision"];
-        if (m.confidence >= 0.95 && m.match_agent_id) decision = "merge";
-        else if (m.confidence >= 0.6 && m.match_agent_id) decision = "pending";
-        else decision = "keep";
-        return {
-          owner_id: user.id, batch_id: batch.id,
-          raw: r, normalized: {
-            ...r,
-            phone_normalized: normalizePhone(r.phone),
-            whatsapp_normalized: normalizePhone(r.whatsapp),
-            email_normalized: normalizeEmail(r.email),
-          },
-          match_agent_id: m.match_agent_id, match_confidence: m.confidence,
-          match_reasons: m.reasons, decision,
-        };
-      });
-
-      // chunked insert
-      for (let i = 0; i < staging.length; i += 500) {
-        const chunk = staging.slice(i, i + 500);
-        await (supabase as any).from("crm_broker_import_staging").insert(chunk);
-      }
-
-      // Paginated fetch — never cap at 1000
-      const PAGE = 1000;
+      // ============ SLOW MODE (≤2k rows total): one file at a time via Review panel ============
+      // For simplicity in the slow path, if multiple files, run them sequentially through
+      // the full match → review → finalize cycle. For a single file (most common case for
+      // small uploads) the dialog behaves exactly as before, but with per-file metadata.
+      // NOTE: when multiple small files are uploaded together, the Review panel will show
+      // each file's batch in turn. To keep this change shippable we collapse them: build
+      // one staging set per file but show them merged in the panel, tagged by batch.
       const allStaging: any[] = [];
-      for (let from = 0; ; from += PAGE) {
-        const { data: p } = await (supabase as any)
-          .from("crm_broker_import_staging")
-          .select("*")
-          .eq("batch_id", batch.id)
-          .range(from, from + PAGE - 1);
-        const arr = (p ?? []) as any[];
-        allStaging.push(...arr);
-        if (arr.length < PAGE) break;
+      let firstBatchId: string | null = null;
+
+      for (const pf of files) {
+        const batch = await createBatchForFile(user.id, pf);
+        if (!firstBatchId) firstBatchId = batch.id;
+        const rows = buildRows(pf);
+
+        const matchByIndex = new Map<number, { match_agent_id: string | null; confidence: number; reasons: string[] }>();
+        for (let i = 0; i < rows.length; i += 500) {
+          const chunk = rows.slice(i, i + 500);
+          const { data, error } = await supabase.functions.invoke("crm-broker-match", {
+            body: { rows: chunk },
+          });
+          if (error) throw error;
+          for (const m of (data as any)?.matches ?? []) matchByIndex.set(m.index, m);
+        }
+
+        const staging = rows.map((r) => {
+          const m = matchByIndex.get(r.index) || { match_agent_id: null, confidence: 0, reasons: [] };
+          let decision: StagingRow["decision"];
+          if (m.confidence >= 0.95 && m.match_agent_id) decision = "merge";
+          else if (m.confidence >= 0.6 && m.match_agent_id) decision = "pending";
+          else decision = "keep";
+          return {
+            owner_id: user.id, batch_id: batch.id,
+            raw: r, normalized: {
+              ...r,
+              phone_normalized: normalizePhone(r.phone),
+              whatsapp_normalized: normalizePhone(r.whatsapp),
+              email_normalized: normalizeEmail(r.email),
+            },
+            match_agent_id: m.match_agent_id, match_confidence: m.confidence,
+            match_reasons: m.reasons, decision,
+          };
+        });
+
+        for (let i = 0; i < staging.length; i += 500) {
+          await (supabase as any).from("crm_broker_import_staging").insert(staging.slice(i, i + 500));
+        }
+
+        const PAGE = 1000;
+        for (let from = 0; ; from += PAGE) {
+          const { data: p } = await (supabase as any)
+            .from("crm_broker_import_staging")
+            .select("*")
+            .eq("batch_id", batch.id)
+            .range(from, from + PAGE - 1);
+          const arr = (p ?? []) as any[];
+          allStaging.push(...arr);
+          if (arr.length < PAGE) break;
+        }
       }
 
       const matchIds = Array.from(new Set(allStaging.map((r: any) => r.match_agent_id).filter(Boolean)));
@@ -315,6 +384,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
       }
       const byId = new Map(matchedAgents.map((a) => [a.id, a]));
       setStagingRows(allStaging.map((r: any) => ({ ...r, matched_agent: r.match_agent_id ? byId.get(r.match_agent_id) : null })));
+      setActiveBatchId(firstBatchId); // first batch is the "primary" for finalize signal
       setStep("review");
     } catch (e: any) {
       toast.error(e?.message || "Matching failed");
@@ -325,10 +395,8 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
   };
 
   const finalize = async (decisions: Record<string, StagingRow["decision"]>) => {
-    if (!batchId) return;
     setBusy(true);
     try {
-      // Persist decisions in chunks
       const ids = Object.keys(decisions);
       for (let i = 0; i < ids.length; i += 200) {
         await Promise.all(ids.slice(i, i + 200).map((id) =>
@@ -336,11 +404,32 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
             .update({ decision: decisions[id] }).eq("id", id),
         ));
       }
-      const { data, error } = await supabase.functions.invoke("crm-broker-import-finalize", {
-        body: { batch_id: batchId },
+      // Finalize each unique batch represented in staging (multi-file slow path).
+      const batchIds = Array.from(new Set(stagingRows.map((r) => r.batch_id).filter(Boolean)));
+      const agg = { total: 0, new_brokers: 0, merged: 0, skipped: 0, missing_phone: 0, missing_email: 0, labels: new Set<string>(), sources: [] as string[] };
+      for (const bid of batchIds) {
+        const { data, error } = await supabase.functions.invoke("crm-broker-import-finalize", {
+          body: { batch_id: bid },
+        });
+        if (error) throw error;
+        const s = (data as any)?.summary;
+        if (s) {
+          agg.total += s.total ?? 0;
+          agg.new_brokers += s.new_brokers ?? 0;
+          agg.merged += s.merged ?? 0;
+          agg.skipped += s.skipped ?? 0;
+          agg.missing_phone += s.missing_phone ?? 0;
+          agg.missing_email += s.missing_email ?? 0;
+          for (const l of s.labels_applied || []) agg.labels.add(l);
+          if (s.source_database) agg.sources.push(s.source_database);
+        }
+      }
+      setSummary({
+        total: agg.total, new_brokers: agg.new_brokers, merged: agg.merged, skipped: agg.skipped,
+        missing_phone: agg.missing_phone, missing_email: agg.missing_email,
+        labels_applied: Array.from(agg.labels),
+        source_database: agg.sources.join(", "),
       });
-      if (error) throw error;
-      setSummary((data as any)?.summary || null);
       setStep("done");
       onDone?.();
     } catch (e: any) {
@@ -352,14 +441,15 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
 
   return (
     <Dialog open={open} onOpenChange={close}>
-      <DialogContent className="max-w-4xl bg-[#FDFBF7] border-[#B89555]/40 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-5xl bg-[#FDFBF7] border-[#B89555]/40 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            <UploadCloud className="w-5 h-5 text-[#B89555]" /> Upload broker database
+            <UploadCloud className="w-5 h-5 text-[#B89555]" /> Upload broker databases
           </DialogTitle>
           <DialogDescription className="text-[#1A1A1A]/70">
-            Drop one or many CSV/Excel files. Tag with a specialty (Leasing / Sales / etc).
-            All uploaded databases merge into one unified Broker Registry — duplicates are auto-detected.
+            Drop one or many CSV/Excel files. <b>Each file</b> gets its own database name,
+            category and source — these labels are saved to every broker in that file and
+            appear on the broker cards and the Excel grid view.
           </DialogDescription>
         </DialogHeader>
 
@@ -373,76 +463,111 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
                 onChange={(e) => handleFiles(e.target.files)} />
             </label>
 
-            {files.length > 0 && (
-              <div className="space-y-1.5">
-                {files.map((f, i) => (
-                  <div key={i} className="flex items-center justify-between rounded-lg border border-[#B89555]/30 bg-white px-3 py-2 text-sm">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <FileSpreadsheet className="w-4 h-4 text-[#B89555] shrink-0" />
-                      <span className="truncate text-[#1A1A1A]">{f.file.name}</span>
-                      <span className="text-[#1A1A1A]/60 text-xs shrink-0">{f.rows.length} rows</span>
-                    </div>
-                    <Button size="icon" variant="ghost" onClick={() => removeFile(i)}><X className="w-4 h-4" /></Button>
-                  </div>
-                ))}
-                <div className="text-xs text-[#1A1A1A]/70">Total: <b>{totalRows}</b> rows</div>
+            {files.length > 1 && (
+              <div className="flex items-center justify-between rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] px-3 py-2 text-xs text-[#1A1A1A]">
+                <span><b>{files.length}</b> files · <b>{totalRows.toLocaleString()}</b> total rows</span>
+                <Button size="sm" variant="outline" onClick={applyFirstToAll}>
+                  <Copy className="w-3.5 h-3.5 mr-1.5" /> Apply first file's category &amp; source to all
+                </Button>
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Specialty label (required)</Label>
-                <Select value={specialty} onValueChange={(v) => setSpecialty(v as Specialty)}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {SPECIALTY_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-                {specialty === "other" && (
-                  <Input placeholder="Custom label" value={customLabel} onChange={(e) => setCustomLabel(e.target.value)} />
-                )}
-                <div className="text-[11px] text-[#1A1A1A]/60">
-                  Every broker in this upload will receive this label. Combines with existing labels on duplicates.
-                </div>
-              </div>
+            {files.length > 0 && (
+              <div className="space-y-3">
+                {files.map((pf, i) => (
+                  <div key={i} className="rounded-xl border border-[#B89555]/30 bg-white p-3 space-y-3">
+                    {/* Header: filename + remove */}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-2 min-w-0 flex-1">
+                        <FileSpreadsheet className="w-4 h-4 text-[#B89555] shrink-0 mt-1" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <Input
+                              value={pf.meta.displayName}
+                              onChange={(e) => updateMeta(i, { displayName: e.target.value })}
+                              placeholder="Database name"
+                              className="h-9 text-sm font-semibold"
+                            />
+                            <Button
+                              size="icon" variant="ghost"
+                              title="Clear name"
+                              onClick={() => updateMeta(i, { displayName: "" })}
+                            ><X className="w-3.5 h-3.5" /></Button>
+                            <Button
+                              size="icon" variant="ghost"
+                              title="Reset to filename"
+                              onClick={() => updateMeta(i, { displayName: stripExt(pf.file.name) })}
+                            ><RotateCcw className="w-3.5 h-3.5" /></Button>
+                          </div>
+                          <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">
+                            Original file: <span className="font-mono">{pf.file.name}</span> · {pf.rows.length.toLocaleString()} rows
+                          </div>
+                        </div>
+                      </div>
+                      <Button size="icon" variant="ghost" onClick={() => removeFile(i)} title="Remove file">
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
 
-              <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Batch label</Label>
-                <Input placeholder='e.g. "DLD Leasing Brokers — May 2026"' value={batchLabel} onChange={(e) => setBatchLabel(e.target.value)} />
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70 mt-2">Source name</Label>
-                <Input placeholder="e.g. DLD" value={sourceName} onChange={(e) => setSourceName(e.target.value)} />
-                <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70 mt-2">Source type</Label>
-                <Input placeholder="e.g. Government registry / Event / Partner" value={sourceType} onChange={(e) => setSourceType(e.target.value)} />
-              </div>
-            </div>
+                    {/* Per-file metadata */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 border-t border-[#B89555]/15">
+                      <div className="space-y-1.5">
+                        <Label className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/70">Category *</Label>
+                        <Select value={pf.meta.specialty} onValueChange={(v) => updateMeta(i, { specialty: v as Specialty })}>
+                          <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {SPECIALTY_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                        {pf.meta.specialty === "other" && (
+                          <Input
+                            placeholder="Custom label"
+                            value={pf.meta.customLabel}
+                            onChange={(e) => updateMeta(i, { customLabel: e.target.value })}
+                            className="h-9"
+                          />
+                        )}
+                      </div>
 
-            <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
-              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70 flex items-center gap-1.5">
-                <Tag className="w-3.5 h-3.5" /> Area(s) of expertise (optional)
-              </Label>
-              <div className="flex flex-wrap gap-1.5">
-                {areas.map((a) => (
-                  <span key={a} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-xs text-[#1A1A1A]">
-                    {a}
-                    <button onClick={() => setAreas(areas.filter((x) => x !== a))}><X className="w-3 h-3" /></button>
-                  </span>
+                      <div className="space-y-1.5">
+                        <Label className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/70">Source name</Label>
+                        <Input
+                          placeholder='e.g. "DLD Export May 2026"'
+                          value={pf.meta.sourceName}
+                          onChange={(e) => updateMeta(i, { sourceName: e.target.value })}
+                          className="h-9"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/70">Source type</Label>
+                        <Select value={pf.meta.sourceType || "__none__"} onValueChange={(v) => updateMeta(i, { sourceType: v === "__none__" ? "" : v })}>
+                          <SelectTrigger className="h-9"><SelectValue placeholder="Select…" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="__none__">— None —</SelectItem>
+                            {SOURCE_TYPE_OPTIONS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <Label className="text-[11px] uppercase tracking-wide text-[#1A1A1A]/70">Notes (optional)</Label>
+                        <Textarea
+                          rows={1}
+                          value={pf.meta.notes}
+                          onChange={(e) => updateMeta(i, { notes: e.target.value })}
+                          placeholder="Anything to remember about this database…"
+                          className="min-h-[36px]"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
-              <div className="flex gap-2">
-                <Input value={areaInput} onChange={(e) => setAreaInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addArea(areaInput); } }}
-                  placeholder="Type an area and press Enter" />
-                <Button variant="outline" onClick={() => addArea(areaInput)}>Add</Button>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {COMMON_AREAS.filter((a) => !areas.includes(a)).slice(0, 12).map((a) => (
-                  <button key={a} onClick={() => addArea(a)} className="text-[11px] px-2 py-0.5 rounded-full border border-[#B89555]/30 text-[#1A1A1A]/80 hover:bg-[#F7F2EA]">+ {a}</button>
-                ))}
-              </div>
-            </div>
+            )}
 
             <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
-              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Default agency (optional)</Label>
+              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Default agency for all files (optional)</Label>
               <Select value={defaultBrokerage} onValueChange={setDefaultBrokerage}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -450,11 +575,6 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
                   {brokerages.slice(0, 500).map((b) => <SelectItem key={b.id} value={b.id}>{b.company_name}</SelectItem>)}
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="rounded-lg border border-[#B89555]/30 bg-white p-3 space-y-2">
-              <Label className="text-xs uppercase tracking-wide text-[#1A1A1A]/70">Notes</Label>
-              <Textarea rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Anything to remember about this database…" />
             </div>
           </div>
         )}
@@ -464,9 +584,8 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
             <Loader2 className="w-8 h-8 animate-spin text-[#B89555]" />
             {progress ? (
               <>
-                <div className="text-sm font-semibold">
-                  Importing {totalRows.toLocaleString()} brokers — chunk {progress.done} / {progress.total}
-                </div>
+                <div className="text-sm font-semibold">{progress.phase}</div>
+                <div className="text-xs text-[#1A1A1A]/70">chunk {progress.done} / {progress.total}</div>
                 <div className="w-full max-w-md h-2 rounded-full bg-[#EFE6D6] overflow-hidden border border-[#B89555]/30">
                   <div
                     className="h-full bg-[#1A1A1A] transition-all"
@@ -502,8 +621,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
             </div>
             <div className="text-xs text-[#1A1A1A]/70">
               Labels applied: <b>{(summary.labels_applied || []).join(", ") || "—"}</b><br />
-              Source: <b>{summary.source_database || "—"}</b><br />
-              Batch ID: <code className="text-[10px]">{summary.batch_id}</code>
+              Databases: <b>{summary.source_database || "—"}</b>
             </div>
           </div>
         )}
@@ -515,7 +633,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
               <Button variant="gold" onClick={startMatching} disabled={busy || files.length === 0}>
                 <ArrowRight className="w-4 h-4 mr-2" />
                 {fastMode
-                  ? `Fast import ${totalRows.toLocaleString()} rows`
+                  ? `Fast import ${totalRows.toLocaleString()} rows (${files.length} file${files.length === 1 ? "" : "s"})`
                   : `Continue (${totalRows.toLocaleString()} rows)`}
               </Button>
             </>
