@@ -43,6 +43,8 @@ export default function DocumentsFormsHub() {
 
   const [picker, setPicker] = useState<EsignTemplate | null>(null);
   const [client, setClient] = useState({ name: "", email: "", phone: "" });
+  const [extraValues, setExtraValues] = useState<Record<string, string>>({});
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleUseTemplate = async () => {
     if (!picker) return;
@@ -51,7 +53,7 @@ export default function DocumentsFormsHub() {
       return;
     }
     try {
-      const env = await createFromTpl.mutateAsync({ template: picker, client });
+      const env = await createFromTpl.mutateAsync({ template: picker, client, values: extraValues });
       toast.success("Draft created — review fields and send");
       navigate(`/e-signature/${env.id}`);
     } catch (e: any) {
