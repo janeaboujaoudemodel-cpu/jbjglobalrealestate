@@ -302,39 +302,10 @@ serve(async (req: Request) => {
       throw new Error("Gmail connector not configured");
     }
 
-    // Send-As alias preflight: Gmail silently rewrites From: to the
-    // authenticated mailbox unless jane@citideveloper.com is registered AND
-    // verified as a Send-As alias. Block the send when not verified so the
-    // user sees a clear error instead of a silently-rewritten From: header.
-    const REQUIRED_FROM = "jane@citideveloper.com";
-    try {
-      const aliasRes = await fetch(`${GMAIL_GATEWAY}/users/me/settings/sendAs`, {
-        headers: {
-          "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-          "X-Connection-Api-Key": GMAIL_API_KEY,
-        },
-      });
-      if (aliasRes.ok) {
-        const aliasJson = await aliasRes.json() as { sendAs?: Array<{ sendAsEmail: string; verificationStatus?: string; isPrimary?: boolean }> };
-        const aliases = Array.isArray(aliasJson?.sendAs) ? aliasJson.sendAs : [];
-        const match = aliases.find(a => (a.sendAsEmail || "").toLowerCase() === REQUIRED_FROM);
-        const isPrimary = !!match?.isPrimary;
-        const isVerified = isPrimary || (match?.verificationStatus || "").toLowerCase() === "accepted";
-        if (!match || !isVerified) {
-          return new Response(JSON.stringify({
-            error: "SENDER_ALIAS_UNVERIFIED",
-            message: `Send blocked — ${REQUIRED_FROM} is not a verified Send-As alias on the connected Gmail account. In Gmail → Settings → Accounts → "Send mail as", add ${REQUIRED_FROM}, then click the verification link Gmail emails to that address. Without this, Gmail rewrites every send back to the connected mailbox.`,
-            requiredAlias: REQUIRED_FROM,
-            present: !!match,
-            verificationStatus: match?.verificationStatus || null,
-          }), { status: 412, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-        }
-      } else {
-        console.warn("[sendAs preflight] non-OK from Gmail:", aliasRes.status);
-      }
-    } catch (aliasErr) {
-      console.warn("[sendAs preflight] failed (continuing):", aliasErr);
-    }
+    // Outbound sender = the connected Gmail mailbox itself
+    // (infoo.jane@gmail.com). No Send-As alias verification is required
+    // because we send directly from the authenticated account, so Gmail
+    // will not rewrite the From: header.
 
     // Sender brand = represented developer (per-row → owner default → CITI Developer)
     const representedDeveloperName: string =
@@ -342,13 +313,13 @@ serve(async (req: Request) => {
       (settings?.default_brokerage_sender_developer_name && String(settings.default_brokerage_sender_developer_name).trim()) ||
       "CITI Developer";
 
-    // HARD LOCK: brokerage outreach is always sent as Jane from jane@citideveloper.com.
-    // No setting, override, or env value can change this — preview must equal sent.
-    const FORCED_FROM_EMAIL = "jane@citideveloper.com";
+    // HARD LOCK: brokerage outreach is always sent as Jane from infoo.jane@gmail.com
+    // (the connected Gmail mailbox — Gmail cannot rewrite this header).
+    const FORCED_FROM_EMAIL = "infoo.jane@gmail.com";
     const FORCED_FROM_DISPLAY = "Jane Bou Jaoude";
     const fromName = FORCED_FROM_DISPLAY;
     const replyTo = FORCED_FROM_EMAIL;
-    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com"];
+    const WORKFLOW_FORBIDDEN_ADDRESSES = ["janeaboujaoudemodel@gmail.com", "jane@citideveloper.com"];
     const brkActiveCc = Array.isArray(settings?.brokerage_active_cc_emails)
       ? settings.brokerage_active_cc_emails.filter(Boolean)
       : [];
@@ -357,11 +328,12 @@ serve(async (req: Request) => {
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
-    // Always CC infoo.jane@gmail.com so both inboxes stay in sync.
-    const SECONDARY_CC = "infoo.jane@gmail.com";
-    if (!ccList.some((c) => c.toLowerCase() === SECONDARY_CC)) {
-      ccList.push(SECONDARY_CC);
-    }
+    // Skip the secondary CC: From is already infoo.jane@gmail.com, so a self-CC
+    // would just duplicate the message back to the same inbox.
+    const SECONDARY_CC = FORCED_FROM_EMAIL;
+    const filteredCc = ccList.filter((c) => c.toLowerCase() !== SECONDARY_CC.toLowerCase());
+    ccList.length = 0;
+    ccList.push(...filteredCc);
     const ccEmail = ccList[0] || "";
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
@@ -516,7 +488,7 @@ serve(async (req: Request) => {
       if (hit) {
         return new Response(JSON.stringify({
           error: "FORBIDDEN_ADDRESS_IN_WORKFLOW",
-          message: `Send blocked — address ${hit} is forbidden in brokerage outreach. Use jane@citideveloper.com.`,
+          message: `Send blocked — address ${hit} is forbidden in brokerage outreach. Use infoo.jane@gmail.com.`,
         }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     }
