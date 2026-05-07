@@ -36,7 +36,9 @@ interface Props {
 }
 
 export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultListId }: Props) {
+  const [mode, setMode] = useState<"file" | "paste">("file");
   const [file, setFile] = useState<File | null>(null);
+  const [pasteText, setPasteText] = useState<string>("");
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
   const [target, setTarget] = useState<"main" | "new" | "existing">(defaultListId ? "existing" : "new");
@@ -47,17 +49,20 @@ export function BulkUploadDialog({ open, onOpenChange, kind, onDone, defaultList
   const { data: lists = [], createList } = useCRMLists(listsKind);
 
   const defaultListName = useMemo(() => {
+    if (mode === "paste") return `Pasted ${kind} list — ${new Date().toLocaleDateString()}`;
     if (!file) return "";
     return file.name.replace(/\.[^.]+$/, "").slice(0, 80);
-  }, [file]);
+  }, [file, mode, kind]);
 
   const reset = () => {
     setFile(null);
+    setPasteText("");
     setBusy(false);
     setResult(null);
     setTarget("new");
     setExistingListId("");
     setNewListName("");
+    setMode("file");
   };
 
   const handleClose = (v: boolean) => {
