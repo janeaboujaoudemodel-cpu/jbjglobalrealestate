@@ -7593,6 +7593,7 @@ export type Database = {
           saved_test_developer_names: Json
           saved_test_to_emails: Json
           signature_html: string | null
+          test_profile: Json
           updated_at: string
         }
         Insert: {
@@ -7620,6 +7621,7 @@ export type Database = {
           saved_test_developer_names?: Json
           saved_test_to_emails?: Json
           signature_html?: string | null
+          test_profile?: Json
           updated_at?: string
         }
         Update: {
@@ -7647,6 +7649,7 @@ export type Database = {
           saved_test_developer_names?: Json
           saved_test_to_emails?: Json
           signature_html?: string | null
+          test_profile?: Json
           updated_at?: string
         }
         Relationships: []
