@@ -154,15 +154,19 @@ export default function IndividualBrokersTab() {
     const ql = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
+      const labels = r.specialty_labels || [];
+      const et = r.expertise_type || "both";
       if (expertiseFilter !== "all") {
-        const et = r.expertise_type || "both";
-        if (expertiseFilter === "leasing" && !(et === "leasing" || et === "both")) return false;
-        if (expertiseFilter === "selling" && !(et === "selling" || et === "both")) return false;
+        if (expertiseFilter === "leasing" && !(labels.includes("leasing") || et === "leasing" || et === "both")) return false;
+        if (expertiseFilter === "sales" && !(labels.includes("sales") || et === "selling" || et === "both")) return false;
+        if (expertiseFilter === "leasing_sales" && !(labels.includes("leasing") && labels.includes("sales"))) return false;
+        if (expertiseFilter === "developer_relations" && !labels.includes("developer_relations")) return false;
+        if (expertiseFilter === "event_attendees" && !labels.includes("event_attendees")) return false;
       }
       if (agencyFilter === "__none__" && r.brokerage_id) return false;
       if (agencyFilter !== "all" && agencyFilter !== "__none__" && r.brokerage_id !== agencyFilter) return false;
       if (!ql) return true;
-      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, ...(r.expertise_areas || [])].filter(Boolean).join(" ").toLowerCase();
+      const hay = [r.name, r.phone, r.whatsapp, r.email, r.role, r.brokerage?.company_name, r.import_label, ...(r.expertise_areas || []), ...labels].filter(Boolean).join(" ").toLowerCase();
       return hay.includes(ql);
     });
   }, [rows, q, agencyFilter, statusFilter, expertiseFilter]);
