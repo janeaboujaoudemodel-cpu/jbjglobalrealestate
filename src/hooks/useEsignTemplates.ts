@@ -182,7 +182,10 @@ export function useCreateEnvelopeFromTemplate() {
 
       if (fieldInserts.length) {
         const { error: fErr } = await supabase.from("esign_fields").insert(fieldInserts);
-        if (fErr) throw fErr;
+        if (fErr) {
+          await supabase.from("esign_envelopes").delete().eq("id", envelope.id);
+          throw fErr;
+        }
       }
 
       return envelope;
