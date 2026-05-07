@@ -151,6 +151,7 @@ export const BulkSendDialog = ({
   const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
+  const [borderedCard, setBorderedCard] = useState(false);
   const [reviewing, setReviewing] = useState(false);
 
   // Manual exclusion list (owner ticks rows out of the broadcast)
@@ -383,9 +384,15 @@ export const BulkSendDialog = ({
 
   const previewHtml = useMemo(() => {
     if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
-    return renderPreview(String(template.html));
+    const rendered = renderPreview(String(template.html));
+    if (!borderedCard) return rendered;
+    // Preview-only: re-apply the original bordered look on .jbj-flat. Does NOT affect the bytes that get sent.
+    const overrideStyle = `<style>.jbj-flat{padding:18px 20px !important;background:#FDFBF7 !important;border:1px solid #B89555 !important;border-radius:12px !important;margin-top:22px !important;}</style>`;
+    return rendered.includes("</head>")
+      ? rendered.replace("</head>", `${overrideStyle}</head>`)
+      : overrideStyle + rendered;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template, previewVars]);
+  }, [template, previewVars, borderedCard]);
 
   const previewSubject = useMemo(() => {
     if (!template?.subject) return "";
@@ -682,6 +689,17 @@ export const BulkSendDialog = ({
                       ))}
                     </SelectContent>
                   </Select>
+                )}
+                {entityType === "brokerage" && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-xs"
+                    title="Preview only — does not affect the email that gets sent"
+                    onClick={() => setBorderedCard((b) => !b)}
+                  >
+                    {borderedCard ? "◼ Bordered card" : "◻ Bordered card"}
+                  </Button>
                 )}
                 <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setShowPreview((s) => !s)}>
                   {showPreview ? "Hide" : "Show"}
