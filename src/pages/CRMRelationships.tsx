@@ -1271,8 +1271,6 @@ const BrokeragesAgenciesView = () => {
             { key: "inquiry_count", label: "Inquiries", width: 90, align: "right" },
             { key: "notes", label: "Notes", width: 260, editable: true },
           ]}
-          getStatus={(r: any) => undefined}
-          onStatusChange={() => {}}
           onCellEdit={(r: any, key, value) => {
             const numericKeys = ["active_broker_count", "briefing_count", "briefing_attendee_count", "breakfast_attendee_count"];
             const dateKeys = ["breakfast_date"];
