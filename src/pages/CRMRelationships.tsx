@@ -1976,15 +1976,20 @@ const DocumentPackPanel = React.memo(({ context = "developer" }: { context?: "br
           {isBrk && (
             <div className="md:col-span-2">
               <Label className="text-xs text-[#1A1A1A] mb-1 block">
-                Google Calendar booking link
+                Google Calendar appointment link (required for breakfast invites)
               </Label>
               <Input
                 value={s.google_calendar_booking_url || ""}
                 onChange={(e) => update({ google_calendar_booking_url: e.target.value })}
                 placeholder="https://calendar.app.google/…"
               />
+              {s.google_calendar_booking_url && /jbj\.ae|\/breakfast-booking/i.test(String(s.google_calendar_booking_url)) && (
+                <p className="text-xs text-red-600 mt-1">
+                  This link points to jbj.ae and will be REJECTED on send. Paste your Google Calendar appointment link (https://calendar.app.google/…) instead.
+                </p>
+              )}
               <p className="text-xs text-[#1A1A1A]/70 mt-1">
-                Paste your Google Calendar appointment scheduling link. Brokerages will book directly on your calendar — Google sends them a confirmation email and notifies you automatically. No website redirect.
+                Brokerages book directly on your dedicated breakfast Google Calendar — Google emails the confirmation. Bookings sync into the backend automatically; the brokerage never visits jbj.ae.
               </p>
             </div>
           )}
