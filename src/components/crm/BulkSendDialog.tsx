@@ -151,6 +151,7 @@ export const BulkSendDialog = ({
   const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
   const [previewDevId, setPreviewDevId] = useState<string>("");
   const [showPreview, setShowPreview] = useState(true);
+  const [borderedCard, setBorderedCard] = useState(false);
   const [reviewing, setReviewing] = useState(false);
 
   // Manual exclusion list (owner ticks rows out of the broadcast)
