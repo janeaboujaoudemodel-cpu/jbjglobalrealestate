@@ -140,7 +140,7 @@ serve(async (req: Request) => {
       invite_token: token,
       requester_name: pc.name || brk.company_name || "Brokerage Partner",
       requester_email: placeholderEmail,
-      purpose: `Private breakfast briefing — ${brk.company_name}`,
+      purpose: `Private Breakfast for ${brk.company_name}`,
       preferred_date: preferredDate || new Date().toISOString().slice(0, 10),
       preferred_time: preferredTime || "TBD",
       status: "invited",
