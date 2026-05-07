@@ -328,11 +328,12 @@ serve(async (req: Request) => {
     const ccList = body.ccEmailOverride
       ? String(body.ccEmailOverride).split(",").map((s: string) => s.trim()).filter(Boolean)
       : [...brkActiveCc];
-    // Always CC infoo.jane@gmail.com so both inboxes stay in sync.
-    const SECONDARY_CC = "infoo.jane@gmail.com";
-    if (!ccList.some((c) => c.toLowerCase() === SECONDARY_CC)) {
-      ccList.push(SECONDARY_CC);
-    }
+    // Skip the secondary CC: From is already infoo.jane@gmail.com, so a self-CC
+    // would just duplicate the message back to the same inbox.
+    const SECONDARY_CC = FORCED_FROM_EMAIL;
+    const filteredCc = ccList.filter((c) => c.toLowerCase() !== SECONDARY_CC.toLowerCase());
+    ccList.length = 0;
+    ccList.push(...filteredCc);
     const ccEmail = ccList[0] || "";
     // Test sends still get CCs (so the owner can verify the CC list is correct).
     const cc = ccList;
