@@ -1,9 +1,10 @@
 // Excel-style grid for the Brokerage / Developer sections.
-// Sticky header, sticky first column, inline status dropdown that paints the
-// cell with the same palette used by the colored XLSX export.
+// Sticky header, sticky first column, champagne-themed status dropdowns
+// (no native blue OS styling), wrap-on-overflow cells, pagination.
 
 import { useMemo, useState } from "react";
 import { statusColor, STATUS_OPTIONS } from "@/utils/crmStatusPalette";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const PAGE_SIZE = 100;
 
@@ -14,6 +15,7 @@ export interface ExcelGridColumn<R> {
   align?: "left" | "right" | "center";
   status?: boolean;       // render colored status cell with dropdown
   editable?: boolean;     // text-edit on double-click (notes)
+  readOnly?: boolean;     // never editable (computed)
   render?: (row: R) => React.ReactNode;
   // Optional per-column overrides for multi-status grids
   statusOptions?: { value: string; label: string }[];
@@ -50,22 +52,21 @@ export function ExcelGridView<R extends { id: string }>({
   return (
     <div className="border border-[#B89555]/40 rounded-xl overflow-hidden bg-[#FDFBF7]">
       <div className="overflow-auto max-h-[640px]">
-
         <table className="w-full text-sm border-collapse" style={{ fontFamily: "Inter, sans-serif" }}>
           <thead className="sticky top-0 z-20">
             <tr>
               {columns.map((c, i) => {
-                const w = c.width ?? 140;
+                const w = c.width ?? 150;
                 return (
                   <th
                     key={String(c.key)}
-                    className={`bg-[#EFE6D6] text-[#1A1A1A] font-semibold text-left px-3 py-2 border-b-2 border-[#B89555] whitespace-nowrap overflow-hidden text-ellipsis ${
+                    className={`bg-[#EFE6D6] text-[#1A1A1A] font-semibold text-left px-3 py-2 border-b-2 border-[#B89555] align-middle ${
                       i === 0 ? "sticky left-0 z-30 bg-[#EFE6D6]" : ""
                     }`}
                     style={{ width: w, minWidth: w, maxWidth: w, textAlign: c.align ?? "left" }}
                     title={c.label}
                   >
-                    {c.label}
+                    <span className="block leading-tight whitespace-normal break-words">{c.label}</span>
                   </th>
                 );
               })}
@@ -78,14 +79,14 @@ export function ExcelGridView<R extends { id: string }>({
             {pagedRows.map((row, idx) => {
               const banded = idx % 2 === 1;
               return (
-                <tr key={row.id} className={banded ? "bg-[#FAF6EE]" : "bg-white"} style={{ height: 36 }}>
+                <tr key={row.id} className={banded ? "bg-[#FAF6EE]" : "bg-white"}>
                   {columns.map((c, i) => {
                     const raw = (row as any)[c.key];
                     const isFirst = i === 0;
-                    const baseCls = `px-3 py-1 border-b border-[#E5DCC8] align-middle whitespace-nowrap overflow-hidden text-ellipsis ${
+                    const baseCls = `px-3 py-2 border-b border-[#E5DCC8] align-middle ${
                       isFirst ? `sticky left-0 z-10 ${banded ? "bg-[#FAF6EE]" : "bg-white"} font-medium` : ""
                     }`;
-                    const cellWidth = c.width ?? 140;
+                    const cellWidth = c.width ?? 150;
 
                     if (c.status) {
                       let current: string | undefined;
@@ -96,16 +97,22 @@ export function ExcelGridView<R extends { id: string }>({
                       const opts = c.statusOptions ?? STATUS_OPTIONS;
                       return (
                         <td key={String(c.key)} className={baseCls} style={{ width: cellWidth, minWidth: cellWidth, maxWidth: cellWidth, textAlign: "center" }}>
-                          <select
+                          <Select
                             value={current || opts[0]?.value || ""}
-                            onChange={(e) => (c.onStatusChange ? c.onStatusChange(row, e.target.value) : onStatusChange?.(row, e.target.value))}
-                            className="w-full px-2 py-1 rounded font-semibold text-xs border-0 outline-none cursor-pointer truncate"
-                            style={{ background: sc.cssBg, color: sc.cssFg }}
+                            onValueChange={(v) => (c.onStatusChange ? c.onStatusChange(row, v) : onStatusChange?.(row, v))}
                           >
-                            {opts.map((s) => (
-                              <option key={s.value} value={s.value}>{s.label}</option>
-                            ))}
-                          </select>
+                            <SelectTrigger
+                              className="h-8 w-full px-2 rounded font-semibold text-xs border-0 outline-none cursor-pointer"
+                              style={{ background: sc.cssBg, color: sc.cssFg }}
+                            >
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white border border-[#B89555]/40">
+                              {opts.map((s) => (
+                                <SelectItem key={s.value} value={s.value} className="text-[#1A1A1A]">{s.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </td>
                       );
                     }
@@ -113,13 +120,14 @@ export function ExcelGridView<R extends { id: string }>({
                     const isEditing = editing?.id === row.id && editing?.key === c.key;
                     const display = c.render ? c.render(row) : (raw ?? "");
                     const titleText = typeof display === "string" || typeof display === "number" ? String(display) : String(raw ?? "");
+                    const editable = c.editable && !c.readOnly;
                     return (
                       <td
                         key={String(c.key)}
                         className={baseCls}
                         style={{ width: cellWidth, minWidth: cellWidth, maxWidth: cellWidth, textAlign: c.align ?? "left" }}
                         title={titleText}
-                        onDoubleClick={() => c.editable && setEditing({ id: row.id, key: String(c.key) })}
+                        onDoubleClick={() => editable && setEditing({ id: row.id, key: String(c.key) })}
                       >
                         {isEditing ? (
                           <input
@@ -130,10 +138,10 @@ export function ExcelGridView<R extends { id: string }>({
                               if (e.key === "Enter") { (e.target as HTMLInputElement).blur(); }
                               if (e.key === "Escape") setEditing(null);
                             }}
-                            className="w-full px-2 py-1 border border-[#B89555] rounded text-sm bg-white"
+                            className="w-full px-2 py-1 border border-[#B89555] rounded text-sm bg-white text-[#1A1A1A]"
                           />
                         ) : (
-                          <span className="text-[#1A1A1A] block truncate">{display as any}</span>
+                          <span className="text-[#1A1A1A] block leading-snug whitespace-normal break-words">{display as any}</span>
                         )}
                       </td>
                     );
@@ -148,7 +156,7 @@ export function ExcelGridView<R extends { id: string }>({
         <span>
           Showing {rows.length === 0 ? 0 : safePage * PAGE_SIZE + 1}–
           {Math.min(rows.length, safePage * PAGE_SIZE + PAGE_SIZE)} of {rows.length.toLocaleString()} ·
-          double-click a cell to edit · status colors export to Excel.
+          double-click any editable cell · status colors export to Excel.
         </span>
         {totalPages > 1 && (
           <span className="flex items-center gap-2">
