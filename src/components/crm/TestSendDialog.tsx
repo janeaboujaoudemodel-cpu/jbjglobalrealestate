@@ -28,11 +28,18 @@ interface TestProfile {
 }
 
 const DEFAULT_PROFILE: TestProfile = {
-  to: "info.jane@gmail.com",
+  to: "infoo.jane@gmail.com",
   cc: "",
   from_email: "jane@citideveloper.com",
   sample_name: "ABC REAL ESTATE",
   subject_override: "",
+};
+
+// Normalize legacy/wrong single-o variant -> correct double-o address.
+const fixEmail = (v: string | undefined | null): string => {
+  const s = (v || "").trim();
+  if (!s) return "";
+  return s.replace(/\binfo\.jane@gmail\.com\b/gi, "infoo.jane@gmail.com");
 };
 
 type FieldKey = keyof TestProfile;
@@ -117,13 +124,16 @@ export const TestSendDialog = ({
     if (hydratedRef.current || !settings) return;
     hydratedRef.current = true;
     const saved = ((settings as any).test_profile || {}) as Partial<TestProfile>;
-    setProfile({
-      to: saved.to || DEFAULT_PROFILE.to,
-      cc: saved.cc || DEFAULT_PROFILE.cc,
-      from_email: saved.from_email || DEFAULT_PROFILE.from_email,
+    const next: TestProfile = {
+      to: fixEmail(saved.to) || DEFAULT_PROFILE.to,
+      cc: fixEmail(saved.cc) || DEFAULT_PROFILE.cc,
+      from_email: fixEmail(saved.from_email) || DEFAULT_PROFILE.from_email,
       sample_name: saved.sample_name || DEFAULT_PROFILE.sample_name,
       subject_override: saved.subject_override || DEFAULT_PROFILE.subject_override,
-    });
+    };
+    setProfile(next);
+    // If we corrected a wrong saved value, persist the fix immediately.
+    if (saved.to && fixEmail(saved.to) !== saved.to) void persist(next);
   }, [open, settings]);
 
   const persist = async (next: TestProfile) => {
@@ -213,7 +223,7 @@ export const TestSendDialog = ({
               <p className="text-[11px] text-[#1A1A1A]/70">
                 These values are saved between sends. Click the pencil on any field to change it — it will stay locked until you do.
               </p>
-              {fieldUI("to", "Send test to", "info.jane@gmail.com")}
+              {fieldUI("to", "Send test to", "infoo.jane@gmail.com")}
               {fieldUI("from_email", "From / Reply-to", "jane@citideveloper.com")}
               {fieldUI("sample_name", mode === "brokerage" ? "Sample brokerage name" : "Sample developer name", "ABC REAL ESTATE")}
               {fieldUI("subject_override", "Subject (override)", "Leave empty to use template subject")}
