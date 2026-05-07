@@ -201,6 +201,7 @@ Deno.serve(async (req) => {
           source_batch_ids: [batchId],
           source_history: [{
             batch_id: batchId, file: batch.source_filename, label: batch.label,
+            source_name: batch.source_name ?? null, source_type: batch.source_type ?? null,
             specialty, imported_at: new Date().toISOString(),
           }],
           import_batch_id: batchId,
@@ -242,6 +243,7 @@ Deno.serve(async (req) => {
         labels = combineSpecialties(labels, incomingLabels);
         newHistory.push({
           batch_id: batchId, file: batch.source_filename, label: batch.label,
+          source_name: batch.source_name ?? null, source_type: batch.source_type ?? null,
           specialty, imported_at: new Date().toISOString(),
         });
         newMergeHistory.push({ at: new Date().toISOString(), from_batch: batchId, reasons: r.reasons });
