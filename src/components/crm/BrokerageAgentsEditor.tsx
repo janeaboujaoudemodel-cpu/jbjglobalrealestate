@@ -36,7 +36,7 @@ export function BrokerageAgentsEditor({ value, onChange, brokerageId }: Props) {
     onChange(value.map((a, i) => (i === idx ? { ...a, ...patch } : a)));
   };
   const remove = (idx: number) => onChange(value.filter((_, i) => i !== idx));
-  const add = () => onChange([...value, { name: "", phone: "", status: "active", source: "manual" }]);
+  const add = (role: string = "broker") => onChange([...value, { name: "", phone: "", role, status: "active", source: "manual" }]);
 
   const importPaste = () => {
     const lines = bulkPaste
