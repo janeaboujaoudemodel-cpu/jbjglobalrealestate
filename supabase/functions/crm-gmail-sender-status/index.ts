@@ -1,7 +1,8 @@
 /**
  * CRM Gmail Sender Status
- * Read-only: returns whether jane@citideveloper.com is registered + verified
- * as a Send-As alias on the currently-connected Gmail account.
+ * Read-only: returns whether the connected Gmail mailbox is the required
+ * outbound sender (infoo.jane@gmail.com). No Send-As alias is needed since
+ * we send directly from the connected mailbox.
  * Owner-only.
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
@@ -18,7 +19,7 @@ const OWNER_EMAILS = [
   "janeaboujaoudemodel@gmail.com",
   "infoo.jane@gmail.com",
 ];
-const REQUIRED_FROM = "jane@citideveloper.com";
+const REQUIRED_FROM = "infoo.jane@gmail.com";
 const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 
 serve(async (req: Request) => {
@@ -46,49 +47,33 @@ serve(async (req: Request) => {
       }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Authenticated mailbox
-    let connectedEmail = "";
-    try {
-      const profRes = await fetch(`${GMAIL_GATEWAY}/users/me/profile`, {
-        headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "X-Connection-Api-Key": GMAIL_API_KEY },
-      });
-      if (profRes.ok) {
-        const j = await profRes.json() as { emailAddress?: string };
-        connectedEmail = j.emailAddress || "";
-      }
-    } catch (_) {/* ignore */}
-
-    const aliasRes = await fetch(`${GMAIL_GATEWAY}/users/me/settings/sendAs`, {
+    // Fetch authenticated mailbox
+    const profRes = await fetch(`${GMAIL_GATEWAY}/users/me/profile`, {
       headers: { "Authorization": `Bearer ${LOVABLE_API_KEY}`, "X-Connection-Api-Key": GMAIL_API_KEY },
     });
-    if (!aliasRes.ok) {
-      const errJson = await aliasRes.json().catch(() => ({}));
+    if (!profRes.ok) {
+      const errJson = await profRes.json().catch(() => ({}));
       return new Response(JSON.stringify({
         ok: false,
-        connected: !!connectedEmail,
-        connectedEmail,
+        connected: false,
         requiredAlias: REQUIRED_FROM,
-        message: `Could not read Gmail Send-As settings (${aliasRes.status}).`,
+        message: `Could not read Gmail profile (${profRes.status}).`,
         details: errJson,
       }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
-    const j = await aliasRes.json() as { sendAs?: Array<{ sendAsEmail: string; verificationStatus?: string; isPrimary?: boolean; displayName?: string }> };
-    const aliases = Array.isArray(j.sendAs) ? j.sendAs : [];
-    const match = aliases.find(a => (a.sendAsEmail || "").toLowerCase() === REQUIRED_FROM);
-    const isPrimary = !!match?.isPrimary;
-    const verificationStatus = match?.verificationStatus || null;
-    const verified = isPrimary || (verificationStatus || "").toLowerCase() === "accepted";
+    const j = await profRes.json() as { emailAddress?: string };
+    const connectedEmail = (j.emailAddress || "").toLowerCase();
+    const matches = connectedEmail === REQUIRED_FROM.toLowerCase();
 
     return new Response(JSON.stringify({
-      ok: !!match && verified,
+      ok: matches,
       connected: true,
       connectedEmail,
       requiredAlias: REQUIRED_FROM,
-      present: !!match,
-      verified,
-      isPrimary,
-      verificationStatus,
-      aliases: aliases.map(a => ({ email: a.sendAsEmail, verificationStatus: a.verificationStatus, isPrimary: !!a.isPrimary })),
+      verified: matches,
+      message: matches
+        ? `Sending directly from ${REQUIRED_FROM}.`
+        : `Connected mailbox is ${connectedEmail}, but outreach requires ${REQUIRED_FROM}. Reconnect Gmail using the correct account.`,
     }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e: any) {
     return new Response(JSON.stringify({ error: e?.message || "Internal error" }), {
