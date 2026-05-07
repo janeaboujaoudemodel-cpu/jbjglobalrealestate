@@ -130,6 +130,83 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
   );
 };
 
+/** Searchable country combobox with flag emojis + per-country counts. */
+const CountryCombobox = ({
+  value,
+  onChange,
+  rows,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  rows: any[];
+}) => {
+  const [open, setOpen] = useState(false);
+  const counts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const r of rows) {
+      const c = String(r?.country || (r?.region === "UAE" ? "United Arab Emirates" : r?.region || "")).trim();
+      if (!c) continue;
+      m[c.toLowerCase()] = (m[c.toLowerCase()] || 0) + 1;
+    }
+    return m;
+  }, [rows]);
+  const selected = COUNTRIES.find((c) => c.name.toLowerCase() === value.toLowerCase());
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          className="w-full justify-between font-normal bg-white"
+        >
+          <span className="truncate">
+            {value === "all"
+              ? `🌐 All countries · ${rows.length}`
+              : selected
+              ? `${selected.flag} ${selected.name}`
+              : value}
+          </span>
+          <ChevronsUpDown className="h-4 w-4 opacity-60 shrink-0 ml-2" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="p-0 w-[280px] bg-[#FDFBF7] border-[#1A1A1A]/10" align="start">
+        <Command>
+          <CommandInput placeholder="Search country…" />
+          <CommandList className="max-h-72">
+            <CommandEmpty>No country found.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem
+                value="all"
+                onSelect={() => { onChange("all"); setOpen(false); }}
+              >
+                <Check className={`mr-2 h-4 w-4 ${value === "all" ? "opacity-100" : "opacity-0"}`} />
+                <span className="mr-2">🌐</span>
+                <span className="flex-1">All countries</span>
+                <span className="text-[#1A1A1A]/60 text-xs">{rows.length}</span>
+              </CommandItem>
+              {COUNTRIES.map((c) => {
+                const n = counts[c.name.toLowerCase()] || 0;
+                return (
+                  <CommandItem
+                    key={c.code}
+                    value={`${c.name} ${c.code} ${c.nationality}`}
+                    onSelect={() => { onChange(c.name); setOpen(false); }}
+                  >
+                    <Check className={`mr-2 h-4 w-4 ${value.toLowerCase() === c.name.toLowerCase() ? "opacity-100" : "opacity-0"}`} />
+                    <span className="mr-2">{c.flag}</span>
+                    <span className="flex-1 truncate">{c.name}</span>
+                    {n > 0 && <span className="text-[#1A1A1A]/60 text-xs ml-2">{n}</span>}
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 /**
  * Verification banner — confirms which table powers the Relationships list and
  * shows live row counts on both sides so we can spot drift between the master
