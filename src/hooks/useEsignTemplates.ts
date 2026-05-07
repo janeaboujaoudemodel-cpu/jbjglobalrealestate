@@ -118,7 +118,7 @@ export function useCreateEnvelopeFromTemplate() {
           category: template.category,
           template_key: template.key,
           template_html: html,
-          template_field_values: values,
+          template_field_values: mergedValues,
           client_lead_id: clientLeadId ?? null,
           expires_at: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
         })
