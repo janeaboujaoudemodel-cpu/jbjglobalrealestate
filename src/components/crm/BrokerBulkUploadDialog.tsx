@@ -42,6 +42,10 @@ interface ParsedFile {
 
 type Step = "meta" | "matching" | "review" | "done";
 
+const FAST_MODE_THRESHOLD = 2000; // rows — above this we skip the per-row Review panel
+const CHUNK_SIZE = 1000;
+const CONCURRENCY = 4;
+
 function pick(row: Record<string, any>, keys: string[]): string | null {
   for (const k of keys) {
     for (const rk of Object.keys(row)) {
@@ -77,8 +81,10 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
   const [batchId, setBatchId] = useState<string | null>(null);
   const [stagingRows, setStagingRows] = useState<StagingRow[]>([]);
   const [summary, setSummary] = useState<any | null>(null);
+  const [progress, setProgress] = useState<{ done: number; total: number; inserted: number; merged: number; skipped: number } | null>(null);
 
   const totalRows = useMemo(() => files.reduce((s, f) => s + f.rows.length, 0), [files]);
+  const fastMode = totalRows > FAST_MODE_THRESHOLD;
 
   const handleFiles = async (list: FileList | null) => {
     if (!list || list.length === 0) return;
@@ -107,7 +113,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     setStep("meta"); setFiles([]); setSpecialty("leasing"); setCustomLabel("");
     setSourceName(""); setSourceType(""); setNotes(""); setAreas([]); setAreaInput("");
     setBatchLabel(""); setDefaultBrokerage("__none__"); setBusy(false);
-    setBatchId(null); setStagingRows([]); setSummary(null);
+    setBatchId(null); setStagingRows([]); setSummary(null); setProgress(null);
   };
 
   const close = (v: boolean) => {
@@ -174,6 +180,79 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         }
       }
 
+      // ============ FAST MODE: skip Review panel, parallel bulk import ============
+      if (fastMode) {
+        // Pre-normalize for the edge function (so it doesn't have to)
+        const normalized = allRows.map((r) => ({
+          ...r,
+          // edge function will recompute, but include for clarity
+        }));
+
+        const chunks: any[][] = [];
+        for (let i = 0; i < normalized.length; i += CHUNK_SIZE) {
+          chunks.push(normalized.slice(i, i + CHUNK_SIZE));
+        }
+
+        let agg = { done: 0, total: chunks.length, inserted: 0, merged: 0, skipped: 0 };
+        setProgress({ ...agg });
+
+        let cursor = 0;
+        const runOne = async () => {
+          while (cursor < chunks.length) {
+            const myIdx = cursor++;
+            const chunk = chunks[myIdx];
+            let attempts = 0;
+            while (attempts < 2) {
+              try {
+                const { data, error } = await supabase.functions.invoke("crm-broker-bulk-import", {
+                  body: { rows: chunk, batch_id: batch.id },
+                });
+                if (error) throw error;
+                const d = data as any;
+                agg = {
+                  done: agg.done + 1,
+                  total: agg.total,
+                  inserted: agg.inserted + (d?.inserted ?? 0),
+                  merged: agg.merged + (d?.merged ?? 0),
+                  skipped: agg.skipped + (d?.skipped ?? 0),
+                };
+                setProgress({ ...agg });
+                break;
+              } catch (e) {
+                attempts++;
+                if (attempts >= 2) {
+                  agg = { ...agg, done: agg.done + 1, skipped: agg.skipped + chunk.length };
+                  setProgress({ ...agg });
+                }
+              }
+            }
+          }
+        };
+        const workers = Array(Math.min(CONCURRENCY, chunks.length)).fill(0).map(runOne);
+        await Promise.all(workers);
+
+        // Mark batch complete
+        await (supabase as any).from("crm_import_batches").update({
+          status: "complete",
+          inserted: agg.inserted, updated: agg.merged, skipped: agg.skipped,
+        }).eq("id", batch.id);
+
+        setSummary({
+          batch_id: batch.id,
+          total: totalRows,
+          new_brokers: agg.inserted,
+          merged: agg.merged,
+          skipped: agg.skipped,
+          missing_phone: 0, missing_email: 0,
+          labels_applied: [specialty, ...(specialty === "other" ? [customLabel] : [])],
+          source_database: sourceName || files.map((f) => f.file.name).join(", "),
+        });
+        setStep("done");
+        onDone?.();
+        return;
+      }
+
+      // ============ SLOW MODE (≤2k rows): per-row Review panel ============
       // Match in chunks
       const matchByIndex = new Map<number, { match_agent_id: string | null; confidence: number; reasons: string[] }>();
       for (let i = 0; i < allRows.length; i += 500) {
@@ -211,13 +290,21 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         await (supabase as any).from("crm_broker_import_staging").insert(chunk);
       }
 
-      // Fetch back the staging rows + matched agent details for review
-      const { data: rows } = await (supabase as any)
-        .from("crm_broker_import_staging")
-        .select("*")
-        .eq("batch_id", batch.id);
+      // Paginated fetch — never cap at 1000
+      const PAGE = 1000;
+      const allStaging: any[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data: p } = await (supabase as any)
+          .from("crm_broker_import_staging")
+          .select("*")
+          .eq("batch_id", batch.id)
+          .range(from, from + PAGE - 1);
+        const arr = (p ?? []) as any[];
+        allStaging.push(...arr);
+        if (arr.length < PAGE) break;
+      }
 
-      const matchIds = Array.from(new Set((rows || []).map((r: any) => r.match_agent_id).filter(Boolean)));
+      const matchIds = Array.from(new Set(allStaging.map((r: any) => r.match_agent_id).filter(Boolean)));
       let matchedAgents: any[] = [];
       if (matchIds.length) {
         const { data: a } = await (supabase as any)
@@ -227,7 +314,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         matchedAgents = a ?? [];
       }
       const byId = new Map(matchedAgents.map((a) => [a.id, a]));
-      setStagingRows((rows || []).map((r: any) => ({ ...r, matched_agent: r.match_agent_id ? byId.get(r.match_agent_id) : null })));
+      setStagingRows(allStaging.map((r: any) => ({ ...r, matched_agent: r.match_agent_id ? byId.get(r.match_agent_id) : null })));
       setStep("review");
     } catch (e: any) {
       toast.error(e?.message || "Matching failed");
@@ -373,9 +460,28 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
         )}
 
         {step === "matching" && (
-          <div className="py-12 flex flex-col items-center gap-3 text-[#1A1A1A]">
+          <div className="py-10 flex flex-col items-center gap-4 text-[#1A1A1A]">
             <Loader2 className="w-8 h-8 animate-spin text-[#B89555]" />
-            <div className="text-sm">Parsing and matching {totalRows} rows against the Broker Registry…</div>
+            {progress ? (
+              <>
+                <div className="text-sm font-semibold">
+                  Importing {totalRows.toLocaleString()} brokers — chunk {progress.done} / {progress.total}
+                </div>
+                <div className="w-full max-w-md h-2 rounded-full bg-[#EFE6D6] overflow-hidden border border-[#B89555]/30">
+                  <div
+                    className="h-full bg-[#1A1A1A] transition-all"
+                    style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }}
+                  />
+                </div>
+                <div className="text-xs text-[#1A1A1A]/70 flex gap-4">
+                  <span>New: <b className="text-[#1A1A1A]">{progress.inserted.toLocaleString()}</b></span>
+                  <span>Merged: <b className="text-[#1A1A1A]">{progress.merged.toLocaleString()}</b></span>
+                  <span>Skipped: <b className="text-[#1A1A1A]">{progress.skipped.toLocaleString()}</b></span>
+                </div>
+              </>
+            ) : (
+              <div className="text-sm">Parsing and matching {totalRows.toLocaleString()} rows against the Broker Registry…</div>
+            )}
           </div>
         )}
 
@@ -407,7 +513,10 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
             <>
               <Button variant="outline" onClick={() => close(false)} disabled={busy}>Cancel</Button>
               <Button variant="gold" onClick={startMatching} disabled={busy || files.length === 0}>
-                <ArrowRight className="w-4 h-4 mr-2" /> Continue ({totalRows} rows)
+                <ArrowRight className="w-4 h-4 mr-2" />
+                {fastMode
+                  ? `Fast import ${totalRows.toLocaleString()} rows`
+                  : `Continue (${totalRows.toLocaleString()} rows)`}
               </Button>
             </>
           )}
