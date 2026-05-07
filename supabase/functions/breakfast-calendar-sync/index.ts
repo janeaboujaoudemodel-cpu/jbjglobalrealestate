@@ -140,7 +140,6 @@ serve(async (req: Request) => {
         purpose: ev.summary || "Private Breakfast",
         notes: ev.description || null,
         calendar_event_id: ev.id,
-        calendar_added: true,
         duration_minutes: 60,
         user_id: user.id,
       } as Record<string, unknown>;
