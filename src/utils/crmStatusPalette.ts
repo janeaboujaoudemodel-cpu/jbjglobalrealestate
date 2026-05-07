@@ -131,6 +131,32 @@ export const BROKERAGE_REGISTRATION_STATUS_OPTIONS: { value: string; label: stri
   { value: "expired",                  label: "Expired",                 tone: "amber"     },
 ];
 
+// Contract pipeline (separate from registration). Stored in crm_brokerages.contract_status.
+export const CONTRACT_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
+  { value: "none",                label: "No contract",        tone: "champagne" },
+  { value: "draft_sent",          label: "Draft sent",         tone: "amber"     },
+  { value: "awaiting_signature",  label: "Awaiting signature", tone: "amber"     },
+  { value: "signed",              label: "Signed",             tone: "emerald"   },
+  { value: "expired",             label: "Expired",            tone: "red"       },
+  { value: "terminated",          label: "Terminated",         tone: "red"       },
+];
+
+// Attendance health (derived bucket from total_attendance count).
+export const ATTENDANCE_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
+  { value: "none",     label: "No attendance",  tone: "champagne" },
+  { value: "occasional", label: "Occasional",    tone: "amber"     },
+  { value: "active",   label: "Active",         tone: "blue"      },
+  { value: "champion", label: "Champion",       tone: "emerald"   },
+];
+
+export function attendanceBucket(total: number | null | undefined): string {
+  const t = Number(total || 0);
+  if (t <= 0) return "none";
+  if (t <= 2) return "occasional";
+  if (t <= 5) return "active";
+  return "champion";
+}
+
 // Brokerage agency-level lifecycle (legacy enum) — kept for backwards compat.
 export const BROKERAGE_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
   { value: "prospect",       label: "Prospect",       tone: "champagne" },
