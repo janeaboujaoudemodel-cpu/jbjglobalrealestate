@@ -61,17 +61,17 @@ export function useIntelligenceTierAccess(): IntelligenceTierAccessResult {
       };
     }
     
-    // Determine roles based on user metadata/profile
-    // This would integrate with your actual role system
-    const userRole = user.user_metadata?.role || 'viewer';
-    
+    // SECURITY: Privilege flags must NEVER be derived from user.user_metadata —
+    // that field is user-editable via supabase.auth.updateUser({ data: {...} }).
+    // Only trust the server-verified `isOwner` flag (resolved through
+    // verify-owner / user_roles RLS).
     return {
       is_authenticated: true,
-      is_active_client: userRole === 'investor' || userRole === 'client',
-      is_admin: isOwner || userRole === 'admin',
-      is_executive: userRole === 'executive',
-      is_owner: isOwner || userRole === 'owner',
-      role: userRole as any,
+      is_active_client: false,
+      is_admin: isOwner,
+      is_executive: isOwner,
+      is_owner: isOwner,
+      role: isOwner ? ('owner' as any) : ('viewer' as any),
     };
   }, [user, isOwner]);
   
