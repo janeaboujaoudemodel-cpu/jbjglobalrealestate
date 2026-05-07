@@ -1520,7 +1520,6 @@ const BrokeragesAgenciesView = () => {
         onExport={handleExportConfigured}
       />
     </div>
-    </div>
     </TooltipProvider>
   );
 };
