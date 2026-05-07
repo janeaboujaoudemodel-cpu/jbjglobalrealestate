@@ -59,6 +59,7 @@ import { OutreachActionsMenu } from "@/components/crm/OutreachActionsMenu";
 import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { PrimarySenderEditor, CcListEditor } from "@/components/crm/EmailListEditor";
 import { GmailSenderStatusBanner } from "@/components/crm/GmailSenderStatusBanner";
+import { BreakfastCalendarStatusBanner } from "@/components/crm/BreakfastCalendarStatusBanner";
 import { BrokerageDealModal } from "@/components/crm/BrokerageDealModal";
 import { BrokerageLedgerDialog } from "@/components/crm/BrokerageLedgerDialog";
 import { DirectoryToolsPanel, BrokerageDirectoryPanel, DeveloperDirectoryPanel } from "@/components/crm/DirectoryToolsPanel";
