@@ -271,9 +271,9 @@ export default function IndividualBrokersTab() {
                       {(r.expertise_areas || []).slice(0, 3).map((a) => (
                         <span key={a} className="px-2 py-0.5 rounded-full border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]">{a}</span>
                       ))}
-                      {(r.source_history || []).slice(0, 2).map((sh: any, i: number) => (
-                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/70" title={`From: ${sh.file || sh.label || ""}`}>
-                          src: {sh.label || sh.file || "import"}
+                      {(r.source_history || []).slice(-2).map((sh: any, i: number) => (
+                        <span key={`sh-${i}`} className="px-2 py-0.5 rounded-full border border-[#1A1A1A]/15 bg-white text-[#1A1A1A]/80" title={`Source: ${sh.source_name || ""} (${sh.source_type || "—"})`}>
+                          📂 {sh.label || sh.file || "import"}
                         </span>
                       ))}
                     </div>
