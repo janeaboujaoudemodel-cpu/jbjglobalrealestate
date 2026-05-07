@@ -113,7 +113,7 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     setStep("meta"); setFiles([]); setSpecialty("leasing"); setCustomLabel("");
     setSourceName(""); setSourceType(""); setNotes(""); setAreas([]); setAreaInput("");
     setBatchLabel(""); setDefaultBrokerage("__none__"); setBusy(false);
-    setBatchId(null); setStagingRows([]); setSummary(null);
+    setBatchId(null); setStagingRows([]); setSummary(null); setProgress(null);
   };
 
   const close = (v: boolean) => {
