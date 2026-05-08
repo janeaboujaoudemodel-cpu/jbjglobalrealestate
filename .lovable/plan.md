@@ -1,67 +1,46 @@
-# Resend-Only Sending + Daily Free-Plan Cap
+## Decision
+Keep the Resend free-plan caps as configured (100/day, 2,900/30d, 2 req/s). No code changes to limits.
 
-## 1. Resend free plan limits (verified)
-- **100 emails / day**
-- **3,000 emails / month**
-- **2 requests / second** (burst rate)
-- Custom domain only sends after DNS verification; otherwise sender is locked to `onboarding@resend.dev`.
+## How to confirm an email was sent via Resend (not Lovable)
 
-We will enforce the **daily 100** cap as the hard ceiling, plus a soft **2,900 / 30-day** monthly guard so we don't blow the monthly quota either. The Resend API key is kept active and untouched (per your choice).
+Three independent checks — any one is sufficient, all three together is conclusive.
 
-## 2. Funnel every send through one Resend gateway
+### 1. Resend dashboard (ground truth)
+- Open https://resend.com/emails
+- A successful send appears within seconds with: recipient, subject, status (Delivered / Bounced), and the message ID.
+- If the email is NOT in this list, it did not go through Resend.
 
-Today ~35 edge functions call Resend or Gmail directly. We add a single shared module + edge function that becomes the *only* path to Resend:
+### 2. Email headers in the recipient's inbox
+- Open the test email in Gmail → "Show original" (or equivalent in other clients).
+- Look for these headers — all three confirm Resend:
+  - `Return-Path: <bounces+...@...resend.com>` or your verified domain
+  - `Received: from ... .resend.com`
+  - `X-SES-...` will be ABSENT (Lovable Email uses SES); Resend uses its own infra.
+- The `Message-ID` will end in `@resend.dev` or your sending domain managed by Resend.
 
-```
-supabase/functions/_shared/resendClient.ts        ← shared sender + cap check
-supabase/functions/email-send-gateway/index.ts    ← thin HTTP wrapper (for non-edge callers)
-```
+### 3. In-app quota counter (proves our gateway ran)
+- On `/owner/crm/relationships`, the Email Quota card shows "Today X / 100".
+- Send one test email → refresh → counter increments by exactly 1.
+- If the counter does NOT move, the send bypassed `quotaGuardedFetch` (i.e., it was not routed through Resend via our wrapper) — that's a bug to fix.
 
-All existing senders (`send-owner-email`, `outreach-send-locked`, `outreach-bulk-worker`, `rel-send-bulk-email`, `resend-support-ticket-confirmation`, `documents-send`, `esign-*`, `send-*-email`, `uae-registry-send`, `crm-send-brokerage-outreach`, etc.) are refactored to call `sendViaResend(...)` from the shared module instead of `fetch("https://api.resend.com/emails", …)` or Gmail API directly.
+## Recommended test procedure
+1. Note current "Today" count on the Email Quota card.
+2. Trigger a real send from one of the funnels we refactored, e.g.:
+   - CRM Relationships → send a developer outreach email to your own address, OR
+   - Owner Inbox → "Send test email" to yourself, OR
+   - Support ticket → resend confirmation.
+3. Within ~10 seconds:
+   - Quota card increments by 1 ✅
+   - Email appears in Resend dashboard ✅
+   - Email arrives in your inbox; headers show `resend.com` in Received/Return-Path ✅
+4. If all three pass → confirmed: Resend, not Lovable.
 
-Result: one chokepoint = one place to enforce the cap, log usage, and swap providers later.
+## Optional: agent-side verification I can run for you
+After you trigger a test send, I can:
+- Query `email_send_log` for the most recent row and show `status`, `message_id`, `template_name`.
+- Tail the relevant edge function logs (e.g. `send-owner-email`) to show the `quotaGuardedFetch` → `api.resend.com` call and the 200 response from Resend.
 
-## 3. Daily/monthly cap enforcement
+Just tell me which send you triggered and to which address, and I'll pull the logs.
 
-New table `email_send_quota` (admin-only RLS, service role writes):
-
-| column | purpose |
-|---|---|
-| `day` (date, PK) | UTC date bucket |
-| `sent_count` (int) | successful sends that day |
-| `failed_count` (int) | for observability |
-| `last_send_at` (timestamptz) | drives 2 req/s throttle |
-
-Plus a **single-row** `email_send_quota_config` table holding the editable limits (`daily_limit=100`, `monthly_limit=2900`, `rate_per_sec=2`) so you can tune from the UI without redeploying.
-
-Logic inside `sendViaResend`:
-1. `SELECT … FOR UPDATE` today's row (insert if missing).
-2. Reject with `429 DAILY_LIMIT_REACHED` if `sent_count >= daily_limit`.
-3. Sum last 30 days; reject with `429 MONTHLY_LIMIT_REACHED` if `>= monthly_limit`.
-4. Sleep to honor `rate_per_sec` (cheap `setTimeout` based on `last_send_at`).
-5. POST to Resend; on 2xx increment `sent_count`, else `failed_count` + return original error.
-
-Caps are **global / account-wide** (your choice).
-
-## 4. Owner-facing UI
-
-Small panel on `/owner/crm/relationships` (and Communication Hub):
-- Today's usage `47 / 100` progress bar (gold hairline, ink text — per design tokens).
-- 30-day usage `1,204 / 2,900`.
-- "Edit limits" dialog → updates `email_send_quota_config`.
-- Banner appears in any send dialog when ≥90% used; sends are blocked at 100%.
-
-## 5. What is NOT changed
-- Resend API key stays as-is (no rotation, no deletion).
-- Gmail-based personal-inbox sync (read side) untouched. Only **outbound** sending is consolidated to Resend. If you'd rather keep Gmail-as-sender for `send-owner-email` personal account, say so and I'll exclude it from the funnel.
-- Lock-and-send byte-for-byte pipeline (`outreach-send-locked`) untouched at the payload layer; only its final HTTP call is swapped to `sendViaResend`.
-
-## 6. Files touched (high level)
-- **New**: `supabase/functions/_shared/resendClient.ts`, `email-send-gateway/index.ts`, migration for `email_send_quota` + `email_send_quota_config` + RLS, `src/components/owner/EmailQuotaCard.tsx`, hook `useEmailQuota.ts`.
-- **Edited**: ~12 highest-traffic sender edge functions to call the shared client. Remaining lower-traffic ones in a follow-up pass.
-- **Note** (heads-up, per project policy): the platform doesn't have first-class rate-limiting primitives, so this is an app-level cap stored in Postgres — good enough for a 100/day ceiling, not a defense against abuse spikes.
-
-## 7. Verification
-- Unit-style Deno test for `sendViaResend` mocking Resend + quota table (limit reached → 429, under limit → success increments counter).
-- Manual: send 3 test emails, confirm counter increments and UI updates live.
-- Force `daily_limit=2`, attempt 3rd send, confirm block + toast.
+## No files changed
+This is a verification plan only — no code edits.
