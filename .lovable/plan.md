@@ -1,70 +1,75 @@
-# Business Card Scanner — Repair + CRM Integration
+# Unified CRM Ecosystem — Audit & Consolidation Plan
 
-## Strategy
-Reuse 100% of existing infrastructure. **No new tables**, **no new OCR provider**, **no duplicate CRM**. The scanner becomes a thin ingestion surface that writes into the existing `crm_leads` table (master DB) and links to `crm_brokerages` / `crm_developer_registry` when applicable.
+## 1. Audit findings (reuse, don't rebuild)
 
-## Scope of changes
+The system already has a strong relational CRM foundation. Existing tables to **KEEP as canonical**:
 
-### 1. Edge function (`supabase/functions/business-card-ocr`)
-Extend the Gemini prompt + response shape to emit the missing fields the spec requires:
-- `mobile`, `whatsapp`, `landline` (separated, not one `phone` blob)
-- `linkedin`, `instagram`, `website`
-- `address`, `city`, `country`
-- `company_name`, `agency_name`, `developer_name` (one of)
-- `event_source`, `notes`, `raw_text`
-Keep model = `google/gemini-2.5-flash` (cheap, fast, already free via Lovable AI Gateway). No extra secrets needed.
+| Domain | Canonical table | Notes |
+|---|---|---|
+| Brokerages | `crm_brokerages` | Has license, website, contacts, tags, status, outreach state |
+| Individual brokers | `crm_brokers` + `crm_brokerage_agents` | Agents row links to brokerage; brokers row is the personal record |
+| Broker history | `broker_company_history` | Already supports prev companies (started_at/ended_at) |
+| Developers | `crm_developer_registry` | Has office, website, country, contacts |
+| Developer reps | `developer_representatives` (+ `developer_sales_reps`, `developer_contacts`) | Three overlapping tables — must consolidate |
+| Investors | `crm_leads` where `lead_type='investor'` (+ `client_investors`) | Investors live in unified leads |
+| Master contacts | `crm_leads` | Source/import metadata, labels, tags, scoring |
+| Imports | `crm_imports`, `crm_import_batches`, `crm_broker_import_staging` | Already track source, batch, file |
+| Campaigns | `campaigns`, `crm_email_campaigns`, `crm_campaign_recipients`, `campaign_members` | Reuse |
+| Activity | `crm_activities`, `crm_brokerage_notes`, `crm_brokerage_events`, `crm_relationship_status_history`, `crm_outreach_touchpoints` | Reuse |
+| Scanner | `crm-save-scanned-card` edge fn already upserts to `crm_brokerages` & `crm_developer_registry` | Reuse — extend, don't replace |
 
-### 2. New edge function `crm-save-scanned-card`
-Single endpoint that:
-- Verifies JWT + admin/owner role (mirrors `requireOwnerAuth` pattern used elsewhere).
-- Runs **CRM-wide duplicate check** against `crm_leads` using: `email_lower`, `phone_normalized` / `phone_e164` (digits only), and `(full_name + company_name)` fuzzy match.
-- Returns `{ status: "duplicate" | "new", existing?: lead }` so the UI can show Merge / Update / Add New / Add Note.
-- On confirm action: `insert` (new) | `update` (merge fields, never overwrite non-empty with empty) | `append-note` into `crm_leads`. Sets `source = 'business_card_scan'`, `lead_source_type = 'scan'`, persists `raw_import = { ocr_payload, card_image_url }`.
-- If `agency_name` present → upsert into `crm_brokerages` and link via `company_name`. If `developer_name` → upsert into `crm_developer_registry`. (Reuse existing tables only.)
+**Duplicates to deprecate (data-migrate then drop):**
+`rel_brokerages`, `rel_developers`, `rel_brokerage_contacts`, `rel_developer_contacts`, `jbj_brokers`, `jbj_leads`, plain `leads`, `developers` (legacy), `developer_sales_reps` + `developer_contacts` (merge into `developer_representatives`).
 
-### 3. Storage
-Add `business-card-scans` private bucket (RLS: owner-only) to persist the original card image alongside the lead for audit/verification. Lead row stores the storage path inside `raw_import`.
+## 2. Schema consolidation (single migration)
 
-### 4. UI — `src/pages/BusinessCardScanner.tsx` + `BusinessCardResults.tsx`
-Per-card review row gains:
-- **Contact type** dropdown → maps to `crm_contact_type` (Broker, Brokerage Agency, Developer, Investor, Client, Partner, Media, Supplier, Other).
-- **Labels multi-select** (VIP, Hot Lead, Follow Up, Event Contact, Broker, Investor, Developer, Potential Partner, Needs Verification, Urgent) → `crm_leads.tags[]`. VIP also flips `vip = true`.
-- New separated fields: WhatsApp, Landline, LinkedIn, Instagram, Event Source.
-- **Save to CRM** button per card + **Save All** bulk. Calls `crm-save-scanned-card`. Shows duplicate dialog (Merge / Update / Add New / Add Note / Cancel) when needed.
-- "Needs Review" badge on any field the AI flagged low-confidence or left empty among critical fields.
-- Existing CSV/Excel export and encryption stay as-is (secondary).
+1. **Brokerage ↔ Broker link**: ensure `crm_brokerage_agents.broker_id uuid REFERENCES crm_brokers(id)` exists; backfill by matching email/phone normalized; add `current_brokerage_id` on `crm_brokers` (denormalized pointer) + trigger to sync.
+2. **Broker history**: keep `broker_company_history`; add trigger on `crm_brokerage_agents` brokerage change → close prior row, insert new.
+3. **Developer reps unification**: migrate rows from `developer_sales_reps` and `developer_contacts` into `developer_representatives` (add missing cols: `whatsapp`, `linkedin`, `instagram`, `role`, `source`, `source_batch_ids`, `import_label`, `current_developer_id`); add `developer_rep_company_history` mirror of broker history.
+4. **Source tracking** (verify/add on `crm_leads`, `crm_brokerages`, `crm_brokerage_agents`, `developer_representatives`):
+   - `database_source text`, `event_source text`, `upload_source text`, `original_filename text`, `imported_by uuid`, `imported_at timestamptz`, `source_history jsonb`.
+5. **Unified contact view**: `vw_crm_contacts` UNION ALL across brokers, agents, reps, investors, partners — exposes `(id, kind, name, email, phone, company_id, company_kind, company_name, source, labels, last_interaction_at)` for global search/exports.
+6. **rel_* / jbj_* / leads / developers**: data-migrate into canonical, then `DROP TABLE` (or mark with comment + revoke) — feature-flagged so app keeps building.
 
-### 5. Shortcuts (visibility only for admin/owner)
-Add a "Business Card Scanner" entry, gated by the same role check used elsewhere, in:
-- Owner sidebar (next to Relationship Hub).
-- CRM Relationships page header.
-- Leads & Clients page header.
-- Marketing Hub page header.
-- Mobile admin nav (`MobileBottomNav` / equivalent).
-Single shared component `<ScanCardShortcut />` to avoid drift.
+## 3. Backend (edge functions)
 
-### 6. Campaign reachability
-No code change required — once leads land in `crm_leads` with `tags[]` and `contact_type`, the existing CRM filters (`CRMRelationships`, `BulkSendDialog`, Marketing Hub audience builder) already segment by tag/type/city/country/source. We will verify the filters surface the new `source = 'business_card_scan'` and the new tag values.
+- **Extend `crm-save-scanned-card`** (already creates brokerage/developer): also write `crm_brokerage_agents` / `developer_representatives` rows linked to the company, and call new `upsert_contact_with_company` RPC.
+- **New RPC `upsert_contact_with_company(payload jsonb)`**: single source of truth used by scanner, manual entry, bulk import, and LinkedIn import. Handles: company find-or-create, contact find-or-create (email/phone fuzzy), link, history row on company change, source append.
+- **Extend `crm-broker-bulk-import` and `crm-bulk-upload-brokerages` / `crm-bulk-upload-developers`** to call the same RPC so all import paths share logic.
+- **New `crm-export` edge function**: streams CSV/XLSX filtered by `{ scope: 'brokerage'|'developer'|'source'|'event'|'label'|'country'|'city'|'team'|'campaign', value }` from `vw_crm_contacts`.
 
-## Out of scope (explicitly not doing)
-- New CRM tables / new contact store.
-- Separate OCR provider (Google Vision, Tesseract). Lovable AI Gateway already handles it for free.
-- Rebuild of camera/upload UI — current components stay.
+## 4. UI (reuse existing pages, add tabs)
 
-## Test plan (manual, end-to-end)
-1. Mobile camera scan → review → classify Broker + tag VIP → Save → appears in `crm_leads` with tags + contact_type.
-2. Same card re-scanned → duplicate dialog → Merge → fields enriched, no duplicate row.
-3. Desktop bulk upload of 5 cards → Save All → 5 leads created, agency cards also create/link `crm_brokerages` row.
-4. Filter CRM Relationships by tag `Hot Lead` and source `business_card_scan` → scanned contact appears.
-5. Marketing Hub → audience "Brokers in Dubai" → scanned broker is reachable; send test email.
-6. Export CSV from scanner still works.
-7. Non-admin user cannot see shortcuts and cannot call `crm-save-scanned-card` (403).
+- **`CRMRelationships.tsx` Brokerage detail drawer**: ensure tabs `Linked Brokers | Notes | Meetings | Campaigns | Cards | Follow-ups | Source history`. Most exist; add missing Cards & Source-history tabs.
+- **`AdminCRM.tsx` Broker detail**: add `Current company`, `Previous companies` (from `broker_company_history`), `Role title`, `Relationship timeline`, `Campaign status`.
+- **`AdminDevelopers.tsx` / `DeveloperDetail.tsx`**: mirror the brokerage layout — `Linked Reps | Notes | Meetings | Campaigns | Cards | Follow-ups`.
+- **New Rep detail panel** inside developer drawer: current developer, previous developers, role, timeline.
+- **Source filter chips** on CRM lists: filter by `database_source`, `event_source`, `upload_source`, `original_filename`, label, country, city, team, campaign.
+- **Unified Export modal** (button on every list/detail) → calls `crm-export` with the active scope/filters.
+- **Scanner save flow**: already proposes Merge/Update/Add — add a "Link to existing brokerage/developer" picker so reps and brokers always land in the right company.
 
-## Files touched (estimate)
-- `supabase/functions/business-card-ocr/index.ts` — extend prompt + payload.
-- `supabase/functions/crm-save-scanned-card/index.ts` — **new**.
-- `supabase/migrations/<ts>_business_card_scans_bucket.sql` — bucket + RLS.
-- `src/pages/BusinessCardScanner.tsx` — wire Save to CRM, duplicate dialog.
-- `src/components/business-card/BusinessCardResults.tsx` — type dropdown, labels, new fields, save buttons.
-- `src/components/business-card/ScanCardShortcut.tsx` — **new** shared shortcut.
-- Sidebar / `CRMRelationships.tsx` / Leads / Marketing Hub / mobile nav — add `<ScanCardShortcut />`.
+## 5. Deprecation rollout (safe order)
+
+1. Migration adds new columns + view + RPC (non-breaking).
+2. Edge functions switch to RPC.
+3. UI switches reads to canonical tables + view.
+4. Backfill script copies `rel_*`, `jbj_*`, `leads`, `developers` rows into canonical (idempotent, dedup by email/phone).
+5. After verification, drop legacy tables in a follow-up migration.
+
+## 6. Acceptance checklist
+
+- Creating "FAM Properties" then scanning "John Smith @ FAM" → John appears in **Individual Brokers** AND in **FAM → Linked Brokers**, auto-linked.
+- Changing John's company updates `current_brokerage_id` and inserts a `broker_company_history` row.
+- Same behavior for Sobha + Sarah Ahmed via `developer_representatives`.
+- Every contact row has `database_source`, `event_source`, `upload_source`, `original_filename`, `imported_by`, `imported_at`.
+- Exports work scoped by brokerage / developer / source / event / label / country / city / team / campaign.
+- Brokerage and developer detail views show the full relational hub (linked people, notes, meetings, campaigns, cards, follow-ups).
+- No new parallel CRM tables created; `rel_*`, `jbj_*`, plain `leads`, plain `developers` are migrated and removed.
+
+## Technical details (for engineers)
+
+- All new policies use `requireOwnerAuth` + `has_role(auth.uid(),'admin')`; never expose PII to anon.
+- `vw_crm_contacts` is a `SECURITY INVOKER` view; underlying RLS still applies.
+- Triggers: `trg_sync_broker_company` on `crm_brokerage_agents`, `trg_sync_rep_company` on `developer_representatives`.
+- Indexes: `(email_normalized)`, `(phone_normalized)`, `(brokerage_id)`, `(current_developer_id)`, GIN on `tags`, `specialty_labels`.
+- Keep champagne-gold design tokens, IconTile, locked-send + quota standards intact — no UI restyle in this scope (No Removal policy).

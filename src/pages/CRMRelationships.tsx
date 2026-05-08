@@ -1243,7 +1243,44 @@ const BrokeragesAgenciesView = () => {
 
       {viewMode === "excel" && sourceTab !== "owner" ? (
         <div className="space-y-3">
-          <div className="flex items-center justify-end"><ScanCardShortcut /></div>
+          <div className="flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const { data: { session } } = await supabase.auth.getSession();
+                  const res = await fetch(
+                    `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/crm-export`,
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${session?.access_token ?? ""}`,
+                      },
+                      body: JSON.stringify({ scope: "all", format: "csv" }),
+                    }
+                  );
+                  if (!res.ok) throw new Error(await res.text());
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `crm-contacts-${new Date().toISOString().slice(0, 10)}.csv`;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                  URL.revokeObjectURL(url);
+                  toast.success("Exported unified CRM contacts");
+                } catch (e: any) {
+                  toast.error(e?.message || "Export failed");
+                }
+              }}
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A] text-sm font-medium hover:bg-[#E7DCC7]"
+            >
+              Export contacts (CSV)
+            </button>
+            <ScanCardShortcut />
+          </div>
           <EmailQuotaCard />
           <BulkOutreachPanel brokerages={(filtered as any[]).map((b) => ({ id: b.id, name: b.company_name || b.name || "", email: b.email }))} />
           <BrokerageAnalyticsStrip rows={filtered as any[]} />

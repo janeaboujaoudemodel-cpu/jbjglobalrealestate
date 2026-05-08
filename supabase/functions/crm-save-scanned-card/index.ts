@@ -213,8 +213,60 @@ serve(async (req) => {
       throw new Error(`Unknown action: ${action}`);
     }
 
-    // 3. Link to brokerage / developer registry (reuse existing tables)
+    // 3. Link to brokerage / developer registry + relational unified upsert
     if (leadId) {
+      // 3a. Unified relational upsert (broker↔brokerage / rep↔developer / investor)
+      try {
+        const sourceMeta = {
+          database_source: body.database_source || "business_card_scan",
+          event_source: body.event_source || null,
+          upload_source: body.upload_source || "scanner",
+          original_filename: body.original_filename || null,
+          imported_by: auth.userId,
+        };
+        if (nonEmpty(contact.agency_name)) {
+          await admin.rpc("upsert_contact_with_company", {
+            payload: {
+              kind: "broker",
+              owner_id: auth.userId,
+              full_name: fullName,
+              email: emailLower,
+              phone: contact.mobile || null,
+              role: contact.title || null,
+              company_name: contact.agency_name.trim(),
+              ...sourceMeta,
+            },
+          });
+        } else if (nonEmpty(contact.developer_name)) {
+          await admin.rpc("upsert_contact_with_company", {
+            payload: {
+              kind: "developer_rep",
+              owner_id: auth.userId,
+              full_name: fullName,
+              email: emailLower,
+              phone: contact.mobile || null,
+              role: contact.title || null,
+              company_name: contact.developer_name.trim(),
+              ...sourceMeta,
+            },
+          });
+        } else if (contactType === "investor") {
+          await admin.rpc("upsert_contact_with_company", {
+            payload: {
+              kind: "investor",
+              owner_id: auth.userId,
+              full_name: fullName,
+              email: emailLower,
+              phone: contact.mobile || null,
+              company_name: companyName,
+              ...sourceMeta,
+            },
+          });
+        }
+      } catch (relErr) {
+        console.warn("relational upsert failed (non-fatal):", relErr);
+      }
+
       if (nonEmpty(contact.agency_name)) {
         const { data: existingBroker } = await admin
           .from("crm_brokerages")
