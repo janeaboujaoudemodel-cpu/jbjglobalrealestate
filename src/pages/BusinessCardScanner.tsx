@@ -34,6 +34,14 @@ import { ScannedContact, encryptData, decryptData, generateEncryptionKey } from 
 import { useStepUpAuth } from "@/hooks/useStepUpAuth";
 import ReAuthModal from "@/components/security/ReAuthModal";
 import { logExportEvent } from "@/utils/dlpExportLogger";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 const BusinessCardScanner = () => {
   const { user } = useAuth();
