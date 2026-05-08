@@ -1282,6 +1282,7 @@ const BrokeragesAgenciesView = () => {
             </button>
             <ScanCardShortcut />
           </div>
+          <UnifiedContactsPanel />
           <EmailQuotaCard />
           <BulkOutreachPanel brokerages={(filtered as any[]).map((b) => ({ id: b.id, name: b.company_name || b.name || "", email: b.email }))} />
           <BrokerageAnalyticsStrip rows={filtered as any[]} />
