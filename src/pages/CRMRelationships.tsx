@@ -2272,9 +2272,9 @@ const DeveloperRegistryTab = () => {
       toast.error("Add a Google Drive link in Document Pack panel first");
       return;
     }
-    if (quota.sentToday >= quota.dailyLimit) {
+    if (!quota.unlimited && quota.sentToday >= quota.dailyLimit) {
       toast.error("Daily email cap reached", {
-        description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight.`,
+        description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight, or upgrade to Pro to remove the cap.`,
         duration: 8000,
       });
       return;
@@ -2297,20 +2297,24 @@ const DeveloperRegistryTab = () => {
     );
     if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
 
-    const remainingNow = Math.max(0, quota.dailyLimit - quota.sentToday);
-    if (remainingNow <= 0) {
-      toast.error("Daily email cap reached", {
-        description: `0 of ${quota.dailyLimit} left today. Resets after UTC midnight.`,
-        duration: 8000,
-      });
-      return;
-    }
-    if (targets.length > remainingNow) {
-      if (!confirm(
-        `Only ${remainingNow} of ${targets.length} can be sent today (Resend free-plan cap = ${quota.dailyLimit}/day). Continue and send the first ${remainingNow}?`,
-      )) return;
-    } else if (!confirm(`Send registration email to ${targets.length} developers? (${remainingNow} left today)`)) {
-      return;
+    if (quota.unlimited) {
+      if (!confirm(`Send registration email to ${targets.length} developers? (Pro plan — no daily cap)`)) return;
+    } else {
+      const remainingNow = Math.max(0, quota.dailyLimit - quota.sentToday);
+      if (remainingNow <= 0) {
+        toast.error("Daily email cap reached", {
+          description: `0 of ${quota.dailyLimit} left today. Resets after UTC midnight, or upgrade to Pro to remove the cap.`,
+          duration: 8000,
+        });
+        return;
+      }
+      if (targets.length > remainingNow) {
+        if (!confirm(
+          `Only ${remainingNow} of ${targets.length} can be sent today (Resend Free cap = ${quota.dailyLimit}/day). Continue and send the first ${remainingNow}?`,
+        )) return;
+      } else if (!confirm(`Send registration email to ${targets.length} developers? (${remainingNow} left today)`)) {
+        return;
+      }
     }
 
     setBulkRunning(true);
