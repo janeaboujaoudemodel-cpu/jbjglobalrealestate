@@ -43,7 +43,9 @@ export default function DocumentFieldPlacer({
   const [totalPages, setTotalPages] = useState(1);
   const [isAutoDetecting, setIsAutoDetecting] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
+  const [pageSize, setPageSize] = useState<{ w: number; h: number } | null>(null);
 
   // Saved stamp SVG from user's stamp generator
   const [savedStampSvg, setSavedStampSvg] = useState<string | null>(null);
