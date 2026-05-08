@@ -915,6 +915,30 @@ export default function DocumentFieldPlacer({
           onClose={() => setShowAssetPicker(false)}
         />
       )}
+
+      {/* ─── Adopt & Sign ─── */}
+      <AdoptAndSignDialog
+        open={showAdopt}
+        onOpenChange={(o) => { setShowAdopt(o); if (!o) setAdoptForFieldId(null); }}
+        recipientName={recipients.find((r) => r.id === fields.find((f) => f.id === adoptForFieldId)?.recipientId)?.name || ""}
+        fieldType={(fields.find((f) => f.id === adoptForFieldId)?.type as any) || "signature"}
+        onAdopt={handleAdoptResult}
+      />
+
+      {/* ─── Document Editor ─── */}
+      <DocumentEditor
+        open={showDocEditor}
+        onOpenChange={setShowDocEditor}
+        pdfFile={workingPdfFile}
+        pdfUrl={workingPdfUrl}
+        fields={fields}
+        onApply={(newFile, remap) => {
+          const url = URL.createObjectURL(newFile);
+          setWorkingPdfFile(newFile);
+          setWorkingPdfUrl(url);
+          onFieldsChange(remap);
+        }}
+      />
     </div>
   );
 }
