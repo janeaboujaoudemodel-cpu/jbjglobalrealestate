@@ -75,6 +75,8 @@ import { ArrowLeftRight, Trophy, HelpCircle, MessageCircle, Globe2, Instagram } 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { parseQuotaError, formatRemaining } from "@/lib/email/quotaErrors";
+import { useEmailQuota } from "@/hooks/useEmailQuota";
 
 type FieldSourceMeta = { source: string; url?: string; fetched_at?: string } | undefined;
 
