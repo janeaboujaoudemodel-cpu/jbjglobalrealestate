@@ -424,7 +424,14 @@ export default function DocumentFieldPlacer({
       }));
 
       onFieldsChange([...fields, ...detected]);
-      toast.success(`Auto-detected ${detected.length} field(s) — review and adjust as needed`);
+      if (detected.length > 0) {
+        // Jump to the page of the first detected field so the user actually sees them
+        const firstPage = Math.min(...detected.map((d) => d.pageNumber));
+        if (firstPage && firstPage !== currentPage) setCurrentPage(firstPage);
+        toast.success(`Auto-detected ${detected.length} field(s) — jumped to page ${firstPage}`);
+      } else {
+        toast.info("No signing fields detected on the first 6 pages.");
+      }
     } catch (err: any) {
       console.error("Auto-detect error:", err);
       toast.error("Auto-detect failed. Placing smart defaults instead.");
