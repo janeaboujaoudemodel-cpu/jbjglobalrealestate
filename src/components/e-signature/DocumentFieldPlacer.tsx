@@ -277,13 +277,20 @@ export default function DocumentFieldPlacer({
   };
 
   const handleOverlayPointerMove = (e: React.PointerEvent) => {
-    if (!overlayRef.current) return;
     const overlay = overlayRef.current;
-    // Auto-scroll near vertical edges so we can drag downward
-    const r = overlay.getBoundingClientRect();
-    const edge = 40;
-    if (e.clientY > r.bottom - edge) overlay.scrollTop += 12;
-    else if (e.clientY < r.top + edge) overlay.scrollTop -= 12;
+    const page = pageRef.current;
+    if (!overlay || !page) return;
+
+    // Auto-scroll near vertical edges of the SCROLL container
+    const ov = overlay.getBoundingClientRect();
+    const edge = 50;
+    if (draggingIdRef.current || resizingRef.current) {
+      if (e.clientY > ov.bottom - edge) overlay.scrollTop += 16;
+      else if (e.clientY < ov.top + edge) overlay.scrollTop -= 16;
+    }
+
+    // All field math is relative to the rendered PAGE box
+    const r = page.getBoundingClientRect();
 
     if (resizingRef.current) {
       const z = resizingRef.current;
@@ -302,8 +309,8 @@ export default function DocumentFieldPlacer({
 
     const id = draggingIdRef.current;
     if (!id) return;
-    const xPx = e.clientX - r.left + overlay.scrollLeft - dragOffsetRef.current.x;
-    const yPx = e.clientY - r.top + overlay.scrollTop - dragOffsetRef.current.y;
+    const xPx = e.clientX - r.left - dragOffsetRef.current.x;
+    const yPx = e.clientY - r.top - dragOffsetRef.current.y;
     const xPct = (xPx / r.width) * 100;
     const yPct = (yPx / r.height) * 100;
     const fld = fields.find((f) => f.id === id);
