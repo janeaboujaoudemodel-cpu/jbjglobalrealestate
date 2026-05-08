@@ -128,142 +128,130 @@ const BusinessCardScanner = () => {
     toast.success("All data cleared and encryption key regenerated");
   };
 
-  // Import to CRM function using proper pipeline
-  const handleImportToCRM = async () => {
-    if (scannedContacts.length === 0) {
-      toast.error("No contacts to import");
+  // Duplicate confirmation dialog state
+  const [dupDialog, setDupDialog] = useState<{
+    contactId: string;
+    existing: any;
+  } | null>(null);
+
+  const updateContactState = (id: string, updates: Partial<ScannedContact>) => {
+    setScannedContacts((prev) => prev.map((c) => (c.id === id ? { ...c, ...updates } : c)));
+  };
+
+  const buildPayload = (contact: ScannedContact) => ({
+    contact: {
+      name: contact.name || "",
+      title: contact.title || contact.jobTitle || "",
+      company_name: contact.company_name || contact.company || "",
+      agency_name: contact.agency_name || "",
+      developer_name: contact.developer_name || "",
+      mobile: contact.mobile || contact.phone || "",
+      whatsapp: contact.whatsapp || "",
+      landline: contact.landline || "",
+      email: contact.email || "",
+      website: contact.website || "",
+      linkedin: contact.linkedin || "",
+      instagram: contact.instagram || "",
+      address: contact.address || "",
+      city: contact.city || "",
+      country: contact.country || "",
+      event_source: contact.event_source || "",
+      notes: contact.notes || "",
+    },
+    contact_type: contact.contactType || "client",
+    labels: contact.labels || [],
+    card_image_base64: contact.imageDataUrl || null,
+  });
+
+  const callSave = async (
+    contact: ScannedContact,
+    action: "insert" | "update" | "merge" | "append_note",
+    existingId?: string
+  ) => {
+    updateContactState(contact.id, { saveStatus: "saving" });
+    const { data, error } = await supabase.functions.invoke("crm-save-scanned-card", {
+      body: { ...buildPayload(contact), action, existing_lead_id: existingId },
+    });
+    if (error || data?.error) {
+      console.error(error || data?.error);
+      toast.error(`Save failed: ${data?.error || error?.message || "unknown"}`);
+      updateContactState(contact.id, { saveStatus: "error" });
+      return null;
+    }
+    updateContactState(contact.id, { saveStatus: "saved", savedLeadId: data?.lead_id });
+    return data;
+  };
+
+  const handleSaveContact = async (id: string) => {
+    const contact = scannedContacts.find((c) => c.id === id);
+    if (!contact) return;
+    if (!user) {
+      toast.error("Please sign in to save to CRM");
       return;
     }
-
-    try {
-      // Create a source entry for this import
-      const { data: sourceData, error: sourceError } = await supabase
-        .from("crm_lead_sources")
-        .insert({
-          source_name: `Business Card Scan - ${new Date().toLocaleDateString()}`,
-          source_group: "business_cards",
-          source_file_name: "scanner_upload",
-          created_by_user_id: user?.id
-        })
-        .select()
-        .single();
-
-      if (sourceError) throw sourceError;
-
-      const batchId = crypto.randomUUID();
-      let successCount = 0;
-      let flaggedCount = 0;
-
-      for (let i = 0; i < scannedContacts.length; i++) {
-        const contact = scannedContacts[i];
-        
-        // Normalize phone and email
-        const phoneRaw = contact.phone || contact.mobile || '';
-        let phoneNormalized: string | null = null;
-        let phoneE164: string | null = null;
-        
-        if (phoneRaw) {
-          let normalized = phoneRaw.replace(/[^\d+]/g, "");
-          if (!normalized.startsWith("+")) {
-            // Starts with 0 (e.g., 0501234567) -> +971501234567
-            if (normalized.startsWith("0") && normalized.length >= 9) {
-              normalized = "+971" + normalized.slice(1);
-            }
-            // Starts with 971 without + (e.g., 971501234567)
-            else if (normalized.startsWith("971") && normalized.length >= 12) {
-              normalized = "+" + normalized;
-            }
-            // Starts with 5 (UAE mobile, e.g., 501234567) -> +971501234567
-            else if (normalized.startsWith("5") && normalized.length >= 9 && normalized.length <= 10) {
-              normalized = "+971" + normalized;
-            }
-            // UAE landline or other formats
-            else if (/^[23467890]/.test(normalized) && normalized.length >= 7) {
-              normalized = "+971" + normalized;
-            }
-            // International number without + (10+ digits)
-            else if (normalized.length >= 10) {
-              normalized = "+" + normalized;
-            }
-            // Shorter but might be valid
-            else if (normalized.length >= 7) {
-              normalized = "+971" + normalized;
-            }
-          }
-          // E.164 validation - be lenient for UAE (9-15 digits after +)
-          if (/^\+[1-9]\d{8,14}$/.test(normalized)) {
-            phoneE164 = normalized;
-            phoneNormalized = normalized.replace(/\D/g, '');
-          }
-        }
-
-        const emailRaw = contact.email || '';
-        let emailNormalized: string | null = null;
-        if (emailRaw && /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(emailRaw.trim())) {
-          emailNormalized = emailRaw.toLowerCase().trim();
-        }
-
-        // Determine flag reasons
-        const flagReasons: string[] = [];
-        if (!phoneRaw && !emailRaw) {
-          flagReasons.push("missing_phone", "missing_email");
-        } else {
-          if (!phoneRaw) flagReasons.push("missing_phone");
-          if (!emailRaw) flagReasons.push("missing_email");
-          if (phoneRaw && !phoneE164) flagReasons.push("invalid_phone_format");
-          if (emailRaw && !emailNormalized) flagReasons.push("invalid_email_format");
-        }
-
-        const isFlagged = flagReasons.length > 0;
-        if (isFlagged) flaggedCount++;
-
-        // Detect contact type based on job title
-        let contactType = 'client';
-        const jobTitle = (contact.jobTitle || '').toLowerCase();
-        if (jobTitle.includes('broker') || jobTitle.includes('agent') || jobTitle.includes('realtor')) {
-          contactType = 'broker';
-        } else if (jobTitle.includes('developer') || jobTitle.includes('construction')) {
-          contactType = 'developer';
-        } else if (jobTitle.includes('investor') || jobTitle.includes('investment')) {
-          contactType = 'investor';
-        }
-
-        // Insert lead with proper JBJ standard columns
-        const { error: insertError } = await supabase
-          .from("crm_leads")
-          .insert({
-            full_name: contact.name || 'Unknown',
-            phone_e164: phoneE164,
-            phone_raw: phoneRaw || null,
-            phone_normalized: phoneNormalized,
-            email_lower: emailNormalized,
-            email_normalized: emailNormalized,
-            company_name: contact.company || null,
-            source: 'business_card_scanner',
-            lead_source_type: 'business_card',
-            source_id: sourceData.id,
-            import_batch_id: batchId,
-            source_row_index: i + 1,
-            raw_import: contact as any,
-            flagged: isFlagged,
-            flag_reasons: flagReasons,
-            imported_at: new Date().toISOString(),
-            notes: `Job Title: ${contact.jobTitle || 'N/A'}\nAddress: ${contact.address || 'N/A'}\nWebsite: ${contact.website || 'N/A'}`,
-            contact_type: contactType as any,
-            created_by_user_id: user?.id,
-            owner_type: 'broker_owned' as const,
-            owner_user_id: user?.id
-          } as any);
-
-        if (!insertError) successCount++;
-      }
-
-      toast.success(`${successCount} contacts imported to CRM!${flaggedCount > 0 ? ` (${flaggedCount} flagged for review)` : ''}`);
-      handleClearAll();
-    } catch (error) {
-      console.error('CRM import error:', error);
-      toast.error('Failed to import contacts to CRM');
+    updateContactState(id, { saveStatus: "saving" });
+    const { data, error } = await supabase.functions.invoke("crm-save-scanned-card", {
+      body: { ...buildPayload(contact), action: "check" },
+    });
+    if (error || data?.error) {
+      toast.error(`Check failed: ${data?.error || error?.message || "unknown"}`);
+      updateContactState(id, { saveStatus: "error" });
+      return;
     }
+    if (data?.status === "duplicate" && data?.existing) {
+      setDupDialog({ contactId: id, existing: data.existing });
+      updateContactState(id, { saveStatus: "idle" });
+      return;
+    }
+    const result = await callSave(contact, "insert");
+    if (result) toast.success(`Saved "${contact.name || "Contact"}" to CRM`);
+  };
+
+  const handleSaveAll = async () => {
+    if (scannedContacts.length === 0) {
+      toast.error("No contacts to save");
+      return;
+    }
+    let okCount = 0;
+    let dupCount = 0;
+    for (const c of scannedContacts) {
+      if (c.saveStatus === "saved") continue;
+      updateContactState(c.id, { saveStatus: "saving" });
+      const { data } = await supabase.functions.invoke("crm-save-scanned-card", {
+        body: { ...buildPayload(c), action: "check" },
+      });
+      if (data?.status === "duplicate" && data?.existing) {
+        dupCount++;
+        // Default behavior for bulk: merge (enrich) instead of duplicating
+        const r = await callSave(c, "merge", data.existing.id);
+        if (r) okCount++;
+      } else {
+        const r = await callSave(c, "insert");
+        if (r) okCount++;
+      }
+    }
+    toast.success(
+      `Saved ${okCount} contact(s) to CRM${dupCount > 0 ? ` (${dupCount} merged into existing)` : ""}`
+    );
+  };
+
+  const resolveDuplicate = async (action: "merge" | "update" | "insert" | "append_note") => {
+    if (!dupDialog) return;
+    const contact = scannedContacts.find((c) => c.id === dupDialog.contactId);
+    if (!contact) return;
+    const result = await callSave(contact, action, dupDialog.existing.id);
+    if (result) {
+      const verb =
+        action === "insert"
+          ? "Added new"
+          : action === "append_note"
+          ? "Appended note"
+          : action === "update"
+          ? "Updated"
+          : "Merged";
+      toast.success(`${verb} for "${contact.name || "Contact"}"`);
+    }
+    setDupDialog(null);
   };
 
   const doExportCSV = () => {
