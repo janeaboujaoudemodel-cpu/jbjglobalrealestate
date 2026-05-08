@@ -35,6 +35,11 @@ const KIND_LABEL: Record<string, string> = {
   developer_rep: "Dev Rep",
   investor: "Investor",
   partner: "Partner",
+  investor_lead: "Investor Lead",
+  broker_lead: "Broker Lead",
+  developer_lead: "Developer Lead",
+  partner_lead: "Partner Lead",
+  contact_lead: "Contact",
 };
 
 export function UnifiedContactsPanel() {
