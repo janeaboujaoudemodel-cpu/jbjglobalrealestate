@@ -1,9 +1,21 @@
 // Client-side encryption utilities for business card data
 // Uses Web Crypto API for secure encryption
 
+export type ContactTypeLabel =
+  | "client"
+  | "broker"
+  | "brokerage_agency"
+  | "developer"
+  | "investor"
+  | "partner"
+  | "media"
+  | "supplier"
+  | "other";
+
 export interface ScannedContact {
   id: string;
   name: string;
+  // Legacy fields kept for backwards compatibility
   jobTitle?: string;
   company?: string;
   email?: string;
@@ -15,6 +27,31 @@ export interface ScannedContact {
   scannedAt: string;
   imagePreview?: string;
   confidence: number;
+
+  // New rich fields from upgraded OCR
+  title?: string;
+  company_name?: string;
+  agency_name?: string;
+  developer_name?: string;
+  whatsapp?: string;
+  landline?: string;
+  linkedin?: string;
+  instagram?: string;
+  city?: string;
+  country?: string;
+  event_source?: string;
+  raw_text?: string;
+
+  // Original full image data URL (for saving to CRM bucket)
+  imageDataUrl?: string;
+
+  // Per-card classification chosen by user before saving
+  contactType?: ContactTypeLabel;
+  labels?: string[];
+
+  // Save status
+  savedLeadId?: string | null;
+  saveStatus?: "idle" | "saving" | "saved" | "error";
 }
 
 // Generate a random encryption key
