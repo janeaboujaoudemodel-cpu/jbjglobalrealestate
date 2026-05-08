@@ -5130,6 +5130,7 @@ export type Database = {
       }
       crm_brokerage_agents: {
         Row: {
+          broker_id: string | null
           brokerage_id: string | null
           city: string | null
           country: string | null
@@ -5163,6 +5164,7 @@ export type Database = {
           whatsapp_normalized: string | null
         }
         Insert: {
+          broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
           country?: string | null
@@ -5196,6 +5198,7 @@ export type Database = {
           whatsapp_normalized?: string | null
         }
         Update: {
+          broker_id?: string | null
           brokerage_id?: string | null
           city?: string | null
           country?: string | null
@@ -5229,6 +5232,13 @@ export type Database = {
           whatsapp_normalized?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_agents_broker_id_fkey"
+            columns: ["broker_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "crm_brokerage_agents_brokerage_id_fkey"
             columns: ["brokerage_id"]
@@ -5554,6 +5564,7 @@ export type Database = {
           contract_status: string
           country: string | null
           created_at: string
+          database_source: string | null
           deal_count: number
           deal_count_cached: number
           deleted_at: string | null
@@ -5568,6 +5579,7 @@ export type Database = {
           enrichment_status: string | null
           entry_source: string
           estimated_agent_count: number | null
+          event_source: string | null
           expertise_areas: string[]
           expertise_type: string
           field_sources: Json
@@ -5576,6 +5588,8 @@ export type Database = {
           id: string
           import_batch_id: string | null
           import_label: string | null
+          imported_at: string | null
+          imported_by: string | null
           inquiry_count: number
           instagram_url: string | null
           is_existing_match: boolean
@@ -5605,6 +5619,7 @@ export type Database = {
           office_address: string | null
           office_location: string | null
           office_map_url: string | null
+          original_filename: string | null
           outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
@@ -5621,6 +5636,7 @@ export type Database = {
           secondary_contact: Json | null
           source: Database["public"]["Enums"]["outreach_source"]
           source_detail: string | null
+          source_history: Json
           star_rating: number | null
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
@@ -5628,6 +5644,7 @@ export type Database = {
           total_deal_value: number
           total_deal_value_cached: number
           updated_at: string
+          upload_source: string | null
           website: string | null
           whatsapp_e164: string | null
         }
@@ -5656,6 +5673,7 @@ export type Database = {
           contract_status?: string
           country?: string | null
           created_at?: string
+          database_source?: string | null
           deal_count?: number
           deal_count_cached?: number
           deleted_at?: string | null
@@ -5670,6 +5688,7 @@ export type Database = {
           enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
+          event_source?: string | null
           expertise_areas?: string[]
           expertise_type?: string
           field_sources?: Json
@@ -5678,6 +5697,8 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          imported_at?: string | null
+          imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
@@ -5707,6 +5728,7 @@ export type Database = {
           office_address?: string | null
           office_location?: string | null
           office_map_url?: string | null
+          original_filename?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
@@ -5723,6 +5745,7 @@ export type Database = {
           secondary_contact?: Json | null
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          source_history?: Json
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
@@ -5730,6 +5753,7 @@ export type Database = {
           total_deal_value?: number
           total_deal_value_cached?: number
           updated_at?: string
+          upload_source?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -5758,6 +5782,7 @@ export type Database = {
           contract_status?: string
           country?: string | null
           created_at?: string
+          database_source?: string | null
           deal_count?: number
           deal_count_cached?: number
           deleted_at?: string | null
@@ -5772,6 +5797,7 @@ export type Database = {
           enrichment_status?: string | null
           entry_source?: string
           estimated_agent_count?: number | null
+          event_source?: string | null
           expertise_areas?: string[]
           expertise_type?: string
           field_sources?: Json
@@ -5780,6 +5806,8 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          imported_at?: string | null
+          imported_by?: string | null
           inquiry_count?: number
           instagram_url?: string | null
           is_existing_match?: boolean
@@ -5809,6 +5837,7 @@ export type Database = {
           office_address?: string | null
           office_location?: string | null
           office_map_url?: string | null
+          original_filename?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
@@ -5825,6 +5854,7 @@ export type Database = {
           secondary_contact?: Json | null
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          source_history?: Json
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
@@ -5832,6 +5862,7 @@ export type Database = {
           total_deal_value?: number
           total_deal_value_cached?: number
           updated_at?: string
+          upload_source?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -5848,44 +5879,89 @@ export type Database = {
       crm_brokers: {
         Row: {
           created_at: string
+          current_brokerage_id: string | null
           current_company: string | null
+          database_source: string | null
           email_lower: string | null
+          event_source: string | null
           full_name: string | null
           id: string
+          imported_at: string | null
+          imported_by: string | null
+          labels: string[]
           last_active_at: string | null
           notes: string | null
+          original_filename: string | null
           owner_id: string | null
           phone_e164: string | null
+          position_title: string | null
           rera_license: string | null
+          source_history: Json
           updated_at: string | null
+          upload_source: string | null
         }
         Insert: {
           created_at?: string
+          current_brokerage_id?: string | null
           current_company?: string | null
+          database_source?: string | null
           email_lower?: string | null
+          event_source?: string | null
           full_name?: string | null
           id?: string
+          imported_at?: string | null
+          imported_by?: string | null
+          labels?: string[]
           last_active_at?: string | null
           notes?: string | null
+          original_filename?: string | null
           owner_id?: string | null
           phone_e164?: string | null
+          position_title?: string | null
           rera_license?: string | null
+          source_history?: Json
           updated_at?: string | null
+          upload_source?: string | null
         }
         Update: {
           created_at?: string
+          current_brokerage_id?: string | null
           current_company?: string | null
+          database_source?: string | null
           email_lower?: string | null
+          event_source?: string | null
           full_name?: string | null
           id?: string
+          imported_at?: string | null
+          imported_by?: string | null
+          labels?: string[]
           last_active_at?: string | null
           notes?: string | null
+          original_filename?: string | null
           owner_id?: string | null
           phone_e164?: string | null
+          position_title?: string | null
           rera_license?: string | null
+          source_history?: Json
           updated_at?: string | null
+          upload_source?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokers_current_brokerage_id_fkey"
+            columns: ["current_brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokers_current_brokerage_id_fkey"
+            columns: ["current_brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
+        ]
       }
       crm_calls: {
         Row: {
@@ -6192,6 +6268,7 @@ export type Database = {
           commission_tier: string | null
           confidence: string | null
           created_at: string
+          database_source: string | null
           deleted_at: string | null
           developer_contact: Json | null
           developer_email: string | null
@@ -6201,11 +6278,14 @@ export type Database = {
           do_not_contact: boolean
           documents: Json | null
           emirate: string | null
+          event_source: string | null
           expiry_date: string | null
           field_sources: Json
           first_contact_at: string | null
           health_score: number | null
           id: string
+          imported_at: string | null
+          imported_by: string | null
           instagram_url: string | null
           is_junk: boolean
           last_auto_reply_at: string | null
@@ -6227,6 +6307,7 @@ export type Database = {
           notes: string | null
           office_address: string | null
           office_map_url: string | null
+          original_filename: string | null
           outreach_channel_pref: Database["public"]["Enums"]["outreach_channel"]
           outreach_count: number
           outreach_stage: Database["public"]["Enums"]["outreach_stage"]
@@ -6239,12 +6320,14 @@ export type Database = {
           response_count: number
           source: Database["public"]["Enums"]["outreach_source"]
           source_detail: string | null
+          source_history: Json
           star_rating: number | null
           status: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags: string[] | null
           tier: string | null
           uae_developer_id: string | null
           updated_at: string
+          upload_source: string | null
           website: string | null
           whatsapp_e164: string | null
         }
@@ -6259,6 +6342,7 @@ export type Database = {
           commission_tier?: string | null
           confidence?: string | null
           created_at?: string
+          database_source?: string | null
           deleted_at?: string | null
           developer_contact?: Json | null
           developer_email?: string | null
@@ -6268,11 +6352,14 @@ export type Database = {
           do_not_contact?: boolean
           documents?: Json | null
           emirate?: string | null
+          event_source?: string | null
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          imported_at?: string | null
+          imported_by?: string | null
           instagram_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
@@ -6294,6 +6381,7 @@ export type Database = {
           notes?: string | null
           office_address?: string | null
           office_map_url?: string | null
+          original_filename?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
@@ -6306,12 +6394,14 @@ export type Database = {
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          source_history?: Json
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
           tier?: string | null
           uae_developer_id?: string | null
           updated_at?: string
+          upload_source?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -6326,6 +6416,7 @@ export type Database = {
           commission_tier?: string | null
           confidence?: string | null
           created_at?: string
+          database_source?: string | null
           deleted_at?: string | null
           developer_contact?: Json | null
           developer_email?: string | null
@@ -6335,11 +6426,14 @@ export type Database = {
           do_not_contact?: boolean
           documents?: Json | null
           emirate?: string | null
+          event_source?: string | null
           expiry_date?: string | null
           field_sources?: Json
           first_contact_at?: string | null
           health_score?: number | null
           id?: string
+          imported_at?: string | null
+          imported_by?: string | null
           instagram_url?: string | null
           is_junk?: boolean
           last_auto_reply_at?: string | null
@@ -6361,6 +6455,7 @@ export type Database = {
           notes?: string | null
           office_address?: string | null
           office_map_url?: string | null
+          original_filename?: string | null
           outreach_channel_pref?: Database["public"]["Enums"]["outreach_channel"]
           outreach_count?: number
           outreach_stage?: Database["public"]["Enums"]["outreach_stage"]
@@ -6373,12 +6468,14 @@ export type Database = {
           response_count?: number
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
+          source_history?: Json
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
           tier?: string | null
           uae_developer_id?: string | null
           updated_at?: string
+          upload_source?: string | null
           website?: string | null
           whatsapp_e164?: string | null
         }
@@ -7294,6 +7391,7 @@ export type Database = {
           created_by_user_id: string | null
           current_location_city: string | null
           current_location_country: string | null
+          database_source: string | null
           deleted_at: string | null
           detection_keywords: string[] | null
           documents: Json
@@ -7302,6 +7400,7 @@ export type Database = {
           email_encrypted: string | null
           email_lower: string | null
           email_normalized: string | null
+          event_source: string | null
           flag_reasons: string[] | null
           flagged: boolean | null
           full_name: string
@@ -7325,6 +7424,7 @@ export type Database = {
           next_followup_at: string | null
           notes: string | null
           notes_encrypted: string | null
+          original_filename: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id: string | null
           partner_service_type: string | null
@@ -7348,12 +7448,14 @@ export type Database = {
           rental_property_type: string | null
           rental_renter_type: string | null
           source: string | null
+          source_history: Json
           source_id: string | null
           source_page: string | null
           source_row_index: number | null
           stale_since: string | null
           tags: string[] | null
           updated_at: string
+          upload_source: string | null
           vip: boolean | null
           vip_tagged_at: string | null
           vip_tagged_by: string | null
@@ -7380,6 +7482,7 @@ export type Database = {
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          database_source?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
           documents?: Json
@@ -7388,6 +7491,7 @@ export type Database = {
           email_encrypted?: string | null
           email_lower?: string | null
           email_normalized?: string | null
+          event_source?: string | null
           flag_reasons?: string[] | null
           flagged?: boolean | null
           full_name: string
@@ -7411,6 +7515,7 @@ export type Database = {
           next_followup_at?: string | null
           notes?: string | null
           notes_encrypted?: string | null
+          original_filename?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           partner_service_type?: string | null
@@ -7434,12 +7539,14 @@ export type Database = {
           rental_property_type?: string | null
           rental_renter_type?: string | null
           source?: string | null
+          source_history?: Json
           source_id?: string | null
           source_page?: string | null
           source_row_index?: number | null
           stale_since?: string | null
           tags?: string[] | null
           updated_at?: string
+          upload_source?: string | null
           vip?: boolean | null
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
@@ -7466,6 +7573,7 @@ export type Database = {
           created_by_user_id?: string | null
           current_location_city?: string | null
           current_location_country?: string | null
+          database_source?: string | null
           deleted_at?: string | null
           detection_keywords?: string[] | null
           documents?: Json
@@ -7474,6 +7582,7 @@ export type Database = {
           email_encrypted?: string | null
           email_lower?: string | null
           email_normalized?: string | null
+          event_source?: string | null
           flag_reasons?: string[] | null
           flagged?: boolean | null
           full_name?: string
@@ -7497,6 +7606,7 @@ export type Database = {
           next_followup_at?: string | null
           notes?: string | null
           notes_encrypted?: string | null
+          original_filename?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           partner_service_type?: string | null
@@ -7520,12 +7630,14 @@ export type Database = {
           rental_property_type?: string | null
           rental_renter_type?: string | null
           source?: string | null
+          source_history?: Json
           source_id?: string | null
           source_page?: string | null
           source_row_index?: number | null
           stale_since?: string | null
           tags?: string[] | null
           updated_at?: string
+          upload_source?: string | null
           vip?: boolean | null
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
@@ -9575,6 +9687,51 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_rep_company_history: {
+        Row: {
+          created_at: string
+          developer_id: string | null
+          developer_name: string
+          ended_at: string | null
+          id: string
+          representative_id: string
+          started_at: string
+        }
+        Insert: {
+          created_at?: string
+          developer_id?: string | null
+          developer_name: string
+          ended_at?: string | null
+          id?: string
+          representative_id: string
+          started_at?: string
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string | null
+          developer_name?: string
+          ended_at?: string | null
+          id?: string
+          representative_id?: string
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_rep_company_history_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_developer_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_rep_company_history_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_representatives: {
         Row: {
           activity_score: number | null
@@ -9584,39 +9741,59 @@ export type Database = {
           company_phone: string | null
           country: string | null
           created_at: string | null
+          current_developer_id: string | null
           custom_role_title: string | null
+          database_source: string | null
           date_of_join: string | null
           developer_name: string
           email: string
+          email_normalized: string | null
+          event_source: string | null
           full_name: string
           gender: string | null
           id: string
+          import_batch_id: string | null
+          import_label: string | null
+          imported_at: string | null
+          imported_by: string | null
+          instagram_url: string | null
           is_on_leave: boolean | null
           job_title: string | null
+          labels: string[]
           languages: string[] | null
           last_active_at: string | null
           leave_end_date: string | null
           leave_start_date: string | null
+          linkedin_url: string | null
           marketing_materials_url: string | null
+          metadata: Json
           nationality: string | null
+          original_filename: string | null
           passport_document_url: string | null
           personal_email: string | null
           personal_phone: string | null
           phone: string | null
+          phone_normalized: string | null
           position: string | null
           projects_handled: string[] | null
           rera_document_url: string | null
           response_time_avg_hours: number | null
           role: string
+          source: string | null
+          source_batch_ids: string[]
+          source_history: Json
           status: string
           total_briefings_hosted: number | null
           total_updates_submitted: number | null
           trade_license_url: string | null
           updated_at: string | null
+          upload_source: string | null
           user_id: string | null
           verification_document_url: string | null
           verification_type: string | null
+          whatsapp: string | null
           whatsapp_group_number: string | null
+          whatsapp_normalized: string | null
           whatsapp_number: string | null
           years_in_real_estate: number | null
         }
@@ -9628,39 +9805,59 @@ export type Database = {
           company_phone?: string | null
           country?: string | null
           created_at?: string | null
+          current_developer_id?: string | null
           custom_role_title?: string | null
+          database_source?: string | null
           date_of_join?: string | null
           developer_name: string
           email: string
+          email_normalized?: string | null
+          event_source?: string | null
           full_name: string
           gender?: string | null
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
+          imported_at?: string | null
+          imported_by?: string | null
+          instagram_url?: string | null
           is_on_leave?: boolean | null
           job_title?: string | null
+          labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
+          linkedin_url?: string | null
           marketing_materials_url?: string | null
+          metadata?: Json
           nationality?: string | null
+          original_filename?: string | null
           passport_document_url?: string | null
           personal_email?: string | null
           personal_phone?: string | null
           phone?: string | null
+          phone_normalized?: string | null
           position?: string | null
           projects_handled?: string[] | null
           rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
+          source?: string | null
+          source_batch_ids?: string[]
+          source_history?: Json
           status?: string
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
           trade_license_url?: string | null
           updated_at?: string | null
+          upload_source?: string | null
           user_id?: string | null
           verification_document_url?: string | null
           verification_type?: string | null
+          whatsapp?: string | null
           whatsapp_group_number?: string | null
+          whatsapp_normalized?: string | null
           whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
@@ -9672,43 +9869,71 @@ export type Database = {
           company_phone?: string | null
           country?: string | null
           created_at?: string | null
+          current_developer_id?: string | null
           custom_role_title?: string | null
+          database_source?: string | null
           date_of_join?: string | null
           developer_name?: string
           email?: string
+          email_normalized?: string | null
+          event_source?: string | null
           full_name?: string
           gender?: string | null
           id?: string
+          import_batch_id?: string | null
+          import_label?: string | null
+          imported_at?: string | null
+          imported_by?: string | null
+          instagram_url?: string | null
           is_on_leave?: boolean | null
           job_title?: string | null
+          labels?: string[]
           languages?: string[] | null
           last_active_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
+          linkedin_url?: string | null
           marketing_materials_url?: string | null
+          metadata?: Json
           nationality?: string | null
+          original_filename?: string | null
           passport_document_url?: string | null
           personal_email?: string | null
           personal_phone?: string | null
           phone?: string | null
+          phone_normalized?: string | null
           position?: string | null
           projects_handled?: string[] | null
           rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
+          source?: string | null
+          source_batch_ids?: string[]
+          source_history?: Json
           status?: string
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
           trade_license_url?: string | null
           updated_at?: string | null
+          upload_source?: string | null
           user_id?: string | null
           verification_document_url?: string | null
           verification_type?: string | null
+          whatsapp?: string | null
           whatsapp_group_number?: string | null
+          whatsapp_normalized?: string | null
           whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "developer_representatives_current_developer_id_fkey"
+            columns: ["current_developer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_developer_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developer_sales_contacts: {
         Row: {
@@ -32000,6 +32225,24 @@ export type Database = {
           },
         ]
       }
+      vw_crm_contacts: {
+        Row: {
+          company_id: string | null
+          company_kind: string | null
+          company_name: string | null
+          created_at: string | null
+          email: string | null
+          id: string | null
+          kind: string | null
+          labels: string[] | null
+          last_interaction_at: string | null
+          name: string | null
+          owner_id: string | null
+          phone: string | null
+          source: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       _esign_envelope_has_token_recipient: {
@@ -32608,6 +32851,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      upsert_contact_with_company: { Args: { payload: Json }; Returns: Json }
       verify_certificate_by_token: {
         Args: { p_token: string }
         Returns: {
