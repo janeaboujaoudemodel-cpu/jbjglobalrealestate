@@ -9,9 +9,11 @@ interface PdfPageCanvasProps {
   pdfUrl: string;
   /** Called when this component independently loads a PDF doc (when pdfDoc prop is null) */
   onDocLoaded?: (doc: any) => void;
+  /** Called whenever the rendered CSS size of the page changes */
+  onSizeChange?: (size: { w: number; h: number }) => void;
 }
 
-export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded }: PdfPageCanvasProps) {
+export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded, onSizeChange }: PdfPageCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rendering, setRendering] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -43,6 +45,7 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded 
         canvas.style.width = `${cssViewport.width}px`;
         canvas.style.height = `${cssViewport.height}px`;
         setCanvasCssSize({ w: cssViewport.width, h: cssViewport.height });
+        onSizeChange?.({ w: cssViewport.width, h: cssViewport.height });
         const ctx = canvas.getContext("2d")!;
         await page.render({ canvasContext: ctx, viewport }).promise;
       } catch (err) {
@@ -54,7 +57,7 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded 
     }
     render();
     return () => { cancelled = true; };
-  }, [pdfDoc, pageNumber, pdfUrl, retryKey, onDocLoaded]);
+  }, [pdfDoc, pageNumber, pdfUrl, retryKey, onDocLoaded, onSizeChange]);
 
   if (failed) {
     return (

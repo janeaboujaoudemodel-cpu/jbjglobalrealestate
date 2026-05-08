@@ -43,7 +43,9 @@ export default function DocumentFieldPlacer({
   const [totalPages, setTotalPages] = useState(1);
   const [isAutoDetecting, setIsAutoDetecting] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
+  const [pageSize, setPageSize] = useState<{ w: number; h: number } | null>(null);
 
   // Saved stamp SVG from user's stamp generator
   const [savedStampSvg, setSavedStampSvg] = useState<string | null>(null);
@@ -204,7 +206,7 @@ export default function DocumentFieldPlacer({
 
   const pageFields = fields.filter((f) => f.pageNumber === currentPage);
 
-  // ── Click-to-place ──────────────────────────────────────────────────────
+  // ── Click-to-place (coords are relative to PAGE, not scrollable overlay) ─
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!selectedRecipient) {
@@ -212,12 +214,18 @@ export default function DocumentFieldPlacer({
         return;
       }
       if ((e.target as HTMLElement).closest("[data-field]")) return;
-
-      const rect = overlayRef.current!.getBoundingClientRect();
-      const xPct = ((e.clientX - rect.left) / rect.width) * 100;
-      const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+      const page = pageRef.current;
+      if (!page) return;
+      const rect = page.getBoundingClientRect();
+      // Ignore clicks outside the rendered page area
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
 
       const fieldConfig = fieldTypes.find((f) => f.type === selectedFieldType)!;
+      // Center field on the click point
+      const wPx = fieldConfig.defaultWidth;
+      const hPx = fieldConfig.defaultHeight;
+      const xPct = (((e.clientX - rect.left) - wPx / 2) / rect.width) * 100;
+      const yPct = (((e.clientY - rect.top) - hPx / 2) / rect.height) * 100;
       const today = new Date().toLocaleDateString("en-AE");
 
       const newField: SignatureField = {
@@ -225,10 +233,10 @@ export default function DocumentFieldPlacer({
         recipientId: selectedRecipient,
         type: selectedFieldType,
         pageNumber: currentPage,
-        x: Math.max(0, Math.min(95, xPct)),
-        y: Math.max(0, Math.min(95, yPct)),
-        width: fieldConfig.defaultWidth,
-        height: fieldConfig.defaultHeight,
+        x: Math.max(0, Math.min(100 - (wPx / rect.width) * 100, xPct)),
+        y: Math.max(0, Math.min(100 - (hPx / rect.height) * 100, yPct)),
+        width: wPx,
+        height: hPx,
         value:
           selectedFieldType === "date"
             ? today
@@ -269,13 +277,20 @@ export default function DocumentFieldPlacer({
   };
 
   const handleOverlayPointerMove = (e: React.PointerEvent) => {
-    if (!overlayRef.current) return;
     const overlay = overlayRef.current;
-    // Auto-scroll near vertical edges so we can drag downward
-    const r = overlay.getBoundingClientRect();
-    const edge = 40;
-    if (e.clientY > r.bottom - edge) overlay.scrollTop += 12;
-    else if (e.clientY < r.top + edge) overlay.scrollTop -= 12;
+    const page = pageRef.current;
+    if (!overlay || !page) return;
+
+    // Auto-scroll near vertical edges of the SCROLL container
+    const ov = overlay.getBoundingClientRect();
+    const edge = 50;
+    if (draggingIdRef.current || resizingRef.current) {
+      if (e.clientY > ov.bottom - edge) overlay.scrollTop += 16;
+      else if (e.clientY < ov.top + edge) overlay.scrollTop -= 16;
+    }
+
+    // All field math is relative to the rendered PAGE box
+    const r = page.getBoundingClientRect();
 
     if (resizingRef.current) {
       const z = resizingRef.current;
@@ -294,8 +309,8 @@ export default function DocumentFieldPlacer({
 
     const id = draggingIdRef.current;
     if (!id) return;
-    const xPx = e.clientX - r.left + overlay.scrollLeft - dragOffsetRef.current.x;
-    const yPx = e.clientY - r.top + overlay.scrollTop - dragOffsetRef.current.y;
+    const xPx = e.clientX - r.left - dragOffsetRef.current.x;
+    const yPx = e.clientY - r.top - dragOffsetRef.current.y;
     const xPct = (xPx / r.width) * 100;
     const yPct = (yPx / r.height) * 100;
     const fld = fields.find((f) => f.id === id);
@@ -317,16 +332,11 @@ export default function DocumentFieldPlacer({
     resizingRef.current = { id: fieldId, corner, startX: e.clientX, startY: e.clientY, w: f.width, h: f.height, x: f.x, y: f.y };
   };
 
-  // ── Adopt-and-Sign click handler with broadcast ────────────────────────
+  // ── Adopt-and-Sign click handler ──────────────────────────────────────
+  // ALWAYS open the dialog so the user can confirm/redraw — no silent broadcast.
   const handleSignatureFieldClick = (fieldId: string) => {
     const field = fields.find((f) => f.id === fieldId);
     if (!field) return;
-    // If we have a default already and field is empty, auto-apply silently and broadcast
-    if ((field.type === "signature" && defaultSignatureUrl) || (field.type === "initials" && defaultInitialsUrl)) {
-      const url = field.type === "signature" ? defaultSignatureUrl! : defaultInitialsUrl!;
-      broadcastValue(field.recipientId, field.type, url);
-      return;
-    }
     setAdoptForFieldId(fieldId);
     setShowAdopt(true);
   };
@@ -414,7 +424,14 @@ export default function DocumentFieldPlacer({
       }));
 
       onFieldsChange([...fields, ...detected]);
-      toast.success(`Auto-detected ${detected.length} field(s) — review and adjust as needed`);
+      if (detected.length > 0) {
+        // Jump to the page of the first detected field so the user actually sees them
+        const firstPage = Math.min(...detected.map((d) => d.pageNumber));
+        if (firstPage && firstPage !== currentPage) setCurrentPage(firstPage);
+        toast.success(`Auto-detected ${detected.length} field(s) — jumped to page ${firstPage}`);
+      } else {
+        toast.info("No signing fields detected on the first 6 pages.");
+      }
     } catch (err: any) {
       console.error("Auto-detect error:", err);
       toast.error("Auto-detect failed. Placing smart defaults instead.");
@@ -651,79 +668,97 @@ export default function DocumentFieldPlacer({
               <CardContent className="p-0">
                 <div
                   ref={overlayRef}
-                  className="relative w-full overflow-y-auto mx-auto select-none"
-                  style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", cursor: "crosshair", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
-                  onClick={handleOverlayClick}
+                  className="w-full overflow-y-auto select-none flex justify-center"
+                  style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
                   onPointerMove={handleOverlayPointerMove}
                   onPointerUp={handleOverlayPointerUp}
                   onPointerLeave={handleOverlayPointerUp}
                 >
-                  <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={workingPdfUrl} />
+                  {/* Page-sized positioned box: ALL field % coords are relative to this. */}
+                  <div
+                    ref={pageRef}
+                    className="relative"
+                    style={{
+                      width: pageSize ? `${pageSize.w}px` : "100%",
+                      height: pageSize ? `${pageSize.h}px` : "auto",
+                      cursor: "crosshair",
+                    }}
+                    onClick={handleOverlayClick}
+                  >
+                    <PdfPageCanvas
+                      pdfDoc={pdfJsDocRef.current}
+                      pageNumber={currentPage}
+                      pdfUrl={workingPdfUrl}
+                      onSizeChange={(s) => setPageSize(s)}
+                    />
 
-                  {/* Field overlays */}
-                  {pageFields.map((field) => {
-                    const style = getRecipientStyle(field.recipientId);
-                    const isSelected = selectedFieldId === field.id;
+                    {/* Field overlays */}
+                    {pageFields.map((field) => {
+                      const style = getRecipientStyle(field.recipientId);
+                      const isSelected = selectedFieldId === field.id;
 
-                    return (
-                      <div
-                        key={field.id}
-                        data-field="true"
-                        onPointerDown={(e) => handleFieldPointerDown(e, field.id)}
-                        onClick={(e) => { e.stopPropagation(); setSelectedFieldId(field.id); }}
-                        className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group ${isSelected ? "ring-2 ring-[hsl(var(--gold))]" : ""}`}
-                        style={{
-                          left: `${field.x}%`,
-                          top: `${field.y}%`,
-                          width: `${field.width}px`,
-                          height: `${field.height}px`,
-                          cursor: "move",
-                          touchAction: "none",
-                        }}
-                      >
-                        {/* Delete button */}
-                        <button
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeField(field.id);
+                      return (
+                        <div
+                          key={field.id}
+                          data-field="true"
+                          onPointerDown={(e) => handleFieldPointerDown(e, field.id)}
+                          onClick={(e) => { e.stopPropagation(); setSelectedFieldId(field.id); }}
+                          className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group ${isSelected ? "ring-2 ring-[hsl(var(--gold))]" : ""}`}
+                          style={{
+                            left: `${field.x}%`,
+                            top: `${field.y}%`,
+                            width: `${field.width}px`,
+                            height: `${field.height}px`,
+                            cursor: "move",
+                            touchAction: "none",
                           }}
-                          className="absolute -top-2.5 -right-2.5 z-30 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full items-center justify-center hidden group-hover:flex shadow"
                         >
-                          <X className="w-3 h-3" />
-                        </button>
-
-                        {/* Field content */}
-                        <FieldContentRenderer
-                          field={field}
-                          style={style}
-                          recipients={recipients}
-                          savedStampSvg={savedStampSvg}
-                          savedSignatureUrl={defaultSignatureUrl || savedSignatureUrl}
-                          onUpdateValue={updateFieldValue}
-                          onOpenDraw={(id) => handleSignatureFieldClick(id)}
-                        />
-
-                        {/* Resize handles (corners) */}
-                        {(["nw", "ne", "sw", "se"] as const).map((corner) => (
-                          <div
-                            key={corner}
-                            data-handle={corner}
-                            onPointerDown={(e) => startResize(e, field.id, corner)}
-                            className={`absolute w-2.5 h-2.5 bg-white border ${style.border} z-30 hidden group-hover:block`}
-                            style={{
-                              [corner.includes("n") ? "top" : "bottom"]: -5,
-                              [corner.includes("w") ? "left" : "right"]: -5,
-                              cursor: corner === "nw" || corner === "se" ? "nwse-resize" : "nesw-resize",
+                          {/* Always-visible delete button (no longer clipped by border) */}
+                          <button
+                            type="button"
+                            aria-label="Delete field"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeField(field.id);
                             }}
-                          />
-                        ))}
+                            className="absolute -top-3 -right-3 z-40 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
 
-                        {/* Recipient color bar */}
-                        <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
-                      </div>
-                    );
-                  })}
+                          {/* Field content */}
+                          <FieldContentRenderer
+                            field={field}
+                            style={style}
+                            recipients={recipients}
+                            savedStampSvg={savedStampSvg}
+                            savedSignatureUrl={defaultSignatureUrl || savedSignatureUrl}
+                            onUpdateValue={updateFieldValue}
+                            onOpenDraw={(id) => handleSignatureFieldClick(id)}
+                          />
+
+                          {/* Resize handles (corners) — visible when field is selected or hovered */}
+                          {(["nw", "ne", "sw", "se"] as const).map((corner) => (
+                            <div
+                              key={corner}
+                              data-handle={corner}
+                              onPointerDown={(e) => startResize(e, field.id, corner)}
+                              className={`absolute w-3 h-3 bg-white border-2 ${style.border} z-30 ${isSelected ? "block" : "hidden group-hover:block"}`}
+                              style={{
+                                [corner.includes("n") ? "top" : "bottom"]: -6,
+                                [corner.includes("w") ? "left" : "right"]: -6,
+                                cursor: corner === "nw" || corner === "se" ? "nwse-resize" : "nesw-resize",
+                              }}
+                            />
+                          ))}
+
+                          {/* Recipient color bar */}
+                          <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Page navigation bar */}
