@@ -6,134 +6,97 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+interface PageImage { pageNumber: number; image: string; width: number; height: number; }
+
 serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { pdfUrl, pdfBase64, recipientId, recipientName } = await req.json();
-
-    if (!pdfUrl && !pdfBase64) {
-      return new Response(JSON.stringify({ error: "pdfUrl or pdfBase64 is required" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
+    const body = await req.json();
+    const { pdfUrl, pdfBase64, recipientId: _rid, recipientName, recipientEmail, pageImages } =
+      body as {
+        pdfUrl?: string;
+        pdfBase64?: string;
+        recipientId?: string;
+        recipientName?: string;
+        recipientEmail?: string;
+        pageImages?: PageImage[];
+      };
 
     const today = new Date().toLocaleDateString("en-AE");
+    const safeName = (recipientName || "").trim();
+    const safeEmail = (recipientEmail || "").trim();
 
-    // If we only have base64 (blob URL case), the AI can't fetch it.
-    // Use smart fallback directly for reliability.
-    if (pdfBase64 && !pdfUrl) {
-      console.log("Received pdfBase64 — using smart fallback layout since AI cannot process binary PDF data directly.");
-      return new Response(
-        JSON.stringify({ fields: getStandardContractLayout(recipientName || "", today) }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const systemPrompt = `You are a document analysis AI specialized in identifying signature fields in legal contracts and real estate documents.
-Your task is to analyze a document and identify where various form fields should be placed.
-Return ONLY a JSON array of field objects. No markdown, no explanation.`;
+    // ── Best path: vision over rasterized pages ──
+    if (pageImages && pageImages.length > 0) {
+      const allFields: any[] = [];
+      for (const pg of pageImages.slice(0, 6)) {
+        const messages = [
+          {
+            role: "system",
+            content:
+              "You analyse contract page images and locate signing-related fields. " +
+              "Return ONLY a JSON array. Each item: { type: 'signature'|'initials'|'date'|'text'|'stamp', " +
+              "x: number (percent of page width 0-100, top-left of field), y: number (percent 0-100), " +
+              "width: number (pixels at the rendered width), height: number (pixels), " +
+              "label: string, suggestedValue: string }. No explanation, no markdown.",
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text:
+                  `Page ${pg.pageNumber} rendered at ${pg.width}x${pg.height} pixels. ` +
+                  `Find every place where the signer needs to put: a Signature, Initials, a Date, their printed Name, Email, Title, Company, or a Stamp/Seal. ` +
+                  `For text fields, set suggestedValue using the recipient: name="${safeName}", email="${safeEmail}", date="${today}". ` +
+                  `Use empty string for signature/initials/stamp. ` +
+                  `Estimate field width/height to comfortably cover the underline or box (signature ~180x52, initials ~90x40, date ~140x36, text ~180x36, stamp ~110x110). ` +
+                  `Return [] if nothing found on this page.`,
+              },
+              { type: "image_url", image_url: { url: pg.image } },
+            ],
+          },
+        ];
 
-    const userPrompt = `Analyze this document at URL: ${pdfUrl}
+        const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "google/gemini-2.5-pro", messages, temperature: 0.1 }),
+        });
 
-Identify all locations where the following field types should be placed:
-- "signature": Signature lines (usually at the bottom of the document, often labeled "Signature:", "Signed by:", "_______")
-- "initials": Initial boxes (short lines, usually labeled "Initials:", or small blank boxes in margins)
-- "date": Date fields (labeled "Date:", "Dated:", near signature lines)
-- "text": Text input areas (labeled "Name:", "Print Name:", "Title:", "Address:", "Company:", "Email:", "Phone:")
-
-For each identified field, return a JSON object with these exact fields:
-- "type": one of "signature", "initials", "date", "text"
-- "x": horizontal position as percentage (0-100) of document width
-- "y": vertical position as percentage (0-100) of document height
-- "width": width in pixels (signature: 180, initials: 90, date: 140, text: 160)
-- "height": height in pixels (signature: 52, initials: 40, date: 36, text: 36)
-- "label": a short descriptive label for the field
-- "suggestedValue": pre-filled value (for "text" with label "Name" use "${recipientName}", for "date" use "${today}", for "signature" and "initials" use "")
-- "pageNumber": page number where the field appears (default to 1)
-
-If you cannot analyze the PDF, return a standard real estate contract layout with these 5 fields placed at typical positions:
-1. Name text field at top (x:10, y:8)
-2. Title text field at top-right (x:55, y:8)
-3. Date field near bottom-left (x:10, y:88)
-4. Signature field at bottom-center (x:40, y:85)
-5. Initials field at bottom-right (x:82, y:88)
-
-Return ONLY the JSON array, example format:
-[{"type":"text","x":10,"y":8,"width":160,"height":36,"label":"Full Name","suggestedValue":"${recipientName}","pageNumber":1}]`;
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        temperature: 0.1,
-      }),
-    });
-
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("AI gateway error:", response.status, errText);
-      throw new Error(`AI gateway returned ${response.status}`);
-    }
-
-    const aiData = await response.json();
-    const rawContent = aiData.choices?.[0]?.message?.content || "";
-
-    let fields: any[] = [];
-    try {
-      const cleaned = rawContent
-        .replace(/```json\s*/gi, "")
-        .replace(/```\s*/gi, "")
-        .trim();
-      const parsed = JSON.parse(cleaned);
-      if (Array.isArray(parsed)) {
-        fields = parsed;
+        if (!resp.ok) {
+          const txt = await resp.text();
+          console.error(`AI vision error p${pg.pageNumber}:`, resp.status, txt);
+          continue;
+        }
+        const data = await resp.json();
+        const raw = data.choices?.[0]?.message?.content || "";
+        const cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
+        try {
+          const parsed = JSON.parse(cleaned);
+          if (Array.isArray(parsed)) {
+            for (const f of parsed) {
+              allFields.push({ ...f, pageNumber: pg.pageNumber });
+            }
+          }
+        } catch (e) {
+          console.warn(`parse failed p${pg.pageNumber}`, e);
+        }
       }
-    } catch (parseErr) {
-      console.warn("Failed to parse AI response, using fallback layout:", parseErr);
-      fields = getStandardContractLayout(recipientName, today);
+
+      const sanitized = sanitizeFields(allFields, safeName, safeEmail, today);
+      if (sanitized.length > 0) {
+        return jsonResponse({ fields: sanitized });
+      }
+      // fall through to fallback layout
     }
 
-    const validTypes = ["signature", "initials", "date", "text"];
-    const sanitized = fields
-      .filter((f) => validTypes.includes(f.type))
-      .map((f) => ({
-        type: f.type,
-        x: Math.max(0, Math.min(95, Number(f.x) || 10)),
-        y: Math.max(0, Math.min(95, Number(f.y) || 50)),
-        width: Number(f.width) || 160,
-        height: Number(f.height) || 36,
-        label: String(f.label || f.type),
-        suggestedValue: String(f.suggestedValue || ""),
-        pageNumber: Number(f.pageNumber) || 1,
-      }));
-
-    if (sanitized.length === 0) {
-      return new Response(
-        JSON.stringify({ fields: getStandardContractLayout(recipientName, today) }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    return new Response(JSON.stringify({ fields: sanitized }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // ── Fallback for blob/base64 with no images: smart standard layout ──
+    return jsonResponse({ fields: getStandardContractLayout(safeName, safeEmail, today) });
   } catch (err: any) {
     console.error("esign-auto-detect-fields error:", err);
     return new Response(JSON.stringify({ error: err.message || "Internal error" }), {
@@ -143,11 +106,49 @@ Return ONLY the JSON array, example format:
   }
 });
 
-function getStandardContractLayout(recipientName: string, today: string) {
+function jsonResponse(payload: unknown) {
+  return new Response(JSON.stringify(payload), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+function sanitizeFields(fields: any[], name: string, email: string, today: string) {
+  const valid = ["signature", "initials", "date", "text", "stamp"];
+  return fields
+    .filter((f) => valid.includes(f.type))
+    .map((f) => {
+      const label = String(f.label || f.type).toLowerCase();
+      let suggested = String(f.suggestedValue ?? "");
+      // Force-correct common label-based fields if AI returned junk
+      if (f.type === "text") {
+        if (/name/.test(label) && !suggested) suggested = name;
+        else if (/email/.test(label) && !suggested) suggested = email;
+        else if (/date/.test(label) && !suggested) suggested = today;
+      }
+      if (f.type === "date" && !suggested) suggested = today;
+      // Strip any literal stray brand strings like "JBJ" if AI hallucinated them
+      if (suggested === "JBJ" || suggested === "JBJ GLOBAL REAL ESTATE") suggested = name || "";
+      return {
+        type: f.type,
+        x: clamp(Number(f.x), 0, 95),
+        y: clamp(Number(f.y), 0, 95),
+        width: Number(f.width) || defaultWidth(f.type),
+        height: Number(f.height) || defaultHeight(f.type),
+        label: String(f.label || f.type),
+        suggestedValue: suggested,
+        pageNumber: Number(f.pageNumber) || 1,
+      };
+    });
+}
+
+function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, isFinite(v) ? v : lo)); }
+function defaultWidth(t: string) { return t === "signature" ? 180 : t === "initials" ? 90 : t === "date" ? 140 : t === "stamp" ? 110 : 160; }
+function defaultHeight(t: string) { return t === "signature" ? 52 : t === "initials" ? 40 : t === "date" ? 36 : t === "stamp" ? 110 : 36; }
+
+function getStandardContractLayout(name: string, email: string, today: string) {
   return [
-    { type: "text", x: 10, y: 8, width: 160, height: 36, label: "Full Name", suggestedValue: recipientName, pageNumber: 1 },
-    { type: "text", x: 55, y: 8, width: 160, height: 36, label: "Title / Position", suggestedValue: "", pageNumber: 1 },
-    { type: "text", x: 10, y: 15, width: 200, height: 36, label: "Company", suggestedValue: "", pageNumber: 1 },
+    { type: "text", x: 10, y: 8, width: 200, height: 36, label: "Full Name", suggestedValue: name, pageNumber: 1 },
+    { type: "text", x: 55, y: 8, width: 200, height: 36, label: "Email", suggestedValue: email, pageNumber: 1 },
     { type: "date", x: 10, y: 88, width: 140, height: 36, label: "Date", suggestedValue: today, pageNumber: 1 },
     { type: "signature", x: 38, y: 84, width: 180, height: 52, label: "Signature", suggestedValue: "", pageNumber: 1 },
     { type: "initials", x: 82, y: 88, width: 90, height: 40, label: "Initials", suggestedValue: "", pageNumber: 1 },
