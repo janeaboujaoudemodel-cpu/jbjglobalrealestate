@@ -661,79 +661,97 @@ export default function DocumentFieldPlacer({
               <CardContent className="p-0">
                 <div
                   ref={overlayRef}
-                  className="relative w-full overflow-y-auto mx-auto select-none"
-                  style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", cursor: "crosshair", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
-                  onClick={handleOverlayClick}
+                  className="w-full overflow-y-auto select-none flex justify-center"
+                  style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
                   onPointerMove={handleOverlayPointerMove}
                   onPointerUp={handleOverlayPointerUp}
                   onPointerLeave={handleOverlayPointerUp}
                 >
-                  <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={workingPdfUrl} />
+                  {/* Page-sized positioned box: ALL field % coords are relative to this. */}
+                  <div
+                    ref={pageRef}
+                    className="relative"
+                    style={{
+                      width: pageSize ? `${pageSize.w}px` : "100%",
+                      height: pageSize ? `${pageSize.h}px` : "auto",
+                      cursor: "crosshair",
+                    }}
+                    onClick={handleOverlayClick}
+                  >
+                    <PdfPageCanvas
+                      pdfDoc={pdfJsDocRef.current}
+                      pageNumber={currentPage}
+                      pdfUrl={workingPdfUrl}
+                      onSizeChange={(s) => setPageSize(s)}
+                    />
 
-                  {/* Field overlays */}
-                  {pageFields.map((field) => {
-                    const style = getRecipientStyle(field.recipientId);
-                    const isSelected = selectedFieldId === field.id;
+                    {/* Field overlays */}
+                    {pageFields.map((field) => {
+                      const style = getRecipientStyle(field.recipientId);
+                      const isSelected = selectedFieldId === field.id;
 
-                    return (
-                      <div
-                        key={field.id}
-                        data-field="true"
-                        onPointerDown={(e) => handleFieldPointerDown(e, field.id)}
-                        onClick={(e) => { e.stopPropagation(); setSelectedFieldId(field.id); }}
-                        className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group ${isSelected ? "ring-2 ring-[hsl(var(--gold))]" : ""}`}
-                        style={{
-                          left: `${field.x}%`,
-                          top: `${field.y}%`,
-                          width: `${field.width}px`,
-                          height: `${field.height}px`,
-                          cursor: "move",
-                          touchAction: "none",
-                        }}
-                      >
-                        {/* Delete button */}
-                        <button
-                          onPointerDown={(e) => e.stopPropagation()}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeField(field.id);
+                      return (
+                        <div
+                          key={field.id}
+                          data-field="true"
+                          onPointerDown={(e) => handleFieldPointerDown(e, field.id)}
+                          onClick={(e) => { e.stopPropagation(); setSelectedFieldId(field.id); }}
+                          className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group ${isSelected ? "ring-2 ring-[hsl(var(--gold))]" : ""}`}
+                          style={{
+                            left: `${field.x}%`,
+                            top: `${field.y}%`,
+                            width: `${field.width}px`,
+                            height: `${field.height}px`,
+                            cursor: "move",
+                            touchAction: "none",
                           }}
-                          className="absolute -top-2.5 -right-2.5 z-30 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full items-center justify-center hidden group-hover:flex shadow"
                         >
-                          <X className="w-3 h-3" />
-                        </button>
-
-                        {/* Field content */}
-                        <FieldContentRenderer
-                          field={field}
-                          style={style}
-                          recipients={recipients}
-                          savedStampSvg={savedStampSvg}
-                          savedSignatureUrl={defaultSignatureUrl || savedSignatureUrl}
-                          onUpdateValue={updateFieldValue}
-                          onOpenDraw={(id) => handleSignatureFieldClick(id)}
-                        />
-
-                        {/* Resize handles (corners) */}
-                        {(["nw", "ne", "sw", "se"] as const).map((corner) => (
-                          <div
-                            key={corner}
-                            data-handle={corner}
-                            onPointerDown={(e) => startResize(e, field.id, corner)}
-                            className={`absolute w-2.5 h-2.5 bg-white border ${style.border} z-30 hidden group-hover:block`}
-                            style={{
-                              [corner.includes("n") ? "top" : "bottom"]: -5,
-                              [corner.includes("w") ? "left" : "right"]: -5,
-                              cursor: corner === "nw" || corner === "se" ? "nwse-resize" : "nesw-resize",
+                          {/* Always-visible delete button (no longer clipped by border) */}
+                          <button
+                            type="button"
+                            aria-label="Delete field"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeField(field.id);
                             }}
-                          />
-                        ))}
+                            className="absolute -top-3 -right-3 z-40 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-md ring-2 ring-white"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
 
-                        {/* Recipient color bar */}
-                        <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
-                      </div>
-                    );
-                  })}
+                          {/* Field content */}
+                          <FieldContentRenderer
+                            field={field}
+                            style={style}
+                            recipients={recipients}
+                            savedStampSvg={savedStampSvg}
+                            savedSignatureUrl={defaultSignatureUrl || savedSignatureUrl}
+                            onUpdateValue={updateFieldValue}
+                            onOpenDraw={(id) => handleSignatureFieldClick(id)}
+                          />
+
+                          {/* Resize handles (corners) — visible when field is selected or hovered */}
+                          {(["nw", "ne", "sw", "se"] as const).map((corner) => (
+                            <div
+                              key={corner}
+                              data-handle={corner}
+                              onPointerDown={(e) => startResize(e, field.id, corner)}
+                              className={`absolute w-3 h-3 bg-white border-2 ${style.border} z-30 ${isSelected ? "block" : "hidden group-hover:block"}`}
+                              style={{
+                                [corner.includes("n") ? "top" : "bottom"]: -6,
+                                [corner.includes("w") ? "left" : "right"]: -6,
+                                cursor: corner === "nw" || corner === "se" ? "nwse-resize" : "nesw-resize",
+                              }}
+                            />
+                          ))}
+
+                          {/* Recipient color bar */}
+                          <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Page navigation bar */}
