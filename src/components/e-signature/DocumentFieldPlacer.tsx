@@ -4,8 +4,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   PenTool, Trash2, User, Wand2, Loader2,
-  ChevronLeft, ChevronRight, X, FileText, Pencil, Package,
+  ChevronLeft, ChevronRight, X, FileText, Pencil, Package, Edit3,
 } from "lucide-react";
+import AdoptAndSignDialog from "./AdoptAndSignDialog";
+import DocumentEditor from "./DocumentEditor";
+import { useOwnerSignatureAssets, useSaveSignatureAsset } from "@/hooks/useOwnerSignatureAssets";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
