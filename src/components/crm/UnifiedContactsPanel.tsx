@@ -367,9 +367,8 @@ export function UnifiedContactsPanel() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
         <SectionSelect value={activeDept} onChange={setActiveDept}
-          options={departments.map((d) => DEPARTMENT_LABEL[d] ?? d)}
+          options={departments} labelMap={DEPARTMENT_LABEL}
           placeholder="Department" />
-        {/* department options come back as labels — translate back when applied */}
         <SectionSelect value={activeLanguage} onChange={setActiveLanguage}
           options={languages} placeholder="Language" />
         <SectionSelect value={activeNationality} onChange={setActiveNationality}
