@@ -39,6 +39,7 @@ import { ExcludeFilterPopover } from "@/components/crm/ExcludeFilterPopover";
 import { ExcelGridView } from "@/components/crm/ExcelGridView";
 import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE_STATUS_OPTIONS, CONTRACT_STATUS_OPTIONS, ATTENDANCE_STATUS_OPTIONS, attendanceBucket, STATUS_OPTIONS as DEV_STATUS_OPTIONS } from "@/utils/crmStatusPalette";
 import { BrokerageAnalyticsStrip } from "@/components/crm/BrokerageAnalyticsStrip";
+import { EmailQuotaCard } from "@/components/owner/EmailQuotaCard";
 import { AgencyAttendancePanel } from "@/components/crm/AgencyAttendancePanel";
 import { useAttendanceCounts } from "@/hooks/useBrokerageEvents";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
