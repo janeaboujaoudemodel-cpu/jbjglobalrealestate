@@ -93,33 +93,43 @@ export default function DocumentFieldPlacer({
       return;
     }
     if (!user?.id) return;
-    async function loadStamp() {
-      // Try brand_assets first
-      const { data: brandStamp } = await supabase
-        .from("brand_assets")
-        .select("svg_content")
-        .eq("user_id", user!.id)
-        .eq("asset_type", "stamp")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (brandStamp?.svg_content) {
-        setSavedStampSvg(brandStamp.svg_content);
+    loadDefaultStamp();
+  }, [user?.id, handoffStampSvg]);
+
+  async function loadDefaultStamp() {
+    if (!user?.id) return;
+    // 1) brand_assets: prefer is_default=true, else most recent
+    const { data: stamps } = await supabase
+      .from("brand_assets")
+      .select("svg_content, thumbnail_url, metadata")
+      .eq("user_id", user.id)
+      .eq("asset_type", "stamp")
+      .order("created_at", { ascending: false });
+    if (stamps && stamps.length > 0) {
+      const def = stamps.find((s: any) => s.metadata?.is_default) || stamps[0];
+      const svg = (def as any).svg_content as string | null;
+      const url = (def as any).thumbnail_url as string | null;
+      if (svg) {
+        setSavedStampSvg(svg);
         return;
       }
-      // Fallback to stamp_designs
-      const { data } = await supabase
-        .from("stamp_designs")
-        .select("svg_source")
-        .eq("user_id", user!.id)
-        .eq("is_favorite", true)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (data?.svg_source) setSavedStampSvg(data.svg_source);
+      if (url) {
+        // Wrap raster image as inline SVG so existing renderer paths work uniformly
+        setSavedStampSvg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"><image href="${url}" width="200" height="200" preserveAspectRatio="xMidYMid meet" /></svg>`);
+        return;
+      }
     }
-    loadStamp();
-  }, [user?.id, handoffStampSvg]);
+    // 2) Fallback to legacy stamp_designs favourite
+    const { data } = await supabase
+      .from("stamp_designs")
+      .select("svg_source")
+      .eq("user_id", user.id)
+      .eq("is_favorite", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (data?.svg_source) setSavedStampSvg(data.svg_source);
+  }
 
   // Load user's saved signature from ai_tool_projects (favorite signature)
   useEffect(() => {
