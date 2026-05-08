@@ -31,6 +31,8 @@ export function EmailQuotaCard() {
   const monthlyPct = Math.min(100, Math.round((q.sentMonth / Math.max(1, q.monthlyLimit)) * 100));
   const dailyHot = dailyPct >= 90;
   const monthlyHot = monthlyPct >= 90;
+  const leftToday = Math.max(0, q.dailyLimit - q.sentToday);
+  const leftMonth = Math.max(0, q.monthlyLimit - q.sentMonth);
 
   const onSave = async () => {
     const { error } = await q.updateLimits({
