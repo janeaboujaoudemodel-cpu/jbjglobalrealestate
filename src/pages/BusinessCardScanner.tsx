@@ -555,6 +555,33 @@ const BusinessCardScanner = () => {
         actionLabel={stepUp.modalActionLabel}
         severity={stepUp.modalSeverity}
       />
+
+      <Dialog open={!!dupDialog} onOpenChange={(o) => !o && setDupDialog(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Existing contact found in CRM</DialogTitle>
+            <DialogDescription>
+              A matching contact already exists. Choose how to handle the scanned card.
+            </DialogDescription>
+          </DialogHeader>
+          {dupDialog && (
+            <div className="rounded-lg border bg-muted/30 p-3 text-sm space-y-1">
+              <div><span className="text-muted-foreground">Name:</span> {dupDialog.existing.full_name || "—"}</div>
+              <div><span className="text-muted-foreground">Email:</span> {dupDialog.existing.email_lower || "—"}</div>
+              <div><span className="text-muted-foreground">Phone:</span> {dupDialog.existing.phone_e164 || "—"}</div>
+              <div><span className="text-muted-foreground">Company:</span> {dupDialog.existing.company_name || "—"}</div>
+              <div><span className="text-muted-foreground">Type:</span> {dupDialog.existing.contact_type || "—"}</div>
+            </div>
+          )}
+          <DialogFooter className="flex-wrap gap-2">
+            <Button variant="ghost" onClick={() => setDupDialog(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => resolveDuplicate("append_note")}>Add Note Only</Button>
+            <Button variant="outline" onClick={() => resolveDuplicate("insert")}>Add New Anyway</Button>
+            <Button variant="outline" onClick={() => resolveDuplicate("update")}>Update Existing</Button>
+            <Button onClick={() => resolveDuplicate("merge")}>Merge (recommended)</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
