@@ -317,7 +317,51 @@ export default function DocumentFieldPlacer({
     resizingRef.current = { id: fieldId, corner, startX: e.clientX, startY: e.clientY, w: f.width, h: f.height, x: f.x, y: f.y };
   };
 
-  // ── Auto-detect (send base64 if blob URL) ──────────────────────────────
+  // ── Adopt-and-Sign click handler with broadcast ────────────────────────
+  const handleSignatureFieldClick = (fieldId: string) => {
+    const field = fields.find((f) => f.id === fieldId);
+    if (!field) return;
+    // If we have a default already and field is empty, auto-apply silently and broadcast
+    if ((field.type === "signature" && defaultSignatureUrl) || (field.type === "initials" && defaultInitialsUrl)) {
+      const url = field.type === "signature" ? defaultSignatureUrl! : defaultInitialsUrl!;
+      broadcastValue(field.recipientId, field.type, url);
+      return;
+    }
+    setAdoptForFieldId(fieldId);
+    setShowAdopt(true);
+  };
+
+  const broadcastValue = (recipientId: string, type: SignatureField["type"], value: string) => {
+    onFieldsChange(fields.map((f) => (f.recipientId === recipientId && f.type === type ? { ...f, value } : f)));
+  };
+
+  const handleAdoptResult = async (res: { signatureUrl: string; initialsUrl: string; broadcast: boolean; saveDefault: boolean }) => {
+    const target = fields.find((f) => f.id === adoptForFieldId);
+    if (!target) return;
+    const recipientId = target.recipientId;
+    if (res.saveDefault) {
+      try {
+        await Promise.all([
+          saveAsset.mutateAsync({ kind: "signature", image_data_url: res.signatureUrl, makeDefault: true }),
+          saveAsset.mutateAsync({ kind: "initial", image_data_url: res.initialsUrl, makeDefault: true }),
+        ]);
+      } catch (e) { console.warn("save asset failed", e); }
+    }
+    if (res.broadcast) {
+      onFieldsChange(fields.map((f) => {
+        if (f.recipientId !== recipientId) return f;
+        if (f.type === "signature") return { ...f, value: res.signatureUrl };
+        if (f.type === "initials") return { ...f, value: res.initialsUrl };
+        return f;
+      }));
+    } else {
+      const url = target.type === "signature" ? res.signatureUrl : res.initialsUrl;
+      onFieldsChange(fields.map((f) => f.id === target.id ? { ...f, value: url } : f));
+    }
+    toast.success("Signature adopted and applied");
+  };
+
+  // ── Auto-detect (rasterize pages and use AI vision) ───────────────────
   const handleAutoDetect = async () => {
     if (!selectedRecipient) {
       toast.error("Please select a recipient first");
@@ -325,24 +369,30 @@ export default function DocumentFieldPlacer({
     }
     setIsAutoDetecting(true);
     try {
-      let bodyPayload: any = {
-        recipientId: selectedRecipient,
-        recipientName: recipients.find((r) => r.id === selectedRecipient)?.name || "",
-      };
-
-      // If pdfFile available, send as base64 instead of blob URL
-      if (pdfFile) {
-        const buffer = await pdfFile.arrayBuffer();
-        const bytes = new Uint8Array(buffer);
-        let binary = "";
-        for (let i = 0; i < bytes.length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        const base64 = btoa(binary);
-        bodyPayload.pdfBase64 = base64;
-      } else if (pdfUrl && !pdfUrl.startsWith("blob:")) {
-        bodyPayload.pdfUrl = pdfUrl;
+      // Rasterize up to first 6 pages to small JPEGs and send to vision model
+      const pdfjsLib = await loadPdfJs();
+      const doc = pdfJsDocRef.current || (await pdfjsLib.getDocument(workingPdfUrl).promise);
+      const maxPages = Math.min(doc.numPages, 6);
+      const pageImages: { pageNumber: number; image: string; width: number; height: number }[] = [];
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await doc.getPage(i);
+        const viewport = page.getViewport({ scale: 1 });
+        const targetW = 1100;
+        const scale = targetW / viewport.width;
+        const sv = page.getViewport({ scale });
+        const canvas = document.createElement("canvas");
+        canvas.width = sv.width; canvas.height = sv.height;
+        await page.render({ canvasContext: canvas.getContext("2d")!, viewport: sv }).promise;
+        pageImages.push({ pageNumber: i, image: canvas.toDataURL("image/jpeg", 0.7), width: sv.width, height: sv.height });
       }
+
+      const recipient = recipients.find((r) => r.id === selectedRecipient);
+      const bodyPayload: any = {
+        recipientId: selectedRecipient,
+        recipientName: recipient?.name || "",
+        recipientEmail: recipient?.email || "",
+        pageImages,
+      };
 
       const { data, error } = await supabase.functions.invoke("esign-auto-detect-fields", {
         body: bodyPayload,
