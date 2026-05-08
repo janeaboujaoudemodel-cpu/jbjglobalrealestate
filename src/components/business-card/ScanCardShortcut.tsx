@@ -16,8 +16,8 @@ const ScanCardShortcut = ({
   variant = "button",
   className = "",
 }: ScanCardShortcutProps) => {
-  const { isOwner, isAdmin } = useUserRole();
-  if (!isOwner && !isAdmin) return null;
+  const { isOwner } = useUserRole();
+  if (!isOwner) return null;
 
   if (variant === "icon") {
     return (
