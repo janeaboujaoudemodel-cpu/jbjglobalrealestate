@@ -1,123 +1,103 @@
+# E-Signature DocuSign-Grade Upgrade
 
-# Relational CRM Intersection & Network Plan
+Fix the broken editor on `/e-signature/create` and bring the whole flow up to DocuSign parity. Strict "no removal" — every existing capability stays.
 
-Builds on the existing unified CRM (`crm_brokerages`, `crm_developer_registry`, `crm_brokerage_agents`, `developer_representatives`, `crm_leads`, `vw_crm_contacts`, `upsert_contact_with_company` RPC). **Nothing is rebuilt** — we add the intersection layer on top.
+## Problems to fix
 
-## 1. Schema additions (single non-breaking migration)
+1. **Drag is wrong** — uses native HTML5 drag with `dataTransfer`; on the scrollable container the drop coordinates skip and snap. Cannot drag downward past the visible area.
+2. **No resize / no style controls** — fields are fixed-size; no font, color, or size handles.
+3. **Signature flow is clunky** — clicking a signature field doesn't open Adopt-and-Sign; saved signature isn't auto-applied across all required fields.
+4. **AI Auto-Detect is dumb** — drops generic "Click to sign" + a date with the literal text "JBJ" instead of recipient name / company / email at the real anchor positions.
+5. **No document editing** — cannot delete, reorder, merge, rotate pages, or export to PNG / Excel / individual page.
+6. **Saved assets not unified** — signature, initials, stamp, name, email, date come from different tables; not auto-applied.
 
-Add to **all four contact-bearing tables** (`crm_brokers`, `crm_brokerage_agents`, `developer_representatives`, `crm_leads`):
+## Plan
 
-| Column | Purpose |
-|---|---|
-| `department text` | Channel Relations, Sales, Marketing, Admin, Owner, Operations, HR, Events, Partnerships, Management |
-| `seniority text` | Owner, Director, Head, Manager, Senior, Mid, Junior |
-| `position_type text` | full_time, partner, freelance, agent |
-| `role_title text` | Free text e.g. "Head of Channel Relations" |
-| `languages text[]` | Multi-select; GIN index |
-| `nationality text` | ISO country |
-| `country text`, `city text`, `region text` | Location |
-| `is_global_broker boolean` | Filter flag |
+### 1. Fix drag + add resize (presentation only)
 
-New enum: `app_department` (channel_relations, sales, marketing, admin, owner, operations, hr, events, partnerships, management). Stored as text + CHECK for flexibility.
+Replace HTML5 drag with a pointer-event drag inside `DocumentFieldPlacer.tsx`:
 
-**Refresh `vw_crm_contacts`** to expose: `department`, `seniority`, `role_title`, `languages`, `nationality`, `country`, `city`, `region`, `is_global_broker`, plus the existing `kind`, `company_id`, `company_kind`, `company_name`, `source`.
+- `onPointerDown` on field → capture pointer, store `(offsetX, offsetY)` and starting field rect.
+- `onPointerMove` → compute new `x%/y%` against `overlayRef.getBoundingClientRect()`, clamp using **field width** (not 95%), so wide signature fields don't snap.
+- Auto-scroll the overlay when cursor nears top/bottom edge so dragging downward works inside the scroll container.
+- 8 resize handles (corners + edges) using the same pointer model; min 24×24, max page width.
+- Per-field inspector panel (right rail) when a field is selected: font family, font size, text color, bold/italic, alignment, fill tint, border style. Stored on `SignatureField` as optional `style: { fontFamily, fontSize, color, bold, italic, align, tint }`.
 
-Indexes: `(department)`, `(nationality)`, `(country)`, `(city)`, GIN on `languages`, GIN on `tags`.
+### 2. Adopt-and-Sign modal (one click, auto-broadcast)
 
-## 2. Section views (independent but linked)
+New `AdoptAndSignDialog.tsx` opened the first time the signer clicks any signature/initials/stamp/name field:
 
-A single page `CRMNetwork.tsx` with left-rail tabs that filter `vw_crm_contacts` by `kind`:
+- Tabs: **Draw**, **Type** (script fonts), **Upload**.
+- Generates **signature + initials + stamp** in one pass using the existing `ai-signature-generator` for "Type" mode.
+- On confirm: saves to `owner_signature_assets` via existing `useSaveSignatureAsset` (kind = `signature` / `initial` / `stamp`, `is_default = true`).
+- Auto-fills **every** field of the same type/recipient on every page. If only one field exists, fills just that one. Same logic for Name, Email, Date, Stamp.
+- "Don't ask again" → next sessions auto-apply the default asset on click without opening the dialog. Re-open via a small pencil icon on the field.
 
-```text
-Clients · Investors · Individual Brokers · Brokerage Agencies · Developers
-Developer Representatives · Channel Partners · Sales Managers · Directors
-Admins · Owners
-```
+### 3. Smarter AI Auto-Detect
 
-Each tab = same table component, pre-filtered. Reuses `UnifiedContactsPanel` plumbing. Every row → opens the relational drawer (§3).
+Upgrade `supabase/functions/esign-auto-detect-fields/index.ts`:
 
-Filter chips on every tab: **Department · Seniority · Language · Nationality · Country · City · Company · Source · Event · Campaign**. All filters stack and serialise to URL.
+- Rasterize each PDF page server-side (pdf-lib + pdfium via Deno; or send page images from the client) and OCR with Lovable AI (`google/gemini-2.5-pro`) to find anchor phrases: "Signature", "Sign here", "Print Name", "Date", "Initials", "Email", "Title", "Company", "Stamp".
+- Return precise `{ pageNumber, x%, y%, width, height, type, suggestedValue, label }` per anchor, mapped to **each recipient by signing order**.
+- `suggestedValue` populated from recipient's profile: name → recipient.name, email → recipient.email, date → today, company → user's brand profile, initials → derived. **Never** literal "JBJ".
+- Client merges results, dedupes overlapping anchors, and shows a confirm toast "Detected N fields across M pages — review".
 
-## 3. Company hub (Brokerage / Developer detail)
+### 4. Saved Assets Hub (unified)
 
-Single component `CompanyHub.tsx` rendered for both brokerage and developer:
+Single `useOwnerSignatureAssets` already exists. Extend to cover:
 
-**Header**: company card (logo, country, website, license, tags, source history).
+- `signature` (multiple, one default)
+- `initial`
+- `stamp` (existing brand_assets stamp also surfaced)
+- `saved_text` kind: full name, title, company, email, phone, address — keyed by label.
 
-**Org tabs** — auto-grouped from contacts where `company_id = X`:
-- Brokerage: Owners · Admins · Sales Directors · Sales Managers · Brokers · Other
-- Developer: Channel Relations *(promoted, default tab)* · Sales Team · Directors · Head of Sales · Marketing · Events · Other
+New `Saved Assets` drawer in the editor (top-right): list, set-default, delete, add new. Deleting clears auto-apply; adding new offers "make default".
 
-**Relational tabs** (reuse existing data sources):
-Linked Agencies/Developers · Campaigns · Events · Follow-ups · Business Cards · Notes · Emails Sent · Communication History · Source/Import History.
+### 5. Document Editor (pages + export)
 
-## 4. Person detail drawer
+New `DocumentEditor.tsx` panel (toggle button "Edit Document"):
 
-Opens from any list. Shows: company link, role/department/seniority, languages, nationality, country/city, current + previous companies (`broker_company_history` / new `developer_rep_company_history`), campaign history, notes, uploaded cards, full relationship timeline (`crm_activities` + `crm_outreach_touchpoints`).
+- Page grid with thumbnails. Per page: **Delete**, **Rotate 90°**, **Duplicate**, **Drag to reorder**.
+- Toolbar: **Merge another PDF**, **Insert blank page**, **Print**, **Export**.
+- Export menu:
+  - PDF (current state)
+  - PDF per page (zip)
+  - PNG per page (zip)
+  - Single PNG (current page)
+  - XLSX (text content per page → rows)
+  - DOCX (text)
+- Implemented with `pdf-lib` (page ops) + existing `loadPdfJs` (rasterize to canvas) + `jszip` + `xlsx` + `jspdf` (already in project).
+- After edits, the modified PDF replaces the working file in memory; field coordinates re-mapped if pages are reordered/deleted (drop fields whose page is gone, shift `pageNumber` for moved pages).
 
-## 5. Smart segmentation engine
+### 6. Multi-party send (already exists — polish)
 
-New `SegmentBuilder` component → produces a JSON filter saved to `crm_segments` (new lightweight table: `id, name, filter jsonb, created_by`). Filter shape:
+- After fields are placed, "Send for Signature" generates per-recipient signing links (existing `esign-send-for-signature`).
+- Recipient opens link → sees only their fields → Adopt-and-Sign once → all their fields fill → submit. Existing `apply-adopt-signature` is reused.
 
-```json
-{ "kind":["broker"], "languages":["ar"], "city":"Dubai", "department":"admin" }
-```
+### 7. End-to-end test
 
-Used by:
-- list views (apply as filter)
-- export (§6)
-- campaigns (§7)
+Add `tests/esign.smoke.spec.ts` (vitest + jsdom):
 
-Pre-seeded segments: "Arabic-speaking Dubai brokers", "Russian investors", "Developer channel managers", "Agency owners", "Sales directors at developers".
+- Place field, drag with synthetic pointer events, assert new `x/y`.
+- Resize via handle, assert width/height.
+- Open Adopt dialog, save, assert all matching fields filled.
+- Auto-detect mock returns 5 fields, assert they render with `suggestedValue`.
+- Page delete: assert fields on deleted page removed, fields on later page shifted.
 
-## 6. Unified export
+## Technical notes
 
-Extend existing `crm-export` edge function to accept `{ segment_id }` OR inline filter, plus `format: csv | xlsx | pdf`. Reuses `vw_crm_contacts`. PDF via existing `jspdf-autotable` pattern (`exportLeads.ts`). One **Export** button on every list and every company hub → opens modal with format + scope (current view / segment / whole company / single event / single campaign).
+- **No DB schema changes required** (uses existing `owner_signature_assets`, `brand_assets`, `ai_tool_projects`, `esign_envelopes`).
+- New optional `style` and `label` columns on `SignatureField` are **client-side only**; serialized into the existing `fields` jsonb on the envelope.
+- New deps to add: `jszip`, `xlsx` (only if missing — verify first), nothing else.
+- Files to add: `AdoptAndSignDialog.tsx`, `DocumentEditor.tsx`, `FieldInspector.tsx`, `useUnifiedSignatureAssets.ts`.
+- Files to modify: `DocumentFieldPlacer.tsx`, `FieldContentRenderer.tsx`, `documentFieldTypes.ts`, `supabase/functions/esign-auto-detect-fields/index.ts`, `CreateEnvelope.tsx`.
+- All styling stays in semantic tokens; gold = hairline only per design rules. No emojis.
 
-## 7. Resend campaigns + smart targeting
+## Acceptance
 
-Reuses existing `campaigns`, `crm_email_campaigns`, `crm_campaign_recipients`, `useLockedSend`, `quotaGuardedFetch`, locked-send standard, and single-agency rule.
-
-New flow `CampaignComposer.tsx`:
-1. Pick **Segment** (from §5) → preview recipient count from `vw_crm_contacts`.
-2. Pick template (existing campaign templates).
-3. Subject + body (locked-send: editable subject, byte-for-byte lock).
-4. Schedule or send.
-
-Recipient resolver edge function `crm-resolve-segment` materialises the segment to `crm_campaign_recipients` at send time. Honors:
-- Resend quota standard (100/day, 2900/30d)
-- Single-agency email rule (validator blocks cross-brokerage merges)
-- Suppression list
-
-## 8. Backfill + intelligent extraction
-
-One-shot migration script populates new fields where derivable:
-- `department` from existing `role_title` keyword match (channel/sales/marketing/admin/owner/director/manager/head)
-- `seniority` from same heuristic (Owner > Director > Head > Manager > Senior > Mid > Junior)
-- `languages` defaults to `['en','ar']` for UAE-based, override-able
-- `nationality` / `country` from existing brokerage/developer country if contact has none
-
-Scanner (`crm-save-scanned-card`) extended: AI extraction prompt asks for department, seniority, languages, nationality, country, city in addition to current fields.
-
-## 9. Acceptance checklist
-
-- Clicking **Individual Brokers** shows only brokers; same for every other section.
-- Opening **FAM Properties** shows owners, admins, directors, managers, brokers, plus campaigns/events/follow-ups/cards/notes/emails.
-- Opening **John Smith** shows agency, position, department, role, languages, nationality, country, campaign history, notes, cards, timeline.
-- Opening any **developer** shows Channel Relations as a promoted tab with its own people group.
-- Filter "Arabic-speaking brokers in Dubai" works in list view, export, and as a campaign segment.
-- Export works at every scope (current view, company, event, segment, campaign) in CSV / XLSX / PDF.
-- Resend campaign sent to a segment respects quota + single-agency rule + suppression list.
-
-## Technical details (engineers)
-
-- Single migration: column adds + CHECKs + indexes + view refresh + new `crm_segments` + new `developer_rep_company_history`.
-- View `vw_crm_contacts` stays `SECURITY INVOKER`; underlying RLS unchanged.
-- New RPC `crm_segment_resolve(filter jsonb) returns setof vw_crm_contacts` — single source of truth used by list, export, campaign.
-- Edge functions:
-  - `crm-export` — extend payload with `{ segment_id | filter, format }`.
-  - `crm-resolve-segment` — new; called by campaign send to materialise recipients.
-  - `crm-save-scanned-card` — extend AI prompt + insert payload with new fields.
-- UI: new `CompanyHub.tsx`, `SegmentBuilder.tsx`, `CampaignComposer.tsx`, `CRMNetwork.tsx`; reuse `UnifiedContactsPanel`, `ExportMenu`, `useLockedSend`.
-- Champagne-gold tokens, IconTile, locked-send, quota, no-removal policy all preserved.
-- No legacy table is dropped in this scope (continues prior backfill/deprecation track).
+- Drag a signature field anywhere on the page (including dragging downward past the fold) and it lands exactly under the cursor.
+- Resize from any handle; width/height update live.
+- Click signature → Adopt-and-Sign opens → save once → every signature field for me on every page is filled. Same for initials, name, email, date, stamp.
+- AI Auto-Detect returns real anchor positions with my real name/email/company prefilled — never literal "JBJ".
+- Document editor lets me delete a page, reorder, merge another PDF, export PDF/PNG/XLSX, and print.
+- All existing features (brand assets picker, contract analyzer, AI signature designer, multi-recipient flow) still work.

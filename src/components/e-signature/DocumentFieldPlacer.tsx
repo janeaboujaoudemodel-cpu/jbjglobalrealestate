@@ -4,8 +4,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   PenTool, Trash2, User, Wand2, Loader2,
-  ChevronLeft, ChevronRight, X, FileText, Pencil, Package,
+  ChevronLeft, ChevronRight, X, FileText, Pencil, Package, Edit3,
 } from "lucide-react";
+import AdoptAndSignDialog from "./AdoptAndSignDialog";
+import DocumentEditor from "./DocumentEditor";
+import { useOwnerSignatureAssets, useSaveSignatureAsset } from "@/hooks/useOwnerSignatureAssets";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -52,6 +55,9 @@ export default function DocumentFieldPlacer({
 
   // Drag offset ref for precision dragging
   const dragOffsetRef = useRef({ x: 0, y: 0 });
+  const draggingIdRef = useRef<string | null>(null);
+  const resizingRef = useRef<{ id: string; corner: "se" | "sw" | "ne" | "nw"; startX: number; startY: number; w: number; h: number; x: number; y: number } | null>(null);
+  const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
 
   // Thumbnail state
   const [thumbnails, setThumbnails] = useState<string[]>([]);
@@ -60,6 +66,20 @@ export default function DocumentFieldPlacer({
 
   // Brand asset picker state
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [showAdopt, setShowAdopt] = useState(false);
+  const [adoptForFieldId, setAdoptForFieldId] = useState<string | null>(null);
+  const [showDocEditor, setShowDocEditor] = useState(false);
+  const [workingPdfUrl, setWorkingPdfUrl] = useState<string>(pdfUrl);
+  const [workingPdfFile, setWorkingPdfFile] = useState<File | null>(pdfFile || null);
+
+  // Saved assets via owner_signature_assets — auto-apply on click
+  const { data: sigAssets } = useOwnerSignatureAssets("signature");
+  const { data: initAssets } = useOwnerSignatureAssets("initial");
+  const saveAsset = useSaveSignatureAsset();
+  const defaultSignatureUrl = sigAssets?.find((a) => a.is_default)?.image_url || sigAssets?.[0]?.image_url || null;
+  const defaultInitialsUrl = initAssets?.find((a) => a.is_default)?.image_url || initAssets?.[0]?.image_url || null;
+
+  useEffect(() => { setWorkingPdfUrl(pdfUrl); setWorkingPdfFile(pdfFile || null); }, [pdfUrl, pdfFile]);
 
   // Load stamp: prefer handoff, then brand_assets, then stamp_designs fallback
   useEffect(() => {
@@ -235,41 +255,113 @@ export default function DocumentFieldPlacer({
     onFieldsChange(fields.map((f) => (f.id === fieldId ? { ...f, value } : f)));
   };
 
-  // ── Drag-to-reposition (with offset for precision) ─────────────────────
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      const fieldId = e.dataTransfer.getData("fieldId");
-      if (!fieldId || !overlayRef.current) return;
-      const rect = overlayRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left - dragOffsetRef.current.x) / rect.width) * 100;
-      const y = ((e.clientY - rect.top - dragOffsetRef.current.y) / rect.height) * 100;
-      onFieldsChange(
-        fields.map((f) =>
-          f.id === fieldId
-            ? { ...f, x: Math.max(0, Math.min(95, x)), y: Math.max(0, Math.min(95, y)) }
-            : f
-        )
-      );
-    },
-    [fields, onFieldsChange]
-  );
-
-  const handleDragOver = (e: React.DragEvent) => e.preventDefault();
-  const handleDragStart = (e: React.DragEvent, fieldId: string) => {
-    e.dataTransfer.setData("fieldId", fieldId);
-    // Calculate offset between cursor and field's top-left corner
-    const fieldEl = (e.target as HTMLElement).closest("[data-field]") as HTMLElement;
-    if (fieldEl) {
-      const fieldRect = fieldEl.getBoundingClientRect();
-      dragOffsetRef.current = {
-        x: e.clientX - fieldRect.left,
-        y: e.clientY - fieldRect.top,
-      };
-    }
+  // ── Pointer-event drag + resize (precise, scroll-friendly) ────────────
+  const handleFieldPointerDown = (e: React.PointerEvent, fieldId: string) => {
+    if ((e.target as HTMLElement).dataset.handle) return; // resize handles handle their own
+    e.stopPropagation();
+    setSelectedFieldId(fieldId);
+    if (!overlayRef.current) return;
+    const fieldEl = (e.currentTarget as HTMLElement);
+    const fieldRect = fieldEl.getBoundingClientRect();
+    dragOffsetRef.current = { x: e.clientX - fieldRect.left, y: e.clientY - fieldRect.top };
+    draggingIdRef.current = fieldId;
+    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
   };
 
-  // ── Auto-detect (send base64 if blob URL) ──────────────────────────────
+  const handleOverlayPointerMove = (e: React.PointerEvent) => {
+    if (!overlayRef.current) return;
+    const overlay = overlayRef.current;
+    // Auto-scroll near vertical edges so we can drag downward
+    const r = overlay.getBoundingClientRect();
+    const edge = 40;
+    if (e.clientY > r.bottom - edge) overlay.scrollTop += 12;
+    else if (e.clientY < r.top + edge) overlay.scrollTop -= 12;
+
+    if (resizingRef.current) {
+      const z = resizingRef.current;
+      const dx = e.clientX - z.startX;
+      const dy = e.clientY - z.startY;
+      let newW = z.w, newH = z.h, newX = z.x, newY = z.y;
+      const widthPct = (delta: number) => (delta / r.width) * 100;
+      const heightPct = (delta: number) => (delta / r.height) * 100;
+      if (z.corner === "se") { newW = Math.max(24, z.w + dx); newH = Math.max(20, z.h + dy); }
+      else if (z.corner === "sw") { newW = Math.max(24, z.w - dx); newH = Math.max(20, z.h + dy); newX = z.x + widthPct(dx); }
+      else if (z.corner === "ne") { newW = Math.max(24, z.w + dx); newH = Math.max(20, z.h - dy); newY = z.y + heightPct(dy); }
+      else if (z.corner === "nw") { newW = Math.max(24, z.w - dx); newH = Math.max(20, z.h - dy); newX = z.x + widthPct(dx); newY = z.y + heightPct(dy); }
+      onFieldsChange(fields.map((f) => f.id === z.id ? { ...f, width: newW, height: newH, x: newX, y: newY } : f));
+      return;
+    }
+
+    const id = draggingIdRef.current;
+    if (!id) return;
+    const xPx = e.clientX - r.left + overlay.scrollLeft - dragOffsetRef.current.x;
+    const yPx = e.clientY - r.top + overlay.scrollTop - dragOffsetRef.current.y;
+    const xPct = (xPx / r.width) * 100;
+    const yPct = (yPx / r.height) * 100;
+    const fld = fields.find((f) => f.id === id);
+    if (!fld) return;
+    const maxX = 100 - (fld.width / r.width) * 100;
+    const maxY = 100 - (fld.height / r.height) * 100;
+    onFieldsChange(fields.map((f) => f.id === id ? { ...f, x: Math.max(0, Math.min(maxX, xPct)), y: Math.max(0, Math.min(maxY, yPct)) } : f));
+  };
+
+  const handleOverlayPointerUp = () => {
+    draggingIdRef.current = null;
+    resizingRef.current = null;
+  };
+
+  const startResize = (e: React.PointerEvent, fieldId: string, corner: "se" | "sw" | "ne" | "nw") => {
+    e.stopPropagation();
+    const f = fields.find((x) => x.id === fieldId);
+    if (!f) return;
+    resizingRef.current = { id: fieldId, corner, startX: e.clientX, startY: e.clientY, w: f.width, h: f.height, x: f.x, y: f.y };
+  };
+
+  // ── Adopt-and-Sign click handler with broadcast ────────────────────────
+  const handleSignatureFieldClick = (fieldId: string) => {
+    const field = fields.find((f) => f.id === fieldId);
+    if (!field) return;
+    // If we have a default already and field is empty, auto-apply silently and broadcast
+    if ((field.type === "signature" && defaultSignatureUrl) || (field.type === "initials" && defaultInitialsUrl)) {
+      const url = field.type === "signature" ? defaultSignatureUrl! : defaultInitialsUrl!;
+      broadcastValue(field.recipientId, field.type, url);
+      return;
+    }
+    setAdoptForFieldId(fieldId);
+    setShowAdopt(true);
+  };
+
+  const broadcastValue = (recipientId: string, type: SignatureField["type"], value: string) => {
+    onFieldsChange(fields.map((f) => (f.recipientId === recipientId && f.type === type ? { ...f, value } : f)));
+  };
+
+  const handleAdoptResult = async (res: { signatureUrl: string; initialsUrl: string; broadcast: boolean; saveDefault: boolean }) => {
+    const target = fields.find((f) => f.id === adoptForFieldId);
+    if (!target) return;
+    const recipientId = target.recipientId;
+    if (res.saveDefault) {
+      try {
+        await Promise.all([
+          saveAsset.mutateAsync({ kind: "signature", image_data_url: res.signatureUrl, makeDefault: true }),
+          saveAsset.mutateAsync({ kind: "initial", image_data_url: res.initialsUrl, makeDefault: true }),
+        ]);
+      } catch (e) { console.warn("save asset failed", e); }
+    }
+    if (res.broadcast) {
+      onFieldsChange(fields.map((f) => {
+        if (f.recipientId !== recipientId) return f;
+        if (f.type === "signature") return { ...f, value: res.signatureUrl };
+        if (f.type === "initials") return { ...f, value: res.initialsUrl };
+        return f;
+      }));
+    } else {
+      const url = target.type === "signature" ? res.signatureUrl : res.initialsUrl;
+      onFieldsChange(fields.map((f) => f.id === target.id ? { ...f, value: url } : f));
+    }
+    toast.success("Signature adopted and applied");
+  };
+
+  // ── Auto-detect (rasterize pages and use AI vision) ───────────────────
   const handleAutoDetect = async () => {
     if (!selectedRecipient) {
       toast.error("Please select a recipient first");
@@ -277,24 +369,30 @@ export default function DocumentFieldPlacer({
     }
     setIsAutoDetecting(true);
     try {
-      let bodyPayload: any = {
-        recipientId: selectedRecipient,
-        recipientName: recipients.find((r) => r.id === selectedRecipient)?.name || "",
-      };
-
-      // If pdfFile available, send as base64 instead of blob URL
-      if (pdfFile) {
-        const buffer = await pdfFile.arrayBuffer();
-        const bytes = new Uint8Array(buffer);
-        let binary = "";
-        for (let i = 0; i < bytes.length; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        const base64 = btoa(binary);
-        bodyPayload.pdfBase64 = base64;
-      } else if (pdfUrl && !pdfUrl.startsWith("blob:")) {
-        bodyPayload.pdfUrl = pdfUrl;
+      // Rasterize up to first 6 pages to small JPEGs and send to vision model
+      const pdfjsLib = await loadPdfJs();
+      const doc = pdfJsDocRef.current || (await pdfjsLib.getDocument(workingPdfUrl).promise);
+      const maxPages = Math.min(doc.numPages, 6);
+      const pageImages: { pageNumber: number; image: string; width: number; height: number }[] = [];
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await doc.getPage(i);
+        const viewport = page.getViewport({ scale: 1 });
+        const targetW = 1100;
+        const scale = targetW / viewport.width;
+        const sv = page.getViewport({ scale });
+        const canvas = document.createElement("canvas");
+        canvas.width = sv.width; canvas.height = sv.height;
+        await page.render({ canvasContext: canvas.getContext("2d")!, viewport: sv }).promise;
+        pageImages.push({ pageNumber: i, image: canvas.toDataURL("image/jpeg", 0.7), width: sv.width, height: sv.height });
       }
+
+      const recipient = recipients.find((r) => r.id === selectedRecipient);
+      const bodyPayload: any = {
+        recipientId: selectedRecipient,
+        recipientName: recipient?.name || "",
+        recipientEmail: recipient?.email || "",
+        pageImages,
+      };
 
       const { data, error } = await supabase.functions.invoke("esign-auto-detect-fields", {
         body: bodyPayload,
@@ -435,6 +533,16 @@ export default function DocumentFieldPlacer({
           <Package className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
           Brand Assets
         </Button>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowDocEditor(true)}
+          className="h-9 gap-1.5 text-sm font-medium border-[hsl(var(--gold)/.4)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.05)]"
+        >
+          <Edit3 className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+          Edit Document
+        </Button>
       </div>
 
       {/* Click-mode hint */}
@@ -543,36 +651,39 @@ export default function DocumentFieldPlacer({
               <CardContent className="p-0">
                 <div
                   ref={overlayRef}
-                  className="relative w-full overflow-y-auto mx-auto"
+                  className="relative w-full overflow-y-auto mx-auto select-none"
                   style={{ maxHeight: "calc(100dvh - 220px)", minHeight: "500px", cursor: "crosshair", touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}
                   onClick={handleOverlayClick}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
+                  onPointerMove={handleOverlayPointerMove}
+                  onPointerUp={handleOverlayPointerUp}
+                  onPointerLeave={handleOverlayPointerUp}
                 >
-                  <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={pdfUrl} />
+                  <PdfPageCanvas pdfDoc={pdfJsDocRef.current} pageNumber={currentPage} pdfUrl={workingPdfUrl} />
 
                   {/* Field overlays */}
                   {pageFields.map((field) => {
                     const style = getRecipientStyle(field.recipientId);
+                    const isSelected = selectedFieldId === field.id;
 
                     return (
                       <div
                         key={field.id}
                         data-field="true"
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, field.id)}
-                        onClick={(e) => e.stopPropagation()}
-                        className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group`}
+                        onPointerDown={(e) => handleFieldPointerDown(e, field.id)}
+                        onClick={(e) => { e.stopPropagation(); setSelectedFieldId(field.id); }}
+                        className={`absolute z-20 rounded border-2 shadow-md ${style.border} ${style.light} group ${isSelected ? "ring-2 ring-[hsl(var(--gold))]" : ""}`}
                         style={{
                           left: `${field.x}%`,
                           top: `${field.y}%`,
                           width: `${field.width}px`,
                           height: `${field.height}px`,
                           cursor: "move",
+                          touchAction: "none",
                         }}
                       >
                         {/* Delete button */}
                         <button
+                          onPointerDown={(e) => e.stopPropagation()}
                           onClick={(e) => {
                             e.stopPropagation();
                             removeField(field.id);
@@ -588,10 +699,25 @@ export default function DocumentFieldPlacer({
                           style={style}
                           recipients={recipients}
                           savedStampSvg={savedStampSvg}
-                          savedSignatureUrl={savedSignatureUrl}
+                          savedSignatureUrl={defaultSignatureUrl || savedSignatureUrl}
                           onUpdateValue={updateFieldValue}
-                          onOpenDraw={(id) => setDrawingFieldId(id)}
+                          onOpenDraw={(id) => handleSignatureFieldClick(id)}
                         />
+
+                        {/* Resize handles (corners) */}
+                        {(["nw", "ne", "sw", "se"] as const).map((corner) => (
+                          <div
+                            key={corner}
+                            data-handle={corner}
+                            onPointerDown={(e) => startResize(e, field.id, corner)}
+                            className={`absolute w-2.5 h-2.5 bg-white border ${style.border} z-30 hidden group-hover:block`}
+                            style={{
+                              [corner.includes("n") ? "top" : "bottom"]: -5,
+                              [corner.includes("w") ? "left" : "right"]: -5,
+                              cursor: corner === "nw" || corner === "se" ? "nwse-resize" : "nesw-resize",
+                            }}
+                          />
+                        ))}
 
                         {/* Recipient color bar */}
                         <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-b ${style.bg}`} />
@@ -789,6 +915,30 @@ export default function DocumentFieldPlacer({
           onClose={() => setShowAssetPicker(false)}
         />
       )}
+
+      {/* ─── Adopt & Sign ─── */}
+      <AdoptAndSignDialog
+        open={showAdopt}
+        onOpenChange={(o) => { setShowAdopt(o); if (!o) setAdoptForFieldId(null); }}
+        recipientName={recipients.find((r) => r.id === fields.find((f) => f.id === adoptForFieldId)?.recipientId)?.name || ""}
+        fieldType={(fields.find((f) => f.id === adoptForFieldId)?.type as any) || "signature"}
+        onAdopt={handleAdoptResult}
+      />
+
+      {/* ─── Document Editor ─── */}
+      <DocumentEditor
+        open={showDocEditor}
+        onOpenChange={setShowDocEditor}
+        pdfFile={workingPdfFile}
+        pdfUrl={workingPdfUrl}
+        fields={fields}
+        onApply={(newFile, remap) => {
+          const url = URL.createObjectURL(newFile);
+          setWorkingPdfFile(newFile);
+          setWorkingPdfUrl(url);
+          onFieldsChange(remap);
+        }}
+      />
     </div>
   );
 }
