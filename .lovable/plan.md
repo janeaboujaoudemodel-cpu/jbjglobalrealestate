@@ -1,75 +1,123 @@
-# Unified CRM Ecosystem — Audit & Consolidation Plan
 
-## 1. Audit findings (reuse, don't rebuild)
+# Relational CRM Intersection & Network Plan
 
-The system already has a strong relational CRM foundation. Existing tables to **KEEP as canonical**:
+Builds on the existing unified CRM (`crm_brokerages`, `crm_developer_registry`, `crm_brokerage_agents`, `developer_representatives`, `crm_leads`, `vw_crm_contacts`, `upsert_contact_with_company` RPC). **Nothing is rebuilt** — we add the intersection layer on top.
 
-| Domain | Canonical table | Notes |
-|---|---|---|
-| Brokerages | `crm_brokerages` | Has license, website, contacts, tags, status, outreach state |
-| Individual brokers | `crm_brokers` + `crm_brokerage_agents` | Agents row links to brokerage; brokers row is the personal record |
-| Broker history | `broker_company_history` | Already supports prev companies (started_at/ended_at) |
-| Developers | `crm_developer_registry` | Has office, website, country, contacts |
-| Developer reps | `developer_representatives` (+ `developer_sales_reps`, `developer_contacts`) | Three overlapping tables — must consolidate |
-| Investors | `crm_leads` where `lead_type='investor'` (+ `client_investors`) | Investors live in unified leads |
-| Master contacts | `crm_leads` | Source/import metadata, labels, tags, scoring |
-| Imports | `crm_imports`, `crm_import_batches`, `crm_broker_import_staging` | Already track source, batch, file |
-| Campaigns | `campaigns`, `crm_email_campaigns`, `crm_campaign_recipients`, `campaign_members` | Reuse |
-| Activity | `crm_activities`, `crm_brokerage_notes`, `crm_brokerage_events`, `crm_relationship_status_history`, `crm_outreach_touchpoints` | Reuse |
-| Scanner | `crm-save-scanned-card` edge fn already upserts to `crm_brokerages` & `crm_developer_registry` | Reuse — extend, don't replace |
+## 1. Schema additions (single non-breaking migration)
 
-**Duplicates to deprecate (data-migrate then drop):**
-`rel_brokerages`, `rel_developers`, `rel_brokerage_contacts`, `rel_developer_contacts`, `jbj_brokers`, `jbj_leads`, plain `leads`, `developers` (legacy), `developer_sales_reps` + `developer_contacts` (merge into `developer_representatives`).
+Add to **all four contact-bearing tables** (`crm_brokers`, `crm_brokerage_agents`, `developer_representatives`, `crm_leads`):
 
-## 2. Schema consolidation (single migration)
+| Column | Purpose |
+|---|---|
+| `department text` | Channel Relations, Sales, Marketing, Admin, Owner, Operations, HR, Events, Partnerships, Management |
+| `seniority text` | Owner, Director, Head, Manager, Senior, Mid, Junior |
+| `position_type text` | full_time, partner, freelance, agent |
+| `role_title text` | Free text e.g. "Head of Channel Relations" |
+| `languages text[]` | Multi-select; GIN index |
+| `nationality text` | ISO country |
+| `country text`, `city text`, `region text` | Location |
+| `is_global_broker boolean` | Filter flag |
 
-1. **Brokerage ↔ Broker link**: ensure `crm_brokerage_agents.broker_id uuid REFERENCES crm_brokers(id)` exists; backfill by matching email/phone normalized; add `current_brokerage_id` on `crm_brokers` (denormalized pointer) + trigger to sync.
-2. **Broker history**: keep `broker_company_history`; add trigger on `crm_brokerage_agents` brokerage change → close prior row, insert new.
-3. **Developer reps unification**: migrate rows from `developer_sales_reps` and `developer_contacts` into `developer_representatives` (add missing cols: `whatsapp`, `linkedin`, `instagram`, `role`, `source`, `source_batch_ids`, `import_label`, `current_developer_id`); add `developer_rep_company_history` mirror of broker history.
-4. **Source tracking** (verify/add on `crm_leads`, `crm_brokerages`, `crm_brokerage_agents`, `developer_representatives`):
-   - `database_source text`, `event_source text`, `upload_source text`, `original_filename text`, `imported_by uuid`, `imported_at timestamptz`, `source_history jsonb`.
-5. **Unified contact view**: `vw_crm_contacts` UNION ALL across brokers, agents, reps, investors, partners — exposes `(id, kind, name, email, phone, company_id, company_kind, company_name, source, labels, last_interaction_at)` for global search/exports.
-6. **rel_* / jbj_* / leads / developers**: data-migrate into canonical, then `DROP TABLE` (or mark with comment + revoke) — feature-flagged so app keeps building.
+New enum: `app_department` (channel_relations, sales, marketing, admin, owner, operations, hr, events, partnerships, management). Stored as text + CHECK for flexibility.
 
-## 3. Backend (edge functions)
+**Refresh `vw_crm_contacts`** to expose: `department`, `seniority`, `role_title`, `languages`, `nationality`, `country`, `city`, `region`, `is_global_broker`, plus the existing `kind`, `company_id`, `company_kind`, `company_name`, `source`.
 
-- **Extend `crm-save-scanned-card`** (already creates brokerage/developer): also write `crm_brokerage_agents` / `developer_representatives` rows linked to the company, and call new `upsert_contact_with_company` RPC.
-- **New RPC `upsert_contact_with_company(payload jsonb)`**: single source of truth used by scanner, manual entry, bulk import, and LinkedIn import. Handles: company find-or-create, contact find-or-create (email/phone fuzzy), link, history row on company change, source append.
-- **Extend `crm-broker-bulk-import` and `crm-bulk-upload-brokerages` / `crm-bulk-upload-developers`** to call the same RPC so all import paths share logic.
-- **New `crm-export` edge function**: streams CSV/XLSX filtered by `{ scope: 'brokerage'|'developer'|'source'|'event'|'label'|'country'|'city'|'team'|'campaign', value }` from `vw_crm_contacts`.
+Indexes: `(department)`, `(nationality)`, `(country)`, `(city)`, GIN on `languages`, GIN on `tags`.
 
-## 4. UI (reuse existing pages, add tabs)
+## 2. Section views (independent but linked)
 
-- **`CRMRelationships.tsx` Brokerage detail drawer**: ensure tabs `Linked Brokers | Notes | Meetings | Campaigns | Cards | Follow-ups | Source history`. Most exist; add missing Cards & Source-history tabs.
-- **`AdminCRM.tsx` Broker detail**: add `Current company`, `Previous companies` (from `broker_company_history`), `Role title`, `Relationship timeline`, `Campaign status`.
-- **`AdminDevelopers.tsx` / `DeveloperDetail.tsx`**: mirror the brokerage layout — `Linked Reps | Notes | Meetings | Campaigns | Cards | Follow-ups`.
-- **New Rep detail panel** inside developer drawer: current developer, previous developers, role, timeline.
-- **Source filter chips** on CRM lists: filter by `database_source`, `event_source`, `upload_source`, `original_filename`, label, country, city, team, campaign.
-- **Unified Export modal** (button on every list/detail) → calls `crm-export` with the active scope/filters.
-- **Scanner save flow**: already proposes Merge/Update/Add — add a "Link to existing brokerage/developer" picker so reps and brokers always land in the right company.
+A single page `CRMNetwork.tsx` with left-rail tabs that filter `vw_crm_contacts` by `kind`:
 
-## 5. Deprecation rollout (safe order)
+```text
+Clients · Investors · Individual Brokers · Brokerage Agencies · Developers
+Developer Representatives · Channel Partners · Sales Managers · Directors
+Admins · Owners
+```
 
-1. Migration adds new columns + view + RPC (non-breaking).
-2. Edge functions switch to RPC.
-3. UI switches reads to canonical tables + view.
-4. Backfill script copies `rel_*`, `jbj_*`, `leads`, `developers` rows into canonical (idempotent, dedup by email/phone).
-5. After verification, drop legacy tables in a follow-up migration.
+Each tab = same table component, pre-filtered. Reuses `UnifiedContactsPanel` plumbing. Every row → opens the relational drawer (§3).
 
-## 6. Acceptance checklist
+Filter chips on every tab: **Department · Seniority · Language · Nationality · Country · City · Company · Source · Event · Campaign**. All filters stack and serialise to URL.
 
-- Creating "FAM Properties" then scanning "John Smith @ FAM" → John appears in **Individual Brokers** AND in **FAM → Linked Brokers**, auto-linked.
-- Changing John's company updates `current_brokerage_id` and inserts a `broker_company_history` row.
-- Same behavior for Sobha + Sarah Ahmed via `developer_representatives`.
-- Every contact row has `database_source`, `event_source`, `upload_source`, `original_filename`, `imported_by`, `imported_at`.
-- Exports work scoped by brokerage / developer / source / event / label / country / city / team / campaign.
-- Brokerage and developer detail views show the full relational hub (linked people, notes, meetings, campaigns, cards, follow-ups).
-- No new parallel CRM tables created; `rel_*`, `jbj_*`, plain `leads`, plain `developers` are migrated and removed.
+## 3. Company hub (Brokerage / Developer detail)
 
-## Technical details (for engineers)
+Single component `CompanyHub.tsx` rendered for both brokerage and developer:
 
-- All new policies use `requireOwnerAuth` + `has_role(auth.uid(),'admin')`; never expose PII to anon.
-- `vw_crm_contacts` is a `SECURITY INVOKER` view; underlying RLS still applies.
-- Triggers: `trg_sync_broker_company` on `crm_brokerage_agents`, `trg_sync_rep_company` on `developer_representatives`.
-- Indexes: `(email_normalized)`, `(phone_normalized)`, `(brokerage_id)`, `(current_developer_id)`, GIN on `tags`, `specialty_labels`.
-- Keep champagne-gold design tokens, IconTile, locked-send + quota standards intact — no UI restyle in this scope (No Removal policy).
+**Header**: company card (logo, country, website, license, tags, source history).
+
+**Org tabs** — auto-grouped from contacts where `company_id = X`:
+- Brokerage: Owners · Admins · Sales Directors · Sales Managers · Brokers · Other
+- Developer: Channel Relations *(promoted, default tab)* · Sales Team · Directors · Head of Sales · Marketing · Events · Other
+
+**Relational tabs** (reuse existing data sources):
+Linked Agencies/Developers · Campaigns · Events · Follow-ups · Business Cards · Notes · Emails Sent · Communication History · Source/Import History.
+
+## 4. Person detail drawer
+
+Opens from any list. Shows: company link, role/department/seniority, languages, nationality, country/city, current + previous companies (`broker_company_history` / new `developer_rep_company_history`), campaign history, notes, uploaded cards, full relationship timeline (`crm_activities` + `crm_outreach_touchpoints`).
+
+## 5. Smart segmentation engine
+
+New `SegmentBuilder` component → produces a JSON filter saved to `crm_segments` (new lightweight table: `id, name, filter jsonb, created_by`). Filter shape:
+
+```json
+{ "kind":["broker"], "languages":["ar"], "city":"Dubai", "department":"admin" }
+```
+
+Used by:
+- list views (apply as filter)
+- export (§6)
+- campaigns (§7)
+
+Pre-seeded segments: "Arabic-speaking Dubai brokers", "Russian investors", "Developer channel managers", "Agency owners", "Sales directors at developers".
+
+## 6. Unified export
+
+Extend existing `crm-export` edge function to accept `{ segment_id }` OR inline filter, plus `format: csv | xlsx | pdf`. Reuses `vw_crm_contacts`. PDF via existing `jspdf-autotable` pattern (`exportLeads.ts`). One **Export** button on every list and every company hub → opens modal with format + scope (current view / segment / whole company / single event / single campaign).
+
+## 7. Resend campaigns + smart targeting
+
+Reuses existing `campaigns`, `crm_email_campaigns`, `crm_campaign_recipients`, `useLockedSend`, `quotaGuardedFetch`, locked-send standard, and single-agency rule.
+
+New flow `CampaignComposer.tsx`:
+1. Pick **Segment** (from §5) → preview recipient count from `vw_crm_contacts`.
+2. Pick template (existing campaign templates).
+3. Subject + body (locked-send: editable subject, byte-for-byte lock).
+4. Schedule or send.
+
+Recipient resolver edge function `crm-resolve-segment` materialises the segment to `crm_campaign_recipients` at send time. Honors:
+- Resend quota standard (100/day, 2900/30d)
+- Single-agency email rule (validator blocks cross-brokerage merges)
+- Suppression list
+
+## 8. Backfill + intelligent extraction
+
+One-shot migration script populates new fields where derivable:
+- `department` from existing `role_title` keyword match (channel/sales/marketing/admin/owner/director/manager/head)
+- `seniority` from same heuristic (Owner > Director > Head > Manager > Senior > Mid > Junior)
+- `languages` defaults to `['en','ar']` for UAE-based, override-able
+- `nationality` / `country` from existing brokerage/developer country if contact has none
+
+Scanner (`crm-save-scanned-card`) extended: AI extraction prompt asks for department, seniority, languages, nationality, country, city in addition to current fields.
+
+## 9. Acceptance checklist
+
+- Clicking **Individual Brokers** shows only brokers; same for every other section.
+- Opening **FAM Properties** shows owners, admins, directors, managers, brokers, plus campaigns/events/follow-ups/cards/notes/emails.
+- Opening **John Smith** shows agency, position, department, role, languages, nationality, country, campaign history, notes, cards, timeline.
+- Opening any **developer** shows Channel Relations as a promoted tab with its own people group.
+- Filter "Arabic-speaking brokers in Dubai" works in list view, export, and as a campaign segment.
+- Export works at every scope (current view, company, event, segment, campaign) in CSV / XLSX / PDF.
+- Resend campaign sent to a segment respects quota + single-agency rule + suppression list.
+
+## Technical details (engineers)
+
+- Single migration: column adds + CHECKs + indexes + view refresh + new `crm_segments` + new `developer_rep_company_history`.
+- View `vw_crm_contacts` stays `SECURITY INVOKER`; underlying RLS unchanged.
+- New RPC `crm_segment_resolve(filter jsonb) returns setof vw_crm_contacts` — single source of truth used by list, export, campaign.
+- Edge functions:
+  - `crm-export` — extend payload with `{ segment_id | filter, format }`.
+  - `crm-resolve-segment` — new; called by campaign send to materialise recipients.
+  - `crm-save-scanned-card` — extend AI prompt + insert payload with new fields.
+- UI: new `CompanyHub.tsx`, `SegmentBuilder.tsx`, `CampaignComposer.tsx`, `CRMNetwork.tsx`; reuse `UnifiedContactsPanel`, `ExportMenu`, `useLockedSend`.
+- Champagne-gold tokens, IconTile, locked-send, quota, no-removal policy all preserved.
+- No legacy table is dropped in this scope (continues prior backfill/deprecation track).
