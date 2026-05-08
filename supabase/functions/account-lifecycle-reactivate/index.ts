@@ -72,10 +72,44 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Verify password before reactivation (use signInWithPassword with service role won't work for banned users)
-    // We'll trust that the user provided correct credentials since they were able to trigger the ban error
+    // SECURITY: Verify the supplied password BEFORE lifting the ban.
+    // Strategy: temporarily lift the ban, attempt signInWithPassword with the
+    // supplied credentials using a non-admin client, then re-ban immediately if
+    // auth fails. Only when the password is verified do we permanently reactivate.
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const userClient = createClient(supabaseUrl, anonKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
 
-    // Reactivate: remove ban and reset status
+    // Step 1: temporarily lift ban so signInWithPassword can run
+    const { error: tempUnbanError } = await admin.auth.admin.updateUserById(targetUser.id, {
+      ban_duration: "none",
+    });
+    if (tempUnbanError) throw tempUnbanError;
+
+    // Step 2: verify credentials
+    const { data: signInData, error: signInError } = await userClient.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError || !signInData?.user) {
+      // Step 2a: re-apply the ban if credentials were wrong
+      await admin.auth.admin.updateUserById(targetUser.id, {
+        ban_duration: "876000h", // ~100 years (effectively indefinite)
+      });
+      return new Response(JSON.stringify({ error: "Invalid email or password" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Step 3: invalidate the temporary session we just created
+    try {
+      await admin.auth.admin.signOut(signInData.session?.access_token || "");
+    } catch (_) { /* best-effort */ }
+
+    // Step 4: persist reactivation metadata
     const { error: updateError } = await admin.auth.admin.updateUserById(targetUser.id, {
       ban_duration: "none",
       user_metadata: {

@@ -43,6 +43,15 @@ const OFFICIAL_EMAILS = {
 // Verified sender domain for outgoing emails
 const VERIFIED_SENDER = 'jbj@jbj.ae';
 
+// SECURITY: HTML-escape user-controlled values before interpolating into email templates
+const esc = (s: unknown): string =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 interface TicketRequest {
   fullName: string;
   email: string;
