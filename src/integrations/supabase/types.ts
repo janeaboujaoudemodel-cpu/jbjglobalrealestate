@@ -10755,6 +10755,7 @@ export type Database = {
           daily_limit: number
           id: number
           monthly_limit: number
+          plan: string
           rate_per_sec: number
           updated_at: string
         }
@@ -10762,6 +10763,7 @@ export type Database = {
           daily_limit?: number
           id?: number
           monthly_limit?: number
+          plan?: string
           rate_per_sec?: number
           updated_at?: string
         }
@@ -10769,6 +10771,7 @@ export type Database = {
           daily_limit?: number
           id?: number
           monthly_limit?: number
+          plan?: string
           rate_per_sec?: number
           updated_at?: string
         }
