@@ -45,6 +45,7 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded,
         canvas.style.width = `${cssViewport.width}px`;
         canvas.style.height = `${cssViewport.height}px`;
         setCanvasCssSize({ w: cssViewport.width, h: cssViewport.height });
+        onSizeChange?.({ w: cssViewport.width, h: cssViewport.height });
         const ctx = canvas.getContext("2d")!;
         await page.render({ canvasContext: ctx, viewport }).promise;
       } catch (err) {
