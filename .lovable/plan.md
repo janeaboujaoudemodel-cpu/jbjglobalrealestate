@@ -1,78 +1,66 @@
 
-# Unified Documents Hub & E-Signature Overhaul
+# Stamp tool fixes for `/e-signature/create`
 
-A comprehensive pass that fixes every broken interaction in `/e-signature/create`, consolidates every document-related tool into ONE hub (no duplicates), and wires the AI tools together so the user never leaves the document preview.
-
----
-
-## Part 1 — E-Signature Bug Fixes (`/e-signature/create`)
-
-### 1.1 Signature Pad — stop auto-saving on pen-up
-- In `AdoptAndSignDialog.tsx`, the canvas currently commits the signature on `pointerup`. Change it so lifting the finger ONLY ends the current stroke. The signature is committed only when the user clicks **Adopt & Sign** (or new **Save**) button.
-- Allow multi-stroke drawing (dots, dotted i's, accents). Add **Clear** and **Undo last stroke** buttons next to **Adopt & Sign**.
-
-### 1.2 Field placement — drop where the cursor is
-- Fix `DocumentFieldPlacer.tsx`: when a field type is selected from the toolbar and the user clicks anywhere on a page, the new field is created with its center at the click coordinates (page-relative %), not at page top.
-- Fix dragging an existing field: pointer-move now correctly translates the field across pages including page 6+. Auto-scroll the page container while dragging near edges.
-- Add visible **trash/bin icon** on every field hover (top-right corner, always visible — currently clipped by border). One click deletes the field.
-
-### 1.3 Sticky tools rail
-- Replace the unrelated "Price / Payment / Property" sidebar shown on `/e-signature/create` with a **document-aware rail** containing: Signature, Initials, Name, Date, Text, Checkbox, Auto-detect, Adopt & Sign, Saved Recipients.
-- Make the rail `position: sticky; top: 88px` so it stays visible while scrolling all 6+ pages.
-
-### 1.4 Auto-detect fields — scroll & accuracy
-- Update `esign-auto-detect-fields` to return only fields that exist in the document (no spurious "Title" if no title anchor was found). Strict prompt: "ONLY emit fields whose anchor text or visible blank line was detected in the page image. Never invent."
-- After response: scroll the viewer to the FIRST detected field's page, then briefly highlight each detected field one-by-one.
-- Pre-fill values from the signed-in user profile + recipient profile: signature → saved default signature asset, "Name" → recipient.full_name, "By" / "On Behalf Of" → recipient.company_name, "Date" → today.
-
-### 1.5 Recipients — auto-load + replace vs add new
-- Always pre-fill the most recently used recipient(s) on mount (no need to click "Recent").
-- Two distinct buttons: **Replace recipient** (swap without persisting) and **Save & add new** (persists to `esign_saved_recipients`). A star toggles "Default recipient".
-
-### 1.6 Draft persistence
-- New table `esign_drafts` keyed by user_id. On every meaningful change (debounced 1.5s) save: pdf_storage_path, fields[], recipients[], current_page. On `/e-signature/create` mount, auto-restore the latest draft unless the user clicks **Start new** or **Discard draft**. Explicit **Save as Draft** and **Delete draft** buttons in the header.
+Three problems to solve, all scoped to the stamp field type. Signature/initials/text/date placement is not changed.
 
 ---
 
-## Part 2 — Unified Documents Hub (`/documents`)
+## 1. Stamp drops in the wrong spot when clicking on the page
 
-One page, accordion sections, tools wired to the SAME loaded document. Opening a section header expands it inline; no navigation away.
+When the user selects **Stamp** and clicks the document, the stamp should land centered exactly on the click point. Today it can land far from the cursor because:
 
-Sections (in this order):
-1. **Library** — all uploaded documents, forms, agreements, signed contracts. Filters: type (Contract, MOU, Agency Registration, NDA, Form, Other), developer, agency, signer, status, date.
-2. **Editor** (merged from existing Document Editor) — pages reorder/delete/rotate/merge, export PDF/PNG/ZIP/DOCX.
-3. **E-Signature** (merged from `/e-signature/create`) — field placement, recipients, send.
-4. **Forms & Agreements** (merged from existing Forms hub) — templates list, fillable forms.
-5. **Signed Contracts** — archive of every completed envelope; auto-categorised; same filters as Library.
-6. **AI Tools** — Summarise, Translate, Extract data, Compare versions, OCR, Risk-flag clauses. Each tool acts on the currently-loaded document without leaving the page.
+- The default stamp box is **100 × 100 px**, but the click handler centers a field by subtracting half its width/height in *pixels* from a *percentage*-based coordinate against the rendered page width — when the page is narrow (sidebars open at 1112 px viewport), 100 px is a large slice of the page so the clamp `Math.max(0, Math.min(...))` snaps it to the edge.
+- The pageRef element is sometimes still `auto`-sized for one paint after switching pages, so the first click after a page switch lands at the top-left.
 
-Routing: `/documents`, `/documents?tool=editor`, `/documents?tool=esign`, etc. Old routes (`/e-signature/*`, `/document-editor`, `/forms`) become redirects to the matching section.
+Fix:
 
-### 2.1 Signed contracts → backend
-- New table `signed_contracts` (envelope_id, contract_type enum, developer_id, agency_id, signer_ids[], pdf_path, signed_at, metadata). Trigger on envelope completion inserts a row.
-- Vertical sidebar (frontend AND backend) now both link to the same `/documents` hub — no duplication.
+- In `DocumentFieldPlacer.tsx → handleOverlayClick`, compute the centering offset from the actual rendered page rect every time, and only clamp if the field would fall outside the page (don't auto-snap on the first paint).
+- Wait for `pageSize` to be set before accepting clicks; if `pageSize` is null, ignore the click and toast "Loading page…".
+- For the **Stamp** type specifically, default size becomes **120 × 120** but the placement math uses the live click rect, so it always lands centered on the cursor.
+
+## 2. No way to upload, manage, edit, or delete stamps from the e-signature screen
+
+Today the Stamp button only places a stamp if a saved one already exists in `brand_assets` or `stamp_designs`. There's no upload UI, no list, no delete, no rename. Brand Assets picker is generic and read-only for stamps.
+
+Add a dedicated **Stamp Manager** dialog opened in two ways:
+
+1. **Automatically** the first time the user clicks the **Stamp** field-type button when no saved stamp exists for them. After saving, the stamp loads and they can click to place.
+2. **Manually** via a small "Manage Stamps" link next to the Stamp button in the toolbar (always available).
+
+Stamp Manager features:
+
+- Grid of saved stamps from `brand_assets WHERE asset_type='stamp'` (uses existing RLS).
+- For each stamp: thumbnail, name, **Set as default**, **Rename**, **Delete**, and "Use this stamp" (loads it into the placer).
+- **Upload new stamp** drop-zone that accepts:
+  - PNG / JPG / WEBP (transparent background recommended) — converted to a `data:` URL stored as `thumbnail_url`.
+  - SVG — sanitized via DOMPurify (per project SVG-Sanitization standard) and stored in `svg_content`.
+- "Default stamp" flag stored in `brand_assets.metadata.is_default`. Default loads automatically into the placer on mount.
+
+## 3. Auto-detect stamp slot
+
+When the user clicks **Stamp** with a saved/default stamp loaded, also offer one-click **Auto-place stamp**:
+
+- Calls existing `esign-auto-detect-fields` edge function with a stamp-only hint (`field_types: ["stamp"]`) to find seal/stamp anchors on the page (e.g. "Company Stamp", "Authorised Signatory", "Seal").
+- If none found, places the stamp in the bottom-right of the current page near the signature line as a sensible default.
 
 ---
 
-## Part 3 — Business Card Scanner Cleanup
+## Files touched
 
-- Audit & delete the old broken scanner route/component. Keep ONE scanner accessible from the AI Tools sidebar at `/tools/business-card-scanner`.
-- Upgrade UX:
-  - Multi-photo capture (Front, Back, +Add another). All images sent together to `crm-save-scanned-card`.
-  - AI merges fields from all images (front+back) into one contact.
-  - On Save: insert into `crm_contacts` with `source = 'business_card'` and store original images in storage. Show in CRM with a "Business Card" source badge.
+- `src/components/e-signature/DocumentFieldPlacer.tsx` — placement math fix, "Manage Stamps" toolbar button, gate Stamp click on having a saved stamp, hook up Stamp Manager dialog and Auto-place stamp.
+- `src/components/e-signature/StampManagerDialog.tsx` — **new**: list, upload, rename, delete, set-default. Reuses `brand_assets` table.
+- `src/components/e-signature/documentFieldTypes.ts` — bump stamp default to 120×120.
+- `supabase/functions/esign-auto-detect-fields/index.ts` — accept optional `field_types` filter so we can request stamp-only detection. No schema change.
 
----
-
-## Technical notes
-
-- DB migrations: `esign_drafts`, `esign_saved_recipients`, `signed_contracts`, `contract_type` enum. RLS = owner-only.
-- Edge function updates: `esign-auto-detect-fields` (strict no-invention prompt), `crm-save-scanned-card` (multi-image merge), new `esign-save-draft` and `esign-archive-signed`.
-- Files touched (key): `src/pages/Documents.tsx` (new hub), `src/components/e-signature/DocumentFieldPlacer.tsx`, `AdoptAndSignDialog.tsx`, `RecipientsPanel.tsx`, `src/pages/tools/BusinessCardScanner.tsx`, sidebar configs (frontend + admin), router redirects.
-- Memory: add `mem://features/documents/unified-hub-standard` and update sidebar/route memory.
+No DB migrations needed (`brand_assets` already has `metadata jsonb` for the `is_default` flag and proper RLS).
 
 ---
 
 ## Verification
 
-After each task: load `/documents` and `/e-signature/create` in the preview, run through the full flow (upload PDF → auto-detect → place signature on page 6 → adopt & sign → send → verify archive in Signed Contracts) and capture before/after screenshots for every fix.
+After each fix, reload `/e-signature/create`, upload a PDF and:
+1. Click **Stamp** with no saved stamps → Stamp Manager opens with empty state and upload dropzone.
+2. Upload a PNG and an SVG → both appear in the grid; mark one as default → reload page → default loads automatically.
+3. Click **Stamp** then click anywhere on the document → stamp lands centered exactly on the click point on pages 1, 3, and 6.
+4. Click **Auto-place stamp** → stamp lands on a detected anchor or bottom-right fallback.
+5. Rename and delete a stamp from the manager → grid updates immediately.

@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import AdoptAndSignDialog from "./AdoptAndSignDialog";
 import DocumentEditor from "./DocumentEditor";
+import StampManagerDialog from "./StampManagerDialog";
+import { Stamp as StampIcon } from "lucide-react";
 import { useOwnerSignatureAssets, useSaveSignatureAsset } from "@/hooks/useOwnerSignatureAssets";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -68,6 +70,7 @@ export default function DocumentFieldPlacer({
 
   // Brand asset picker state
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [showStampManager, setShowStampManager] = useState(false);
   const [showAdopt, setShowAdopt] = useState(false);
   const [adoptForFieldId, setAdoptForFieldId] = useState<string | null>(null);
   const [showDocEditor, setShowDocEditor] = useState(false);
@@ -90,33 +93,43 @@ export default function DocumentFieldPlacer({
       return;
     }
     if (!user?.id) return;
-    async function loadStamp() {
-      // Try brand_assets first
-      const { data: brandStamp } = await supabase
-        .from("brand_assets")
-        .select("svg_content")
-        .eq("user_id", user!.id)
-        .eq("asset_type", "stamp")
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (brandStamp?.svg_content) {
-        setSavedStampSvg(brandStamp.svg_content);
+    loadDefaultStamp();
+  }, [user?.id, handoffStampSvg]);
+
+  async function loadDefaultStamp() {
+    if (!user?.id) return;
+    // 1) brand_assets: prefer is_default=true, else most recent
+    const { data: stamps } = await supabase
+      .from("brand_assets")
+      .select("svg_content, thumbnail_url, metadata")
+      .eq("user_id", user.id)
+      .eq("asset_type", "stamp")
+      .order("created_at", { ascending: false });
+    if (stamps && stamps.length > 0) {
+      const def = stamps.find((s: any) => s.metadata?.is_default) || stamps[0];
+      const svg = (def as any).svg_content as string | null;
+      const url = (def as any).thumbnail_url as string | null;
+      if (svg) {
+        setSavedStampSvg(svg);
         return;
       }
-      // Fallback to stamp_designs
-      const { data } = await supabase
-        .from("stamp_designs")
-        .select("svg_source")
-        .eq("user_id", user!.id)
-        .eq("is_favorite", true)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (data?.svg_source) setSavedStampSvg(data.svg_source);
+      if (url) {
+        // Wrap raster image as inline SVG so existing renderer paths work uniformly
+        setSavedStampSvg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"><image href="${url}" width="200" height="200" preserveAspectRatio="xMidYMid meet" /></svg>`);
+        return;
+      }
     }
-    loadStamp();
-  }, [user?.id, handoffStampSvg]);
+    // 2) Fallback to legacy stamp_designs favourite
+    const { data } = await supabase
+      .from("stamp_designs")
+      .select("svg_source")
+      .eq("user_id", user.id)
+      .eq("is_favorite", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (data?.svg_source) setSavedStampSvg(data.svg_source);
+  }
 
   // Load user's saved signature from ai_tool_projects (favorite signature)
   useEffect(() => {
@@ -217,15 +230,31 @@ export default function DocumentFieldPlacer({
       const page = pageRef.current;
       if (!page) return;
       const rect = page.getBoundingClientRect();
+      // Page hasn't laid out yet (PDF still loading) — bail with a hint
+      if (rect.width < 20 || rect.height < 20) {
+        toast.info("Page is still loading — try again in a second.");
+        return;
+      }
       // Ignore clicks outside the rendered page area
       if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
 
+      // Special-case: user picked Stamp but has no saved stamp yet
+      if (selectedFieldType === "stamp" && !savedStampSvg) {
+        setShowStampManager(true);
+        toast.info("Pick or upload a stamp first.");
+        return;
+      }
+
       const fieldConfig = fieldTypes.find((f) => f.type === selectedFieldType)!;
-      // Center field on the click point
       const wPx = fieldConfig.defaultWidth;
       const hPx = fieldConfig.defaultHeight;
-      const xPct = (((e.clientX - rect.left) - wPx / 2) / rect.width) * 100;
-      const yPct = (((e.clientY - rect.top) - hPx / 2) / rect.height) * 100;
+      // Center field on the actual click point
+      const xPx = (e.clientX - rect.left) - wPx / 2;
+      const yPx = (e.clientY - rect.top) - hPx / 2;
+      const xPct = (xPx / rect.width) * 100;
+      const yPct = (yPx / rect.height) * 100;
+      const maxXPct = 100 - (wPx / rect.width) * 100;
+      const maxYPct = 100 - (hPx / rect.height) * 100;
       const today = new Date().toLocaleDateString("en-AE");
 
       const newField: SignatureField = {
@@ -233,8 +262,8 @@ export default function DocumentFieldPlacer({
         recipientId: selectedRecipient,
         type: selectedFieldType,
         pageNumber: currentPage,
-        x: Math.max(0, Math.min(100 - (wPx / rect.width) * 100, xPct)),
-        y: Math.max(0, Math.min(100 - (hPx / rect.height) * 100, yPct)),
+        x: Math.max(0, Math.min(maxXPct, xPct)),
+        y: Math.max(0, Math.min(maxYPct, yPct)),
         width: wPx,
         height: hPx,
         value:
@@ -250,7 +279,7 @@ export default function DocumentFieldPlacer({
       };
 
       onFieldsChange([...fields, newField]);
-      toast.success(`${fieldConfig.label} field added — drag to reposition`);
+      toast.success(`${fieldConfig.label} placed — drag to fine-tune`);
     },
     [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients, savedSignatureUrl, savedStampSvg]
   );
@@ -498,7 +527,14 @@ export default function DocumentFieldPlacer({
               key={type}
               variant={selectedFieldType === type ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedFieldType(type)}
+              onClick={() => {
+                setSelectedFieldType(type);
+                // If user picks Stamp and no stamp is loaded yet, open the manager
+                if (type === "stamp" && !savedStampSvg) {
+                  setShowStampManager(true);
+                  toast.info("Upload or pick a stamp, then click on the document to place it.");
+                }
+              }}
               className={`h-9 gap-1.5 text-sm font-medium ${
                 selectedFieldType === type
                   ? "bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.9)] text-white border-transparent"
@@ -509,6 +545,17 @@ export default function DocumentFieldPlacer({
               {label}
             </Button>
           ))}
+          {/* Manage Stamps shortcut — always visible */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowStampManager(true)}
+            className="h-9 gap-1.5 text-sm font-medium border-[hsl(var(--gold)/.4)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.05)]"
+            title="Upload, edit or delete saved stamps"
+          >
+            <StampIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+            Manage Stamps
+          </Button>
         </div>
 
         <div className="w-px h-8 bg-border" />
@@ -950,6 +997,24 @@ export default function DocumentFieldPlacer({
           onClose={() => setShowAssetPicker(false)}
         />
       )}
+
+      {/* ─── Stamp Manager ─── */}
+      <StampManagerDialog
+        open={showStampManager}
+        onOpenChange={setShowStampManager}
+        onUse={(s) => {
+          if (s.svg) {
+            setSavedStampSvg(s.svg);
+          } else if (s.imageUrl) {
+            // Wrap raster image so the existing SVG-based renderer paths work
+            setSavedStampSvg(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"><image href="${s.imageUrl}" width="200" height="200" preserveAspectRatio="xMidYMid meet" /></svg>`
+            );
+          }
+          setSelectedFieldType("stamp");
+          toast.success(`Stamp "${s.name}" ready — click on the document to place it`);
+        }}
+      />
 
       {/* ─── Adopt & Sign ─── */}
       <AdoptAndSignDialog
