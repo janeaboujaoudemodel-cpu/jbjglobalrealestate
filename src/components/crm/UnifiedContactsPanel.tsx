@@ -59,7 +59,7 @@ export function UnifiedContactsPanel() {
           toast.error(error.message);
           setRows([]);
         } else {
-          setRows((data || []) as ContactRow[]);
+          setRows((data || []) as unknown as ContactRow[]);
         }
         setLoading(false);
       });
