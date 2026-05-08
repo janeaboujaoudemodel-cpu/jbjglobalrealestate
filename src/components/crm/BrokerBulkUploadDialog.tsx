@@ -354,7 +354,16 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
           labelsApplied.add(pf.meta.specialty);
           if (pf.meta.specialty === "other" && pf.meta.customLabel) labelsApplied.add(pf.meta.customLabel);
           sourceNames.push(pf.meta.displayName || pf.file.name);
-          await runFastImportForFile(pf, batch, accAgg, { fileIdx: fi + 1, fileTotal: files.length });
+          try {
+            await runFastImportForFile(pf, batch, accAgg, { fileIdx: fi + 1, fileTotal: files.length }, user.id);
+          } catch (e: any) {
+            // Mark batch failed with reason so it doesn't stay "running" with 0 rows.
+            await (supabase as any).from("crm_import_batches").update({
+              status: "failed",
+              notes: `Import failed: ${(e?.message || String(e)).slice(0, 500)}`,
+            }).eq("id", batch.id);
+            toast.error(`"${pf.meta.displayName}" failed: ${e?.message || "see import errors"}`);
+          }
         }
 
         setSummary({
