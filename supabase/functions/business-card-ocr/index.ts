@@ -16,34 +16,37 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("AI service not configured");
 
     const { image, timestamp } = await req.json();
+    if (!image) throw new Error("Missing required field: image");
 
-    if (!image) {
-      throw new Error("Missing required field: image");
-    }
+    const prompt = `You are an expert OCR system specialized in business cards.
+Read every visible piece of text on this card carefully and return ONLY valid JSON in this exact shape:
 
-    // The image is a data URL (data:image/...;base64,...)
-    const prompt = `You are an expert OCR system specialized in business cards and contact cards (including bank cards, ID cards, etc).
-
-Analyze this image carefully and extract ALL visible text and contact information.
-
-Return ONLY valid JSON in this exact format:
 {
-  "name": "full name of the person",
-  "title": "job title or position",
-  "company": "company or organization name",
-  "phone": "phone number(s) - include all numbers found, separated by ' / '",
-  "email": "email address",
+  "name": "full person name",
+  "title": "job title / position",
+  "company_name": "primary company name on the card",
+  "agency_name": "real estate brokerage / agency name (only if the card clearly belongs to a real estate broker or brokerage)",
+  "developer_name": "real estate developer name (only if the card clearly belongs to a property developer)",
+  "mobile": "mobile number with country code if shown",
+  "whatsapp": "WhatsApp number if explicitly labeled as WhatsApp, else empty",
+  "landline": "office / landline / direct phone number, separate from mobile",
+  "email": "primary email address",
   "website": "website URL",
-  "address": "physical address if visible",
-  "linkedin": "LinkedIn URL or handle if visible",
-  "fax": "fax number if visible",
-  "mobile": "mobile number if different from phone",
-  "department": "department if visible",
-  "additional_info": "any other relevant text on the card"
+  "linkedin": "LinkedIn URL or @handle if visible",
+  "instagram": "Instagram URL or @handle if visible",
+  "address": "street / building address line",
+  "city": "city",
+  "country": "country",
+  "event_source": "event/expo/conference name if printed on card, else empty",
+  "notes": "anything noteworthy not captured elsewhere",
+  "raw_text": "full raw text exactly as printed, line breaks preserved with \\n",
+  "confidence": 0.0
 }
 
-Use empty string "" for fields not found. Extract EVERY piece of text visible on the card.
-No explanation, no markdown, just the JSON object.`;
+Rules:
+- Use empty string "" for any field you cannot find. Do NOT guess or fabricate.
+- Set "confidence" between 0 and 1 based on overall image legibility.
+- Do not return markdown, do not return prose. Just the JSON object.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -77,8 +80,6 @@ No explanation, no markdown, just the JSON object.`;
 
     const aiData = await response.json();
     let rawContent = aiData.choices?.[0]?.message?.content?.trim() || "";
-
-    // Strip markdown code blocks if present
     rawContent = rawContent.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
 
     let parsed: Record<string, unknown>;
@@ -92,32 +93,36 @@ No explanation, no markdown, just the JSON object.`;
       });
     }
 
-    // Build contact object
+    const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
     const contact = {
-      name: parsed.name || "",
-      title: parsed.title || "",
-      company: parsed.company || "",
-      phone: parsed.phone || parsed.mobile || "",
-      email: parsed.email || "",
-      website: parsed.website || "",
-      address: parsed.address || "",
-      linkedin: parsed.linkedin || "",
-      fax: parsed.fax || "",
-      department: parsed.department || "",
-      additionalInfo: parsed.additional_info || "",
+      name: str(parsed.name),
+      title: str(parsed.title),
+      company_name: str(parsed.company_name) || str((parsed as any).company),
+      agency_name: str(parsed.agency_name),
+      developer_name: str(parsed.developer_name),
+      mobile: str(parsed.mobile) || str((parsed as any).phone),
+      whatsapp: str(parsed.whatsapp),
+      landline: str(parsed.landline) || str((parsed as any).fax),
+      email: str(parsed.email),
+      website: str(parsed.website),
+      linkedin: str(parsed.linkedin),
+      instagram: str(parsed.instagram),
+      address: str(parsed.address),
+      city: str(parsed.city),
+      country: str(parsed.country),
+      event_source: str(parsed.event_source),
+      notes: str(parsed.notes),
+      raw_text: str(parsed.raw_text),
     };
 
-    // Calculate confidence based on filled fields
-    const fields = [contact.name, contact.phone, contact.email, contact.company, contact.title];
-    const filledFields = fields.filter(f => f && String(f).trim().length > 0).length;
-    const confidence = Math.min(0.99, 0.5 + (filledFields / fields.length) * 0.5);
+    const critical = [contact.name, contact.email, contact.mobile, contact.company_name];
+    const filled = critical.filter((f) => f.length > 0).length;
+    const confidence =
+      typeof parsed.confidence === "number"
+        ? Math.max(0, Math.min(1, parsed.confidence as number))
+        : Math.min(0.99, 0.5 + (filled / critical.length) * 0.5);
 
-    return new Response(JSON.stringify({ 
-      contact, 
-      confidence,
-      raw_extraction: parsed,
-      timestamp 
-    }), {
+    return new Response(JSON.stringify({ contact, confidence, raw_extraction: parsed, timestamp }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {

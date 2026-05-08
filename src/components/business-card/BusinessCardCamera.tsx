@@ -280,12 +280,21 @@ const BusinessCardCamera = ({
         }
         
         if (data?.contact) {
+          const c = data.contact;
           contacts.push({
-            ...data.contact,
+            ...c,
             id: generateContactId(),
+            // legacy aliases for backwards compatibility
+            jobTitle: c.title || c.jobTitle || "",
+            company: c.company_name || c.company || "",
+            phone: c.mobile || c.phone || "",
             scannedAt: new Date().toISOString(),
             imagePreview: imageData.substring(0, 100) + '...',
-            confidence: data.confidence || 0.85
+            imageDataUrl: imageData,
+            confidence: data.confidence || 0.85,
+            contactType: "client",
+            labels: [],
+            saveStatus: "idle",
           });
         }
         
