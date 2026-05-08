@@ -6692,6 +6692,44 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_import_batch_errors: {
+        Row: {
+          attempted_at: string
+          batch_id: string
+          chunk_index: number | null
+          chunk_size: number | null
+          error_text: string
+          id: string
+          owner_id: string
+        }
+        Insert: {
+          attempted_at?: string
+          batch_id: string
+          chunk_index?: number | null
+          chunk_size?: number | null
+          error_text: string
+          id?: string
+          owner_id: string
+        }
+        Update: {
+          attempted_at?: string
+          batch_id?: string
+          chunk_index?: number | null
+          chunk_size?: number | null
+          error_text?: string
+          id?: string
+          owner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_import_batch_errors_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "crm_import_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_import_batches: {
         Row: {
           created_at: string
