@@ -511,7 +511,14 @@ export default function DocumentFieldPlacer({
               key={type}
               variant={selectedFieldType === type ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedFieldType(type)}
+              onClick={() => {
+                setSelectedFieldType(type);
+                // If user picks Stamp and no stamp is loaded yet, open the manager
+                if (type === "stamp" && !savedStampSvg) {
+                  setShowStampManager(true);
+                  toast.info("Upload or pick a stamp, then click on the document to place it.");
+                }
+              }}
               className={`h-9 gap-1.5 text-sm font-medium ${
                 selectedFieldType === type
                   ? "bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.9)] text-white border-transparent"
@@ -522,6 +529,17 @@ export default function DocumentFieldPlacer({
               {label}
             </Button>
           ))}
+          {/* Manage Stamps shortcut — always visible */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowStampManager(true)}
+            className="h-9 gap-1.5 text-sm font-medium border-[hsl(var(--gold)/.4)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.05)]"
+            title="Upload, edit or delete saved stamps"
+          >
+            <StampIcon className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+            Manage Stamps
+          </Button>
         </div>
 
         <div className="w-px h-8 bg-border" />
