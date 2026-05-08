@@ -41,6 +41,7 @@ import { AGENCY_STATUS_OPTIONS, BROKERAGE_REGISTRATION_STATUS_OPTIONS, BROKERAGE
 import { BrokerageAnalyticsStrip } from "@/components/crm/BrokerageAnalyticsStrip";
 import { EmailQuotaCard } from "@/components/owner/EmailQuotaCard";
 import ScanCardShortcut from "@/components/business-card/ScanCardShortcut";
+import { UnifiedContactsPanel } from "@/components/crm/UnifiedContactsPanel";
 import { AgencyAttendancePanel } from "@/components/crm/AgencyAttendancePanel";
 import { useAttendanceCounts } from "@/hooks/useBrokerageEvents";
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
