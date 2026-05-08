@@ -37,7 +37,7 @@ export const fieldTypes = [
   { type: "date" as const, label: "Date", icon: Calendar, defaultWidth: 140, defaultHeight: 36 },
   { type: "text" as const, label: "Text", icon: Type, defaultWidth: 160, defaultHeight: 36 },
   { type: "checkbox" as const, label: "Checkbox", icon: CheckSquare, defaultWidth: 28, defaultHeight: 28 },
-  { type: "stamp" as const, label: "Stamp", icon: Stamp, defaultWidth: 100, defaultHeight: 100 },
+  { type: "stamp" as const, label: "Stamp", icon: Stamp, defaultWidth: 120, defaultHeight: 120 },
 ];
 
 export const recipientColorStyles = [
