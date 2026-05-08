@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, monogramBadge, sharedSections, arabicDivider } from "../_shared/email-html.ts";
 import { enforceRateLimit, logSecurityEvent } from "../_shared/rate-limit-middleware.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -111,7 +112,7 @@ ${sharedSections("verification")}</td></tr>`;
     const emailHtml = emailShell("Email Verification", bodyContent);
 
     try {
-      const emailResponse = await fetch("https://api.resend.com/emails", {
+      const emailResponse = await quotaGuardedFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -1,41 +1,67 @@
-## Why "0 rows" after the 33,874-row upload
+# Resend-Only Sending + Daily Free-Plan Cap
 
-The batch row was inserted (`row_count: 33874, status: running`) but every counter stayed at 0 and the status never flipped to `complete`. Edge function analytics show only 4 CORS preflight OPTIONS calls (one per parallel worker) and **zero POSTs** — meaning the actual chunk uploads never landed on `crm-broker-bulk-import`, and the client never recorded them as failed either. The batch is orphaned in `running` state.
+## 1. Resend free plan limits (verified)
+- **100 emails / day**
+- **3,000 emails / month**
+- **2 requests / second** (burst rate)
+- Custom domain only sends after DNS verification; otherwise sender is locked to `onboarding@resend.dev`.
 
-Three things combined to cause this:
+We will enforce the **daily 100** cap as the hard ceiling, plus a soft **2,900 / 30-day** monthly guard so we don't blow the monthly quota either. The Resend API key is kept active and untouched (per your choice).
 
-1. **No status feedback when chunks fail to reach the function.** The client catches errors silently (`accAgg.skipped += chunk.length`) and only writes counters at the very end. If the dialog closes, the tab navigates, or the function never responds, the batch stays at `inserted=0, skipped=0, status='running'` forever — exactly what we see.
-2. **No batch-level failure marking.** There is no `try/catch` around `runFastImportForFile` that flips the batch to `failed` with an error message, so failures are invisible.
-3. **No resume / retry path.** Even though every row of the original file is still parseable client-side, there is no "Resume" button on the orphaned batch, and the existing matching counters are unreliable.
+## 2. Funnel every send through one Resend gateway
 
-## Plan to fix
+Today ~35 edge functions call Resend or Gmail directly. We add a single shared module + edge function that becomes the *only* path to Resend:
 
-### A. Make the importer self-reporting
-- Wrap each `runFastImportForFile` call in `try/catch`. On throw, update the batch to `status: 'failed'` with `notes` containing the first error.
-- Inside `runFastImportForFile`, call `crm_import_batches.update({ inserted, updated, skipped })` after **every** chunk (not only at the end), so progress survives a tab close.
-- After both workers finish, only set `status: 'complete'` if `inserted + merged + skipped >= row_count`; otherwise mark `partial` with the missing-row count.
+```
+supabase/functions/_shared/resendClient.ts        ← shared sender + cap check
+supabase/functions/email-send-gateway/index.ts    ← thin HTTP wrapper (for non-edge callers)
+```
 
-### B. Surface the real failure cause
-- In the chunk worker, when `supabase.functions.invoke` throws, log the error message to a new `crm_import_batch_errors` table (batch_id, chunk_index, error_text, attempted_at). Show the latest 3 errors on the batch card so the user sees *why* it stalled.
-- Validate request size before sending: if a 1000-row chunk JSON exceeds ~900 KB, split it in half and retry, instead of letting the edge runtime reject silently.
+All existing senders (`send-owner-email`, `outreach-send-locked`, `outreach-bulk-worker`, `rel-send-bulk-email`, `resend-support-ticket-confirmation`, `documents-send`, `esign-*`, `send-*-email`, `uae-registry-send`, `crm-send-brokerage-outreach`, etc.) are refactored to call `sendViaResend(...)` from the shared module instead of `fetch("https://api.resend.com/emails", …)` or Gmail API directly.
 
-### C. Auto-recover orphaned batches
-- On dialog open, query `crm_import_batches WHERE owner_id = me AND status = 'running' AND created_at < now()-interval '5 minutes'` and offer a "Resume / Mark failed" action for each.
-- Add a "Resume" button that re-parses the file (user re-selects it) and re-imports only the missing slice (rows beyond `inserted+merged+skipped`).
+Result: one chokepoint = one place to enforce the cap, log usage, and swap providers later.
 
-### D. Fix the current orphaned batch
-- One-time: mark batch `a5b6cf01…` as `failed` with note "stalled — please re-upload" so the UI stops showing it as in-progress.
+## 3. Daily/monthly cap enforcement
 
-### E. Verify
-- Re-upload the 33,874-row file, watch the batch row tick up live, and confirm final `status='complete'` with `inserted+merged+skipped == 33874`.
-- Force a failure (e.g. invalid `batch_id`) and confirm the batch flips to `failed` with a readable error.
+New table `email_send_quota` (admin-only RLS, service role writes):
 
-## Technical details
+| column | purpose |
+|---|---|
+| `day` (date, PK) | UTC date bucket |
+| `sent_count` (int) | successful sends that day |
+| `failed_count` (int) | for observability |
+| `last_send_at` (timestamptz) | drives 2 req/s throttle |
 
-Files to touch:
-- `src/components/crm/BrokerBulkUploadDialog.tsx` — per-chunk progress writes, try/catch around fast path, payload-size guard, orphaned-batch banner.
-- `supabase/functions/crm-broker-bulk-import/index.ts` — return more detail in error responses (currently bare `{error}`), include payload size limit hint.
-- New migration: `crm_import_batch_errors` table + RLS (owner can read their own).
-- One-time SQL via migration to mark the existing stuck batch `failed`.
+Plus a **single-row** `email_send_quota_config` table holding the editable limits (`daily_limit=100`, `monthly_limit=2900`, `rate_per_sec=2`) so you can tune from the UI without redeploying.
 
-No existing import behavior is removed; this is purely additive observability + recovery.
+Logic inside `sendViaResend`:
+1. `SELECT … FOR UPDATE` today's row (insert if missing).
+2. Reject with `429 DAILY_LIMIT_REACHED` if `sent_count >= daily_limit`.
+3. Sum last 30 days; reject with `429 MONTHLY_LIMIT_REACHED` if `>= monthly_limit`.
+4. Sleep to honor `rate_per_sec` (cheap `setTimeout` based on `last_send_at`).
+5. POST to Resend; on 2xx increment `sent_count`, else `failed_count` + return original error.
+
+Caps are **global / account-wide** (your choice).
+
+## 4. Owner-facing UI
+
+Small panel on `/owner/crm/relationships` (and Communication Hub):
+- Today's usage `47 / 100` progress bar (gold hairline, ink text — per design tokens).
+- 30-day usage `1,204 / 2,900`.
+- "Edit limits" dialog → updates `email_send_quota_config`.
+- Banner appears in any send dialog when ≥90% used; sends are blocked at 100%.
+
+## 5. What is NOT changed
+- Resend API key stays as-is (no rotation, no deletion).
+- Gmail-based personal-inbox sync (read side) untouched. Only **outbound** sending is consolidated to Resend. If you'd rather keep Gmail-as-sender for `send-owner-email` personal account, say so and I'll exclude it from the funnel.
+- Lock-and-send byte-for-byte pipeline (`outreach-send-locked`) untouched at the payload layer; only its final HTTP call is swapped to `sendViaResend`.
+
+## 6. Files touched (high level)
+- **New**: `supabase/functions/_shared/resendClient.ts`, `email-send-gateway/index.ts`, migration for `email_send_quota` + `email_send_quota_config` + RLS, `src/components/owner/EmailQuotaCard.tsx`, hook `useEmailQuota.ts`.
+- **Edited**: ~12 highest-traffic sender edge functions to call the shared client. Remaining lower-traffic ones in a follow-up pass.
+- **Note** (heads-up, per project policy): the platform doesn't have first-class rate-limiting primitives, so this is an app-level cap stored in Postgres — good enough for a 100/day ceiling, not a defense against abuse spikes.
+
+## 7. Verification
+- Unit-style Deno test for `sendViaResend` mocking Resend + quota table (limit reached → 429, under limit → success increments counter).
+- Manual: send 3 test emails, confirm counter increments and UI updates live.
+- Force `daily_limit=2`, attempt 3rd send, confirm block + toast.

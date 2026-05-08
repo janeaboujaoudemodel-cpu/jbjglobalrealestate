@@ -14,6 +14,7 @@
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -334,7 +335,7 @@ serve(async (req: Request) => {
         resendPayload.attachments = resendAttachments;
       }
 
-      const resendRes = await fetch("https://api.resend.com/emails", {
+      const resendRes = await quotaGuardedFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${apiKey}`,

@@ -3,6 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { SITE_URL, emailShell, sharedSections, teamReplyCard, inquiryStages, userGreetingRow } from "../_shared/email-html.ts";
 import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "jbj@jbj.ae";
@@ -14,7 +15,7 @@ const corsHeaders = {
 
 async function sendEmail(payload: { from: string; reply_to: string; to: string[]; subject: string; html: string }) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
-  const res = await fetch(RESEND_API_URL, {
+  const res = await quotaGuardedFetch(RESEND_API_URL, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify(payload),
