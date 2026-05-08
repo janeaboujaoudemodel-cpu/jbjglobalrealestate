@@ -2251,12 +2251,40 @@ const DeveloperRegistryTab = () => {
     });
   };
 
-  const sendOne = (d: any) => {
+  const quota = useEmailQuota();
+
+  const showQuotaToast = (err: unknown, fallback: string) => {
+    const q = parseQuotaError(err);
+    if (q.isQuota) {
+      const remaining = formatRemaining(quota.sentToday, quota.dailyLimit);
+      toast.error(q.message, {
+        description: `${remaining}. Resend free plan: ${quota.dailyLimit}/day, ${quota.monthlyLimit.toLocaleString()}/month.`,
+        duration: 8000,
+      });
+      return true;
+    }
+    toast.error(fallback);
+    return false;
+  };
+
+  const sendOne = async (d: any) => {
     if (!settings?.drive_doc_pack_url) {
       toast.error("Add a Google Drive link in Document Pack panel first");
       return;
     }
-    sendRegistration.mutate({ developerId: d.id });
+    if (quota.sentToday >= quota.dailyLimit) {
+      toast.error("Daily email cap reached", {
+        description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight.`,
+        duration: 8000,
+      });
+      return;
+    }
+    try {
+      await sendRegistration.mutateAsync({ developerId: d.id });
+      quota.refresh();
+    } catch (e) {
+      showQuotaToast(e, "Failed to send registration email");
+    }
   };
 
   const bulkSend = async () => {
@@ -2268,19 +2296,50 @@ const DeveloperRegistryTab = () => {
       d.developer_email && d.status !== "registered"
     );
     if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
-    if (!confirm(`Send registration email to ${targets.length} developers?`)) return;
+
+    const remainingNow = Math.max(0, quota.dailyLimit - quota.sentToday);
+    if (remainingNow <= 0) {
+      toast.error("Daily email cap reached", {
+        description: `0 of ${quota.dailyLimit} left today. Resets after UTC midnight.`,
+        duration: 8000,
+      });
+      return;
+    }
+    if (targets.length > remainingNow) {
+      if (!confirm(
+        `Only ${remainingNow} of ${targets.length} can be sent today (Resend free-plan cap = ${quota.dailyLimit}/day). Continue and send the first ${remainingNow}?`,
+      )) return;
+    } else if (!confirm(`Send registration email to ${targets.length} developers? (${remainingNow} left today)`)) {
+      return;
+    }
+
     setBulkRunning(true);
     const t = toast.loading(`Sending 0 / ${targets.length}…`);
-    let ok = 0, fail = 0;
+    let ok = 0, fail = 0, quotaStop = false;
     for (let i = 0; i < targets.length; i++) {
       try {
         await sendRegistration.mutateAsync({ developerId: targets[i].id });
         ok++;
-      } catch { fail++; }
+      } catch (e) {
+        const q = parseQuotaError(e);
+        if (q.isQuota) {
+          quotaStop = true;
+          toast.error(q.message, {
+            id: t,
+            description: `Stopped after ${ok} sends. ${formatRemaining(quota.sentToday + ok, quota.dailyLimit)}.`,
+            duration: 10000,
+          });
+          break;
+        }
+        fail++;
+      }
       toast.loading(`Sending ${i + 1} / ${targets.length}…`, { id: t });
       await new Promise((r) => setTimeout(r, 800));
     }
-    toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
+    if (!quotaStop) {
+      toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
+    }
+    quota.refresh();
     setBulkRunning(false);
     refetch();
   };
