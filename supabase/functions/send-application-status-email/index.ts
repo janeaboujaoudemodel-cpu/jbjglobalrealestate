@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, sharedSections, progressSteps } from "../_shared/email-html.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "jbj@jbj.ae";
@@ -12,7 +13,7 @@ const corsHeaders = {
 
 async function sendEmail(payload: { from: string; to: string[]; subject: string; html: string }) {
   const apiKey = Deno.env.get("RESEND_API_KEY");
-  const res = await fetch(RESEND_API_URL, {
+  const res = await quotaGuardedFetch(RESEND_API_URL, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ ...payload, reply_to: "CONTACT@JBJ.AE" }),
