@@ -10726,6 +10726,54 @@ export type Database = {
         }
         Relationships: []
       }
+      email_send_quota: {
+        Row: {
+          day: string
+          failed_count: number
+          last_send_at: string | null
+          sent_count: number
+          updated_at: string
+        }
+        Insert: {
+          day: string
+          failed_count?: number
+          last_send_at?: string | null
+          sent_count?: number
+          updated_at?: string
+        }
+        Update: {
+          day?: string
+          failed_count?: number
+          last_send_at?: string | null
+          sent_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      email_send_quota_config: {
+        Row: {
+          daily_limit: number
+          id: number
+          monthly_limit: number
+          rate_per_sec: number
+          updated_at: string
+        }
+        Insert: {
+          daily_limit?: number
+          id?: number
+          monthly_limit?: number
+          rate_per_sec?: number
+          updated_at?: string
+        }
+        Update: {
+          daily_limit?: number
+          id?: number
+          monthly_limit?: number
+          rate_per_sec?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_signatures: {
         Row: {
           created_at: string
@@ -32217,6 +32265,8 @@ export type Database = {
           transcript: string
         }[]
       }
+      email_quota_record_failure: { Args: never; Returns: undefined }
+      email_quota_try_claim: { Args: never; Returns: Json }
       encrypt_bank_field: {
         Args: { plain_text: string; salt_id: string }
         Returns: string
