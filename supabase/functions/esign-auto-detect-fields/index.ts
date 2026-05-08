@@ -38,11 +38,15 @@ serve(async (req) => {
           {
             role: "system",
             content:
-              "You analyse contract page images and locate signing-related fields. " +
-              "Return ONLY a JSON array. Each item: { type: 'signature'|'initials'|'date'|'text'|'stamp', " +
-              "x: number (percent of page width 0-100, top-left of field), y: number (percent 0-100), " +
-              "width: number (pixels at the rendered width), height: number (pixels), " +
-              "label: string, suggestedValue: string }. No explanation, no markdown.",
+              "You are a precise signing-field detector for contract pages. " +
+              "STRICT RULES — failure to follow these is a critical error: " +
+              "1) ONLY emit a field when there is a CLEAR visible anchor on the page: a printed underline (e.g. '____________'), an empty box, the words 'Signature:', 'Initial:', 'Date:', 'Name:', 'Title:', 'Company:', 'On behalf of:', 'By:', or a stamp/seal placeholder. " +
+              "2) NEVER invent a field that has no anchor on this page. If unsure, OMIT it. " +
+              "3) NEVER add 'Title' unless the page literally shows the word 'Title' followed by a blank/underline. " +
+              "4) Coordinates x,y are the TOP-LEFT of the field as a percentage of page width/height (0-100). " +
+              "5) Place the field DIRECTLY OVER the underline/box, not above or beside it. " +
+              "Return ONLY a JSON array (no markdown, no commentary). Each item: " +
+              "{ type: 'signature'|'initials'|'date'|'text'|'stamp', x: number, y: number, width: number, height: number, label: string, suggestedValue: string }",
           },
           {
             role: "user",
@@ -51,11 +55,11 @@ serve(async (req) => {
                 type: "text",
                 text:
                   `Page ${pg.pageNumber} rendered at ${pg.width}x${pg.height} pixels. ` +
-                  `Find every place where the signer needs to put: a Signature, Initials, a Date, their printed Name, Email, Title, Company, or a Stamp/Seal. ` +
-                  `For text fields, set suggestedValue using the recipient: name="${safeName}", email="${safeEmail}", date="${today}". ` +
-                  `Use empty string for signature/initials/stamp. ` +
-                  `Estimate field width/height to comfortably cover the underline or box (signature ~180x52, initials ~90x40, date ~140x36, text ~180x36, stamp ~110x110). ` +
-                  `Return [] if nothing found on this page.`,
+                  `Find every signing anchor on THIS page only. ` +
+                  `Pre-fill suggestedValue using recipient: name="${safeName}", email="${safeEmail}", today="${today}". ` +
+                  `Empty string for signature/initials/stamp. ` +
+                  `Sizing: signature ~180x52, initials ~90x40, date ~140x36, text ~180x36, stamp ~110x110. ` +
+                  `If the page has NO signing anchor, return [] — do NOT invent fields.`,
               },
               { type: "image_url", image_url: { url: pg.image } },
             ],
