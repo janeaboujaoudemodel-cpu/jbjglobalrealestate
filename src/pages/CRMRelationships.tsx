@@ -2272,9 +2272,9 @@ const DeveloperRegistryTab = () => {
       toast.error("Add a Google Drive link in Document Pack panel first");
       return;
     }
-    if (quota.sentToday >= quota.dailyLimit) {
+    if (!quota.unlimited && quota.sentToday >= quota.dailyLimit) {
       toast.error("Daily email cap reached", {
-        description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight.`,
+        description: `${formatRemaining(quota.sentToday, quota.dailyLimit)}. Resets after UTC midnight, or upgrade to Pro to remove the cap.`,
         duration: 8000,
       });
       return;
