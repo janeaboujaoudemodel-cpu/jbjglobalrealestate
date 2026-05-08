@@ -1,39 +1,41 @@
-## Plan
+## Why "0 rows" after the 33,874-row upload
 
-1. **Fix the import-blocking database constraint**
-   - Update `crm_import_batches.default_expertise_type` so it accepts the newer broker categories currently used by the uploader: `sales`, `leasing_sales`, `developer_relations`, `event_attendees`, and `other`.
-   - Keep existing allowed values (`leasing`, `selling`, `both`) so older data continues to work.
-   - This directly resolves the current error: `crm_import_batches_default_expertise_type_check` rejecting `sales`.
+The batch row was inserted (`row_count: 33874, status: running`) but every counter stayed at 0 and the status never flipped to `complete`. Edge function analytics show only 4 CORS preflight OPTIONS calls (one per parallel worker) and **zero POSTs** — meaning the actual chunk uploads never landed on `crm-broker-bulk-import`, and the client never recorded them as failed either. The batch is orphaned in `running` state.
 
-2. **Make category mapping consistent end-to-end**
-   - Update the upload dialog so “Sales” maps safely for both legacy fields and modern labels.
-   - Keep `specialty_label` as the true category shown on broker cards/grid.
-   - Ensure “Leasing + Sales” imports as both `leasing` and `sales`, not an invalid category.
+Three things combined to cause this:
 
-3. **Fix drag-and-drop file upload**
-   - Add real `dragOver`, `dragLeave`, and `drop` handlers to the upload zone.
-   - Allow dropping multiple `.xlsx`, `.xls`, `.csv`, and `.tsv` files directly into the box.
-   - Add clear visual feedback while dragging over the drop area.
+1. **No status feedback when chunks fail to reach the function.** The client catches errors silently (`accAgg.skipped += chunk.length`) and only writes counters at the very end. If the dialog closes, the tab navigates, or the function never responds, the batch stays at `inserted=0, skipped=0, status='running'` forever — exactly what we see.
+2. **No batch-level failure marking.** There is no `try/catch` around `runFastImportForFile` that flips the batch to `failed` with an error message, so failures are invisible.
+3. **No resume / retry path.** Even though every row of the original file is still parseable client-side, there is no "Resume" button on the orphaned batch, and the existing matching counters are unreliable.
 
-4. **Improve “Add new / add more database” workflow**
-   - Ensure the upload dialog can add more files after the first file is already loaded.
-   - Reset the hidden file input after each selection so selecting the same file again works.
-   - Keep existing metadata cards intact while appending additional databases.
+## Plan to fix
 
-5. **Harden import reliability for large files**
-   - Improve error messages so constraint/import failures name the affected file and reason.
-   - Keep the existing fast import path for large databases, but prevent a failed batch from leaving the UI stuck.
-   - Refresh the broker registry after successful import so new database rows appear immediately.
+### A. Make the importer self-reporting
+- Wrap each `runFastImportForFile` call in `try/catch`. On throw, update the batch to `status: 'failed'` with `notes` containing the first error.
+- Inside `runFastImportForFile`, call `crm_import_batches.update({ inserted, updated, skipped })` after **every** chunk (not only at the end), so progress survives a tab close.
+- After both workers finish, only set `status: 'complete'` if `inserted + merged + skipped >= row_count`; otherwise mark `partial` with the missing-row count.
 
-6. **Validate the workflow**
-   - Confirm the current failing payload with `default_expertise_type: "sales"` is accepted after the migration.
-   - Test the upload dialog interaction logic locally through code-level checks and inspect the import request path.
-   - Deploy any changed backend functions only if needed.
+### B. Surface the real failure cause
+- In the chunk worker, when `supabase.functions.invoke` throws, log the error message to a new `crm_import_batch_errors` table (batch_id, chunk_index, error_text, attempted_at). Show the latest 3 errors on the batch card so the user sees *why* it stalled.
+- Validate request size before sending: if a 1000-row chunk JSON exceeds ~900 KB, split it in half and retry, instead of letting the edge runtime reject silently.
+
+### C. Auto-recover orphaned batches
+- On dialog open, query `crm_import_batches WHERE owner_id = me AND status = 'running' AND created_at < now()-interval '5 minutes'` and offer a "Resume / Mark failed" action for each.
+- Add a "Resume" button that re-parses the file (user re-selects it) and re-imports only the missing slice (rows beyond `inserted+merged+skipped`).
+
+### D. Fix the current orphaned batch
+- One-time: mark batch `a5b6cf01…` as `failed` with note "stalled — please re-upload" so the UI stops showing it as in-progress.
+
+### E. Verify
+- Re-upload the 33,874-row file, watch the batch row tick up live, and confirm final `status='complete'` with `inserted+merged+skipped == 33874`.
+- Force a failure (e.g. invalid `batch_id`) and confirm the batch flips to `failed` with a readable error.
 
 ## Technical details
 
-- Files expected to change:
-  - `src/components/crm/BrokerBulkUploadDialog.tsx`
-  - Possibly `src/lib/crm/brokerNormalize.ts`
-  - A new database migration for the `crm_import_batches_default_expertise_type_check` constraint
-- No existing import features will be removed.
+Files to touch:
+- `src/components/crm/BrokerBulkUploadDialog.tsx` — per-chunk progress writes, try/catch around fast path, payload-size guard, orphaned-batch banner.
+- `supabase/functions/crm-broker-bulk-import/index.ts` — return more detail in error responses (currently bare `{error}`), include payload size limit hint.
+- New migration: `crm_import_batch_errors` table + RLS (owner can read their own).
+- One-time SQL via migration to mark the existing stuck batch `failed`.
+
+No existing import behavior is removed; this is purely additive observability + recovery.
