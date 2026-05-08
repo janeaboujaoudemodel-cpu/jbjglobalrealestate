@@ -57,7 +57,7 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded,
     }
     render();
     return () => { cancelled = true; };
-  }, [pdfDoc, pageNumber, pdfUrl, retryKey, onDocLoaded]);
+  }, [pdfDoc, pageNumber, pdfUrl, retryKey, onDocLoaded, onSizeChange]);
 
   if (failed) {
     return (
