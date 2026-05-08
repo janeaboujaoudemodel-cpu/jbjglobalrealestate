@@ -110,12 +110,20 @@ const BusinessCardUpload = ({
         }
         
         if (data?.contact) {
+          const c = data.contact;
           contacts.push({
-            ...data.contact,
+            ...c,
             id: generateContactId(),
+            jobTitle: c.title || c.jobTitle || "",
+            company: c.company_name || c.company || "",
+            phone: c.mobile || c.phone || "",
             scannedAt: new Date().toISOString(),
             imagePreview: preview.substring(0, 100) + '...',
-            confidence: data.confidence || 0.85
+            imageDataUrl: preview,
+            confidence: data.confidence || 0.85,
+            contactType: "client",
+            labels: [],
+            saveStatus: "idle",
           });
         }
       }
