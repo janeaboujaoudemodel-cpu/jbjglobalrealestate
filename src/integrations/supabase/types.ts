@@ -5135,6 +5135,7 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          department: string | null
           email: string | null
           email_normalized: string | null
           expertise_areas: string[]
@@ -5143,6 +5144,8 @@ export type Database = {
           id: string
           import_batch_id: string | null
           import_label: string | null
+          is_global_broker: boolean | null
+          languages: string[] | null
           license_number: string | null
           merge_history: Json
           metadata: Json
@@ -5152,8 +5155,12 @@ export type Database = {
           phone: string | null
           phone_normalized: string | null
           photo_path: string | null
+          position_type: string | null
+          region: string | null
           rera_number: string | null
           role: string | null
+          role_title: string | null
+          seniority: string | null
           source: string
           source_batch_ids: string[]
           source_history: Json
@@ -5169,6 +5176,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          department?: string | null
           email?: string | null
           email_normalized?: string | null
           expertise_areas?: string[]
@@ -5177,6 +5185,8 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          is_global_broker?: boolean | null
+          languages?: string[] | null
           license_number?: string | null
           merge_history?: Json
           metadata?: Json
@@ -5186,8 +5196,12 @@ export type Database = {
           phone?: string | null
           phone_normalized?: string | null
           photo_path?: string | null
+          position_type?: string | null
+          region?: string | null
           rera_number?: string | null
           role?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source?: string
           source_batch_ids?: string[]
           source_history?: Json
@@ -5203,6 +5217,7 @@ export type Database = {
           city?: string | null
           country?: string | null
           created_at?: string
+          department?: string | null
           email?: string | null
           email_normalized?: string | null
           expertise_areas?: string[]
@@ -5211,6 +5226,8 @@ export type Database = {
           id?: string
           import_batch_id?: string | null
           import_label?: string | null
+          is_global_broker?: boolean | null
+          languages?: string[] | null
           license_number?: string | null
           merge_history?: Json
           metadata?: Json
@@ -5220,8 +5237,12 @@ export type Database = {
           phone?: string | null
           phone_normalized?: string | null
           photo_path?: string | null
+          position_type?: string | null
+          region?: string | null
           rera_number?: string | null
           role?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source?: string
           source_batch_ids?: string[]
           source_history?: Json
@@ -5878,70 +5899,100 @@ export type Database = {
       }
       crm_brokers: {
         Row: {
+          city: string | null
+          country: string | null
           created_at: string
           current_brokerage_id: string | null
           current_company: string | null
           database_source: string | null
+          department: string | null
           email_lower: string | null
           event_source: string | null
           full_name: string | null
           id: string
           imported_at: string | null
           imported_by: string | null
+          is_global_broker: boolean | null
           labels: string[]
+          languages: string[] | null
           last_active_at: string | null
+          nationality: string | null
           notes: string | null
           original_filename: string | null
           owner_id: string | null
           phone_e164: string | null
           position_title: string | null
+          position_type: string | null
+          region: string | null
           rera_license: string | null
+          role_title: string | null
+          seniority: string | null
           source_history: Json
           updated_at: string | null
           upload_source: string | null
         }
         Insert: {
+          city?: string | null
+          country?: string | null
           created_at?: string
           current_brokerage_id?: string | null
           current_company?: string | null
           database_source?: string | null
+          department?: string | null
           email_lower?: string | null
           event_source?: string | null
           full_name?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          is_global_broker?: boolean | null
           labels?: string[]
+          languages?: string[] | null
           last_active_at?: string | null
+          nationality?: string | null
           notes?: string | null
           original_filename?: string | null
           owner_id?: string | null
           phone_e164?: string | null
           position_title?: string | null
+          position_type?: string | null
+          region?: string | null
           rera_license?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source_history?: Json
           updated_at?: string | null
           upload_source?: string | null
         }
         Update: {
+          city?: string | null
+          country?: string | null
           created_at?: string
           current_brokerage_id?: string | null
           current_company?: string | null
           database_source?: string | null
+          department?: string | null
           email_lower?: string | null
           event_source?: string | null
           full_name?: string | null
           id?: string
           imported_at?: string | null
           imported_by?: string | null
+          is_global_broker?: boolean | null
           labels?: string[]
+          languages?: string[] | null
           last_active_at?: string | null
+          nationality?: string | null
           notes?: string | null
           original_filename?: string | null
           owner_id?: string | null
           phone_e164?: string | null
           position_title?: string | null
+          position_type?: string | null
+          region?: string | null
           rera_license?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source_history?: Json
           updated_at?: string | null
           upload_source?: string | null
@@ -7393,6 +7444,7 @@ export type Database = {
           current_location_country: string | null
           database_source: string | null
           deleted_at: string | null
+          department: string | null
           detection_keywords: string[] | null
           documents: Json
           duplicate_hash: string | null
@@ -7413,7 +7465,9 @@ export type Database = {
           imported_at: string | null
           internal_comments: string | null
           is_duplicate: boolean | null
+          is_global_broker: boolean | null
           is_junk: boolean
+          languages: string[] | null
           last_contacted_at: string | null
           lead_intent: string | null
           lead_score_band: string | null
@@ -7433,6 +7487,7 @@ export type Database = {
           phone_normalized: string | null
           phone_raw: string | null
           pipeline_stage: string | null
+          position_type: string | null
           preferred_language: string | null
           preferred_location: string | null
           preferred_project: string | null
@@ -7440,6 +7495,7 @@ export type Database = {
           priority_score: number | null
           property_type: string | null
           raw_import: Json | null
+          region: string | null
           rental_budget_max: number | null
           rental_budget_min: number | null
           rental_lease_duration: string | null
@@ -7447,6 +7503,8 @@ export type Database = {
           rental_preferred_areas: string[] | null
           rental_property_type: string | null
           rental_renter_type: string | null
+          role_title: string | null
+          seniority: string | null
           source: string | null
           source_history: Json
           source_id: string | null
@@ -7484,6 +7542,7 @@ export type Database = {
           current_location_country?: string | null
           database_source?: string | null
           deleted_at?: string | null
+          department?: string | null
           detection_keywords?: string[] | null
           documents?: Json
           duplicate_hash?: string | null
@@ -7504,7 +7563,9 @@ export type Database = {
           imported_at?: string | null
           internal_comments?: string | null
           is_duplicate?: boolean | null
+          is_global_broker?: boolean | null
           is_junk?: boolean
+          languages?: string[] | null
           last_contacted_at?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
@@ -7524,6 +7585,7 @@ export type Database = {
           phone_normalized?: string | null
           phone_raw?: string | null
           pipeline_stage?: string | null
+          position_type?: string | null
           preferred_language?: string | null
           preferred_location?: string | null
           preferred_project?: string | null
@@ -7531,6 +7593,7 @@ export type Database = {
           priority_score?: number | null
           property_type?: string | null
           raw_import?: Json | null
+          region?: string | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
           rental_lease_duration?: string | null
@@ -7538,6 +7601,8 @@ export type Database = {
           rental_preferred_areas?: string[] | null
           rental_property_type?: string | null
           rental_renter_type?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source?: string | null
           source_history?: Json
           source_id?: string | null
@@ -7575,6 +7640,7 @@ export type Database = {
           current_location_country?: string | null
           database_source?: string | null
           deleted_at?: string | null
+          department?: string | null
           detection_keywords?: string[] | null
           documents?: Json
           duplicate_hash?: string | null
@@ -7595,7 +7661,9 @@ export type Database = {
           imported_at?: string | null
           internal_comments?: string | null
           is_duplicate?: boolean | null
+          is_global_broker?: boolean | null
           is_junk?: boolean
+          languages?: string[] | null
           last_contacted_at?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
@@ -7615,6 +7683,7 @@ export type Database = {
           phone_normalized?: string | null
           phone_raw?: string | null
           pipeline_stage?: string | null
+          position_type?: string | null
           preferred_language?: string | null
           preferred_location?: string | null
           preferred_project?: string | null
@@ -7622,6 +7691,7 @@ export type Database = {
           priority_score?: number | null
           property_type?: string | null
           raw_import?: Json | null
+          region?: string | null
           rental_budget_max?: number | null
           rental_budget_min?: number | null
           rental_lease_duration?: string | null
@@ -7629,6 +7699,8 @@ export type Database = {
           rental_preferred_areas?: string[] | null
           rental_property_type?: string | null
           rental_renter_type?: string | null
+          role_title?: string | null
+          seniority?: string | null
           source?: string | null
           source_history?: Json
           source_id?: string | null
@@ -8142,6 +8214,36 @@ export type Database = {
           ip_address?: string | null
           user_agent?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      crm_segments: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          filter: Json
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          filter?: Json
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          filter?: Json
+          id?: string
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -9745,6 +9847,7 @@ export type Database = {
           custom_role_title: string | null
           database_source: string | null
           date_of_join: string | null
+          department: string | null
           developer_name: string
           email: string
           email_normalized: string | null
@@ -9757,6 +9860,7 @@ export type Database = {
           imported_at: string | null
           imported_by: string | null
           instagram_url: string | null
+          is_global_broker: boolean | null
           is_on_leave: boolean | null
           job_title: string | null
           labels: string[]
@@ -9775,10 +9879,14 @@ export type Database = {
           phone: string | null
           phone_normalized: string | null
           position: string | null
+          position_type: string | null
           projects_handled: string[] | null
+          region: string | null
           rera_document_url: string | null
           response_time_avg_hours: number | null
           role: string
+          role_title: string | null
+          seniority: string | null
           source: string | null
           source_batch_ids: string[]
           source_history: Json
@@ -9809,6 +9917,7 @@ export type Database = {
           custom_role_title?: string | null
           database_source?: string | null
           date_of_join?: string | null
+          department?: string | null
           developer_name: string
           email: string
           email_normalized?: string | null
@@ -9821,6 +9930,7 @@ export type Database = {
           imported_at?: string | null
           imported_by?: string | null
           instagram_url?: string | null
+          is_global_broker?: boolean | null
           is_on_leave?: boolean | null
           job_title?: string | null
           labels?: string[]
@@ -9839,10 +9949,14 @@ export type Database = {
           phone?: string | null
           phone_normalized?: string | null
           position?: string | null
+          position_type?: string | null
           projects_handled?: string[] | null
+          region?: string | null
           rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
+          role_title?: string | null
+          seniority?: string | null
           source?: string | null
           source_batch_ids?: string[]
           source_history?: Json
@@ -9873,6 +9987,7 @@ export type Database = {
           custom_role_title?: string | null
           database_source?: string | null
           date_of_join?: string | null
+          department?: string | null
           developer_name?: string
           email?: string
           email_normalized?: string | null
@@ -9885,6 +10000,7 @@ export type Database = {
           imported_at?: string | null
           imported_by?: string | null
           instagram_url?: string | null
+          is_global_broker?: boolean | null
           is_on_leave?: boolean | null
           job_title?: string | null
           labels?: string[]
@@ -9903,10 +10019,14 @@ export type Database = {
           phone?: string | null
           phone_normalized?: string | null
           position?: string | null
+          position_type?: string | null
           projects_handled?: string[] | null
+          region?: string | null
           rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
+          role_title?: string | null
+          seniority?: string | null
           source?: string | null
           source_batch_ids?: string[]
           source_history?: Json
@@ -32227,18 +32347,28 @@ export type Database = {
       }
       vw_crm_contacts: {
         Row: {
+          city: string | null
           company_id: string | null
           company_kind: string | null
           company_name: string | null
+          country: string | null
           created_at: string | null
+          department: string | null
           email: string | null
           id: string | null
+          is_global_broker: boolean | null
           kind: string | null
           labels: string[] | null
+          languages: string[] | null
           last_interaction_at: string | null
           name: string | null
+          nationality: string | null
           owner_id: string | null
           phone: string | null
+          position_type: string | null
+          region: string | null
+          role_title: string | null
+          seniority: string | null
           source: string | null
         }
         Relationships: []
@@ -32429,6 +32559,40 @@ export type Database = {
       crm_hard_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       crm_purge_deleted_leads: { Args: never; Returns: Json }
       crm_restore_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
+      crm_segment_resolve: {
+        Args: { filter: Json }
+        Returns: {
+          city: string | null
+          company_id: string | null
+          company_kind: string | null
+          company_name: string | null
+          country: string | null
+          created_at: string | null
+          department: string | null
+          email: string | null
+          id: string | null
+          is_global_broker: boolean | null
+          kind: string | null
+          labels: string[] | null
+          languages: string[] | null
+          last_interaction_at: string | null
+          name: string | null
+          nationality: string | null
+          owner_id: string | null
+          phone: string | null
+          position_type: string | null
+          region: string | null
+          role_title: string | null
+          seniority: string | null
+          source: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "vw_crm_contacts"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       crm_soft_delete_leads: { Args: { p_lead_ids: string[] }; Returns: Json }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
