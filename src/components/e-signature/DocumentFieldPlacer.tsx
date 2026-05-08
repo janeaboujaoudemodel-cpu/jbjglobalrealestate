@@ -998,6 +998,24 @@ export default function DocumentFieldPlacer({
         />
       )}
 
+      {/* ─── Stamp Manager ─── */}
+      <StampManagerDialog
+        open={showStampManager}
+        onOpenChange={setShowStampManager}
+        onUse={(s) => {
+          if (s.svg) {
+            setSavedStampSvg(s.svg);
+          } else if (s.imageUrl) {
+            // Wrap raster image so the existing SVG-based renderer paths work
+            setSavedStampSvg(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet"><image href="${s.imageUrl}" width="200" height="200" preserveAspectRatio="xMidYMid meet" /></svg>`
+            );
+          }
+          setSelectedFieldType("stamp");
+          toast.success(`Stamp "${s.name}" ready — click on the document to place it`);
+        }}
+      />
+
       {/* ─── Adopt & Sign ─── */}
       <AdoptAndSignDialog
         open={showAdopt}
