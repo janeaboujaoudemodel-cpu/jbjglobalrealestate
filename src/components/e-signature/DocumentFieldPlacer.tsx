@@ -230,15 +230,31 @@ export default function DocumentFieldPlacer({
       const page = pageRef.current;
       if (!page) return;
       const rect = page.getBoundingClientRect();
+      // Page hasn't laid out yet (PDF still loading) — bail with a hint
+      if (rect.width < 20 || rect.height < 20) {
+        toast.info("Page is still loading — try again in a second.");
+        return;
+      }
       // Ignore clicks outside the rendered page area
       if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
 
+      // Special-case: user picked Stamp but has no saved stamp yet
+      if (selectedFieldType === "stamp" && !savedStampSvg) {
+        setShowStampManager(true);
+        toast.info("Pick or upload a stamp first.");
+        return;
+      }
+
       const fieldConfig = fieldTypes.find((f) => f.type === selectedFieldType)!;
-      // Center field on the click point
       const wPx = fieldConfig.defaultWidth;
       const hPx = fieldConfig.defaultHeight;
-      const xPct = (((e.clientX - rect.left) - wPx / 2) / rect.width) * 100;
-      const yPct = (((e.clientY - rect.top) - hPx / 2) / rect.height) * 100;
+      // Center field on the actual click point
+      const xPx = (e.clientX - rect.left) - wPx / 2;
+      const yPx = (e.clientY - rect.top) - hPx / 2;
+      const xPct = (xPx / rect.width) * 100;
+      const yPct = (yPx / rect.height) * 100;
+      const maxXPct = 100 - (wPx / rect.width) * 100;
+      const maxYPct = 100 - (hPx / rect.height) * 100;
       const today = new Date().toLocaleDateString("en-AE");
 
       const newField: SignatureField = {
@@ -246,8 +262,8 @@ export default function DocumentFieldPlacer({
         recipientId: selectedRecipient,
         type: selectedFieldType,
         pageNumber: currentPage,
-        x: Math.max(0, Math.min(100 - (wPx / rect.width) * 100, xPct)),
-        y: Math.max(0, Math.min(100 - (hPx / rect.height) * 100, yPct)),
+        x: Math.max(0, Math.min(maxXPct, xPct)),
+        y: Math.max(0, Math.min(maxYPct, yPct)),
         width: wPx,
         height: hPx,
         value:
@@ -263,7 +279,7 @@ export default function DocumentFieldPlacer({
       };
 
       onFieldsChange([...fields, newField]);
-      toast.success(`${fieldConfig.label} field added — drag to reposition`);
+      toast.success(`${fieldConfig.label} placed — drag to fine-tune`);
     },
     [selectedRecipient, selectedFieldType, currentPage, fields, onFieldsChange, recipients, savedSignatureUrl, savedStampSvg]
   );
