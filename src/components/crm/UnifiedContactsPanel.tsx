@@ -267,11 +267,12 @@ export function UnifiedContactsPanel() {
     }
   };
 
-  const SectionSelect = ({ value, onChange, options, placeholder }: {
+  const SectionSelect = ({ value, onChange, options, placeholder, labelMap }: {
     value: string | null;
     onChange: (v: string | null) => void;
     options: string[];
     placeholder: string;
+    labelMap?: Record<string, string>;
   }) => (
     <Select value={value ?? "__all"} onValueChange={(v) => onChange(v === "__all" ? null : v)}>
       <SelectTrigger className="h-8 w-[160px] bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] text-xs">
@@ -280,7 +281,7 @@ export function UnifiedContactsPanel() {
       <SelectContent className="bg-[#FDFBF7] border-[#B89555]/30 text-[#1A1A1A] max-h-72">
         <SelectItem value="__all">All {placeholder.toLowerCase()}</SelectItem>
         {options.map((o) => (
-          <SelectItem key={o} value={o}>{o}</SelectItem>
+          <SelectItem key={o} value={o}>{labelMap?.[o] ?? o}</SelectItem>
         ))}
       </SelectContent>
     </Select>
