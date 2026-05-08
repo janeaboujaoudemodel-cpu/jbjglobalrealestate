@@ -70,6 +70,7 @@ export default function DocumentFieldPlacer({
 
   // Brand asset picker state
   const [showAssetPicker, setShowAssetPicker] = useState(false);
+  const [showStampManager, setShowStampManager] = useState(false);
   const [showAdopt, setShowAdopt] = useState(false);
   const [adoptForFieldId, setAdoptForFieldId] = useState<string | null>(null);
   const [showDocEditor, setShowDocEditor] = useState(false);
