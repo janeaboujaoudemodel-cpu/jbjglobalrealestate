@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { validateEmployeeAuth, unauthorizedResponse, forbiddenResponse, corsHeaders } from "../_shared/auth-utils.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 interface BrokerStats {
   broker_name: string;
@@ -162,7 +163,7 @@ async function sendEmail(apiKey: string, options: {
   html: string;
 }): Promise<{ data?: { id: string }; error?: Error }> {
   try {
-    const response = await fetch("https://api.resend.com/emails", {
+    const response = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,

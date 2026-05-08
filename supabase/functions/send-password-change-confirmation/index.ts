@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { emailShell, lockIconBadge, sharedSections, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -101,7 +102,7 @@ ${sharedSections("account security", "JBJ Global Real Estate Team")}
 
     const emailHtml = emailShell("Security Notification", bodyContent);
 
-    const emailRes = await fetch("https://api.resend.com/emails", {
+    const emailRes = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({

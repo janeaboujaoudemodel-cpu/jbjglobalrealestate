@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -81,7 +82,7 @@ Deno.serve(async (req) => {
       const subject = render(campaign.subject, r.merge_data);
       const html = render(campaign.body_html, r.merge_data);
 
-      const res = await fetch("https://api.resend.com/emails", {
+      const res = await quotaGuardedFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

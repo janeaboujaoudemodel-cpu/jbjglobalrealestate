@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { SITE_URL, emailShell, arabicDivider, sharedSections, userGreetingRow } from "../_shared/email-html.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -175,7 +176,7 @@ serve(async (req) => {
     const cta = ctaByRole[role] || ctaByRole.visitor;
     const emailHtml = buildWelcomeHtml(displayName, email, role, cta.text, cta.url, benefitsByRole[role] || benefitsByRole.visitor, benefitsArByRole[role] || benefitsArByRole.visitor);
 
-    const emailResponse = await fetch("https://api.resend.com/emails", {
+    const emailResponse = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${RESEND_API_KEY}`,

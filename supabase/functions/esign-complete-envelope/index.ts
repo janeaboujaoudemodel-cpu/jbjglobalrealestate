@@ -2,6 +2,7 @@ import { corsHeaders, getCorsHeaders, corsJsonResponse, corsErrorResponse } from
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 import { PDFDocument, rgb, StandardFonts } from "npm:pdf-lib@1.17.1";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -642,7 +643,7 @@ Deno.serve(async (req) => {
     if (resendApiKey) {
       for (const email of allEmails) {
         try {
-          const res = await fetch("https://api.resend.com/emails", {
+          const res = await quotaGuardedFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Authorization": `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
             body: JSON.stringify({

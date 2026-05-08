@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { emailShell, sharedSections } from "../_shared/email-html.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -95,7 +96,7 @@ async function sendAutoBlockNotification(clientIp: string, functionName: string,
     if (!resendApiKey) return;
     const maskedIp = `${clientIp.substring(0, 8)}***`;
     const expiresAtFormatted = expiresAt.toLocaleString("en-US", { timeZone: "Asia/Dubai", dateStyle: "medium", timeStyle: "short" });
-    await fetch("https://api.resend.com/emails", {
+    await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendApiKey}` },
       body: JSON.stringify({
@@ -171,7 +172,7 @@ function escapeHtml(str: string): string {
 }
 
 const sendEmail = async (to: string, subject: string, html: string) => {
-  const res = await fetch("https://api.resend.com/emails", {
+  const res = await quotaGuardedFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

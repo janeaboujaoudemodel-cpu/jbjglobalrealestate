@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { quotaGuardedFetch } from "../_shared/quotaGuardedFetch.ts";
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -200,7 +201,7 @@ async function sendAutoBlockNotification(
       timeStyle: "short"
     });
 
-    const response = await fetch("https://api.resend.com/emails", {
+    const response = await quotaGuardedFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
