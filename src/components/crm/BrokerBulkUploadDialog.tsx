@@ -217,51 +217,95 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     return batch;
   };
 
-  /** Run fast import for a single file using its own batch_id. */
+  /** Run fast import for a single file using its own batch_id.
+   *  - Logs every chunk failure to crm_import_batch_errors so the user sees WHY it stalled.
+   *  - Persists progress to crm_import_batches after each chunk so a tab close
+   *    no longer leaves an orphaned "running" batch with 0 rows.
+   *  - Marks the batch as `complete` only if every row was accounted for, otherwise `partial`.
+   */
   const runFastImportForFile = async (
     pf: ParsedFile,
     batch: any,
     accAgg: { inserted: number; merged: number; skipped: number },
     overall: { fileIdx: number; fileTotal: number },
+    userId: string,
   ) => {
     const rows = buildRows(pf);
     const chunks: any[][] = [];
     for (let i = 0; i < rows.length; i += CHUNK_SIZE) chunks.push(rows.slice(i, i + CHUNK_SIZE));
 
+    // Per-batch counters (so we can persist accurate batch totals incrementally).
+    let bInserted = 0, bMerged = 0, bSkipped = 0;
     let cursor = 0;
     let chunksDone = 0;
+    let firstError: string | null = null;
+
+    const persistBatchProgress = async () => {
+      try {
+        await (supabase as any).from("crm_import_batches").update({
+          inserted: bInserted,
+          updated: bMerged,
+          skipped: bSkipped,
+          status: "running",
+        }).eq("id", batch.id);
+      } catch (_) { /* best effort */ }
+    };
+
+    const logChunkError = async (chunkIdx: number, chunkLen: number, msg: string) => {
+      if (!firstError) firstError = msg;
+      try {
+        await (supabase as any).from("crm_import_batch_errors").insert({
+          batch_id: batch.id,
+          owner_id: userId,
+          chunk_index: chunkIdx,
+          chunk_size: chunkLen,
+          error_text: msg.slice(0, 2000),
+        });
+      } catch (_) { /* best effort */ }
+    };
+
     const runOne = async () => {
       while (cursor < chunks.length) {
         const myIdx = cursor++;
         const chunk = chunks[myIdx];
         let attempts = 0;
+        let lastErr: string = "unknown error";
         while (attempts < 2) {
           try {
             const { data, error } = await supabase.functions.invoke("crm-broker-bulk-import", {
               body: { rows: chunk, batch_id: batch.id },
             });
-            if (error) throw error;
+            if (error) {
+              // supabase-js wraps the body in error.context; extract whatever we can
+              const ctxMsg = (error as any)?.context?.error || (error as any)?.message || JSON.stringify(error);
+              throw new Error(typeof ctxMsg === "string" ? ctxMsg : JSON.stringify(ctxMsg));
+            }
             const d = data as any;
-            accAgg.inserted += d?.inserted ?? 0;
-            accAgg.merged += d?.merged ?? 0;
-            accAgg.skipped += d?.skipped ?? 0;
+            const ins = d?.inserted ?? 0, mer = d?.merged ?? 0, skp = d?.skipped ?? 0;
+            accAgg.inserted += ins; accAgg.merged += mer; accAgg.skipped += skp;
+            bInserted += ins; bMerged += mer; bSkipped += skp;
             chunksDone++;
             setProgress({
               phase: `File ${overall.fileIdx}/${overall.fileTotal}: ${pf.meta.displayName}`,
               done: chunksDone, total: chunks.length,
               inserted: accAgg.inserted, merged: accAgg.merged, skipped: accAgg.skipped,
             });
+            await persistBatchProgress();
             break;
-          } catch (e) {
+          } catch (e: any) {
+            lastErr = e?.message || String(e);
             attempts++;
             if (attempts >= 2) {
               accAgg.skipped += chunk.length;
+              bSkipped += chunk.length;
               chunksDone++;
+              await logChunkError(myIdx, chunk.length, lastErr);
               setProgress({
                 phase: `File ${overall.fileIdx}/${overall.fileTotal}: ${pf.meta.displayName}`,
                 done: chunksDone, total: chunks.length,
                 inserted: accAgg.inserted, merged: accAgg.merged, skipped: accAgg.skipped,
               });
+              await persistBatchProgress();
             }
           }
         }
@@ -270,9 +314,23 @@ export default function BrokerBulkUploadDialog({ open, onOpenChange, onDone, bro
     const workers = Array(Math.min(CONCURRENCY, chunks.length || 1)).fill(0).map(runOne);
     await Promise.all(workers);
 
+    const accountedFor = bInserted + bMerged + bSkipped;
+    const finalStatus = accountedFor >= rows.length && firstError == null
+      ? "complete"
+      : (accountedFor === 0 ? "failed" : "partial");
     await (supabase as any).from("crm_import_batches").update({
-      status: "complete",
+      inserted: bInserted,
+      updated: bMerged,
+      skipped: bSkipped,
+      status: finalStatus,
+      notes: firstError
+        ? `Import error (first of many possibly): ${firstError.slice(0, 500)}`
+        : batch.notes ?? null,
     }).eq("id", batch.id);
+
+    if (finalStatus === "failed") {
+      throw new Error(firstError || `Import failed for "${pf.meta.displayName}" — 0 rows inserted.`);
+    }
   };
 
   const startMatching = async () => {
