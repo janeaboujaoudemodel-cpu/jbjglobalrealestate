@@ -479,11 +479,8 @@ const BusinessCardScanner = () => {
                 contacts={scannedContacts}
                 onDelete={handleDeleteContact}
                 showEncrypted={showEncryptedData}
-                onUpdateContact={(id, updates) => {
-                  setScannedContacts(prev => 
-                    prev.map(c => c.id === id ? { ...c, ...updates } : c)
-                  );
-                }}
+                onUpdateContact={updateContactState}
+                onSaveContact={handleSaveContact}
               />
             </CardContent>
           </Card>
