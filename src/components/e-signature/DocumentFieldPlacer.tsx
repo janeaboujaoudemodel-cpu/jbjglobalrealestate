@@ -206,7 +206,7 @@ export default function DocumentFieldPlacer({
 
   const pageFields = fields.filter((f) => f.pageNumber === currentPage);
 
-  // ── Click-to-place ──────────────────────────────────────────────────────
+  // ── Click-to-place (coords are relative to PAGE, not scrollable overlay) ─
   const handleOverlayClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (!selectedRecipient) {
@@ -214,12 +214,18 @@ export default function DocumentFieldPlacer({
         return;
       }
       if ((e.target as HTMLElement).closest("[data-field]")) return;
-
-      const rect = overlayRef.current!.getBoundingClientRect();
-      const xPct = ((e.clientX - rect.left) / rect.width) * 100;
-      const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+      const page = pageRef.current;
+      if (!page) return;
+      const rect = page.getBoundingClientRect();
+      // Ignore clicks outside the rendered page area
+      if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
 
       const fieldConfig = fieldTypes.find((f) => f.type === selectedFieldType)!;
+      // Center field on the click point
+      const wPx = fieldConfig.defaultWidth;
+      const hPx = fieldConfig.defaultHeight;
+      const xPct = (((e.clientX - rect.left) - wPx / 2) / rect.width) * 100;
+      const yPct = (((e.clientY - rect.top) - hPx / 2) / rect.height) * 100;
       const today = new Date().toLocaleDateString("en-AE");
 
       const newField: SignatureField = {
@@ -227,10 +233,10 @@ export default function DocumentFieldPlacer({
         recipientId: selectedRecipient,
         type: selectedFieldType,
         pageNumber: currentPage,
-        x: Math.max(0, Math.min(95, xPct)),
-        y: Math.max(0, Math.min(95, yPct)),
-        width: fieldConfig.defaultWidth,
-        height: fieldConfig.defaultHeight,
+        x: Math.max(0, Math.min(100 - (wPx / rect.width) * 100, xPct)),
+        y: Math.max(0, Math.min(100 - (hPx / rect.height) * 100, yPct)),
+        width: wPx,
+        height: hPx,
         value:
           selectedFieldType === "date"
             ? today
