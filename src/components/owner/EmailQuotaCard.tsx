@@ -135,7 +135,20 @@ export function EmailQuotaCard() {
         </Dialog>
       </div>
 
-      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="mt-5 rounded-xl border border-[#E8DEC8] bg-[#FDFBF7] px-4 py-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <span className="text-xs uppercase tracking-wide text-[#1A1A1A]/60">Emails left today</span>
+          <span className={`text-sm ${dailyHot ? "text-amber-700" : "text-[#1A1A1A]/70"}`}>
+            {leftMonth.toLocaleString()} left this month
+          </span>
+        </div>
+        <div className={`mt-1 text-3xl font-semibold tabular-nums ${dailyHot ? "text-amber-700" : "text-[#1A1A1A]"}`}>
+          {leftToday.toLocaleString()}
+          <span className="ml-2 text-base font-normal text-[#1A1A1A]/60">/ {q.dailyLimit.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <QuotaBar
           label="Today (UTC)"
           used={q.sentToday}
