@@ -147,14 +147,28 @@ serve(async (req) => {
 
     let leadId: string | null = null;
 
+    // Map our contact_type → lead_type so the unified contacts view + filters work
+    const leadTypeMap: Record<string, string> = {
+      broker: "broker",
+      developer: "developer",
+      investor: "investor",
+      vendor: "partner",
+      client: "client",
+      other: "contact",
+    };
+    const leadType = leadTypeMap[contactType] || "contact";
+
     if (action === "insert" || (action === "merge" && !duplicate)) {
       const { data, error } = await admin
         .from("crm_leads")
         .insert({
           ...baseFields,
           owner_type: "company_assigned",
+          owner_user_id: auth.userId,
           created_by_user_id: auth.userId,
           import_approval_status: "approved",
+          lead_type: leadType,
+          database_source: body.database_source || "business_card_scan",
         })
         .select("id")
         .single();
