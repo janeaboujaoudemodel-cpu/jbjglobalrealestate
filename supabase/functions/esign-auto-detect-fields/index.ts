@@ -93,14 +93,12 @@ serve(async (req) => {
       }
 
       const sanitized = sanitizeFields(allFields, safeName, safeEmail, today);
-      if (sanitized.length > 0) {
-        return jsonResponse({ fields: sanitized });
-      }
-      // fall through to fallback layout
+      // Return whatever vision found — even if empty. NEVER fall back to a guessed layout.
+      return jsonResponse({ fields: sanitized });
     }
 
-    // ── Fallback for blob/base64 with no images: smart standard layout ──
-    return jsonResponse({ fields: getStandardContractLayout(safeName, safeEmail, today) });
+    // Only when there are no page images at all (legacy callers), return empty — do NOT invent.
+    return jsonResponse({ fields: [] });
   } catch (err: any) {
     console.error("esign-auto-detect-fields error:", err);
     return new Response(JSON.stringify({ error: err.message || "Internal error" }), {
