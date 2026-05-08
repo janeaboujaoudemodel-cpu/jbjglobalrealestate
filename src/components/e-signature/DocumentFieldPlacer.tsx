@@ -332,16 +332,11 @@ export default function DocumentFieldPlacer({
     resizingRef.current = { id: fieldId, corner, startX: e.clientX, startY: e.clientY, w: f.width, h: f.height, x: f.x, y: f.y };
   };
 
-  // ── Adopt-and-Sign click handler with broadcast ────────────────────────
+  // ── Adopt-and-Sign click handler ──────────────────────────────────────
+  // ALWAYS open the dialog so the user can confirm/redraw — no silent broadcast.
   const handleSignatureFieldClick = (fieldId: string) => {
     const field = fields.find((f) => f.id === fieldId);
     if (!field) return;
-    // If we have a default already and field is empty, auto-apply silently and broadcast
-    if ((field.type === "signature" && defaultSignatureUrl) || (field.type === "initials" && defaultInitialsUrl)) {
-      const url = field.type === "signature" ? defaultSignatureUrl! : defaultInitialsUrl!;
-      broadcastValue(field.recipientId, field.type, url);
-      return;
-    }
     setAdoptForFieldId(fieldId);
     setShowAdopt(true);
   };
